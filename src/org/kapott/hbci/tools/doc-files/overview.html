@@ -1,0 +1,57 @@
+<html><body>
+<h1>Allgemeines</h1>
+<p>
+<em>HBCI4Java</em> ist ein Java-Paket, welches HBCI-Funktionalität
+für Java-Anwendungen bereitstellt. 
+</p>
+
+<p>
+Diese Dokumentation ist bewusst Deutsch gehalten, da es HBCI meines Wissens
+nur in Deutschland gibt und somit die Wahrscheinlichkeit, dass ausländische
+(bzw. nicht deutsch-sprechende) Entwickler dieses Java-Paket einsetzen wollen,
+als eher gering einzuschätzen ist. Falls dennoch Bedarf an einer
+anderssprachigen Dokumentation besteht -- es ist nicht verboten,
+diesen Text zu übersetzen ;-)
+</p>
+
+<p>
+Die wichtigsten Klassen für die Integration in eigene Anwendungen sind
+<a href="org/kapott/hbci/passport/HBCIPassport.html"><code>HBCIPassport</code></a>
+sowie <a href="org/kapott/hbci/manager/HBCIHandler.html"><code>HBCIHandler</code></a>.
+<br/>
+Das Interface <code>HBCIPassport</code> stellt die Schnittstelle zu den
+HBCI-Sicherheitsmedien dar. <em>HBCI4Java</em> unterstützt verschiedene
+Sicherheitsmedien und -verfahren, welche jedoch <em>alle</em> über dieses
+Interface angesprochen werden. 
+<br/>
+Über Instanzen der Klasse <code>HBCIHandler</code> kann die Anwendung
+die bereitgestellten HBCI-Funktionen nutzen.
+</p>
+
+<p>
+Außerdem benötigt eine Anwendung Methoden der Klasse
+<a href="org/kapott/hbci/manager/HBCIUtils.html"><code>HBCIUtils</code></a>
+sowie <a href="org/kapott/hbci/callback/HBCICallback.html"><code>HBCICallback</code></a>-Instanzen.
+</p>
+
+<p>
+Eine kleine Vorlage zur Benutzung von <em>HBCI4Java</em> stellt das Tool
+<a href="org/kapott/hbci/tools/InitAndTest.html"><code>InitAndTest</code></a> dar.
+Der Sourcecode zu diesem Tool ist im src-Paket enthalten. Darin werden die grundlegendsten
+Funktionen von <em>HBCI4Java</em> demonstriert. Außerdem kann das Tool
+<a href="org/kapott/hbci/tools/AnalyzeReportOfTransactions.html"><code>AnalyzeReportOfTransactions</code></a>
+als Vorlage für ein Tool benutzt werden, mit welchem regelmäßig Kontoauszüge
+abgeholt und ausgewertet werden können.
+</p> 
+
+<p>
+Noch eine Anmerkung zu dieser Dokumentation: zur Erzeugung wurde <code>javadoc</code>
+verwendet, allerdings mit einem modifizierten Doclet. Dieses modifizierte Doclet
+hat die Aufgabe, Klassen, Felder und Methoden, die nicht von außen (also von einer
+Anwendung aus) benutzt werden sollen, aus der Dokumentation zu entfernen. <em>Bei
+Erzeugung dieser Dokumentation mit dem Standard-Doclet werden diese <b>zusätzlichen
+Elemente</b> wieder sichtbar. Diese sind zum großen Teil nicht ordentlich dokumentiert
+und <b>sollten auch nicht benutzt werden</b></em>! Bei Benutzung von nichtdokumentierten
+Klassen oder Methoden kann es zu schwer nachvollziehbaren Fehlern kommen.     
+</p>
+</body></html>

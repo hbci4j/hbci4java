@@ -1,0 +1,58 @@
+<html><body>
+<p>
+Dieses Paket enthält Klassen, die Status-Informationen zu einzelnen Aufträgen,
+Nachrichten oder Dialogen bereitstellen. Diese Status-Informationen werden
+an verschiedenen Stellen zurückgegeben.
+</p>
+
+<p>
+Zum einen wird beim Ausführen eines HBCI-Dialoges ein Objekt der Klasse
+<a href="HBCIDialogStatus.html">HBCIDialogStatus</a> zurückgegeben, anhand
+dessen sämtliche Status-Informationen, die während der Dialogausführung
+aufgelaufen sind, ausgewertet werden können.
+</p>
+
+<p>
+Außerdem werden in jedem Objekt, welches Rückgabedaten für einen Geschäftsvorfall
+enthält (siehe <a href="../GV_Result/HBCIJobResult.html">HBCIJobResult</a>), die Statusinformationen
+gespeichert, die konkret diesen Geschäftsvorfall betreffen. Dazu wird ein
+Objekt der Klasse <a href="HBCIStatus.html">HBCIStatus</a> verwendet.  
+</p>
+
+<p>
+Innerhalb einer Anwendung reicht i.d.R. die Anwendung der im folgenden Beispiel
+gezeigten Methoden aus:
+<pre>
+// initialize HBCI-stuff here
+...
+
+// add a business task
+HBCIJob jobSaldo=hbciHandle.newJob("SaldoReq");
+jobSaldo.setParam("my",myAccount);
+hbciHandle.addJob(jobSaldo);
+
+// add more business tasks here
+...
+
+// execute dialog
+HBCIDialogStatus dialogStatus=hbciHandler.execute();
+
+// print information about complete dialog
+if (!dialogStatus.isOK()) {
+    System.out.println("some error has occured during execution of the HBCI dialog:");
+    System.out.println(dialogStatus.getErrorString());
+}
+
+// check each business task
+if (jobSaldo.getJobResult().isOK()) {
+    System.out.println("saldo information for account "+myAccount);
+    System.out.println(jobSaldo.getJobResult().toString());
+} else {
+    System.out.println("an error occured in task SaldoRequest");
+    System.out.println(jobSaldo.getJobResult().jobStatus.getErrorString());
+}
+ 
+...
+</pre>  
+</p>
+</body></html>

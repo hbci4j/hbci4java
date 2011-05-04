@@ -1,0 +1,25 @@
+
+Es gibt leider immer wieder Probleme mit dem von mir modifizierten
+Javadoc-Doclet, das bewirken soll, dass es keine Referenzen auf
+nicht zur Benutzung freigegebene Klassen/Methoden/Variablen 
+in der API-Dokumentation gibt.
+
+Wenn also in der API-Dokumentation ein Link auf eine nicht existierende
+Dokumentation auftaucht, dann bedeutet das nicht, dass das verlinkte
+Objekt "bloss nicht dokumentiert" ist, sondern dass es auch tatsächlich
+von "normalen" Anwendungen nicht benutzt werden sollte. Durch einen
+Blick auf den Quelltext der entsprechenden Klasse ist es zwar
+prinzipiell möglich, evtl. vorhandene öffentliche (=public) Schnittstellen
+in Erfahrung zu bringen. Sollten diese aber nicht sauber in der
+"offiziellen" API-Dokumentation erscheinen, so kann es durchaus
+passieren, dass sich diese Schnittstellen ohne Vorankündigung
+bzw. ohne Erwähnung in ChangeLogs von einer Version zur nächsten
+ändern. 
+
+Also besser Finger weg von undokumentierten Schnittstellen, besser
+einen Hinweis an mich senden, wenn ein bestimmtes Feature benötigt
+wird, welches nicht in der offiziellen Dokumentation auftaucht ;-)
+
+Grüße
+-Stefan-
+hbci4java@kapott.org

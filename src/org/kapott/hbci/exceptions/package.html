@@ -1,0 +1,42 @@
+<html><body>
+<p>
+In diesem Package werden alle Exceptions definiert, die von
+<code><em>HBCI4Java</em></code> u.U. erzeugt werden. Alle diese Exceptions
+sind von der Klasse <a href="HBCI_Exception.html">HBCI_Exception</a>
+abgeleitet.   
+</p>
+
+<p>
+Um beim "Durchschlagen" einer solchen Exception bis zur Anwendung
+die genaue Fehlerursache bestimmen zu können, hilft (neben einem
+kompletten Stack-Trace natürlich) die Auswertung aller 
+<code>getMessage()</code>-Meldungen der gecatchten Exception
+und deren <code>getCause()</code>-Exceptions.
+</p>
+
+<p>
+Beispielcode zur Auswertung von Exceptions:
+<pre>
+try {
+  ...
+  // call some <em>HBCI4Java</em>-Methods here
+  ...
+} catch (HBCI_Exception e) {
+    Throwable e2=e;
+    String    msg;
+    
+    while (e2!=null) {
+        if ((msg=e2.getMessage())!=null) {
+            System.out.println(msg);
+        }
+        e2=e2.getCause();
+    }
+}
+</pre>
+Auf diese Art und Weise wird der etwas unübersichtliche Stack-Trace
+in eine besser lesbare Form gebracht. Alle vom HBCI-Kernel erzeugten
+Exceptions enthalten eine entsprechende Message, so dass die Auswertung
+der Exception-Messages meist schon ausreicht, um die genaue Fehlerursache
+zu lokalisieren.  
+</p>
+</body></html>

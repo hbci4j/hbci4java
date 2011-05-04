@@ -1,0 +1,30 @@
+
+Contributed by Olaf Stüben (http://felfri.de):
+
+
+In der Verzeichnis-Struktur ab chipcard/src befinden sich u.a.
+Makefiles für Mac-OS (jeweils mit dem Namen Makefile.mac).
+
+
+Hinweise zum Chipkarten-Support unter Mac-OS:
+
+  Vielleicht noch als Hinweis für die Benutzer unter MAC OS-X. Dort wird  
+  mehr oder weniger automatisch der pcscd gestartet - und dann klappt der  
+  Zugriff über CTAPI nicht mehr. Daher muss man das Ding abdrehen:
+
+  MAC OSX 10.3:
+  Es muss das pcscd Service abgedreht werden. Pcscd ist ein Service, welches  
+  den Zugriff auf den Kartenleser über die PCSC Schnittstelle regelt. Dort  
+  ist evtl noch ein Eintrag in der /System/Library/StartupItems
+
+  MAC OSX 10.4+:
+  Hier wird das pcscd Service dynamisch gestartet, dadurch kann dies nicht  
+  einfach gestoppt werden. Zuerst muss das Service securityd geändert  
+  werden, damit der alte 10.3 Mechanismus verwendet wird. In der  
+  securityd.plist ("/private/etc/mach_init.d/securityd.plist") muss der  
+  "Command" Wert von "/usr/sbin/securityd" nach "/usr/sbin/securityd -s on"  
+  geändert werden. !ACHTUNG: Wird hier etwas falsches eingetragen, so  
+  startet das System überhaupt nicht mehr! Anschließend muss das System neu  
+  gestartet werden.
+
+

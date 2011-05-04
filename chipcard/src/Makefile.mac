@@ -1,0 +1,6 @@
+
+all:
+	make -C lowlevel -f Makefile.mac all
+	make -C highlevel -f Makefile.mac all
+	make -C frontend -f Makefile.mac all
+	make -C tools -f Makefile.mac all

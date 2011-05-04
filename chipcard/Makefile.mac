@@ -1,0 +1,19 @@
+# Makefile for hbci4java - MAC OS-X
+
+# prefix lib and suffix .jnilib is required by Apple-Java
+
+TARGET=libhbci4java-card-mac.jnilib
+all: lib/$(TARGET)
+
+lib/$(TARGET): bin/$(TARGET)
+	cp bin/$(TARGET) lib/
+
+bin/$(TARGET): .make
+
+.make:
+	make -C src -f Makefile.mac all
+
+clean:
+	-rm -f lib/$(TARGET)
+	-rm -f bin/*
+	-find . -name Makefile.depend -delete

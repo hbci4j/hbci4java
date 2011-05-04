@@ -1,0 +1,29 @@
+Index: src/org/kapott/hbci/manager/AccountCRCAlgs.java
+===================================================================
+--- src/org/kapott/hbci/manager/AccountCRCAlgs.java	(revision 392)
++++ src/org/kapott/hbci/manager/AccountCRCAlgs.java	(revision 393)
+@@ -1182,8 +1182,12 @@
+         }
+ 
+         // Methode C
++        /* TODO: einige kontonummern werden laut spez hier ausgeschlossen */
+         sum = addProducts(number, 4, 8, new int[] {6, 5, 4, 3, 2}, false);
+         crc = 7-sum%7;
++        if (crc==7) {
++            crc=0;
++        }
+         if (number[9]==crc) {
+             return true;
+         }
+@@ -1191,7 +1195,10 @@
+         // Methode D
+         sum = addProducts(number, 4, 8, new int[] {6, 5, 4, 3, 2}, false);
+         crc = 9-sum%9;
+-        if (number[9]==crc&&number[9]!=9) {
++        if (crc==9) {
++            crc=0;
++        }
++        if (number[9]==crc && number[9]!=9) {
+             return true;
+         }
+ 

@@ -1,0 +1,128 @@
+
+# In dieser Datei werden die auszuführenden Jobs definiert. Eine Job-Definition
+# hat dabei folgendes Format:
+# 
+#   JOBNAME:JOBID:(props|toString)[:CUSTOMERID]
+#   PARAM1=VALUE1
+#   PARAM2=<FILENAME
+#   ...
+# 
+# Mehrere Job-Definitionen sind durch Leerzeilen voneinander zu trennen.
+#
+# JOBNAME legt fest, welcher GV ausgeführt werden soll. Die Liste aller
+# möglichen Werte für JOBNAME ist in der API-Dok. zum Package org.kapott.hbci.GV
+# zu finden ("Highlevel-Name"). Für eine Salden-Abfrage wäre hier also 
+# "SaldoReq", für eine Einzelüberweisung "Ueb" und für das Abholen von Konto-
+# auszügen "KUmsAll" zu verwenden.
+#
+# JOBID legt einen selbst definierten Bezeichner fest, um diesen Job eindeutig 
+# zu identifizieren. Diese JOBID dient dazu, die Job-Ergebnisdaten den richtigen
+# Aufträgen zuordnen zu können (wenn z.B. Saldenabfragen für mehrere Konten 
+# gemacht werden sollen, müssen die Ergebnisdaten natürlich den richtigen 
+# Aufträgen zugeordnet werden können - das geschieht auf Basis der JOBID).
+# Siehe dazu auch die Beschreibung des Formats der Ausgabedatei.
+#
+# Das dritte Token muss entweder den String "props" oder "toString" enthalten
+# und legt fest, in welchem Format die Job-Ergebnisdaten in die Ausgabedatei
+# geschrieben werden. Mit "toString" wird ein job-spezifisches "human-readable"
+# Format verwendet (intern wird die toString()-Methode der entsprechenden
+# GV_Result-Klasse aufgerufen). Bei Angabe von "props" werden die "Rohdaten"
+# aus der HBCI-Antwortnachricht in die Ausgabedatei geschrieben (diese Variante
+# ist u.U. besser zu parsen, falls die Ergebnisdaten automatisiert weiterver-
+# arbeitet werden sollen).
+#
+# Beispiel Ausgabedaten für SaldoReq mit "toString" (gekürzt):
+# 
+#   Konto: Testkonto Stefan Palme 1234567899 BLZ 80007777(Stefan Palme Testinstitut (HBCI4Java)) (BIC ) [DE] EUR
+#     Gebucht: 14.06.06 08:06 48.64 EUR
+# 
+# Beispiel Ausgabedaten für SaldoReq mit "props" (gekürzt):
+#
+#   content.KTV.KIK.blz=80007777
+#   content.KTV.number=1234567899
+#   content.Timestamp.date=14.06.06
+#   content.Timestamp.time=08:06
+#   content.booked.BTG.curr=EUR
+#   content.booked.BTG.value=48.64
+#   content.booked.CreditDebit=C
+#   content.booked.date=14.06.06
+#   content.booked.time=08:06
+#   content.curr=EUR
+#   content.kontobez=Testkonto
+#
+# Eine Liste aller möglichen "props", die für einen Job zurückgegeben werden
+# können, erhält man mit dem Kommandozeilentool o.k.h.tools.ShowLowlevelGVRs.
+#
+# Optional kann als viertes Token eine CUSTOMERID angegeben werden. Einige
+# Banken unterstützen HBCI-Zugänge, bei denen einer Nutzerkennung (= ein HBCI-
+# Zugang) mehrere Kunden-IDs zugeordnet sind. Abhängig davon, welche Kunden-ID
+# für einen HBCI-Dialog verwendet wird, hat der Anwender u.U. Zugriff auf
+# unterschiedliche Konten. Mit CUSTOMERID kann festgelegt werden, unter welcher
+# Kunden-ID der betreffende Auftrag ausgeführt werden soll. Details in der
+# API-Dok. zu org.kapott.hbci.manager.HBCIHandler.addJob(...)
+#
+# Anschließend folgen Zeilen Job-Parameter-Daten (jeweils ein Parameter pro
+# Zeile). Beendet wird eine Job-Definition durch eine Leerzeile bzw. das 
+# Datei-Ende.
+# Die möglichen Parameter für jeden GV sind der API-Dokumentation zum Package
+# org.kapott.hbci.GV zu finden (und org.kapott.hbci.GV.HBCIJob.setParam(...)).
+# 
+# Alle hier angegebenen Parameter werden intern in einen Aufruf von 
+# HBCIJob.setParam(String,String) umgewandelt. Deshalb funktionieren hier die
+# "komplexen" Varianten von setParam() nicht. Um zum Beispiel eine 
+# Kontoverbindung zu setzen (z.B. für BLZ und Kontonummer eines Empfänger-Kontos
+# für eine Überweisung), könnte man einer Applikation
+#
+#   transfer.setParam("dst", new Konto("80007777", "1234567890"))
+#
+# schreiben. In dieser Job-Definitions-Datei muss der entsprechende Parameter 
+# jedoch so gesetzt werden:
+#
+#   dst.country=DE
+#   dst.blz=80007777
+#   dst.number=1234567890
+#
+# (wobei "dst.country=DE" auch entfallen kann, weil "DE" der default-Wert ist).
+#
+# Alternativ kann der Wert für einen Job-Parameter auch aus einer Datei kommen.
+# Dazu ist das Format "PARAM=<FILENAME" zu verwenden. Dabei wird der komplette
+# Inhalt der angegebenen Datei als Wert für den Parameter verwendet. Dieses
+# Feature ist z.B. bei Sammelüberweisungen (JOBNAME=MultiUeb) nützlich: dort
+# wird im Job-Parameter "data" ein DTAUS-Datenstrom mit den Überweisungs-
+# aufträgen erwartet. Eine externe Anwendung könnte diese DTAUS-Daten in einer
+# separaten Datei erzeugen, die dann in der Job-Definitions-Datei einfach
+# referenziert wird, so dass deren Inhalt als Wert für den "data"-Parameter
+# verwendet wird. Prinzipiell kann man dieses Feature für jeden beliebigen 
+# Job-Parameter verwenden.
+
+
+# Eine Saldenabfrage
+SaldoReq:saldo1:props
+my.number=1234567890
+
+
+# Abholen von Kontoauszügen
+KUmsAll:kontoauszug:toString
+my.number=38473874
+# startdate=1.3.2006
+# enddate=1.6.2006
+
+
+# # Einzelüberweisung
+# Ueb:ueberweisung1:props
+# src.blz=80007777
+# src.number=1234567890
+# dst.blz=99999999
+# dst.number=1010101010
+# btg.value=1.23
+# btg.curr=EUR
+# name=Max Mustermann
+# usage=Gutschrift für Abo
+# usage_2=Abo-ID: 987-654-32
+
+
+# # Sammelüberweisung mit Daten aus externer Datei
+# MultiUeb:sammelueb:props
+# my.number=1234567890
+# data=</tmp/dtaus.dat
+

@@ -1,0 +1,309 @@
+
+# when connecting to the HBCI-server we have to provide an
+# application name and version. this is sometimes used by
+# the hbci-server to handle certain applications in a special way.
+# you may use the defaults here.
+client.product.name=HBCI4Java
+client.product.version=2.5
+
+# -----------------------------------------------------------------
+
+# these are the parameters for the DDV security mechanism
+# (symmetric keys stored on a chipcard)
+
+# the *prefix* of the filename in which to locally cache
+# all needed user and institure information. the filename will be 
+# built from this value and the card-number (16 digits). so if you
+# really want to specify a *pathname* here, dont forget
+# the trailing "/"
+client.passport.DDV.path=./passports/
+
+# filename of the shared library, that makes the connection between
+# java and the CT-API. this library is shipped with the HBCI4Java-
+# package. 
+client.passport.DDV.libname.ddv=/home/kleiner/projects/hbci4java/chipcard/lib/libhbci4java-card-linux.so
+
+# this is the filename of the ctapi-library, that you can get
+# from the vendor of your chipcard-terminal.
+client.passport.DDV.libname.ctapi=/usr/lib/libctapi-cyberjack.so
+
+# the portnumber to be used when accessing the chipcard terminal.
+# for serially connected terminals, /dev/ttyS0 (COM1:) is 
+# accessed by port=1 (some vendors also use port=0), for
+# /dev/ttyS1 (COM2:) use port=2 (sometimes port=1) and so on.
+# the same scheme applies for USB-connected terminals
+client.passport.DDV.port=1
+
+# which internal termina-number to be used when accessing the
+# chipcard-terminal. this is only interesting, when you have
+# more than one terminal accessed by the *same* driver (e.g.
+# two reiner-sct-terminals). each terminal needs an unique number
+# (starting with 0)
+client.passport.DDV.ctnumber=0
+
+# this setting currently only works
+# for reiner-sct-biometric chipcard-terminal. when you set this
+# to 1, then you dont have to enter the chipcard-pin manually, but
+# can use your fingerprint instead, so that the chipcard-terminal
+# automatically "enters" the pin assigned to your finger
+# setting this to "-1" always works and detects if you have a
+# biometric finger unit or not. if yes, it will be used automatically
+client.passport.DDV.usebio=-1
+
+# this setting is for chipcard-terminals that dont have an
+# own keypad (i.e. class-1 chipcard-terminals). if you set
+# this to 1, the pin for accessing the chipcard will be requested
+# by software, i.e. you have to enter it via your computer-
+# keyboard. this is of course less secure, because someone could
+# "sniff" the pin. also, the client-software must support this.
+# by setting this to "0" the keypad of the chipcard terminal
+# will be used to enter the PIN
+# you can set this to "-1" for auto-detection
+client.passport.DDV.softpin=-1
+
+# this parameter is only used, when softpin is 1. this can be set
+# to the chipcard-pin, so that you dont have to enter the pin
+# manually. but beware, if someone finds this config-file (or the
+# software code that sets this option), she knows your pin!
+#client.passport.DDV.pin=
+
+# on some DDV-chipcards there is more than one HBCI account stored.
+# with this parameter you can set the index number of the entry
+# you want to use. the default value is 1. currently there can be
+# no more than five entries, so the max. value for this is 5 
+client.passport.DDV.entryidx=1
+
+# -------------------------------------------------------------------
+
+# the following settings are for security type RDH
+# (asymmetric keys stored in a special rsa-key-file)
+# note, that this hbci-implementation uses an own format
+# for these key-files, so the files you get from your credit-
+# institute will not work!
+# there will be tools in the future to convert these external
+# files to the right format.
+
+# the filename of the passport file to be used. this option will
+# mostly be set by the application, depending on the user who wants
+# to connect to his credit institute (so this file is user-
+# and credit institute -individual)
+client.passport.RDHNew.filename=./passports/institute_X_user_Y.dat
+
+# always set this to 1, all other possible settings are only used
+# internally
+client.passport.RDHNew.init=1
+
+# -------------------------------------------------------------------
+
+# the following settings are for security type SIZRDHFile
+# these files are normally used by other HBCI software (e.g. StarMoney),
+# but can also be used with HBCI4Java.
+# please make a backup copy of the keyfile before you use
+# it with HBCI4Java! 
+
+# the filename of the keyfile
+client.passport.SIZRDHFile.filename=./passports/secret.key
+
+# the filename of the shared library to access siz rdh keyfiles
+# (download from http://hbci4java.kapott.org#download)
+client.passport.SIZRDHFile.libname=/usr/lib/libhbci4java-sizrdh.so
+
+# always set this to 1, all other possible settings are only used
+# internally
+client.passport.SIZRDHFile.init=1
+
+# -------------------------------------------------------------------
+
+# the following parameters have the same meaning as the
+# corresponding paramaters for RDHnew. The RDH-variant of
+# this type of passports is deprecated now, you are highly
+# encouraged to use RDHNew.  
+
+client.passport.RDH.filename=./passports/institute_X_user_Y.dat
+client.passport.RDH.init=1
+
+# -------------------------------------------------------------------
+
+# These settings specify parameters of an PinTan account.
+# The filename is the name of a file where all your HBCI account 
+# data will be stored (userid, url, some internally cached data,
+# etc.).
+client.passport.PinTan.filename=./passports/institute_X_user_Y_pintan.dat
+
+# PinTan uses HTTPS communication. When setting checkcert=1 the
+# SSL certificate will be checked for validity. If the root
+# certificate of this SSL certificate is not in your cacert file,
+# you may specify an own "certfile" containing the certificate
+# chain.
+client.passport.PinTan.certfile=hbcicerts.bin
+client.passport.PinTan.checkcert=1
+
+# When you want to use a proxy for the outgoing HTTPS connection
+client.passport.PinTan.proxy=proxy.intern.domain.com:3128
+
+# proxy authentication data if required. 
+# When you dont specify these kernel parameters, they will be
+# asked for on demand via callback mechanism
+#client.passport.PinTan.proxyuser=fred
+#client.passport.PinTan.proxypass=very_secret
+
+# always set this to 1
+client.passport.PinTan.init=1
+
+# -------------------------------------------------------------------
+
+# the following parameters have the same meaning as the
+# corresponding paramaters of RDHnew. Anonymous passports
+# provide an anonymous access to the HBCI server of a credit
+# institute. Only few credit institutes support this feature.
+
+client.passport.Anonymous.filename=./passports/institute_xx_anonymous.dat
+client.passport.Anonymous.init=1
+
+# -------------------------------------------------------------------
+
+# this option specifies which security method to use 
+# (DDV,  
+#  RDHNew, RDH, 
+#  SIZRDHFile, RDHXFile, 
+#  PinTan, Anonymous)
+# when no parameter is given to HBCIPassport.getInstance()
+client.passport.default=DDV
+
+# -------------------------------------------------------------------
+
+# this setting specifies the numbers of tries you have to
+# enter the correct passphrase to decrypt the passport file
+# (if any). if this number of tries has been reached without
+# success, the kernel will throw an exception
+client.retries.passphrase=2
+
+# this setting is only needed when you (the hbci-kernel, i.e. the
+# listener-part of this implementation) are behind a firewall, which
+# just lets out connections *from* specific tcp-ports. you can
+# set the tcp-port for the local end of the connection with this
+# option. if it is not set, the port will be assigned by the os.
+#client.connection.localPort=62534
+
+# ------------------------------------------------------------------
+
+# this is the path where the kernel searches for the
+# xml-file that contains the syntax-description for the
+# requested hbci-version. when searching for the file, 
+# the kernel uses the ClassLoader.getResourceAsStream()
+# method, giving this option+filename as arguments. 
+# normally you dont have to set this option, but
+# dont forget the trailing "/" if specified
+#kernel.kernel.xmlpath=syntax/
+
+# with these parameter you could change the paths
+# where the kernel looks for the blz.properties
+# resp. challengedata.xml
+# you should NEVER change these values
+#kernel.kernel.blzpath=blzs/
+#kernel.kernel.challengedatapath=challengedata/
+
+# this option enables a special feature of the new message engine: when a
+# required syntax element is missing, the message engine inserts "nothing"
+# for this syntax element by default. When this kernel parameter is enabled
+# ("1"), there will be a string "[MISSING:...]" inserted.  
+# Only useful for debugging core components of HBCI4Java
+client.msgengine.insertMissingTags=1
+
+# this option sets the loglevel for messages generated
+# by the hbci-kernel. the default value is 2.
+# the levels have to following semantics:
+# 0=no logging, 1=errors, 2=warnings, 3=info, 4=debug, 5=heavy debug
+# a loglevel of X contains all loglevels less than X
+log.loglevel.default=4
+
+# with this kernel parameter you configure how much data will
+# be filtered by the HBCI4Java logging engine
+# valid values:
+#   0 - no filtering
+#   1 - all secret data will be filtered out (passphrases, PIN, TAN, ...)
+#   2 - all "identifying" data will be filtered out (account numbers, user ids,
+#       real names, ...)
+#   3 - more "semi-sensitive" data will be filtered out (institute codes, 
+#       money amounts, ...)
+# default value is 2
+log.filter=2
+
+# enable logging of data sent via SSL sockets when using HBCI-PIN/TAN
+# (default is disabled)
+# log.ssl.enable=1
+
+# specify filename where to write SSL log data (writes to HBCI4Java
+# logger with level LOG_DEBUG2 (=5) if not specified)
+# log.ssl.filename=/tmp/ssl.log
+
+# this option is a list of so called "rewriter"-modules.
+# these modules are used to fix bugs that some credit-
+# institutes make in their hbci-implementation. usually
+# you dont have to set this option manually
+# kernel.rewriter=
+
+# ------------------------------------------------------------------
+
+# When using threaded callbacks, this timeout specifies how long
+# one thread waits for the other one. When a thread has not be
+# notified after this amount of time (in seconds), the thread will
+# terminate by itself. Any further attempts to contact the terminated
+# thread after this time will cause a runtime exception.
+# kernel.threaded.maxwaittime=300
+
+# ------------------------------------------------------------------
+
+# when you set the following parameter to "1", the dialog engine ignores the
+# response message to a DialogEnd request. this is needed for some very special
+# cases where buggy HBCI server create an error message instead of a valid
+# DialogEndResponse.
+kernel.dialogs.ignoreDialogEndErrors=0
+
+# ------------------------------------------------------------------
+
+# the following kernel parameters set the size of
+# some object pools. object pools are used internally to
+# reduce the need for often allocating and throwing away.
+# the values shown here are the builtin defaults.
+# kernel.objpool.MSG=8
+# kernel.objpool.SF=128
+# kernel.objpool.SEG=128
+# kernel.objpool.DEG=512
+# kernel.objpool.DE=1024
+# kernel.objpool.Sig=8
+# kernel.objpool.Crypt=8
+# kernel.objpool.Syntax=1024
+
+# ------------------------------------------------------------------
+
+# The following parameters can be set to "yes", "no" or "callback".
+# They are used when HBCI4Java detects an error. When the corresponding
+# kernel parameter is set to "yes", HBCI4Java will only log an
+# error message and continue (dangerous!).
+# When the value is "no", HBCI4Java will not igore the error but
+# raise an exception (the normal behaviour).
+# When you use the value "callback", HBCI4Java will generate a callback
+# with reason HAVE_ERROR, so the client may decide whether to ignore
+# the error or not.
+# The default (and heavily recommended) setting is "no", so all
+# errors will raise an exception. Settings other than "no" are for
+# debugging and development purposes only.
+
+# client.errors.ignoreJobResultStoreErrors=no
+# client.errors.ignoreWrongJobDataErrors=no
+# client.errors.ignoreWrongDataLengthErrors=no
+# client.errors.ignoreWrongDataSyntaxErrors=no
+# client.errors.ignoreAddJobErrors=no
+# client.errors.ignoreCreateJobErrors=no
+# client.errors.ignoreExtractKeysErrors=no
+# client.errors.ignoreDialogEndErrors=no
+# client.errors.ignoreSecMechCheckErrors=no
+# client.errors.ignoreVersionCheckErrors=no
+# client.errors.ignoreSignErrors=no
+# client.errors.ignoreMsgSizeErrors=no
+# client.errors.ignoreCryptErrors=no
+# client.errors.ignoreMsgCheckErrors=no
+# client.errors.allowOverwrites=no
+# client.errors.ignoreValidValueErrors=no
+# client.errors.ignoreSegSeqErrors=no

@@ -1,0 +1,33 @@
+
+DEFINES  = -D__UNIX
+INCLUDES = -I../include -I/System/Library/Frameworks/JavaVM.framework/Headers
+WARNINGS = -Wall 
+TARGET = ../../bin/libhbci4java-card-mac.jnilib
+ARCH = -arch i386 -arch ppc
+
+# removed "-Werror -pedantic" because of dlsym() typecast problem
+
+CC       = g++
+CFLAGS   = -fPIC $(DEFINES) $(INCLUDES) $(WARNINGS) 
+LIBS     = -L../../bin -lzkachip-highlevel -lzkachip-lowlevel
+
+SOURCES = frontend.cpp
+
+OBJECTS = ../../bin/frontend.o
+
+.SUFFIXES: .cpp .o
+
+../../bin/%.o: %.cpp
+	$(CC) -c -o $@ $(CFLAGS) $(ARCH) $<
+
+all: depend $(TARGET)
+
+depend: Makefile.depend
+
+Makefile.depend: $(SOURCES)
+	for file in $(SOURCES); do echo -n "../../bin/"; gcc $(CFLAGS) -MM $$file; done >Makefile.depend
+
+$(TARGET): $(OBJECTS) ../../bin/libzkachip-highlevel.a ../../bin/libzkachip-lowlevel.a
+	$(CC) -fPIC -dynamiclib -o $@ $(OBJECTS) $(LIBS) -framework JavaVM $(ARCH)
+
+include Makefile.depend

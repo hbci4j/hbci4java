@@ -1,0 +1,75 @@
+<!ELEMENT hbci (DEGs,SEGs,SFs,MSGs)>
+
+<!ELEMENT DEGs    (DEGdef)*>
+<!ELEMENT SEGs    (SEGdef)*>
+<!ELEMENT SFs     (SFdef)*>
+<!ELEMENT MSGs    (MSGdef)*>
+
+<!ELEMENT DEGdef ((DE | DEG)+,valids*,value*)>
+<!ATTLIST DEGdef
+  id ID #REQUIRED
+  needsRequestTag (1) #IMPLIED
+>
+
+<!ELEMENT SEGdef ((DEG | DE)+,valids*,value*)>
+<!ATTLIST SEGdef
+  id ID #REQUIRED
+  needsRequestTag (1) #IMPLIED
+>
+
+<!ELEMENT SFdef (SEG | SF)*>
+<!ATTLIST SFdef
+  id ID #REQUIRED
+  needsRequestTag (1) #IMPLIED
+>
+
+<!ELEMENT MSGdef ((SEG | SF)+,valids*,value*)>
+<!ATTLIST MSGdef
+  id ID #REQUIRED
+  dontsign (1) #IMPLIED
+  dontcrypt (1) #IMPLIED
+>
+
+<!ELEMENT DE EMPTY>
+<!ATTLIST DE
+  name CDATA #REQUIRED
+  type (AN | Bin | Ctr | Cur | DTAUS | Date | Dig | ID | JN | Num | Time | Wrt) #REQUIRED
+  minsize CDATA #IMPLIED
+  maxsize CDATA #IMPLIED
+  minnum CDATA #IMPLIED
+  maxnum CDATA #IMPLIED
+>
+
+<!ELEMENT DEG EMPTY>
+<!ATTLIST DEG
+  name IDREF #REQUIRED
+  minnum CDATA "1"
+  maxnum CDATA "1"
+>
+
+<!ELEMENT SEG EMPTY>
+<!ATTLIST SEG
+  name IDREF #REQUIRED
+  minnum CDATA "1"
+  maxnum CDATA "1"
+>
+
+<!ELEMENT SF EMPTY>
+<!ATTLIST SF
+  name IDREF #REQUIRED
+  minnum CDATA "1"
+  maxnum CDATA "1"
+>
+
+<!ELEMENT valids (validvalue)+>
+<!ATTLIST valids
+  path CDATA #REQUIRED
+>
+
+<!ELEMENT validvalue (#PCDATA)>
+
+<!ELEMENT value (#PCDATA)>
+<!ATTLIST value
+  path CDATA #REQUIRED
+>
+

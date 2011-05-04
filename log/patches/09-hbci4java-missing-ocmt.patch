@@ -1,0 +1,46 @@
+Index: src/org/kapott/hbci/GV_Result/GVRKUms.java
+===================================================================
+--- src/org/kapott/hbci/GV_Result/GVRKUms.java	2011-05-02 17:04:39.000000000 +0200
++++ src/org/kapott/hbci/GV_Result/GVRKUms.java	2011-05-02 17:07:50.273516107 +0200
+@@ -576,9 +576,16 @@
+                             if (slashpos==-1)
+                                 slashpos=st_ums.length();
+                             
+-                            line.orig_value=new Value(
+-                                st_ums.substring(pos+9,slashpos).replace(',','.'),
+-                                st_ums.substring(pos+6,pos+9));
++                            try
++                            {
++                              line.orig_value=new Value(
++                                  st_ums.substring(pos+9,slashpos).replace(',','.'),
++                                  st_ums.substring(pos+6,pos+9));
++                            }
++                            catch (NumberFormatException nfe)
++                            {
++                              // Der Betrag darf fehlen. Tolerieren wir
++                            }
+                         }
+                         
+                         // extract charge Value
+@@ -587,10 +594,17 @@
+                             int slashpos=st_ums.indexOf("/",pos+9);
+                             if (slashpos==-1)
+                                 slashpos=st_ums.length();
+-                            
+-                            line.charge_value=new Value(
+-                                st_ums.substring(pos+9,slashpos).replace(',','.'),
+-                                st_ums.substring(pos+6,pos+9));
++
++                            try
++                            {
++                              line.charge_value=new Value(
++                                  st_ums.substring(pos+9,slashpos).replace(',','.'),
++                                  st_ums.substring(pos+6,pos+9));
++                            }
++                            catch (NumberFormatException nfe)
++                            {
++                              // Der Betrag darf fehlen. Tolerieren wir
++                            }
+                         }
+                     }
+                     

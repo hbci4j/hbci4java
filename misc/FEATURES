@@ -1,0 +1,159 @@
+
+--- was kann ich alles mit HBCI4Java machen?
+
+* Unterstützung der Version HBCI-2.01 bis HBCI-2.2 sowie FinTS-3.0
+
+* Unterstützung von dateibasiertem RDH-Verfahren, PIN/TAN-Verfahren (seit 
+  FinTS-3.0 auch das Zweischritt-Verfahren) und chipkartenbasierten DDV-
+  Verfahren, dabei Unterstützung von Kartentypen 0 und 1, Chipkartenleser 
+  Klassen 1-3 (benötigt CTAPI-Treiber) sowie Biometrieeinheit (nur Reiner-SCT)
+
+* Unterstützung von SIZ-RDH-Schlüsseldateien und RDH-2-Schlüsseldateien
+  (StarMoney, GENOlite, VR-Networld, ProfiCash, ...)
+  
+* Unterstützung der folgenden HBCI-Geschäftsvorfälle:
+  - Einzelüberweisungen
+    . normale (Ueb)
+    . Umbuchung (Umb)
+    . Spendenüberweisungen (Donation)
+    . BZÜ-Überweisungen (UebBZU)
+  - Auslandsüberweisungen
+  - Sammelüberweisungen (MultiUeb),
+    Sammellastschriften (MultiLast)
+    (jeweils HBCI4Java-eigener DTAUS-Generator vorhanden)
+  - Verwalten von terminierten Überweisungen
+    . einreichen (TermUeb), auflisten (TermUebList), 
+      bearbeiten (TermUebEdit) und löschen (TermUebDel)
+  - Verwalten von Daueraufträgen
+    . einreichen (DauerNew), auflisten (DauerList), 
+      bearbeiten (DauerEdit) und löschen (DauerDel)
+  - Einreichen von Lastschriften (Last)
+  - Widerrufen von Lastschriften (StornoLast)
+  - Verwalten von Festgeldanlagen
+    . zur Zeit nur Abfrage von Konditionen (FestCondList) und Auflisten von
+      bestehenden Festgeldanlagen (FestList[All])
+  - Abfrage von Kontoinformationen
+    . Saldenabfragen (auch für SEPA-fähige Konten) (SaldoReq[All|SEPA])
+    . Abholen von Umsatzinformationen (Kontoauszug) (KUms[All|New])
+    . Abholen von Kontostammdaten (AccInfo)
+    . Abholen von Informationen zu ausgegebenen Karten (Cardlist)
+  - Abholen und Senden verschiedener Informationen und Nachrichten
+    (CustomMsg, InfoList, InfoOrder)
+  - Auswertung des bankinternen Statusprotokolls (Status)
+  - Anzeigen von Informationen zu TAN-Listen (nur bei PIN/TAN-Verfahren)
+    (TANList)
+  - Abholen von Wertpapierdepot-Informationen (WPDepotList)
+  
+  - es werden u.U. einige weitere Geschäftsvorfälle unterstützt, für die 
+    zur Zeit noch keine Highlevel-Unterstützung implementiert ist, 
+    aber als Lowlevel-GVs lassen sich diese benutzen
+
+* Erzeugen von Aufträgen:
+  - Lowlevel-Interface: *schnelles* Implementieren neuer GVs möglich,
+    starke Kontrolle über alle GV-Parameter und Ergebnisdaten
+  - Highlevel-Interface: anwendungsorientierte Schnittstelle zum
+    Erzeugen von Aufträgen und zum Auswerten von Ergebnisdaten
+
+* einfacher Zugriff auf Job-bezogene Statusinformationen einer
+  HBCI-Antwortnachricht
+
+* einfache Identifizierung von erzeugten Aufträgen und überprüfen
+  deren Status' im Statusprotokoll
+
+* Zuordnung von Bankleitzahlen zu Kreditinstituts-Bezeichnungen
+
+* diverse Tools zum Auslesen/Bearbeiten der DDV-Chipkarte, zum Erzeugen
+  eines INI-Briefes, zum Bearbeiten der Passports (Sicherheitsmedien), usw.
+  
+* Batch-Tool für automatisierte Abarbeitung von HBCI-Jobs, die in einer
+  Textdatei definiert werden können
+
+* Schlüsselverwaltung:
+  - Sperren von Nutzerschlüsseln
+  - Neugenerieren von Nutzerschlüsseln
+  - Setzen von Nutzerschlüsseln auf vorgegebene Werte 
+
+* dynamisches Ändern von Kernel-Parametern zur Laufzeit
+
+* verfolgen der HBCI-Kernel-Aktivitäten durch Callbacks möglich 
+
+* dynamische Anpassungen an HBCI-Server mit "Fehlern" in der 
+  Implementation des HBCI-Standards
+
+* Callback-Mechanismus für die Kommunikation zwischen HBCI-Kernel
+  und Anwendung, um unabhängig von der Laufzeitumgebung (Applikation,
+  Servlet, Applet, mit oder ohne GUI usw.) zu sein
+  
+* Möglichkeit, bestimmte von HBCI4Java erkannte Fehler im HBCI-Dialog
+  zu ignorieren (für die Entwicklungsphase von Anwendungen)
+  
+* Demo-Applet bzw. Java WebStart Anwendung verfügbar
+
+* Einsatz in multithreaded Anwendungen möglich
+
+--- was macht HBCI4Java für mich?
+
+* automatische Auswertung der BPD:
+  - automatisches Benutzen der jeweils höchsten unterstützten
+    Version eines Geschäftsvorfalls
+  - automatisches Erzeugen zusätzlicher Nachrichten, wenn max.
+    Anzahl von GVs pro Nachricht überschritten wird
+  - automatisches Überprüfen, ob bestimmte Einschränkungen bzgl.
+    eines zu erzeugenden Auftrages eingehalten wurden
+  - automatisches Erkennen, ob ein bestimmter Geschäftsvorfall
+    von der Bank überhaupt angeboten wird
+  - bei PIN/TAN-Verfahren: automatische Erkennung von Geschäftsvorfällen,
+    die eine TAN benötigen
+
+* automatisches Überprüfen der verwendeten Kontonummern anhand
+  der für die jeweilige Bank zu verwendenden Prüfzifferverfahren 
+
+* automatisches Aktualisieren der BPD und UPD beim Wechsel der 
+  für die Dialoge benutzten HBCI-Version
+
+* automatisches Konvertieren und Parsen von Datums- und Zeitangaben
+  in bzw. von Locale-spezifischen Formaten
+
+* für jedes Sicherheitsmedium wird optional automatisch die damit zuletzt 
+  benutzte HBCI-Version verwendet  
+
+* passwortgeschützte Sicherheitsmedien
+
+* Speichern von (geänderten) Zugangsdaten auf der Chipkarte 
+  (für DDV-Passports) möglich (wird teilweise für Initialisierung
+  der Benutzerkennung benötigt)
+
+* sauberes Fehlerbehandlungs- und Status-System
+
+* Erzeugen noch nicht existierender bzw. Initialisieren nicht 
+  initialisierter Sicherheitsmedien (=Passports) zur Laufzeit und 
+  ohne zusätzlichen Programmcode innerhalb der HBCI-Anwendung
+  (Beispiel siehe org.kapott.hbci.tools.AnalyzeReportOfTransactions)
+
+* automatisches Erzeugen zusätzlicher HBCI-Nachrichten, wenn
+  in einer Antwortnachricht nicht alle verfügbaren Antwortdaten
+  enthalten sind --> Abholen der restlichen Daten
+
+* völlig automatisches Aktualisieren von BPD, UPD und Institutsschlüsseln
+
+--- Details der Implementation von HBCI4Java
+
+* lauffähig auf allen Plattformen mit Java Runtime Environment 1.4+,
+  für Chipkartensupport wird zusätzlich Unterstützung von dynamischen
+  Bibliotheken benötigt.
+
+* austauschbare integrierte HBCI-Spezifikation (XML-Format),
+  damit leicht Anpassung an neue Versionen bzw. Debugging möglich
+  
+* I18N-Support für Deutsch und Englisch (noch nicht für alle Texte)
+
+* modulares System für folgende Komponenten, ermöglicht einfaches
+  Hinzufügen weiterer Module:
+  - Kommunikationspfade (Standard-HBCI, PIN/TAN (HTTPS))
+  - Kommunikationsfilter (Base64)
+  - Datentypen für Datenelemente
+  - Highlevel-Support für Geschäftsvorfälle
+  - intern verwendete HBCI-Spezifikation
+  - Sicherheitsmedien (=Passports: RDH mit Datei, DDV mit Chipkarte,
+    PIN/TAN mit Datei)
+  - Module für Anpassung an "fehlerhafte" HBCI-Server

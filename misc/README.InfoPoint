@@ -1,0 +1,177 @@
+
+Der HBCI4Java-InfoPoint-Server ist ein Versuch, HBCI-Konfigurationsdaten
+der verschiedenen Banken zentral zu sammeln und über ein öffentliches
+Interface zur Verfügung zu stellen.
+
+Problem: Um in einer HBCI-fähigen Software einen HBCI-Account einzurichten,
+werden eine Menge technischer Daten benötigt (Hostname/URL, zu verwendende
+HBCI-Version, ...). In einigen Software-Produkten muss man diese Daten 
+alle manuell eingeben, andere Produkte enthalten eine integrierte Daten-
+bank, die den Anwender bei der Wahl der richtigen Einstellungen unterstützt.
+Diese integrierte Datenbank wird i.d.R. vom Softwarehersteller gepflegt
+und muss regelmäßig aktualisiert werden.
+
+In den entsprechenden Foren findet man oft diesbezügliche Fragen ("Welche
+Einstellungen muss ich für meinen Zugang zur Bank X verwenden?") und die
+dazugehörigen Antworten. In der Regel kommen diese Antworten von Nutzern,
+die den Zugang zu dieser Bank bereits erfolgreich eingerichtet haben.
+
+An genau dieser Stelle setzt die Idee des InfoPoint-Servers an. Der
+HBCI4Java-InfoPoint-Server ist eine zentrale Datenbank, in der die 
+richtigen Konfigurations-Einstellungen für die HBCI-Server aller Banken
+gespeichert werden sollen.
+
+Da niemand diese Daten manuell pflegen will, und weil Nutzer, die einen
+Zugang erfolgreich eingerichtet haben, in der Regel zu faul sind, ihr
+Wissen dann auch in eine zentrale Datenbank einzutragen, soll diese
+Datenbank automatisch mit Wissen gefüllt werden. Ziel ist es, dass
+möglichst viele HBCI-fähige Softwareprodukte diese Datenbank mit einer
+Erfolgsmeldung füttern, sobald sie einen HBCI-Verbindungsaufbau
+erfolgreich absolviert haben. In dieser Erfolgsmeldung sind diverse
+technische Daten enthalten, die die verwendeten Konfigurations-
+einstellungen beschreiben.
+
+Auf diese Art und Weise lernt die Datenbank nach und nach funktionierende
+Konfigurationseinstellungen für die verschiedenen HBCI-Server.
+
+Um dieses Wissen auch nutzen zu können, sind zwei Abfrage-Möglichkeiten
+geplant: zum einen soll es ein einfaches Web-Interface geben, wo man
+"manuell" anhand der BLZ abfragen kann, welche Konfiguration für die 
+jeweilige Bank zu verwenden ist.
+
+Außerdem soll es ein einfaches HTTP-basiertes API geben, welches
+es auch Softwareprodukten ermöglichen soll, diese Datenbank abzufragen.
+Damit könnten z.B. auch Produkte wie Hibiscus, die keine eingebaute
+Datenbank mit allen Banken und deren Konfigurationen haben, dem Nutzer
+bei der Einrichtung von HBCI-Zugängen Hilfestellung bieten.
+
+
+Neben den reinen Konfigurationsdaten für den HBCI-Zugang werden in der
+Datenbank auch Informationen darüber gespeichert, welche Geschäftsvorfälle
+ein HBCI-Server unterstützt, welche PIN/TAN-Verfahren angeboten werden
+usw. Damit besteht zum einen die (theoretische, nicht sehr sinnvolle)
+Möglichkeit, über das Web-Interface nach Banken zu *suchen*, die z.B.
+den Geschäftsvorfall "Auslandsüberweisung" via HBCI anbieten (natürlich
+bräuchte man dann dort auch einen Zugang, um diesen GV nutzen zu können).
+
+Außerdem besteht damit die Möglichkeit, dass eine HBCI-fähige Anwendung
+nicht erst einen HBCI-Zugang konfigurieren und den HBCI-Server der Bank
+befragen muss, um herauszufinden, welche Geschäftsvorfälle von der
+jeweiligen Bank überhaupt unterstützt werden. Das wäre z.B. für mobile
+Anwendungen, Applets o.ä. hilfreich, die solche Daten nicht selbst in 
+einem Cache vorhalten wollen und trotzdem ohne HBCI-Kommunikation auf diese
+Informationen zugreifen wollen.
+
+
+Ein weiterer Vorteil dieses Systems ist, dass Änderungen relativ schnell
+zentral bekannt werden. Wenn z.B. eine Bank die URL für den Zugriff auf
+das HBCI-PIN/TAN-Interface ändert, wird der Server ab diesem Zeitpunkt
+keine Erfolgsmeldungen mit der alten URL mehr empfangen. Durch entsprechende
+statistische Auswertungen der empfangenen Erfolgsmeldungen kann der Server
+bei entsprechenden Abfragen sehr schnell mit der neuen, funktionierenden 
+URL antworten. Softwareprodukte, die die automatisierte Abfrage des
+InfoPoints-Servers unterstützen, könnten so sehr schnell und fast voll-
+automatisch die entsprechenden HBCI-Konfigurationseinstellungen für einen
+Nutzer ändern - im Extremfall sogar völlig transparent für den Nutzer.
+
+
+Konkrete technische Details der aktuellen Umsetzung:
+
+Im Moment läuft auf dem Server hbci4java.kapott.org eine erste Version des
+InfoPoint-Servers. Dieser Server kann im Moment nur Daten SAMMELN, 
+jedoch noch keine Anfragen beantworten.
+
+Zur Zeit unterstützt nur HBCI4Java-basierte Software das InfoPoint-
+Protokoll. Konkret heißt das, dass der HBCI4Java-Kernel Informationen
+über erfolgreiche HBCI-Verbindungen an diesen Server melden kann.
+
+Um dieses Feature zu aktivieren, muss der HBCI-Kernel-Parameter 
+"infoPoint.enabled=1" gesetzt werden. Standardmäßig ist dieser
+Parameter deaktiviert, so dass die Software nicht per default
+"nach Hause telefoniert".
+
+Wenn dieses Feature aktiv ist, passiert folgendes: sobald der HBCI4Java-
+Kernel nach einer Dialog-Initialisierung neue Bank-Parameter-Daten (BPD)
+empfängt, geht die Kernel-Logik von einem "erfolgreichen Verbindungsaufbau"
+aus. 
+
+Es wird ein XML-Dokument mit nachfolgender Struktur erzeugt und via
+HTTP-POST an die URL http://hbci4java.kapott.org/infoPoint gesendet:
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bpdReceived>
+  <passport>
+    <param name="filter" value="Base64"/>
+    <param name="type" value="PinTan"/>
+    <param name="host" value="www.hora-obscura.de/pintan/PinTanServlet"/>
+    <param name="hbciVersion" value="220"/>
+    <param name="blz" value="80007777"/>
+    <param name="country" value="DE"/>
+  </passport>
+  <sent>
+    <param name="productVersion" value="2.5"/>
+    <param name="productName" value="HBCI4Java"/>
+    <param name="language" value="0"/>
+  </sent>
+  <bpd encoding="base64">
+    SElCUEE6NDoyOjMrMjErMjgwOjgwMDA3Nzc3K1N0ZWZhbiBQYWxtZSBUZXN0aW5zdGl0dXQgKEhCQ0k0SmF2YSkrNSsxOjIrMjAxOjIxMDoyMjA6MzAwKzgnSElLT006NToyOjMrMjgwOjgwMDA3Nzc3KzErMjpoYmNpLmhvcmEtb2JzY3VyYS5kZSszOmh0dHBzPzovL3d3dy5ob3JhLW9ic2N1cmEuZGUvcGludGFuL1BpblRhblNlcnZsZXQ6Ok1JTToxJ0hJU0hWOjY6MjozK04rUkRIOjEnSElLUFY6NzoxOjMrMDowJ0hJS0RNUzo4OjM6MysxKzErODE5MidISUtETVM6OTo0OjMrMSsxKzgxOTInSElLQU5TOjEwOjQ6MysxKzErMzY1Ok4nSElLQU5TOjExOjU6MysxKzErMzY1Ok46SidISUtBWlM6MTI6NDozKzErMSszNjU6TidISUtBWlM6MTM6NTozKzErMSszNjU6TjpKJ0hJTEFTUzoxNDozOjMrMSsxKzI6MDUnSElMQVNTOjE1OjQ6MysxKzErMjowNSdISVNBTFM6MTY6NDozKzErMSdISVNBTFM6MTc6NTozKzErMSdISVNMQVM6MTg6MzozKzErMSsxNjo4OjUxOjY5OjY3J0hJU0xBUzoxOTo0OjMrMSsxKzE2Ojg6NTE6Njk6NjcnSElTVUJTOjIwOjM6MysxKzErMTY6ODo1MTo2OTo2NydISVNVQlM6MjE6NDozKzErMSsxNjo4OjUxOjY5OjY3J0hJUFJPUzoyMjoyOjMrMSsxJ0hJUFJPUzoyMzozOjMrMSsxJ0hJVFVFUzoyNDozOjMrMSsxKzE6MzY1OjI6NTE6Njk6NjcnSElUVUVTOjI1OjQ6MysxKzErMSsxOjM2NToyOjUxOjY5OjY3J0hJVUVCUzoyNjozOjMrMSsxKzI6NTE6Njk6NjcnSElVRUJTOjI3OjQ6MysxKzErMjo1MTo2OTo2NydISVVNQlM6Mjg6MTozKzErMSsyOjUxOjY5OjY3J0hJVEFOUzoyOToxOjMrMSswKzErSjpOOjE6MDo5OTE6MTppVEFOMTppVEFOLVZlcmZhaHJlbiAoUFYgMSk6ODoxOkluZGV4IGluIFRBTi1MaXN0ZToyNTU6MTpOOk46OTkyOjI6aVRBTjI6aVRBTi1WZXJmYWhyZW4gKFBWIDIpOjg6MTpJbmRleCBpbiBUQU4tTGlzdGU6MjU1OjE6TjpOJ0RJUElOUzozMDoxOjMrMSsxK0hLVUVCOko6SEtLRE06TjpIS1NVQjpKOkhLTEFTOko6SEtVTUI6SjpIS1NBTDpOOkhLVFVFOko6SEtTTEE6SjpIS1BSTzpOOkhLS0FaOk46SEtLQU46Tic=
+  </bpd>
+</bpdReceived>
+
+In den Unter-Elementen von <passport> werden die verwendeten HBCI-
+Konfigurations-Einstellungen übermittelt: welche Bank (country,blz) mit
+welcher HBCI-Version (hbciVersion), welcher Passport-Typ (RDH, DDV oder 
+PinTan), welcher Host oder welche PIN/TAN-URL benutzt wurde (host)
+und welcher Filter aktiv war (filter).
+
+In den Elementen unterhalb von <sent> werden einige Informationen
+aus der ursprünglich gesendeten Dialog-Initialisierungs-Nachricht
+reflektiert: welches Software-Produkt verwendet wurde und welche HBCI-
+Sprache eingestellt war.
+
+Das Element <bpd> schließlich enthält die Base64-kodierten BPD, die
+in der Antwortnachricht auf die Dialog-Initialisierung zurückgemeldet
+wurden. 
+
+WICHTIG: Die BPD enthalten KEINE vertraulichen Informationen, dort
+stehen nur allgemeine Angaben zum HBCI-Server der Bank drin (welche
+HBCI-Versionen unterstützt werden, welche Geschäftsvorfälle angeboten
+werden usw.). Die BPD kann man ohnehin von jeder beliebigen Bank in
+einem anonymen Dialog abfragen (z.B. mit dem HBCI4Java Passport Editor).
+
+Die oben dargestellten BPD sehen im Klartext z.B. so aus:
+
+HIBPA:4:2:3+21+280:80007777+Stefan Palme Testinstitut (HBCI4Java)+5+1:2+201:210:220:300+8'HIKOM:5:2:3+280:80007777+1+2:hbci.hora-obscura.de+3:https?://www.hora-obscura.de/pintan/PinTanServlet::MIM:1'HISHV:6:2:3+N+RDH:1'HIKPV:7:1:3+0:0'HIKDMS:8:3:3+1+1+8192'HIKDMS:9:4:3+1+1+8192'HIKANS:10:4:3+1+1+365:N'HIKANS:11:5:3+1+1+365:N:J'HIKAZS:12:4:3+1+1+365:N'HIKAZS:13:5:3+1+1+365:N:J'HILASS:14:3:3+1+1+2:05'HILASS:15:4:3+1+1+2:05'HISALS:16:4:3+1+1'HISALS:17:5:3+1+1'HISLAS:18:3:3+1+1+16:8:51:69:67'HISLAS:19:4:3+1+1+16:8:51:69:67'HISUBS:20:3:3+1+1+16:8:51:69:67'HISUBS:21:4:3+1+1+16:8:51:69:67'HIPROS:22:2:3+1+1'HIPROS:23:3:3+1+1'HITUES:24:3:3+1+1+1:365:2:51:69:67'HITUES:25:4:3+1+1+1+1:365:2:51:69:67'HIUEBS:26:3:3+1+1+2:51:69:67'HIUEBS:27:4:3+1+1+2:51:69:67'HIUMBS:28:1:3+1+1+2:51:69:67'HITANS:29:1:3+1+0+1+J:N:1:0:991:1:iTAN1:iTAN-Verfahren (PV 1):8:1:Index in TAN-Liste:255:1:N:N:992:2:iTAN2:iTAN-Verfahren (PV 2):8:1:Index in TAN-Liste:255:1:N:N'DIPINS:30:1:3+1+1+HKUEB:J:HKKDM:N:HKSUB:J:HKLAS:J:HKUMB:J:HKSAL:N:HKTUE:J:HKSLA:J:HKPRO:N:HKKAZ:N:HKKAN:N'
+
+
+Im Moment speichert der InfoPoint-Server die so empfangen Daten nur in einer
+Datenbank ab. Eine zusätzliche Softwarekomponente (die sich noch im 
+Entwicklungsstadium befindet) wird diese Daten später aufbereiten, so dass
+auch sinnvolle Abfragen möglich werden.
+
+
+Die Idee des InfoPoint-Servers lebt davon, dass anfangs möglichst viele Daten
+gesammelt werden. Dazu ist es notwendig, dass...
+
+1) ...Nutzer von HBCI4Java-basierter Software dieses Feature aktivieren. 
+   Bei selbstprogrammierten Anwendungen wird das erreicht durch 
+
+       HBCIUtils.setParam("infoPoint.enabled", "1").
+
+2) ...Entwickler anderer HBCI-Bibliotheken bzw. -Frameworks dieses InfoPoint-
+   Protokoll ebenfalls in ihre Software einbauen. Sehr wahrscheinlich wird
+   sich das Format für das oben beschriebene XML-Dokument noch ein
+   wenig ändern, und der Server wird später auch GET-Requests für die
+   Abfrage von Informationen unterstützen.
+
+   Dennoch wäre eine Integration des jetzigen Mini-Protokolles schon
+   sehr hilfreich, denn auf diese Art und Weise kommen insgesamt mehr
+   Informationen auf dem InfoPoint-Server an, die zu einem späteren Zeitpunkt
+   abgefragt werden können.
+
+
+-stefan-
+hbci4java@kapott.org
+
+http://hbci4java.kapott.org
+

@@ -1,0 +1,67 @@
+Index: src/org/kapott/hbci/comm/CommStandard.java
+===================================================================
+--- src/org/kapott/hbci/comm/CommStandard.java	(revision 418)
++++ src/org/kapott/hbci/comm/CommStandard.java	(revision 419)
+@@ -24,6 +24,7 @@
+ import java.io.InputStream;
+ import java.io.OutputStream;
+ import java.net.InetSocketAddress;
++import java.net.Proxy;
+ import java.net.Socket;
+ 
+ import org.kapott.hbci.exceptions.HBCI_Exception;
+@@ -49,7 +50,25 @@
+                 HBCIUtils.LOG_DEBUG);
+         
+         try {
+-            s=new Socket();
++            String socksServer=HBCIUtils.getParam("comm.standard.socks.server");
++            if (socksServer!=null && socksServer.trim().length()!=0) {
++                // use SOCKS server
++                String[] ss=socksServer.split(":");
++                String socksHost=ss[0].trim();
++                String socksPort=ss[1].trim();
++                HBCIUtils.log(
++                    "using SOCKS server at "+socksHost+":"+socksPort,
++                    HBCIUtils.LOG_DEBUG);
++                
++                Proxy proxy=new Proxy(
++                    Proxy.Type.SOCKS, 
++                    new InetSocketAddress(socksHost, Integer.parseInt(socksPort)));
++                this.s=new Socket(proxy);
++                
++            } else {
++                // no SOCKS server
++                s=new Socket();
++            }
+ 
+             int localPort=Integer.parseInt(HBCIUtils.getParam("client.connection.localPort","0"));
+             if (localPort!=0) {
+Index: src/org/kapott/hbci/tools/InitAndTest.java
+===================================================================
+--- src/org/kapott/hbci/tools/InitAndTest.java	(revision 418)
++++ src/org/kapott/hbci/tools/InitAndTest.java	(revision 419)
+@@ -146,6 +146,7 @@
+         throws IOException
+     {
+         readParam("client.connection.localPort",null,"local tcp-port to be used for outgoing connections");
++        readParam("comm.standard.socks.server",null,"SOCKS server to be used for outgoing connections (will be ignored for PIN/TAN)");
+         readParam("log.loglevel.default","5","loglevel for HBCI4Java-messages (from 0(no logging) to 5(really heavy)");
+         readParam("kernel.rewriter",HBCIUtils.getParam("kernel.rewriter"),"rewriter modules to be activated");
+     }
+Index: src/org/kapott/hbci/manager/HBCIUtils.java
+===================================================================
+--- src/org/kapott/hbci/manager/HBCIUtils.java	(revision 418)
++++ src/org/kapott/hbci/manager/HBCIUtils.java	(revision 419)
+@@ -257,6 +257,11 @@
+           HBCI-Verbindungen Auswirkungen. Beim PIN/TAN-Verfahren wird 
+           eine HTTPS-Verbindung mit dem HBCI-Server aufgebaut, für diese 
+           Verbindung wird der localPort-Parameter im Moment noch nicht ausgewertet.</p></li>
++      <li><code>comm.standard.socks.server</code>
++          <p>Soll für ausgehende Verbindungen ein SOCKS-Server verwendet werden, kann
++          dieser SOCKS-Server im Format <code>hostname:port</code> festgelegt werden. 
++          Diese Einstellung wird <em>NICHT</em> für HBCI-PIN/TAN verwendet, sondern nur 
++          für alle "richtigen" HBCI-Verbindungen (alle Passport-Varianten von RDH und DDV).</p></li>
+       <li><code>kernel.kernel.xmlpath</code>
+           <p>(wird nicht gesetzt, zur Zeit nur intern benutzt)</p></li>
+       <li><code>kernel.kernel.blzpath</code>

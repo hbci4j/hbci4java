@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 sp1 (http://www.altova.com) by XMLSpy 2008 Professional Ed. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:swift:xsd:$pain.002.002.02" targetNamespace="urn:swift:xsd:$pain.002.002.02" elementFormDefault="qualified">
+	<xs:element name="Document" type="Document"/>
+	<xs:complexType name="AccountIdentificationSEPA">
+		<xs:sequence>
+			<xs:element name="IBAN" type="IBANIdentifier"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AmendmentInformationDetailsSEPA">
+		<xs:sequence>
+			<xs:element name="OrgnlMndtId" type="Max35Text" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Mandatory if changes occur in ‘Mandate Identification’, otherwise not to be used.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OrgnlCdtrSchmeId" type="PartyIdentificationSEPA3" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Mandatory if changes occur in
+'Creditor Scheme Identification', otherwise not to be used.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OrgnlDbtrAcct" type="CashAccountSEPA2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>To be used only for changes of accounts within the same bank.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OrgnlDbtrAgt" type="BranchAndFinancialInstitutionIdentificationSEPA2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>To use ‘Proprietary Identification’ with code ‘SMNDA’ to indicate same mandate with new Debtor Agent. To be used with the ‘FRST’ indicator in the ‘Sequence Type’.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AmountTypeSEPA">
+		<xs:sequence>
+			<xs:element name="InstdAmt" type="CurrencyAndAmountSEPA"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="BEIIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BICIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="BranchAndFinancialInstitutionIdentificationSEPA1">
+		<xs:sequence>
+			<xs:element name="FinInstnId" type="FinancialInstitutionIdentificationSEPA1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BranchAndFinancialInstitutionIdentificationSEPA2">
+		<xs:sequence>
+			<xs:element name="FinInstnId" type="FinancialInstitutionIdentificationSEPA2"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="CHIPSUniversalIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="CH[0-9]{6,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CashAccountSEPA1">
+		<xs:sequence>
+			<xs:element name="Id" type="AccountIdentificationSEPA"/>
+			<xs:element name="Ccy" type="CurrencyCode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CashAccountSEPA2">
+		<xs:sequence>
+			<xs:element name="Id" type="AccountIdentificationSEPA"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="CountryCode">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{2,2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CreditorReferenceInformationSEPA">
+		<xs:sequence>
+			<xs:element name="CdtrRefTp" type="CreditorReferenceTypeSEPA" minOccurs="0"/>
+			<xs:element name="CdtrRef" type="Max35Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreditorReferenceTypeSEPA">
+		<xs:sequence>
+			<xs:element name="Cd" type="DocumentType3CodeSEPA"/>
+			<xs:element name="Issr" type="Max35Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="CurrencyAndAmount_SimpleTypeSEPA">
+		<xs:restriction base="xs:decimal">
+			<xs:minInclusive value="0.01"/>
+			<xs:maxInclusive value="999999999.99"/>
+			<xs:fractionDigits value="2"/>
+			<xs:totalDigits value="11"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CurrencyAndAmountSEPA">
+		<xs:simpleContent>
+			<xs:extension base="CurrencyAndAmount_SimpleTypeSEPA">
+				<xs:attribute name="Ccy" type="CurrencyCodeEUR" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="CurrencyCode">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{3,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyCodeEUR">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EUR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="DateAndPlaceOfBirth">
+		<xs:sequence>
+			<xs:element name="BirthDt" type="ISODate"/>
+			<xs:element name="PrvcOfBirth" type="Max35Text" minOccurs="0"/>
+			<xs:element name="CityOfBirth" type="Max35Text"/>
+			<xs:element name="CtryOfBirth" type="CountryCode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Document">
+		<xs:sequence>
+			<xs:element name="pain.002.001.02" type="pain.002.001.02"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="DocumentType3CodeSEPA">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SCOR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DunsIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{9,9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EANGLNIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{13,13}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ExternalLocalInstrumentCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="FinancialInstitutionIdentificationSEPA1">
+		<xs:sequence>
+			<xs:element name="BIC" type="BICIdentifier"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FinancialInstitutionIdentificationSEPA2">
+		<xs:sequence>
+			<xs:element name="PrtryId" type="RestrictedIdentificationSEPA"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GenericIdentification3">
+		<xs:sequence>
+			<xs:element name="Id" type="Max35Text"/>
+			<xs:element name="Issr" type="Max35Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GenericIdentification4">
+		<xs:sequence>
+			<xs:element name="Id" type="Max35Text"/>
+			<xs:element name="IdTp" type="Max35Text"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GenericIdentificationSEPA">
+		<xs:sequence>
+			<xs:element name="Id" type="RestrictedIdentification3"/>
+			<xs:element name="IdTp" type="RestrictedSEPACode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GroupHeaderSEPA">
+		<xs:sequence>
+			<xs:element name="MsgId" type="RestrictedIdentification1"/>
+			<xs:element name="CreDtTm" type="ISODateTime"/>
+			<xs:choice>
+				<xs:element name="CdtrAgt" type="BranchAndFinancialInstitutionIdentificationSEPA1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Direct Debit only</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DbtrAgt" type="BranchAndFinancialInstitutionIdentificationSEPA1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Credit Transfer only</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="IBANIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IBEIIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{2,2}[B-DF-HJ-NP-TV-XZ0-9]{7,7}[0-9]{1,1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISODate">
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="ISODateTime">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:complexType name="LocalInstrumentSEPA">
+		<xs:sequence>
+			<xs:element name="Cd">
+				<xs:simpleType>
+					<xs:restriction base="ExternalLocalInstrumentCode">
+						<xs:enumeration value="CORE"/>
+						<xs:enumeration value="B2B"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MandateRelatedInformationSEPA">
+		<xs:sequence>
+			<xs:element name="MndtId" type="Max35Text" minOccurs="0"/>
+			<xs:element name="DtOfSgntr" type="ISODate" minOccurs="0"/>
+			<xs:element name="AmdmntInd" type="TrueFalseIndicator" minOccurs="0"/>
+			<xs:element name="AmdmntInfDtls" type="AmendmentInformationDetailsSEPA" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Mandatory if 'Amendment Indicator' is 'TRUE'</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ElctrncSgntr" type="Max1025Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Max1025Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1025"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max140Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="140"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max35Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max70Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="70"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="OrganisationIdentificationSEPAChoice">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="BIC" type="BICIdentifier"/>
+				<xs:element name="IBEI" type="IBEIIdentifier"/>
+				<xs:element name="BEI" type="BEIIdentifier"/>
+				<xs:element name="EANGLN" type="EANGLNIdentifier"/>
+				<xs:element name="USCHU" type="CHIPSUniversalIdentifier"/>
+				<xs:element name="DUNS" type="DunsIdentifier"/>
+				<xs:element name="BkPtyId" type="Max35Text"/>
+				<xs:element name="TaxIdNb" type="Max35Text"/>
+				<xs:element name="PrtryId" type="GenericIdentification3"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrganisationIdentificationSEPA">
+		<xs:sequence>
+			<xs:element name="BIC" type="BICIdentifier"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OriginalGroupInformationSEPA">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="OrgnlMsgId" type="RestrictedIdentification1"/>
+				<xs:element name="NtwkFileNm" type="Max35Text"/>
+			</xs:choice>
+			<xs:element name="OrgnlMsgNmId" type="Max35Text"/>
+			<xs:element name="GrpSts" type="TransactionGroupStatus1CodeSEPA" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Either ‘Group Status’ or ‘Transaction Status’ must be present with the code ‘RJCT’.     </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StsRsnInf" type="StatusReasonInformationSEPA" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>‘Status Reason Information’ may be present either in ‘Original Group Information And Status’ or in ‘Transaction Information and Status’.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OriginalTransactionReferenceSEPA">
+		<xs:sequence>
+			<xs:element name="Amt" type="AmountTypeSEPA" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="ReqdExctnDt" type="ISODate" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Credit Transfer Only</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReqdColltnDt" type="ISODate" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Direct Debit Only</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="CdtrSchmeId" type="PartyIdentificationSEPA2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Direct Debit Only</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PmtTpInf" type="PaymentTypeInformationSEPA" minOccurs="0"/>
+			<xs:element name="PmtMtd" type="PaymentMethodSEPACode" minOccurs="0"/>
+			<xs:element name="MndtRltdInf" type="MandateRelatedInformationSEPA" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Direct Debit Only</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RmtInf" type="RemittanceInformationSEPAChoice" minOccurs="0"/>
+			<xs:element name="UltmtDbtr" type="PartyIdentificationSEPA4" minOccurs="0"/>
+			<xs:element name="Dbtr" type="PartyIdentificationSEPA5" minOccurs="0"/>
+			<xs:element name="DbtrAcct" type="CashAccountSEPA1" minOccurs="0"/>
+			<xs:element name="DbtrAgt" type="BranchAndFinancialInstitutionIdentificationSEPA1" minOccurs="0"/>
+			<xs:element name="CdtrAgt" type="BranchAndFinancialInstitutionIdentificationSEPA1" minOccurs="0"/>
+			<xs:element name="Cdtr" type="PartyIdentificationSEPA5" minOccurs="0"/>
+			<xs:element name="CdtrAcct" type="CashAccountSEPA1" minOccurs="0"/>
+			<xs:element name="UltmtCdtr" type="PartyIdentificationSEPA4" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartySEPAChoice">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="OrgId" type="OrganisationIdentificationSEPAChoice"/>
+				<xs:element name="PrvtId" type="PersonIdentification3"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartySEPA1">
+		<xs:sequence>
+			<xs:element name="OrgId" type="OrganisationIdentificationSEPA"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartySEPA2">
+		<xs:sequence>
+			<xs:element name="PrvtId" type="PersonIdentificationSEPA">
+				<xs:annotation>
+					<xs:documentation>‘Identification Type’ under ‘Other Identification’ must specify ‘SEPA’.  ‘Identification’ under ‘Other Identification’ is allowed using an identifier described in General Message Element Specifications, Chapter 1.6.2. of the Implementation Guide.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyIdentificationSEPA1">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Nm" type="Max70Text"/>
+				<xs:element name="Id" type="PartySEPA1"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyIdentificationSEPA2">
+		<xs:sequence>
+			<xs:element name="Id" type="PartySEPA2"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyIdentificationSEPA3">
+		<xs:sequence>
+			<xs:element name="Nm" type="Max70Text" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If present the new’ Name’ must be specified under ‘Creditor’.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Id" type="PartySEPA2" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyIdentificationSEPA4">
+		<xs:sequence>
+			<xs:element name="Nm" type="Max70Text" minOccurs="0"/>
+			<xs:element name="Id" type="PartySEPAChoice" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyIdentificationSEPA5">
+		<xs:sequence>
+			<xs:element name="Nm" type="Max70Text" minOccurs="0"/>
+			<xs:element name="PstlAdr" type="PostalAddressSEPA" minOccurs="0"/>
+			<xs:element name="Id" type="PartySEPAChoice" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PaymentCategoryPurpose1Code">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CORT"/>
+			<xs:enumeration value="SALA"/>
+			<xs:enumeration value="TREA"/>
+			<xs:enumeration value="CASH"/>
+			<xs:enumeration value="DIVI"/>
+			<xs:enumeration value="GOVT"/>
+			<xs:enumeration value="INTE"/>
+			<xs:enumeration value="LOAN"/>
+			<xs:enumeration value="PENS"/>
+			<xs:enumeration value="SECU"/>
+			<xs:enumeration value="SSBE"/>
+			<xs:enumeration value="SUPP"/>
+			<xs:enumeration value="TAXS"/>
+			<xs:enumeration value="TRAD"/>
+			<xs:enumeration value="VATX"/>
+			<xs:enumeration value="HEDG"/>
+			<xs:enumeration value="INTC"/>
+			<xs:enumeration value="WHLD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PaymentMethodSEPACode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DD"/>
+			<xs:enumeration value="TRF"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PaymentTransactionInformationSEPA">
+		<xs:sequence>
+			<xs:element name="StsId" type="RestrictedIdentification1" minOccurs="0"/>
+			<xs:element name="OrgnlPmtInfId" type="RestrictedIdentification1" minOccurs="0"/>
+			<xs:element name="OrgnlInstrId" type="RestrictedIdentification1" minOccurs="0"/>
+			<xs:element name="OrgnlEndToEndId" type="RestrictedIdentification2" minOccurs="0"/>
+			<xs:element name="TxSts" type="TransactionIndividualStatus1CodeSEPA" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Either ‘Group Status’ or ‘Transaction Status’ must be present with the code ‘RJCT’.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StsRsnInf" type="StatusReasonInformationSEPA" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>‘Status Reason Information’ may be present either in ‘Original Group Information And Status’ or in ‘Transaction Information and Status’.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OrgnlTxRef" type="OriginalTransactionReferenceSEPA">
+				<xs:annotation>
+					<xs:documentation>The message elements under ‘Original Transaction Reference’ must be populated with the same value as the message elements of the original instruction, as defined within the following elements.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentTypeInformationSEPA">
+		<xs:sequence>
+			<xs:element name="InstrPrty" type="Priority2Code" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Credit Transfer Only</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SvcLvl" type="ServiceLevelSEPA" minOccurs="0"/>
+			<xs:element name="LclInstrm" type="LocalInstrumentSEPA" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Direct Debit Only</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SeqTp" type="SequenceType1Code" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Direct Debit Only</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CtgyPurp" type="PaymentCategoryPurpose1Code" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonIdentification3">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="DrvrsLicNb" type="Max35Text"/>
+				<xs:element name="CstmrNb" type="Max35Text"/>
+				<xs:element name="SclSctyNb" type="Max35Text"/>
+				<xs:element name="AlnRegnNb" type="Max35Text"/>
+				<xs:element name="PsptNb" type="Max35Text"/>
+				<xs:element name="TaxIdNb" type="Max35Text"/>
+				<xs:element name="IdntyCardNb" type="Max35Text"/>
+				<xs:element name="MplyrIdNb" type="Max35Text"/>
+				<xs:element name="DtAndPlcOfBirth" type="DateAndPlaceOfBirth"/>
+				<xs:element name="OthrId" type="GenericIdentification4"/>
+			</xs:choice>
+			<xs:element name="Issr" type="Max35Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonIdentificationSEPA">
+		<xs:sequence>
+			<xs:element name="OthrId" type="GenericIdentificationSEPA"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PostalAddressSEPA">
+		<xs:sequence>
+			<xs:element name="AdrLine" type="Max70Text" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="Ctry" type="CountryCode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Priority2Code">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="HIGH"/>
+			<xs:enumeration value="NORM"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="RemittanceInformationSEPAChoice">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Ustrd" type="Max140Text"/>
+				<xs:element name="Strd" type="StructuredRemittanceInformationSEPA"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="RestrictedIdentification1">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z0-9]|[\+|\?|/|\-|:|\(|\)|\.|,|']){1,35}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RestrictedIdentification2">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z0-9]|[\+|\?|/|\-|:|\(|\)|\.|,|'| ]){1,35}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RestrictedIdentification3">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{3,3}[a-zA-Z0-9]{1,28}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="RestrictedIdentificationSEPA">
+		<xs:sequence>
+			<xs:element name="Id" type="RestrictedSMNDACode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="RestrictedProprietaryReasonSEPA">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RR01"/>
+			<xs:enumeration value="SL01"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RestrictedSEPACode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SEPA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RestrictedSMNDACode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SMNDA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SequenceType1Code">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FRST"/>
+			<xs:enumeration value="RCUR"/>
+			<xs:enumeration value="FNAL"/>
+			<xs:enumeration value="OOFF"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceLevelSEPACode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SEPA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ServiceLevelSEPA">
+		<xs:sequence>
+			<xs:element name="Cd" type="ServiceLevelSEPACode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StatusReason1Choice">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Cd" type="TransactionRejectReason2Code">
+					<xs:annotation>
+						<xs:documentation>Other Codes may be used when the debtor / creditor bank has rejected the message</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Prtry" type="RestrictedProprietaryReasonSEPA"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StatusReasonInformationSEPA">
+		<xs:sequence>
+			<xs:element name="StsOrgtr" type="PartyIdentificationSEPA1" minOccurs="0"/>
+			<xs:element name="StsRsn" type="StatusReason1Choice" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StructuredRemittanceInformationSEPA">
+		<xs:sequence>
+			<xs:element name="CdtrRefInf" type="CreditorReferenceInformationSEPA" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="TransactionGroupStatus1CodeSEPA">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RJCT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TransactionIndividualStatus1CodeSEPA">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RJCT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TransactionRejectReason2Code">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AC01"/>
+			<xs:enumeration value="AC04"/>
+			<xs:enumeration value="AC06"/>
+			<xs:enumeration value="AM01"/>
+			<xs:enumeration value="AM02"/>
+			<xs:enumeration value="AM03"/>
+			<xs:enumeration value="AM04"/>
+			<xs:enumeration value="AM05"/>
+			<xs:enumeration value="AM06"/>
+			<xs:enumeration value="AM07"/>
+			<xs:enumeration value="BE01"/>
+			<xs:enumeration value="BE04"/>
+			<xs:enumeration value="BE05"/>
+			<xs:enumeration value="AG01"/>
+			<xs:enumeration value="AG02"/>
+			<xs:enumeration value="DT01"/>
+			<xs:enumeration value="RF01"/>
+			<xs:enumeration value="RC01"/>
+			<xs:enumeration value="TM01"/>
+			<xs:enumeration value="ED01"/>
+			<xs:enumeration value="ED03"/>
+			<xs:enumeration value="MS03"/>
+			<xs:enumeration value="MS02"/>
+			<xs:enumeration value="BE06"/>
+			<xs:enumeration value="BE07"/>
+			<xs:enumeration value="AM09"/>
+			<xs:enumeration value="AM10"/>
+			<xs:enumeration value="MD01"/>
+			<xs:enumeration value="MD02"/>
+			<xs:enumeration value="MD03"/>
+			<xs:enumeration value="MD04"/>
+			<xs:enumeration value="MD06"/>
+			<xs:enumeration value="MD07"/>
+			<xs:enumeration value="ED05"/>
+			<xs:enumeration value="NARR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TrueFalseIndicator">
+		<xs:restriction base="xs:boolean"/>
+	</xs:simpleType>
+	<xs:complexType name="pain.002.001.02">
+		<xs:sequence>
+			<xs:element name="GrpHdr" type="GroupHeaderSEPA"/>
+			<xs:element name="OrgnlGrpInfAndSts" type="OriginalGroupInformationSEPA"/>
+			<xs:element name="TxInfAndSts" type="PaymentTransactionInformationSEPA" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,24 @@
+../../bin/atr.o: atr.cpp ../include/atr.h ../include/ctapi-tools.h
+../../bin/bcs.o: bcs.cpp ../include/atr.h ../include/bcs.h ../include/ctapi-tools.h \
+ ../include/tools.h
+../../bin/ctapi-tools.o: ctapi-tools.cpp ../include/ctapi-tools.h \
+ ../include/porting.h
+../../bin/get_challenge.o: get_challenge.cpp ../include/ctapi-tools.h \
+ ../include/seccos.h
+../../bin/get_keyinfo.o: get_keyinfo.cpp ../include/ctapi-tools.h \
+ ../include/seccos.h
+../../bin/internal_authenticate.o: internal_authenticate.cpp \
+ ../include/ctapi-tools.h ../include/seccos.h
+../../bin/put_data.o: put_data.cpp ../include/ctapi-tools.h ../include/seccos.h
+../../bin/read_binary.o: read_binary.cpp ../include/ctapi-tools.h \
+ ../include/seccos.h
+../../bin/read_record.o: read_record.cpp ../include/ctapi-tools.h \
+ ../include/seccos.h
+../../bin/select_file.o: select_file.cpp ../include/ctapi-tools.h \
+ ../include/seccos.h ../include/tools.h
+../../bin/tools.o: tools.cpp
+../../bin/verify_pin.o: verify_pin.cpp ../include/ctapi-tools.h ../include/bcs.h \
+ ../include/seccos.h
+../../bin/modify_pin.o: modify_pin.cpp ../include/ctapi-tools.h ../include/seccos.h
+../../bin/write_record.o: write_record.cpp ../include/ctapi-tools.h \
+ ../include/seccos.h
