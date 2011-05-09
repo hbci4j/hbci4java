@@ -1,5 +1,5 @@
 
-/*  $Id: HBCICallback.java,v 1.1 2011/05/04 22:37:52 willuhn Exp $
+/*  $Id: HBCICallback.java,v 1.2 2011/05/09 15:07:02 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -328,6 +328,13 @@ public interface HBCICallback
      * Daten gesendet werden, ist von der Anwendung also ein leerer String in
      * <code>retData</code> zurückzugeben, ansonsten ein beliebiger nicht-leerer String. */
     public final static int NEED_INFOPOINT_ACK=31;
+    
+    /** <p>Ursache des Callbacks: bei Verwendung von HBCI-PIN/TAN muss
+     * die Bezeichnung des TAN-Mediums eingegeben werden. Bei smsTAN ist
+     * das z.Bsp. der Alias-Name des Mobiltelefons, wie er bei der Bank
+     * hinterlegt wurde. Dieser Name wird verwendet, damit die SMS mit
+     * der TAN an mehrere Mobiltelefone schicken kann. */
+    public final static int NEED_PT_TANMEDIA=32;
     
     /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
     public final static int TYPE_NONE=0;

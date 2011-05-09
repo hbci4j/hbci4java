@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractPinTanPassport.java,v 1.1 2011/05/04 22:37:42 willuhn Exp $
+/*  $Id: AbstractPinTanPassport.java,v 1.2 2011/05/09 15:07:02 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -44,6 +44,7 @@ import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.protocol.SEG;
 import org.kapott.hbci.protocol.factory.SEGFactory;
 import org.kapott.hbci.security.Crypt;
@@ -959,7 +960,7 @@ public abstract class AbstractPinTanPassport
                                 
                                 // TODO: verwendete spezifikation parametrisieren
                                 int    hktan_version=Integer.parseInt(hktan.getSegVersion());
-                                String spec=hktan_version<3?"hhd12":"hhd13";
+                                String spec="hhd1" + hktan_version;
                                 
                                 String   klass=cinfo.getKlassBySegCode(segcode,spec);
                                 HBCIUtils.log("using challenge klass "+klass, HBCIUtils.LOG_DEBUG2);
@@ -974,7 +975,7 @@ public abstract class AbstractPinTanPassport
                                         HBCIUtils.log("adding challenge parameter "+path+" = "+value, HBCIUtils.LOG_DEBUG2);
                                         hktan.setParam("ChallengeKlassParam"+(p+1),value);
                                 }
-                                
+
                                 // wenn auch noch der betrag aus dem auftrag in die challenge-parameter
                                 // eingestellt werden soll, machen wir das (sofern ein wert existiert)
                                 if (secmechInfo.getProperty("needchallengevalue","N").equals("J")) {
@@ -1009,6 +1010,9 @@ public abstract class AbstractPinTanPassport
                                             }
                                         }
                                 }
+
+                                // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
+                                applyTanMedia((GVTAN2Step) hktan);
                             }
                             
                             // hktan-job zur neuen msg hinzufügen
@@ -1036,6 +1040,9 @@ public abstract class AbstractPinTanPassport
                             // hktan1.setParam("listidx","");
                             // TODO: das für mehrfachsignaturen
                             // hktan1.setParam("notlasttan","N");
+
+                            // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
+                            applyTanMedia(hktan1);
                             
                             // den hktan-job zusätzlich zur aktuellen msg hinzufügen
                             new_msg_tasks.add(hktan1);
@@ -1052,6 +1059,8 @@ public abstract class AbstractPinTanPassport
                             // hktan2.setParam("listidx","");
                             // TODO: das für mehrfachsignaturen
                             // hktan2.setParam("notlasttan","J");
+                            
+                            // willuhn 2011-05-09: Laut Spec (siehe applyTanMedia()) ist das TAN-Medium nur bei Prozess 1,3 und 4 noetig
                             
                             // hktan-job zur neuen msg hinzufügen
                             additional_msg_tasks.add(hktan2);
@@ -1092,6 +1101,55 @@ public abstract class AbstractPinTanPassport
             msgs.clear();
             msgs.addAll(new_msgs);
         }
+    }
+    
+    /**
+     * Uebernimmt das Rueckfragen und Einsetzen der TAN-Medien-Bezeichung bei Bedarf.
+     * @param hktan der Job, in den der Parameter eingesetzt werden soll.
+     * @param secmechInfo
+     */
+    private void applyTanMedia(GVTAN2Step hktan)
+    {
+      if (hktan == null)
+        return;
+      
+      // Gibts erst ab hhd1.3, siehe
+      // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf, Kapitel B.4.3.1.1.1
+      // Zitat: Ist in der BPD als Anzahl unterstützter aktiver TAN-Medien ein Wert > 1
+      //        angegeben und ist der BPD-Wert für Bezeichnung des TAN-Mediums erforderlich = 2,
+      //        so muss der Kunde z. B. im Falle des mobileTAN-Verfahrens
+      //        hier die Bezeichnung seines für diesen Auftrag zu verwendenden TAN-
+      //        Mediums angeben.
+      // Ausserdem: "Nur bei TAN-Prozess=1, 3, 4". Das muess aber der Aufrufer pruefen. Ist mir
+      // hier zu kompliziert
+      
+      int hktan_version = Integer.parseInt(hktan.getSegVersion());
+      HBCIUtils.log("hktan_version: " + hktan_version,HBCIUtils.LOG_DEBUG);
+      if (hktan_version >= 3)
+      {
+        Properties  secmechInfo = getCurrentSecMechInfo();
+        
+        // Anzahl aktiver TAN-Medien ermitteln
+        int num        = Integer.parseInt(secmechInfo.getProperty("nofactivetanmedia","0"));
+        String needed  = secmechInfo.getProperty("needtanmedia","");
+        HBCIUtils.log("nofactivetanmedia: " + num + ", needtanmedia: " + needed,HBCIUtils.LOG_DEBUG);
+
+        // Ich hab Mails von Usern erhalten, bei denen die Angabe des TAN-Mediums auch
+        // dann noetig war, wenn nur eine Handy-Nummer hinterlegt war. Daher logen wir
+        // "num" nur, bringen die Abfrage jedoch schon bei num<2 - insofern needed=2.
+        if (needed.equals("2"))
+        {
+          HBCIUtils.log("we have to add the tan media",HBCIUtils.LOG_DEBUG);
+
+          StringBuffer retData=new StringBuffer();
+          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,
+              "*** Enter the name of your TAN media",
+              HBCICallback.TYPE_TEXT,
+              retData);
+          
+          hktan.setParam("tanmedia",retData.toString());
+        }
+      }
     }
 
     public void afterCustomDialogInitHook(HBCIDialog dialog)

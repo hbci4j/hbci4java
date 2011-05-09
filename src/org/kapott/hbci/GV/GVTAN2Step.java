@@ -1,5 +1,5 @@
 
-/*  $Id: GVTAN2Step.java,v 1.1 2011/05/04 22:37:53 willuhn Exp $
+/*  $Id: GVTAN2Step.java,v 1.2 2011/05/09 15:07:02 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -66,8 +66,8 @@ public class GVTAN2Step
         addConstraint("ChallengeKlassParam7", "ChallengeKlassParams.param_7","", LogFilter.FILTER_IDS);
         addConstraint("ChallengeKlassParam8", "ChallengeKlassParams.param_8","", LogFilter.FILTER_IDS);
         addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param_9","", LogFilter.FILTER_IDS);
-        
-        // TODO: tanmedia fehlt
+
+        addConstraint("tanmedia", "tanmedia","", LogFilter.FILTER_IDS);
     }
     
     public void setParam(String paramName, String value)
