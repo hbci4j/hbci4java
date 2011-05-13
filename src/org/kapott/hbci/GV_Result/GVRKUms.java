@@ -1,5 +1,5 @@
 
-/*  $Id: GVRKUms.java,v 1.1 2011/05/04 22:37:47 willuhn Exp $
+/*  $Id: GVRKUms.java,v 1.2 2011/05/13 12:24:56 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -477,6 +477,7 @@ public class GVRKUms
                         // wenn bdate und valuta um mehr als einen monat voneinander
                         // abweichen, dann ist das jahr des bdate falsch (1.1.2005 vs. 31.12.2004)
                         // korrektur des bdate-jahres in die richtige richtung notwendig
+                        // TODO: YEAR-Auto-Complete. Das kann fehlschlagen. Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=75348
                         if (Math.abs(line.bdate.getTime()-line.valuta.getTime())>30L*24*3600*1000) {
                             int diff;
                             
