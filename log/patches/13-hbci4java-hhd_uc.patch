@@ -1,0 +1,66 @@
+Index: src/org/kapott/hbci/GV/GVTAN2Step.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/GV/GVTAN2Step.java,v
+retrieving revision 1.2
+diff -u -r1.2 GVTAN2Step.java
+--- src/org/kapott/hbci/GV/GVTAN2Step.java	9 May 2011 15:07:02 -0000	1.2
++++ src/org/kapott/hbci/GV/GVTAN2Step.java	13 May 2011 15:30:28 -0000
+@@ -128,6 +128,20 @@
+                 
+                 // TODO: hier noch die optionale DEG ChallengeValidity bereitstellen
+             }
++
++            // willuhn 2011-05-09 extrahieren der Infos fuer die Generierung des Flickercodes
++            String hhdUc = result.getProperty(header + ".challenge_hhd_uc");
++            if (hhdUc != null)
++            {
++              // TODO willuhn 2011-05-13 das HHD_UC ist nocht NICHT das Format, wie es
++              // von einem Flickercode-Widget angezeigt werden kann. Es muss noch umgewandelt
++              // werden. Das ist in
++              // Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf
++              // Seite 45 beschrieben. Ich warte hier aber mal noch auf einen Beispiel-HHD_UC
++              // von einem User, mit dem ich testen kann, bevor ich das einbaue
++              HBCIUtils.log("found HHD UC '" + hhdUc + "' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
++              getMainPassport().setPersistentData("pintan_challenge_hhd_uc",hhdUc);
++            }
+             
+             String orderref=result.getProperty(header+".orderref");
+             if (orderref!=null) {
+@@ -144,7 +158,6 @@
+                     HBCIUtils.log("no other HKTAN task known - ignoring orderref",HBCIUtils.LOG_DEBUG);
+                 }
+             }
+-            
+         }
+     }
+ }
+Index: src/org/kapott/hbci/passport/HBCIPassportPinTan.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/passport/HBCIPassportPinTan.java,v
+retrieving revision 1.1
+diff -u -r1.1 HBCIPassportPinTan.java
+--- src/org/kapott/hbci/passport/HBCIPassportPinTan.java	4 May 2011 22:37:43 -0000	1.1
++++ src/org/kapott/hbci/passport/HBCIPassportPinTan.java	13 May 2011 15:30:28 -0000
+@@ -343,6 +343,10 @@
+                 String challenge=(String)getPersistentData("pintan_challenge");
+                 setPersistentData("pintan_challenge",null);
+                 
++                // willuhn 2011-05-09 HHD UC aus dem Passport holen
++                String hhdUc = (String) getPersistentData("pintan_challenge_hhd_uc");
++                setPersistentData("pintan_challenge_hhd_uc",null);
++                
+                 if (challenge==null) {
+                     // es gibt noch keine challenge
+                     HBCIUtils.log("will not sign with a TAN, because there is no challenge",HBCIUtils.LOG_DEBUG);
+@@ -350,7 +354,10 @@
+                     HBCIUtils.log("found challenge in passport, so we ask for a TAN",HBCIUtils.LOG_DEBUG);
+                     // es gibt eine challenge, also damit tan ermitteln
+                     
+-                    StringBuffer s=new StringBuffer();
++                    // willuhn 2011-05-09: Wir uebergeben HHD UC erstmal direkt hier - bei NEED_PT_SECMECH
++                    // wird das ja auch so gemacht. Sollte hier spaeter noch mehr uebergeben werden,
++                    // kann man das ja sicher noch aendern.
++                    StringBuffer s = hhdUc != null ? new StringBuffer(hhdUc) : new StringBuffer();
+                     HBCIUtilsInternal.getCallback().callback(this,
+                         HBCICallback.NEED_PT_TAN,
+                         secmechInfo.getProperty("name")+" "+secmechInfo.getProperty("inputinfo")+": "+challenge,

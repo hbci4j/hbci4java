@@ -1,5 +1,5 @@
 
-/*  $Id: GVTAN2Step.java,v 1.2 2011/05/09 15:07:02 willuhn Exp $
+/*  $Id: GVTAN2Step.java,v 1.3 2011/05/13 15:31:38 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -128,6 +128,20 @@ public class GVTAN2Step
                 
                 // TODO: hier noch die optionale DEG ChallengeValidity bereitstellen
             }
+
+            // willuhn 2011-05-09 extrahieren der Infos fuer die Generierung des Flickercodes
+            String hhdUc = result.getProperty(header + ".challenge_hhd_uc");
+            if (hhdUc != null)
+            {
+              // TODO willuhn 2011-05-13 das HHD_UC ist nocht NICHT das Format, wie es
+              // von einem Flickercode-Widget angezeigt werden kann. Es muss noch umgewandelt
+              // werden. Das ist in
+              // Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf
+              // Seite 45 beschrieben. Ich warte hier aber mal noch auf einen Beispiel-HHD_UC
+              // von einem User, mit dem ich testen kann, bevor ich das einbaue
+              HBCIUtils.log("found HHD UC '" + hhdUc + "' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
+              getMainPassport().setPersistentData("pintan_challenge_hhd_uc",hhdUc);
+            }
             
             String orderref=result.getProperty(header+".orderref");
             if (orderref!=null) {
@@ -144,7 +158,6 @@ public class GVTAN2Step
                     HBCIUtils.log("no other HKTAN task known - ignoring orderref",HBCIUtils.LOG_DEBUG);
                 }
             }
-            
         }
     }
 }

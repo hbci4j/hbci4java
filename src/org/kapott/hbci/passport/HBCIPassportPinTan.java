@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIPassportPinTan.java,v 1.1 2011/05/04 22:37:43 willuhn Exp $
+/*  $Id: HBCIPassportPinTan.java,v 1.2 2011/05/13 15:31:38 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -343,6 +343,10 @@ public class HBCIPassportPinTan
                 String challenge=(String)getPersistentData("pintan_challenge");
                 setPersistentData("pintan_challenge",null);
                 
+                // willuhn 2011-05-09 HHD UC aus dem Passport holen
+                String hhdUc = (String) getPersistentData("pintan_challenge_hhd_uc");
+                setPersistentData("pintan_challenge_hhd_uc",null);
+                
                 if (challenge==null) {
                     // es gibt noch keine challenge
                     HBCIUtils.log("will not sign with a TAN, because there is no challenge",HBCIUtils.LOG_DEBUG);
@@ -350,7 +354,10 @@ public class HBCIPassportPinTan
                     HBCIUtils.log("found challenge in passport, so we ask for a TAN",HBCIUtils.LOG_DEBUG);
                     // es gibt eine challenge, also damit tan ermitteln
                     
-                    StringBuffer s=new StringBuffer();
+                    // willuhn 2011-05-09: Wir uebergeben HHD UC erstmal direkt hier - bei NEED_PT_SECMECH
+                    // wird das ja auch so gemacht. Sollte hier spaeter noch mehr uebergeben werden,
+                    // kann man das ja sicher noch aendern.
+                    StringBuffer s = hhdUc != null ? new StringBuffer(hhdUc) : new StringBuffer();
                     HBCIUtilsInternal.getCallback().callback(this,
                         HBCICallback.NEED_PT_TAN,
                         secmechInfo.getProperty("name")+" "+secmechInfo.getProperty("inputinfo")+": "+challenge,
