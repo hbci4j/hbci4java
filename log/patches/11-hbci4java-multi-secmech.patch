@@ -1,0 +1,107 @@
+Index: src/org/kapott/hbci/passport/AbstractPinTanPassport.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/passport/AbstractPinTanPassport.java,v
+retrieving revision 1.2
+diff -u -r1.2 AbstractPinTanPassport.java
+--- src/org/kapott/hbci/passport/AbstractPinTanPassport.java	9 May 2011 15:07:02 -0000	1.2
++++ src/org/kapott/hbci/passport/AbstractPinTanPassport.java	13 May 2011 15:25:21 -0000
+@@ -101,12 +101,38 @@
+                 if (key.startsWith("Params")) {
+                     String subkey=key.substring(key.indexOf('.')+1);
+                     if (subkey.startsWith("TAN2StepPar")) {
++                      
++                        // willuhn 2011-05-13 Wir brauchen die Segment-Version, weil mittlerweile TAN-Verfahren
++                        // mit identischer Sicherheitsfunktion in unterschiedlichen Segment-Versionen auftreten koennen
++                        // Wenn welche mehrfach vorhanden sind, nehmen wir nur das aus der neueren Version
++                        int segVersion = Integer.parseInt(subkey.substring(11,12));
++                      
+                         subkey=subkey.substring(subkey.indexOf('.')+1);
+                         if (subkey.startsWith("ParTAN2Step") &&
+                                 subkey.endsWith(".secfunc"))
+                         {
+-                            String     secfunc=p.getProperty(key);
++                            String secfunc=p.getProperty(key);
++                            
++                            // willuhn 2011-05-13 Checken, ob wir das Verfahren schon aus einer aktuelleren Segment-Version haben
++                            Properties prev = (Properties) twostepMechanisms.get(secfunc);
++                            if (prev != null)
++                            {
++                              // Wir haben es schonmal. Mal sehen, welche Versionsnummer es hat
++                              int prevVersion = Integer.parseInt(prev.getProperty("segversion"));
++                              if (prevVersion > segVersion)
++                              {
++                                HBCIUtils.log("found another twostepmech " + secfunc + " in segversion " + segVersion + ", allready have one in segversion " + prevVersion + ", ignoring segversion " + segVersion, HBCIUtils.LOG_DEBUG);
++                                continue;
++                              }
++                            }
++                            
+                             Properties entry=new Properties();
++                            
++                            // willuhn 2011-05-13 Wir merken uns die Segment-Version in dem Zweischritt-Verfahren
++                            // Daran koennen wir erkennen, ob wir ein mehrfach auftretendes
++                            // Verfahren ueberschreiben koennen oder nicht.
++                            entry.put("segversion",Integer.toString(segVersion));
++
+                             String     paramHeader=key.substring(0,key.lastIndexOf('.'));
+                             // Params_x.TAN2StepParY.ParTAN2StepZ.TAN2StepParamsX_z
+ 
+@@ -258,6 +284,11 @@
+             for (Enumeration e=bpd.propertyNames();e.hasMoreElements();) {
+                 String key=(String)e.nextElement();
+                 
++                // TODO: willuhn 2011-05-13: Das nimmt einfach den ersten gefundenen Parameter, liefert
++                // jedoch faelschlicherweise false, wenn das erste gefundene kein Einschritt-Verfahren ist
++                // Hier muesste man durch alle iterieren und dann true liefern, wenn wenigstens
++                // eines den Wert "J" hat.
++
+                 // p.getProperty("Params_x.TAN2StepParY.ParTAN2StepZ.can1step")
+                 if (key.startsWith("Params")) {
+                     String subkey=key.substring(key.indexOf('.')+1);
+@@ -857,6 +888,18 @@
+             for (Enumeration e=bpd.propertyNames();e.hasMoreElements();) {
+                 String key=(String)e.nextElement();
+                 
++                // TODO: willuhn 2011-05-13: Das nimmt einfach das Hash-Verfahren
++                // aus dem ersten gefundenen Element. HITANS kann inzwischen
++                // aber mehrfach auftreten. muss es von genau dem aktuell gewaehlten
++                // genommen werden.
++                // Hier muesste man vermutlich stattdessen folgendes machen
++
++                // Properties props = getCurrentSecMechInfo();
++                // String version = props.getProperty("segversion");
++                // Und dann nicht subkey.startsWith("TAN2StepPar") sondern
++                // subkey.startsWith("TAN2StepPar" + version)
++                // Muesste man aber noch testen
++                
+                 // p.getProperty("Params_x.TAN2StepParY.ParTAN2StepZ.can1step")
+                 if (key.startsWith("Params")) {
+                     String subkey=key.substring(key.indexOf('.')+1);
+@@ -901,7 +944,7 @@
+                 for (Iterator j=msg_tasks.iterator();j.hasNext();) {
+                     HBCIJobImpl task=(HBCIJobImpl)j.next();
+                     String      segcode=task.getHBCICode();
+-                    
++
+                     if (getPinTanInfo(segcode).equals("J")) {
+                         // es handelt sich um einen tan-pflichtigen task
+                         HBCIUtils.log("found task that requires a TAN: "+segcode+" - have to patch message queue",HBCIUtils.LOG_DEBUG);
+@@ -960,7 +1003,18 @@
+                                 
+                                 // TODO: verwendete spezifikation parametrisieren
+                                 int    hktan_version=Integer.parseInt(hktan.getSegVersion());
+-                                String spec="hhd1" + hktan_version;
++                                String spec=hktan_version<3?"hhd12":"hhd13";
++
++                                // TODO: willuhn 2011-05-13 Woran kann ich festmachen, welche HHD-Version verwendet werden soll?
++                                // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf, Kapitel B.4.5
++                                // klingt so, als wuerde hhd14 ab HKTAN5 gelten. Wenn in HBCI4Java also HKTAN/HITAN und HITANS 5
++                                // eingebaut ist, muss das hier beachtet werden. IMHO gibt es aber keine Aenderungen zwischen
++                                // hhd 1.3 und hhd 1.4
++                                //
++                                // Also etwa so:
++                                // String spec = "hhd12"; // Default
++                                // if (hktan_version > 2) spec = "hhd13"; // bei HKTAN3/HKTAN4
++                                // if (hktan_version > 4) spec = "hhd15"; // ab HKTAN5
+                                 
+                                 String   klass=cinfo.getKlassBySegCode(segcode,spec);
+                                 HBCIUtils.log("using challenge klass "+klass, HBCIUtils.LOG_DEBUG2);
