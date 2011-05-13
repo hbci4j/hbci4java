@@ -1,5 +1,5 @@
 
-/*  $Id: ChallengeInfo.java,v 1.1 2011/05/04 22:37:47 willuhn Exp $
+/*  $Id: ChallengeInfo.java,v 1.2 2011/05/13 15:28:35 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -101,10 +101,13 @@ public class ChallengeInfo
             int      specs_len=specs.getLength();
             for (int s=0;s<specs_len;s++) {
                 Element spec=(Element)specs.item(s);
-                String  specname=spec.getAttribute("spec");
+                
+                // willuhn 2011-05-13 In dem Attribut koennen mehrere HHD-Versionen angegeben werden
+                String [] specnames=spec.getAttribute("spec").split(",");
 
                 Hashtable h_info=new Hashtable();
-                h_specs.put(specname,h_info);
+                for (String names:specnames)
+                  h_specs.put(names,h_info);
 
                 h_info.put("klass", ((Element)spec.getElementsByTagName("klass").item(0)).getFirstChild().getNodeValue());
 
