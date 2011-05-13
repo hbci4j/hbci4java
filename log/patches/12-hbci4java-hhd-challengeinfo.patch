@@ -1,0 +1,210 @@
+Index: src/challengedata.xml
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/challengedata.xml,v
+retrieving revision 1.1
+diff -u -r1.1 challengedata.xml
+--- src/challengedata.xml	4 May 2011 22:37:50 -0000	1.1
++++ src/challengedata.xml	13 May 2011 15:27:50 -0000
+@@ -50,7 +50,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>20</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -78,7 +78,7 @@
+             <value>sepa.btg.value</value>
+             <curr>sepa.btg.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>22</klass>
+             <param>SegHead.code</param>
+             <param>sepa.dst.iban</param>
+@@ -100,7 +100,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -116,7 +116,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -132,7 +132,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -148,7 +148,7 @@
+             <value>sumValue</value>
+             <curr>sumCurr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>50</klass>
+ 	    <param>SegHead.code</param>
+             <param>sumOthers</param>
+@@ -164,7 +164,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -198,7 +198,7 @@
+             <value>Anlagebetrag.value</value>
+             <curr>Anlagebetrag.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Belastungskto.number</param>
+@@ -214,7 +214,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -236,7 +236,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -252,7 +252,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -322,7 +322,7 @@
+             <value>sumValue</value>
+             <curr>sumCurr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>50</klass>
+ 	    <param>SegHead.code</param>
+             <param>sumOthers</param>
+@@ -344,7 +344,7 @@
+             <value>sumValue</value>
+             <curr>sumCurr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>50</klass>
+ 	    <param>SegHead.code</param>
+             <param>sumOthers</param>
+@@ -366,7 +366,7 @@
+             <value>sumValue</value>
+             <curr>sumCurr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>50</klass>
+ 	    <param>SegHead.code</param>
+             <param>sumOthers</param>
+@@ -394,7 +394,7 @@
+             <value>sumValue</value>
+             <curr>sumCurr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>50</klass>
+ 	    <param>SegHead.code</param>
+             <param>sumOthers</param>
+@@ -416,7 +416,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -438,7 +438,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -454,7 +454,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -470,7 +470,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+@@ -486,7 +486,7 @@
+             <value>BTG.value</value>
+             <curr>BTG.curr</curr>
+         </challengeinfo>
+-        <challengeinfo spec="hhd13">
++        <challengeinfo spec="hhd13,hhd14">
+             <klass>10</klass>
+ 	    <param>SegHead.code</param>
+             <param>Other.number</param>
+Index: src/org/kapott/hbci/manager/ChallengeInfo.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/ChallengeInfo.java,v
+retrieving revision 1.1
+diff -u -r1.1 ChallengeInfo.java
+--- src/org/kapott/hbci/manager/ChallengeInfo.java	4 May 2011 22:37:47 -0000	1.1
++++ src/org/kapott/hbci/manager/ChallengeInfo.java	13 May 2011 15:27:50 -0000
+@@ -101,10 +101,13 @@
+             int      specs_len=specs.getLength();
+             for (int s=0;s<specs_len;s++) {
+                 Element spec=(Element)specs.item(s);
+-                String  specname=spec.getAttribute("spec");
++                
++                // willuhn 2011-05-13 In dem Attribut koennen mehrere HHD-Versionen angegeben werden
++                String [] specnames=spec.getAttribute("spec").split(",");
+ 
+                 Hashtable h_info=new Hashtable();
+-                h_specs.put(specname,h_info);
++                for (String names:specnames)
++                  h_specs.put(names,h_info);
+ 
+                 h_info.put("klass", ((Element)spec.getElementsByTagName("klass").item(0)).getFirstChild().getNodeValue());
+ 
