@@ -50,7 +50,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>20</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -78,7 +78,7 @@
             <value>sepa.btg.value</value>
             <curr>sepa.btg.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>22</klass>
             <param>SegHead.code</param>
             <param>sepa.dst.iban</param>
@@ -100,7 +100,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -116,7 +116,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -132,7 +132,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -148,7 +148,7 @@
             <value>sumValue</value>
             <curr>sumCurr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>50</klass>
 	    <param>SegHead.code</param>
             <param>sumOthers</param>
@@ -164,7 +164,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -198,7 +198,7 @@
             <value>Anlagebetrag.value</value>
             <curr>Anlagebetrag.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Belastungskto.number</param>
@@ -214,7 +214,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -236,7 +236,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -252,7 +252,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -322,7 +322,7 @@
             <value>sumValue</value>
             <curr>sumCurr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>50</klass>
 	    <param>SegHead.code</param>
             <param>sumOthers</param>
@@ -344,7 +344,7 @@
             <value>sumValue</value>
             <curr>sumCurr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>50</klass>
 	    <param>SegHead.code</param>
             <param>sumOthers</param>
@@ -366,7 +366,7 @@
             <value>sumValue</value>
             <curr>sumCurr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>50</klass>
 	    <param>SegHead.code</param>
             <param>sumOthers</param>
@@ -394,7 +394,7 @@
             <value>sumValue</value>
             <curr>sumCurr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>50</klass>
 	    <param>SegHead.code</param>
             <param>sumOthers</param>
@@ -416,7 +416,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -438,7 +438,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -454,7 +454,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -470,7 +470,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
@@ -486,7 +486,7 @@
             <value>BTG.value</value>
             <curr>BTG.curr</curr>
         </challengeinfo>
-        <challengeinfo spec="hhd13,hhd14">
+        <challengeinfo spec="hhd13">
             <klass>10</klass>
 	    <param>SegHead.code</param>
             <param>Other.number</param>
