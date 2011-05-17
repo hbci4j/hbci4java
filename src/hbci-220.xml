@@ -1244,6 +1244,19 @@
             </valids>
         </DEGdef>
         
+        <DEGdef id="ParTAN2Step5">
+            <DE name="can1step" type="JN"/>
+            <DE name="canmultitangvs" type="JN"/>
+            <DE name="orderhashmode" type="Code" maxsize="1"/>
+            <DEG type="TAN2StepParams5" name="TAN2StepParams" maxnum="98"/>
+            
+            <valids path="orderhashmode">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>
+
         <DEGdef id="ParTemplateD">
             <DE name="dummy" type="AN" minsize="0" maxsize="999" minnum="2" maxnum="999"/>
         </DEGdef>
@@ -1499,6 +1512,40 @@
             <DE name="needchallengeklass" type="JN"/>
             <DE name="needchallengevalue" type="JN"/>
 	    <DE name="ischallengestructured" type="JN" />
+            <DE name="initmode" type="Code"/>
+            <DE name="needtanmedia" type="Code"/>
+            <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <valids path="tanformat">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>
+
+        <DEGdef id="TAN2StepParams5">
+            <DE name="secfunc" type="Code" maxsize="3"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="id" type="ID"/>
+            <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" />
+            <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
+            <DE name="name" type="AN" maxsize="30"/>
+            <DE name="maxlentan2step" type="Num" maxsize="2"/>
+            <DE name="tanformat" type="Code" maxsize="1"/>
+            <DE name="inputinfo" type="AN" maxsize="30"/>
+            <DE name="maxleninput2step" type="Num" maxsize="4"/>
+            <DE name="noftanlists" type="Num" maxsize="1" minnum="0"/>
+            <DE name="canmultitan" type="JN"/>
+            <DE name="cantandelay" type="Code" maxsize="1"/>
+            <DE name="needtanlistidx" type="Code" maxsize="1"/>
+            <DE name="canstorno" type="JN"/>
+            <DE name="needsmsaccount" type="Code" maxsize="1"/>
+            <DE name="needorderaccount" type="Code" maxsize="1"/>
+            <DE name="needchallengeklass" type="JN"/>
+            <DE name="ischallengestructured" type="JN" />
             <DE name="initmode" type="Code"/>
             <DE name="needtanmedia" type="Code"/>
             <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
@@ -4483,6 +4530,72 @@
             <value path="SegHead.version">4</value>
         </SEGdef>
 
+
+
+
+        <!--  willuhn 2011-05-16 BEGIN HKTAN/HITAN/HITANS Version 5 -->
+        <SEGdef id="TAN2Step5" needsRequestTag="1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="ordersegcode" type="AN" maxsize="6" minnum="0"/>
+            <DEG name="OrderAccount" type="KTV3" minnum="0" />
+            <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+            <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            <DE name="listidx" type="AN" maxsize="20" minnum="0"/>
+            <DE name="notlasttan" type="JN" minnum="0"/>
+            <DE name="storno" type="JN" minnum="0"/>
+            <DEG name="SMSAccount" type="KTV3" minnum="0" />
+            <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+            <DEG type="ChallengeKlassParams" minnum="0"/>
+            <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            
+            <value path="SegHead.code">HKTAN</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+        <SEGdef id="TAN2StepRes5">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+            <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            <DE name="challenge" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="challenge_hhd_uc" type="Bin" maxsize="0" minnum="0" />
+            <DEG type="ChallengeValidity" minnum="0"/>
+            <DE name="listidx" type="AN" maxsize="20" minnum="0"/>
+            <DE name="ben" type="AN" maxsize="99" minnum="0"/>
+            <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            
+            <value path="SegHead.code">HITAN</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+        <SEGdef id="TAN2StepPar5">
+            &GVP2;
+            <DEG type="ParTAN2Step5" name="ParTAN2Step"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITANS</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+        <!--  willuhn 2011-05-16 END HKTAN/HITAN/HITANS Version 5 -->
+
+
+
+
+
         <SEGdef id="TANListList1" needsRequestTag="1"> <!-- 2.2 -->
             <DEG type="SegHeadUser" name="SegHead"/>
 
@@ -6101,6 +6214,7 @@
             <SEG type="TAN2Step2" minnum="0"/>
             <SEG type="TAN2Step3" minnum="0"/>
             <SEG type="TAN2Step4" minnum="0"/>
+            <SEG type="TAN2Step5" minnum="0"/>
             <SEG type="TANListList1" minnum="0"/>
             <SEG type="TermSammelLast3" minnum="0"/>
             <SEG type="TermSammelLastDel3" minnum="0"/>
@@ -6219,6 +6333,7 @@
             <SEG type="TAN2StepRes2" minnum="0"/>
             <SEG type="TAN2StepRes3" minnum="0"/>
             <SEG type="TAN2StepRes4" minnum="0"/>
+            <SEG type="TAN2StepRes5" minnum="0"/>
             <SEG type="TANListListRes1" minnum="0"/>
             <SEG type="TermSammelLastRes3" minnum="0"/>
             <SEG type="TermSammelLastListRes3" minnum="0"/>
@@ -6351,6 +6466,7 @@
             <SEG type="TAN2StepPar2" minnum="0"/>
             <SEG type="TAN2StepPar3" minnum="0"/>
             <SEG type="TAN2StepPar4" minnum="0"/>
+            <SEG type="TAN2StepPar5" minnum="0"/>
             <SEG type="TANListListPar1" minnum="0"/>
             <SEG type="TermSammelLastPar3" minnum="0"/>
             <SEG type="TermSammelLastDelPar3" minnum="0"/>

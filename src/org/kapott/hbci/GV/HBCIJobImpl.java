@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIJobImpl.java,v 1.1 2011/05/04 22:37:54 willuhn Exp $
+/*  $Id: HBCIJobImpl.java,v 1.2 2011/05/17 16:39:06 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -929,6 +929,32 @@ public abstract class HBCIJobImpl
             result=this.getLowlevelParam(valuePath);
         }
         return result;
+    }
+    
+    /**
+     * Liefert das Auftraggeber-Konto, wie es ab HKTAN5 erforderlich ist.
+     * @return das Auftraggeber-Konto oder NULL, wenn keines angegeben ist.
+     */
+    public Konto getOrderAccount()
+    {
+      // Checken, ob wir das Konto unter "My.number" haben
+      String prefix = this.getName() + ".My.";
+      String number = this.getLowlevelParam(prefix + "number");
+      if (number == null || number.length() == 0)
+      {
+        // OK, vielleicht unter "KTV.number"?
+        prefix = this.getName() + ".KTV.";
+        number = this.getLowlevelParam(prefix + "number");
+
+        if (number == null || number.length() == 0)
+          return null; // definitiv kein Konto vorhanden
+      }
+      Konto k = new Konto();
+      k.number    = number;
+      k.subnumber = this.getLowlevelParam(prefix + "subnumber");
+      k.blz       = this.getLowlevelParam(prefix + "KIK.blz");
+      k.country   = this.getLowlevelParam(prefix + "KIK.country");
+      return k;
     }
     
     public HBCIHandler getParentHandler()

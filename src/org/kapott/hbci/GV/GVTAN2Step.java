@@ -1,5 +1,5 @@
 
-/*  $Id: GVTAN2Step.java,v 1.3 2011/05/13 15:31:38 willuhn Exp $
+/*  $Id: GVTAN2Step.java,v 1.4 2011/05/17 16:39:06 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -68,6 +68,19 @@ public class GVTAN2Step
         addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param_9","", LogFilter.FILTER_IDS);
 
         addConstraint("tanmedia", "tanmedia","", LogFilter.FILTER_IDS);
+
+        addConstraint("ordersegcode", "ordersegcode","", LogFilter.FILTER_NONE);
+
+        addConstraint("orderaccount.number","OrderAccount.number",null, LogFilter.FILTER_IDS);
+        addConstraint("orderaccount.subnumber","OrderAccount.subnumber","", LogFilter.FILTER_MOST);
+        addConstraint("orderaccount.blz","OrderAccount.KIK.blz",null, LogFilter.FILTER_MOST);
+        addConstraint("orderaccount.country","OrderAccount.KIK.country","DE", LogFilter.FILTER_NONE);
+
+        // willuhn 2011-05-17 wird noch nicht genutzt
+        // addConstraint("smsaccount.number","SMSAccount.number",null, LogFilter.FILTER_IDS);
+        // addConstraint("smsaccount.subnumber","SMSAccount.subnumber","", LogFilter.FILTER_MOST);
+        // addConstraint("smsaccount.blz","SMSAccount.KIK.blz",null, LogFilter.FILTER_MOST);
+        // addConstraint("smsaccount.country","SMSAccount.KIK.country","DE", LogFilter.FILTER_NONE);
     }
     
     public void setParam(String paramName, String value)

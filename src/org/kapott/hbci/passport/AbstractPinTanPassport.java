@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractPinTanPassport.java,v 1.3 2011/05/13 15:26:23 willuhn Exp $
+/*  $Id: AbstractPinTanPassport.java,v 1.4 2011/05/17 16:39:07 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -35,7 +35,6 @@ import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
-import org.kapott.hbci.datatypes.SyntaxWrt;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.ChallengeInfo;
@@ -44,13 +43,13 @@ import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.protocol.SEG;
 import org.kapott.hbci.protocol.factory.SEGFactory;
 import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.status.HBCIRetVal;
+import org.kapott.hbci.structures.Konto;
 
 public abstract class AbstractPinTanPassport 
     extends AbstractHBCIPassport
@@ -959,6 +958,31 @@ public abstract class AbstractPinTanPassport
                             HBCIJob hktan=handler.newJob("TAN2Step");
                             hktan.setParam("process",process);
                             hktan.setParam("notlasttan","N");
+                            
+                            // willuhn 2011-05-16
+                            // Siehe FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf, Seite 58
+                            int hktanVersion = Integer.parseInt(hktan.getSegVersion());
+                            if (hktanVersion >= 5)
+                            {
+                              // Bis HKTAN4/hhd1.3 wurde das noch als Challenge-Parameter uebermittelt. Jetzt hat es einen
+                              // eigenen Platz in den Job-Parametern
+                              hktan.setParam("ordersegcode",task.getHBCICode());
+
+                              // Zitat aus HITANS5: Diese Funktion ermöglicht das Sicherstellen einer gültigen Kontoverbindung
+                              // z. B. für die Abrechnung von SMS-Kosten bereits vor Erzeugen und Versenden einer
+                              // (ggf. kostenpflichtigen!) TAN.
+                              //  0: Auftraggeberkonto darf nicht angegeben werden
+                              //  2: Auftraggeberkonto muss angegeben werden, wenn im Geschäftsvorfall enthalten
+                              if (secmechInfo.getProperty("needorderaccount","").equals("2"))
+                              {
+                                Konto k = task.getOrderAccount();
+                                if (k != null)
+                                  hktan.setParam("orderaccount",k);
+                                else
+                                  HBCIUtils.log("orderaccount needed, but not found in " + task.getHBCICode(),HBCIUtils.LOG_DEBUG);
+                              }
+                            }
+                            
                             // TODO: das für mehrfachsignaturen
                             // hktan.setParam("notlasttan","J");
                             
@@ -996,78 +1020,15 @@ public abstract class AbstractPinTanPassport
                             // hktan.setParam("listidx","");
                             
                             // wenn needchallengeklass gesetzt ist:
-                            if (secmechInfo.getProperty("needchallengeklass","N").equals("J")) {
-                                HBCIUtils.log("we are in PV #1, and a challenge klass is required",
-                                                HBCIUtils.LOG_DEBUG);
-                                ChallengeInfo cinfo=ChallengeInfo.getInstance();
-                                
-                                // TODO: verwendete spezifikation parametrisieren
-                                int    hktan_version=Integer.parseInt(hktan.getSegVersion());
-                                String spec=hktan_version<3?"hhd12":"hhd13";
-
-                                // TODO: willuhn 2011-05-13 Woran kann ich festmachen, welche HHD-Version verwendet werden soll?
-                                // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf, Kapitel B.4.5
-                                // klingt so, als wuerde hhd14 ab HKTAN5 gelten. Wenn in HBCI4Java also HKTAN/HITAN und HITANS 5
-                                // eingebaut ist, muss das hier beachtet werden. IMHO gibt es aber keine Aenderungen zwischen
-                                // hhd 1.3 und hhd 1.4
-                                //
-                                // Also etwa so:
-                                // String spec = "hhd12"; // Default
-                                // if (hktan_version > 2) spec = "hhd13"; // bei HKTAN3/HKTAN4
-                                // if (hktan_version > 4) spec = "hhd15"; // ab HKTAN5
-                                
-                                String   klass=cinfo.getKlassBySegCode(segcode,spec);
-                                HBCIUtils.log("using challenge klass "+klass, HBCIUtils.LOG_DEBUG2);
-                                hktan.setParam("challengeklass",klass);
-
-                                // die als challenge-param einzustellenden werte aus der challenge-info holen
-                                String[] param_paths=cinfo.getParamPathsBySegCode(segcode,spec);
-                                int      param_count=param_paths.length;
-                                for (int p=0;p<param_count;p++) {
-                                        String path=param_paths[p];
-                                        String value=task.getChallengeParam(path);
-                                        HBCIUtils.log("adding challenge parameter "+path+" = "+value, HBCIUtils.LOG_DEBUG2);
-                                        hktan.setParam("ChallengeKlassParam"+(p+1),value);
-                                }
-
-                                // wenn auch noch der betrag aus dem auftrag in die challenge-parameter
-                                // eingestellt werden soll, machen wir das (sofern ein wert existiert)
-                                if (secmechInfo.getProperty("needchallengevalue","N").equals("J")) {
-                                        HBCIUtils.log("we also have to add the value as challenge parameter",
-                                                        HBCIUtils.LOG_DEBUG);
-                                        
-                                        // pfad zum wert holen
-                                        String path=cinfo.getValuePathBySegCode(segcode,spec);
-                                        if (path!=null) {
-                                            // es ist tatsächlich der pfad zu einem wert definiert
-                                            String value=task.getChallengeParam(path);
-                                            if (value!=null && value.length()!=0) {
-                                                value=new SyntaxWrt(value,1,0).toString(0);
-
-                                                HBCIUtils.log("adding challenge parameter "+path+" = "+value, 
-                                                        HBCIUtils.LOG_DEBUG2);
-                                                // der an dieser stelle gespeicherte wert ist nicht leer
-                                                hktan.setParam("ChallengeKlassParam"+(param_count+1),value);
-                                            }
-                                        }
-
-                                        // pfad zur währung holen
-                                        path=cinfo.getCurrPathBySegCode(segcode,spec);
-                                        if (path!=null) {
-                                            // es gibt einen währungs-eintrag
-                                            String value=task.getChallengeParam(path);
-                                            if (value!=null && value.length()!=0) {
-                                                // und es gibt auch eine währung
-                                                HBCIUtils.log("adding challenge parameter "+path+" = "+value, 
-                                                        HBCIUtils.LOG_DEBUG2);
-                                                hktan.setParam("ChallengeKlassParam"+(param_count+2),value);
-                                            }
-                                        }
-                                }
-
-                                // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
-                                applyTanMedia((GVTAN2Step) hktan);
+                            if (secmechInfo.getProperty("needchallengeklass","N").equals("J"))
+                            {
+                                HBCIUtils.log("we are in PV #1, and a challenge klass is required",HBCIUtils.LOG_DEBUG);
+                                ChallengeInfo cinfo = ChallengeInfo.getInstance();
+                                cinfo.applyParams(task,hktan,secmechInfo);
                             }
+
+                            // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
+                            applyTanMedia((GVTAN2Step) hktan);
                             
                             // hktan-job zur neuen msg hinzufügen
                             additional_msg_tasks.add(hktan);
@@ -1114,8 +1075,8 @@ public abstract class AbstractPinTanPassport
                             // TODO: das für mehrfachsignaturen
                             // hktan2.setParam("notlasttan","J");
                             
-                            // willuhn 2011-05-09: Laut Spec (siehe applyTanMedia()) ist das TAN-Medium nur bei Prozess 1,3 und 4 noetig
-                            
+                            // willuhn 2011-05-09 TAN-Media gibts nur bei Prozess 1,3,4 - also nicht in hktan2
+
                             // hktan-job zur neuen msg hinzufügen
                             additional_msg_tasks.add(hktan2);
                             

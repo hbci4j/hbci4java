@@ -1,191 +1,423 @@
+/*  $Id: ChallengeInfo.java,v 1.4 2011/05/17 16:39:07 willuhn Exp $
 
-/*  $Id: ChallengeInfo.java,v 1.3 2011/05/16 15:40:00 willuhn Exp $
+ This file is part of HBCI4Java
+ Copyright (C) 2001-2008  Stefan Palme
 
-    This file is part of HBCI4Java
-    Copyright (C) 2001-2008  Stefan Palme
+ HBCI4Java is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
 
-    HBCI4Java is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+ HBCI4Java is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    HBCI4Java is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 package org.kapott.hbci.manager;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.kapott.hbci.GV.HBCIJob;
+import org.kapott.hbci.GV.HBCIJobImpl;
+import org.kapott.hbci.datatypes.SyntaxWrt;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//TODO: doku fehlt
-public class ChallengeInfo 
+/**
+ * Diese Klasse ermittelt die noetigen HKTAN-Challenge-Parameter fuer einen
+ * Geschaeftsvorfall
+ */
+public class ChallengeInfo
 {
-    private static ChallengeInfo _instance=null;
+  /**
+   * Versionskennung fuer HHD 1.2
+   */
+  public final static String VERSION_HHD_1_2 = "hhd12";
+  
+  /**
+   * Versionskennung fuer HHD 1.3
+   */
+  public final static String VERSION_HHD_1_3 = "hhd13";
 
-    private Hashtable challengedata;
+  /**
+   * Versionskennung fuer HHD 1.4
+   */
+  public final static String VERSION_HHD_1_4 = "hhd14";
 
-    static public ChallengeInfo getInstance()
+  /**
+   * Das Singleton.
+   */
+  private static ChallengeInfo singleton = null;
+    private Map<String,Job> data = null; // Die Parameter-Daten aus der XML-Datei.
+
+  /**
+   * Erzeugt ein neues Challenge-Info-Objekt.
+   * @return das Challenge-Info-Objekt.
+   */
+  public static synchronized ChallengeInfo getInstance()
+  {
+    if (singleton == null)
+      singleton = new ChallengeInfo();
+    return singleton;
+  }
+  
+  /**
+   * ct.
+   */
+  private ChallengeInfo()
+  {
+    HBCIUtils.log("initializing challenge info engine",HBCIUtils.LOG_DEBUG);
+
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // XML-Datei lesen
+    String xmlpath = HBCIUtils.getParam("kernel.kernel.challengedatapath","");
+    InputStream dataStream = null;
+
+    String filename = xmlpath+"challengedata.xml";
+    dataStream = ChallengeInfo.class.getClassLoader().getResourceAsStream(filename);
+    if (dataStream == null)
+      throw new InvalidUserDataException("*** can not load challenge information from "+filename);
+
+    // mit den so gefundenen xml-daten ein xml-dokument bauen
+    Document doc = null;
+    try
     {
-        if (_instance==null) {
-            _instance=new ChallengeInfo();
-        }
-        return _instance;
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      dbf.setIgnoringComments(true);
+      dbf.setValidating(true);
+
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      doc = db.parse(dataStream);
+      dataStream.close();
+    }
+    catch (Exception e)
+    {
+      throw new HBCI_Exception("*** can not load challengedata from file "+filename,e);
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////
+
+    data = new HashMap<String,Job>();
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Parsen
+    NodeList jobs = doc.getElementsByTagName("job");
+    int size      = jobs.getLength();
+    
+    for (int i=0;i<size;++i)
+    {
+      Element job = (Element) jobs.item(i);
+      String code = job.getAttribute("code");
+      data.put(code,new Job(job));
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////
+
+    HBCIUtils.log("challenge information loaded",HBCIUtils.LOG_DEBUG);
+  }
+  
+  /**
+   * Ermittelt die zu verwendende HHD-Version aus den BPD-Informationen des TAN-Verfahrens.
+   * @param secmech die BPD-Informationen zum TAN-Verfahren.
+   * @return die HHD-Version.
+   */
+  private String getVersion(Properties secmech)
+  {
+    // HHD-Version ermitteln
+    String id = secmech.getProperty("id","");
+    
+    if (id.startsWith("HHD1.4")) return VERSION_HHD_1_4;
+    if (id.startsWith("HHD1.3")) return VERSION_HHD_1_3;
+    
+    // Default:
+    return VERSION_HHD_1_2;
+  }
+  
+  /**
+   * Liefert die Challenge-Daten fuer einen Geschaeftsvorfall.
+   * @param code die Segmentkennung des Geschaeftsvorfalls.
+   * @return die Challenge-Daten.
+   */
+  public Job getData(String code)
+  {
+    return data.get(code);
+  }
+
+  /**
+   * Uebernimmt die Challenge-Parameter in den HKTAN-Geschaeftsvorfall.
+   * @param task der Job, zu dem die Challenge-Parameter ermittelt werden sollen.
+   * @param hktan der HKTAN-Geschaeftsvorfall, in dem die Parameter gesetzt werden sollen.
+   * @param secmech die BPD-Informationen zum TAN-Verfahren.
+   */
+  public void applyParams(HBCIJobImpl task, HBCIJob hktan, Properties secmech)
+  {
+    String code = task.getHBCICode(); // Code des Geschaeftsvorfalls
+
+    // Job-Parameter holen
+    Job job = this.getData(code);
+    
+    // Den Geschaeftsvorfall kennen wir nicht. Dann brauchen wir
+    // auch keine Challenge-Parameter setzen
+    if (job == null)
+    {
+      HBCIUtils.log("have no challenge data for " + code + ", will not apply challenge params", HBCIUtils.LOG_INFO);
+      return;
+    }
+    
+    String version = this.getVersion(secmech); // HHD-Version
+    HBCIUtils.log("using hhd version " + version, HBCIUtils.LOG_DEBUG2);
+
+    // Parameter fuer die passende HHD-Version holen
+    HhdVersion hhd = job.getVersion(version);
+    
+    // Wir haben keine Parameter fuer diese HHD-Version
+    if (hhd == null)
+    {
+      HBCIUtils.log("have no challenge data for " + code + " in " + version + ", will not apply challenge params", HBCIUtils.LOG_INFO);
+      return;
     }
 
-    private ChallengeInfo()
+
+    // Schritt 1: Challenge-Klasse uebernehmen
+    String klass = hhd.getKlass();
+    HBCIUtils.log("using challenge klass " + klass, HBCIUtils.LOG_DEBUG2);
+    hktan.setParam("challengeklass", klass);
+
+    
+    // Schritt 2: Challenge-Parameter uebernehmen
+    List<Param> params = hhd.getParams();
+    for (int i=0;i<params.size();++i)
     {
-        HBCIUtils.log("initializing challenge info engine",HBCIUtils.LOG_DEBUG);
-
-        // classloader ermitteln, mit dem die challengedata.xml geladen werden soll
-        ClassLoader cl=this.getClass().getClassLoader();
-
-        // versuchen, die challengeinfo.xml mit diesem classloader zu laden
-        String xmlpath=HBCIUtils.getParam("kernel.kernel.challengedatapath");
-        InputStream dataStream=null;
-        if (xmlpath==null) {
-            xmlpath="";
-        }
-
-        String filename=xmlpath+"challengedata.xml";
-        dataStream=cl.getResourceAsStream(filename);
-        if (dataStream==null)
-            throw new InvalidUserDataException("*** can not load challenge information from "+filename);
-
-        // mit den so gefundenen xml-daten ein xml-dokument bauen
-        Document doc=null;
-        try {
-            DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
-
-            dbf.setIgnoringComments(true);
-            dbf.setValidating(true);
-
-            DocumentBuilder db=dbf.newDocumentBuilder();
-            doc=db.parse(dataStream);
-            dataStream.close();
-        } catch (Exception e) {
-            throw new HBCI_Exception("*** can not load challengedata from file "+filename,e);
-        }
-
-        // dieses xml-dokument parsen und daraus ein entsprechendes properties
-        // objekt mit den challenge-informationen machen
-        this.challengedata=new Hashtable();
-
-        NodeList jobs=doc.getElementsByTagName("job");
-        int      jobs_len=jobs.getLength();
-        for (int j=0;j<jobs_len;j++) {
-            Element    job=(Element)jobs.item(j);
-            String     segcode=job.getAttribute("code");
-
-            Hashtable h_specs=new Hashtable();
-            challengedata.put(segcode,h_specs);
-
-            NodeList specs=job.getElementsByTagName("challengeinfo");
-            int      specs_len=specs.getLength();
-            for (int s=0;s<specs_len;s++) {
-                Element spec=(Element)specs.item(s);
-                String  specname=spec.getAttribute("spec");
-
-                Hashtable h_info=new Hashtable();
-                h_specs.put(specname,h_info);
-
-                h_info.put("klass", ((Element)spec.getElementsByTagName("klass").item(0)).getFirstChild().getNodeValue());
-
-                NodeList params=spec.getElementsByTagName("param");
-                int      params_len=params.getLength();
-                
-                // jetzt alle params durchgehen und merken 
-                List     params_l=new ArrayList();
-                for (int p=0;p<params_len;p++) {
-                    Element param=(Element)params.item(p);
-                    params_l.add(param.getFirstChild().getNodeValue());
-                }
-                h_info.put("param_paths", params_l.toArray(new String[params_len]));
-
-                // das gleiche für value
-                NodeList values=spec.getElementsByTagName("value");
-                if (values.getLength()!=0) {
-                    h_info.put("value_path", values.item(0).getFirstChild().getNodeValue());
-                }
-
-                // und für curr
-                NodeList currs=spec.getElementsByTagName("curr");
-                if (currs.getLength()!=0) {
-                    h_info.put("curr_path", currs.item(0).getFirstChild().getNodeValue());
-                }
-            }
-        }
-
-        HBCIUtils.log("challenge information loaded",HBCIUtils.LOG_DEBUG);
+      int num = i+1; // Die Job-Parameter beginnen bei 1
+      Param param = params.get(i);
+      
+      // Checken, ob der Parameter angewendet werden soll.
+      if (!param.isComplied(secmech))
+      {
+        HBCIUtils.log("skipping challenge parameter " + num + " (" + param.path + "), condition " + param.conditionName + "=" + param.conditionValue + " not complied",HBCIUtils.LOG_DEBUG2);
+        continue;
+      }
+      
+      // Parameter uebernehmen. Aber nur wenn er auch einen Wert hat.
+      // Seit HHD 1.4 duerfen Parameter mittendrin optional sein, sie
+      // werden dann freigelassen
+      String value = param.getValue(task);
+      
+      if (value == null || value.length() == 0)
+      {
+        HBCIUtils.log("challenge parameter " + num + " (" + param.path + ") is empty",HBCIUtils.LOG_DEBUG2);
+        continue;
+      }
+      
+      HBCIUtils.log("adding challenge parameter " + num + " " + param.path + "=" + value, HBCIUtils.LOG_DEBUG2);
+      hktan.setParam("ChallengeKlassParam" + num, value);
     }
-
-    public Hashtable getInfoBySegCode(String segcode,String spec)
+  }
+  
+  /**
+   * Eine Bean fuer die Parameter-Saetze eines Geschaeftsvorfalles fuer die HHD-Versionen.
+   */
+  public static class Job
+  {
+    /**
+     * Die Parameter fuer die jeweilige HHD-Version.
+     */
+    private Map<String,HhdVersion> versions = new HashMap<String,HhdVersion>();
+    
+    /**
+     * ct.
+     * @param job der XML-Knoten, in dem die Daten stehen.
+     */
+    private Job(Element job)
     {
-        Hashtable result=null;
-        Hashtable specs_table=(Hashtable)(this.challengedata.get(segcode));
-        if (specs_table!=null) {
-            result=(Hashtable)specs_table.get(spec);
-        }
-        return result;
+      NodeList specs = job.getElementsByTagName("challengeinfo");
+      int size       = specs.getLength();
+      
+      for (int i=0;i<size;++i)
+      {
+        Element spec    = (Element) specs.item(i);
+        String  version = spec.getAttribute("spec");
+        
+        this.versions.put(version,new HhdVersion(spec));
+      }
     }
-
-    public String getKlassBySegCode(String segcode,String spec)
+    
+    /**
+     * Liefert die Challenge-Parameter fuer die angegeben HHD-Version.
+     * @param version die HHD-Version.
+     * @return die Challenge-Parameter fuer die HHD-Version.
+     */
+    public HhdVersion getVersion(String version)
     {
-        String    klass=null;
-        Hashtable info=getInfoBySegCode(segcode,spec);
-        if (info!=null) {
-            klass=(String)info.get("klass");
-        }
-        return klass;
+      return this.versions.get(version);
     }
-
-    public String[] getParamPathsBySegCode(String segcode,String spec)
+  }
+  
+  /**
+   * Eine Bean fuer den Parameter-Satz eines Geschaeftvorfalles innerhalb einer HHD-Version.
+   */
+  public static class HhdVersion
+  {
+    /**
+     * Die Challenge-Klasse.
+     */
+    private String klass = null;
+    
+    /**
+     * Liste der Challenge-Parameter.
+     */
+    private List<Param> params = new ArrayList<Param>();
+    
+    /**
+     * ct.
+     * @param spec der XML-Knoten mit den Daten.
+     */
+    private HhdVersion(Element spec)
     {
-        String[]  parampaths=new String[0];
-        Hashtable info=getInfoBySegCode(segcode,spec);
-        if (info!=null) {
-            String[] paths=(String[])info.get("param_paths");
-            if (paths!=null) {
-                parampaths=paths;
-            }
-        }
-        return parampaths;
-    }
+      this.klass = ((Element)spec.getElementsByTagName("klass").item(0)).getFirstChild().getNodeValue();
 
-    public String getValuePathBySegCode(String segcode,String spec)
-    {
-        String    valuepath=null;
-        Hashtable info=getInfoBySegCode(segcode,spec);
-        if (info!=null) {
-            valuepath=(String)info.get("value_path");
-        }
-        return valuepath;
+      NodeList list = spec.getElementsByTagName("param");
+      int size      = list.getLength();
+      for (int i=0;i<size;++i)
+      {
+        Element param = (Element) list.item(i);
+        this.params.add(new Param(param));
+      }
     }
+    
+    /**
+     * Liefert die Challenge-Klasse.
+     * @return die Challenge-Klasse.
+     */
+    public String getKlass()
+    {
+      return this.klass;
+    }
+    
+    /**
+     * Liefert die Challenge-Parameter fuer den Geschaeftsvorfall in dieser HHD-Version.
+     * @return die Challenge-Parameter fuer den Geschaeftsvorfall in dieser HHD-Version.
+     */
+    public List<Param> getParams()
+    {
+      return this.params;
+    }
+  }
+  
+  /**
+   * Eine Bean fuer einen einzelnen Challenge-Parameter.
+   */
+  public static class Param
+  {
+    /**
+     * Der Typ des Parameters.
+     */
+    private String type = null;
+    
+    /**
+     * Der Pfad in den Geschaeftsvorfall-Parametern, unter dem der Wert steht.
+     */
+    private String path = null;
+    
+    /**
+     * Optional: Der Name einer Bedingung, die erfuellt sein muss, damit
+     * der Parameter verwendet wird. Konkret ist hier der Name eines Property
+     * aus secmechInfo gemeint. Also ein BPD-Parameter.
+     */
+    private String conditionName = null;
+    
+    /**
+     * Optional: Der Wert, den der BPD-Parameter haben muss, damit der Challenge-Parameter
+     * verwendet wird.
+     */
+    private String conditionValue = null;
+    
+    /**
+     * ct.
+     * @param param der XML-Knoten mit den Daten.
+     */
+    private Param(Element param)
+    {
+      Node content = param.getFirstChild();
+      this.path           = content != null ? content.getNodeValue() : null;
+      this.type           = param.getAttribute("type");
+      this.conditionName  = param.getAttribute("condition-name");
+      this.conditionValue = param.getAttribute("condition-value");
+    }
+    
+    /**
+     * Liefert true, wenn entweder keine Bedingung angegeben ist oder
+     * die Bedingung erfuellt ist und der Parameter verwendet werden kann.
+     * @param secmech die BPD-Informationen zum TAN-Verfahren.
+     * @return true, wenn der Parameter verwendet werden kann.
+     */
+    public boolean isComplied(Properties secmech)
+    {
+      if (this.conditionName == null || this.conditionName.length() == 0)
+        return true;
+      
+      // Wir haben eine Bedingung. Mal schauen, ob sie erfuellt ist.
+      String value = secmech.getProperty(this.conditionName,"");
+      return value.equals(this.conditionValue);
+    }
+    
+    /**
+     * Liefert den Typ des Parameters.
+     * @return der Typ des Parameters.
+     */
+    public String getType()
+    {
+      return this.type;
+    }
+    
+    /**
+     * Liefert den Pfad zum Wert.
+     * @return der Pfad zum Wert.
+     */
+    public String getPath()
+    {
+      return this.path;
+    }
+    
+    /**
+     * Liefert den Wert des Parameters.
+     * @param job der Geschaeftsvorfall.
+     * @return der Wert des Parameters.
+     */
+    private String getValue(HBCIJobImpl job)
+    {
+      // Leerer Parameter
+      if (this.path == null || this.path.length() == 0)
+        return null;
+      
+      String value = job.getChallengeParam(this.path);
+      if (value == null || value.length() == 0)
+        return value;
 
-    public String getCurrPathBySegCode(String segcode,String spec)
-    {
-        String    currpath=null;
-        Hashtable info=getInfoBySegCode(segcode,spec);
-        if (info!=null) {
-            currpath=(String)info.get("curr_path");
-        }
-        return currpath;
+      // Ist es ein Betrag?
+      if (type != null && type.equals("value"))
+        return new SyntaxWrt(value, 1, 0).toString(0);
+      
+      // Ansonsten ganz normal den Betrag zurueckliefern
+      return value;
     }
+  }
 }
