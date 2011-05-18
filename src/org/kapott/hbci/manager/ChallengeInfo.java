@@ -1,4 +1,4 @@
-/*  $Id: ChallengeInfo.java,v 1.4 2011/05/17 16:39:07 willuhn Exp $
+/*  $Id: ChallengeInfo.java,v 1.5 2011/05/18 17:19:08 willuhn Exp $
 
  This file is part of HBCI4Java
  Copyright (C) 2001-2008  Stefan Palme
@@ -21,7 +21,9 @@
 package org.kapott.hbci.manager;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -412,9 +414,34 @@ public class ChallengeInfo
       if (value == null || value.length() == 0)
         return value;
 
-      // Ist es ein Betrag?
-      if (type != null && type.equals("value"))
-        return new SyntaxWrt(value, 1, 0).toString(0);
+      // haben wir einen konkreten Typ?
+      if (type != null && type.length() > 0)
+      {
+        // Ist es ein Betrag?
+        if (type.equals("value"))
+        {
+          return new SyntaxWrt(value, 1, 0).toString(0);
+        }
+        // Datum?
+        else if (type.equals("date"))
+        {
+          try
+          {
+            // War ja klar, dass die das Datum hier nochmal in einem anderen Format haben wollen
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+            return new SimpleDateFormat("ddMMyyyy").format(date);
+          }
+          catch (Exception e)
+          {
+            HBCIUtils.log("unable to parse " + value + " as yyyy-MM-dd, sending as is",HBCIUtils.LOG_WARN);
+            return value;
+          }
+        }
+        else
+        {
+          HBCIUtils.log("unknown parameter type " + type,HBCIUtils.LOG_WARN);
+        }
+      }
       
       // Ansonsten ganz normal den Betrag zurueckliefern
       return value;

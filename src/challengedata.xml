@@ -676,7 +676,7 @@
       <param type="value">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
-      <param>date</param>
+      <param type="date">date</param>
     </challengeinfo>
   </job>
 
