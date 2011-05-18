@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/ChallengeInfoTest.java,v $
- * $Revision: 1.3 $
- * $Date: 2011/05/18 13:50:04 $
+ * $Revision: 1.4 $
+ * $Date: 2011/05/18 17:16:19 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -279,13 +279,29 @@ public class ChallengeInfoTest extends AbstractTest
     }
   }
   
+  /**
+   * Testet das korrekte Parsen eines Datums.
+   * @throws Exception
+   */
+  @Test
+  public void testDate() throws Exception
+  {
+    HhdVersion version = getHhdVersion("HKTUE",ChallengeInfo.VERSION_HHD_1_4);
+    List<Param> params = version.getParams();
+    Param p = params.get(3);
+    Assert.assertEquals(p.getType(),"date");
+  }
+  
 }
 
 
 
 /**********************************************************************
  * $Log: ChallengeInfoTest.java,v $
- * Revision 1.3  2011/05/18 13:50:04  willuhn
+ * Revision 1.4  2011/05/18 17:16:19  willuhn
+ * @N Test fuer das Datumsformat
+ *
+ * Revision 1.3  2011-05-18 13:50:04  willuhn
  * @N Test fuer die korrekte Erzeugung des DEG
  *
  * Revision 1.2  2011-05-18 13:36:23  willuhn
