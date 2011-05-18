@@ -1,5 +1,5 @@
 
-/*  $Id: GVTAN2Step.java,v 1.4 2011/05/17 16:39:06 willuhn Exp $
+/*  $Id: GVTAN2Step.java,v 1.5 2011/05/18 14:57:27 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -57,15 +57,15 @@ public class GVTAN2Step
         
         addConstraint("storno","storno","", LogFilter.FILTER_NONE);
         addConstraint("challengeklass","challengeklass","", LogFilter.FILTER_NONE);
-        addConstraint("ChallengeKlassParam1", "ChallengeKlassParams.param","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam2", "ChallengeKlassParams.param_2","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam3", "ChallengeKlassParams.param_3","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam4", "ChallengeKlassParams.param_4","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam5", "ChallengeKlassParams.param_5","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam6", "ChallengeKlassParams.param_6","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam7", "ChallengeKlassParams.param_7","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam8", "ChallengeKlassParams.param_8","", LogFilter.FILTER_IDS);
-        addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param_9","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam1", "ChallengeKlassParams.param1","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam2", "ChallengeKlassParams.param2","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam3", "ChallengeKlassParams.param3","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam4", "ChallengeKlassParams.param4","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam5", "ChallengeKlassParams.param5","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam6", "ChallengeKlassParams.param6","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam7", "ChallengeKlassParams.param7","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam8", "ChallengeKlassParams.param8","", LogFilter.FILTER_IDS);
+        addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param9","", LogFilter.FILTER_IDS);
 
         addConstraint("tanmedia", "tanmedia","", LogFilter.FILTER_IDS);
 

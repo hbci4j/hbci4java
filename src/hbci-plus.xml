@@ -880,7 +880,15 @@
         </DEGdef>
         
         <DEGdef id="ChallengeKlassParams">
-            <DE name="param" type="AN" maxsize="999" minnum="0" maxnum="9"/>
+            <DE name="param1" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param2" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param3" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param4" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param5" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param6" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param7" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param8" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+            <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
         </DEGdef>
         
         <DEGdef id="ChallengeValidity">
@@ -4379,7 +4387,7 @@
             <DE name="notlasttan" type="JN" minnum="0"/>
             <DE name="storno" type="JN" minnum="0"/>
             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
-            <DEG type="ChallengeKlassParams" minnum="0"/>
+            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
             
             <valids path="process">
                 <validvalue>1</validvalue>
@@ -4430,7 +4438,7 @@
             <DE name="notlasttan" type="JN" minnum="0"/>
             <DE name="storno" type="JN" minnum="0"/>
             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
-            <DEG type="ChallengeKlassParams" minnum="0"/>
+            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
             
             <valids path="process">
@@ -4484,7 +4492,7 @@
             <DE name="storno" type="JN" minnum="0"/>
 	    <DEG name="SMSAccount" type="KTV3" minnum="0" />
             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
-            <DEG type="ChallengeKlassParams" minnum="0"/>
+            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
             
             <valids path="process">
@@ -4545,7 +4553,7 @@
             <DE name="storno" type="JN" minnum="0"/>
             <DEG name="SMSAccount" type="KTV3" minnum="0" />
             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
-            <DEG type="ChallengeKlassParams" minnum="0"/>
+            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
             
             <valids path="process">

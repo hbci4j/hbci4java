@@ -1,0 +1,332 @@
+Index: src/hbci-201.xml
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/hbci-201.xml,v
+retrieving revision 1.2
+diff -u -r1.2 hbci-201.xml
+--- src/hbci-201.xml	17 May 2011 16:39:07 -0000	1.2
++++ src/hbci-201.xml	18 May 2011 14:55:41 -0000
+@@ -876,7 +876,15 @@
+         </DEGdef>
+         
+         <DEGdef id="ChallengeKlassParams">
+-            <DE name="param" type="AN" maxsize="999" minnum="0" maxnum="9"/>
++            <DE name="param1" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param2" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param3" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param4" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param5" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param6" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param7" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param8" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+         </DEGdef>
+         
+         <DEGdef id="ChallengeValidity">
+@@ -4381,7 +4389,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             
+             <valids path="process">
+                 <validvalue>1</validvalue>
+@@ -4432,7 +4440,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4486,7 +4494,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+ 	    <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4546,7 +4554,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+             <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+Index: src/hbci-210.xml
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/hbci-210.xml,v
+retrieving revision 1.2
+diff -u -r1.2 hbci-210.xml
+--- src/hbci-210.xml	17 May 2011 16:39:07 -0000	1.2
++++ src/hbci-210.xml	18 May 2011 14:55:44 -0000
+@@ -876,7 +876,15 @@
+         </DEGdef>
+         
+         <DEGdef id="ChallengeKlassParams">
+-            <DE name="param" type="AN" maxsize="999" minnum="0" maxnum="9"/>
++            <DE name="param1" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param2" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param3" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param4" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param5" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param6" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param7" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param8" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+         </DEGdef>
+         
+         <DEGdef id="ChallengeValidity">
+@@ -4381,7 +4389,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             
+             <valids path="process">
+                 <validvalue>1</validvalue>
+@@ -4432,7 +4440,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4486,7 +4494,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+ 	    <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4546,7 +4554,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+             <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+Index: src/hbci-220.xml
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/hbci-220.xml,v
+retrieving revision 1.2
+diff -u -r1.2 hbci-220.xml
+--- src/hbci-220.xml	17 May 2011 16:39:07 -0000	1.2
++++ src/hbci-220.xml	18 May 2011 14:55:44 -0000
+@@ -875,7 +875,15 @@
+         </DEGdef>
+         
+         <DEGdef id="ChallengeKlassParams">
+-            <DE name="param" type="AN" maxsize="999" minnum="0" maxnum="9"/>
++            <DE name="param1" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param2" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param3" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param4" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param5" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param6" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param7" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param8" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+         </DEGdef>
+         
+         <DEGdef id="ChallengeValidity">
+@@ -4380,7 +4388,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             
+             <valids path="process">
+                 <validvalue>1</validvalue>
+@@ -4431,7 +4439,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4485,7 +4493,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+ 	    <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4546,7 +4554,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+             <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+Index: src/hbci-300.xml
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/hbci-300.xml,v
+retrieving revision 1.2
+diff -u -r1.2 hbci-300.xml
+--- src/hbci-300.xml	17 May 2011 16:39:07 -0000	1.2
++++ src/hbci-300.xml	18 May 2011 14:55:44 -0000
+@@ -939,7 +939,15 @@
+         </DEGdef>
+         
+         <DEGdef id="ChallengeKlassParams">
+-            <DE name="param" type="AN" maxsize="999" minnum="0" maxnum="9"/>
++            <DE name="param1" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param2" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param3" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param4" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param5" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param6" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param7" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param8" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+         </DEGdef>
+         
+         <DEGdef id="ChallengeValidity">
+@@ -4505,7 +4513,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             
+             <valids path="process">
+                 <validvalue>1</validvalue>
+@@ -4556,7 +4564,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4610,7 +4618,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+ 	    <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4669,7 +4677,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+             <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0" />
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+Index: src/hbci-plus.xml
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/hbci-plus.xml,v
+retrieving revision 1.2
+diff -u -r1.2 hbci-plus.xml
+--- src/hbci-plus.xml	17 May 2011 16:39:07 -0000	1.2
++++ src/hbci-plus.xml	18 May 2011 14:55:44 -0000
+@@ -880,7 +880,15 @@
+         </DEGdef>
+         
+         <DEGdef id="ChallengeKlassParams">
+-            <DE name="param" type="AN" maxsize="999" minnum="0" maxnum="9"/>
++            <DE name="param1" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param2" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param3" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param4" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param5" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param6" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param7" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param8" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
++            <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
+         </DEGdef>
+         
+         <DEGdef id="ChallengeValidity">
+@@ -4379,7 +4387,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             
+             <valids path="process">
+                 <validvalue>1</validvalue>
+@@ -4430,7 +4438,7 @@
+             <DE name="notlasttan" type="JN" minnum="0"/>
+             <DE name="storno" type="JN" minnum="0"/>
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4484,7 +4492,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+ 	    <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+@@ -4545,7 +4553,7 @@
+             <DE name="storno" type="JN" minnum="0"/>
+             <DEG name="SMSAccount" type="KTV3" minnum="0" />
+             <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+-            <DEG type="ChallengeKlassParams" minnum="0"/>
++            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0"/>
+             <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+             
+             <valids path="process">
+Index: src/org/kapott/hbci/GV/GVTAN2Step.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/GV/GVTAN2Step.java,v
+retrieving revision 1.4
+diff -u -r1.4 GVTAN2Step.java
+--- src/org/kapott/hbci/GV/GVTAN2Step.java	17 May 2011 16:39:06 -0000	1.4
++++ src/org/kapott/hbci/GV/GVTAN2Step.java	18 May 2011 14:55:44 -0000
+@@ -57,15 +57,15 @@
+         
+         addConstraint("storno","storno","", LogFilter.FILTER_NONE);
+         addConstraint("challengeklass","challengeklass","", LogFilter.FILTER_NONE);
+-        addConstraint("ChallengeKlassParam1", "ChallengeKlassParams.param","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam2", "ChallengeKlassParams.param_2","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam3", "ChallengeKlassParams.param_3","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam4", "ChallengeKlassParams.param_4","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam5", "ChallengeKlassParams.param_5","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam6", "ChallengeKlassParams.param_6","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam7", "ChallengeKlassParams.param_7","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam8", "ChallengeKlassParams.param_8","", LogFilter.FILTER_IDS);
+-        addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param_9","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam1", "ChallengeKlassParams.param1","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam2", "ChallengeKlassParams.param2","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam3", "ChallengeKlassParams.param3","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam4", "ChallengeKlassParams.param4","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam5", "ChallengeKlassParams.param5","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam6", "ChallengeKlassParams.param6","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam7", "ChallengeKlassParams.param7","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam8", "ChallengeKlassParams.param8","", LogFilter.FILTER_IDS);
++        addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param9","", LogFilter.FILTER_IDS);
+ 
+         addConstraint("tanmedia", "tanmedia","", LogFilter.FILTER_IDS);
+ 
