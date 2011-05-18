@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/ChallengeInfoTest.java,v $
- * $Revision: 1.2 $
- * $Date: 2011/05/18 13:36:23 $
+ * $Revision: 1.3 $
+ * $Date: 2011/05/18 13:50:04 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -268,6 +268,8 @@ public class ChallengeInfoTest extends AbstractTest
       
       String generated = msg.toString(0);
       String expected = "HNHBK:1:3+000000000137+300+H11051813102140+3'HKTAN:2:5+1+HKDAN+12345678::280:12345678+@5@12345+++N+++43+:201,:12345::Param 5'HNHBS:3:1+3'";
+                                                                                                                              // ^^^^^^^^^^^^^^^^^^^^
+      // Das sind die relevanten Params. Die letzten duerfen weggelassen werden, aber nicht am Anfang.
       Assert.assertEquals(generated,expected);
     }
     finally
@@ -283,7 +285,10 @@ public class ChallengeInfoTest extends AbstractTest
 
 /**********************************************************************
  * $Log: ChallengeInfoTest.java,v $
- * Revision 1.2  2011/05/18 13:36:23  willuhn
+ * Revision 1.3  2011/05/18 13:50:04  willuhn
+ * @N Test fuer die korrekte Erzeugung des DEG
+ *
+ * Revision 1.2  2011-05-18 13:36:23  willuhn
  * @N Test fuer die korrekte Erzeugung des DEG
  *
  * Revision 1.1  2011-05-17 16:39:38  willuhn
