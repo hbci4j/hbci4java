@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/ChallengeInfoTest.java,v $
- * $Revision: 1.4 $
- * $Date: 2011/05/18 17:16:19 $
+ * $Revision: 1.5 $
+ * $Date: 2011/05/20 10:49:44 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -23,6 +23,7 @@ import java.util.Properties;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.kapott.hbci.exceptions.InitializingException;
 import org.kapott.hbci.manager.ChallengeInfo;
 import org.kapott.hbci.manager.ChallengeInfo.HhdVersion;
 import org.kapott.hbci.manager.ChallengeInfo.Job;
@@ -102,41 +103,104 @@ public class ChallengeInfoTest extends AbstractTest
   }
 
   /**
-   * Testet, ob ein Parameter als Value korrekt erkannt wird.
+   * Testet, ob ein Parameter korrekt als SyntaxWrt erkannt und formatiert wird.
    */
   @Test
-  public void testValue()
+  public void testWrt()
   {
     HhdVersion version = null;
+    Param p            = null;
     String code        = "HKAOM";
-    List<Param> params = null;
     
     
     version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
-    params = version.getParams();
-    Assert.assertEquals(params.size(),3);
-    for (Param p:params)
-    {
-      if (p.getPath().equals("BTG.value"))
-        Assert.assertEquals(p.getType(),"value");
-    }
-
+    p = version.getParams().get(1);
+    Assert.assertEquals(p.getPath(),"BTG.value");
+    Assert.assertEquals(p.getType(),"Wrt");
+    Assert.assertEquals(p.format("100"),"100,");
+    Assert.assertEquals(p.format("100.50"),"100,5");
+    Assert.assertEquals(p.format("100.99"),"100,99");
+    Assert.assertNull(p.format(null));
+    
     version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
-    params = version.getParams();
-    Assert.assertEquals(params.size(),4);
-    for (Param p:params)
-    {
-      if (p.getPath().equals("BTG.value"))
-        Assert.assertEquals(p.getType(),"value");
-    }
+    p = version.getParams().get(2);
+    Assert.assertEquals(p.getPath(),"BTG.value");
+    Assert.assertEquals(p.getType(),"Wrt");
+    Assert.assertEquals(p.format("100"),"100,");
+    Assert.assertEquals(p.format("100.50"),"100,5");
+    Assert.assertEquals(p.format("100.99"),"100,99");
+    Assert.assertNull(p.format(null));
+    
 
     version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
-    Assert.assertEquals(params.size(),4);
-    params = version.getParams();
-    for (Param p:params)
+    p = version.getParams().get(0);
+    Assert.assertEquals(p.getPath(),"BTG.value");
+    Assert.assertEquals(p.getType(),"Wrt");
+    Assert.assertEquals(p.format("100"),"100,");
+    Assert.assertEquals(p.format("100.50"),"100,5");
+    Assert.assertEquals(p.format("100.99"),"100,99");
+    Assert.assertNull(p.format(null));
+  }
+
+  /**
+   * Testet, ob ein Parameter korrekt als SyntaxAN erkannt und formatiert wird.
+   */
+  @Test
+  public void testAN()
+  {
+    HhdVersion version = null;
+    Param p            = null;
+    String code        = "HKAOM";
+    
+    
+    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    p = version.getParams().get(0);
+    Assert.assertEquals(p.getPath(),"Other.number");
+    Assert.assertEquals(p.getType(),"");
+    Assert.assertEquals(p.format("AaBb"),"AaBb");
+    Assert.assertEquals(p.format("+:'@"),"?+?:?'?@");
+    Assert.assertNull(p.format(null));
+    
+    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    p = version.getParams().get(1);
+    Assert.assertEquals(p.getPath(),"Other.number");
+    Assert.assertEquals(p.getType(),"");
+    Assert.assertEquals(p.format("AaBb"),"AaBb");
+    Assert.assertEquals(p.format("+:'@"),"?+?:?'?@");
+    Assert.assertNull(p.format(null));
+    
+
+    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    p = version.getParams().get(3);
+    Assert.assertEquals(p.getPath(),"Other.number");
+    Assert.assertEquals(p.getType(),"");
+    Assert.assertEquals(p.format("AaBb"),"AaBb");
+    Assert.assertEquals(p.format("+:'@"),"?+?:?'?@");
+    Assert.assertNull(p.format(null));
+  }
+
+  /**
+   * Testet, ob ein Parameter korrekt als SyntaxDate erkannt wird.
+   * @throws Exception
+   */
+  @Test
+  public void testDate() throws Exception
+  {
+    HhdVersion version = getHhdVersion("HKTUE",ChallengeInfo.VERSION_HHD_1_4);
+    Param p = version.getParams().get(3);
+    Assert.assertEquals(p.getPath(),"date");
+    Assert.assertEquals(p.getType(),"Date");
+    Assert.assertEquals(p.format("2011-05-20"),"20110520");
+    Assert.assertNull(p.format(null));
+
+    try
     {
-      if (p.getPath().equals("BTG.value"))
-        Assert.assertEquals(p.getType(),"value");
+      p.format("invalid-date");
+      throw new Exception("hier duerfen wir nicht ankommen");
+    }
+    catch (InitializingException e)
+    {
+      Assert.assertEquals(InitializingException.class,e.getClass());
     }
   }
   
@@ -278,27 +342,16 @@ public class ChallengeInfoTest extends AbstractTest
         is.close();
     }
   }
-  
-  /**
-   * Testet das korrekte Parsen eines Datums.
-   * @throws Exception
-   */
-  @Test
-  public void testDate() throws Exception
-  {
-    HhdVersion version = getHhdVersion("HKTUE",ChallengeInfo.VERSION_HHD_1_4);
-    List<Param> params = version.getParams();
-    Param p = params.get(3);
-    Assert.assertEquals(p.getType(),"date");
-  }
-  
 }
 
 
 
 /**********************************************************************
  * $Log: ChallengeInfoTest.java,v $
- * Revision 1.4  2011/05/18 17:16:19  willuhn
+ * Revision 1.5  2011/05/20 10:49:44  willuhn
+ * @N Tests erweitert fuer neue SyntaxDE-basierte Formatierung der Werte
+ *
+ * Revision 1.4  2011-05-18 17:16:19  willuhn
  * @N Test fuer das Datumsformat
  *
  * Revision 1.3  2011-05-18 13:50:04  willuhn
