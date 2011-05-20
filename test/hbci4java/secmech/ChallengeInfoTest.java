@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/ChallengeInfoTest.java,v $
- * $Revision: 1.5 $
- * $Date: 2011/05/20 10:49:44 $
+ * $Revision: 1.6 $
+ * $Date: 2011/05/20 11:03:28 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -158,7 +158,11 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertEquals(p.getPath(),"Other.number");
     Assert.assertEquals(p.getType(),"");
     Assert.assertEquals(p.format("AaBb"),"AaBb");
-    Assert.assertEquals(p.format("+:'@"),"?+?:?'?@");
+    
+    // Hier darf KEIN Escaping stattfinden. Das macht HBCI4Java dann spaeter
+    // ohnehin beim Zusammenbauen des Segments, da ChallengeKlassParams#param[1-9]
+    // ja in hbci-{version}.xml als Type="AN" deklariert sind.
+    Assert.assertEquals(p.format("+:'@"),"+:'@");
     Assert.assertNull(p.format(null));
     
     version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
@@ -166,7 +170,7 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertEquals(p.getPath(),"Other.number");
     Assert.assertEquals(p.getType(),"");
     Assert.assertEquals(p.format("AaBb"),"AaBb");
-    Assert.assertEquals(p.format("+:'@"),"?+?:?'?@");
+    Assert.assertEquals(p.format("+:'@"),"+:'@");
     Assert.assertNull(p.format(null));
     
 
@@ -175,7 +179,7 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertEquals(p.getPath(),"Other.number");
     Assert.assertEquals(p.getType(),"");
     Assert.assertEquals(p.format("AaBb"),"AaBb");
-    Assert.assertEquals(p.format("+:'@"),"?+?:?'?@");
+    Assert.assertEquals(p.format("+:'@"),"+:'@");
     Assert.assertNull(p.format(null));
   }
 
@@ -348,7 +352,10 @@ public class ChallengeInfoTest extends AbstractTest
 
 /**********************************************************************
  * $Log: ChallengeInfoTest.java,v $
- * Revision 1.5  2011/05/20 10:49:44  willuhn
+ * Revision 1.6  2011/05/20 11:03:28  willuhn
+ * @N 18-hbci4java-challengeparam-no-an-syntax.patch
+ *
+ * Revision 1.5  2011-05-20 10:49:44  willuhn
  * @N Tests erweitert fuer neue SyntaxDE-basierte Formatierung der Werte
  *
  * Revision 1.4  2011-05-18 17:16:19  willuhn

@@ -1,4 +1,4 @@
-/*  $Id: ChallengeInfo.java,v 1.6 2011/05/20 10:52:02 willuhn Exp $
+/*  $Id: ChallengeInfo.java,v 1.7 2011/05/20 11:03:28 willuhn Exp $
 
  This file is part of HBCI4Java
  Copyright (C) 2001-2008  Stefan Palme
@@ -427,20 +427,29 @@ public class ChallengeInfo
       if (value == null || value.trim().length() == 0)
         return null;
 
-      String t = this.type != null && type.length() > 0 ? this.type : "AN";
+      // Wenn kein Typ angegeben ist, gibts auch nichts zu formatieren.
+      // Nein, wir duerfen NICHT SyntaxAN verwenden. Denn die Parameter
+      // in ChallengeKlassParams#param[1-9] sind ja bereits als Type AN
+      // deklariert. Wuerden wir hier SyntaxAN verwenden, wuerden die
+      // Werte dann doppelt codiert werden (das zweite Codieren macht ja
+      // anschliessend HBCI4Java intern beim Zusammenbauen des Segments).
+      // Was zum Beispiel dazu fuehren wuerde, dass ein Sonderzeichen wie
+      // "+" oder "?" doppelt escaped werden wuerde.
+      if (this.type == null || this.type.trim().length() == 0)
+        return value;
 
       SyntaxDEFactory factory = SyntaxDEFactory.getInstance();
       SyntaxDE syntax = null;
       try
       {
-        syntax = factory.createSyntaxDE(t,this.path,value,0,0);
+        syntax = factory.createSyntaxDE(this.type,this.path,value,0,0);
         return syntax.toString(0);
       }
       finally
       {
         // Objekt wieder freigeben
         if (syntax != null)
-          factory.unuseObject(syntax,t);
+          factory.unuseObject(syntax,this.type);
       }
     }
   }
