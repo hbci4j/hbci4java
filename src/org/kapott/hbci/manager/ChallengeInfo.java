@@ -1,4 +1,4 @@
-/*  $Id: ChallengeInfo.java,v 1.7 2011/05/20 11:03:28 willuhn Exp $
+/*  $Id: ChallengeInfo.java,v 1.8 2011/05/20 11:27:03 willuhn Exp $
 
  This file is part of HBCI4Java
  Copyright (C) 2001-2008  Stefan Palme
@@ -416,7 +416,7 @@ public class ChallengeInfo
     
     /**
      * Formatiert den Text abhaengig vom Typ.
-     * Wenn kein Typ angegeben ist, wird SyntaxAN verwendet.
+     * Wenn kein Typ angegeben ist, wird der Wert unformatiert zurueckgegeben.
      * @param value der zu formatierende Wert.
      * @return der formatierte Wert.
      */
