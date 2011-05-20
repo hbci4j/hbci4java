@@ -50,19 +50,19 @@
     <challengeinfo spec="hhd12">
       <klass>20</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>20</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>10</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>otheriban</param>
       <param>Other.number</param>
@@ -96,19 +96,19 @@
     <challengeinfo spec="hhd12">
       <klass>22</klass>
       <param>sepa.dst.iban</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sepa.btg.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
       <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>22</klass>
       <param>SegHead.code</param>
       <param>sepa.dst.iban</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sepa.btg.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
       <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>09</klass>
-      <param type="value">sepa.btg.value</param>
+      <param type="Wrt">sepa.btg.value</param>
       <param>sepa.dst.iban</param>
     </challengeinfo>
   </job>
@@ -130,19 +130,19 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>34</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
     </challengeinfo>
@@ -152,21 +152,21 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>40</klass>
       <param></param>          <!-- Anzahl -->
       <param>orderid</param>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>My.number</param>
       <param></param>          <!-- IBAN Empfaenger -->
       <param>Other.number</param>
@@ -179,20 +179,20 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>43</klass>
       <param></param>          <!-- Anzahl -->
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param></param>          <!-- IBAN Empfaenger -->
       <param>Other.number</param>
@@ -203,14 +203,14 @@
     <challengeinfo spec="hhd12">
       <klass>50</klass>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>50</klass>
       <param>SegHead.code</param>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
@@ -223,19 +223,19 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>04</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
     </challengeinfo>
@@ -283,14 +283,14 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Belastungskto.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">Anlagebetrag.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">Anlagebetrag.value</param>
       <param condition-name="needchallengevalue" condition-value="J">Anlagebetrag.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Belastungskto.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">Anlagebetrag.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">Anlagebetrag.value</param>
       <param condition-name="needchallengevalue" condition-value="J">Anlagebetrag.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
@@ -303,19 +303,19 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>04</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
     </challengeinfo>
@@ -335,19 +335,19 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>15</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
     </challengeinfo>
@@ -357,14 +357,14 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
@@ -485,20 +485,20 @@
     <challengeinfo spec="hhd12">
       <klass>50</klass>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>50</klass>
       <param>SegHead.code</param>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>19</klass>
       <param>sumCount</param>
-      <param type="value">sumValue</param>
+      <param type="Wrt">sumValue</param>
       <param>KTV.number</param>
       <param>sumOthers</param>
     </challengeinfo>
@@ -518,14 +518,14 @@
     <challengeinfo spec="hhd12">
       <klass>50</klass>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>50</klass>
       <param>SegHead.code</param>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
@@ -548,20 +548,20 @@
     <challengeinfo spec="hhd12">
       <klass>50</klass>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>50</klass>
       <param>SegHead.code</param>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>12</klass>
       <param>sumCount</param>
-      <param type="value">sumValue</param>
+      <param type="Wrt">sumValue</param>
       <param>KTV.number</param>
       <param>sumOthers</param>
     </challengeinfo>
@@ -594,14 +594,14 @@
     <challengeinfo spec="hhd12">
       <klass>50</klass>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>50</klass>
       <param>SegHead.code</param>
       <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">sumValue</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
       <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
@@ -624,20 +624,20 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>43</klass>
       <param></param>          <!-- Anzahl -->
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param></param>          <!-- IBAN Empfaenger -->
       <param>Other.number</param>
@@ -661,22 +661,22 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>22</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
-      <param type="date">date</param>
+      <param type="Date">date</param>
     </challengeinfo>
   </job>
 
@@ -684,14 +684,14 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
@@ -711,19 +711,19 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>04</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.KIK.blz</param>
       <param>Other.number</param>
     </challengeinfo>
@@ -733,19 +733,19 @@
     <challengeinfo spec="hhd12">
       <klass>10</klass>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd13">
       <klass>10</klass>
       <param>SegHead.code</param>
       <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="value">BTG.value</param>
+      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
       <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
     </challengeinfo>
     <challengeinfo spec="hhd14">
       <klass>05</klass>
-      <param type="value">BTG.value</param>
+      <param type="Wrt">BTG.value</param>
       <param>Other.number</param>
     </challengeinfo>
   </job>

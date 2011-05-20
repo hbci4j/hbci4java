@@ -1,4 +1,4 @@
-/*  $Id: ChallengeInfo.java,v 1.5 2011/05/18 17:19:08 willuhn Exp $
+/*  $Id: ChallengeInfo.java,v 1.6 2011/05/20 10:52:02 willuhn Exp $
 
  This file is part of HBCI4Java
  Copyright (C) 2001-2008  Stefan Palme
@@ -21,9 +21,7 @@
 package org.kapott.hbci.manager;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV.HBCIJobImpl;
-import org.kapott.hbci.datatypes.SyntaxWrt;
+import org.kapott.hbci.datatypes.SyntaxDE;
+import org.kapott.hbci.datatypes.factory.SyntaxDEFactory;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.w3c.dom.Document;
@@ -222,7 +221,6 @@ public class ChallengeInfo
       // Seit HHD 1.4 duerfen Parameter mittendrin optional sein, sie
       // werden dann freigelassen
       String value = param.getValue(task);
-      
       if (value == null || value.length() == 0)
       {
         HBCIUtils.log("challenge parameter " + num + " (" + param.path + ") is empty",HBCIUtils.LOG_DEBUG2);
@@ -411,40 +409,39 @@ public class ChallengeInfo
         return null;
       
       String value = job.getChallengeParam(this.path);
-      if (value == null || value.length() == 0)
-        return value;
-
-      // haben wir einen konkreten Typ?
-      if (type != null && type.length() > 0)
-      {
-        // Ist es ein Betrag?
-        if (type.equals("value"))
-        {
-          return new SyntaxWrt(value, 1, 0).toString(0);
-        }
-        // Datum?
-        else if (type.equals("date"))
-        {
-          try
-          {
-            // War ja klar, dass die das Datum hier nochmal in einem anderen Format haben wollen
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
-            return new SimpleDateFormat("ddMMyyyy").format(date);
-          }
-          catch (Exception e)
-          {
-            HBCIUtils.log("unable to parse " + value + " as yyyy-MM-dd, sending as is",HBCIUtils.LOG_WARN);
-            return value;
-          }
-        }
-        else
-        {
-          HBCIUtils.log("unknown parameter type " + type,HBCIUtils.LOG_WARN);
-        }
-      }
       
-      // Ansonsten ganz normal den Betrag zurueckliefern
-      return value;
+      // Wert im passenden Format zurueckliefern
+      return format(value);
+    }
+    
+    /**
+     * Formatiert den Text abhaengig vom Typ.
+     * Wenn kein Typ angegeben ist, wird SyntaxAN verwendet.
+     * @param value der zu formatierende Wert.
+     * @return der formatierte Wert.
+     */
+    public String format(String value)
+    {
+      // Bei leeren Werten lieferen wir generell NULL.
+      // Die Parameter werden dann uebersprungen.
+      if (value == null || value.trim().length() == 0)
+        return null;
+
+      String t = this.type != null && type.length() > 0 ? this.type : "AN";
+
+      SyntaxDEFactory factory = SyntaxDEFactory.getInstance();
+      SyntaxDE syntax = null;
+      try
+      {
+        syntax = factory.createSyntaxDE(t,this.path,value,0,0);
+        return syntax.toString(0);
+      }
+      finally
+      {
+        // Objekt wieder freigeben
+        if (syntax != null)
+          factory.unuseObject(syntax,t);
+      }
     }
   }
 }
