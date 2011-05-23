@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractPinTanPassport.java,v 1.4 2011/05/17 16:39:07 willuhn Exp $
+/*  $Id: AbstractPinTanPassport.java,v 1.5 2011/05/23 09:45:26 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -925,9 +925,10 @@ public abstract class AbstractPinTanPassport
             
             HBCIUtils.log("afterCustomDialogInitHook: patching message queues for twostep method",HBCIUtils.LOG_DEBUG);
             
-            HBCIHandler handler=(HBCIHandler)getParentHandlerData();
-            Properties  secmechInfo=getCurrentSecMechInfo();
-            String      process=secmechInfo.getProperty("process");
+            HBCIHandler handler     = (HBCIHandler)getParentHandlerData();
+            Properties  secmechInfo = getCurrentSecMechInfo();
+            String      segversion  = secmechInfo.getProperty("segversion");
+            String      process     = secmechInfo.getProperty("process");
             
             List msgs=dialog.getMessages();
             List new_msgs=new ArrayList();
@@ -955,7 +956,12 @@ public abstract class AbstractPinTanPassport
                             // neue msg erzeugen
                             additional_msg_tasks=new ArrayList();
 
-                            HBCIJob hktan=handler.newJob("TAN2Step");
+                            GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
+                            
+                            // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
+                            // schicken, in der das HITANS kam.
+                            hktan.setSegVersion(segversion);
+                            
                             hktan.setParam("process",process);
                             hktan.setParam("notlasttan","N");
                             
@@ -1028,7 +1034,7 @@ public abstract class AbstractPinTanPassport
                             }
 
                             // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
-                            applyTanMedia((GVTAN2Step) hktan);
+                            applyTanMedia(hktan);
                             
                             // hktan-job zur neuen msg hinzufügen
                             additional_msg_tasks.add(hktan);
@@ -1049,7 +1055,12 @@ public abstract class AbstractPinTanPassport
                             new_msg_tasks.add(task);
                             
                             // dazu noch einen hktan-job hinzufügen
-                            GVTAN2Step hktan1=(GVTAN2Step)handler.newJob("TAN2Step");
+                            GVTAN2Step hktan1 = (GVTAN2Step) handler.newJob("TAN2Step");
+
+                            // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
+                            // schicken, in der das HITANS kam.
+                            hktan1.setSegVersion(segversion);
+
                             hktan1.setParam("process","4");
                             // TODO: evtl. listindex ermitteln
                             // hktan1.setParam("listidx","");
@@ -1067,7 +1078,12 @@ public abstract class AbstractPinTanPassport
                             additional_msg_tasks=new ArrayList();
                             
                             // HKTAN-job für das einreichen der TAN erzeugen
-                            GVTAN2Step hktan2=(GVTAN2Step)handler.newJob("TAN2Step");
+                            GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
+
+                            // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
+                            // schicken, in der das HITANS kam.
+                            hktan1.setSegVersion(segversion);
+
                             hktan2.setParam("process","2");
                             hktan2.setParam("notlasttan","N");
                             // TODO: evtl. listindex ermitteln

@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIJobImpl.java,v 1.2 2011/05/17 16:39:06 willuhn Exp $
+/*  $Id: HBCIJobImpl.java,v 1.3 2011/05/23 09:45:25 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -56,7 +56,8 @@ import org.kapott.hbci.structures.Value;
 public abstract class HBCIJobImpl 
     implements HBCIJob
 {
-    private String name;              /* @brief name of the corresponding GV-segment */
+    private String name;              /* Job-Name mit Versionsnummer */
+    private String jobName;           /* Job-Name ohne Versionsnummer */
     private String segVersion;        /* Segment-Version */
     private Properties llParams;       /* Eingabeparameter für diesen GV (Saldo.KTV.number) */
     private HBCIPassportList passports;
@@ -112,7 +113,7 @@ public abstract class HBCIJobImpl
     {
         StringBuffer ret=null;
         
-        // entfernen der versionsnummer vom aktuellen jobnamen
+        // Macht aus z.Bsp. "KUmsZeit5" -> "KUmsZeitPar5.SegHead.code"
         StringBuffer searchString=new StringBuffer(name);
         for (int i=searchString.length()-1;i>=0;i--) {
             if (!(searchString.charAt(i)>='0' && searchString.charAt(i)<='9')) {
@@ -194,9 +195,49 @@ public abstract class HBCIJobImpl
             throw new JobNotSupportedException(jobnameLL);
         }
         
-        // namen+versionsnummer zurückgeben
+        // namen+versionsnummer speichern
+        this.jobName    = jobnameLL;
         this.segVersion = Integer.toString(maxVersion);
-        this.name = jobnameLL + this.segVersion;
+        this.name       = jobnameLL + this.segVersion;
+    }
+    
+    /**
+     * Legt die Versionsnummer des Segments manuell fest.
+     * Ist u.a. noetig, um HKTAN-Segmente in genau der Version zu senden, in der
+     * auch die HITANS empfangen wurden. Andernfalls koennte es passieren, dass
+     * wir ein HKTAN mit einem TAN-Verfahren senden, welches in dieser HKTAN-Version
+     * gar nicht von der Bank unterstuetzt wird. Das ist ein Dirty-Hack, ich weiss ;)
+     * Falls das noch IRGENDWO anders verwendet wird, muss man hoellisch aufpassen,
+     * dass alle Stellen, wo "this.name" bzw. "this.segVersion" direkt oder indirekt
+     * verwendet wurde, ebenfalls beruecksichtigt werden.
+     * @param version die neue Versionsnummer.
+     */
+    public void setSegVersion(String version)
+    {
+      if (version == null || version.length() == 0)
+      {
+        HBCIUtils.log("tried to change segment version for task " + this.jobName + " explicit, but no version given",HBCIUtils.LOG_WARN);
+        return;
+      }
+      
+      // Wenn sich die Versionsnummer nicht geaendert hat, muessen wir die
+      // Huehner ja nicht verrueckt machen ;)
+      if (version.equals(this.segVersion))
+        return;
+      
+      HBCIUtils.log("changed segment version for task " + this.jobName + " explicit to " + version,HBCIUtils.LOG_INFO);
+
+      // Bisheriges Request-Tag entfernen
+      this.llParams.remove(this.name);
+
+      // Neue Versionsnummer speichern
+      this.segVersion = version;
+      
+      // Neuer Name des Jobs
+      this.name = this.jobName + this.segVersion;
+      
+      // Request-Tag neu setzen
+      this.llParams.setProperty(this.name,"requested");
     }
     
     public int getMaxNumberPerMsg()
