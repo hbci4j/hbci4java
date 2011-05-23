@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIJobImpl.java,v 1.3 2011/05/23 09:45:25 willuhn Exp $
+/*  $Id: HBCIJobImpl.java,v 1.4 2011/05/23 15:48:19 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -212,7 +212,7 @@ public abstract class HBCIJobImpl
      * verwendet wurde, ebenfalls beruecksichtigt werden.
      * @param version die neue Versionsnummer.
      */
-    public void setSegVersion(String version)
+    public synchronized void setSegVersion(String version)
     {
       if (version == null || version.length() == 0)
       {
@@ -225,19 +225,46 @@ public abstract class HBCIJobImpl
       if (version.equals(this.segVersion))
         return;
       
-      HBCIUtils.log("changed segment version for task " + this.jobName + " explicit to " + version,HBCIUtils.LOG_INFO);
+      HBCIUtils.log("changing segment version for task " + this.jobName + " explicit from " + this.segVersion + " to " + version,HBCIUtils.LOG_INFO);
 
-      // Bisheriges Request-Tag entfernen
-      this.llParams.remove(this.name);
-
-      // Neue Versionsnummer speichern
+      // Der alte Name
+      String oldName = this.name;
+      
+      // Neuer Name und neue Versionsnummer
       this.segVersion = version;
-      
-      // Neuer Name des Jobs
-      this.name = this.jobName + this.segVersion;
-      
-      // Request-Tag neu setzen
-      this.llParams.setProperty(this.name,"requested");
+      this.name       = this.jobName + version;
+
+      // Bereits gesetzte llParams fixen
+      String[] names = this.llParams.keySet().toArray(new String[this.llParams.size()]);
+      for (String s:names)
+      {
+        if (!s.startsWith(oldName))
+          continue; // nicht betroffen
+
+        // Alten Schluessel entfernen und neuen einfuegen
+        String value = this.llParams.getProperty(s);
+        String newName = s.replaceFirst(oldName,this.name);
+        this.llParams.remove(s);
+        this.llParams.setProperty(newName,value);
+      }
+
+      // Destination-Namen in den LowLevel-Parameter auf den neuen Namen umbiegen
+      Enumeration e = constraints.keys();
+      while (e.hasMoreElements())
+      {
+        String frontendName = (String) e.nextElement();
+        String[][] values = (String[][]) constraints.get(frontendName);
+        for (int i=0;i<values.length;++i)
+        {
+          String[] value = values[i];
+          // value[0] ist das Target
+          if (!value[0].startsWith(oldName))
+            continue;
+
+          // Hier ersetzen wir z.Bsp. "TAN2Step5.process" gegen "TAN2Step3.process"
+          value[0] = value[0].replaceFirst(oldName,this.name);
+        }
+      }
     }
     
     public int getMaxNumberPerMsg()
