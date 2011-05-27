@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v $
- * $Revision: 1.2 $
- * $Date: 2011/05/27 11:19:44 $
+ * $Revision: 1.3 $
+ * $Date: 2011/05/27 11:20:36 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -179,9 +179,7 @@ public class FlickerCode
   }
 
   /**
-   * Rendert den flickerfaehigen Code aus dem Challenge im HHD 1.4-Format.
-   * Das HHD 1.3-Format wird nicht unterstuetzt. Der TAN-Generator muss also
-   * HHD 1.4-faehig sein.
+   * Rendert den flickerfaehigen Code aus dem Challenge im HHD-Format.
    * @return der neu generierte Flicker-Code.
    */
   public String render()
@@ -724,7 +722,10 @@ public class FlickerCode
 
 /**********************************************************************
  * $Log: FlickerCode.java,v $
- * Revision 1.2  2011/05/27 11:19:44  willuhn
+ * Revision 1.3  2011/05/27 11:20:36  willuhn
+ * *** empty log message ***
+ *
+ * Revision 1.2  2011-05-27 11:19:44  willuhn
  * *** empty log message ***
  *
  * Revision 1.1  2011-05-27 10:28:38  willuhn
