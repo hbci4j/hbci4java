@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v $
- * $Revision: 1.3 $
- * $Date: 2011/05/27 11:20:36 $
+ * $Revision: 1.4 $
+ * $Date: 2011/05/27 11:21:38 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -245,16 +245,12 @@ public class FlickerCode
    */
   private String createXORChecksum(String payload)
   {
-    ////////////////////////////////////////////////////////////////////////////
-    // Schritt 1: Pruefziffer berechnen
     int xorsum = 0;
     for (int i=0; i<payload.length(); ++i)
     {
       xorsum ^= Integer.parseInt(Character.toString(payload.charAt(i)),16);
     }
     return toHex(xorsum,1);
-    //
-    ////////////////////////////////////////////////////////////////////////////
   }
 
   /**
@@ -722,7 +718,10 @@ public class FlickerCode
 
 /**********************************************************************
  * $Log: FlickerCode.java,v $
- * Revision 1.3  2011/05/27 11:20:36  willuhn
+ * Revision 1.4  2011/05/27 11:21:38  willuhn
+ * *** empty log message ***
+ *
+ * Revision 1.3  2011-05-27 11:20:36  willuhn
  * *** empty log message ***
  *
  * Revision 1.2  2011-05-27 11:19:44  willuhn
