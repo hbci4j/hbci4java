@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v $
- * $Revision: 1.1 $
- * $Date: 2011/05/27 10:28:38 $
+ * $Revision: 1.2 $
+ * $Date: 2011/05/27 11:15:39 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -162,8 +162,8 @@ public class FlickerTest extends AbstractTest
     // Code von http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=60532
     // Stammt nicht aus dem "Challenge HHDuc" sondern aus dem Freitext
     // des TAN-Dialoges
-    // Das zwischen "CHLGUC" und "CHLGTEXT" ist der Flickercode. Die fuehrende
-    // "0" muss aber auch noch weg. Keine Ahnung, warum die da steht.
+    // Das zwischen "CHLGUC$4zahlen" und "CHLGTEXT" ist der Flickercode.
+    // Das $4zahlen gibt IMHO an, wie lang der danach folgende Flicker-Code ist
     // ...TAN-Nummer: CHLGUC 002624088715131306389726041,00CHLGTEXT0244 Sie haben eine...
 
     FlickerCode code = new FlickerCode("...TAN-Nummer: CHLGUC 002624088715131306389726041,00CHLGTEXT0244 Sie h...");
@@ -252,7 +252,10 @@ public class FlickerTest extends AbstractTest
 
 /**********************************************************************
  * $Log: FlickerTest.java,v $
- * Revision 1.1  2011/05/27 10:28:38  willuhn
+ * Revision 1.2  2011/05/27 11:15:39  willuhn
+ * *** empty log message ***
+ *
+ * Revision 1.1  2011-05-27 10:28:38  willuhn
  * @N 22-hbci4java-chiptan-opt.patch
  *
  **********************************************************************/
