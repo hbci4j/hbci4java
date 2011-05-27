@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIPassportPinTan.java,v 1.2 2011/05/13 15:31:38 willuhn Exp $
+/*  $Id: HBCIPassportPinTan.java,v 1.3 2011/05/27 10:28:38 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -41,6 +41,7 @@ import javax.crypto.spec.PBEParameterSpec;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidPassphraseException;
+import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
@@ -343,9 +344,10 @@ public class HBCIPassportPinTan
                 String challenge=(String)getPersistentData("pintan_challenge");
                 setPersistentData("pintan_challenge",null);
                 
-                // willuhn 2011-05-09 HHD UC aus dem Passport holen
-                String hhdUc = (String) getPersistentData("pintan_challenge_hhd_uc");
-                setPersistentData("pintan_challenge_hhd_uc",null);
+                // willuhn 2011-05-27 Wir versuchen, den Flickercode zu ermitteln und zu parsen
+                String hhduc = (String) getPersistentData("pintan_challenge_hhd_uc");
+                setPersistentData("pintan_challenge_hhd_uc",null); // gleich wieder aus dem Passport loeschen
+                String flicker = parseFlickercode(challenge,hhduc);
                 
                 if (challenge==null) {
                     // es gibt noch keine challenge
@@ -354,10 +356,9 @@ public class HBCIPassportPinTan
                     HBCIUtils.log("found challenge in passport, so we ask for a TAN",HBCIUtils.LOG_DEBUG);
                     // es gibt eine challenge, also damit tan ermitteln
                     
-                    // willuhn 2011-05-09: Wir uebergeben HHD UC erstmal direkt hier - bei NEED_PT_SECMECH
-                    // wird das ja auch so gemacht. Sollte hier spaeter noch mehr uebergeben werden,
-                    // kann man das ja sicher noch aendern.
-                    StringBuffer s = hhdUc != null ? new StringBuffer(hhdUc) : new StringBuffer();
+                    // willuhn 2011-05-27: Flicker-Code uebergeben, falls vorhanden
+                    // bei NEED_PT_SECMECH wird das auch so gemacht.
+                    StringBuffer s = flicker != null ? new StringBuffer(flicker) : new StringBuffer();
                     HBCIUtilsInternal.getCallback().callback(this,
                         HBCICallback.NEED_PT_TAN,
                         secmechInfo.getProperty("name")+" "+secmechInfo.getProperty("inputinfo")+": "+challenge,
@@ -377,6 +378,58 @@ public class HBCIPassportPinTan
         } catch (Exception ex) {
             throw new HBCI_Exception("*** signing failed",ex);
         }
+    }
+    
+    /**
+     * Versucht, aus Challenge und Challenge HHDuc den Flicker-Code zu extrahieren
+     * und ihn in einen flickerfaehigen Code umzuwandeln.
+     * Nur wenn tatsaechlich ein gueltiger Code enthalten ist, der als
+     * HHDuc-Code geparst und in einen Flicker-Code umgewandelt werden konnte,
+     * liefert die Funktion den Code. Sonst immer NULL.
+     * @param challenge der Challenge-Text. Das DE "Challenge HHDuc" gibt es
+     * erst seit HITAN4. Einige Banken haben aber schon vorher optisches chipTAN
+     * gemacht. Die haben das HHDuc dann direkt im Freitext des Challenge
+     * mitgeschickt (mit String-Tokens zum Extrahieren markiert). Die werden vom
+     * FlickerCode-Parser auch unterstuetzt.
+     * @param hhduc das echte Challenge HHDuc.
+     * @return der geparste und in Flicker-Format konvertierte Code oder NULL.
+     */
+    private String parseFlickercode(String challenge, String hhduc)
+    {
+      // 1. Prioritaet hat hhduc. Gibts aber erst seit HITAN4
+      if (hhduc != null && hhduc.trim().length() > 0)
+      {
+        try
+        {
+          FlickerCode code = new FlickerCode(hhduc);
+          return code.render();
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log("unable to parse Challenge HHDuc " + hhduc + ":" + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG);
+        }
+      }
+      
+      // 2. Checken, ob im Freitext-Challenge was parse-faehiges steht.
+      // Kann seit HITAN1 auftreten
+      if (challenge != null && challenge.trim().length() > 0)
+      {
+        try
+        {
+          FlickerCode code = new FlickerCode(challenge);
+          return code.render();
+        }
+        catch (Exception e)
+        {
+          // Das darf durchaus vorkommen, weil das Challenge auch bei manuellem
+          // chipTAN- und smsTAN Verfahren verwendet wird, wo gar kein Flicker-Code enthalten ist.
+          // Wir loggen es aber trotzdem - fuer den Fall, dass tatsaechlich ein Flicker-Code
+          // enthalten ist. Sonst koennen wir das nicht debuggen.
+          HBCIUtils.log("challenge contains no HHDuc (no problem in most cases):" + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG2);
+        }
+      }
+      // Ne, definitiv kein Flicker-Code.
+      return null;
     }
 
     public boolean verify(byte[] data,byte[] sig)
