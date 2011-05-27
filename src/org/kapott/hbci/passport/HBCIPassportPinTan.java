@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIPassportPinTan.java,v 1.3 2011/05/27 10:28:38 willuhn Exp $
+/*  $Id: HBCIPassportPinTan.java,v 1.4 2011/05/27 15:46:13 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -361,7 +361,7 @@ public class HBCIPassportPinTan
                     StringBuffer s = flicker != null ? new StringBuffer(flicker) : new StringBuffer();
                     HBCIUtilsInternal.getCallback().callback(this,
                         HBCICallback.NEED_PT_TAN,
-                        secmechInfo.getProperty("name")+" "+secmechInfo.getProperty("inputinfo")+": "+challenge,
+                        secmechInfo.getProperty("name")+"\n"+secmechInfo.getProperty("inputinfo")+"\n"+challenge,
                         HBCICallback.TYPE_TEXT,
                         s);
                     if (s.length()==0) {

@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerRenderer.java,v $
- * $Revision: 1.1 $
- * $Date: 2011/05/27 10:28:38 $
+ * $Revision: 1.2 $
+ * $Date: 2011/05/27 15:46:13 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -28,9 +28,21 @@ import java.util.Map;
  */
 public class FlickerRenderer
 {
-  // Taktfrequenz. Soll laut tan_hhd_uc_v14.pdf, Kapitel C.1
-  // zwischen 2 und 20 Hz liegen.
-  private final static int HZ = 16;
+  /**
+   * Default-Taktfequenz in Hz.
+   * Soll laut tan_hhd_uc_v14.pdf, Kapitel C.1 zwischen 2 und 20 Hz liegen.
+   */
+  public final static int FREQUENCY_DEFAULT = 15;
+  
+  /**
+   * Minimale Taktfrequenz.
+   */
+  public final static int FREQUENCY_MIN     = 2;
+  
+  /**
+   * Maximale Taktfrequenz.
+   */
+  public final static int FREQUENCY_MAX = 20;
   
   private int halfbyteid       = 0;
   private int clock            = 0;
@@ -38,6 +50,7 @@ public class FlickerRenderer
   
   private Thread thread = null;
   private int iterations = 0;
+  private int freq       = FREQUENCY_DEFAULT;
   
   /**
    * ct.
@@ -91,6 +104,20 @@ public class FlickerRenderer
   }
   
   /**
+   * Legt die Taktfrequenz in Hz fest.
+   * Per Default werden 15Hz verwendet.
+   * @param hz die zu verwendende Taktfrequenz.
+   * Es werden nur Werte zwischen {@link FlickerRenderer#FREQUENCY_MIN} und
+   * {@link FlickerRenderer#FREQUENCY_MAX} akzeptiert.
+   */
+  public void setFrequency(int hz)
+  {
+    if (hz < FREQUENCY_MIN || hz > FREQUENCY_MAX)
+      return;
+    this.freq = hz;
+  }
+  
+  /**
    * Startet das Rendering des Flicker-Codes.
    * Die Funktion startet einen neuen Thread, kehrt also sofort zurueck.
    * 
@@ -129,8 +156,6 @@ public class FlickerRenderer
     {
       public void run()
       {
-        long sleep = 1000L / HZ;
-        
         // Wir fangen beim ersten Halbbyte an.
         halfbyteid = 0;
         
@@ -169,6 +194,9 @@ public class FlickerRenderer
             }
             
             // Warten
+            // Wir errechnen die Wartezeit in jedem Durchlauf.
+            // Dann kann die Frequenz auch waehrend des Blinkens geaendert werden.
+            long sleep = 1000L / freq;
             sleep(sleep);
           }
         }
@@ -281,7 +309,10 @@ public class FlickerRenderer
 
 /**********************************************************************
  * $Log: FlickerRenderer.java,v $
- * Revision 1.1  2011/05/27 10:28:38  willuhn
+ * Revision 1.2  2011/05/27 15:46:13  willuhn
+ * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
+ *
+ * Revision 1.1  2011-05-27 10:28:38  willuhn
  * @N 22-hbci4java-chiptan-opt.patch
  *
  **********************************************************************/

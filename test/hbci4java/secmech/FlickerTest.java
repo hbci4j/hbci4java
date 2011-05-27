@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v $
- * $Revision: 1.2 $
- * $Date: 2011/05/27 11:15:39 $
+ * $Revision: 1.3 $
+ * $Date: 2011/05/27 15:46:13 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -192,7 +192,38 @@ public class FlickerTest extends AbstractTest
     String rendered = code.render();
     Assert.assertEquals(rendered,"0F04871513130338972614312C30303B");
   }
-  
+
+  /**
+   * Enthaelt ein DE irgendwas ausser 0-9, muss es ASC-codiert werden.
+   * @throws Exception
+   */
+  @Test
+  public void test5() throws Exception
+  {
+    FlickerCode code = new FlickerCode("0248A01204520199808123F5678");
+      
+    FlickerCode expected = new FlickerCode();
+    expected.lc = 24;
+    expected.startCode.lde      = 138;
+    expected.startCode.length   = 10;
+    expected.startCode.data     = "2045201998";
+    expected.startCode.encoding = null;
+    expected.startCode.controlBytes.add(1);
+    expected.de1.lde      = 8;
+    expected.de1.length   = 8;
+    expected.de1.data     = "123F5678";
+    expected.de1.encoding = null;
+    expected.de2.data     = null;
+    expected.de3.data     = null;
+    
+    // Code muss dem erwarteten entsprechen
+    Assert.assertEquals(expected,code);
+    
+    // In Flicker-Format wandeln
+    String rendered = code.render();
+    Assert.assertEquals(rendered,"118501204520199848313233463536373875");
+  }
+
   /**
    * Testet das korrekte Rendern.
    * @throws Exception
@@ -252,7 +283,10 @@ public class FlickerTest extends AbstractTest
 
 /**********************************************************************
  * $Log: FlickerTest.java,v $
- * Revision 1.2  2011/05/27 11:15:39  willuhn
+ * Revision 1.3  2011/05/27 15:46:13  willuhn
+ * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
+ *
+ * Revision 1.2  2011-05-27 11:15:39  willuhn
  * *** empty log message ***
  *
  * Revision 1.1  2011-05-27 10:28:38  willuhn

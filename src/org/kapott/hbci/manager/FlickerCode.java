@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v $
- * $Revision: 1.5 $
- * $Date: 2011/05/27 11:23:13 $
+ * $Revision: 1.6 $
+ * $Date: 2011/05/27 15:46:13 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -60,6 +60,9 @@ public class FlickerCode
    * Die Anzahl der Bytes, in der die Laenge des Challenge steht.
    * Bei HHD 1.3 war das noch 2 Zeichen lang.
    * Ich habe keine Ahnung, woran ich erkennen kann, wenn der nur 2 Stellen lang ist.
+   * Wenn der Flicker-Code nicht in "Challenge HHDuc" uebertragen wurde
+   * sondern direkt im Freitext-Challenge, koennen wir das Problem umgehen,
+   * indem wir in clean() einfach eine "0" vorn anhaengen.
    */
   private final static int LC_LENGTH_HHD14 = 3;
   
@@ -104,11 +107,9 @@ public class FlickerCode
   public DE de3           = new DE();
   
   /**
-   * Der Rest des Codes. In aller Regel sollte das ein Byte sein.
-   * Wobei das linke Halbbyte die Luhn-Pruefziffer ist und das rechte
-   * die XOR-Summe.
+   * Der Rest des Codes. Mit dem koennen wir nichts anfangen
    */
-  public String cb        = null;
+  public String rest      = null;
 
   /**
    * ct.
@@ -142,7 +143,7 @@ public class FlickerCode
     code = this.de3.parse(code);
 
     // 4. Den Rest speichern wir hier.
-    this.cb = code.length() > 0 ? code : null;
+    this.rest = code.length() > 0 ? code : null;
   }
   
   /**
@@ -178,9 +179,7 @@ public class FlickerCode
   }
 
   /**
-   * Rendert den flickerfaehigen Code aus dem Challenge im HHD 1.4-Format.
-   * Das HHD 1.3-Format wird nicht unterstuetzt. Der TAN-Generator muss also
-   * HHD 1.4-faehig sein.
+   * Rendert den flickerfaehigen Code aus dem Challenge im HHD-Format.
    * @return der neu generierte Flicker-Code.
    */
   public String render()
@@ -246,16 +245,12 @@ public class FlickerCode
    */
   private String createXORChecksum(String payload)
   {
-    ////////////////////////////////////////////////////////////////////////////
-    // Schritt 1: Pruefziffer berechnen
     int xorsum = 0;
     for (int i=0; i<payload.length(); ++i)
     {
       xorsum ^= Integer.parseInt(Character.toString(payload.charAt(i)),16);
     }
     return toHex(xorsum,1);
-    //
-    ////////////////////////////////////////////////////////////////////////////
   }
 
   /**
@@ -325,7 +320,7 @@ public class FlickerCode
     sb.append("DE1:\n" + this.de1 + "\n");
     sb.append("DE2:\n" + this.de2 + "\n");
     sb.append("DE3:\n" + this.de3 + "\n");
-    sb.append("CB : " + this.cb + "\n");
+    sb.append("CB : " + this.rest + "\n");
     return sb.toString();
   }
   
@@ -345,9 +340,9 @@ public class FlickerCode
     if (!this.de2.equals(other.de2))             return false;
     if (!this.de3.equals(other.de3))             return false;
     
-    if (this.cb == null)
-      return (other.cb == null);
-    return this.cb.equals(other.cb);
+    if (this.rest == null)
+      return (other.rest == null);
+    return this.rest.equals(other.rest);
   }
 
   
@@ -466,10 +461,15 @@ public class FlickerCode
         return this.encoding;
       
       // Siehe tan_hhd_uc_v14.pdf, letzter Absatz in B.2.3
-      if (this.data.contains(",") || this.data.contains("-"))
-        return Encoding.ASC;
+      // Bei SEPA-Auftraegen koennen auch Buchstaben in BIC/IBAN vorkommen.
+      // In dem Fall muss auch ASC-codiert werden. Also machen wir BCD nur
+      // noch dann, wenn ausschliesslich Zahlen drin stehen.
+      // Das macht subsembly auch so
+      // http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=75602#75602
+      if (this.data.matches("[0-9]{1,}"))
+        return Encoding.BCD;
       
-      return Encoding.BCD;
+      return Encoding.ASC;
     }
     
     /**
@@ -723,8 +723,17 @@ public class FlickerCode
 
 /**********************************************************************
  * $Log: FlickerCode.java,v $
- * Revision 1.5  2011/05/27 11:23:13  willuhn
- * @C Kommentar-Aenderungen wieder entfernt - noch nicht einchecken - sonst passt das naechste Patch ggf. nicht mehr
+ * Revision 1.6  2011/05/27 15:46:13  willuhn
+ * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
+ *
+ * Revision 1.4  2011-05-27 11:21:38  willuhn
+ * *** empty log message ***
+ *
+ * Revision 1.3  2011-05-27 11:20:36  willuhn
+ * *** empty log message ***
+ *
+ * Revision 1.2  2011-05-27 11:19:44  willuhn
+ * *** empty log message ***
  *
  * Revision 1.1  2011-05-27 10:28:38  willuhn
  * @N 22-hbci4java-chiptan-opt.patch
