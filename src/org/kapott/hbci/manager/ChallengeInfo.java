@@ -1,4 +1,4 @@
-/*  $Id: ChallengeInfo.java,v 1.8 2011/05/20 11:27:03 willuhn Exp $
+/*  $Id: ChallengeInfo.java,v 1.9 2011/05/30 12:47:56 willuhn Exp $
 
  This file is part of HBCI4Java
  Copyright (C) 2001-2008  Stefan Palme
@@ -142,11 +142,37 @@ public class ChallengeInfo
    */
   private String getVersion(Properties secmech)
   {
-    // HHD-Version ermitteln
+    // Das ist die "Technische Kennung"
+    // Siehe "Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf"
+    // Der Name ist standardisiert, wenn er mit "HHD1...." beginnt, ist
+    // das die HHD-Version
     String id = secmech.getProperty("id","");
-    
     if (id.startsWith("HHD1.4")) return VERSION_HHD_1_4;
     if (id.startsWith("HHD1.3")) return VERSION_HHD_1_3;
+    
+    // Fallback 1. Wir schauen noch in "ZKA-Version bei HKTAN"
+    String version = secmech.getProperty("zkamethod_version");
+    if (version != null && version.length() > 0)
+    {
+      if (version.startsWith("1.4")) return VERSION_HHD_1_4;
+      if (version.startsWith("1.3")) return VERSION_HHD_1_3;
+    }
+    
+    // Fallback 2. Wir checken noch die HITAN/HKTAN-Version
+    // Bei HKTAN5 kann es HHD 1.3 oder 1.4 sein, bei HKTAN4 bleibt eigentlich nur noch 1.3
+    // Ich weiss nicht, ob Fallback 2 ueberhaupt notwendig ist. Denn angeblich
+    // ist zkamethod_version seit HHD 1.3.1 Pflicht (siehe
+    // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf,
+    // Data dictionary "Version ZKA-TAN-Verfahren"
+    String segversion = secmech.getProperty("segversion");
+    if (segversion != null && segversion.length() > 0)
+    {
+      int i = Integer.parseInt(segversion);
+      if (i == 5)
+        return VERSION_HHD_1_4; // Genau wissen wir es nicht, aber HHD 1.4 ist wahrscheinlich
+      if (i == 4)
+        return VERSION_HHD_1_3; // 1.4 ist in HKTAN4 noch nicht erlaubt, damit bleibt eigentlich nur 1.3
+    }
     
     // Default:
     return VERSION_HHD_1_2;
