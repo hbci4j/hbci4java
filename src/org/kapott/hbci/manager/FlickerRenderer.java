@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerRenderer.java,v $
- * $Revision: 1.4 $
- * $Date: 2011/06/06 15:32:10 $
+ * $Revision: 1.5 $
+ * $Date: 2011/06/06 15:32:51 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -32,7 +32,7 @@ public class FlickerRenderer
    * Default-Taktfequenz in Hz.
    * Soll laut tan_hhd_uc_v14.pdf, Kapitel C.1 zwischen 2 und 20 Hz liegen.
    */
-  public final static int FREQUENCY_DEFAULT = 15;
+  public final static int FREQUENCY_DEFAULT = 10;
   
   /**
    * Minimale Taktfrequenz.
@@ -196,7 +196,16 @@ public class FlickerRenderer
             // Warten
             // Wir errechnen die Wartezeit in jedem Durchlauf.
             // Dann kann die Frequenz auch waehrend des Blinkens geaendert werden.
-            long sleep = 1000L / freq;
+            // In der Spec. ist nicht eindeutig definiert, ob mit derm Maximalfrequenz
+            // von 20 Hz die Anzahl der Blink-Vorgaenge oder die Anzahl der Zeichen
+            // gemeint ist (wir uebertragen ja jedes Zeichen doppelt - einmal mit
+            // schwarzem Sync und einmal mit weissen). User berichteten mir, dass
+            // die Flicker-Codes auf den Bank-Webseiten schneller blinken als die
+            // von HBCI4Java. Ich halbiere daher die Wartezeit nochmal, weil davon
+            // ausgegangen werden kann, dass mit der Frequenz die Anzahl der Zeichen
+            // gemeint ist und nicht die der Blink-Vorgaenge. Ergo kann eventuell
+            // doppelt so schnell geblinkt werden, wie bisher vorgesehen.
+            long sleep = 1000L / freq / 2;
             sleep(sleep);
           }
         }
@@ -309,8 +318,11 @@ public class FlickerRenderer
 
 /**********************************************************************
  * $Log: FlickerRenderer.java,v $
- * Revision 1.4  2011/06/06 15:32:10  willuhn
- * @R undo
+ * Revision 1.5  2011/06/06 15:32:51  willuhn
+ * @N 26-hbci4java-flicker-speed.patch
+ *
+ * Revision 1.3  2011-06-06 15:25:12  willuhn
+ * @N 26-hbci4java-flicker-speed.patch
  *
  * Revision 1.2  2011-05-27 15:46:13  willuhn
  * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten

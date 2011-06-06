@@ -1,10 +1,29 @@
 Index: src/org/kapott/hbci/manager/FlickerRenderer.java
 ===================================================================
 RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerRenderer.java,v
-retrieving revision 1.2
-diff -u -r1.2 FlickerRenderer.java
---- src/org/kapott/hbci/manager/FlickerRenderer.java	27 May 2011 15:46:13 -0000	1.2
-+++ src/org/kapott/hbci/manager/FlickerRenderer.java	6 Jun 2011 15:24:50 -0000
+retrieving revision 1.4
+diff -u -r1.4 FlickerRenderer.java
+--- src/org/kapott/hbci/manager/FlickerRenderer.java	6 Jun 2011 15:32:10 -0000	1.4
++++ src/org/kapott/hbci/manager/FlickerRenderer.java	6 Jun 2011 15:32:25 -0000
+@@ -1,7 +1,7 @@
+ /**********************************************************************
+  * $Source: /cvsroot/hibiscus/hbci4java/log/patches/26-hbci4java-flicker-speed.patch,v $
+- * $Revision: 1.2 $
+- * $Date: 2011/06/06 15:32:51 $
++ * $Revision: 1.2 $
++ * $Date: 2011/06/06 15:32:51 $
+  * $Author: willuhn $
+  *
+  * Copyright (c) by willuhn - software & services
+@@ -32,7 +32,7 @@
+    * Default-Taktfequenz in Hz.
+    * Soll laut tan_hhd_uc_v14.pdf, Kapitel C.1 zwischen 2 und 20 Hz liegen.
+    */
+-  public final static int FREQUENCY_DEFAULT = 15;
++  public final static int FREQUENCY_DEFAULT = 10;
+   
+   /**
+    * Minimale Taktfrequenz.
 @@ -196,7 +196,16 @@
              // Warten
              // Wir errechnen die Wartezeit in jedem Durchlauf.
@@ -23,3 +42,17 @@ diff -u -r1.2 FlickerRenderer.java
              sleep(sleep);
            }
          }
+@@ -309,8 +318,8 @@
+ 
+ /**********************************************************************
+  * $Log: 26-hbci4java-flicker-speed.patch,v $
+  * Revision 1.2  2011/06/06 15:32:51  willuhn
+  * @N 26-hbci4java-flicker-speed.patch
+  *
+- * Revision 1.4  2011-06-06 15:32:10  willuhn
+- * @R undo
++ * Revision 1.3  2011-06-06 15:25:12  willuhn
++ * @N 26-hbci4java-flicker-speed.patch
+  *
+  * Revision 1.2  2011-05-27 15:46:13  willuhn
+  * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
