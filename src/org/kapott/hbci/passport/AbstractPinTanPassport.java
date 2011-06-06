@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractPinTanPassport.java,v 1.5 2011/05/23 09:45:26 willuhn Exp $
+/*  $Id: AbstractPinTanPassport.java,v 1.6 2011/06/06 10:30:31 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -92,6 +92,17 @@ public abstract class AbstractPinTanPassport
             // bpd (HITANS) extrahieren
 
             twostepMechanisms.clear();
+            
+            // willuhn 2011-06-06 Maximal zulaessige HITANS-Segment-Version ermitteln
+            // Hintergrund: Es gibt User, die nur HHD 1.3-taugliche TAN-Generatoren haben,
+            // deren Banken aber auch HHD 1.4 beherrschen. In dem Fall wuerde die Bank
+            // HITANS/HKTAN/HITAN in Segment-Version 5 machen, was in der Regel dazu fuehren
+            // wird, dass HHD 1.4 zur Anwendung kommt. Das bewirkt, dass ein Flicker-Code
+            // erzeugt wird, der vom TAN-Generator des Users gar nicht lesbar ist, da dieser
+            // kein HHD 1.4 beherrscht. Mit dem folgenden Parameter kann die Maximal-Version
+            // des HITANS-Segments nach oben begrenzt werden, so dass z.Bsp. HITANS5 ausgefiltert
+            // wird.
+            int maxAllowedVersion = Integer.parseInt(HBCIUtils.getParam("kernel.gv.HITANS.segversion.max","0"));
 
             for (Enumeration e=p.propertyNames();e.hasMoreElements();) {
                 String key=(String)e.nextElement();
@@ -105,13 +116,20 @@ public abstract class AbstractPinTanPassport
                         // mit identischer Sicherheitsfunktion in unterschiedlichen Segment-Versionen auftreten koennen
                         // Wenn welche mehrfach vorhanden sind, nehmen wir nur das aus der neueren Version
                         int segVersion = Integer.parseInt(subkey.substring(11,12));
-                      
+                        
                         subkey=subkey.substring(subkey.indexOf('.')+1);
                         if (subkey.startsWith("ParTAN2Step") &&
                                 subkey.endsWith(".secfunc"))
                         {
+                            // willuhn 2011-06-06 Segment-Versionen ueberspringen, die groesser als die max. zulaessige sind
+                            if (maxAllowedVersion > 0 && segVersion > maxAllowedVersion)
+                            {
+                              HBCIUtils.log("skipping segversion " + segVersion + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_INFO);
+                              continue;
+                            }
+
                             String secfunc=p.getProperty(key);
-                            
+
                             // willuhn 2011-05-13 Checken, ob wir das Verfahren schon aus einer aktuelleren Segment-Version haben
                             Properties prev = (Properties) twostepMechanisms.get(secfunc);
                             if (prev != null)

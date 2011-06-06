@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIJobImpl.java,v 1.4 2011/05/23 15:48:19 willuhn Exp $
+/*  $Id: HBCIJobImpl.java,v 1.5 2011/06/06 10:30:31 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -157,9 +157,11 @@ public abstract class HBCIJobImpl
         StringBuffer key=new StringBuffer();
         
         // alle param-segmente durchlaufen
-        for (Enumeration i=handler.getPassport().getBPD().propertyNames();i.hasMoreElements();) {
+        Properties bpd = handler.getPassport().getBPD();
+        for (Enumeration i=bpd.propertyNames();i.hasMoreElements();) {
+            String path = (String)i.nextElement();
             key.setLength(0);
-            key.append((String)i.nextElement());
+            key.append(path);
             
             if (key.indexOf("Params")==0) {
                 key.delete(0,key.indexOf(".")+1);
@@ -168,7 +170,16 @@ public abstract class HBCIJobImpl
                 if (key.indexOf(jobnameLL+"Par")==0 &&
                     key.toString().endsWith(".SegHead.code")) 
                 {
-                    key.delete(0,jobnameLL.length()+("Par").length());
+                  // willuhn 2011-06-06 Maximal zulaessige Segment-Version ermitteln
+                  // Hintergrund: Es gibt Szenarien, in denen nicht die hoechste verfuegbare
+                  // Versionsnummer verwendet werden kann, weil die Voraussetzungen impliziert,
+                  // die beim User nicht gegeben sind. Mit diesem Parameter kann die maximale
+                  // Version nach oben begrenzt werden. In AbstractPinTanPassport#setBPD() ist
+                  // ein konkretes Beispiel enthalten (Bank macht HITANS5 und damit HHD 1.4, der
+                  // User hat aber nur ein HHD-1.3-tauglichen TAN-Generator)
+                  int maxAllowedVersion = Integer.parseInt(HBCIUtils.getParam("kernel.gv." + bpd.getProperty(path,"default") + ".segversion.max","0"));
+                  
+                  key.delete(0,jobnameLL.length()+("Par").length());
                     
                     // extrahieren der versionsnummer aus dem spez-namen
                     String st=key.substring(0,key.indexOf("."));
@@ -180,6 +191,12 @@ public abstract class HBCIJobImpl
                         HBCIUtils.log("found invalid job version: key="+key+", jobnameLL="+jobnameLL+" (this is a known, but harmless bug)", HBCIUtils.LOG_WARN);
                     }
                     
+                    // willuhn 2011-06-06 Segment-Versionen ueberspringen, die groesser als die max. zulaessige sind
+                    if (maxAllowedVersion > 0 && version > maxAllowedVersion)
+                    {
+                      HBCIUtils.log("skipping segment version " + version + " for task " + jobnameLL + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_INFO);
+                      continue;
+                    }
                     // merken der größten jemals aufgetretenen versionsnummer
                     if (version!=0) {
                         HBCIUtils.log("task "+jobnameLL+" is supported with segment version "+st,HBCIUtils.LOG_DEBUG2);
