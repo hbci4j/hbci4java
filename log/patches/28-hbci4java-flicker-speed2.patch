@@ -1,0 +1,53 @@
+Index: src/org/kapott/hbci/manager/FlickerRenderer.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerRenderer.java,v
+retrieving revision 1.5
+diff -u -r1.5 FlickerRenderer.java
+--- src/org/kapott/hbci/manager/FlickerRenderer.java	6 Jun 2011 15:32:51 -0000	1.5
++++ src/org/kapott/hbci/manager/FlickerRenderer.java	7 Jun 2011 13:54:43 -0000
+@@ -23,7 +23,7 @@
+  * Balken sowie das Timing. Sie ruft dann im Wiedergabe-Takt die Funktion paint()
+  * auf, die ueberschrieben werden muss, um dort dann das eigentliche Zeichnen
+  * der 5 Balken durchzufuehren.
+- * Die paint-Funktion wird so ca. 15-20 mal pro Sekunde aufgerufen, sollte die
++ * Die paint-Funktion wird so ca. 10-20 mal pro Sekunde aufgerufen, sollte die
+  * Ausgabe auf dem Bildschirm daher flott machen ;)
+  */
+ public class FlickerRenderer
+@@ -41,8 +41,9 @@
+   
+   /**
+    * Maximale Taktfrequenz.
++   * Laut Spec. sind die Geraete bis 20 Hz zugelassen, viele koennen aber schneller.
+    */
+-  public final static int FREQUENCY_MAX = 20;
++  public final static int FREQUENCY_MAX = 40;
+   
+   private int halfbyteid       = 0;
+   private int clock            = 0;
+@@ -105,7 +106,6 @@
+   
+   /**
+    * Legt die Taktfrequenz in Hz fest.
+-   * Per Default werden 15Hz verwendet.
+    * @param hz die zu verwendende Taktfrequenz.
+    * Es werden nur Werte zwischen {@link FlickerRenderer#FREQUENCY_MIN} und
+    * {@link FlickerRenderer#FREQUENCY_MAX} akzeptiert.
+@@ -196,16 +196,7 @@
+             // Warten
+             // Wir errechnen die Wartezeit in jedem Durchlauf.
+             // Dann kann die Frequenz auch waehrend des Blinkens geaendert werden.
+-            // In der Spec. ist nicht eindeutig definiert, ob mit derm Maximalfrequenz
+-            // von 20 Hz die Anzahl der Blink-Vorgaenge oder die Anzahl der Zeichen
+-            // gemeint ist (wir uebertragen ja jedes Zeichen doppelt - einmal mit
+-            // schwarzem Sync und einmal mit weissen). User berichteten mir, dass
+-            // die Flicker-Codes auf den Bank-Webseiten schneller blinken als die
+-            // von HBCI4Java. Ich halbiere daher die Wartezeit nochmal, weil davon
+-            // ausgegangen werden kann, dass mit der Frequenz die Anzahl der Zeichen
+-            // gemeint ist und nicht die der Blink-Vorgaenge. Ergo kann eventuell
+-            // doppelt so schnell geblinkt werden, wie bisher vorgesehen.
+-            long sleep = 1000L / freq / 2;
++            long sleep = 1000L / freq;
+             sleep(sleep);
+           }
+         }
