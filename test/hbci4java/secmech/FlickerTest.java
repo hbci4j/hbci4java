@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v $
- * $Revision: 1.3 $
- * $Date: 2011/05/27 15:46:13 $
+ * $Revision: 1.4 $
+ * $Date: 2011/06/07 13:45:50 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -17,6 +17,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.FlickerRenderer;
+import org.kapott.hbci.manager.FlickerCode.HHDVersion;
 
 /**
  * Testet die Flicker-Codes.
@@ -225,6 +226,25 @@ public class FlickerTest extends AbstractTest
   }
 
   /**
+   * Testet, dass die Luhn-Checksumme 0 lautet (Sonderbedingung)
+   * @throws Exception
+   */
+  @Test
+  public void test6() throws Exception
+  {
+    FlickerCode code = new FlickerCode();
+    code.version = HHDVersion.HHD14;
+    code.startCode.data = "1120492";
+    code.startCode.controlBytes.add(1);
+    code.de1.data = "30084403";
+    code.de2.data = "450,00";
+    code.de3.data = "2";
+    
+    String rendered = code.render();
+    Assert.assertEquals(rendered,"1584011120492F0430084403463435302C3030012F05");
+  }
+
+  /**
    * Testet das korrekte Rendern.
    * @throws Exception
    */
@@ -283,7 +303,10 @@ public class FlickerTest extends AbstractTest
 
 /**********************************************************************
  * $Log: FlickerTest.java,v $
- * Revision 1.3  2011/05/27 15:46:13  willuhn
+ * Revision 1.4  2011/06/07 13:45:50  willuhn
+ * @N 27-hbci4java-flickercode-luhnsum.patch
+ *
+ * Revision 1.3  2011-05-27 15:46:13  willuhn
  * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
  *
  * Revision 1.2  2011-05-27 11:15:39  willuhn

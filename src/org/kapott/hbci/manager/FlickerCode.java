@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v $
- * $Revision: 1.6 $
- * $Date: 2011/05/27 15:46:13 $
+ * $Revision: 1.7 $
+ * $Date: 2011/06/07 13:45:50 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -296,7 +296,11 @@ public class FlickerCode
     // luhnsum = 129 modulo 10 -> 9
     // 10 - 9 = 1
     // also 129 + 1 = 130
-    int rest = 10 - (luhnsum % 10);
+    int mod = luhnsum % 10;
+    if (mod == 0)
+      return "0"; // Siehe "Schritt 3" in tan_hhd_uc_v14.pdf, Seite 17
+    
+    int rest = 10 - mod;
     int sum = luhnsum + rest;
     
     // Von dieser Summe ziehen wir die berechnete Summe ab
@@ -723,7 +727,10 @@ public class FlickerCode
 
 /**********************************************************************
  * $Log: FlickerCode.java,v $
- * Revision 1.6  2011/05/27 15:46:13  willuhn
+ * Revision 1.7  2011/06/07 13:45:50  willuhn
+ * @N 27-hbci4java-flickercode-luhnsum.patch
+ *
+ * Revision 1.6  2011-05-27 15:46:13  willuhn
  * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
  *
  * Revision 1.4  2011-05-27 11:21:38  willuhn

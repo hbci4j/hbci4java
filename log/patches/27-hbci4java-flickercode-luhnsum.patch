@@ -1,0 +1,61 @@
+Index: src/org/kapott/hbci/manager/FlickerCode.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v
+retrieving revision 1.6
+diff -u -r1.6 FlickerCode.java
+--- src/org/kapott/hbci/manager/FlickerCode.java	27 May 2011 15:46:13 -0000	1.6
++++ src/org/kapott/hbci/manager/FlickerCode.java	7 Jun 2011 13:45:25 -0000
+@@ -296,7 +296,11 @@
+     // luhnsum = 129 modulo 10 -> 9
+     // 10 - 9 = 1
+     // also 129 + 1 = 130
+-    int rest = 10 - (luhnsum % 10);
++    int mod = luhnsum % 10;
++    if (mod == 0)
++      return "0"; // Siehe "Schritt 3" in tan_hhd_uc_v14.pdf, Seite 17
++    
++    int rest = 10 - mod;
+     int sum = luhnsum + rest;
+     
+     // Von dieser Summe ziehen wir die berechnete Summe ab
+Index: test/hbci4java/secmech/FlickerTest.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v
+retrieving revision 1.3
+diff -u -r1.3 FlickerTest.java
+--- test/hbci4java/secmech/FlickerTest.java	27 May 2011 15:46:13 -0000	1.3
++++ test/hbci4java/secmech/FlickerTest.java	7 Jun 2011 13:45:25 -0000
+@@ -17,6 +17,7 @@
+ import org.junit.Test;
+ import org.kapott.hbci.manager.FlickerCode;
+ import org.kapott.hbci.manager.FlickerRenderer;
++import org.kapott.hbci.manager.FlickerCode.HHDVersion;
+ 
+ /**
+  * Testet die Flicker-Codes.
+@@ -225,6 +226,25 @@
+   }
+ 
+   /**
++   * Testet, dass die Luhn-Checksumme 0 lautet (Sonderbedingung)
++   * @throws Exception
++   */
++  @Test
++  public void test6() throws Exception
++  {
++    FlickerCode code = new FlickerCode();
++    code.version = HHDVersion.HHD14;
++    code.startCode.data = "1120492";
++    code.startCode.controlBytes.add(1);
++    code.de1.data = "30084403";
++    code.de2.data = "450,00";
++    code.de3.data = "2";
++    
++    String rendered = code.render();
++    Assert.assertEquals(rendered,"1584011120492F0430084403463435302C3030012F05");
++  }
++
++  /**
+    * Testet das korrekte Rendern.
+    * @throws Exception
+    */
