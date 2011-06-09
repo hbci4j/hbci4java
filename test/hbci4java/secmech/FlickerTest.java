@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v $
- * $Revision: 1.4 $
- * $Date: 2011/06/07 13:45:50 $
+ * $Revision: 1.5 $
+ * $Date: 2011/06/09 08:06:49 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -243,6 +243,34 @@ public class FlickerTest extends AbstractTest
     String rendered = code.render();
     Assert.assertEquals(rendered,"1584011120492F0430084403463435302C3030012F05");
   }
+  
+  /**
+   * Das ist ein "echter" HHD-1.3-Code, der nicht im Challenge-Freitext sondern
+   * tatsaechlich im Challenge HHDuc uebertragen wurde. Erkennbar daran, dass
+   * das LC nur 2 Zeichen lang ist. Stammt von der Postbank.
+   * @throws Exception
+   */
+  @Test
+  public void test7() throws Exception
+  {
+    FlickerCode code = new FlickerCode("190277071234567041,00");
+    
+    FlickerCode expected = new FlickerCode();
+    expected.lc = 19;
+    expected.startCode.lde      = 2;
+    expected.startCode.length   = 2;
+    expected.startCode.data     = "77";
+    expected.de1.lde      = 7;
+    expected.de1.length   = 7;
+    expected.de1.data     = "1234567";
+    expected.de2.lde      = 4;
+    expected.de2.length   = 4;
+    expected.de2.data     = "1,00";
+    
+    // Code muss dem erwarteten entsprechen
+    Assert.assertEquals(expected,code);
+    
+  }
 
   /**
    * Testet das korrekte Rendern.
@@ -285,7 +313,8 @@ public class FlickerTest extends AbstractTest
           stop();
       }
     };
-
+    
+    renderer.setFrequency(FlickerRenderer.FREQUENCY_MAX);
     renderer.start();
     renderer.waitFor();
     
@@ -303,7 +332,10 @@ public class FlickerTest extends AbstractTest
 
 /**********************************************************************
  * $Log: FlickerTest.java,v $
- * Revision 1.4  2011/06/07 13:45:50  willuhn
+ * Revision 1.5  2011/06/09 08:06:49  willuhn
+ * @N 29-hbci4java-chiptan-opt-hhd13.patch
+ *
+ * Revision 1.4  2011-06-07 13:45:50  willuhn
  * @N 27-hbci4java-flickercode-luhnsum.patch
  *
  * Revision 1.3  2011-05-27 15:46:13  willuhn

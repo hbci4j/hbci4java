@@ -1,0 +1,120 @@
+Index: src/org/kapott/hbci/manager/FlickerCode.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v
+retrieving revision 1.7
+diff -u -r1.7 FlickerCode.java
+--- src/org/kapott/hbci/manager/FlickerCode.java	7 Jun 2011 13:45:50 -0000	1.7
++++ src/org/kapott/hbci/manager/FlickerCode.java	9 Jun 2011 08:06:02 -0000
+@@ -57,16 +57,24 @@
+   
+ 
+   /**
+-   * Die Anzahl der Bytes, in der die Laenge des Challenge steht.
++   * Die Anzahl der Bytes, in der die Laenge des Challenge bei HHD 1.4 steht.
+    * Bei HHD 1.3 war das noch 2 Zeichen lang.
+-   * Ich habe keine Ahnung, woran ich erkennen kann, wenn der nur 2 Stellen lang ist.
+    * Wenn der Flicker-Code nicht in "Challenge HHDuc" uebertragen wurde
+    * sondern direkt im Freitext-Challenge, koennen wir das Problem umgehen,
+    * indem wir in clean() einfach eine "0" vorn anhaengen.
++   * Wenn er aber tatsaechlich im "Challenge HHDuc" steht, kann man dem
++   * Code nicht ansehen, ob es ein HHD 1.3-Code ist. In dem Fall hilft nur
++   * Try&Error. Also mit HHD 1.4 parsen. Und wenn das fehlschlaegt, dann
++   * HHD 1.3 versuchen.
+    */
+   private final static int LC_LENGTH_HHD14 = 3;
+   
+   /**
++   * Die Anzahl der Bytes, in der die Laenge des Challenge bei HHD 1.3 steht.
++   */
++  private final static int LC_LENGTH_HHD13 = 2;
++
++  /**
+    * Die Position des Bits, welches das Encoding enthaelt.
+    */
+   private final static int BIT_ENCODING = 6;
+@@ -126,12 +134,31 @@
+    */
+   public FlickerCode(String code)
+   {
++    // Wir versuchen es erstmal als HHD 1.4
++    try
++    {
++      parse(code,HHDVersion.HHD14);
++    }
++    catch (Exception e)
++    {
++      parse(code,HHDVersion.HHD13);
++    }
++  }
++  
++  /**
++   * Parst den Code mit der angegebenen HHD-Version.
++   * @param code der zu parsende Code.
++   * @param version die HHD-Version.
++   */
++  private void parse(String code, HHDVersion version)
++  {
+     code = clean(code);
+     
+     // 1. LC ermitteln. Banales ASCII
+     {
+-      this.lc = Integer.parseInt(code.substring(0,LC_LENGTH_HHD14));
+-      code = code.substring(LC_LENGTH_HHD14); // und abschneiden
++      int len = version == HHDVersion.HHD14 ? LC_LENGTH_HHD14 : LC_LENGTH_HHD13;
++      this.lc = Integer.parseInt(code.substring(0,len));
++      code = code.substring(len); // und abschneiden
+     }
+ 
+     // 2. Startcode/Control-Bytes
+Index: test/hbci4java/secmech/FlickerTest.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v
+retrieving revision 1.4
+diff -u -r1.4 FlickerTest.java
+--- test/hbci4java/secmech/FlickerTest.java	7 Jun 2011 13:45:50 -0000	1.4
++++ test/hbci4java/secmech/FlickerTest.java	9 Jun 2011 08:06:02 -0000
+@@ -243,6 +243,34 @@
+     String rendered = code.render();
+     Assert.assertEquals(rendered,"1584011120492F0430084403463435302C3030012F05");
+   }
++  
++  /**
++   * Das ist ein "echter" HHD-1.3-Code, der nicht im Challenge-Freitext sondern
++   * tatsaechlich im Challenge HHDuc uebertragen wurde. Erkennbar daran, dass
++   * das LC nur 2 Zeichen lang ist. Stammt von der Postbank.
++   * @throws Exception
++   */
++  @Test
++  public void test7() throws Exception
++  {
++    FlickerCode code = new FlickerCode("190277071234567041,00");
++    
++    FlickerCode expected = new FlickerCode();
++    expected.lc = 19;
++    expected.startCode.lde      = 2;
++    expected.startCode.length   = 2;
++    expected.startCode.data     = "77";
++    expected.de1.lde      = 7;
++    expected.de1.length   = 7;
++    expected.de1.data     = "1234567";
++    expected.de2.lde      = 4;
++    expected.de2.length   = 4;
++    expected.de2.data     = "1,00";
++    
++    // Code muss dem erwarteten entsprechen
++    Assert.assertEquals(expected,code);
++    
++  }
+ 
+   /**
+    * Testet das korrekte Rendern.
+@@ -285,7 +313,8 @@
+           stop();
+       }
+     };
+-
++    
++    renderer.setFrequency(FlickerRenderer.FREQUENCY_MAX);
+     renderer.start();
+     renderer.waitFor();
+     

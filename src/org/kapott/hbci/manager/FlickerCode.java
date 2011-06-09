@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v $
- * $Revision: 1.7 $
- * $Date: 2011/06/07 13:45:50 $
+ * $Revision: 1.8 $
+ * $Date: 2011/06/09 08:06:49 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -57,15 +57,23 @@ public class FlickerCode
   
 
   /**
-   * Die Anzahl der Bytes, in der die Laenge des Challenge steht.
+   * Die Anzahl der Bytes, in der die Laenge des Challenge bei HHD 1.4 steht.
    * Bei HHD 1.3 war das noch 2 Zeichen lang.
-   * Ich habe keine Ahnung, woran ich erkennen kann, wenn der nur 2 Stellen lang ist.
    * Wenn der Flicker-Code nicht in "Challenge HHDuc" uebertragen wurde
    * sondern direkt im Freitext-Challenge, koennen wir das Problem umgehen,
    * indem wir in clean() einfach eine "0" vorn anhaengen.
+   * Wenn er aber tatsaechlich im "Challenge HHDuc" steht, kann man dem
+   * Code nicht ansehen, ob es ein HHD 1.3-Code ist. In dem Fall hilft nur
+   * Try&Error. Also mit HHD 1.4 parsen. Und wenn das fehlschlaegt, dann
+   * HHD 1.3 versuchen.
    */
   private final static int LC_LENGTH_HHD14 = 3;
   
+  /**
+   * Die Anzahl der Bytes, in der die Laenge des Challenge bei HHD 1.3 steht.
+   */
+  private final static int LC_LENGTH_HHD13 = 2;
+
   /**
    * Die Position des Bits, welches das Encoding enthaelt.
    */
@@ -126,12 +134,31 @@ public class FlickerCode
    */
   public FlickerCode(String code)
   {
+    // Wir versuchen es erstmal als HHD 1.4
+    try
+    {
+      parse(code,HHDVersion.HHD14);
+    }
+    catch (Exception e)
+    {
+      parse(code,HHDVersion.HHD13);
+    }
+  }
+  
+  /**
+   * Parst den Code mit der angegebenen HHD-Version.
+   * @param code der zu parsende Code.
+   * @param version die HHD-Version.
+   */
+  private void parse(String code, HHDVersion version)
+  {
     code = clean(code);
     
     // 1. LC ermitteln. Banales ASCII
     {
-      this.lc = Integer.parseInt(code.substring(0,LC_LENGTH_HHD14));
-      code = code.substring(LC_LENGTH_HHD14); // und abschneiden
+      int len = version == HHDVersion.HHD14 ? LC_LENGTH_HHD14 : LC_LENGTH_HHD13;
+      this.lc = Integer.parseInt(code.substring(0,len));
+      code = code.substring(len); // und abschneiden
     }
 
     // 2. Startcode/Control-Bytes
@@ -727,7 +754,10 @@ public class FlickerCode
 
 /**********************************************************************
  * $Log: FlickerCode.java,v $
- * Revision 1.7  2011/06/07 13:45:50  willuhn
+ * Revision 1.8  2011/06/09 08:06:49  willuhn
+ * @N 29-hbci4java-chiptan-opt-hhd13.patch
+ *
+ * Revision 1.7  2011-06-07 13:45:50  willuhn
  * @N 27-hbci4java-flickercode-luhnsum.patch
  *
  * Revision 1.6  2011-05-27 15:46:13  willuhn
