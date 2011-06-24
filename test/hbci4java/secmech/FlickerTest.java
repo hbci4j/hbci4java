@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v $
- * $Revision: 1.5 $
- * $Date: 2011/06/09 08:06:49 $
+ * $Revision: 1.6 $
+ * $Date: 2011/06/24 16:53:23 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -269,8 +269,25 @@ public class FlickerTest extends AbstractTest
     
     // Code muss dem erwarteten entsprechen
     Assert.assertEquals(expected,code);
-    
   }
+
+  /**
+   * Das ist ein Code von einem User, der zwar korrekt als HHD 1.3 erkannt
+   * wurde - aber der Fehler beim Versuch, es als HHD 1.4 zu parsen, trat
+   * zu einem Zeitpunkt auf, wo schon ein Controlbyte falsch gelesen wurde.
+   * Daraufhin habe ich die neue Funktion "rest()" eingebaut, die sicherstellt,
+   * dass von dem 1.4er Versuch keine Fragmente mehr uebrig sind, wenn im
+   * zweiten Versuch als 1.3 gelesen wird.
+   * @throws Exception
+   */
+  @Test
+  public void test8() throws Exception
+  {
+    FlickerCode code = new FlickerCode("250891715637071234567041,00");
+    Assert.assertEquals(code.version,HHDVersion.HHD13);
+    Assert.assertEquals(0,code.startCode.controlBytes.size());
+  }
+
 
   /**
    * Testet das korrekte Rendern.
@@ -332,7 +349,10 @@ public class FlickerTest extends AbstractTest
 
 /**********************************************************************
  * $Log: FlickerTest.java,v $
- * Revision 1.5  2011/06/09 08:06:49  willuhn
+ * Revision 1.6  2011/06/24 16:53:23  willuhn
+ * @N 30-hbci4java-chiptan-reset.patch
+ *
+ * Revision 1.5  2011-06-09 08:06:49  willuhn
  * @N 29-hbci4java-chiptan-opt-hhd13.patch
  *
  * Revision 1.4  2011-06-07 13:45:50  willuhn

@@ -1,7 +1,7 @@
 /**********************************************************************
  * $Source: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v $
- * $Revision: 1.8 $
- * $Date: 2011/06/09 08:06:49 $
+ * $Revision: 1.9 $
+ * $Date: 2011/06/24 16:53:23 $
  * $Author: willuhn $
  *
  * Copyright (c) by willuhn - software & services
@@ -141,6 +141,7 @@ public class FlickerCode
     }
     catch (Exception e)
     {
+      // OK, dann HHD 1.3
       parse(code,HHDVersion.HHD13);
     }
   }
@@ -152,6 +153,7 @@ public class FlickerCode
    */
   private void parse(String code, HHDVersion version)
   {
+    reset();
     code = clean(code);
     
     // 1. LC ermitteln. Banales ASCII
@@ -346,6 +348,7 @@ public class FlickerCode
   public String toString()
   {
     StringBuffer sb = new StringBuffer();
+    sb.append("VERSION:\n" + this.version + "\n");
     sb.append("LC: " + this.lc + "\n");
     sb.append("Startcode:\n" + this.startCode + "\n");
     sb.append("DE1:\n" + this.de1 + "\n");
@@ -353,6 +356,20 @@ public class FlickerCode
     sb.append("DE3:\n" + this.de3 + "\n");
     sb.append("CB : " + this.rest + "\n");
     return sb.toString();
+  }
+  
+  /**
+   * Resettet den Code.
+   */
+  private void reset()
+  {
+    this.version   = null;
+    this.lc        = 0;
+    this.startCode = new Startcode();
+    this.de1       = new DE();
+    this.de2       = new DE();
+    this.de3       = new DE();
+    this.rest      = null;
   }
   
 
@@ -754,7 +771,10 @@ public class FlickerCode
 
 /**********************************************************************
  * $Log: FlickerCode.java,v $
- * Revision 1.8  2011/06/09 08:06:49  willuhn
+ * Revision 1.9  2011/06/24 16:53:23  willuhn
+ * @N 30-hbci4java-chiptan-reset.patch
+ *
+ * Revision 1.8  2011-06-09 08:06:49  willuhn
  * @N 29-hbci4java-chiptan-opt-hhd13.patch
  *
  * Revision 1.7  2011-06-07 13:45:50  willuhn

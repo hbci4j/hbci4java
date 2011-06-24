@@ -1,0 +1,147 @@
+Index: log/patches/30-hbci4java-chiptan-reset.patch
+===================================================================
+RCS file: log/patches/30-hbci4java-chiptan-reset.patch
+diff -N log/patches/30-hbci4java-chiptan-reset.patch
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ log/patches/30-hbci4java-chiptan-reset.patch	1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,52 @@
++Index: src/org/kapott/hbci/manager/FlickerCode.java
++===================================================================
++RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v
++retrieving revision 1.8
++diff -u -r1.8 FlickerCode.java
++--- src/org/kapott/hbci/manager/FlickerCode.java	9 Jun 2011 08:06:49 -0000	1.8
+++++ src/org/kapott/hbci/manager/FlickerCode.java	24 Jun 2011 16:51:25 -0000
++@@ -141,6 +141,7 @@
++     }
++     catch (Exception e)
++     {
+++      // OK, dann HHD 1.3
++       parse(code,HHDVersion.HHD13);
++     }
++   }
++@@ -152,6 +153,7 @@
++    */
++   private void parse(String code, HHDVersion version)
++   {
+++    reset();
++     code = clean(code);
++     
++     // 1. LC ermitteln. Banales ASCII
++@@ -346,6 +348,7 @@
++   public String toString()
++   {
++     StringBuffer sb = new StringBuffer();
+++    sb.append("VERSION:\n" + this.version + "\n");
++     sb.append("LC: " + this.lc + "\n");
++     sb.append("Startcode:\n" + this.startCode + "\n");
++     sb.append("DE1:\n" + this.de1 + "\n");
++@@ -355,6 +358,20 @@
++     return sb.toString();
++   }
++   
+++  /**
+++   * Resettet den Code.
+++   */
+++  private void reset()
+++  {
+++    this.version   = null;
+++    this.lc        = 0;
+++    this.startCode = new Startcode();
+++    this.de1       = new DE();
+++    this.de2       = new DE();
+++    this.de3       = new DE();
+++    this.rest      = null;
+++  }
+++  
++ 
++   /**
++    * @see java.lang.Object#equals(java.lang.Object)
+Index: src/org/kapott/hbci/manager/FlickerCode.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/src/org/kapott/hbci/manager/FlickerCode.java,v
+retrieving revision 1.8
+diff -u -r1.8 FlickerCode.java
+--- src/org/kapott/hbci/manager/FlickerCode.java	9 Jun 2011 08:06:49 -0000	1.8
++++ src/org/kapott/hbci/manager/FlickerCode.java	24 Jun 2011 16:52:52 -0000
+@@ -141,6 +141,7 @@
+     }
+     catch (Exception e)
+     {
++      // OK, dann HHD 1.3
+       parse(code,HHDVersion.HHD13);
+     }
+   }
+@@ -152,6 +153,7 @@
+    */
+   private void parse(String code, HHDVersion version)
+   {
++    reset();
+     code = clean(code);
+     
+     // 1. LC ermitteln. Banales ASCII
+@@ -346,6 +348,7 @@
+   public String toString()
+   {
+     StringBuffer sb = new StringBuffer();
++    sb.append("VERSION:\n" + this.version + "\n");
+     sb.append("LC: " + this.lc + "\n");
+     sb.append("Startcode:\n" + this.startCode + "\n");
+     sb.append("DE1:\n" + this.de1 + "\n");
+@@ -355,6 +358,20 @@
+     return sb.toString();
+   }
+   
++  /**
++   * Resettet den Code.
++   */
++  private void reset()
++  {
++    this.version   = null;
++    this.lc        = 0;
++    this.startCode = new Startcode();
++    this.de1       = new DE();
++    this.de2       = new DE();
++    this.de3       = new DE();
++    this.rest      = null;
++  }
++  
+ 
+   /**
+    * @see java.lang.Object#equals(java.lang.Object)
+Index: test/hbci4java/secmech/FlickerTest.java
+===================================================================
+RCS file: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v
+retrieving revision 1.5
+diff -u -r1.5 FlickerTest.java
+--- test/hbci4java/secmech/FlickerTest.java	9 Jun 2011 08:06:49 -0000	1.5
++++ test/hbci4java/secmech/FlickerTest.java	24 Jun 2011 16:52:52 -0000
+@@ -269,10 +269,27 @@
+     
+     // Code muss dem erwarteten entsprechen
+     Assert.assertEquals(expected,code);
+-    
+   }
+ 
+   /**
++   * Das ist ein Code von einem User, der zwar korrekt als HHD 1.3 erkannt
++   * wurde - aber der Fehler beim Versuch, es als HHD 1.4 zu parsen, trat
++   * zu einem Zeitpunkt auf, wo schon ein Controlbyte falsch gelesen wurde.
++   * Daraufhin habe ich die neue Funktion "rest()" eingebaut, die sicherstellt,
++   * dass von dem 1.4er Versuch keine Fragmente mehr uebrig sind, wenn im
++   * zweiten Versuch als 1.3 gelesen wird.
++   * @throws Exception
++   */
++  @Test
++  public void test8() throws Exception
++  {
++    FlickerCode code = new FlickerCode("250891715637071234567041,00");
++    Assert.assertEquals(code.version,HHDVersion.HHD13);
++    Assert.assertEquals(0,code.startCode.controlBytes.size());
++  }
++
++
++  /**
+    * Testet das korrekte Rendern.
+    * @throws Exception
+    */
