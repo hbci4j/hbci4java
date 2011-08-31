@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIHandler.java,v 1.1 2011/05/04 22:37:46 willuhn Exp $
+/*  $Id: HBCIHandler.java,v 1.2 2011/08/31 14:05:21 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -156,6 +156,13 @@ public final class HBCIHandler
      * BIC/IBAN geliefert */
     private void updateSEPAInfo()
     {
+        Properties bpd = passport.getBPD();
+        if (bpd == null)
+        {
+          HBCIUtils.log("have no bpd, skipping SEPA information fetching", HBCIUtils.LOG_WARN);
+          return;
+        }
+
         // jetzt noch zusaetzliche die SEPA-Informationen abholen
         try {
         	if (getSupportedLowlevelJobs().getProperty("SEPAInfo")!=null) {
@@ -183,8 +190,14 @@ public final class HBCIHandler
         	} else {
         		HBCIUtils.log("institute does not support SEPA accounts, so we skip fetching information about SEPA", HBCIUtils.LOG_DEBUG);
         	}
-        } catch (Exception e) {
-        	throw new HBCI_Exception();
+        }
+        catch (HBCI_Exception he)
+        {
+          throw he;
+        }
+        catch (Exception e)
+        {
+        	throw new HBCI_Exception(e);
         }
     }
     

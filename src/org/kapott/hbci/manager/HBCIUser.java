@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIUser.java,v 1.1 2011/05/04 22:37:46 willuhn Exp $
+/*  $Id: HBCIUser.java,v 1.2 2011/08/31 14:05:21 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -574,7 +574,7 @@ public final class HBCIUser
     {
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_UPD,null);
-            HBCIUtils.log("fetching UPD",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("fetching UPD (BPD-Version: " + passport.getBPDVersion() + ")",HBCIUtils.LOG_INFO);
             
             // autosecmech
             HBCIUtils.log("checking whether passport is supported (but ignoring result)",HBCIUtils.LOG_DEBUG);
@@ -649,9 +649,13 @@ public final class HBCIUser
         }
         
         Properties upd=passport.getUPD();
+        Properties bpd=passport.getBPD();
         String     hbciVersionOfUPD=(upd!=null)?upd.getProperty("_hbciversion"):null;
-        
-        if (passport.getUPDVersion().equals("0") ||
+
+        // Wir haben noch keine BPD. Offensichtlich unterstuetzt die Bank
+        // das Abrufen von BPDs ueber einen anonymen Dialog nicht. Also machen
+        // wir das jetzt hier mit einem nicht-anonymen Dialog gleich mit
+        if (bpd == null || passport.getUPDVersion().equals("0") ||
             hbciVersionOfUPD==null ||
             !hbciVersionOfUPD.equals(kernel.getHBCIVersion())) 
         {
