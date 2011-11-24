@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractHBCIPassport.java,v 1.1 2011/05/04 22:37:43 willuhn Exp $
+/*  $Id: AbstractHBCIPassport.java,v 1.2 2011/11/24 21:57:14 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -23,6 +23,7 @@ package org.kapott.hbci.passport;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -704,10 +705,26 @@ public abstract class AbstractHBCIPassport
             Constructor con=cl.getConstructor(new Class[] {Object.class});
             HBCIPassport p=(HBCIPassport)(con.newInstance(new Object[] {init}));
             return p;
-        } catch (ClassNotFoundException e) {
-            throw new InvalidUserDataException("*** No passport implementation '"+name+"' found - there must be a class "+className);
-        } catch (Exception e) {
-            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INST",name),e); 
+        }
+        catch (ClassNotFoundException e)
+        {
+          throw new InvalidUserDataException("*** No passport implementation '"+name+"' found - there must be a class "+className);
+        }
+        catch (InvocationTargetException ite)
+        {
+          Throwable cause = ite.getCause();
+          if (cause instanceof HBCI_Exception)
+            throw (HBCI_Exception) cause;
+          
+          throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INST",name),ite);
+        }
+        catch (HBCI_Exception he)
+        {
+          throw he;
+        }
+        catch (Exception e)
+        {
+          throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INST",name),e); 
         }
     }
 
