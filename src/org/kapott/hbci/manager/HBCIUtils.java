@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIUtils.java,v 1.1 2011/05/04 22:37:46 willuhn Exp $
+/*  $Id: HBCIUtils.java,v 1.2 2011/11/24 21:59:37 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -146,6 +146,10 @@ import org.kapott.hbci.swift.Swift;
           Da in den meisten Fällen aber nur der erste Datensatzu tatsächlich belegt
           ist, wird dieser Parameter meist den Wert "1" haben (ist auch default,
           falls dieser Parameter gar nicht gesetzt ist).</p></li>
+      <li><code>client.passport.DDV.pcsc.name</code> (für DDV-Passports bei Verwendung von HBCIPassportDDVPCSC)
+          <p>Wenn statt dem DDV-Passport der DDVPCSC-Passport (basierend auf javax.smartcardio)
+          verwendet wird, kann hier der Name des Kartenlesers angegeben werden. Andernfalls
+          wird der erste gefundene verwendet.</p></li>
       <li><code>client.passport.RDHNew.filename</code> (für RDHNew-Passports)
           <p>Dieser Parameter legt den 
           Dateinamen der Schlüsseldatei fest. Diese Datei sollte am 
