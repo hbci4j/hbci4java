@@ -1,5 +1,5 @@
 
-/*  $Id: GVRKUms.java,v 1.2 2011/05/13 12:24:56 willuhn Exp $
+/*  $Id: GVRKUms.java,v 1.3 2012/01/27 22:52:25 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -468,8 +468,14 @@ public class GVRKUms
                     // extract bdate
                     int next=0;
                     if (st_ums.charAt(6)>'9') {
-                        line.bdate=line.valuta;
+                        // [2012-01-27 - Patch von Frank/Pecunia]
+                        // beim :61er Tag ist das Buchungsdatum optional. Wenn es nicht gesetzt ist, muss das Buchungsdatum des
+                        // Umsatzes z.B. aus :60F kommen
+                        if (btag.start !=  null && btag.start.timestamp != null) line.bdate = btag.start.timestamp;
+                        else line.bdate=line.valuta;
+                        
                         next=6;
+                        
                     } else {
                         line.bdate=dateFormat.parse(st_ums.substring(0,2)+
                             st_ums.substring(6,10));
