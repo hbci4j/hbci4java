@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractHBCIPassport.java,v 1.2 2011/11/24 21:57:14 willuhn Exp $
+/*  $Id: AbstractHBCIPassport.java,v 1.3 2012/03/04 12:41:01 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -948,7 +948,7 @@ public abstract class AbstractHBCIPassport
         byte[] result=buffer;
         
         if (buffer.length!=size) {
-            HBCIUtils.log("checking for crypted_data_length=="+size+"; current length is "+buffer.length,HBCIUtils.LOG_WARN);
+            HBCIUtils.log("checking for crypted_data_length=="+size+"; current length is "+buffer.length,HBCIUtils.LOG_DEBUG);
             if (buffer.length>size) {
                 int diff=buffer.length-size;
                 boolean ok=true;
@@ -961,7 +961,7 @@ public abstract class AbstractHBCIPassport
                 }
 
                 if (ok) {
-                    HBCIUtils.log("removing "+diff+" unnecessary null-bytes from crypted_data",HBCIUtils.LOG_WARN);
+                    HBCIUtils.log("removing "+diff+" unnecessary null-bytes from crypted_data",HBCIUtils.LOG_DEBUG);
                     result=new byte[size];
                     System.arraycopy(buffer,diff,result,0,size);
                 }
