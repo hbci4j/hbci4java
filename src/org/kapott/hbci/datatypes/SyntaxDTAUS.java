@@ -1,5 +1,5 @@
 
-/*  $Id: SyntaxDTAUS.java,v 1.1 2011/05/04 22:37:55 willuhn Exp $
+/*  $Id: SyntaxDTAUS.java,v 1.2 2012/03/06 23:18:26 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -30,12 +30,27 @@ public class SyntaxDTAUS
 {
     public static String check(String st)
     {
+        // [willuhn 2012-03-06, BUG 1129] siehe http://de.wikipedia.org/wiki/DIN_66003
+        // DIN-66003 (der DTAUS-Zeichensatz) ist eigentlich ASCII, jedoch sind ein paar
+        // unuebliche Sonderzeichen gegen deutsche Umlaute ersetzt worden.
+        // Da HBCI4Java den Datenstrom jedoch als Latin1 liest, werden die Umlaure
+        // faelschlicherweise als die Sonderzeichen aus der ASCII-Tabelle interpretiert.
+        // In Wirklichkeit sind es jedoch die deutschen Umlaute. Wir biegen das
+        // hier wieder gerade.
+        st=st.replace("[","Ä");  // 0x5B
+        st=st.replace("\\","Ö"); // 0x5C
+        st=st.replace("]","Ü");  // 0x5D
+        st=st.replace("{","ä");  // 0x7B
+        st=st.replace("|","ö");  // 0x7C
+        st=st.replace("}","ü");  // 0x7D
+        st=st.replace("~","ß");  // 0x7E
+      
         st=st.toUpperCase();
         st=st.replace('\344','\133').replace('\304','\133');
         st=st.replace('\366','\134').replace('\326','\134');
         st=st.replace('\374','\135').replace('\334','\135');
         st=st.replace('\337','\176');
-
+        
         int len=st.length();
         for (int i=0;i<len;i++) {
             char ch=st.charAt(i);
@@ -50,8 +65,12 @@ public class SyntaxDTAUS
                 
                 String msg=HBCIUtilsInternal.getLocMsg("EXC_DTAUS_INV_CHAR",Character.toString(ch));
                 if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreWrongDataSyntaxErrors",msg)) {
-                    throw new InvalidArgumentException(msg);
+                    // [willuhn 2012-03-06, BUG 1129] Exception als fatal markieren
+                    InvalidArgumentException e = new InvalidArgumentException(msg);
+                    e.setFatal(true);
+                    throw e;
                 }
+                
                 st=st.replace(ch,' ');
             }
         }

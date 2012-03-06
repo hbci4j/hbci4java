@@ -1,5 +1,5 @@
 
-/*  $Id: MultipleSyntaxElements.java,v 1.1 2011/05/04 22:38:03 willuhn Exp $
+/*  $Id: MultipleSyntaxElements.java,v 1.2 2012/03/06 23:18:26 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -397,6 +397,11 @@ public abstract class MultipleSyntaxElements
                     if (child!=null)
                         child.setParent(this);
                 } catch (ParseErrorException e) {
+                  
+                    // [willuhn 2012-03-06, BUG 1129] weiterwerfen, wenn sie als fatal eingestuft ist
+                    if (e.isFatal())
+                      throw e;
+                    
                     // wenn das nicht klappt, dann reststring zuruecksetzen, aber nur, 
                     //   wenn naechstes zeichen nicht wieder ein delimiter ist
                     //   dann war naemlich das zu generierende DE leer!!!

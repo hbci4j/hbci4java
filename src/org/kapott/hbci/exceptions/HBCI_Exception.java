@@ -1,5 +1,5 @@
 
-/*  $Id: HBCI_Exception.java,v 1.1 2011/05/04 22:38:01 willuhn Exp $
+/*  $Id: HBCI_Exception.java,v 1.2 2012/03/06 23:18:26 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -47,8 +47,10 @@ try {
 }
     </pre> */
 public class HBCI_Exception
-     extends RuntimeException
+    extends RuntimeException
 {
+    private boolean fatal = false;
+  
     protected static String applyLogFilter(String st) 
     {
         try {
@@ -94,5 +96,32 @@ public class HBCI_Exception
     public HBCI_Exception(String st,Throwable e)
     {
         super(applyLogFilter(st),e);
+    }
+    
+    /**
+     * Markiert eine Exception als fatal.
+     * @param b true, wenn sie fatal ist.
+     */
+    public void setFatal(boolean b)
+    {
+      this.fatal = b;
+    }
+    
+    /**
+     * Liefert true, wenn die Exception oder ihr Cause als fatal eingestuft wurde.
+     * @return true, wenn die Exception oder ihr Cause als fatal eingestuft wurde.
+     */
+    public boolean isFatal()
+    {
+      if (this.fatal) // dann brauchen wir den Cause nicht mehr checken
+        return true;
+      
+      Throwable t = this.getCause();
+      if (t == this)
+        return false; // sind wir selbst
+      if (t instanceof HBCI_Exception)
+        return ((HBCI_Exception)t).isFatal();
+      
+      return false;
     }
 }
