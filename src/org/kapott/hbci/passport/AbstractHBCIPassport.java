@@ -1,5 +1,5 @@
 
-/*  $Id: AbstractHBCIPassport.java,v 1.3 2012/03/04 12:41:01 willuhn Exp $
+/*  $Id: AbstractHBCIPassport.java,v 1.4 2012/03/13 22:07:43 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -137,7 +137,7 @@ public abstract class AbstractHBCIPassport
 
         if (needPort && 
             (getPort()==null || getPort().intValue()==0)) {
-            StringBuffer sb=new StringBuffer("3000");
+            StringBuffer sb=new StringBuffer((this instanceof AbstractPinTanPassport) ? "443" : "3000");
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PORT,HBCIUtilsInternal.getLocMsg("PORT"),HBCICallback.TYPE_TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("PORT")));

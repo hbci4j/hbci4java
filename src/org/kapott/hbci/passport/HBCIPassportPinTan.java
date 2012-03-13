@@ -1,5 +1,5 @@
 
-/*  $Id: HBCIPassportPinTan.java,v 1.5 2011/05/30 12:47:56 willuhn Exp $
+/*  $Id: HBCIPassportPinTan.java,v 1.6 2012/03/13 22:07:43 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -97,7 +97,6 @@ public class HBCIPassportPinTan
         
         HBCIUtils.log("loading passport data from file "+fname,HBCIUtils.LOG_DEBUG);
         setFileName(fname);
-        setPort(new Integer(443));
         setCertFile(HBCIUtils.getParam(header+"certfile"));
         setCheckCert(HBCIUtils.getParam(header+"checkcert","1").equals("1"));
         
