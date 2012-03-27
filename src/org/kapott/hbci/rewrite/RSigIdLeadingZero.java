@@ -1,5 +1,5 @@
 
-/*  $Id: RSigIdLeadingZero.java,v 1.1 2011/05/04 22:37:57 willuhn Exp $
+/*  $Id: RSigIdLeadingZero.java,v 1.2 2012/03/27 21:33:13 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -46,9 +46,9 @@ public class RSigIdLeadingZero
                 if (secondPlus!=-1) {
                     StringBuffer value=new StringBuffer(st.substring(firstPlus+1,secondPlus));
                     
-                    if (value.length()>0 && value.charAt(0)=='0') {
+                    if (value.length()>1 && value.charAt(0)=='0') {
                         HBCIUtils.log("RSigIdLeadingZero: found leading zero ("+value+"), removing it",HBCIUtils.LOG_WARN);
-                        while (value.length()>0 && value.charAt(0)=='0') {
+                        while (value.length()>1 && value.charAt(0)=='0') {
                             value.deleteCharAt(0);
                         }
                         

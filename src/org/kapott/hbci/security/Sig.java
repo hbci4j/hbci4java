@@ -1,5 +1,5 @@
 
-/*  $Id: Sig.java,v 1.1 2011/05/04 22:38:03 willuhn Exp $
+/*  $Id: Sig.java,v 1.2 2012/03/27 21:33:13 willuhn Exp $
 
     This file is part of HBCI4Java
     Copyright (C) 2001-2008  Stefan Palme
@@ -409,7 +409,6 @@ public final class Sig
 
         u_role = msg.getValueOfDE(sigheadName + ".role");
         u_range = msg.getValueOfDE(sigheadName + ".range");
-        u_keyblz = msg.getValueOfDE(sigheadName + ".KeyName.KIK.blz");
         u_keycountry = msg.getValueOfDE(sigheadName + ".KeyName.KIK.country");
         u_keyuserid = msg.getValueOfDE(sigheadName + ".KeyName.userid");
         u_keynum = msg.getValueOfDE(sigheadName + ".KeyName.keynum");
@@ -418,7 +417,16 @@ public final class Sig
         u_sigalg = msg.getValueOfDE(sigheadName + ".SigAlg.alg");
         u_sigmode = msg.getValueOfDE(sigheadName + ".SigAlg.mode");
         u_hashalg = msg.getValueOfDE(sigheadName + ".HashAlg.alg");
-        
+
+        // Die Angabe der BLZ ist nicht unbedingt verpflichtend (für 280 aber schon...). Trotzdem gibt es wohl
+        // Banken die das nicht interessiert...
+        try {
+          u_keyblz = msg.getValueOfDE(sigheadName + ".KeyName.KIK.blz");
+        }
+        catch (Exception e) {
+          HBCIUtils.log("missing bank code in message signature, ignoring...",HBCIUtils.LOG_WARN);
+        }
+
         if (mainPassport.needUserSig()) {
             // TODO: bei anderen user-signaturen hier allgemeineren code schreiben
             Hashtable values=new Hashtable();
