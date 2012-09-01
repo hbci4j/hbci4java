@@ -30,7 +30,6 @@ import java.util.Map;
  */
 public class UpdateBLZProperties
 {
-  private final static boolean DEBUG = false;
   private final static String ENCODING = "iso-8859-1";
   
   /**
@@ -88,40 +87,16 @@ public class UpdateBLZProperties
       while ((line = f2.readLine()) != null)
       {
         String[] values = line.split("=");
-        String blz      = values[0];
-        String current  = values[1];
+        Line current    = new Line(values[0],values[1]);
 
-        try
-        {
-          String url = lookup.get(blz);
-          if (url == null) continue; // wir haben keine URL fuer die BLZ
-          
-          List<String> oldValues = Arrays.asList(current.split("\\|"));
-          if (oldValues.size() <= 5)
-          {
-            if (DEBUG) System.err.println(blz + ": " + url + " URL fehlt in HBCI4Java");
-            continue; // wir haben in HBCI4Java keine URL - TODO: Die neue URL sollte dann in HBCI4Java uebernommen werden
-          }
-            
-          String oldUrl = oldValues.get(5).trim();
-          if (oldUrl.length() == 0)
-          {
-            if (DEBUG) System.err.println(blz + ": " + url + " URL leer in HBCI4Java");
-            continue; // wir haben in HBCI4Java keine URL - TODO: Die sollte dann in HBCI4Java uebernommen werden  
-          }
-          
-          // checken, ob wir in der CSV-Datei eine andere URL haben. Falls ja -> aktualisieren
-          if (url.equals(oldUrl))
-            continue; // unveraendert
-          
-          System.out.println(blz + ": Update " + oldUrl + "-> " + url);
-          current = current.replace(oldUrl,url);
-        }
-        finally
-        {
-          f3.write(blz + "=" + current);
-          f3.newLine();
-        }
+        String url = lookup.get(current.blz);
+        
+        // URL uebernehmen
+        current.updateUrl(url);
+        
+        // Neue Zeile schreiben
+        f3.write(current.toString());
+        f3.newLine();
       }
       //
       //////////////////////////////////////////////////////////////////////////
@@ -132,16 +107,67 @@ public class UpdateBLZProperties
       if (f2 != null) f2.close();
       if (f3 != null) f3.close();
     }
+  }
+  
+  /**
+   * Implementiert eine einzelne Zeile der blz.properties
+   */
+  private static class Line
+  {
+    private String blz = null;
+    private String[] values = new String[9];
     
+    /**
+     * ct.
+     * @param blz die BLZ.
+     * @param line die Zeile aus der blz.properties
+     */
+    private Line(String blz,String line)
+    {
+      this.blz = blz;
+      String[] s = line.split("\\|");
+      System.arraycopy(s,0,this.values,0,s.length);
+    }
+    
+    /**
+     * Speichert die neue URL, wenn vorher keine da war oder eine andere.
+     * @param url die neue URL.
+     */
+    private void updateUrl(String url)
+    {
+      // Keine neue URL
+      if (url == null || url.length() == 0)
+        return;
+      
+      String current = this.values[5];
+      current = current != null ? current.trim() : "";
+      if (!current.equals(url))
+      {
+        System.out.println(blz + ": URL \"" + current + "\" -> \"" + url + "\"");
+        this.values[5] = url;
+      }
+    }
+    
+    /**
+     * Wandelt die Zeile wieder zurueck in einen String.
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+      StringBuffer sb = new StringBuffer();
+      sb.append(this.blz);
+      sb.append("=");
+      for (int i=0;i<this.values.length;++i)
+      {
+        if (i > 0)
+          sb.append("|");
+        
+        String s = this.values[i];
+        if (s != null)
+          sb.append(s);
+      }
+      
+      return sb.toString();
+    }
   }
 }
-
-
-
-/**********************************************************************
- * $Log: UpdateBLZProperties.java,v $
- * Revision 1.1  2012/04/16 22:24:40  willuhn
- * @N BLZ-Updater Tool
- * @N Aktualisierte BLZ-Liste (Stand 16.10.2011)
- *
- **********************************************************************/
