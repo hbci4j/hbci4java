@@ -1,4 +1,0 @@
-../../bin/frontend.o: frontend.cpp ../include/frontend.h \
- /usr/lib/jvm/java/include/jni.h /usr/lib/jvm/java/include/linux/jni_md.h \
- ../include/bcs.h ../include/ctapi-tools.h ../include/ddvcard.h \
- ../include/hbci.h ../include/hbci.h ../include/seccos.h
