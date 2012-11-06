@@ -564,6 +564,10 @@
                 <validvalue>1</validvalue>
                 <validvalue>2</validvalue>
                 <validvalue>3</validvalue>
+                
+                <!-- Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?t=14583 -->
+                <validvalue>98</validvalue>
+                <validvalue>99</validvalue>
             </valids>
             <valids path="limittype">
                 <validvalue>E</validvalue>
