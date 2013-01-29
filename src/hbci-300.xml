@@ -1338,7 +1338,7 @@
         </DEGdef>
         
         <DEGdef id="ParTemplate2D">
-            <DE name="dummy" type="AN" minsize="0" maxsize="999" maxnum="999"/>
+            <DE name="dummy" type="AN" minsize="0" maxsize="8192" maxnum="999"/>
         </DEGdef>
         
         <DEGdef id="ParTermSammelLast">
