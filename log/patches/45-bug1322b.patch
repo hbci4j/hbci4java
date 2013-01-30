@@ -1,0 +1,13 @@
+diff --git a/src/hbci-300.xml b/src/hbci-300.xml
+index 8653ac4..98aa294 100644
+--- a/src/hbci-300.xml
++++ b/src/hbci-300.xml
+@@ -1338,7 +1338,7 @@
+         </DEGdef>
+         
+         <DEGdef id="ParTemplate2D">
+-            <DE name="dummy" type="AN" minsize="0" maxsize="8192" maxnum="999"/>
++            <DE name="dummy" type="AN" minsize="0" maxsize="16384" maxnum="999"/>
+         </DEGdef>
+         
+         <DEGdef id="ParTermSammelLast">
