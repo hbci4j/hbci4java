@@ -22,13 +22,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <jni.h>
 
-#include "frontend.h"
+/*#include "frontend.h"*/
 #include "bcs.h"
 #include "ctapi-tools.h"
 #include "ddvcard.h"
 #include "hbci.h"
 #include "seccos.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif 
 
 JNIEnv *javaEnv;
 
@@ -565,3 +570,7 @@ JNIEXPORT void JNICALL Java_org_kapott_hbci_passport_HBCIPassportDDV_closeCT
     BCS_resetCT();
     CTAPI_closeCTAPI();
 }
+
+#ifdef __cplusplus
+}
+#endif

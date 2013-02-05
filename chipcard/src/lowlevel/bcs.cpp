@@ -38,6 +38,7 @@ bool BCS_resetCT()
         BCS_INS_RESET,
         BCS_FU_CT,
         0x00,
+        0x00,
     };
     unsigned short int len=2;
     unsigned char      *response=new unsigned char[len];

@@ -25,9 +25,9 @@
 #include "ctapi-tools.h"
 #include "porting.h"
 
-initfunc_t         initfunc;
-datafunc_t         datafunc;
-closefunc_t        closefunc;
+static initfunc_t         initfunc;
+static datafunc_t         datafunc;
+static closefunc_t        closefunc;
 
 apihandle_t        handle;
 unsigned short int ctnum;
@@ -91,14 +91,38 @@ bool CTAPI_isOK(unsigned short int status)
            ((status&0xFF00)==0x6100);
 }
 
-unsigned short int perform(unsigned char _dad,const char *name,unsigned short int lenIn,unsigned char *command,unsigned short int *lenOut,unsigned char *response)
+#define MIN_LOCAL_RESPONSE_BUFFER_SIZE 4096
+static unsigned short int perform(unsigned char _dad,const char *name,
+             unsigned short int lenIn,unsigned char *command,
+             unsigned short int *lenOut,unsigned char *response)
 {
     unsigned char sad=CTAPI_SAD;
     unsigned char dad=_dad;
     
     char logmsg[1024];
     char temp[20];
-    
+    static unsigned char *response_local = NULL;
+    static unsigned short int lenOut_local, lenOut_return;
+     
+    if (response_local==NULL) {
+      lenOut_local = MIN_LOCAL_RESPONSE_BUFFER_SIZE;
+      response_local = (unsigned char *)malloc( lenOut_local * sizeof(unsigned char) );
+      if (response_local==NULL) {
+        CTAPI_log("Alloc of local response buffer failed. Out of memory. Aborting!");
+        return 0;
+      }
+    }
+    if (lenOut_local<(*lenOut)) {
+      free( response_local );
+      lenOut_local = *lenOut;
+      response_local = (unsigned char *)malloc( lenOut_local * sizeof(unsigned char) );
+      if (response_local==NULL) {
+        CTAPI_log("Realloc of local response buffer failed. Out of memory. Aborting!");
+        return 0;
+      }
+    }
+    lenOut_return = lenOut_local;  
+      
     sprintf(logmsg,"%s apdu:",name);
     for (int i=0;i<lenIn;i++) {
         sprintf(temp," %02X",command[i]);
@@ -112,7 +136,7 @@ unsigned short int perform(unsigned char _dad,const char *name,unsigned short in
     char err;
     int  retries=3;
     while (retries--) { 
-        err=(*datafunc)(ctnum,&dad,&sad,lenIn,command,lenOut,response);
+        err=(*datafunc)(ctnum,&dad,&sad,lenIn,command,&lenOut_return,response_local);
         CTAPI_error.ret=err;
         
         if (!err)
@@ -122,6 +146,10 @@ unsigned short int perform(unsigned char _dad,const char *name,unsigned short in
         CTAPI_log(logmsg);
     }
 
+    if (lenOut_return < (*lenOut)) {
+      *lenOut = lenOut_return;
+    }
+    memcpy(response,response_local, *lenOut);
     if (err!=0) {
         CTAPI_log("aborting");
         return 0;

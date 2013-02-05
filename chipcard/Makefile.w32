@@ -1,0 +1,164 @@
+# Project: hbci32
+# Makefile created by Dev-C++ 5.2.0.0
+
+CPP      = g++.exe
+CC       = gcc.exe
+MINGW_PATH  = C:/Program Files/Dev-Cpp/MinGW32
+JDK_PATH    = C:/Program Files/Java/jdk1.6.0_38
+DLL_NAME = hbci4java-card-win32
+OBJ      = bin/atr.o bin/bcs.o bin/ctapi-tools.o bin/get_challenge.o bin/get_keyinfo.o bin/internal_authenticate.o bin/modify_pin.o bin/put_data.o bin/read_binary.o bin/read_record.o bin/select_file.o bin/tools.o bin/verify_pin.o bin/write_record.o bin/ddv_decrypt.o bin/ddv_encrypt.o bin/ddv_pins.o bin/ddv_readbankdata.o bin/ddv_readkeydata.o bin/ddv_readsigid.o bin/ddv_signdata.o bin/ddv_writebankdata.o bin/ddv_writesigid.o bin/hbci_cardtype.o bin/rsa_cardnumber.o bin/rsa_pins.o 
+LINKOBJ  = bin/atr.o bin/bcs.o bin/ctapi-tools.o bin/get_challenge.o bin/get_keyinfo.o bin/internal_authenticate.o bin/modify_pin.o bin/put_data.o bin/read_binary.o bin/read_record.o bin/select_file.o bin/tools.o bin/verify_pin.o bin/write_record.o bin/ddv_decrypt.o bin/ddv_encrypt.o bin/ddv_pins.o bin/ddv_readbankdata.o bin/ddv_readkeydata.o bin/ddv_readsigid.o bin/ddv_signdata.o bin/ddv_writebankdata.o bin/ddv_writesigid.o bin/hbci_cardtype.o bin/rsa_cardnumber.o bin/rsa_pins.o 
+LIBS     = -L"$(MINGW_PATH)/lib"
+INCS     = -I"$(MINGW_PATH)/include"  -Isrc/include 
+CXXINCS  = -I"$(MINGW_PATH)/include"  -Isrc/include -I"$(JDK_PATH)\include" -I"$(JDK_PATH)\include\win32"
+BIN      = lib/t_test.exe lib/t_ddv_checkpin.exe lib/t_ddv_editdata.exe lib/t_ddv_readdata.exe \
+           lib/t_hbci_cardinfo.exe lib/t_hbci_cardtype.exe lib/t_rsa_cardinfo.exe lib/t_rsa_editkeys.exe \
+           lib/$(DLL_NAME).dll 
+CXXFLAGS = $(CXXINCS) -O2 -D__WIN32
+RM       = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: lib/$(DLL_NAME).dll lib/t_test.exe lib/t_ddv_checkpin.exe lib/t_ddv_editdata.exe  \
+     lib/t_ddv_readdata.exe lib/t_hbci_cardinfo.exe lib/t_hbci_cardtype.exe  \
+     lib/t_rsa_cardinfo.exe lib/t_rsa_editkeys.exe 
+
+
+clean: clean-custom
+	${RM} $(OBJ) bin/frontend.o bin/t_ddv_checkpin.o bin/t_ddv_editdata.o \
+              bin/t_ddv_readdata.o bin/t_hbci_cardinfo.o bin/t_hbci_cardtype.o \
+              bin/t_rsa_cardinfo.o bin/t_rsa_editkeys.o bin/t_test.o $(BIN)
+
+lib/$(DLL_NAME).dll: $(OBJ) bin/frontend.o 
+	$(CPP) -shared -static-libgcc -O2 -o"lib\$(DLL_NAME).dll" -Wl,--dll,-Bstatic,--kill-at,-Bsymbolic,--strip-all,--no-whole-archive $(LINKOBJ) bin/frontend.o $(LIBS)
+
+lib/t_ddv_checkpin.exe: $(OBJ) bin/t_ddv_checkpin.o 
+	$(CPP) $(LINKOBJ) bin/t_ddv_checkpin.o -o"lib\t_ddv_checkpin.exe" $(LIBS)
+
+lib/t_ddv_editdata.exe: $(OBJ) bin/t_ddv_editdata.o 
+	$(CPP) $(LINKOBJ) bin/t_ddv_editdata.o -o"lib\t_ddv_editdata.exe" $(LIBS)
+
+lib/t_ddv_readdata.exe: $(OBJ) bin/t_ddv_readdata.o 
+	$(CPP) $(LINKOBJ) bin/t_ddv_readdata.o -o"lib\t_ddv_readdata.exe" $(LIBS)
+
+lib/t_hbci_cardinfo.exe: $(OBJ) bin/t_hbci_cardinfo.o 
+	$(CPP) $(LINKOBJ) bin/t_hbci_cardinfo.o -o"lib\t_hbci_cardinfo.exe" $(LIBS)
+
+lib/t_hbci_cardtype.exe: $(OBJ) bin/t_hbci_cardtype.o 
+	$(CPP) $(LINKOBJ) bin/t_hbci_cardtype.o -o"lib\t_hbci_cardtype.exe" $(LIBS)
+
+lib/t_rsa_cardinfo.exe: $(OBJ) bin/t_rsa_cardinfo.o 
+	$(CPP) $(LINKOBJ) bin/t_rsa_cardinfo.o -o"lib\t_rsa_cardinfo.exe" $(LIBS)
+
+lib/t_rsa_editkeys.exe: $(OBJ) bin/t_rsa_editkeys.o 
+	$(CPP) $(LINKOBJ) bin/t_rsa_editkeys.o -o"lib\t_rsa_editkeys.exe" $(LIBS)
+
+lib/t_test.exe: $(OBJ) bin/t_test.o 
+	$(CPP) $(LINKOBJ) bin/t_test.o -o"lib\t_test.exe" $(LIBS)
+
+
+bin/t_ddv_checkpin.o: src/tools/t_ddv_checkpin.cpp 
+	$(CPP) -c src/tools/t_ddv_checkpin.cpp -o bin/t_ddv_checkpin.o $(CXXFLAGS)
+
+bin/t_ddv_editdata.o: src/tools/t_ddv_editdata.cpp 
+	$(CPP) -c src/tools/t_ddv_editdata.cpp -o bin/t_ddv_editdata.o $(CXXFLAGS)
+
+bin/t_ddv_readdata.o: src/tools/t_ddv_readdata.cpp 
+	$(CPP) -c src/tools/t_ddv_readdata.cpp -o bin/t_ddv_readdata.o $(CXXFLAGS)
+
+bin/t_hbci_cardinfo.o: src/tools/t_hbci_cardinfo.cpp 
+	$(CPP) -c src/tools/t_hbci_cardinfo.cpp -o bin/t_hbci_cardinfo.o $(CXXFLAGS)
+
+bin/t_hbci_cardtype.o: src/tools/t_hbci_cardtype.cpp 
+	$(CPP) -c src/tools/t_hbci_cardtype.cpp -o bin/t_hbci_cardtype.o $(CXXFLAGS)
+
+bin/t_rsa_cardinfo.o: src/tools/t_rsa_cardinfo.cpp 
+	$(CPP) -c src/tools/t_rsa_cardinfo.cpp -o bin/t_rsa_cardinfo.o $(CXXFLAGS)
+
+bin/t_rsa_editkeys.o: src/tools/t_rsa_editkeys.cpp 
+	$(CPP) -c src/tools/t_rsa_editkeys.cpp -o bin/t_rsa_editkeys.o $(CXXFLAGS)
+
+bin/t_test.o: src/tools/t_test.cpp 
+	$(CPP) -c src/tools/t_test.cpp -o bin/t_test.o $(CXXFLAGS)
+
+
+bin/atr.o: src/lowlevel/atr.cpp 
+	$(CPP) -c src/lowlevel/atr.cpp -o bin/atr.o $(CXXFLAGS)
+
+bin/bcs.o: src/lowlevel/bcs.cpp 
+	$(CPP) -c src/lowlevel/bcs.cpp -o bin/bcs.o $(CXXFLAGS)
+
+bin/ctapi-tools.o: src/lowlevel/ctapi-tools.cpp 
+	$(CPP) -c src/lowlevel/ctapi-tools.cpp -o bin/ctapi-tools.o $(CXXFLAGS)
+
+bin/get_challenge.o: src/lowlevel/get_challenge.cpp 
+	$(CPP) -c src/lowlevel/get_challenge.cpp -o bin/get_challenge.o $(CXXFLAGS)
+
+bin/get_keyinfo.o: src/lowlevel/get_keyinfo.cpp 
+	$(CPP) -c src/lowlevel/get_keyinfo.cpp -o bin/get_keyinfo.o $(CXXFLAGS)
+
+bin/internal_authenticate.o: src/lowlevel/internal_authenticate.cpp 
+	$(CPP) -c src/lowlevel/internal_authenticate.cpp -o bin/internal_authenticate.o $(CXXFLAGS)
+
+bin/modify_pin.o: src/lowlevel/modify_pin.cpp 
+	$(CPP) -c src/lowlevel/modify_pin.cpp -o bin/modify_pin.o $(CXXFLAGS)
+
+bin/put_data.o: src/lowlevel/put_data.cpp 
+	$(CPP) -c src/lowlevel/put_data.cpp -o bin/put_data.o $(CXXFLAGS)
+
+bin/read_binary.o: src/lowlevel/read_binary.cpp 
+	$(CPP) -c src/lowlevel/read_binary.cpp -o bin/read_binary.o $(CXXFLAGS)
+
+bin/read_record.o: src/lowlevel/read_record.cpp 
+	$(CPP) -c src/lowlevel/read_record.cpp -o bin/read_record.o $(CXXFLAGS)
+
+bin/select_file.o: src/lowlevel/select_file.cpp 
+	$(CPP) -c src/lowlevel/select_file.cpp -o bin/select_file.o $(CXXFLAGS)
+
+bin/tools.o: src/lowlevel/tools.cpp 
+	$(CPP) -c src/lowlevel/tools.cpp -o bin/tools.o $(CXXFLAGS)
+
+bin/verify_pin.o: src/lowlevel/verify_pin.cpp 
+	$(CPP) -c src/lowlevel/verify_pin.cpp -o bin/verify_pin.o $(CXXFLAGS)
+
+bin/write_record.o: src/lowlevel/write_record.cpp 
+	$(CPP) -c src/lowlevel/write_record.cpp -o bin/write_record.o $(CXXFLAGS)
+
+bin/ddv_decrypt.o: src/highlevel/ddv_decrypt.cpp 
+	$(CPP) -c src/highlevel/ddv_decrypt.cpp -o bin/ddv_decrypt.o $(CXXFLAGS)
+
+bin/ddv_encrypt.o: src/highlevel/ddv_encrypt.cpp 
+	$(CPP) -c src/highlevel/ddv_encrypt.cpp -o bin/ddv_encrypt.o $(CXXFLAGS)
+
+bin/ddv_pins.o: src/highlevel/ddv_pins.cpp 
+	$(CPP) -c src/highlevel/ddv_pins.cpp -o bin/ddv_pins.o $(CXXFLAGS)
+
+bin/ddv_readbankdata.o: src/highlevel/ddv_readbankdata.cpp 
+	$(CPP) -c src/highlevel/ddv_readbankdata.cpp -o bin/ddv_readbankdata.o $(CXXFLAGS)
+
+bin/ddv_readkeydata.o: src/highlevel/ddv_readkeydata.cpp 
+	$(CPP) -c src/highlevel/ddv_readkeydata.cpp -o bin/ddv_readkeydata.o $(CXXFLAGS)
+
+bin/ddv_readsigid.o: src/highlevel/ddv_readsigid.cpp 
+	$(CPP) -c src/highlevel/ddv_readsigid.cpp -o bin/ddv_readsigid.o $(CXXFLAGS)
+
+bin/ddv_signdata.o: src/highlevel/ddv_signdata.cpp 
+	$(CPP) -c src/highlevel/ddv_signdata.cpp -o bin/ddv_signdata.o $(CXXFLAGS)
+
+bin/ddv_writebankdata.o: src/highlevel/ddv_writebankdata.cpp 
+	$(CPP) -c src/highlevel/ddv_writebankdata.cpp -o bin/ddv_writebankdata.o $(CXXFLAGS)
+
+bin/ddv_writesigid.o: src/highlevel/ddv_writesigid.cpp 
+	$(CPP) -c src/highlevel/ddv_writesigid.cpp -o bin/ddv_writesigid.o $(CXXFLAGS)
+
+bin/hbci_cardtype.o: src/highlevel/hbci_cardtype.cpp 
+	$(CPP) -c src/highlevel/hbci_cardtype.cpp -o bin/hbci_cardtype.o $(CXXFLAGS)
+
+bin/rsa_cardnumber.o: src/highlevel/rsa_cardnumber.cpp 
+	$(CPP) -c src/highlevel/rsa_cardnumber.cpp -o bin/rsa_cardnumber.o $(CXXFLAGS)
+
+bin/rsa_pins.o: src/highlevel/rsa_pins.cpp 
+	$(CPP) -c src/highlevel/rsa_pins.cpp -o bin/rsa_pins.o $(CXXFLAGS)
+
+bin/frontend.o: src/frontend/frontend.cpp 
+	$(CPP) -c src/frontend/frontend.cpp -o bin/frontend.o $(CXXFLAGS)
