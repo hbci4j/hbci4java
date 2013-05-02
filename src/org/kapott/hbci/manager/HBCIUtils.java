@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.security.Security;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -899,7 +900,42 @@ public final class HBCIUtils
         String data=HBCIUtilsInternal.getBLZData(blz);
         return HBCIUtilsInternal.getNthToken(data,3);
     }
+    
+    /**
+     * Berechnet die IBAN fuer ein angegebenes deutsches Konto.
+     * @param blz die BLZ.
+     * @param konto die Kontonummer.
+     * @return die berechnete IBAN.
+     */
+    public static String getIBANForKonto(String blz, String konto)
+    {
+      /////////////////
+      // Pruefziffer berechnen
+      // Siehe http://www.iban.de/iban-pruefsumme.html
+      String zeros = "0000000000";
+      String filledKonto = zeros.substring(0,10-konto.length()) + konto; // 10-stellig mit Nullen fuellen 
+      StringBuffer sb = new StringBuffer();
+      sb.append(blz);
+      sb.append(filledKonto);
+      sb.append("1314"); // hartcodiert fuer "DE
+      sb.append("00"); // fest vorgegeben
+      
+      BigInteger mod = new BigInteger(sb.toString()).mod(new BigInteger("97")); // "97" ist fest vorgegeben in ISO 7064/Modulo 97-10
+      String checksum = String.valueOf(98 - mod.intValue()); // "98" ist fest vorgegeben in ISO 7064/Modulo 97-10 
+      if (checksum.length() < 2)
+        checksum = "0" + checksum;
+      //
+      /////////////////
 
+      StringBuffer result = new StringBuffer();
+      result.append("DE");
+      result.append(checksum);
+      result.append(blz);
+      result.append(filledKonto);
+      
+      return result.toString();
+    }
+    
     /**
      * Gibt zu einer gegebenen Bankleitzahl den HBCI-Host (für RDH und DDV)
      * zurück.
