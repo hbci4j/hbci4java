@@ -45,6 +45,7 @@ import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
+import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.swift.Swift;
 
 /** <p>Hilfsklasse für diverse Tools. Diese Klasse definiert nur statische
@@ -903,19 +904,24 @@ public final class HBCIUtils
     
     /**
      * Berechnet die IBAN fuer ein angegebenes deutsches Konto.
-     * @param blz die BLZ.
-     * @param konto die Kontonummer.
+     * @param k das Konto.
      * @return die berechnete IBAN.
      */
-    public static String getIBANForKonto(String blz, String konto)
+    public static String getIBANForKonto(Konto k)
     {
+      String konto = k.number;
+      
+      // Die Unterkonto-Nummer muss mit eingerechnet werden.
+      if (k.subnumber != null && k.subnumber.length() > 0)
+        konto += k.subnumber;
+      
       /////////////////
       // Pruefziffer berechnen
       // Siehe http://www.iban.de/iban-pruefsumme.html
       String zeros = "0000000000";
       String filledKonto = zeros.substring(0,10-konto.length()) + konto; // 10-stellig mit Nullen fuellen 
       StringBuffer sb = new StringBuffer();
-      sb.append(blz);
+      sb.append(k.blz);
       sb.append(filledKonto);
       sb.append("1314"); // hartcodiert fuer "DE
       sb.append("00"); // fest vorgegeben
@@ -930,7 +936,7 @@ public final class HBCIUtils
       StringBuffer result = new StringBuffer();
       result.append("DE");
       result.append(checksum);
-      result.append(blz);
+      result.append(k.blz);
       result.append(filledKonto);
       
       return result.toString();
