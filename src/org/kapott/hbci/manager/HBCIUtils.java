@@ -912,7 +912,10 @@ public final class HBCIUtils
       String konto = k.number;
       
       // Die Unterkonto-Nummer muss mit eingerechnet werden.
-      if (k.subnumber != null && k.subnumber.length() > 0)
+      // Aber nur, wenn sie numerisch ist. Bei irgendeiner Bank wurde
+      // "EUR" als Unterkontonummer verwendet. Das geht natuerlich nicht,
+      // weil damit nicht gerechnet werden kann
+      if (k.subnumber != null && k.subnumber.length() > 0 && k.subnumber.matches("[0-9]{1,8}"));
         konto += k.subnumber;
       
       /////////////////
