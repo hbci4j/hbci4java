@@ -23,7 +23,6 @@ package org.kapott.hbci.smartcardio;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,7 +135,9 @@ public abstract class HBCICardService
     "FEATURE_MODIFY_PIN_DIRECT_APP_ID",
     "FEATURE_WRITE_DISPLAY",
     "FEATURE_GET_KEY",
-    "FEATURE_IFD_DISPLAY_PROPERTIES"
+    "FEATURE_IFD_DISPLAY_PROPERTIES",
+    "FEATURE_GET_TLV_PROPERTIES", // NEU
+    "FEATURE_CCID_ESC_COMMAND" //NEU
   };
 
   final static Byte FEATURE_VERIFY_PIN_START   = new Byte((byte) 0x01);
@@ -370,8 +371,8 @@ public abstract class HBCICardService
       ResponseAPDU response = channel.transmit(command);
       
       // Command und Response loggen
-      HBCIUtils.log(caller + " command : " + toHex(command.getBytes()),HBCIUtils.LOG_INFO); // TODO: Loglevel auf DEBUG aendern
-      HBCIUtils.log(caller + " response: " + toHex(response.getBytes()),HBCIUtils.LOG_INFO);// TODO: Loglevel auf DEBUG aendern
+      HBCIUtils.log(caller + " command : " + toHex(command.getBytes()),HBCIUtils.LOG_DEBUG);
+      HBCIUtils.log(caller + " response: " + toHex(response.getBytes()),HBCIUtils.LOG_DEBUG);
 
       this.check(response,returncodes);
       return response.getData();
@@ -463,24 +464,24 @@ public abstract class HBCICardService
   private byte[] createPINVerificationDataStructure() throws IOException
   {
     ByteArrayOutputStream verifyCommand = new ByteArrayOutputStream();
-    verifyCommand.write(30); // bTimeOut
-    verifyCommand.write(30); // bTimeOut2
-    verifyCommand.write(0x80 | 0x08 | 0x00 | 0x01); // bmFormatString
-    verifyCommand.write(0x47); // bmPINBlockString
-    verifyCommand.write(0x04); // bmPINLengthFormat
-    verifyCommand.write(new byte[] {(byte) 12,(byte) 4}); // PIN size (max/min)
+    verifyCommand.write(0x0f); // bTimeOut
+    verifyCommand.write(0x05); // bTimeOut2
+    verifyCommand.write(0x89); // bmFormatString
+    verifyCommand.write(0x07); // bmPINBlockString
+    verifyCommand.write(0x10); // bmPINLengthFormat
+    verifyCommand.write(new byte[] {(byte) 8,(byte) 4}); // PIN size (max/min), volker: 12,4=>8,4
     verifyCommand.write(0x02); // bEntryValidationCondition
     verifyCommand.write(0x01); // bNumberMessage
-    verifyCommand.write(new byte[] { 0x13, 0x08 }); // wLangId
+    verifyCommand.write(new byte[] { 0x04, 0x09 }); // wLangId, volker: 13,8=>4,9
     verifyCommand.write(0x00); // bMsgIndex
     verifyCommand.write(new byte[] { 0x00, 0x00, 0x00 }); // bTeoPrologue
     byte[] verifyApdu = new byte[] {
         SECCOS_CLA_STD, // CLA
         SECCOS_INS_VERIFY, // INS
         0x00, // P1
-        0x01, // P2
+        (byte)0x81, // P2 volker: 01=>81
         0x08, // Lc = 8 bytes in command data
-        (byte) 0x20, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
+        (byte) 0x25, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,//volker:0x20=>0x25
         (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
     verifyCommand.write(verifyApdu.length & 0xff); // ulDataLength[0]
     verifyCommand.write(0x00); // ulDataLength[1]
