@@ -125,7 +125,7 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
         ////////////////////////////////////////////////////////////////////////
         // read passport file
         String path = HBCIUtils.getParam(getParamHeader()+".path","./");
-        this.setFileName(HBCIUtilsInternal.withCounter(path+getCardId(),getEntryIdx()-1));
+        this.setFileName(HBCIUtilsInternal.withCounter(path+"pcsc"+getCardId(),getEntryIdx()-1));
         HBCIUtils.log("loading passport data from file "+getFileName(),HBCIUtils.LOG_DEBUG);
         
         File file = new File(this.getFileName());
