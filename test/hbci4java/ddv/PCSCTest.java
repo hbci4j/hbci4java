@@ -14,12 +14,16 @@ package hbci4java.ddv;
 import hbci4java.AbstractTest;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.kapott.hbci.GV.HBCIJob;
+import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportDDVPCSC;
@@ -46,14 +50,33 @@ public class PCSCTest extends AbstractTest
   }
   
   /**
+   * Testet das Abrufen des Saldos.
+   * @throws Exception
+   */
+  @Test
+  public void testFetchSaldo() throws Exception
+  {
+    HBCIHandler handler = new HBCIHandler("210",passport);
+    HBCIJob job = handler.newJob("SaldoReq");
+    
+    // wir nehmen wir die Saldo-Abfrage einfach das erste verfuegbare Konto
+    job.setParam("my",passport.getAccounts()[0]);
+    job.addToQueue();
+    handler.execute();
+  }
+  
+  /**
    * Erzeugt das Passport-Objekt.
    * @throws Exception
    */
   @Before
   public void beforeCard() throws Exception
   {
-    HBCIUtils.setParam("client.passport.DDV.path",dir.getAbsolutePath() + "/");
-    HBCIUtils.setParam("client.passport.DDV.entryidx","1");
+    Properties props = new Properties();
+    props.put("client.passport.DDV.path",dir.getAbsolutePath() + "/");
+    props.put("client.passport.DDV.entryidx","1");
+    props.put("log.loglevel.default",Integer.toString(HBCIUtils.LOG_DEBUG2));
+    HBCIUtils.init(props,new HBCICallbackConsole());
     this.passport = (HBCIPassportDDVPCSC) AbstractHBCIPassport.getInstance("DDVPCSC");
   }
   
@@ -64,8 +87,15 @@ public class PCSCTest extends AbstractTest
   @After
   public void afterCard() throws Exception
   {
-    if (this.passport != null)
-      this.passport.close();
+    try
+    {
+      if (this.passport != null)
+        this.passport.close();
+    }
+    finally
+    {
+      HBCIUtils.done();
+    }
   }
   
   /**
