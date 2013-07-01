@@ -185,7 +185,17 @@ public abstract class HBCICardService
                                  | ((0xff & response[i + 3]) << 16)
                                  | ((0xff & response[i + 4]) << 8)
                                  | (0xff & response[i + 5]);
-        HBCIUtils.log("  " + FEATURES[feature.intValue()] + ": " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
+        
+        String name = null;
+        try
+        {
+          name = FEATURES[feature.intValue()];
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+          name = "FEATURE_UNKNOWN";
+        }
+        HBCIUtils.log("  " +  name + ": " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
         features.put(feature, ioctl);
       }      
     }
