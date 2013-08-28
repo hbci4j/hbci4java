@@ -251,6 +251,12 @@ public final class HBCIInstitute
                     throw new ProcessException(HBCIUtilsInternal.getLocMsg("ERR_INST_BPDFAILED"),status);
                 }
             } catch (Exception e) {
+                if (e instanceof HBCI_Exception)
+                {
+                  HBCI_Exception he = (HBCI_Exception) e;
+                  if (he.isFatal())
+                    throw he;
+                }
                 HBCIUtils.log(e);
                 HBCIUtils.log("FAILED! - maybe this institute does not support anonymous logins",HBCIUtils.LOG_ERR);
                 HBCIUtils.log("we will nevertheless go on",HBCIUtils.LOG_ERR);
