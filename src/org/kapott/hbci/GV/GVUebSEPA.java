@@ -39,12 +39,12 @@ public class GVUebSEPA
     extends HBCIJobImpl
 {
     private Properties sepaParams;
-    
+
     public static String getLowlevelName()
     {
         return "UebSEPA";
     }
-    
+
     public GVUebSEPA(HBCIHandler handler,String name)
     {
         super(handler,name,new HBCIJobResultImpl());
@@ -54,7 +54,7 @@ public class GVUebSEPA
     public GVUebSEPA(HBCIHandler handler)
     {
         this(handler,getLowlevelName());
-        
+
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
 
@@ -66,6 +66,11 @@ public class GVUebSEPA
         */
 
         /* TODO: take SEPA descriptor from list of supported descriptors (BPD) */
+        if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") !=null)
+        {
+          Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
+        }
+
         addConstraint("_sepadescriptor", "sepadescr", "sepade.pain.001.001.02.xsd", LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain",  null,                         LogFilter.FILTER_IDS);
 
@@ -82,15 +87,15 @@ public class GVUebSEPA
         addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
         addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
     }
-    
-    
-    /* This is needed to "redirect" the sepa values. They dont have to stored 
+
+
+    /* This is needed to "redirect" the sepa values. They dont have to stored
      * directly in the message, but have to go into the SEPA document which will
      * by created later (in verifyConstraints()) */
     protected void setLowlevelParam(String key, String value)
     {
         String intern=getName()+".sepa.";
-        
+
         if (key.startsWith(intern)) {
             String realKey=key.substring(intern.length());
             this.sepaParams.setProperty(realKey, value);
@@ -99,8 +104,8 @@ public class GVUebSEPA
             super.setLowlevelParam(key, value);
         }
     }
-    
-    
+
+
     /* This is needed for verifyConstraints(). Because verifyConstraints() tries
      * to read the lowlevel-values for each constraint, the lowlevel-values for
      * sepa.xxx would always be empty (because they do not exist in hbci messages).
@@ -109,19 +114,19 @@ public class GVUebSEPA
     public String getLowlevelParam(String key)
     {
         String result;
-        
-        String intern=getName()+".sepa.";        
+
+        String intern=getName()+".sepa.";
         if (key.startsWith(intern)) {
             String realKey=key.substring(intern.length());
             result=getSEPAParam(realKey);
         } else {
             result=super.getLowlevelParam(key);
         }
-        
+
         return result;
     }
 
-    
+
     protected String getSEPAMessageId()
     {
         String result=getSEPAParam("messageId");
@@ -133,16 +138,16 @@ public class GVUebSEPA
         }
         return result;
     }
-    
-    
+
+
     protected String createSEPATimestamp()
     {
         Date             now=new Date();
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         return format.format(now);
     }
-    
-    
+
+
     protected void createSEPAFromParams()
     {
         // open SEPA descriptor and create an XML-Creator using it
@@ -150,14 +155,14 @@ public class GVUebSEPA
          * above, depending on the supported SEPA descriptors (BPD) */
         InputStream f=this.getClass().getClassLoader().getResourceAsStream("pain.001.001.02.xsd");
         XMLCreator2 creator=new XMLCreator2(f);
-        
+
         // define data to be filled into SEPA document
         XMLData xmldata=new XMLData();
         xmldata.setValue("Document/pain.001.001.02/GrpHdr/MsgId",                              getSEPAMessageId());
         xmldata.setValue("Document/pain.001.001.02/GrpHdr/CreDtTm",                            createSEPATimestamp());
         xmldata.setValue("Document/pain.001.001.02/GrpHdr/NbOfTxs",                            "1");
         xmldata.setValue("Document/pain.001.001.02/GrpHdr/InitgPty/Nm",                        getSEPAParam("src.name"));
-        
+
         xmldata.setValue("Document/pain.001.001.02/PmtInf/Dbtr/Nm",                            getSEPAParam("src.name"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/DbtrAgt/FinInstnId/BIC",             getSEPAParam("src.bic"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/DbtrAcct/Id/IBAN",                   getSEPAParam("src.iban"));
@@ -165,18 +170,18 @@ public class GVUebSEPA
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Cdtr/Nm",                getSEPAParam("dst.name"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/CdtrAgt/FinInstnId/BIC", getSEPAParam("dst.bic"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/CdtrAcct/Id/IBAN",       getSEPAParam("dst.iban"));
-        
+
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Amt/InstdAmt",           getSEPAParam("btg.value"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Amt/InstdAmt:Ccy",       getSEPAParam("btg.curr"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/RmtInf/Ustrd",           getSEPAParam("usage"));
         xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/PmtId/EndToEndId",       getSEPAMessageId());
-        
+
         xmldata.setValue("Document/pain.001.001.02/PmtInf/ReqdExctnDt",                        "1999-01-01"); // hart kodiert
 
         // create SEPA document
         ByteArrayOutputStream o=new ByteArrayOutputStream();
         creator.createXMLFromSchemaAndData(xmldata, o);
-        
+
         // store SEPA document as parameter
         try {
             setParam("_sepapain", "B"+o.toString("ISO-8859-1"));
@@ -184,23 +189,23 @@ public class GVUebSEPA
             throw new RuntimeException(e);
         }
     }
-    
+
     public void verifyConstraints()
     {
         // creating SEPA document and storing it in _sepapain
         createSEPAFromParams();
-        
+
         // verify all constraints
         super.verifyConstraints();
-        
+
         // TODO: checkIBANCRC
     }
-    
+
     protected void setSEPAParam(String name, String value)
     {
         this.sepaParams.setProperty(name, value);
     }
-    
+
     protected String getSEPAParam(String name)
     {
         return this.sepaParams.getProperty(name);
