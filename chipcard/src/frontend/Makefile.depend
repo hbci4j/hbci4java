@@ -1,0 +1,3 @@
+../../bin/frontend.o: frontend.cpp ../include/bcs.h ../include/ctapi-tools.h \
+ ../include/ddvcard.h ../include/hbci.h ../include/hbci.h \
+ ../include/seccos.h
