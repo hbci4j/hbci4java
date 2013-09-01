@@ -14,7 +14,6 @@ package hbci4java.sepa;
 import hbci4java.AbstractTest;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -25,13 +24,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.junit.Test;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.AccountIdentification2;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.AmountType3;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.CashAccount8;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ChargeBearerType2Code;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.CreditTransferTransactionInformation2;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.EuroMax9Amount;
@@ -39,6 +38,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitution2;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitutionIdentification4;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.GroupHeader20;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Grouping2Code;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Pain00100102;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification20;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification21;
@@ -110,6 +110,7 @@ public class TestPainGen extends AbstractTest
     pmtInf.setDbtrAgt(dbtrAgt);
     pmtInf.setDbtrAcct(dbtrAcct);
     pmtInf.getCdtTrfTxInf().add(cdtTrfTxInf);
+    pmtInf.setChrgBr(ChargeBearerType2Code.SLEV);
 
     dbtrAgt.setFinInstnId(finInstnId);
     dbtrAcct.setId(id);
@@ -153,14 +154,16 @@ public class TestPainGen extends AbstractTest
 
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    Schema schema = schemaFactory.newSchema(new File("src/pain.001.001.02.xsd"));
+//    Schema schema = schemaFactory.newSchema(new File("src/pain.001.001.02.xsd"));
 
     JAXBContext jaxbContext = JAXBContext.newInstance(Document.class);
     Marshaller marshaller = jaxbContext.createMarshaller();
 //    marshaller.setSchema(schema);
     marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-    marshaller.marshal(doc,bos);
+
+    ObjectFactory of = new ObjectFactory();
+    marshaller.marshal(of.createDocument(doc),bos);
 
     return bos.toString("UTF-8");
   }

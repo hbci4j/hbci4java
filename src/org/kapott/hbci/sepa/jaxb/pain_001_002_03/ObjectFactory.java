@@ -34,14 +34,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreditorReferenceTypeCodeSEPA }
-     * 
-     */
-    public CreditorReferenceTypeCodeSEPA createCreditorReferenceTypeCodeSEPA() {
-        return new CreditorReferenceTypeCodeSEPA();
-    }
-
-    /**
      * Create an instance of {@link GroupHeaderSCT }
      * 
      */
@@ -82,6 +74,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreditorReferenceTypeCodeSEPA }
+     * 
+     */
+    public CreditorReferenceTypeCodeSEPA createCreditorReferenceTypeCodeSEPA() {
+        return new CreditorReferenceTypeCodeSEPA();
+    }
+
+    /**
+     * Create an instance of {@link PaymentIdentificationSEPA }
+     * 
+     */
+    public PaymentIdentificationSEPA createPaymentIdentificationSEPA() {
+        return new PaymentIdentificationSEPA();
+    }
+
+    /**
      * Create an instance of {@link ActiveOrHistoricCurrencyAndAmountSEPA }
      * 
      */
@@ -95,6 +103,14 @@ public class ObjectFactory {
      */
     public CustomerCreditTransferInitiationV03 createCustomerCreditTransferInitiationV03() {
         return new CustomerCreditTransferInitiationV03();
+    }
+
+    /**
+     * Create an instance of {@link FinancialInstitutionIdentificationSEPA1 }
+     * 
+     */
+    public FinancialInstitutionIdentificationSEPA1 createFinancialInstitutionIdentificationSEPA1() {
+        return new FinancialInstitutionIdentificationSEPA1();
     }
 
     /**
@@ -146,11 +162,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentIdentificationSEPA }
+     * Create an instance of {@link Document }
      * 
      */
-    public PaymentIdentificationSEPA createPaymentIdentificationSEPA() {
-        return new PaymentIdentificationSEPA();
+    public Document createDocument() {
+        return new Document();
     }
 
     /**
@@ -167,14 +183,6 @@ public class ObjectFactory {
      */
     public PaymentInstructionInformationSCT createPaymentInstructionInformationSCT() {
         return new PaymentInstructionInformationSCT();
-    }
-
-    /**
-     * Create an instance of {@link Document }
-     * 
-     */
-    public Document createDocument() {
-        return new Document();
     }
 
     /**
@@ -247,14 +255,6 @@ public class ObjectFactory {
      */
     public PaymentTypeInformationSCT2 createPaymentTypeInformationSCT2() {
         return new PaymentTypeInformationSCT2();
-    }
-
-    /**
-     * Create an instance of {@link FinancialInstitutionIdentificationSEPA1 }
-     * 
-     */
-    public FinancialInstitutionIdentificationSEPA1 createFinancialInstitutionIdentificationSEPA1() {
-        return new FinancialInstitutionIdentificationSEPA1();
     }
 
     /**
