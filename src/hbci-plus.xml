@@ -6201,7 +6201,7 @@
             <SEG type="LastObjection1" minnum="0"/>
             <SEG type="LastObjection2" minnum="0"/>
             <SEG type="OrderHistory1" minnum="0"/>
-	    <SEG type="Receipt1" minnum="0"/>
+	    	<SEG type="Receipt1" minnum="0"/>
             <SEG type="Saldo3" minnum="0"/>
             <SEG type="Saldo4" minnum="0"/>
             <SEG type="Saldo5" minnum="0"/>
@@ -6390,8 +6390,8 @@
             <SEG type="AccInfoPar2" minnum="0"/>
             <SEG type="CardListPar1" minnum="0"/>
             <SEG type="CardListPar2" minnum="0"/>
-	    <SEG type="ChangePINPar1" minnum="0" />
-	    <SEG type="ChangePINOldPar1" minnum="0" />
+	    	<SEG type="ChangePINPar1" minnum="0" />
+	    	<SEG type="ChangePINOldPar1" minnum="0" />
             <SEG type="CommListPar2" minnum="0"/>
             <SEG type="CommListPar3" minnum="0"/>
             <SEG type="CommListPar4" minnum="0"/>

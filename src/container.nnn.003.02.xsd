@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!-- Version gemäß DFÜ-Abkommen Anlage 3, Version 2.7, gültig ab November 2013 -->
+<!-- Mit XMLSpy v2008 am 17.12.2012 von der SIZ GmbH bearbeitet -->
+<!-- SEPA Kunde-Bank-Nachrichten via XML-Container (gemäß Kapitel 9 der o.g. Spezifikation) für pain.001, pain.002 and pain.008, es ist nur der (sortenreine) Transport von Nachrichten mit Mittelblock 003 möglich (s.u.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:conxml="urn:conxml:xsd:container.nnn.003.02" xmlns:DocPain001="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03" xmlns:DocPain002="urn:iso:std:iso:20022:tech:xsd:pain.002.003.03" xmlns:DocPain008="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02" targetNamespace="urn:conxml:xsd:container.nnn.003.02" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03" schemaLocation="pain.001.003.03.xsd"/>
+	<xs:import namespace="urn:iso:std:iso:20022:tech:xsd:pain.002.003.03" schemaLocation="pain.002.003.03.xsd"/>
+	<xs:import namespace="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02" schemaLocation="pain.008.003.02.xsd"/>
+	<xs:element name="conxml" type="conxml:conxml"/>
+	<xs:complexType name="conxml">
+		<xs:sequence>
+			<xs:element name="ContainerId" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ContainerId and CreDtTm should form a unique reference. This reference must be provided in the signature authorizing the container.
+Defined as optional because the data might be provided by the bank's responder system instead of customers.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SenderId">
+							<xs:annotation>
+								<xs:documentation>User ID (BCS or EBICS or RVS file and station ID, or other)</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="22"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="IdType">
+							<xs:annotation>
+								<xs:documentation>Type of ID provided. It may indicate the routing layer/communication protocol the id is valid for. Recommended are: BCS, EBIC, FTAM, BFTP, H2H, RVS, X400, CD, SFTP, SCP. It is intended to allow for additional bilaterally agreed values, so no enumeration is defined here.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="1"/>
+									<xs:maxLength value="4"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="TimeStamp">
+							<xs:annotation>
+								<xs:documentation>Time Stamp with a millisecond precision, as a numeric string of length 9 (hhmmssxxx)</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value="9"/>
+									<xs:pattern value="[0-9]{9,9}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CreDtTm" type="conxml:ISODateTime">
+				<xs:annotation>
+					<xs:documentation>Creation Timestamp for container structure</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="MsgPain001" type="conxml:MsgPain001" maxOccurs="unbounded"/>
+				<xs:element name="MsgPain002" type="conxml:MsgPain002" maxOccurs="unbounded"/>
+				<xs:element name="MsgPain008" type="conxml:MsgPain008" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgPain001">
+		<xs:sequence>
+			<xs:element name="HashValue" type="conxml:HashSHA256" minOccurs="0"/>
+			<xs:element name="HashAlgorithm" type="conxml:HashAlgorithm" minOccurs="0"/>
+			<xs:element ref="DocPain001:Document"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgPain002">
+		<xs:sequence>
+			<xs:element name="HashValue" type="conxml:HashSHA256" minOccurs="0"/>
+			<xs:element name="HashAlgorithm" type="conxml:HashAlgorithm" minOccurs="0"/>
+			<xs:element ref="DocPain002:Document"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgPain008">
+		<xs:sequence>
+			<xs:element name="HashValue" type="conxml:HashSHA256" minOccurs="0"/>
+			<xs:element name="HashAlgorithm" type="conxml:HashAlgorithm" minOccurs="0"/>
+			<xs:element ref="DocPain008:Document"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="HashSHA256">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="64"/>
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HashAlgorithm">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SHA256"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISODateTime">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+</xs:schema>

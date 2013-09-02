@@ -83,6 +83,8 @@ public class TestGVLastSEPA extends AbstractTest
     job.setParam("name","test");
     job.setParam("key","51");
     
+    job.addToQueue();
+   
     SEG seg = job.createJobSegment(0);
     seg.validate();
     String msg = seg.toString(0);

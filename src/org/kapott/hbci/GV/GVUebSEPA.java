@@ -20,7 +20,7 @@
 */
 
 package org.kapott.hbci.GV;
-
+ 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -28,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import org.kapott.hbci.GV.generators.ISEPAGenerator;
+import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -153,34 +155,39 @@ public class GVUebSEPA
         // open SEPA descriptor and create an XML-Creator using it
         /* TODO: load correct schema files depending on the SEPA descriptor set
          * above, depending on the supported SEPA descriptors (BPD) */
-        InputStream f=this.getClass().getClassLoader().getResourceAsStream("pain.001.001.02.xsd");
-        XMLCreator2 creator=new XMLCreator2(f);
-
-        // define data to be filled into SEPA document
-        XMLData xmldata=new XMLData();
-        xmldata.setValue("Document/pain.001.001.02/GrpHdr/MsgId",                              getSEPAMessageId());
-        xmldata.setValue("Document/pain.001.001.02/GrpHdr/CreDtTm",                            createSEPATimestamp());
-        xmldata.setValue("Document/pain.001.001.02/GrpHdr/NbOfTxs",                            "1");
-        xmldata.setValue("Document/pain.001.001.02/GrpHdr/InitgPty/Nm",                        getSEPAParam("src.name"));
-
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/Dbtr/Nm",                            getSEPAParam("src.name"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/DbtrAgt/FinInstnId/BIC",             getSEPAParam("src.bic"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/DbtrAcct/Id/IBAN",                   getSEPAParam("src.iban"));
-
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Cdtr/Nm",                getSEPAParam("dst.name"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/CdtrAgt/FinInstnId/BIC", getSEPAParam("dst.bic"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/CdtrAcct/Id/IBAN",       getSEPAParam("dst.iban"));
-
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Amt/InstdAmt",           getSEPAParam("btg.value"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Amt/InstdAmt:Ccy",       getSEPAParam("btg.curr"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/RmtInf/Ustrd",           getSEPAParam("usage"));
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/PmtId/EndToEndId",       getSEPAMessageId());
-
-        xmldata.setValue("Document/pain.001.001.02/PmtInf/ReqdExctnDt",                        "1999-01-01"); // hart kodiert
+//    	InputStream f=this.getClass().getClassLoader().getResourceAsStream("pain.001.001.02.xsd");
+//        XMLCreator2 creator=new XMLCreator2(f);
+//
+//        // define data to be filled into SEPA document
+//        XMLData xmldata=new XMLData();
+//        xmldata.setValue("Document/pain.001.001.02/GrpHdr/MsgId",                              getSEPAMessageId());
+//        xmldata.setValue("Document/pain.001.001.02/GrpHdr/CreDtTm",                            createSEPATimestamp());
+//        xmldata.setValue("Document/pain.001.001.02/GrpHdr/NbOfTxs",                            "1");
+//        xmldata.setValue("Document/pain.001.001.02/GrpHdr/InitgPty/Nm",                        getSEPAParam("src.name"));
+//
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/Dbtr/Nm",                            getSEPAParam("src.name"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/DbtrAgt/FinInstnId/BIC",             getSEPAParam("src.bic"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/DbtrAcct/Id/IBAN",                   getSEPAParam("src.iban"));
+//
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Cdtr/Nm",                getSEPAParam("dst.name"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/CdtrAgt/FinInstnId/BIC", getSEPAParam("dst.bic"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/CdtrAcct/Id/IBAN",       getSEPAParam("dst.iban"));
+//
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Amt/InstdAmt",           getSEPAParam("btg.value"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/Amt/InstdAmt:Ccy",       getSEPAParam("btg.curr"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/RmtInf/Ustrd",           getSEPAParam("usage"));
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/CdtTrfTxInf/PmtId/EndToEndId",       getSEPAMessageId());
+//
+//        xmldata.setValue("Document/pain.001.001.02/PmtInf/ReqdExctnDt",                        "1999-01-01"); // hart kodiert
 
         // create SEPA document
         ByteArrayOutputStream o=new ByteArrayOutputStream();
-        creator.createXMLFromSchemaAndData(xmldata, o);
+    	String schema = "pain.001.001.02";
+    	ISEPAGenerator gen = SEPAGeneratorFactory.get(this, schema);
+    	gen.generate(this, o);
+        
+        
+//        creator.createXMLFromSchemaAndData(xmldata, o);
 
         // store SEPA document as parameter
         try {

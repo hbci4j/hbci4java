@@ -1,22 +1,7 @@
 
-/*  $Id: GVUebSEPA.java,v 1.1 2011/05/04 22:37:54 willuhn Exp $
-
-    This file is part of HBCI4Java
-    Copyright (C) 2001-2008  Stefan Palme
-
-    HBCI4Java is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    HBCI4Java is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+/** 
+ * Geschäftsvorfall SEPA Basislastschrift. Diese ist in pain.008.003.02.xsd spezifiziert.
+ * @author Jan Thielemann
 */
 
 package org.kapott.hbci.GV;
@@ -55,11 +40,17 @@ public class GVLastSEPA
     {
         this(handler,getLowlevelName());
         
+        
+        
+        
+        
+        
+        
         addConstraint("dst.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("dst.iban", "My.iban", null, LogFilter.FILTER_IDS);
 
-        /* TODO: take SEPA descriptor from list of supported descriptors (BPD) */
-        addConstraint("_sepadescriptor", "sepadescr", "sepade.pain.008.002.02.xsd", LogFilter.FILTER_NONE);
+		/* TODO: take SEPA descriptor from list of supported descriptors (BPD) */
+        addConstraint("_sepadescriptor", "sepadescr", "sepade.pain.008.003.03.xsd", LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain",  null,                         LogFilter.FILTER_IDS);
 
         /* dummy constraints to allow an application to set these values. the
@@ -214,137 +205,7 @@ public class GVLastSEPA
 			xmldata.setValue("Document/pain.008.002.02/PmtInf/DrctDbtTxInf/RmtInf/Ustrd",           getSEPAParam("usage"));
         }
         
-        
-        /*
-         * 
-         * Quellen:
-         * Beispiel-Datei: http://www.ebics.de/fileadmin/unsecured/anlage3/anlage3_archiv/Anlage3_V2_6_gueltigBis2013-11-03.zip
-         * [ksk] https://www.ksk-koeln.de/erstellung-einer-sepa-lastschriftdatei-aus-dta-dateien.xlsx?forced=true
-         * [bayernlb]  http://www.bayernlb.de/internet/media/internet_4/de_1/downloads_5/0800_financial_office_it_operations_5/4200_1/sepa_5/sepaaktuell/Newsletter_SEPA_006.pdf
-        <PmtInf>
-		!<PmtInfId>Payment-ID</PmtInfId>
-		!<PmtMtd>DD</PmtMtd>
-		!<NbOfTxs>2</NbOfTxs>
-		!<CtrlSum>6655.86</CtrlSum>
-		!<PmtTpInf>
-		!	<SvcLvl>
-		!		<Cd>SEPA</Cd>
-		!	</SvcLvl>
-		!	<LclInstrm>
-		!		<Cd>CORE</Cd>
-		!	</LclInstrm>
-		!	<SeqTp>FRST</SeqTp>
-		!</PmtTpInf>
-		!<ReqdColltnDt>2010-12-03</ReqdColltnDt>
-		!<Cdtr>
-		!	<Nm>Creditor Name</Nm>
-		!</Cdtr>
-		!<CdtrAcct>
-		!	<Id>
-		!		<IBAN>DE87200500001234567890</IBAN>
-		!	</Id>
-		!</CdtrAcct>
-		!<CdtrAgt>
-		!	<FinInstnId>
-		!		<BIC>BANKDEFFXXX</BIC>
-		!	</FinInstnId>
-		!</CdtrAgt>
-		<ChrgBr>SLEV</ChrgBr>
-		!<CdtrSchmeId>		<Id>
-		!		<PrvtId>
-		!			<Othr>
-		!				<Id>DE00ZZZ00099999999</Id>
-		!				<SchmeNm>
-		!					<Prtry>SEPA</Prtry>
-		!				</SchmeNm>
-		!			</Othr>
-		!		</PrvtId>
-		!	</Id>
-		!</CdtrSchmeId>
-		<DrctDbtTxInf>
-			<PmtId>
-				<EndToEndId>OriginatorID1234</EndToEndId> 
-				// ist optional, erstmal weggelassen [bayernlb]
-			</PmtId>
-		!	<InstdAmt Ccy="EUR">6543.14</InstdAmt>
-		!	<DrctDbtTx>
-		!		<MndtRltdInf>
-		!			<MndtId>Mandate-Id</MndtId>
-		!			<DtOfSgntr>2010-11-20</DtOfSgntr>
-		!			! Dtls optional wenn auf false [ksk], weggelassen
-		!			<AmdmntInd>true</AmdmntInd>
-		!			<AmdmntInfDtls>
-		!				<OrgnlCdtrSchmeId>
-		!					<Nm>Original Creditor Name</Nm>
-		!					<Id>
-		!						<PrvtId>
-		!							<Othr>
-		!								<Id>AA00ZZZOriginalCreditorID</Id>
-		!								<SchmeNm>
-		!									<Prtry>SEPA</Prtry>
-		!								</SchmeNm>
-		!							</Othr>
-		!						</PrvtId>
-		!					</Id>
-		!				</OrgnlCdtrSchmeId>
-		!			</AmdmntInfDtls>
-		!		</MndtRltdInf>
-		!	</DrctDbtTx>
-		!	<DbtrAgt>
-		!		<FinInstnId>
-		!			<BIC>SPUEDE2UXXX</BIC>
-		!		</FinInstnId>
-		!	</DbtrAgt>
-		!	<Dbtr>
-		!		<Nm>Debtor Name</Nm>
-		!	</Dbtr>
-		!	<DbtrAcct>
-		!		<Id>
-		!			<IBAN>DE21500500009876543210</IBAN>
-		!		</Id>
-		!	</DbtrAcct>
-			<UltmtDbtr>
-				<Nm>Ultimate Debtor Name</Nm>
-			</UltmtDbtr>
-			<RmtInf>
-				<Ustrd>Unstructured Remittance Information</Ustrd>
-			</RmtInf>
-		</DrctDbtTxInf>
-		<DrctDbtTxInf>
-			<PmtId>
-				<EndToEndId>OriginatorID1235</EndToEndId>
-			</PmtId>
-			<InstdAmt Ccy="EUR">112.72</InstdAmt>
-			<DrctDbtTx>
-				<MndtRltdInf>
-					<MndtId>Other-Mandate-Id</MndtId>
-					<DtOfSgntr>2010-11-20</DtOfSgntr>
-					<AmdmntInd>false</AmdmntInd>
-				</MndtRltdInf>
-			</DrctDbtTx>
-			<DbtrAgt>
-				<FinInstnId>
-					<BIC>SPUEDE2UXXX</BIC>
-				</FinInstnId>
-			</DbtrAgt>
-			<Dbtr>
-				<Nm>Other Debtor Name</Nm>
-			</Dbtr>
-			<DbtrAcct>
-				<Id>
-					<IBAN>DE21500500001234567897</IBAN>
-				</Id>
-			</DbtrAcct>
-			<UltmtDbtr>
-				<Nm>Ultimate Debtor Name</Nm>
-			</UltmtDbtr>
-			<RmtInf>
-				<Ustrd>Unstructured Remittance Information</Ustrd>
-			</RmtInf>
-		</DrctDbtTxInf>
-	</PmtInf>
-			
-			*/
+
         // create SEPA document
         ByteArrayOutputStream o=new ByteArrayOutputStream();
         creator.createXMLFromSchemaAndData(xmldata, o);

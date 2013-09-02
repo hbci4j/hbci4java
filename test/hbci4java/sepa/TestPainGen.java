@@ -21,6 +21,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -77,7 +78,9 @@ public class TestPainGen extends AbstractTest
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DatatypeFactory df = DatatypeFactory.newInstance();
 
-    Document doc = new Document();
+//    Document doc = new Document();
+    ObjectFactory factory = new ObjectFactory();
+    Document doc = factory.createDocument();
     Pain00100102 pain = new Pain00100102();
     GroupHeader20 grpHdr = new GroupHeader20();
     PartyIdentification20 initgPty = new PartyIdentification20();
@@ -161,9 +164,11 @@ public class TestPainGen extends AbstractTest
 //    marshaller.setSchema(schema);
     marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+    marshaller.marshal(factory.createDocument(doc) ,bos);
 
     ObjectFactory of = new ObjectFactory();
     marshaller.marshal(of.createDocument(doc),bos);
+
 
     return bos.toString("UTF-8");
   }
