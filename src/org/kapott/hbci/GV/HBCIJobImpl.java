@@ -58,7 +58,11 @@ public abstract class HBCIJobImpl
 {
     private String name;              /* Job-Name mit Versionsnummer */
     private String jobName;           /* Job-Name ohne Versionsnummer */
-    private String segVersion;        /* Segment-Version */
+    public String getJobName() {
+		return jobName;
+	}
+
+	private String segVersion;        /* Segment-Version */
     private Properties llParams;       /* Eingabeparameter für diesen GV (Saldo.KTV.number) */
     private HBCIPassportList passports;
     protected HBCIJobResultImpl jobResult;         /* Objekt mit Rückgabedaten für diesen GV */

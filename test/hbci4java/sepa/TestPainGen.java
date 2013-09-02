@@ -164,7 +164,7 @@ public class TestPainGen extends AbstractTest
 //    marshaller.setSchema(schema);
     marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-    marshaller.marshal(doc,bos);
+    marshaller.marshal(factory.createDocument(doc) ,bos);
 
     return bos.toString("UTF-8");
   }

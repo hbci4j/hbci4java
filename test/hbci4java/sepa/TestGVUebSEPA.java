@@ -21,11 +21,11 @@ import java.util.Properties;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kapott.hbci.GV.HBCIJobImpl;
+import org.kapott.hbci.GV.HBCIJob;
+import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -33,32 +33,30 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportPinTan;
-import org.kapott.hbci.protocol.SEG;
+import org.kapott.hbci.status.HBCIExecStatus;
 import org.kapott.hbci.structures.Value;
 
 /**
  * Testet das Erstellen von SEPA-Basis-Lastschriften
  */
-public class TestGVLastSEPA extends AbstractTest
+public class TestGVUebSEPA extends AbstractTest
 {
-  private final static int LOGLEVEL = HBCIUtils.LOG_INFO;
+  private final static int LOGLEVEL = HBCIUtils.LOG_DEBUG;
   private final static Map<Integer,String> settings = new HashMap<Integer,String>()
   {{
-    // Demo-Konto bei der ApoBank
+    // Jans-Konto bei der DKB
     put(HBCICallback.NEED_COUNTRY,         "DE");
-    put(HBCICallback.NEED_BLZ,             "30060601");
-    put(HBCICallback.NEED_CUSTOMERID,      "0001956434");
+    put(HBCICallback.NEED_BLZ,             "12030000");
+    put(HBCICallback.NEED_CUSTOMERID,      "1007318833");
     put(HBCICallback.NEED_FILTER,          "Base64");
-    put(HBCICallback.NEED_HOST,            "hbcibanking.apobank.de/fints_pintan/receiver");
+    put(HBCICallback.NEED_HOST,            "hbci-pintan-by.s-hbci.de/PinTanServlet");
     put(HBCICallback.NEED_PASSPHRASE_LOAD, "test");
     put(HBCICallback.NEED_PASSPHRASE_SAVE, "test");
     put(HBCICallback.NEED_PORT,            "443");
-    put(HBCICallback.NEED_PT_PIN,          "11111");
-    put(HBCICallback.NEED_PT_TAN,          "123456"); // hier geht jede 6-stellige Zahl
-    put(HBCICallback.NEED_USERID,          "0001956434");
-    put(HBCICallback.NEED_PT_SECMECH,      "900"); // wird IMHO nicht benoetigt, weil es beim Demo-Account eh nur dieses eine Verfahren gibt
+    put(HBCICallback.NEED_USERID,          "1007318833");
     put(HBCICallback.NEED_CONNECTION,      ""); // ignorieren
     put(HBCICallback.CLOSE_CONNECTION,     ""); // ignorieren
+    put(HBCICallback.NEED_PT_PIN,          "x121y");
   }};
   
   private static File dir             = null;
@@ -73,22 +71,32 @@ public class TestGVLastSEPA extends AbstractTest
   @Test
   public void test001() throws Exception
   {
-    HBCIJobImpl job = (HBCIJobImpl) handler.newJob("Ueb");
+	  System.out.println("---------Erstelle Job");
+    HBCIJob job =  handler.newJob("UebSEPA");
+//    
+//    // wir nehmen einfach das erste verfuegbare Konto
+//    job.setParam("src",passport.getAccounts()[0]);
+//    job.setParam("dst",passport.getAccounts()[0]);
+//    job.setParam("btg",new Value(1L,"EUR"));
+//    job.setParam("usage","test");
+//    job.setParam("name","test");
+//    job.setParam("key","51");
+//    
     
-    // wir nehmen einfach das erste verfuegbare Konto
-    job.setParam("src",passport.getAccounts()[0]);
-    job.setParam("dst",passport.getAccounts()[0]);
-    job.setParam("btg",new Value(1L,"EUR"));
-    job.setParam("usage","test");
-    job.setParam("name","test");
-    job.setParam("key","51");
-    
+    System.out.println("---------Für Job zur Queue");
     job.addToQueue();
-   
-    SEG seg = job.createJobSegment(0);
-    seg.validate();
-    String msg = seg.toString(0);
-    Assert.assertEquals("HKUEB:0:5+0001956434:EUR:280:30060601+0001956434:EUR:280:30060601+TEST++0,01:EUR+51++TEST'",msg);
+//   
+    HBCIExecStatus ret = handler.execute();
+    HBCIJobResult res = job.getJobResult();
+    System.out.println("----------Result: "+res.toString());
+    
+    
+    
+    
+//    SEG seg = job.createJobSegment(0);
+//    seg.validate();
+//    String msg = seg.toString(0);
+//    Assert.assertEquals("HKUEB:0:5+0001956434:EUR:280:30060601+0001956434:EUR:280:30060601+TEST++0,01:EUR+51++TEST'",msg);
   }
   
   /**
@@ -104,7 +112,7 @@ public class TestGVLastSEPA extends AbstractTest
     
     props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
     props.put("client.passport.PinTan.init","1");
-    props.put("client.passport.PinTan.checkcert","0"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
+    props.put("client.passport.PinTan.checkcert","1"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
     
     // falls noetig
     props.put("client.passport.PinTan.proxy",""); // host:port
@@ -132,13 +140,13 @@ public class TestGVLastSEPA extends AbstractTest
     this.passport = (HBCIPassportPinTan) AbstractHBCIPassport.getInstance("PinTan");
     
     // init handler
-    this.handler = new HBCIHandler("300",passport);
+    this.handler = new HBCIHandler("plus",passport);
 
     // dump bpd
-    // this.dump("BPD",this.passport.getBPD());
+//    this.dump("BPD",this.passport.getBPD());
     
-    // Liste der unterstuetzten Geschaeftsvorfaelle ausgeben
-    // this.dump("Supported GV",this.handler.getSupportedLowlevelJobs());
+    //Liste der unterstuetzten Geschaeftsvorfaelle ausgeben
+     this.dump("Supported GV",this.handler.getSupportedLowlevelJobs());
   }
   
   /**
