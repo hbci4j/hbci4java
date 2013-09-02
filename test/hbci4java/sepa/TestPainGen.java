@@ -22,6 +22,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -39,6 +40,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitution2;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitutionIdentification4;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.GroupHeader20;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Grouping2Code;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Pain00100102;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification20;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification21;
@@ -77,7 +79,9 @@ public class TestPainGen extends AbstractTest
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DatatypeFactory df = DatatypeFactory.newInstance();
 
-    Document doc = new Document();
+//    Document doc = new Document();
+    ObjectFactory factory = new ObjectFactory();
+    Document doc = factory.createDocument();
     Pain00100102 pain = new Pain00100102();
     GroupHeader20 grpHdr = new GroupHeader20();
     PartyIdentification20 initgPty = new PartyIdentification20();

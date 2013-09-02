@@ -27,7 +27,12 @@
       <param name="param.schema"  value="pain.001.002.03.xsd" />
     </antcall>
   </target>
-  
+	<target name="jaxb-pain.008.003.02" description="generates the JAXB classes for the pain.008.003.02">
+		<antcall target="sub_jaxb">
+	    	<param name="param.package" value="pain_008_003_02" />
+	    	<param name="param.schema"  value="pain.008.003.02.xsd" />
+	    </antcall>
+	</target>
   <!--
     Erzeugt die Klassen fuer das angegebene Schema.
     @param param.package der Package-Name
