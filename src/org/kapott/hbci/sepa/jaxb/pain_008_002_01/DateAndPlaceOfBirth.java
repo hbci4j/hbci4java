@@ -18,10 +18,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="BirthDt" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}ISODate"/>
- *         &lt;element name="PrvcOfBirth" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max35Text" minOccurs="0"/>
- *         &lt;element name="CityOfBirth" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max35Text"/>
- *         &lt;element name="CtryOfBirth" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CountryCode"/>
+ *         &lt;element name="BirthDt" type="{urn:swift:xsd:$pain.008.002.01}ISODate"/>
+ *         &lt;element name="PrvcOfBirth" type="{urn:swift:xsd:$pain.008.002.01}Max35Text" minOccurs="0"/>
+ *         &lt;element name="CityOfBirth" type="{urn:swift:xsd:$pain.008.002.01}Max35Text"/>
+ *         &lt;element name="CtryOfBirth" type="{urn:swift:xsd:$pain.008.002.01}CountryCode"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DateAndPlaceOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "DateAndPlaceOfBirth", namespace = "urn:swift:xsd:$pain.008.002.01", propOrder = {
     "birthDt",
     "prvcOfBirth",
     "cityOfBirth",
@@ -39,13 +39,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 })
 public class DateAndPlaceOfBirth {
 
-    @XmlElement(name = "BirthDt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "BirthDt", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected XMLGregorianCalendar birthDt;
-    @XmlElement(name = "PrvcOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "PrvcOfBirth", namespace = "urn:swift:xsd:$pain.008.002.01")
     protected String prvcOfBirth;
-    @XmlElement(name = "CityOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "CityOfBirth", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected String cityOfBirth;
-    @XmlElement(name = "CtryOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "CtryOfBirth", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected String ctryOfBirth;
 
     /**

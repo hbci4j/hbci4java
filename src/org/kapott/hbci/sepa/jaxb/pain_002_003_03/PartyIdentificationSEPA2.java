@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Nm" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max70Text"/>
- *         &lt;element name="PstlAdr" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}PostalAddressSEPA" minOccurs="0"/>
- *         &lt;element name="Id" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}PartySEPAChoice" minOccurs="0"/>
+ *         &lt;element name="Nm" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}Max70Text" minOccurs="0"/>
+ *         &lt;element name="PstlAdr" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}PostalAddressSEPA" minOccurs="0"/>
+ *         &lt;element name="Id" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}PartySEPAChoice" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,18 +29,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PartyIdentificationSEPA2", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "PartyIdentificationSEPA2", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "nm",
     "pstlAdr",
     "id"
 })
 public class PartyIdentificationSEPA2 {
 
-    @XmlElement(name = "Nm", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "Nm", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected String nm;
-    @XmlElement(name = "PstlAdr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "PstlAdr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected PostalAddressSEPA pstlAdr;
-    @XmlElement(name = "Id", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Id", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected PartySEPAChoice id;
 
     /**

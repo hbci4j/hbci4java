@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="Ustrd" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max140Text"/>
- *           &lt;element name="Strd" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}StructuredRemittanceInformationSEPA1"/>
+ *           &lt;element name="Ustrd" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}Max140Text"/>
+ *           &lt;element name="Strd" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}StructuredRemittanceInformationSEPA1"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RemittanceInformationSEPA1Choice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "RemittanceInformationSEPA1Choice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
     "ustrd",
     "strd"
 })
 public class RemittanceInformationSEPA1Choice {
 
-    @XmlElement(name = "Ustrd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Ustrd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected String ustrd;
-    @XmlElement(name = "Strd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Strd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected StructuredRemittanceInformationSEPA1 strd;
 
     /**

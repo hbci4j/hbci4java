@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="BIC" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}BICIdentifier"/>
+ *         &lt;element name="BIC" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}BICIdentifier"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FinancialInstitutionIdentificationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "FinancialInstitutionIdentificationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "bic"
 })
 public class FinancialInstitutionIdentificationSEPA1 {
 
-    @XmlElement(name = "BIC", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "BIC", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", required = true)
     protected String bic;
 
     /**

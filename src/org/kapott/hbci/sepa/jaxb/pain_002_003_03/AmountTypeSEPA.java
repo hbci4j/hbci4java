@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="InstdAmt" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}ActiveOrHistoricCurrencyAndAmountSEPA"/>
+ *         &lt;element name="InstdAmt" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}ActiveOrHistoricCurrencyAndAmountSEPA"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AmountTypeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "AmountTypeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "instdAmt"
 })
 public class AmountTypeSEPA {
 
-    @XmlElement(name = "InstdAmt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "InstdAmt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", required = true)
     protected ActiveOrHistoricCurrencyAndAmountSEPA instdAmt;
 
     /**

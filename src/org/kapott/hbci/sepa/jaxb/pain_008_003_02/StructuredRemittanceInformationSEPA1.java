@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CdtrRefInf" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CreditorReferenceInformationSEPA1" minOccurs="0"/>
+ *         &lt;element name="CdtrRefInf" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}CreditorReferenceInformationSEPA1" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "StructuredRemittanceInformationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "StructuredRemittanceInformationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
     "cdtrRefInf"
 })
 public class StructuredRemittanceInformationSEPA1 {
 
-    @XmlElement(name = "CdtrRefInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "CdtrRefInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected CreditorReferenceInformationSEPA1 cdtrRefInf;
 
     /**

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CstmrCdtTrfInitn" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CustomerCreditTransferInitiationV03"/>
+ *         &lt;element name="CstmrPmtStsRpt" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}CustomerPaymentStatusReportV03"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,36 +27,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Document", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
-    "cstmrCdtTrfInitn"
+@XmlType(name = "Document", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
+    "cstmrPmtStsRpt"
 })
 public class Document {
 
-    @XmlElement(name = "CstmrCdtTrfInitn", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
-    protected CustomerCreditTransferInitiationV03 cstmrCdtTrfInitn;
+    @XmlElement(name = "CstmrPmtStsRpt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", required = true)
+    protected CustomerPaymentStatusReportV03 cstmrPmtStsRpt;
 
     /**
-     * Gets the value of the cstmrCdtTrfInitn property.
+     * Gets the value of the cstmrPmtStsRpt property.
      * 
      * @return
      *     possible object is
-     *     {@link CustomerCreditTransferInitiationV03 }
+     *     {@link CustomerPaymentStatusReportV03 }
      *     
      */
-    public CustomerCreditTransferInitiationV03 getCstmrCdtTrfInitn() {
-        return cstmrCdtTrfInitn;
+    public CustomerPaymentStatusReportV03 getCstmrPmtStsRpt() {
+        return cstmrPmtStsRpt;
     }
 
     /**
-     * Sets the value of the cstmrCdtTrfInitn property.
+     * Sets the value of the cstmrPmtStsRpt property.
      * 
      * @param value
      *     allowed object is
-     *     {@link CustomerCreditTransferInitiationV03 }
+     *     {@link CustomerPaymentStatusReportV03 }
      *     
      */
-    public void setCstmrCdtTrfInitn(CustomerCreditTransferInitiationV03 value) {
-        this.cstmrCdtTrfInitn = value;
+    public void setCstmrPmtStsRpt(CustomerPaymentStatusReportV03 value) {
+        this.cstmrPmtStsRpt = value;
     }
 
 }

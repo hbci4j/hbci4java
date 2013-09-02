@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "Priority2Code", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+@XmlType(name = "Priority2Code", namespace = "urn:swift:xsd:$pain.008.002.01")
 @XmlEnum
 public enum Priority2Code {
 

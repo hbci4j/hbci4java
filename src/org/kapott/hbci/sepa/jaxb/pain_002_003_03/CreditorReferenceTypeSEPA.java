@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CdOrPrtry" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CreditorReferenceTypeCodeSEPA"/>
- *         &lt;element name="Issr" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max35Text" minOccurs="0"/>
+ *         &lt;element name="CdOrPrtry" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}CreditorReferenceTypeCodeSEPA"/>
+ *         &lt;element name="Issr" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}Max35Text" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CreditorReferenceTypeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "CreditorReferenceTypeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "cdOrPrtry",
     "issr"
 })
 public class CreditorReferenceTypeSEPA {
 
-    @XmlElement(name = "CdOrPrtry", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "CdOrPrtry", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", required = true)
     protected CreditorReferenceTypeCodeSEPA cdOrPrtry;
-    @XmlElement(name = "Issr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Issr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected String issr;
 
     /**

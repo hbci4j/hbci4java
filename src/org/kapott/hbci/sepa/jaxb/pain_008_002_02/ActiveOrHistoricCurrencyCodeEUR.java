@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "ActiveOrHistoricCurrencyCodeEUR", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+@XmlType(name = "ActiveOrHistoricCurrencyCodeEUR", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.002.02")
 @XmlEnum
 public enum ActiveOrHistoricCurrencyCodeEUR {
 

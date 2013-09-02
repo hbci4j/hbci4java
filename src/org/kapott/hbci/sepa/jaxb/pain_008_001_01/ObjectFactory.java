@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Document_QNAME = new QName("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", "Document");
+    private final static QName _Document_QNAME = new QName("urn:sepade:xsd:pain.008.001.01", "Document");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.kapott.hbci.sepa.jaxb.pain_008_001_01
@@ -42,267 +42,355 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentIdentificationSEPA }
+     * Create an instance of {@link PartyPrivate1 }
      * 
      */
-    public PaymentIdentificationSEPA createPaymentIdentificationSEPA() {
-        return new PaymentIdentificationSEPA();
+    public PartyPrivate1 createPartyPrivate1() {
+        return new PartyPrivate1();
     }
 
     /**
-     * Create an instance of {@link FinancialInstitutionIdentificationSEPA1 }
+     * Create an instance of {@link DirectDebitTransactionInformation2 }
      * 
      */
-    public FinancialInstitutionIdentificationSEPA1 createFinancialInstitutionIdentificationSEPA1() {
-        return new FinancialInstitutionIdentificationSEPA1();
+    public DirectDebitTransactionInformation2 createDirectDebitTransactionInformation2() {
+        return new DirectDebitTransactionInformation2();
     }
 
     /**
-     * Create an instance of {@link CreditorReferenceTypeCodeSEPA }
+     * Create an instance of {@link DirectDebitTransaction4 }
      * 
      */
-    public CreditorReferenceTypeCodeSEPA createCreditorReferenceTypeCodeSEPA() {
-        return new CreditorReferenceTypeCodeSEPA();
+    public DirectDebitTransaction4 createDirectDebitTransaction4() {
+        return new DirectDebitTransaction4();
     }
 
     /**
-     * Create an instance of {@link FinancialInstitutionIdentificationSEPA3 }
+     * Create an instance of {@link ServiceLevel4 }
      * 
      */
-    public FinancialInstitutionIdentificationSEPA3 createFinancialInstitutionIdentificationSEPA3() {
-        return new FinancialInstitutionIdentificationSEPA3();
+    public ServiceLevel4 createServiceLevel4() {
+        return new ServiceLevel4();
     }
 
     /**
-     * Create an instance of {@link GroupHeaderSCT }
+     * Create an instance of {@link PersonIdentification3 }
      * 
      */
-    public GroupHeaderSCT createGroupHeaderSCT() {
-        return new GroupHeaderSCT();
+    public PersonIdentification3 createPersonIdentification3() {
+        return new PersonIdentification3();
     }
 
     /**
-     * Create an instance of {@link GenericOrganisationIdentification1 }
+     * Create an instance of {@link PersonIdentification4 }
      * 
      */
-    public GenericOrganisationIdentification1 createGenericOrganisationIdentification1() {
-        return new GenericOrganisationIdentification1();
+    public PersonIdentification4 createPersonIdentification4() {
+        return new PersonIdentification4();
     }
 
     /**
-     * Create an instance of {@link PaymentTypeInformationSCT2 }
+     * Create an instance of {@link StructuredRemittanceInformation6 }
      * 
      */
-    public PaymentTypeInformationSCT2 createPaymentTypeInformationSCT2() {
-        return new PaymentTypeInformationSCT2();
+    public StructuredRemittanceInformation6 createStructuredRemittanceInformation6() {
+        return new StructuredRemittanceInformation6();
     }
 
     /**
-     * Create an instance of {@link PartyIdentificationSEPA2 }
+     * Create an instance of {@link CashAccount8 }
      * 
      */
-    public PartyIdentificationSEPA2 createPartyIdentificationSEPA2() {
-        return new PartyIdentificationSEPA2();
+    public CashAccount8 createCashAccount8() {
+        return new CashAccount8();
     }
 
     /**
-     * Create an instance of {@link PartyIdentificationSEPA1 }
+     * Create an instance of {@link ReferredDocumentInformation1 }
      * 
      */
-    public PartyIdentificationSEPA1 createPartyIdentificationSEPA1() {
-        return new PartyIdentificationSEPA1();
+    public ReferredDocumentInformation1 createReferredDocumentInformation1() {
+        return new ReferredDocumentInformation1();
     }
 
     /**
-     * Create an instance of {@link PaymentTypeInformationSCT1 }
+     * Create an instance of {@link GroupHeader20 }
      * 
      */
-    public PaymentTypeInformationSCT1 createPaymentTypeInformationSCT1() {
-        return new PaymentTypeInformationSCT1();
+    public GroupHeader20 createGroupHeader20() {
+        return new GroupHeader20();
     }
 
     /**
-     * Create an instance of {@link PurposeSEPA }
+     * Create an instance of {@link AccountIdentification2 }
      * 
      */
-    public PurposeSEPA createPurposeSEPA() {
-        return new PurposeSEPA();
+    public AccountIdentification2 createAccountIdentification2() {
+        return new AccountIdentification2();
     }
 
     /**
-     * Create an instance of {@link CustomerCreditTransferInitiationV03 }
+     * Create an instance of {@link OrganisationIdentification2 }
      * 
      */
-    public CustomerCreditTransferInitiationV03 createCustomerCreditTransferInitiationV03() {
-        return new CustomerCreditTransferInitiationV03();
+    public OrganisationIdentification2 createOrganisationIdentification2() {
+        return new OrganisationIdentification2();
     }
 
     /**
-     * Create an instance of {@link AccountIdentificationSEPA }
+     * Create an instance of {@link ReferredDocumentAmount1Choice }
      * 
      */
-    public AccountIdentificationSEPA createAccountIdentificationSEPA() {
-        return new AccountIdentificationSEPA();
+    public ReferredDocumentAmount1Choice createReferredDocumentAmount1Choice() {
+        return new ReferredDocumentAmount1Choice();
     }
 
     /**
-     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSEPA3 }
+     * Create an instance of {@link CreditorReferenceType1 }
      * 
      */
-    public BranchAndFinancialInstitutionIdentificationSEPA3 createBranchAndFinancialInstitutionIdentificationSEPA3() {
-        return new BranchAndFinancialInstitutionIdentificationSEPA3();
+    public CreditorReferenceType1 createCreditorReferenceType1() {
+        return new CreditorReferenceType1();
     }
 
     /**
-     * Create an instance of {@link PartySEPAChoice }
+     * Create an instance of {@link Party5Choice }
      * 
      */
-    public PartySEPAChoice createPartySEPAChoice() {
-        return new PartySEPAChoice();
+    public Party5Choice createParty5Choice() {
+        return new Party5Choice();
     }
 
     /**
-     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSEPA1 }
+     * Create an instance of {@link PostalAddress5 }
      * 
      */
-    public BranchAndFinancialInstitutionIdentificationSEPA1 createBranchAndFinancialInstitutionIdentificationSEPA1() {
-        return new BranchAndFinancialInstitutionIdentificationSEPA1();
+    public PostalAddress5 createPostalAddress5() {
+        return new PostalAddress5();
     }
 
     /**
-     * Create an instance of {@link PersonIdentificationSchemeName1Choice }
+     * Create an instance of {@link CurrencyAndAmount }
      * 
      */
-    public PersonIdentificationSchemeName1Choice createPersonIdentificationSchemeName1Choice() {
-        return new PersonIdentificationSchemeName1Choice();
+    public CurrencyAndAmount createCurrencyAndAmount() {
+        return new CurrencyAndAmount();
     }
 
     /**
-     * Create an instance of {@link RemittanceInformationSEPA1Choice }
+     * Create an instance of {@link EuroMax9Amount }
      * 
      */
-    public RemittanceInformationSEPA1Choice createRemittanceInformationSEPA1Choice() {
-        return new RemittanceInformationSEPA1Choice();
+    public EuroMax9Amount createEuroMax9Amount() {
+        return new EuroMax9Amount();
     }
 
     /**
-     * Create an instance of {@link ServiceLevelSEPA }
+     * Create an instance of {@link PostalAddress1 }
      * 
      */
-    public ServiceLevelSEPA createServiceLevelSEPA() {
-        return new ServiceLevelSEPA();
+    public PostalAddress1 createPostalAddress1() {
+        return new PostalAddress1();
     }
 
     /**
-     * Create an instance of {@link CashAccountSEPA2 }
+     * Create an instance of {@link PartyIdentification23 }
      * 
      */
-    public CashAccountSEPA2 createCashAccountSEPA2() {
-        return new CashAccountSEPA2();
+    public PartyIdentification23 createPartyIdentification23() {
+        return new PartyIdentification23();
     }
 
     /**
-     * Create an instance of {@link PostalAddressSEPA }
+     * Create an instance of {@link PartyIdentification11 }
      * 
      */
-    public PostalAddressSEPA createPostalAddressSEPA() {
-        return new PostalAddressSEPA();
+    public PartyIdentification11 createPartyIdentification11() {
+        return new PartyIdentification11();
     }
 
     /**
-     * Create an instance of {@link CashAccountSEPA1 }
+     * Create an instance of {@link PartyIdentification22 }
      * 
      */
-    public CashAccountSEPA1 createCashAccountSEPA1() {
-        return new CashAccountSEPA1();
+    public PartyIdentification22 createPartyIdentification22() {
+        return new PartyIdentification22();
     }
 
     /**
-     * Create an instance of {@link OthrIdentification }
+     * Create an instance of {@link PartyIdentification12 }
      * 
      */
-    public OthrIdentification createOthrIdentification() {
-        return new OthrIdentification();
+    public PartyIdentification12 createPartyIdentification12() {
+        return new PartyIdentification12();
     }
 
     /**
-     * Create an instance of {@link OrganisationIdentificationSchemeName1Choice }
+     * Create an instance of {@link FinancialInstitutionIdentification4 }
      * 
      */
-    public OrganisationIdentificationSchemeName1Choice createOrganisationIdentificationSchemeName1Choice() {
-        return new OrganisationIdentificationSchemeName1Choice();
+    public FinancialInstitutionIdentification4 createFinancialInstitutionIdentification4() {
+        return new FinancialInstitutionIdentification4();
     }
 
     /**
-     * Create an instance of {@link AmountTypeSEPA }
+     * Create an instance of {@link PartyIdentification20 }
      * 
      */
-    public AmountTypeSEPA createAmountTypeSEPA() {
-        return new AmountTypeSEPA();
+    public PartyIdentification20 createPartyIdentification20() {
+        return new PartyIdentification20();
     }
 
     /**
-     * Create an instance of {@link CreditTransferTransactionInformationSCT }
+     * Create an instance of {@link ReferredDocumentType1 }
      * 
      */
-    public CreditTransferTransactionInformationSCT createCreditTransferTransactionInformationSCT() {
-        return new CreditTransferTransactionInformationSCT();
+    public ReferredDocumentType1 createReferredDocumentType1() {
+        return new ReferredDocumentType1();
     }
 
     /**
-     * Create an instance of {@link PaymentInstructionInformationSCT }
+     * Create an instance of {@link PaymentIdentification1 }
      * 
      */
-    public PaymentInstructionInformationSCT createPaymentInstructionInformationSCT() {
-        return new PaymentInstructionInformationSCT();
+    public PaymentIdentification1 createPaymentIdentification1() {
+        return new PaymentIdentification1();
     }
 
     /**
-     * Create an instance of {@link PersonIdentificationSEPA1Choice }
+     * Create an instance of {@link PartyIdentification17 }
      * 
      */
-    public PersonIdentificationSEPA1Choice createPersonIdentificationSEPA1Choice() {
-        return new PersonIdentificationSEPA1Choice();
+    public PartyIdentification17 createPartyIdentification17() {
+        return new PartyIdentification17();
     }
 
     /**
-     * Create an instance of {@link ActiveOrHistoricCurrencyAndAmountSEPA }
+     * Create an instance of {@link FinancialInstitutionIdentification5 }
      * 
      */
-    public ActiveOrHistoricCurrencyAndAmountSEPA createActiveOrHistoricCurrencyAndAmountSEPA() {
-        return new ActiveOrHistoricCurrencyAndAmountSEPA();
+    public FinancialInstitutionIdentification5 createFinancialInstitutionIdentification5() {
+        return new FinancialInstitutionIdentification5();
     }
 
     /**
-     * Create an instance of {@link OrganisationIdentificationSEPAChoice }
+     * Create an instance of {@link RemittanceInformation3 }
      * 
      */
-    public OrganisationIdentificationSEPAChoice createOrganisationIdentificationSEPAChoice() {
-        return new OrganisationIdentificationSEPAChoice();
+    public RemittanceInformation3 createRemittanceInformation3() {
+        return new RemittanceInformation3();
     }
 
     /**
-     * Create an instance of {@link StructuredRemittanceInformationSEPA1 }
+     * Create an instance of {@link AmendmentInformationDetails4 }
      * 
      */
-    public StructuredRemittanceInformationSEPA1 createStructuredRemittanceInformationSEPA1() {
-        return new StructuredRemittanceInformationSEPA1();
+    public AmendmentInformationDetails4 createAmendmentInformationDetails4() {
+        return new AmendmentInformationDetails4();
     }
 
     /**
-     * Create an instance of {@link CreditorReferenceInformationSEPA1 }
+     * Create an instance of {@link PaymentTypeInformation8 }
      * 
      */
-    public CreditorReferenceInformationSEPA1 createCreditorReferenceInformationSEPA1() {
-        return new CreditorReferenceInformationSEPA1();
+    public PaymentTypeInformation8 createPaymentTypeInformation8() {
+        return new PaymentTypeInformation8();
     }
 
     /**
-     * Create an instance of {@link GenericPersonIdentification1 }
+     * Create an instance of {@link PaymentInstructionInformation5 }
      * 
      */
-    public GenericPersonIdentification1 createGenericPersonIdentification1() {
-        return new GenericPersonIdentification1();
+    public PaymentInstructionInformation5 createPaymentInstructionInformation5() {
+        return new PaymentInstructionInformation5();
+    }
+
+    /**
+     * Create an instance of {@link FinancialInstitution3 }
+     * 
+     */
+    public FinancialInstitution3 createFinancialInstitution3() {
+        return new FinancialInstitution3();
+    }
+
+    /**
+     * Create an instance of {@link FinancialInstitution2 }
+     * 
+     */
+    public FinancialInstitution2 createFinancialInstitution2() {
+        return new FinancialInstitution2();
+    }
+
+    /**
+     * Create an instance of {@link Party2Choice }
+     * 
+     */
+    public Party2Choice createParty2Choice() {
+        return new Party2Choice();
+    }
+
+    /**
+     * Create an instance of {@link Pain00800101 }
+     * 
+     */
+    public Pain00800101 createPain00800101() {
+        return new Pain00800101();
+    }
+
+    /**
+     * Create an instance of {@link PartyIdentification8 }
+     * 
+     */
+    public PartyIdentification8 createPartyIdentification8() {
+        return new PartyIdentification8();
+    }
+
+    /**
+     * Create an instance of {@link RestrictedIdentification2 }
+     * 
+     */
+    public RestrictedIdentification2 createRestrictedIdentification2() {
+        return new RestrictedIdentification2();
+    }
+
+    /**
+     * Create an instance of {@link RestrictedIdentification1 }
+     * 
+     */
+    public RestrictedIdentification1 createRestrictedIdentification1() {
+        return new RestrictedIdentification1();
+    }
+
+    /**
+     * Create an instance of {@link CreditorReferenceInformation1 }
+     * 
+     */
+    public CreditorReferenceInformation1 createCreditorReferenceInformation1() {
+        return new CreditorReferenceInformation1();
+    }
+
+    /**
+     * Create an instance of {@link GenericIdentification3 }
+     * 
+     */
+    public GenericIdentification3 createGenericIdentification3() {
+        return new GenericIdentification3();
+    }
+
+    /**
+     * Create an instance of {@link GenericIdentification4 }
+     * 
+     */
+    public GenericIdentification4 createGenericIdentification4() {
+        return new GenericIdentification4();
+    }
+
+    /**
+     * Create an instance of {@link MandateRelatedInformation4 }
+     * 
+     */
+    public MandateRelatedInformation4 createMandateRelatedInformation4() {
+        return new MandateRelatedInformation4();
     }
 
     /**
@@ -314,26 +402,10 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CategoryPurposeSEPA }
-     * 
-     */
-    public CategoryPurposeSEPA createCategoryPurposeSEPA() {
-        return new CategoryPurposeSEPA();
-    }
-
-    /**
-     * Create an instance of {@link CreditorReferenceTypeSEPA }
-     * 
-     */
-    public CreditorReferenceTypeSEPA createCreditorReferenceTypeSEPA() {
-        return new CreditorReferenceTypeSEPA();
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Document }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", name = "Document")
+    @XmlElementDecl(namespace = "urn:sepade:xsd:pain.008.001.01", name = "Document")
     public JAXBElement<Document> createDocument(Document value) {
         return new JAXBElement<Document>(_Document_QNAME, Document.class, null, value);
     }

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Cd" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}ExternalServiceLevel1Code"/>
+ *         &lt;element name="Cd" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.002.02}ServiceLevelSEPACode"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,23 +27,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ServiceLevelSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "ServiceLevelSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.002.02", propOrder = {
     "cd"
 })
 public class ServiceLevelSEPA {
 
-    @XmlElement(name = "Cd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
-    protected String cd;
+    @XmlElement(name = "Cd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.002.02", required = true)
+    protected ServiceLevelSEPACode cd;
 
     /**
      * Gets the value of the cd property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link ServiceLevelSEPACode }
      *     
      */
-    public String getCd() {
+    public ServiceLevelSEPACode getCd() {
         return cd;
     }
 
@@ -52,10 +52,10 @@ public class ServiceLevelSEPA {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link ServiceLevelSEPACode }
      *     
      */
-    public void setCd(String value) {
+    public void setCd(ServiceLevelSEPACode value) {
         this.cd = value;
     }
 

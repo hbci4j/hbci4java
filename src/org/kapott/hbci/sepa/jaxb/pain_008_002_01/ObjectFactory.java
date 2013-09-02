@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Document_QNAME = new QName("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", "Document");
+    private final static QName _Document_QNAME = new QName("urn:swift:xsd:$pain.008.002.01", "Document");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.kapott.hbci.sepa.jaxb.pain_008_002_01
@@ -42,267 +42,291 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentIdentificationSEPA }
+     * Create an instance of {@link PaymentTypeInformationSDD }
      * 
      */
-    public PaymentIdentificationSEPA createPaymentIdentificationSEPA() {
-        return new PaymentIdentificationSEPA();
+    public PaymentTypeInformationSDD createPaymentTypeInformationSDD() {
+        return new PaymentTypeInformationSDD();
     }
 
     /**
-     * Create an instance of {@link FinancialInstitutionIdentificationSEPA1 }
+     * Create an instance of {@link PartySDD }
      * 
      */
-    public FinancialInstitutionIdentificationSEPA1 createFinancialInstitutionIdentificationSEPA1() {
-        return new FinancialInstitutionIdentificationSEPA1();
+    public PartySDD createPartySDD() {
+        return new PartySDD();
     }
 
     /**
-     * Create an instance of {@link CreditorReferenceTypeCodeSEPA }
+     * Create an instance of {@link PartySDDChoice }
      * 
      */
-    public CreditorReferenceTypeCodeSEPA createCreditorReferenceTypeCodeSEPA() {
-        return new CreditorReferenceTypeCodeSEPA();
+    public PartySDDChoice createPartySDDChoice() {
+        return new PartySDDChoice();
     }
 
     /**
-     * Create an instance of {@link FinancialInstitutionIdentificationSEPA3 }
+     * Create an instance of {@link PartyIdentificationSDD2 }
      * 
      */
-    public FinancialInstitutionIdentificationSEPA3 createFinancialInstitutionIdentificationSEPA3() {
-        return new FinancialInstitutionIdentificationSEPA3();
+    public PartyIdentificationSDD2 createPartyIdentificationSDD2() {
+        return new PartyIdentificationSDD2();
     }
 
     /**
-     * Create an instance of {@link GroupHeaderSCT }
+     * Create an instance of {@link PartyIdentificationSDD1 }
      * 
      */
-    public GroupHeaderSCT createGroupHeaderSCT() {
-        return new GroupHeaderSCT();
+    public PartyIdentificationSDD1 createPartyIdentificationSDD1() {
+        return new PartyIdentificationSDD1();
     }
 
     /**
-     * Create an instance of {@link GenericOrganisationIdentification1 }
+     * Create an instance of {@link PartyIdentificationSDD5 }
      * 
      */
-    public GenericOrganisationIdentification1 createGenericOrganisationIdentification1() {
-        return new GenericOrganisationIdentification1();
+    public PartyIdentificationSDD5 createPartyIdentificationSDD5() {
+        return new PartyIdentificationSDD5();
     }
 
     /**
-     * Create an instance of {@link PaymentTypeInformationSCT2 }
+     * Create an instance of {@link PartyIdentificationSDD4 }
      * 
      */
-    public PaymentTypeInformationSCT2 createPaymentTypeInformationSCT2() {
-        return new PaymentTypeInformationSCT2();
+    public PartyIdentificationSDD4 createPartyIdentificationSDD4() {
+        return new PartyIdentificationSDD4();
     }
 
     /**
-     * Create an instance of {@link PartyIdentificationSEPA2 }
+     * Create an instance of {@link PartyIdentificationSDD3 }
      * 
      */
-    public PartyIdentificationSEPA2 createPartyIdentificationSEPA2() {
-        return new PartyIdentificationSEPA2();
+    public PartyIdentificationSDD3 createPartyIdentificationSDD3() {
+        return new PartyIdentificationSDD3();
     }
 
     /**
-     * Create an instance of {@link PartyIdentificationSEPA1 }
+     * Create an instance of {@link AmendmentInformationDetailsSDD }
      * 
      */
-    public PartyIdentificationSEPA1 createPartyIdentificationSEPA1() {
-        return new PartyIdentificationSEPA1();
+    public AmendmentInformationDetailsSDD createAmendmentInformationDetailsSDD() {
+        return new AmendmentInformationDetailsSDD();
     }
 
     /**
-     * Create an instance of {@link PaymentTypeInformationSCT1 }
+     * Create an instance of {@link CurrencyAndAmountSDD }
      * 
      */
-    public PaymentTypeInformationSCT1 createPaymentTypeInformationSCT1() {
-        return new PaymentTypeInformationSCT1();
+    public CurrencyAndAmountSDD createCurrencyAndAmountSDD() {
+        return new CurrencyAndAmountSDD();
     }
 
     /**
-     * Create an instance of {@link PurposeSEPA }
+     * Create an instance of {@link CreditorReferenceInformationSDD }
      * 
      */
-    public PurposeSEPA createPurposeSEPA() {
-        return new PurposeSEPA();
+    public CreditorReferenceInformationSDD createCreditorReferenceInformationSDD() {
+        return new CreditorReferenceInformationSDD();
     }
 
     /**
-     * Create an instance of {@link CustomerCreditTransferInitiationV03 }
+     * Create an instance of {@link GenericIdentificationSDD }
      * 
      */
-    public CustomerCreditTransferInitiationV03 createCustomerCreditTransferInitiationV03() {
-        return new CustomerCreditTransferInitiationV03();
+    public GenericIdentificationSDD createGenericIdentificationSDD() {
+        return new GenericIdentificationSDD();
     }
 
     /**
-     * Create an instance of {@link AccountIdentificationSEPA }
+     * Create an instance of {@link DirectDebitTransactionSDD }
      * 
      */
-    public AccountIdentificationSEPA createAccountIdentificationSEPA() {
-        return new AccountIdentificationSEPA();
+    public DirectDebitTransactionSDD createDirectDebitTransactionSDD() {
+        return new DirectDebitTransactionSDD();
     }
 
     /**
-     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSEPA3 }
+     * Create an instance of {@link RestrictedIdentificationSDD }
      * 
      */
-    public BranchAndFinancialInstitutionIdentificationSEPA3 createBranchAndFinancialInstitutionIdentificationSEPA3() {
-        return new BranchAndFinancialInstitutionIdentificationSEPA3();
+    public RestrictedIdentificationSDD createRestrictedIdentificationSDD() {
+        return new RestrictedIdentificationSDD();
     }
 
     /**
-     * Create an instance of {@link PartySEPAChoice }
+     * Create an instance of {@link LocalInstrumentSDD }
      * 
      */
-    public PartySEPAChoice createPartySEPAChoice() {
-        return new PartySEPAChoice();
+    public LocalInstrumentSDD createLocalInstrumentSDD() {
+        return new LocalInstrumentSDD();
     }
 
     /**
-     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSEPA1 }
+     * Create an instance of {@link PostalAddressSDD }
      * 
      */
-    public BranchAndFinancialInstitutionIdentificationSEPA1 createBranchAndFinancialInstitutionIdentificationSEPA1() {
-        return new BranchAndFinancialInstitutionIdentificationSEPA1();
+    public PostalAddressSDD createPostalAddressSDD() {
+        return new PostalAddressSDD();
     }
 
     /**
-     * Create an instance of {@link PersonIdentificationSchemeName1Choice }
+     * Create an instance of {@link ServiceLevelSDD }
      * 
      */
-    public PersonIdentificationSchemeName1Choice createPersonIdentificationSchemeName1Choice() {
-        return new PersonIdentificationSchemeName1Choice();
+    public ServiceLevelSDD createServiceLevelSDD() {
+        return new ServiceLevelSDD();
     }
 
     /**
-     * Create an instance of {@link RemittanceInformationSEPA1Choice }
+     * Create an instance of {@link PaymentIdentification1 }
      * 
      */
-    public RemittanceInformationSEPA1Choice createRemittanceInformationSEPA1Choice() {
-        return new RemittanceInformationSEPA1Choice();
+    public PaymentIdentification1 createPaymentIdentification1() {
+        return new PaymentIdentification1();
     }
 
     /**
-     * Create an instance of {@link ServiceLevelSEPA }
+     * Create an instance of {@link CashAccountSDD2 }
      * 
      */
-    public ServiceLevelSEPA createServiceLevelSEPA() {
-        return new ServiceLevelSEPA();
+    public CashAccountSDD2 createCashAccountSDD2() {
+        return new CashAccountSDD2();
     }
 
     /**
-     * Create an instance of {@link CashAccountSEPA2 }
+     * Create an instance of {@link CashAccountSDD1 }
      * 
      */
-    public CashAccountSEPA2 createCashAccountSEPA2() {
-        return new CashAccountSEPA2();
+    public CashAccountSDD1 createCashAccountSDD1() {
+        return new CashAccountSDD1();
     }
 
     /**
-     * Create an instance of {@link PostalAddressSEPA }
+     * Create an instance of {@link AccountIdentificationSDD }
      * 
      */
-    public PostalAddressSEPA createPostalAddressSEPA() {
-        return new PostalAddressSEPA();
+    public AccountIdentificationSDD createAccountIdentificationSDD() {
+        return new AccountIdentificationSDD();
     }
 
     /**
-     * Create an instance of {@link CashAccountSEPA1 }
+     * Create an instance of {@link OrganisationIdentificationSDDChoice }
      * 
      */
-    public CashAccountSEPA1 createCashAccountSEPA1() {
-        return new CashAccountSEPA1();
+    public OrganisationIdentificationSDDChoice createOrganisationIdentificationSDDChoice() {
+        return new OrganisationIdentificationSDDChoice();
     }
 
     /**
-     * Create an instance of {@link OthrIdentification }
+     * Create an instance of {@link StructuredRemittanceInformationSDD }
      * 
      */
-    public OthrIdentification createOthrIdentification() {
-        return new OthrIdentification();
+    public StructuredRemittanceInformationSDD createStructuredRemittanceInformationSDD() {
+        return new StructuredRemittanceInformationSDD();
     }
 
     /**
-     * Create an instance of {@link OrganisationIdentificationSchemeName1Choice }
+     * Create an instance of {@link RemittanceInformationSDDChoice }
      * 
      */
-    public OrganisationIdentificationSchemeName1Choice createOrganisationIdentificationSchemeName1Choice() {
-        return new OrganisationIdentificationSchemeName1Choice();
+    public RemittanceInformationSDDChoice createRemittanceInformationSDDChoice() {
+        return new RemittanceInformationSDDChoice();
     }
 
     /**
-     * Create an instance of {@link AmountTypeSEPA }
+     * Create an instance of {@link PurposeSDD }
      * 
      */
-    public AmountTypeSEPA createAmountTypeSEPA() {
-        return new AmountTypeSEPA();
+    public PurposeSDD createPurposeSDD() {
+        return new PurposeSDD();
     }
 
     /**
-     * Create an instance of {@link CreditTransferTransactionInformationSCT }
+     * Create an instance of {@link PersonIdentificationSDD1 }
      * 
      */
-    public CreditTransferTransactionInformationSCT createCreditTransferTransactionInformationSCT() {
-        return new CreditTransferTransactionInformationSCT();
+    public PersonIdentificationSDD1 createPersonIdentificationSDD1() {
+        return new PersonIdentificationSDD1();
     }
 
     /**
-     * Create an instance of {@link PaymentInstructionInformationSCT }
+     * Create an instance of {@link PersonIdentificationSDD2 }
      * 
      */
-    public PaymentInstructionInformationSCT createPaymentInstructionInformationSCT() {
-        return new PaymentInstructionInformationSCT();
+    public PersonIdentificationSDD2 createPersonIdentificationSDD2() {
+        return new PersonIdentificationSDD2();
     }
 
     /**
-     * Create an instance of {@link PersonIdentificationSEPA1Choice }
+     * Create an instance of {@link PaymentInstructionInformationSDD }
      * 
      */
-    public PersonIdentificationSEPA1Choice createPersonIdentificationSEPA1Choice() {
-        return new PersonIdentificationSEPA1Choice();
+    public PaymentInstructionInformationSDD createPaymentInstructionInformationSDD() {
+        return new PaymentInstructionInformationSDD();
     }
 
     /**
-     * Create an instance of {@link ActiveOrHistoricCurrencyAndAmountSEPA }
+     * Create an instance of {@link Pain00800101 }
      * 
      */
-    public ActiveOrHistoricCurrencyAndAmountSEPA createActiveOrHistoricCurrencyAndAmountSEPA() {
-        return new ActiveOrHistoricCurrencyAndAmountSEPA();
+    public Pain00800101 createPain00800101() {
+        return new Pain00800101();
     }
 
     /**
-     * Create an instance of {@link OrganisationIdentificationSEPAChoice }
+     * Create an instance of {@link DirectDebitTransactionInformationSDD }
      * 
      */
-    public OrganisationIdentificationSEPAChoice createOrganisationIdentificationSEPAChoice() {
-        return new OrganisationIdentificationSEPAChoice();
+    public DirectDebitTransactionInformationSDD createDirectDebitTransactionInformationSDD() {
+        return new DirectDebitTransactionInformationSDD();
     }
 
     /**
-     * Create an instance of {@link StructuredRemittanceInformationSEPA1 }
+     * Create an instance of {@link MandateRelatedInformationSDD }
      * 
      */
-    public StructuredRemittanceInformationSEPA1 createStructuredRemittanceInformationSEPA1() {
-        return new StructuredRemittanceInformationSEPA1();
+    public MandateRelatedInformationSDD createMandateRelatedInformationSDD() {
+        return new MandateRelatedInformationSDD();
     }
 
     /**
-     * Create an instance of {@link CreditorReferenceInformationSEPA1 }
+     * Create an instance of {@link CreditorReferenceTypeSDD }
      * 
      */
-    public CreditorReferenceInformationSEPA1 createCreditorReferenceInformationSEPA1() {
-        return new CreditorReferenceInformationSEPA1();
+    public CreditorReferenceTypeSDD createCreditorReferenceTypeSDD() {
+        return new CreditorReferenceTypeSDD();
     }
 
     /**
-     * Create an instance of {@link GenericPersonIdentification1 }
+     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSDD2 }
      * 
      */
-    public GenericPersonIdentification1 createGenericPersonIdentification1() {
-        return new GenericPersonIdentification1();
+    public BranchAndFinancialInstitutionIdentificationSDD2 createBranchAndFinancialInstitutionIdentificationSDD2() {
+        return new BranchAndFinancialInstitutionIdentificationSDD2();
+    }
+
+    /**
+     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSDD1 }
+     * 
+     */
+    public BranchAndFinancialInstitutionIdentificationSDD1 createBranchAndFinancialInstitutionIdentificationSDD1() {
+        return new BranchAndFinancialInstitutionIdentificationSDD1();
+    }
+
+    /**
+     * Create an instance of {@link GenericIdentification3 }
+     * 
+     */
+    public GenericIdentification3 createGenericIdentification3() {
+        return new GenericIdentification3();
+    }
+
+    /**
+     * Create an instance of {@link GenericIdentification4 }
+     * 
+     */
+    public GenericIdentification4 createGenericIdentification4() {
+        return new GenericIdentification4();
     }
 
     /**
@@ -314,26 +338,34 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CategoryPurposeSEPA }
+     * Create an instance of {@link FinancialInstitutionIdentificationSDD2 }
      * 
      */
-    public CategoryPurposeSEPA createCategoryPurposeSEPA() {
-        return new CategoryPurposeSEPA();
+    public FinancialInstitutionIdentificationSDD2 createFinancialInstitutionIdentificationSDD2() {
+        return new FinancialInstitutionIdentificationSDD2();
     }
 
     /**
-     * Create an instance of {@link CreditorReferenceTypeSEPA }
+     * Create an instance of {@link FinancialInstitutionIdentificationSDD1 }
      * 
      */
-    public CreditorReferenceTypeSEPA createCreditorReferenceTypeSEPA() {
-        return new CreditorReferenceTypeSEPA();
+    public FinancialInstitutionIdentificationSDD1 createFinancialInstitutionIdentificationSDD1() {
+        return new FinancialInstitutionIdentificationSDD1();
+    }
+
+    /**
+     * Create an instance of {@link GroupHeaderSDD }
+     * 
+     */
+    public GroupHeaderSDD createGroupHeaderSDD() {
+        return new GroupHeaderSDD();
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Document }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", name = "Document")
+    @XmlElementDecl(namespace = "urn:swift:xsd:$pain.008.002.01", name = "Document")
     public JAXBElement<Document> createDocument(Document value) {
         return new JAXBElement<Document>(_Document_QNAME, Document.class, null, value);
     }

@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="DtAndPlcOfBirth" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}DateAndPlaceOfBirth"/>
- *           &lt;element name="Othr" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}GenericPersonIdentification1"/>
+ *           &lt;element name="DtAndPlcOfBirth" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}DateAndPlaceOfBirth"/>
+ *           &lt;element name="Othr" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}GenericPersonIdentification1"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PersonIdentificationSEPA1Choice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "PersonIdentificationSEPA1Choice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "dtAndPlcOfBirth",
     "othr"
 })
 public class PersonIdentificationSEPA1Choice {
 
-    @XmlElement(name = "DtAndPlcOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "DtAndPlcOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected DateAndPlaceOfBirth dtAndPlcOfBirth;
-    @XmlElement(name = "Othr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Othr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected GenericPersonIdentification1 othr;
 
     /**

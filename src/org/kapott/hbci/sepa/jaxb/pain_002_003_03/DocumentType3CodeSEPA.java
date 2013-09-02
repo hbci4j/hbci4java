@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "DocumentType3CodeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+@XmlType(name = "DocumentType3CodeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
 @XmlEnum
 public enum DocumentType3CodeSEPA {
 

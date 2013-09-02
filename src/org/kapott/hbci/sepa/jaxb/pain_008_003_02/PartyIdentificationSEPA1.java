@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Nm" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max70Text" minOccurs="0"/>
- *         &lt;element name="Id" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}PartySEPAChoice" minOccurs="0"/>
+ *         &lt;element name="Nm" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}Max70Text" minOccurs="0"/>
+ *         &lt;element name="Id" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}PartySEPAChoice" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PartyIdentificationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "PartyIdentificationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
     "nm",
     "id"
 })
 public class PartyIdentificationSEPA1 {
 
-    @XmlElement(name = "Nm", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Nm", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected String nm;
-    @XmlElement(name = "Id", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Id", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected PartySEPAChoice id;
 
     /**

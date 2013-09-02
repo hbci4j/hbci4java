@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CstmrCdtTrfInitn" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CustomerCreditTransferInitiationV03"/>
+ *         &lt;element name="CstmrDrctDbtInitn" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.002.02}CustomerDirectDebitInitiationV02"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,36 +27,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Document", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
-    "cstmrCdtTrfInitn"
+@XmlType(name = "Document", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.002.02", propOrder = {
+    "cstmrDrctDbtInitn"
 })
 public class Document {
 
-    @XmlElement(name = "CstmrCdtTrfInitn", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
-    protected CustomerCreditTransferInitiationV03 cstmrCdtTrfInitn;
+    @XmlElement(name = "CstmrDrctDbtInitn", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.002.02", required = true)
+    protected CustomerDirectDebitInitiationV02 cstmrDrctDbtInitn;
 
     /**
-     * Gets the value of the cstmrCdtTrfInitn property.
+     * Gets the value of the cstmrDrctDbtInitn property.
      * 
      * @return
      *     possible object is
-     *     {@link CustomerCreditTransferInitiationV03 }
+     *     {@link CustomerDirectDebitInitiationV02 }
      *     
      */
-    public CustomerCreditTransferInitiationV03 getCstmrCdtTrfInitn() {
-        return cstmrCdtTrfInitn;
+    public CustomerDirectDebitInitiationV02 getCstmrDrctDbtInitn() {
+        return cstmrDrctDbtInitn;
     }
 
     /**
-     * Sets the value of the cstmrCdtTrfInitn property.
+     * Sets the value of the cstmrDrctDbtInitn property.
      * 
      * @param value
      *     allowed object is
-     *     {@link CustomerCreditTransferInitiationV03 }
+     *     {@link CustomerDirectDebitInitiationV02 }
      *     
      */
-    public void setCstmrCdtTrfInitn(CustomerCreditTransferInitiationV03 value) {
-        this.cstmrCdtTrfInitn = value;
+    public void setCstmrDrctDbtInitn(CustomerDirectDebitInitiationV02 value) {
+        this.cstmrDrctDbtInitn = value;
     }
 
 }

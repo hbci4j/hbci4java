@@ -29,7 +29,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.junit.Test;
-import org.kapott.hbci.sepa.jaxb.pain_008_003_02.CustomerDirectDebitInitiationV02;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.GroupHeaderSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA1;
@@ -56,8 +55,8 @@ public class TestPainGenLastSEPA extends AbstractTest
   {
     
 	Document doc = new Document();
-	doc.setCstmrDrctDbtInitn(new CustomerDirectDebitInitiationV02());
-	setGroupHeaderSSD(doc);
+	
+	
 	setPaymentInstructionInformationSSD(doc);
        
 
@@ -96,7 +95,7 @@ public class TestPainGenLastSEPA extends AbstractTest
 		initgPty.setNm("Initiator Name");
 		header.setInitgPty(initgPty);
 		
-		doc.getCstmrDrctDbtInitn().setGrpHdr(header);
+		
 	}
 
 private String viaXMLCreator2() throws Exception

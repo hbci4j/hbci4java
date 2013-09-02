@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Cd" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}ExternalCategoryPurpose1Code"/>
+ *         &lt;element name="Cd" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}ExternalCategoryPurpose1Code"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CategoryPurposeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "CategoryPurposeSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "cd"
 })
 public class CategoryPurposeSEPA {
 
-    @XmlElement(name = "Cd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
+    @XmlElement(name = "Cd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", required = true)
     protected String cd;
 
     /**

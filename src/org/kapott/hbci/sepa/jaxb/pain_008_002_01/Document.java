@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CstmrCdtTrfInitn" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CustomerCreditTransferInitiationV03"/>
+ *         &lt;element name="pain.008.001.01" type="{urn:swift:xsd:$pain.008.002.01}pain.008.001.01"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,36 +27,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Document", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
-    "cstmrCdtTrfInitn"
+@XmlType(name = "Document", namespace = "urn:swift:xsd:$pain.008.002.01", propOrder = {
+    "pain00800101"
 })
 public class Document {
 
-    @XmlElement(name = "CstmrCdtTrfInitn", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
-    protected CustomerCreditTransferInitiationV03 cstmrCdtTrfInitn;
+    @XmlElement(name = "pain.008.001.01", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
+    protected Pain00800101 pain00800101;
 
     /**
-     * Gets the value of the cstmrCdtTrfInitn property.
+     * Gets the value of the pain00800101 property.
      * 
      * @return
      *     possible object is
-     *     {@link CustomerCreditTransferInitiationV03 }
+     *     {@link Pain00800101 }
      *     
      */
-    public CustomerCreditTransferInitiationV03 getCstmrCdtTrfInitn() {
-        return cstmrCdtTrfInitn;
+    public Pain00800101 getPain00800101() {
+        return pain00800101;
     }
 
     /**
-     * Sets the value of the cstmrCdtTrfInitn property.
+     * Sets the value of the pain00800101 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link CustomerCreditTransferInitiationV03 }
+     *     {@link Pain00800101 }
      *     
      */
-    public void setCstmrCdtTrfInitn(CustomerCreditTransferInitiationV03 value) {
-        this.cstmrCdtTrfInitn = value;
+    public void setPain00800101(Pain00800101 value) {
+        this.pain00800101 = value;
     }
 
 }

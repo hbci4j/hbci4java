@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Ctry" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CountryCode" minOccurs="0"/>
- *         &lt;element name="AdrLine" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max70Text" maxOccurs="2" minOccurs="0"/>
+ *         &lt;element name="Ctry" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}CountryCode" minOccurs="0"/>
+ *         &lt;element name="AdrLine" type="{urn:iso:std:iso:20022:tech:xsd:pain.002.003.03}Max70Text" maxOccurs="2" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PostalAddressSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "PostalAddressSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", propOrder = {
     "ctry",
     "adrLine"
 })
 public class PostalAddressSEPA {
 
-    @XmlElement(name = "Ctry", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Ctry", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected String ctry;
-    @XmlElement(name = "AdrLine", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "AdrLine", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03")
     protected List<String> adrLine;
 
     /**

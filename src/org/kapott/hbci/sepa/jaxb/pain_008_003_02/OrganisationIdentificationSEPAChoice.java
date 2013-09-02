@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="BICOrBEI" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}AnyBICIdentifier"/>
- *           &lt;element name="Othr" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}GenericOrganisationIdentification1"/>
+ *           &lt;element name="BICOrBEI" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}AnyBICIdentifier"/>
+ *           &lt;element name="Othr" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}GenericOrganisationIdentification1"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OrganisationIdentificationSEPAChoice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "OrganisationIdentificationSEPAChoice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
     "bicOrBEI",
     "othr"
 })
 public class OrganisationIdentificationSEPAChoice {
 
-    @XmlElement(name = "BICOrBEI", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "BICOrBEI", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected String bicOrBEI;
-    @XmlElement(name = "Othr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlElement(name = "Othr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
     protected GenericOrganisationIdentification1 othr;
 
     /**

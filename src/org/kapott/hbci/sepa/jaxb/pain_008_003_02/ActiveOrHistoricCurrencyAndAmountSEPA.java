@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlValue;
  * <pre>
  * &lt;complexType name="ActiveOrHistoricCurrencyAndAmountSEPA">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;urn:iso:std:iso:20022:tech:xsd:pain.001.003.03>ActiveOrHistoricCurrencyAndAmount_SimpleTypeSEPA">
- *       &lt;attribute name="Ccy" use="required" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}ActiveOrHistoricCurrencyCodeEUR" />
+ *     &lt;extension base="&lt;urn:iso:std:iso:20022:tech:xsd:pain.008.003.02>ActiveOrHistoricCurrencyAndAmount_SimpleTypeSEPA">
+ *       &lt;attribute name="Ccy" use="required" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}ActiveOrHistoricCurrencyCodeEUR" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ActiveOrHistoricCurrencyAndAmountSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
+@XmlType(name = "ActiveOrHistoricCurrencyAndAmountSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
     "value"
 })
 public class ActiveOrHistoricCurrencyAndAmountSEPA {
