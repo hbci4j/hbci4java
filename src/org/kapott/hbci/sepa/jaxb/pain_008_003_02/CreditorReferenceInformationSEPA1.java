@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Tp" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}CreditorReferenceTypeSEPA"/>
- *         &lt;element name="Ref" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}Max35Text"/>
+ *         &lt;element name="Tp" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}CreditorReferenceTypeSEPA"/>
+ *         &lt;element name="Ref" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}Max35Text"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CreditorReferenceInformationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
+@XmlType(name = "CreditorReferenceInformationSEPA1", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
     "tp",
     "ref"
 })
 public class CreditorReferenceInformationSEPA1 {
 
-    @XmlElement(name = "Tp", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
+    @XmlElement(name = "Tp", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
     protected CreditorReferenceTypeSEPA tp;
-    @XmlElement(name = "Ref", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
+    @XmlElement(name = "Ref", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
     protected String ref;
 
     /**

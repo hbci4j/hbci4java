@@ -57,29 +57,50 @@ public class GenUebSEPA00100102 implements ISEPAGenerator{
 	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	    DatatypeFactory df = DatatypeFactory.newInstance();
 
-//	    Document doc = new Document();
 	    ObjectFactory factory = new ObjectFactory();
+
 	    Document doc = factory.createDocument();
+	    
 	    Pain00100102 pain = new Pain00100102();
+	    
 	    GroupHeader20 grpHdr = new GroupHeader20();
+	    
 	    PartyIdentification20 initgPty = new PartyIdentification20();
+	    
 	    PaymentInstructionInformation4 pmtInf = new PaymentInstructionInformation4();
+	    
 	    PartyIdentification23 dbtr = new PartyIdentification23();
+	    
 	    FinancialInstitution2 dbtrAgt = new FinancialInstitution2();
+	    
 	    FinancialInstitutionIdentification4 finInstnId = new FinancialInstitutionIdentification4();
+	    
 	    CashAccount8 dbtrAcct = new CashAccount8();
+	    
 	    AccountIdentification2 id = new AccountIdentification2();
+	    
 	    CreditTransferTransactionInformation2 cdtTrfTxInf = new CreditTransferTransactionInformation2();
+	    
 	    PartyIdentification21 cdtr = new PartyIdentification21();
+	    
 	    FinancialInstitution2 cdtrAgt = new FinancialInstitution2();
+	    
 	    FinancialInstitutionIdentification4 finInstnId2 = new FinancialInstitutionIdentification4();
+	    
 	    CashAccount8 cdtrAcct = new CashAccount8();
+	    
 	    AccountIdentification2 id2 = new AccountIdentification2();
+	    
 	    AmountType3 amt = new AmountType3();
+	    
 	    EuroMax9Amount instdAmt = new EuroMax9Amount();
+	    
 	    RemittanceInformation3 rmtInf = new RemittanceInformation3();
+	    
 	    PaymentIdentification1 pmtId = new PaymentIdentification1();
+	    
 	    PaymentTypeInformation7 pmtTpInf = new PaymentTypeInformation7();
+	    
 	    ServiceLevel4 svcLvl = new ServiceLevel4();
 	    svcLvl.setCd(ServiceLevel3Code.SEPA);
 	    pmtTpInf.setSvcLvl(svcLvl);

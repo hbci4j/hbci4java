@@ -30,6 +30,32 @@
 			<param name="param.package" value="pain_001_003_03" />
 			<param name="param.schema" value="pain.001.003.03.xsd" />
 		</antcall>
+		
+		<antcall target="sub_jaxb">
+			<param name="param.package" value="pain_002_002_02" />
+			<param name="param.schema" value="pain.002.002.02.xsd" />
+		</antcall>
+		<antcall target="sub_jaxb">
+			<param name="param.package" value="pain_002_003_03" />
+			<param name="param.schema" value="pain.001.003.03.xsd" />
+		</antcall>
+		
+		<antcall target="sub_jaxb">
+			<param name="param.package" value="pain_008_001_01" />
+			<param name="param.schema" value="pain.001.003.03.xsd" />
+		</antcall>
+		<antcall target="sub_jaxb">
+			<param name="param.package" value="pain_008_002_01" />
+			<param name="param.schema" value="pain.001.003.03.xsd" />
+		</antcall>
+		<antcall target="sub_jaxb">
+			<param name="param.package" value="pain_008_002_02" />
+			<param name="param.schema" value="pain.001.003.03.xsd" />
+		</antcall>
+		<antcall target="sub_jaxb">
+			<param name="param.package" value="pain_008_003_02" />
+			<param name="param.schema" value="pain.001.003.03.xsd" />
+		</antcall>
 	</target>
 	<!--
     Erzeugt die Klassen fuer das angegebene Schema.

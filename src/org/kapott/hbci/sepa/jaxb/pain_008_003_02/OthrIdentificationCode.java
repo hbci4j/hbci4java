@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "OthrIdentificationCode", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
+@XmlType(name = "OthrIdentificationCode", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
 @XmlEnum
 public enum OthrIdentificationCode {
 

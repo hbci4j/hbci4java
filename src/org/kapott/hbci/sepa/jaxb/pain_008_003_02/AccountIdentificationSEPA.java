@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="IBAN" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}IBAN2007Identifier"/>
+ *         &lt;element name="IBAN" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}IBAN2007Identifier"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AccountIdentificationSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
+@XmlType(name = "AccountIdentificationSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
     "iban"
 })
 public class AccountIdentificationSEPA {
 
-    @XmlElement(name = "IBAN", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
+    @XmlElement(name = "IBAN", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
     protected String iban;
 
     /**

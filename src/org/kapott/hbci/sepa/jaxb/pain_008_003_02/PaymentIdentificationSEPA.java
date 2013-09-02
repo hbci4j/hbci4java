@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="InstrId" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}RestrictedIdentificationSEPA1" minOccurs="0"/>
- *         &lt;element name="EndToEndId" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}RestrictedIdentificationSEPA1"/>
+ *         &lt;element name="InstrId" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}RestrictedIdentificationSEPA1" minOccurs="0"/>
+ *         &lt;element name="EndToEndId" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}RestrictedIdentificationSEPA1"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PaymentIdentificationSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
+@XmlType(name = "PaymentIdentificationSEPA", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
     "instrId",
     "endToEndId"
 })
 public class PaymentIdentificationSEPA {
 
-    @XmlElement(name = "InstrId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
+    @XmlElement(name = "InstrId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
     protected String instrId;
-    @XmlElement(name = "EndToEndId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
+    @XmlElement(name = "EndToEndId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
     protected String endToEndId;
 
     /**

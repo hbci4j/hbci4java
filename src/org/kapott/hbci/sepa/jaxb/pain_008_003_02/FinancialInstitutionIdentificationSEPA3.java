@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="BIC" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}BICIdentifier"/>
- *           &lt;element name="Othr" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}OthrIdentification"/>
+ *           &lt;element name="BIC" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}BICIdentifier"/>
+ *           &lt;element name="Othr" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}OthrIdentification"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FinancialInstitutionIdentificationSEPA3", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
+@XmlType(name = "FinancialInstitutionIdentificationSEPA3", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
     "bic",
     "othr"
 })
 public class FinancialInstitutionIdentificationSEPA3 {
 
-    @XmlElement(name = "BIC", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
+    @XmlElement(name = "BIC", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
     protected String bic;
-    @XmlElement(name = "Othr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
+    @XmlElement(name = "Othr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
     protected OthrIdentification othr;
 
     /**

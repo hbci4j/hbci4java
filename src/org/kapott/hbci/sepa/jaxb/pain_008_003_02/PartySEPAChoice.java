@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="OrgId" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}OrganisationIdentificationSEPAChoice"/>
- *           &lt;element name="PrvtId" type="{urn:iso:std:iso:20022:tech:xsd:pain.008.003.02}PersonIdentificationSEPA1Choice"/>
+ *           &lt;element name="OrgId" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}OrganisationIdentificationSEPAChoice"/>
+ *           &lt;element name="PrvtId" type="{urn:iso:std:iso:20022:tech:xsd:pain.001.003.03}PersonIdentificationSEPA1Choice"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PartySEPAChoice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", propOrder = {
+@XmlType(name = "PartySEPAChoice", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", propOrder = {
     "orgId",
     "prvtId"
 })
 public class PartySEPAChoice {
 
-    @XmlElement(name = "OrgId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
+    @XmlElement(name = "OrgId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
     protected OrganisationIdentificationSEPAChoice orgId;
-    @XmlElement(name = "PrvtId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02")
+    @XmlElement(name = "PrvtId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
     protected PersonIdentificationSEPA1Choice prvtId;
 
     /**
