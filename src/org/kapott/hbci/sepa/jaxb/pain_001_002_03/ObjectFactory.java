@@ -34,6 +34,7 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link Document }
      * 
      */
@@ -43,6 +44,9 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PaymentIdentificationSEPA }
+=======
+     * Create an instance of {@link GroupHeaderSCT }
+>>>>>>> d1ce32a08f7c37c8ec2c035c72448bf31c6ec9f1
      * 
      */
     public PaymentIdentificationSEPA createPaymentIdentificationSEPA() {
@@ -82,7 +86,27 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link PaymentTypeInformationSCT2 }
+=======
+     * Create an instance of {@link CreditorReferenceTypeCodeSEPA }
+     * 
+     */
+    public CreditorReferenceTypeCodeSEPA createCreditorReferenceTypeCodeSEPA() {
+        return new CreditorReferenceTypeCodeSEPA();
+    }
+
+    /**
+     * Create an instance of {@link PaymentIdentificationSEPA }
+     * 
+     */
+    public PaymentIdentificationSEPA createPaymentIdentificationSEPA() {
+        return new PaymentIdentificationSEPA();
+    }
+
+    /**
+     * Create an instance of {@link ActiveOrHistoricCurrencyAndAmountSEPA }
+>>>>>>> d1ce32a08f7c37c8ec2c035c72448bf31c6ec9f1
      * 
      */
     public PaymentTypeInformationSCT2 createPaymentTypeInformationSCT2() {
@@ -98,7 +122,19 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link PartyIdentificationSEPA1 }
+=======
+     * Create an instance of {@link FinancialInstitutionIdentificationSEPA1 }
+     * 
+     */
+    public FinancialInstitutionIdentificationSEPA1 createFinancialInstitutionIdentificationSEPA1() {
+        return new FinancialInstitutionIdentificationSEPA1();
+    }
+
+    /**
+     * Create an instance of {@link AccountIdentificationSEPA }
+>>>>>>> d1ce32a08f7c37c8ec2c035c72448bf31c6ec9f1
      * 
      */
     public PartyIdentificationSEPA1 createPartyIdentificationSEPA1() {
@@ -146,11 +182,19 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSEPA1 }
      * 
      */
     public BranchAndFinancialInstitutionIdentificationSEPA1 createBranchAndFinancialInstitutionIdentificationSEPA1() {
         return new BranchAndFinancialInstitutionIdentificationSEPA1();
+=======
+     * Create an instance of {@link Document }
+     * 
+     */
+    public Document createDocument() {
+        return new Document();
+>>>>>>> d1ce32a08f7c37c8ec2c035c72448bf31c6ec9f1
     }
 
     /**
@@ -170,6 +214,7 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link ServiceLevelSEPA }
      * 
      */
@@ -179,6 +224,9 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CashAccountSEPA2 }
+=======
+     * Create an instance of {@link StructuredRemittanceInformationSEPA1 }
+>>>>>>> d1ce32a08f7c37c8ec2c035c72448bf31c6ec9f1
      * 
      */
     public CashAccountSEPA2 createCashAccountSEPA2() {
@@ -250,6 +298,7 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link OrganisationIdentificationSEPAChoice }
      * 
      */
@@ -259,6 +308,9 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link StructuredRemittanceInformationSEPA1 }
+=======
+     * Create an instance of {@link RemittanceInformationSEPA1Choice }
+>>>>>>> d1ce32a08f7c37c8ec2c035c72448bf31c6ec9f1
      * 
      */
     public StructuredRemittanceInformationSEPA1 createStructuredRemittanceInformationSEPA1() {
