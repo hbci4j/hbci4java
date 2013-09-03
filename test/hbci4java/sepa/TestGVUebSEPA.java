@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -41,10 +43,10 @@ import org.kapott.hbci.structures.Value;
  */
 public class TestGVUebSEPA extends AbstractTest
 {
-  private final static int LOGLEVEL = HBCIUtils.LOG_DEBUG;
+  private final static int LOGLEVEL = HBCIUtils.LOG_INTERN;
   private final static Map<Integer,String> settings = new HashMap<Integer,String>()
   {{
-    // Jans-Konto bei der DKB
+	//TODO: Ein bisschen Geld auf folgendes Konto überweisen ;) 
     put(HBCICallback.NEED_COUNTRY,         "DE");
     put(HBCICallback.NEED_BLZ,             "12030000");
     put(HBCICallback.NEED_CUSTOMERID,      "1007318833");
@@ -56,7 +58,6 @@ public class TestGVUebSEPA extends AbstractTest
     put(HBCICallback.NEED_USERID,          "1007318833");
     put(HBCICallback.NEED_CONNECTION,      ""); // ignorieren
     put(HBCICallback.CLOSE_CONNECTION,     ""); // ignorieren
-    put(HBCICallback.NEED_PT_PIN,          "x121y");
   }};
   
   private static File dir             = null;
@@ -75,10 +76,10 @@ public class TestGVUebSEPA extends AbstractTest
     HBCIJob job =  handler.newJob("UebSEPA");
 //    
 //    // wir nehmen einfach das erste verfuegbare Konto
-//    job.setParam("src",passport.getAccounts()[0]);
-//    job.setParam("dst",passport.getAccounts()[0]);
-//    job.setParam("btg",new Value(1L,"EUR"));
-//    job.setParam("usage","test");
+    job.setParam("src",passport.getAccounts()[0]);
+    job.setParam("dst",passport.getAccounts()[0]);
+    job.setParam("btg",new Value(1L,"EUR"));
+    job.setParam("usage","test");
 //    job.setParam("name","test");
 //    job.setParam("key","51");
 //    
@@ -90,7 +91,7 @@ public class TestGVUebSEPA extends AbstractTest
     HBCIJobResult res = job.getJobResult();
     System.out.println("----------Result: "+res.toString());
     
-    
+    Assert.assertEquals("Job Result ist nicht OK!", true, res.isOK());
     
     
 //    SEG seg = job.createJobSegment(0);
@@ -146,7 +147,7 @@ public class TestGVUebSEPA extends AbstractTest
 //    this.dump("BPD",this.passport.getBPD());
     
     //Liste der unterstuetzten Geschaeftsvorfaelle ausgeben
-     this.dump("Supported GV",this.handler.getSupportedLowlevelJobs());
+//     this.dump("Supported GV",this.handler.getSupportedLowlevelJobs());
   }
   
   /**

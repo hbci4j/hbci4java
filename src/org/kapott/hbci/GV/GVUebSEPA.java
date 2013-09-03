@@ -31,6 +31,7 @@ import java.util.Properties;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
+import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
@@ -128,8 +129,11 @@ public class GVUebSEPA
         return result;
     }
 
-
-    protected String getSEPAMessageId()
+    /**
+     * Gibt die SEPA Message ID als String zurück. Existiert noch keine wird sie aus Datum und User ID erstellt. 
+     * @return SEPA Message ID
+     */
+    public String getSEPAMessageId()
     {
         String result=getSEPAParam("messageId");
         if (result==null) {
@@ -141,8 +145,12 @@ public class GVUebSEPA
         return result;
     }
 
-
-    protected String createSEPATimestamp()
+    /**
+     * Erstellt einen Timestamp im ISODateTime Forma.
+     * @discuss Diese methode wäre bestimmt auch gut in der SEPAGeneratorFactory oder den einzelnen Generator Klassen nützlich
+     * @return Aktuelles Datum als ISODateTime String
+     */
+    public String createSEPATimestamp()
     {
         Date             now=new Date();
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -152,6 +160,8 @@ public class GVUebSEPA
 
     protected void createSEPAFromParams()
     {
+    	
+    	//TODO: Entfernen wenn auf JAXB umgestellt ist
         // open SEPA descriptor and create an XML-Creator using it
         /* TODO: load correct schema files depending on the SEPA descriptor set
          * above, depending on the supported SEPA descriptors (BPD) */
@@ -182,13 +192,25 @@ public class GVUebSEPA
 
         // create SEPA document
         ByteArrayOutputStream o=new ByteArrayOutputStream();
-    	String schema = "pain.001.001.02";
+    	String schema = "pain.001.003.03";
     	ISEPAGenerator gen = SEPAGeneratorFactory.get(this, schema);
-    	gen.generate(this, o);
+    	try{
+    		gen.generate(this, o);
+    	}catch(Exception e){
+    		throw new HBCI_Exception("*** the _sepapain segment for this job can not be created",e);
+    	}    	
+    	if(o.size() == 0){    		
+    		throw new HBCI_Exception("*** the _sepapain segment for this job can not be created");
+    	}
         
-        
-//        creator.createXMLFromSchemaAndData(xmldata, o);
+//      creator.createXMLFromSchemaAndData(xmldata, o); //TODO: Entfernen wenn auf JAXB umgestellt ist
 
+    	try {
+			System.out.println("-------------" + o.toString("ISO-8859-1"));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         // store SEPA document as parameter
         try {
             setParam("_sepapain", "B"+o.toString("ISO-8859-1"));
@@ -213,7 +235,12 @@ public class GVUebSEPA
         this.sepaParams.setProperty(name, value);
     }
 
-    protected String getSEPAParam(String name)
+    /**
+     * Liest den Parameter zu einem gegeben Key aus dem speziellen SEPA Parametern aus
+     * @param Key
+     * @return Value
+     */
+    public String getSEPAParam(String name)
     {
         return this.sepaParams.getProperty(name);
     }
