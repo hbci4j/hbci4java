@@ -20,9 +20,8 @@
 */
 
 package org.kapott.hbci.GV;
- 
+
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -40,18 +39,16 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.xml.XMLCreator2;
-import org.kapott.hbci.xml.XMLData;
 
 public class GVUebSEPA
     extends HBCIJobImpl
 {
     private Properties sepaParams;
-    
+
     //Pain Version die genutzt werden soll. Größter gemeinsamer Nenner von Bank und HBCI4Java unterstützter Version
     //Sicherheitshalber mit default Value initialisieren, wird später überschrieben
-    private String painToUse = "pain.001.001.02";	 
-    
+    private String painToUse = "pain.001.001.02";
+
     public static String getLowlevelName()
     {
         return "UebSEPA";
@@ -66,11 +63,11 @@ public class GVUebSEPA
     public GVUebSEPA(HBCIHandler handler)
     {
         this(handler,getLowlevelName());
-        
+
         //Prüfen welche Pain Version die Bank unterstzützt und diese mit den von HBCI4Java unterstützten Pains vergleichen
         checkSupportedPainVersion(handler);
-        
-        
+
+
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
 
@@ -81,7 +78,7 @@ public class GVUebSEPA
         addConstraint("src.subnumber","My.subnumber",  "", LogFilter.FILTER_MOST);
         */
 
-        
+
 
         addConstraint("_sepadescriptor", "sepadescr", "sepade."+painToUse+".xsd", LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain",  null,                         LogFilter.FILTER_IDS);
@@ -101,52 +98,54 @@ public class GVUebSEPA
     }
 
     /**
-     * Diese Methode schaut in den BPD nach den unterstzützen pain Versionen (bei UebSEPA pain.001.xxx.xx) 
+     * Diese Methode schaut in den BPD nach den unterstzützen pain Versionen (bei UebSEPA pain.001.xxx.xx)
      * und vergleicht diese mit den von HBCI4Java unterstützen pain Versionen. Der größte gemeinsamme Nenner
-     * wird schließlich in this.painToUse gespeichert.  
+     * wird schließlich in this.painToUse gespeichert.
      * @param handler
      */
     private void checkSupportedPainVersion(HBCIHandler handler) {
     	//Erst prüfen ob die SEPAInfo überhaupt vorhanden ist
     	if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") !=null)
         {
-    		//Regex für die pain Version			
+    		//Regex für die pain Version
 			Pattern pattern = Pattern.compile("pain\\.001\\.(\\d\\d\\d\\.\\d\\d)");
-			
+
 			//Liste zum speichern aller gefundenen pain Versionen
 			ArrayList<String[]> validPains = new ArrayList<String[]>();
-			
+
 			//SEPAInfo laden und darüber iterieren
+        HBCIUtils.log("available pain schema versions",HBCIUtils.LOG_DEBUG);
     		Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
 			Enumeration<?> e = props.propertyNames();
 			while(e.hasMoreElements()){
 				String key = (String) e.nextElement();
 				String val = props.getProperty(key);
-								
+
 				//pain Version suchen
 				Matcher m = pattern.matcher(val);
 				while (m.find()) {
+	        HBCIUtils.log("  " + val,HBCIUtils.LOG_DEBUG);
 					//Prüfen ob die gefundene pain Version von HBCI4Java unterstützt wird. Dazu einfach prüfen ob das pain Schema vorhanden ist
 					String rawpain  = m.group(1);
 					URL u = GVUebSEPA.class.getClassLoader().getResource("pain.001."+rawpain+".xsd");
 					if (u != null) {
-						validPains.add(rawpain.split("\\."));   
-					}					
+						validPains.add(rawpain.split("\\."));
+					}
 				}
 			}
-			
+
 			int maxMajorVersion = 0;
 			int maxMinorVersion = 0;
 			for(String[] pain : validPains){
 				int maj = Integer.parseInt(pain[0]);
-				maxMajorVersion = maj > maxMajorVersion ? maj : maxMajorVersion; 
+				maxMajorVersion = maj > maxMajorVersion ? maj : maxMajorVersion;
 			}
 			for(String[] pain : validPains){
 				int maj = Integer.parseInt(pain[0]);
 				int min = Integer.parseInt(pain[1]);
 				if(maj == maxMajorVersion){
 					maxMinorVersion = min > maxMinorVersion ? min : maxMinorVersion;
-				} 
+				}
 			}
 			for(String[] pain : validPains){
 				int maj = Integer.parseInt(pain[0]);
@@ -195,7 +194,7 @@ public class GVUebSEPA
     }
 
     /**
-     * Gibt die SEPA Message ID als String zurück. Existiert noch keine wird sie aus Datum und User ID erstellt. 
+     * Gibt die SEPA Message ID als String zurück. Existiert noch keine wird sie aus Datum und User ID erstellt.
      * @return SEPA Message ID
      */
     public String getSEPAMessageId()
@@ -225,7 +224,7 @@ public class GVUebSEPA
 
     protected void createSEPAFromParams()
     {
-    	
+
     	//TODO: Entfernen wenn auf JAXB umgestellt ist
         // open SEPA descriptor and create an XML-Creator using it
         /* TODO: load correct schema files depending on the SEPA descriptor set
@@ -263,19 +262,18 @@ public class GVUebSEPA
     		gen.generate(this, o);
     	}catch(Exception e){
     		throw new HBCI_Exception("*** the _sepapain segment for this job can not be created",e);
-    	}    	
-    	
-    	if(o.size() == 0)  		
+    	}
+
+    	if(o.size() == 0)
     		throw new HBCI_Exception("*** the _sepapain segment for this job can not be created");
-    	
-        
+
+
 //      creator.createXMLFromSchemaAndData(xmldata, o); //TODO: Entfernen wenn auf JAXB umgestellt ist
 
     	try {
-			System.out.println("-------------" + o.toString("ISO-8859-1"));
+    	  HBCIUtils.log("generated SEPA: " + o.toString("ISO-8859-1"),HBCIUtils.LOG_DEBUG);
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+        HBCIUtils.log(e1,HBCIUtils.LOG_DEBUG);
 		}
         // store SEPA document as parameter
         try {
