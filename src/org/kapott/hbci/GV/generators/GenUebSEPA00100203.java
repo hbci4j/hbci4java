@@ -1,6 +1,5 @@
 package org.kapott.hbci.GV.generators;
 
-
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -13,47 +12,41 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.GV.GVUebSEPA;
 import org.kapott.hbci.GV.HBCIJob;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.AccountIdentificationSEPA;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyAndAmountSEPA;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyCodeEUR;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.AmountTypeSEPA;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.BranchAndFinancialInstitutionIdentificationSEPA1;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.BranchAndFinancialInstitutionIdentificationSEPA3;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.CashAccountSEPA1;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.CashAccountSEPA2;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ChargeBearerTypeSEPACode;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.CreditTransferTransactionInformationSCT;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.CustomerCreditTransferInitiationV03;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.Document;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.FinancialInstitutionIdentificationSEPA1;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.FinancialInstitutionIdentificationSEPA3;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.GroupHeaderSCT;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ObjectFactory;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PartyIdentificationSEPA1;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PartyIdentificationSEPA2;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PaymentIdentificationSEPA;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PaymentInstructionInformationSCT;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PaymentMethodSCTCode;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.RemittanceInformationSEPA1Choice;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.AccountIdentificationSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ActiveOrHistoricCurrencyAndAmountSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ActiveOrHistoricCurrencyCodeEUR;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.AmountTypeSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.BranchAndFinancialInstitutionIdentificationSEPA1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.CashAccountSEPA1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.CashAccountSEPA2;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ChargeBearerTypeSEPACode;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.CreditTransferTransactionInformationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.CustomerCreditTransferInitiationV03;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.Document;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.FinancialInstitutionIdentificationSEPA1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.GroupHeaderSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ObjectFactory;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PartyIdentificationSEPA1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PartyIdentificationSEPA2;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentIdentificationSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentInstructionInformationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentMethodSCTCode;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.RemittanceInformationSEPA1Choice;
 
-public class GenUebSEPA00100303 implements ISEPAGenerator{
+public class GenUebSEPA00100203 implements ISEPAGenerator{
 
 	@Override
 	public void generate(HBCIJob job, ByteArrayOutputStream os)
-			throws Exception {
-		
-		
+			throws Exception {		
 		generate((GVUebSEPA)job, os);
-		
 	}
+	
 	public void generate(GVUebSEPA job, ByteArrayOutputStream os) throws Exception {
-		
 		//Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
 		Date now=new Date();
 		SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	    DatatypeFactory df = DatatypeFactory.newInstance();
-		
-		
+	    	    
 		//Document
 		Document doc = new Document();
 		
@@ -80,10 +73,13 @@ public class GenUebSEPA00100303 implements ISEPAGenerator{
 		pmtInf.setPmtInfId(job.getSEPAMessageId()); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
-		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		/*FIXME: Hier schreiben wir den 1.1.1999 rein. Die Transaktion wird dann am nächsten Werktag ausgeführt. Nimmt man hier jedoch
+				 das aktuelle Datum so erhält man den HBCI Fehler: "Das Ausführungsdatum darf nicht gesetzt sein.*/
+		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01")); 
+		
 		pmtInf.setDbtr(new PartyIdentificationSEPA2());
 		pmtInf.setDbtrAcct(new CashAccountSEPA1());
-		pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA3());
+		pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA1());
 		
 		
 		//Payment Information - Debtor
@@ -96,7 +92,7 @@ public class GenUebSEPA00100303 implements ISEPAGenerator{
 		
 		
 		//Payment Information - DebtorAgent
-		pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA3());
+		pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA1());
 		pmtInf.getDbtrAgt().getFinInstnId().setBIC(job.getSEPAParam("src.bic"));
 		
 		
@@ -134,15 +130,14 @@ public class GenUebSEPA00100303 implements ISEPAGenerator{
 		cdtTrxTxInf.setAmt(new AmountTypeSEPA());
 		cdtTrxTxInf.getAmt().setInstdAmt(new ActiveOrHistoricCurrencyAndAmountSEPA());
 		cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(job.getSEPAParam("btg.value")));
-		
-		//FIXME: Schema sagt es gibt nur "eur" aber besser wäre bestimmt trotzdem getSEPAParam("btg.curr") oder?
-		cdtTrxTxInf.getAmt().getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR); 
-		
+		cdtTrxTxInf.getAmt().getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR); //FIXME: Schema sagt es gibt nur eur aber besser wäre bestimmt getSEPAParam("btg.curr")
 		
 
 		//Payment Information - Credit Transfer Transaction Information - Usage
-		//FIXME: momentan nur unstrukturierter Verwendungszweck! Vielleicht gibt es einen Parameter dafür? Dann kann man per If entscheiden
+		//FIXME: momentan nur unstrukturierter Verwendungszweck! BPD auslesen oder Anwendung bestimmen lassen
 		cdtTrxTxInf.setRmtInf(new RemittanceInformationSEPA1Choice());
+		
+		//FIXME: Usage kann umlaute, Fragezeichen oder andere Sonderzeichen enthalten. Diese sollten vorher entfernt oder ersetzt werden
 		cdtTrxTxInf.getRmtInf().setUstrd(job.getSEPAParam("usage"));
 
 
@@ -158,5 +153,6 @@ public class GenUebSEPA00100303 implements ISEPAGenerator{
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.marshal(of.createDocument(doc), os);
 	}
+
 
 }

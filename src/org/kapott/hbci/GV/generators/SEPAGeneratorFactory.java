@@ -34,7 +34,7 @@ public class SEPAGeneratorFactory {
             Constructor cons=cl.getConstructor();
             ret=(ISEPAGenerator)cons.newInstance();
         } catch (ClassNotFoundException e) {
-            throw new InvalidUserDataException("*** there is no highlevel job named "+job.getName()+" - need class "+className);
+            throw new InvalidUserDataException("*** there is no ISEPAGenerator class named " + className +". Maybe the pain version is not supported");
         } catch (Exception e) {
             String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_GENERATOR_CREATE_ERR",job.getName()); //TODO: Msg anlegen
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreCreateJobErrors",msg))

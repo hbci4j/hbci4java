@@ -12,28 +12,30 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.GV.GVUebSEPA;
 import org.kapott.hbci.GV.HBCIJob;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.AccountIdentification2;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.AmountType3;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.CashAccount8;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ChargeBearerType2Code;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.CreditTransferTransactionInformation2;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Document;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.EuroMax9Amount;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitution2;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitutionIdentification4;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.GroupHeader20;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ObjectFactory;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Pain00100102;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification20;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification21;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification23;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentIdentification1;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentInstructionInformation4;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentMethod5Code;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.RemittanceInformation3;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AccountIdentificationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AmountTypeSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.BranchAndFinancialInstitutionIdentificationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CashAccountSCT1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CashAccountSCT2;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ChargeBearerTypeSCTCode;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CreditTransferTransactionInformationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CurrencyAndAmountSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CurrencyCodeSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Document;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.FinancialInstitutionIdentificationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.GroupHeaderSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ObjectFactory;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Pain00100102;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PartyIdentificationSCT1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PartyIdentificationSCT2;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentIdentification1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentInstructionInformationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentMethodSCTCode;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.RemittanceInformationSCTChoice;
 
 
-public class GenUebSEPA00100102 implements ISEPAGenerator{
+
+public class GenUebSEPA00100202 implements ISEPAGenerator{
 
 	@Override
 	public void generate(HBCIJob job, ByteArrayOutputStream os)
@@ -59,27 +61,29 @@ public class GenUebSEPA00100102 implements ISEPAGenerator{
 		doc.setPain00100102(new Pain00100102());
 		
 		
-		doc.getPain00100102().setGrpHdr(new GroupHeader20());
+		doc.getPain00100102().setGrpHdr(new GroupHeaderSCT());
 				
 		//Group Header
 		doc.getPain00100102().getGrpHdr().setMsgId(job.getSEPAMessageId());
 		doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 	    doc.getPain00100102().getGrpHdr().setNbOfTxs("1");
-		doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentification20());
+		doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentificationSCT1());
 		doc.getPain00100102().getGrpHdr().getInitgPty().setNm(job.getSEPAParam("src.name"));
 		
 		
 		//Payment Information 
-		PaymentInstructionInformation4 pmtInf = doc.getPain00100102().getPmtInf();
+		ArrayList<PaymentInstructionInformationSCT> pmtInfs = (ArrayList<PaymentInstructionInformationSCT>) doc.getPain00100102().getPmtInf();
+		PaymentInstructionInformationSCT pmtInf = new PaymentInstructionInformationSCT();
+		pmtInfs.add(pmtInf);
 		
 		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
 		pmtInf.setPmtInfId(job.getSEPAMessageId()); 
-		pmtInf.setPmtMtd(PaymentMethod5Code.TRF);
+		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
 		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
-		pmtInf.setDbtr(new PartyIdentification23());
-		pmtInf.setDbtrAcct(new CashAccount8());
-		pmtInf.setDbtrAgt(new FinancialInstitution2());
+		pmtInf.setDbtr(new PartyIdentificationSCT2());
+		pmtInf.setDbtrAcct(new CashAccountSCT1());
+		pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
 		
 		
 		//Payment Information - Debtor
@@ -87,22 +91,22 @@ public class GenUebSEPA00100102 implements ISEPAGenerator{
 		
 		
 		//Payment Information - DebtorAccount
-		pmtInf.getDbtrAcct().setId(new AccountIdentification2());
+		pmtInf.getDbtrAcct().setId(new AccountIdentificationSCT());
 		pmtInf.getDbtrAcct().getId().setIBAN(job.getSEPAParam("src.iban"));
 		
 		
 		//Payment Information - DebtorAgent
-		pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentification4());
+		pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
 		pmtInf.getDbtrAgt().getFinInstnId().setBIC(job.getSEPAParam("src.bic"));
 		
 		
 		//Payment Information - ChargeBearer
-		pmtInf.setChrgBr(ChargeBearerType2Code.SLEV);
+		pmtInf.setChrgBr(ChargeBearerTypeSCTCode.SLEV);
 		
 		
 		//Payment Information - Credit Transfer Transaction Information
-		ArrayList<CreditTransferTransactionInformation2> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformation2>) pmtInf.getCdtTrfTxInf();
-		CreditTransferTransactionInformation2 cdtTrxTxInf = new CreditTransferTransactionInformation2();
+		ArrayList<CreditTransferTransactionInformationSCT> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformationSCT>) pmtInf.getCdtTrfTxInf();
+		CreditTransferTransactionInformationSCT cdtTrxTxInf = new CreditTransferTransactionInformationSCT();
 		cdtTrxTxInfs.add(cdtTrxTxInf);
 		
 		
@@ -112,33 +116,33 @@ public class GenUebSEPA00100102 implements ISEPAGenerator{
 		
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor
-		cdtTrxTxInf.setCdtr(new PartyIdentification21());
+		cdtTrxTxInf.setCdtr(new PartyIdentificationSCT2());
 		cdtTrxTxInf.getCdtr().setNm(job.getSEPAParam("dst.name"));
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor Account
-		cdtTrxTxInf.setCdtrAcct(new CashAccount8());
-		cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentification2());
+		cdtTrxTxInf.setCdtrAcct(new CashAccountSCT2());
+		cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentificationSCT());
 		cdtTrxTxInf.getCdtrAcct().getId().setIBAN(job.getSEPAParam("dst.iban"));
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor Agent
-		cdtTrxTxInf.setCdtrAgt(new FinancialInstitution2());
-		cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentification4());
+		cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
+		cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
 		cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(job.getSEPAParam("dst.bic"));
 
 
 		//Payment Information - Credit Transfer Transaction Information - Amount
-		cdtTrxTxInf.setAmt(new AmountType3());
-		cdtTrxTxInf.getAmt().setInstdAmt(new EuroMax9Amount());
+		cdtTrxTxInf.setAmt(new AmountTypeSCT());
+		cdtTrxTxInf.getAmt().setInstdAmt(new CurrencyAndAmountSCT());
 		cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(job.getSEPAParam("btg.value")));
 		
 		//FIXME: Schema sagt es gibt nur "eur" aber besser wäre bestimmt trotzdem getSEPAParam("btg.curr") oder?
-		cdtTrxTxInf.getAmt().getInstdAmt().setCcy("EUR"); 
+		cdtTrxTxInf.getAmt().getInstdAmt().setCcy(CurrencyCodeSCT.EUR); 
 		
 		
 
 		//Payment Information - Credit Transfer Transaction Information - Usage
 		//FIXME: momentan nur unstrukturierter Verwendungszweck! Vielleicht gibt es einen Parameter dafür? Dann kann man per If entscheiden
-		cdtTrxTxInf.setRmtInf(new RemittanceInformation3());
+		cdtTrxTxInf.setRmtInf(new RemittanceInformationSCTChoice());
 		cdtTrxTxInf.getRmtInf().setUstrd(job.getSEPAParam("usage"));
 
 

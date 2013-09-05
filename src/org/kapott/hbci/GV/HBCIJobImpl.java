@@ -402,7 +402,7 @@ public abstract class HBCIJobImpl
         String[][] values=(String[][])(constraints.get(frontendName));
 
         if (values==null) {
-            // wenn es noch keine gibt, ein neues frontend-ding anlegen
+            // wenn es noch keine gibt, ein neues frontend-ding anlegen //FIXME: was ist ein "frontend-ding"?
             values=new String[1][];
             values[0]=value;
         } else {
@@ -432,8 +432,9 @@ public abstract class HBCIJobImpl
 
             // durch alle ziel-lowlevel-parameternamen durchlaufen, die gesetzt werden müssen
             for (int j=0;j<values.length;j++) {
+            	//Array mit Pfadname und default Wert 
                 String[] value=values[j];
-                // lowlevel-name des parameters
+                // lowlevel-name (Pfadname) des parameters (z.B. wird Frontendname src.bic zum Pfad My.bic
                 String   destination=value[0];
                 // default-wert des parameters, wenn keiner angegeben wurde
                 String   defValue=value[1];
