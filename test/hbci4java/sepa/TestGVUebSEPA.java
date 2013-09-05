@@ -36,6 +36,7 @@ import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportPinTan;
 import org.kapott.hbci.status.HBCIExecStatus;
+import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
 /**
@@ -43,7 +44,7 @@ import org.kapott.hbci.structures.Value;
  */
 public class TestGVUebSEPA extends AbstractTest
 {
-  private final static int LOGLEVEL = HBCIUtils.LOG_INTERN;
+  private final static int LOGLEVEL = HBCIUtils.LOG_INFO;
   private final static Map<Integer,String> settings = new HashMap<Integer,String>()
   {{
 	//TODO: Ein bisschen Geld auf folgendes Konto überweisen ;) 
@@ -74,22 +75,29 @@ public class TestGVUebSEPA extends AbstractTest
   {
 	  System.out.println("---------Erstelle Job");
     HBCIJob job =  handler.newJob("UebSEPA");
-//    
-//    // wir nehmen einfach das erste verfuegbare Konto
-    job.setParam("src",passport.getAccounts()[0]);
+
+    
+//    //Mal schauen welche Konten ich habe
+//    int i = 0;
+//    for(Konto konto : passport.getAccounts()){
+//    	System.out.println("Konto " + i +": " + konto);
+//    	i++;
+//    }
+    
+    job.setParam("src",passport.getAccounts()[2]);
     job.setParam("dst",passport.getAccounts()[0]);
-    job.setParam("btg",new Value(1L,"EUR"));
-    job.setParam("usage","test");
-//    job.setParam("name","test");
-//    job.setParam("key","51");
-//    
+    job.setParam("btg",new Value(100L,"EUR"));
+    job.setParam("usage","Hello SEPA Ueberweisung");
+
     
     System.out.println("---------Für Job zur Queue");
     job.addToQueue();
-//   
+
+    
     HBCIExecStatus ret = handler.execute();
     HBCIJobResult res = job.getJobResult();
     System.out.println("----------Result: "+res.toString());
+      
     
     Assert.assertEquals("Job Result ist nicht OK!", true, res.isOK());
     
