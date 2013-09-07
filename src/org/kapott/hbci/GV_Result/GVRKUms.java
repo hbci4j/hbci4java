@@ -484,7 +484,8 @@ public class GVRKUms
                         // abweichen, dann ist das jahr des bdate falsch (1.1.2005 vs. 31.12.2004)
                         // korrektur des bdate-jahres in die richtige richtung notwendig
                         // TODO: YEAR-Auto-Complete. Das kann fehlschlagen. Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=75348
-                        if (Math.abs(line.bdate.getTime()-line.valuta.getTime())>30L*24*3600*1000) {
+                        // FE: ein Monat reicht nicht, es sollte schon ein halbes Jahr sein - es gab verschiedene Probleme mit Umsaetzen im falschen Jahr!!
+                        if (Math.abs(line.bdate.getTime()-line.valuta.getTime())>180L*24*3600*1000) {
                             int diff;
                             
                             if (line.bdate.before(line.valuta)) {
@@ -621,6 +622,7 @@ public class GVRKUms
                         st_multi=Swift.packMulti(st_multi.substring(3));
                         
                         if (!line.gvcode.equals("999")) {
+                        	boolean isSepa = line.gvcode.startsWith("1");
                             line.text=Swift.getMultiTagValue(st_multi,"00");
                             line.primanota=Swift.getMultiTagValue(st_multi,"10");
                             for (int i=0;i<10;i++) {
@@ -629,8 +631,8 @@ public class GVRKUms
                             
                             Konto acc=new Konto();
                             // TODO: this could also be the BIC
-                            acc.blz=Swift.getMultiTagValue(st_multi,"30");
-                            acc.number=Swift.getMultiTagValue(st_multi,"31");
+                            if(isSepa == false) acc.blz=Swift.getMultiTagValue(st_multi,"30"); else acc.bic = Swift.getMultiTagValue(st_multi, "30");
+                            if(isSepa == false) acc.number=Swift.getMultiTagValue(st_multi,"31"); else acc.iban = Swift.getMultiTagValue(st_multi,"31");
                             acc.name=Swift.getMultiTagValue(st_multi,"32");
                             acc.name2=Swift.getMultiTagValue(st_multi,"33");
                             if (acc.blz!=null ||
@@ -700,6 +702,21 @@ public class GVRKUms
                             st_end.substring(7,10));
                 }
                 
+                // Now check if the end balance (Schlusssaldo) equals balance of last statement. If not, the bank sent a wrong start balance
+                // and we have to re-calculate the balances for each statement
+                int numLines = btag.lines.size();
+                if(numLines > 0 && btag.end != null) {
+                    UmsLine lastLine = (UmsLine)btag.lines.get(numLines-1);
+                    saldo = btag.end.value.getLongValue();
+                    if(lastLine.saldo.value.getLongValue() != saldo) {
+                    	for(int i=numLines-1; i>=0; i--) {
+                    		lastLine = (UmsLine)btag.lines.get(i);
+                    		lastLine.saldo.value = new Value(saldo, btag.end.value.getCurr());
+                    		saldo -= lastLine.value.getLongValue();
+                    	}
+                    }
+                }
+
                 tage.add(btag);
                 buffer.delete(0,st_tag.length());
             }
