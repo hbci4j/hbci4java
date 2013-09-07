@@ -6,11 +6,12 @@ import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 public class SEPAGeneratorFactory {
-	
-	
+
+
 	/**
 	 * Gibt den passenden SEPA Generator für ein gegebenes Schema. Das Schema
 	 * muss dabei derzeit die Form "pain.001.001.02" oder "00100102" haben um
@@ -19,22 +20,22 @@ public class SEPAGeneratorFactory {
 	 * @return ISEPAGenerator
 	 */
 	public static ISEPAGenerator get(HBCIJob job, String schema){
-		
-		
+
+
 		//Schmenamen parsen und entsprechenden Generator für Job/Schema Kombination laden
 		String pschema = parseScheme(schema);
 		ISEPAGenerator ret=null;
-		
-		//FIXME: Der Jobname ist entspricht dem LowLevel Namen zusammen mit einer Versionsnummer
-        String      className="org.kapott.hbci.GV.generators.Gen"+job.getName()+pschema;
-        String jobname  = ((HBCIJobImpl)job).getJobName();
+
+    String jobname   = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
+    String className = "org.kapott.hbci.GV.generators.Gen" + jobname + pschema;
 
         try {
-            Class cl=Class.forName("org.kapott.hbci.GV.generators.Gen"+jobname + pschema);
+            HBCIUtils.log("trying to load SEPA creator class: " + className,HBCIUtils.LOG_INFO);
+            Class cl = Class.forName(className);
             Constructor cons=cl.getConstructor();
             ret=(ISEPAGenerator)cons.newInstance();
         } catch (ClassNotFoundException e) {
-            throw new InvalidUserDataException("*** there is no highlevel job named "+job.getName()+" - need class "+className);
+            throw new InvalidUserDataException("*** there is no ISEPAGenerator class named " + className +". Maybe the pain version is not supported");
         } catch (Exception e) {
             String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_GENERATOR_CREATE_ERR",job.getName()); //TODO: Msg anlegen
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreCreateJobErrors",msg))
@@ -44,19 +45,19 @@ public class SEPAGeneratorFactory {
 
 	}
 
-	
+
 	/**
 	 * Parst ein Schma in einen für diese Factory brauchbaren String.
 	 * @param schema
-	 * @return Schema als String der Form "00100102" 
+	 * @return Schema als String der Form "00100102"
 	 */
 	private static String parseScheme(String schema) {
-		
+
 		//Schema der Form 00100102
 		if(schema != null && schema.length() > 0 && schema.matches("[0-9]+"))
 			return schema;
-		
-		
+
+
 		//Schema der Form pain.001.001.02
 		String ret = "";
 		for(String s : schema.split("\\.")){
@@ -65,5 +66,5 @@ public class SEPAGeneratorFactory {
 		}
 		return ret;
 	}
-        
+
 }
