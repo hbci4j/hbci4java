@@ -336,6 +336,9 @@ public interface HBCICallback
      * der TAN an mehrere Mobiltelefone schicken kann. */
     public final static int NEED_PT_TANMEDIA=32;
     
+    /** <p>Ursache des Callbacks: falsche PIN eingegeben */
+    public final static int WRONG_PIN=40;
+
     /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
     public final static int TYPE_NONE=0;
     /** erwarteter Datentyp der Antwort: geheimer Text (bei Eingabe nicht anzeigen) */

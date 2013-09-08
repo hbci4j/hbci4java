@@ -264,7 +264,17 @@ public abstract class AbstractHBCIPassport
                     if ((st=upd.getProperty(header+".KLimit.limitdays"))!=null)
                         limit.days=Integer.parseInt(st);
                 }
-
+                
+                // allowedGVs
+                ArrayList<String> codes = new ArrayList<String>();
+                for (int j=0;;j++) {
+                	String gvHeader = HBCIUtilsInternal.withCounter(header+".AllowedGV", j);
+                	String code = upd.getProperty(gvHeader+".code");
+                	if (code == null) break;
+                	codes.add(code);
+                }
+                if (!codes.isEmpty()) entry.allowedGVs = codes;
+                
                 ret.add(entry);
             }
         }

@@ -205,6 +205,10 @@ public abstract class AbstractPinTanPassport
             if (msgStatus.isInvalidPIN()) {
                 HBCIUtils.log("detected 'invalid PIN' error - clearing passport PIN", HBCIUtils.LOG_INFO);
                 clearPIN();
+                
+                // Aufrufer informieren, dass falsche PIN eingegeben wurde (um evtl. PIN aus Puffer zu löschen, etc.) 
+                StringBuffer retData=new StringBuffer();
+                HBCIUtilsInternal.getCallback().callback(this,HBCICallback.WRONG_PIN,"*** invalid PIN entered",HBCICallback.TYPE_TEXT,retData);
             }
         }
             
@@ -510,6 +514,11 @@ public abstract class AbstractPinTanPassport
     public Properties getCurrentSecMechInfo()
     {
         return (Properties)twostepMechanisms.get(getCurrentTANMethod(false));
+    }
+    
+    public Hashtable getTwostepMechanisms()
+    {
+    	return twostepMechanisms;
     }
 
     public String getProfileMethod()
