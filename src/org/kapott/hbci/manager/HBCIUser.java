@@ -655,7 +655,7 @@ public final class HBCIUser
         // Wir haben noch keine BPD. Offensichtlich unterstuetzt die Bank
         // das Abrufen von BPDs ueber einen anonymen Dialog nicht. Also machen
         // wir das jetzt hier mit einem nicht-anonymen Dialog gleich mit
-        if (bpd == null || passport.getUPDVersion().equals("0") ||
+        if (bpd == null || passport.getUPD() == null ||
             hbciVersionOfUPD==null ||
             !hbciVersionOfUPD.equals(kernel.getHBCIVersion())) 
         {
