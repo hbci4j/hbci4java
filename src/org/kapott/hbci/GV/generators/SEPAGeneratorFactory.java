@@ -26,8 +26,8 @@ public class SEPAGeneratorFactory {
 		String pschema = parseScheme(schema);
 		ISEPAGenerator ret=null;
 
-    String jobname   = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
-    String className = "org.kapott.hbci.GV.generators.Gen" + jobname + pschema;
+		String jobname   = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
+		String className = "org.kapott.hbci.GV.generators.Gen" + jobname + pschema;
 
         try {
             HBCIUtils.log("trying to load SEPA creator class: " + className,HBCIUtils.LOG_INFO);

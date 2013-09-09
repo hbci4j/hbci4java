@@ -40,12 +40,12 @@ public class GVLastSEPA extends HBCIJobImpl {
 		return "UebSEPA";
 	}
 
-	public GVUebSEPA(HBCIHandler handler, String name) {
+	public GVLastSEPA(HBCIHandler handler, String name) {
 		super(handler, name, new HBCIJobResultImpl());
 		this.sepaParams = new Properties();
 	}
 
-	public GVUebSEPA(HBCIHandler handler) {
+	public GVLastSEPA(HBCIHandler handler) {
 		this(handler, getLowlevelName());
 
 		// Prüfen welche Pain Version die Bank unterstzützt und diese mit den
