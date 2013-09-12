@@ -40,7 +40,21 @@ import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
 /**
- * Testet das Erstellen von SEPA-Basis-Lastschriften
+ * Testet das Erstellen von SEPA-Basis-Überweisung
+ * 
+ * Erforderliche Angaben für das Nachrichtenformat pain.001 (SEPA-Überweisung) 
+	Folgende Angaben sind für das Nachrichtenformat für SEPA-Überweisungen (pain.001) erforderlich: 
+	- Name des Zahlungspflichtigen (<Dbtr><Nm>) 
+	- IBAN des Zahlungskontos des Zahlungspflichtigen (<DbtrAcct>) 
+	- BIC des Kreditinstituts des Zahlungspflichtigen (<DbtrAgt>) 
+	- Überweisungsbetrag in Euro (<InstdAmt>) 
+	- Angaben zum Verwendungszweck (<RmtInf>) 
+	- Name des Zahlungsempfängers (<Cdtr><Nm>) 
+	- IBAN des Zahlungskontos des Zahlungsempfängers (<CdtrAcct>) 
+	- BIC des Kreditinstituts des Zahlungsempfängers (<CdtrAgt>) 
+	- Gegebenenfalls Identifikationscode des Zahlungsempfängers (<Cdtr><Id>) 
+	- Gegebenenfalls Name der Referenzpartei des Zahlungsempfängers(<UltmtCdtr>) 
+	- Gegebenenfalls Zweck der Überweisung (<Purp>) 
  */
 public class TestGVUebSEPA extends AbstractTest
 {

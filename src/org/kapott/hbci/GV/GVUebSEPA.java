@@ -67,7 +67,6 @@ public class GVUebSEPA
         //Prüfen welche Pain Version die Bank unterstzützt und diese mit den von HBCI4Java unterstützten Pains vergleichen
         checkSupportedPainVersion(handler);
 
-
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
 
@@ -95,6 +94,10 @@ public class GVUebSEPA
         addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE);
         addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
         addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
+      
+        //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
+        addConstraint("sepaid", "sepa.sepaid", getSEPAMessageId(), LogFilter.FILTER_NONE);
+	addConstraint("endtoendid", "sepa.endtoendid", null, LogFilter.FILTER_NONE);
     }
 
     /**

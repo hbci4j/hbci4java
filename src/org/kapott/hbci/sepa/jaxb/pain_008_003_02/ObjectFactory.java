@@ -1,7 +1,12 @@
 
 package org.kapott.hbci.sepa.jaxb.pain_008_003_02;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
+import javax.xml.namespace.QName;
+
+
 
 
 /**
@@ -21,6 +26,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _Document_QNAME = new QName("urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", "Document");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.kapott.hbci.sepa.jaxb.pain_008_003_02
@@ -35,6 +41,15 @@ public class ObjectFactory {
      */
     public Document createDocument() {
         return new Document();
+    }
+    
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Document }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", name = "Document")
+    public JAXBElement<Document> createDocument(Document value) {
+        return new JAXBElement<Document>(_Document_QNAME, Document.class, null, value);
     }
 
     /**

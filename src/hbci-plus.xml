@@ -4020,7 +4020,23 @@
             <value path="SegHead.code">HILSWS</value>
             <value path="SegHead.version">2</value>
         </SEGdef>
-        
+        <SEGdef id="LastSEPA1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            
+            <value path="SegHead.code">HKDSE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="LastSEPAPar1">
+            &GVP2;
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HIDSE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
         <SEGdef id="OrderHistory1"> <!-- 3.0 -->
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTV3" name="My"/>
@@ -6528,6 +6544,7 @@
             <SEG type="Last5" minnum="0"/>
             <SEG type="LastObjection1" minnum="0"/>
             <SEG type="LastObjection2" minnum="0"/>
+            <SEG type="LastSEPA1" minnum="0"/>
             <SEG type="OrderHistory1" minnum="0"/>
 	    	<SEG type="Receipt1" minnum="0"/>
             <SEG type="Saldo3" minnum="0"/>

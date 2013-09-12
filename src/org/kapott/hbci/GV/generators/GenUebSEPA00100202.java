@@ -64,7 +64,7 @@ public class GenUebSEPA00100202 implements ISEPAGenerator{
 		doc.getPain00100102().setGrpHdr(new GroupHeaderSCT());
 				
 		//Group Header
-		doc.getPain00100102().getGrpHdr().setMsgId(job.getSEPAMessageId());
+		doc.getPain00100102().getGrpHdr().setMsgId(job.getSEPAParam("sepaid"));
 		doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 	    doc.getPain00100102().getGrpHdr().setNbOfTxs("1");
 		doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentificationSCT1());
@@ -77,7 +77,7 @@ public class GenUebSEPA00100202 implements ISEPAGenerator{
 		pmtInfs.add(pmtInf);
 		
 		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
-		pmtInf.setPmtInfId(job.getSEPAMessageId()); 
+		pmtInf.setPmtInfId(job.getSEPAParam("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
 		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
@@ -112,7 +112,7 @@ public class GenUebSEPA00100202 implements ISEPAGenerator{
 		
 		//Payment Information - Credit Transfer Transaction Information - Payment Identification
 		cdtTrxTxInf.setPmtId(new PaymentIdentification1());
-		cdtTrxTxInf.getPmtId().setEndToEndId(job.getSEPAMessageId());
+		cdtTrxTxInf.getPmtId().setEndToEndId(job.getSEPAParam("endtoendid"));
 		
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor

@@ -57,7 +57,7 @@ public class GenUebSEPA00100203 implements ISEPAGenerator{
 		
 		
 		//Group Header
-		doc.getCstmrCdtTrfInitn().getGrpHdr().setMsgId(job.getSEPAMessageId());
+		doc.getCstmrCdtTrfInitn().getGrpHdr().setMsgId(job.getSEPAParam("sepaid"));
 		doc.getCstmrCdtTrfInitn().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 	    doc.getCstmrCdtTrfInitn().getGrpHdr().setNbOfTxs("1");
 		doc.getCstmrCdtTrfInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
@@ -70,7 +70,7 @@ public class GenUebSEPA00100203 implements ISEPAGenerator{
 		pmtInfs.add(pmtInf);
 		
 		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
-		pmtInf.setPmtInfId(job.getSEPAMessageId()); 
+		pmtInf.setPmtInfId(job.getSEPAParam("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
 		/*FIXME: Hier schreiben wir den 1.1.1999 rein. Die Transaktion wird dann am nächsten Werktag ausgeführt. Nimmt man hier jedoch
@@ -108,7 +108,7 @@ public class GenUebSEPA00100203 implements ISEPAGenerator{
 		
 		//Payment Information - Credit Transfer Transaction Information - Payment Identification
 		cdtTrxTxInf.setPmtId(new PaymentIdentificationSEPA());
-		cdtTrxTxInf.getPmtId().setEndToEndId(job.getSEPAMessageId());
+		cdtTrxTxInf.getPmtId().setEndToEndId(job.getSEPAParam("endtoendid"));
 		
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor
