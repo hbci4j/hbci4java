@@ -57,7 +57,7 @@ public class GenLastSEPA00800101 implements ISEPAGenerator{
 		//Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
 		Date now=new Date();
 		SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	    DatatypeFactory df = DatatypeFactory.newInstance();
+		DatatypeFactory df = DatatypeFactory.newInstance();
 		
 		
 		//Document
