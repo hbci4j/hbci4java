@@ -1,17 +1,14 @@
 package org.kapott.hbci.GV.generators;
 
-import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 
-import org.kapott.hbci.GV.GVLastSEPA;
-import org.kapott.hbci.GV.HBCIJob;
+import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.AccountIdentification2;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.AmendmentInformationDetails4;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.CashAccount8;
@@ -42,18 +39,17 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification2;
 
 
-public class GenLastSEPA00800101 implements ISEPAGenerator{
-
+/**
+ * SEPA-Generator fuer das Schema pain.008.001.01.
+ */
+public class GenLastSEPA00800101 extends AbstractSEPAGenerator
+{
+	/**
+	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)
+	 */
 	@Override
-	public void generate(HBCIJob job, ByteArrayOutputStream os)
-			throws Exception {
-		
-		
-		generate((GVLastSEPA)job, os);
-		
-	}
-	public void generate(GVLastSEPA job, ByteArrayOutputStream os) throws Exception {
-		
+	public void generate(AbstractSEPAGV job, OutputStream os) throws Exception
+	{
 		//Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
 		Date now=new Date();
 		SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -173,17 +169,7 @@ public class GenLastSEPA00800101 implements ISEPAGenerator{
 		drctDbtTxInf.setRmtInf(new RemittanceInformation3());
 		drctDbtTxInf.getRmtInf().setUstrd(job.getSEPAParam("usage"));
 
-
-		writeDocToOutputStream(doc, os);
-	}
-
-	private void writeDocToOutputStream(Document doc, ByteArrayOutputStream os) throws Exception{
-		//Fertiges Dokument mittels JAXB marshallen (XML in den ByteArrayOutputStream schreiben)
-		ObjectFactory of = new ObjectFactory();		
-		JAXBContext jaxbContext = JAXBContext.newInstance(Document.class);
-		Marshaller marshaller = jaxbContext.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.marshal(of.createDocument(doc), os);
+        ObjectFactory of = new ObjectFactory();
+        this.marshal(of.createDocument(doc),os);
 	}
 }

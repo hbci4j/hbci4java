@@ -9,17 +9,21 @@ import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
-public class SEPAGeneratorFactory {
-
-
+/**
+ * Factory zum Ermitteln des passenden Pain-Generators fuer den angegebenen Job.
+ */
+public class SEPAGeneratorFactory
+{
 	/**
 	 * Gibt den passenden SEPA Generator für ein gegebenes Schema. Das Schema
 	 * muss dabei derzeit die Form "pain.001.001.02" oder "00100102" haben um
 	 * erfoglreich geparst zu werden.
+	 * @param job der zu erzeugende Job.
 	 * @param schema
 	 * @return ISEPAGenerator
 	 */
-	public static ISEPAGenerator get(HBCIJob job, String schema){
+	public static ISEPAGenerator get(HBCIJob job, String schema)
+	{
 
 
 		//Schmenamen parsen und entsprechenden Generator für Job/Schema Kombination laden
@@ -34,15 +38,18 @@ public class SEPAGeneratorFactory {
             Class cl = Class.forName(className);
             Constructor cons=cl.getConstructor();
             ret=(ISEPAGenerator)cons.newInstance();
-        } catch (ClassNotFoundException e) {
+        }
+        catch (ClassNotFoundException e)
+        {
             throw new InvalidUserDataException("*** there is no ISEPAGenerator class named " + className +". Maybe the pain version is not supported");
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_GENERATOR_CREATE_ERR",job.getName()); //TODO: Msg anlegen
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreCreateJobErrors",msg))
             	throw new HBCI_Exception(msg,e);
         }
-            return ret;
-
+        return ret;
 	}
 
 
