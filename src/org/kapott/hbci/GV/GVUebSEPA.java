@@ -94,8 +94,10 @@ public class GVUebSEPA
         addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE);
         addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
         addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
-      //TODO: Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren) hinzufügen
-        
+      
+        //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
+        addConstraint("sepaid", "sepa.sepaid", getSEPAMessageId(), LogFilter.FILTER_NONE);
+	addConstraint("endtoendid", "sepa.endtoendid", null, LogFilter.FILTER_NONE);
     }
 
     /**

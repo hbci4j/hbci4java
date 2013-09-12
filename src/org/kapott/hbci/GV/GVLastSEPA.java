@@ -34,10 +34,10 @@ public class GVLastSEPA extends HBCIJobImpl {
 	// und HBCI4Java unterstützter Version
 	// Sicherheitshalber mit default Value initialisieren, wird später
 	// überschrieben
-	private String painToUse = "pain.001.001.02";
+	private String painToUse = "pain.008.001.01";
 
 	public static String getLowlevelName() {
-		return "UebSEPA";
+		return "LastSEPA";
 	}
 
 	public GVLastSEPA(HBCIHandler handler, String name) {
@@ -52,45 +52,32 @@ public class GVLastSEPA extends HBCIJobImpl {
 		// von HBCI4Java unterstützten Pains vergleichen
 		checkSupportedPainVersion(handler);
 
+		//My bzw. src ist das Konto des Ausführenden. Dst ist das Konto des Belasteten.		
 		addConstraint("src.bic", "My.bic", null, LogFilter.FILTER_MOST);
 		addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
-
-		/*
-		 * addConstraint("src.country", "My.KIK.country", "",
-		 * LogFilter.FILTER_NONE); addConstraint("src.blz", "My.KIK.blz", "",
-		 * LogFilter.FILTER_MOST); addConstraint("src.number", "My.number", "",
-		 * LogFilter.FILTER_IDS); addConstraint("src.subnumber","My.subnumber",
-		 * "", LogFilter.FILTER_MOST);
-		 */
-
-		addConstraint("_sepadescriptor", "sepadescr", "sepade." + painToUse
-				+ ".xsd", LogFilter.FILTER_NONE);
+		addConstraint("_sepadescriptor", "sepadescr", "sepade."+ painToUse+".xsd", LogFilter.FILTER_NONE);
 		addConstraint("_sepapain", "sepapain", null, LogFilter.FILTER_IDS);
 
-		/*
-		 * dummy constraints to allow an application to set these values. the
-		 * overriden setLowlevelParam() stores these values in a special
-		 * structure which is later used to create the SEPA pain document.
-		 */
 		addConstraint("src.bic", "sepa.src.bic", null, LogFilter.FILTER_MOST);
 		addConstraint("src.iban", "sepa.src.iban", null, LogFilter.FILTER_IDS);
 		addConstraint("src.name", "sepa.src.name", null, LogFilter.FILTER_IDS);
 		addConstraint("dst.bic", "sepa.dst.bic", null, LogFilter.FILTER_MOST);
 		addConstraint("dst.iban", "sepa.dst.iban", null, LogFilter.FILTER_IDS);
 		addConstraint("dst.name", "sepa.dst.name", null, LogFilter.FILTER_IDS);
-		addConstraint("btg.value", "sepa.btg.value", null,
-				LogFilter.FILTER_NONE);
+		addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE);
 		addConstraint("btg.curr", "sepa.btg.curr", "EUR", LogFilter.FILTER_NONE);
 		addConstraint("usage", "sepa.usage", null, LogFilter.FILTER_NONE);
-		// TODO: Constraints für die PmtInfId (eindeutige SEPA Message ID) und
-		// EndToEndId (eindeutige ID um Transaktion zu identifizieren)
-		// hinzufügen
-
+		
+		addConstraint("sepaid", "sepa.sepaid", getSEPAMessageId(), LogFilter.FILTER_NONE);
+		addConstraint("endtoendid", "sepa.endtoendid", null, LogFilter.FILTER_NONE);
+		addConstraint("mandateid", "sepa.mandateid", null, LogFilter.FILTER_NONE);
+		addConstraint("manddateofsig", "sepa.manddateofsig", null, LogFilter.FILTER_NONE);
+		addConstraint("amendmandindic", "sepa.amendmandindic", Boolean.toString(false), LogFilter.FILTER_NONE);
 	}
 
 	/**
 	 * Diese Methode schaut in den BPD nach den unterstzützen pain Versionen
-	 * (bei UebSEPA pain.001.xxx.xx) und vergleicht diese mit den von HBCI4Java
+	 * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
 	 * unterstützen pain Versionen. Der größte gemeinsamme Nenner wird
 	 * schließlich in this.painToUse gespeichert.
 	 * 
@@ -101,7 +88,7 @@ public class GVLastSEPA extends HBCIJobImpl {
 		if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") != null) {
 			// Regex für die pain Version
 			Pattern pattern = Pattern
-					.compile("pain\\.001\\.(\\d\\d\\d\\.\\d\\d)");
+					.compile("pain\\.008\\.(\\d\\d\\d\\.\\d\\d)");
 
 			// Liste zum speichern aller gefundenen pain Versionen
 			ArrayList<String[]> validPains = new ArrayList<String[]>();
@@ -121,7 +108,7 @@ public class GVLastSEPA extends HBCIJobImpl {
 					// vorhanden ist
 					String rawpain = m.group(1);
 					URL u = GVUebSEPA.class.getClassLoader().getResource(
-							"pain.001." + rawpain + ".xsd");
+							"pain.008." + rawpain + ".xsd");
 					if (u != null) {
 						validPains.add(rawpain.split("\\."));
 					}
@@ -146,7 +133,7 @@ public class GVLastSEPA extends HBCIJobImpl {
 				int maj = Integer.parseInt(pain[0]);
 				int min = Integer.parseInt(pain[1]);
 				if (maxMajorVersion == maj && maxMinorVersion == min)
-					painToUse = "pain.001." + pain[0] + "." + pain[1];
+					painToUse = "pain.008." + pain[0] + "." + pain[1];
 			}
 		}
 	}
@@ -226,9 +213,13 @@ public class GVLastSEPA extends HBCIJobImpl {
 	 */
 	protected void createSEPAFromParams() {
 
+		//Hier wird die XML rein geschrieben
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 
+		//Passenden SEPA Generator zur verwendeten pain Version laden
 		ISEPAGenerator gen = SEPAGeneratorFactory.get(this, painToUse);
+		
+		//Die XML in den baos schreiben, ggf fehler behandeln
 		try {
 			gen.generate(this, o);
 		} catch (Exception e) {
@@ -237,19 +228,18 @@ public class GVLastSEPA extends HBCIJobImpl {
 					e);
 		}
 
+		//Prüfen ob die XML erfolgreich generiert wurde
 		if (o.size() == 0)
 			throw new HBCI_Exception(
 					"*** the _sepapain segment for this job can not be created");
 
-		// creator.createXMLFromSchemaAndData(xmldata, o); //TODO: Entfernen
-		// wenn auf JAXB umgestellt ist
-
-		try {
-			System.out.println("-------------" + o.toString("ISO-8859-1"));
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		//Testausgabe der XML
+//		try {
+//			System.out.println("-------------" + o.toString("ISO-8859-1"));
+//		} catch (UnsupportedEncodingException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		// store SEPA document as parameter
 		try {
 			setParam("_sepapain", "B" + o.toString("ISO-8859-1"));
@@ -258,6 +248,9 @@ public class GVLastSEPA extends HBCIJobImpl {
 		}
 	}
 
+	/**
+	 * Bei SEPA Geschäftsvorfällen müssen wir verifyConstraints überschreiben um die SEPA XML zu generieren
+	 */
 	public void verifyConstraints() {
 		// creating SEPA document and storing it in _sepapain
 		createSEPAFromParams();
