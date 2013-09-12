@@ -113,10 +113,14 @@ public class GVRKUms
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
         public String   addkey;
+        
+        /** Gibt an, ob ein Umsatz ein SEPA-Umsatz ist **/
+        public boolean isSepa;
 
         public UmsLine()
         {
             usage=new ArrayList();
+            isSepa=false;
         }
 
         public void addUsage(String st)
@@ -622,7 +626,7 @@ public class GVRKUms
                         st_multi=Swift.packMulti(st_multi.substring(3));
 
                         if (!line.gvcode.equals("999")) {
-                        	boolean isSepa = line.gvcode.startsWith("1");
+                            line.isSepa = line.gvcode.startsWith("1");
                             line.text=Swift.getMultiTagValue(st_multi,"00");
                             line.primanota=Swift.getMultiTagValue(st_multi,"10");
                             for (int i=0;i<10;i++) {
@@ -633,7 +637,7 @@ public class GVRKUms
                             acc.blz=Swift.getMultiTagValue(st_multi,"30");
                             acc.number=Swift.getMultiTagValue(st_multi,"31");
 
-                            if (isSepa)
+                            if (line.isSepa)
                             {
                               acc.bic = Swift.getMultiTagValue(st_multi, "30");
                               acc.iban = Swift.getMultiTagValue(st_multi,"31");

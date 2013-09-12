@@ -548,6 +548,38 @@
    <DEG type="KTV3" name="KTV"/>
    <DE name="data" type="Bin" maxsize="0"/>'
 >
+
+<!ENTITY TANMedia1
+    '<!-- 3.0 -->
+    <DEG type="SegHeadUser" name="SegHead"/>
+    <DE name="mediatype" type="Code" maxsize="1"/>
+            
+    <valids path="mediatype">
+        <validvalue>0</validvalue>
+        <validvalue>2</validvalue>
+        <validvalue>3</validvalue>
+    </valids>'           
+>
+
+<!ENTITY TANMedia2
+    '<!-- 3.0 -->
+    <DEG type="SegHeadUser" name="SegHead"/>
+    <DE name="mediatype" type="Code" maxsize="1"/>
+    <DE name="mediacategory" type="Code" maxsize="1"/>
+            
+    <valids path="mediatype">
+        <validvalue>0</validvalue>
+        <validvalue>2</validvalue>
+        <validvalue>3</validvalue>
+    </valids>           
+    <valids path="mediacategory">
+        <validvalue>A</validvalue>
+        <validvalue>L</validvalue>
+        <validvalue>G</validvalue>
+        <validvalue>M</validvalue>
+        <validvalue>S</validvalue>
+    </valids>'           
+>
 ]>
 
 <hbci>
@@ -836,7 +868,7 @@
         </DEGdef>
         
         <DEGdef id="UserSig">
-            <DE name="pin" type="AN" maxsize="99"/>
+            <DE name="pin" type="AN" maxsize="99"/>               <!-- Einige Banken unterstützen mehr als 6 Stellen  -->
             <DE name="tan" type="AN" maxsize="99" minnum="0"/>
         </DEGdef>
 
@@ -1087,8 +1119,21 @@
             <DE name="KIK.blz" type="AN" maxsize="30" minnum="0"/>
         </DEGdef>
         
+         <DEGdef id="KTV2opt"> <!-- 2.2 -->
+            <DE name="number" type="ID" minnum="0"/>
+            <DE name="subnumber" type="ID" minnum="0"/>
+            <DE name="KIK.country" type="Ctr" minnum="0"/>
+            <DE name="KIK.blz" type="AN" maxsize="30" minnum="0"/>
+        </DEGdef>
+        
         <DEGdef id="KTV3"> <!-- 3.0 -->
             <DE name="number" type="ID"/>
+            <DE name="subnumber" type="ID" minnum="0"/>
+            <DEG type="KIK"/>
+        </DEGdef>
+        
+        <DEGdef id="KTV3opt"> <!-- 3.0 -->
+            <DE name="number" type="ID" minnum="0"/>
             <DE name="subnumber" type="ID" minnum="0"/>
             <DEG type="KIK"/>
         </DEGdef>
@@ -1099,6 +1144,15 @@
             <DE name="number" type="ID" minnum="0"/>
             <DE name="subnumber" type="ID" minnum="0"/>
             <DEG type="KIK" minnum="0"/>
+        </DEGdef>
+        
+        <DEGdef id="KTVIntOpt">
+            <DE name="iban" type="AN" maxsize="34" minnum="0"/>
+            <DE name="bic" type="AN" maxsize="11" minnum="0"/>
+            <DE name="number" type="ID" minnum="0"/>
+            <DE name="subnumber" type="ID" minnum="0"/>
+            <DE name="KIK.country" type="Ctr" minnum="0"/>
+            <DE name="KIK.blz" type="AN" maxsize="30" minnum="0"/>
         </DEGdef>
         
         <DEGdef id="KTVZVInt">
@@ -1660,6 +1714,124 @@
             <DE name="usagetime" type="Time" minnum="0"/>
         </DEGdef>
 
+        <!--  macemmi 2012-02-20 BEGIN HKTAB -->
+        <DEGdef id="TANMediaInfo1">
+            <DE name="mediacategory" type="AN" maxsize="1"/>
+            <DE name="status" type="Code" maxsize="1"/>
+            <DE name="cardnumber" type="ID" minnum="0"/>
+            <DE name="cardseqnumber" type="ID" minnum="0"/>
+            <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
+            <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
+            <DE name="lastuse" type="Date" minnum="0"/>
+            <DE name="activatedon" type="Date" minnum="0"/>
+            
+            <valids path="mediacategory">
+                <validvalue>G</validvalue>
+                <validvalue>L</validvalue>
+            </valids>
+            <valids path="status">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+        </DEGdef>
+        
+        <DEGdef id="TANMediaInfo2">
+            <DE name="mediacategory" type="AN" maxsize="1"/>
+            <DE name="status" type="Code" maxsize="1"/>
+            <DE name="cardnumber" type="ID" minnum="0"/>
+            <DE name="cardseqnumber" type="ID" minnum="0"/>
+            <DE name="cardtype" type="Num" maxsize="2" minnum="0"/>
+            <DEG type="KTV2opt" name="KTV" minnum="0"/>
+            <DE name="validfrom" type="Date" minnum="0"/>
+            <DE name="validto" type="Date" minnum="0"/>
+            <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
+            <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
+            <DEG type="KTVIntOpt" name="smsaccount" minnum="0"/>
+            <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
+            <DE name="lastuse" type="Date" minnum="0"/>
+            <DE name="activatedon" type="Date" minnum="0"/>
+            
+            <valids path="mediacategory">
+                <validvalue>G</validvalue>
+                <validvalue>L</validvalue>
+                <validvalue>M</validvalue>
+            </valids>
+            <valids path="status">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+        </DEGdef>
+        
+        <DEGdef id="TANMediaInfo3">
+            <DE name="mediacategory" type="AN" maxsize="1"/>
+            <DE name="status" type="Code" maxsize="1"/>
+            <DE name="cardnumber" type="ID" minnum="0"/>
+            <DE name="cardseqnumber" type="ID" minnum="0"/>
+            <DE name="cardtype" type="Num" maxsize="2" minnum="0"/>
+            <DEG type="KTV2opt" name="KTV" minnum="0"/>
+            <DE name="validfrom" type="Date" minnum="0"/>
+            <DE name="validto" type="Date" minnum="0"/>
+            <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
+            <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
+            <DE name="mobilenumber_secure" type="AN" maxsize="35" minnum="0"/>
+            <DEG type="KTVIntOpt" name="smsaccount" minnum="0"/>
+            <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
+            <DE name="lastuse" type="Date" minnum="0"/>
+            <DE name="activatedon" type="Date" minnum="0"/>
+            
+            <valids path="mediacategory">
+                <validvalue>G</validvalue>
+                <validvalue>L</validvalue>
+                <validvalue>M</validvalue>
+                <validvalue>S</validvalue>
+            </valids>
+            <valids path="status">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+        </DEGdef>
+
+        <DEGdef id="TANMediaInfo4">
+            <DE name="mediacategory" type="AN" maxsize="1"/>
+            <DE name="status" type="Code" maxsize="1"/>
+            <DE name="cardnumber" type="ID" minnum="0"/>
+            <DE name="cardseqnumber" type="ID" minnum="0"/>
+            <DE name="cardtype" type="Num" maxsize="2" minnum="0"/>
+            <DEG type="KTV2opt" name="KTV" minnum="0"/>
+            <DE name="validfrom" type="Date" minnum="0"/>
+            <DE name="validto" type="Date" minnum="0"/>
+            <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
+            <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
+            <DE name="mobilenumber_secure" type="AN" maxsize="35" minnum="0"/>
+            <DE name="mobilenumber" type="AN" maxsize="35" minnum="0"/>
+            <DEG type="KTVIntOpt" name="smsaccount" minnum="0"/>
+            <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
+            <DE name="lastuse" type="Date" minnum="0"/>
+            <DE name="activatedon" type="Date" minnum="0"/>
+            
+            <valids path="mediacategory">
+                <validvalue>G</validvalue>
+                <validvalue>L</validvalue>
+                <validvalue>M</validvalue>
+                <validvalue>S</validvalue>
+                <validvalue>A</validvalue>
+            </valids>
+            <valids path="status">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+        </DEGdef>
+                
+        <!--  macemmi 2012-02-20 END HKTAB -->
+        
         <DEGdef id="TimeRange">
             <DE name="startdate" type="Date"/>
             <DE name="enddate" type="Date"/>
@@ -4744,6 +4916,165 @@
         <!--  willuhn 2011-05-16 END HKTAN/HITAN/HITANS Version 5 -->
 
 
+        <!--  macemmi 2012-02-20 BEGIN HKTAB -->
+        <!--  Version 1 -->
+        <SEGdef id="TANMediaList1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="mediatype" type="Code" maxsize="1"/>
+            
+            <valids path="mediatype">
+                <validvalue>0</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+            </valids>           
+            
+            <value path="SegHead.code">HKTAB</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="TANMediaListRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="tanoption" type="Code" maxsize="1"/>
+            <DEG type="TANMediaInfo1" name="MediaInfo" minnum="0" maxnum="999"/>
+                            
+            <valids path="tanoption">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <value path="SegHead.code">HITAB</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="TANMediaListPar1">
+            &GVP2;
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITABS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+                   
+        <!--  Version 2 -->
+        <SEGdef id="TANMediaList2">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="mediatype" type="Code" maxsize="1"/>
+            
+            <valids path="mediatype">
+                <validvalue>0</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+            </valids>           
+            
+            <value path="SegHead.code">HKTAB</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        
+        <SEGdef id="TANMediaListRes2">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="tanoption" type="Code" maxsize="1"/>
+            <DEG type="TANMediaInfo2" name="MediaInfo" minnum="0" maxnum="999"/>
+                            
+            <valids path="tanoption">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <value path="SegHead.code">HITAB</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        
+        <SEGdef id="TANMediaListPar2">
+            &GVP2;
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITABS</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        
+        <!--  Version 3 -->
+        <SEGdef id="TANMediaList3">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="mediatype" type="Code" maxsize="1"/>
+            
+            <valids path="mediatype">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>           
+            
+            <value path="SegHead.code">HKTAB</value>
+            <value path="SegHead.version">3</value>
+        </SEGdef>
+        
+        <SEGdef id="TANMediaListRes3">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="tanoption" type="Code" maxsize="1"/>
+            <DEG type="TANMediaInfo3" name="MediaInfo" minnum="0" maxnum="999"/>
+                            
+            <valids path="tanoption">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <value path="SegHead.code">HITAB</value>
+            <value path="SegHead.version">3</value>
+        </SEGdef>
+        
+        <SEGdef id="TANMediaListPar3">
+            &GVP2;
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITABS</value>
+            <value path="SegHead.version">3</value>
+        </SEGdef>
+        
+        <!--  Version 4 -->
+        <SEGdef id="TANMediaList4">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="mediatype" type="Code" maxsize="1"/>
+            <DE name="mediacategory" type="Code" maxsize="1"/>
+            
+            <valids path="mediatype">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>           
+            <valids path="mediacategory">
+                <validvalue>A</validvalue>
+                <validvalue>L</validvalue>
+                <validvalue>G</validvalue>
+                <validvalue>M</validvalue>
+                <validvalue>S</validvalue>
+            </valids>           
+            
+            <value path="SegHead.code">HKTAB</value>
+            <value path="SegHead.version">4</value>
+        </SEGdef>
+
+        <SEGdef id="TANMediaListRes4">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="tanoption" type="Code" maxsize="1"/>
+            <DEG type="TANMediaInfo4" name="MediaInfo" minnum="0" maxnum="999"/>
+                            
+            <valids path="tanoption">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <value path="SegHead.code">HITAB</value>
+            <value path="SegHead.version">4</value>
+        </SEGdef>
+
+        <SEGdef id="TANMediaListPar4">
+            &GVP2;
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITABS</value>
+            <value path="SegHead.version">4</value>
+        </SEGdef>
+
+        <!--  macemmi 2012-02-20 END HKTAB -->
+
         <SEGdef id="TANListList1" needsRequestTag="1"> <!-- 2.2 -->
             <DEG type="SegHeadUser" name="SegHead"/>
 
@@ -6405,6 +6736,10 @@
             <SEG type="TAN2Step4" minnum="0"/>
             <SEG type="TAN2Step5" minnum="0"/>
             <SEG type="TANListList1" minnum="0"/>
+            <SEG type="TANMediaList1" minnum="0"/>
+            <SEG type="TANMediaList2" minnum="0"/>
+            <SEG type="TANMediaList3" minnum="0"/>
+            <SEG type="TANMediaList4" minnum="0"/>
             <SEG type="TermSammelLast3" minnum="0"/>
             <SEG type="TermSammelLastDel3" minnum="0"/>
             <SEG type="TermSammelLastList3" minnum="0"/>
@@ -6524,6 +6859,10 @@
             <SEG type="TAN2StepRes4" minnum="0"/>
             <SEG type="TAN2StepRes5" minnum="0"/>
             <SEG type="TANListListRes1" minnum="0"/>
+            <SEG type="TANMediaListRes1" minnum="0"/>
+            <SEG type="TANMediaListRes2" minnum="0"/>
+            <SEG type="TANMediaListRes3" minnum="0"/>
+            <SEG type="TANMediaListRes4" minnum="0"/>
             <SEG type="TermSammelLastRes3" minnum="0"/>
             <SEG type="TermSammelLastListRes3" minnum="0"/>
             <SEG type="TermSammelUebRes3" minnum="0"/>
@@ -6657,6 +6996,10 @@
             <SEG type="TAN2StepPar4" minnum="0"/>
             <SEG type="TAN2StepPar5" minnum="0"/>
             <SEG type="TANListListPar1" minnum="0"/>
+            <SEG type="TANMediaListPar1" minnum="0"/>
+            <SEG type="TANMediaListPar2" minnum="0"/>
+            <SEG type="TANMediaListPar3" minnum="0"/>
+            <SEG type="TANMediaListPar4" minnum="0"/>
             <SEG type="TermSammelLastPar3" minnum="0"/>
             <SEG type="TermSammelLastDelPar3" minnum="0"/>
             <SEG type="TermSammelLastListPar3" minnum="0"/>
