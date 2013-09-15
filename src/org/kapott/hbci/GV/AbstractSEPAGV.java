@@ -85,6 +85,11 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
             while (e.hasMoreElements())
             {
                 String key = (String) e.nextElement();
+
+                // Die Keys, welche die Schema-Versionen enthalten, heissen alle "suppformats*"
+                if (!key.startsWith("suppformats"))
+                    continue;
+                
                 String val = props.getProperty(key);
 
                 // pain Version suchen
@@ -125,8 +130,8 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
             }
             for (String[] pain : validPains)
             {
-                int maj = Integer.parseInt(pain[0]);
-                int min = Integer.parseInt(pain[1]);
+                int maj = Integer.parseInt(pain[1]);
+                int min = Integer.parseInt(pain[2]);
                 if (maxMajorVersion == maj && maxMinorVersion == min)
                 {
                     String s = "pain." + pain[0] + "." + pain[1] + "." + pain[2];
@@ -141,7 +146,8 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         return def;
     }
 
-    /*
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#setLowlevelParam(java.lang.String, java.lang.String)
      * This is needed to "redirect" the sepa values. They dont have to stored
      * directly in the message, but have to go into the SEPA document which will
      * by created later (in verifyConstraints())
@@ -186,7 +192,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     
     	return result;
     }
-
+    
     /**
      * Gibt die SEPA Message ID als String zurück. Existiert noch keine wird sie
      * aus Datum und User ID erstellt.
@@ -257,15 +263,31 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
 
     /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#addConstraint(java.lang.String, java.lang.String, java.lang.String, int)
+     * Ueberschrieben, um die Default-Werte der SEPA-Parameter vorher rauszufischen und in "this.sepaParams" zu
+     * speichern. Die brauchen wir "createSEPAFromParams" beim Erstellen des XML - sie wuerden dort sonst aber
+     * fehlen, weil Default-Werte eigentlich erst in "verifyConstraints" uebernommen werden.
+     */
+    protected void addConstraint(String frontendName, String destinationName, String defValue, int logFilterLevel)
+    {
+        super.addConstraint(frontendName, destinationName, defValue, logFilterLevel);
+        
+        if (destinationName.startsWith("sepa.") && defValue != null)
+        {
+            this.sepaParams.put(frontendName,defValue);
+        }
+    }
+
+
+    /**
      * Bei SEPA Geschäftsvorfällen müssen wir verifyConstraints überschreiben um
      * die SEPA XML zu generieren
      */
     public void verifyConstraints()
     {
-    	// creating SEPA document and storing it in _sepapain
-    	createSEPAFromParams();
-    
-    	// verify all constraints
+        // creating SEPA document and storing it in _sepapain
+        createSEPAFromParams();
+        
     	super.verifyConstraints();
 
     	// TODO: checkIBANCRC
