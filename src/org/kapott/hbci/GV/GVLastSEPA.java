@@ -55,19 +55,19 @@ public class GVLastSEPA extends AbstractSEPAGV
     	addConstraint("_sepadescriptor", "sepadescr", "sepade." + this.getSchema() + ".xsd", LogFilter.FILTER_NONE);
     	addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
     
-    	addConstraint("src.bic",         "sepa.src.bic", null, LogFilter.FILTER_MOST);
-    	addConstraint("src.iban",        "sepa.src.iban", null, LogFilter.FILTER_IDS);
-    	addConstraint("src.name",        "sepa.src.name", null, LogFilter.FILTER_IDS);
-    	addConstraint("dst.bic",         "sepa.dst.bic", null, LogFilter.FILTER_MOST);
-    	addConstraint("dst.iban",        "sepa.dst.iban", null, LogFilter.FILTER_IDS);
-    	addConstraint("dst.name",        "sepa.dst.name", null, LogFilter.FILTER_IDS);
-    	addConstraint("btg.value",       "sepa.btg.value", null,LogFilter.FILTER_NONE);
-    	addConstraint("btg.curr",        "sepa.btg.curr", "EUR", LogFilter.FILTER_NONE);
-    	addConstraint("usage",           "sepa.usage", null, LogFilter.FILTER_NONE);
+    	addConstraint("src.bic",         "sepa.src.bic",  null,   LogFilter.FILTER_MOST);
+    	addConstraint("src.iban",        "sepa.src.iban",  null,  LogFilter.FILTER_IDS);
+    	addConstraint("src.name",        "sepa.src.name",  null,  LogFilter.FILTER_IDS);
+    	addConstraint("dst.bic",         "sepa.dst.bic",   null,  LogFilter.FILTER_MOST);
+    	addConstraint("dst.iban",        "sepa.dst.iban",  null,  LogFilter.FILTER_IDS);
+    	addConstraint("dst.name",        "sepa.dst.name",  null,  LogFilter.FILTER_IDS);
+    	addConstraint("btg.value",       "sepa.btg.value", null,  LogFilter.FILTER_NONE);
+    	addConstraint("btg.curr",        "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
+    	addConstraint("usage",           "sepa.usage",     null,  LogFilter.FILTER_NONE);
     
-    	addConstraint("sepaid",          "sepa.sepaid", getSEPAMessageId(),LogFilter.FILTER_NONE);
-    	addConstraint("endtoendid",      "sepa.endtoendid", null,LogFilter.FILTER_NONE);
-    	addConstraint("mandateid",       "sepa.mandateid", null,LogFilter.FILTER_NONE);
+    	addConstraint("sepaid",          "sepa.sepaid",        getSEPAMessageId(), LogFilter.FILTER_NONE);
+    	addConstraint("endtoendid",      "sepa.endtoendid",    getSEPAMessageId(), LogFilter.FILTER_NONE);
+    	addConstraint("mandateid",       "sepa.mandateid",     null,               LogFilter.FILTER_NONE);
     	addConstraint("manddateofsig",   "sepa.manddateofsig", null,LogFilter.FILTER_NONE);
     	addConstraint("amendmandindic",  "sepa.amendmandindic",Boolean.toString(false), LogFilter.FILTER_NONE);
     }
