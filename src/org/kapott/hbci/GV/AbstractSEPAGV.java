@@ -213,6 +213,15 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
 
     /**
+     * Gibt eine generierte End-to-End-ID zurueck.
+     * @return End-to-End-ID.
+     */
+    public String createEndToEndId()
+    {
+        return Long.toString(System.currentTimeMillis());
+    }
+
+    /**
      * Erstellt einen Timestamp im ISODateTime Forma.
      * 
      * @discuss Diese methode wäre bestimmt auch gut in der SEPAGeneratorFactory
