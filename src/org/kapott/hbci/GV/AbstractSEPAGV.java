@@ -24,6 +24,14 @@ import org.kapott.hbci.manager.HBCIUtils;
  */
 public abstract class AbstractSEPAGV extends HBCIJobImpl
 {
+    /**
+     * Token, der als End-to-End ID Platzhalter verwendet wird, wenn keine angegeben wurde.
+     * In pain.001.001.02 wurde dieser Token noch explizit erwaehnt. Inzwischen nicht mehr.
+     * Nach Ruecksprache mit Holger vom onlinebanking-forum.de weiss ich aber, dass VRNetworld
+     * den auch verwendet und er von Banken als solcher erkannt wird.
+     */
+    protected final static String ENDTOEND_ID_NOTPROVIDED = "NOTPROVIDED";
+    
     private Properties sepaParams = new Properties();
     private String schema         = null;
     
@@ -210,15 +218,6 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	    setSEPAParam("messageId", result);
     	}
     	return result;
-    }
-
-    /**
-     * Gibt eine generierte End-to-End-ID zurueck.
-     * @return End-to-End-ID.
-     */
-    public String createEndToEndId()
-    {
-        return Long.toString(System.currentTimeMillis());
     }
 
     /**
