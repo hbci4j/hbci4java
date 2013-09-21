@@ -66,10 +66,10 @@ public class GVLastSEPA extends AbstractSEPAGV
     	addConstraint("btg.curr",        "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
     	addConstraint("usage",           "sepa.usage",     null,  LogFilter.FILTER_NONE);
     
-    	addConstraint("sepaid",          "sepa.sepaid",        getSEPAMessageId(), LogFilter.FILTER_NONE);
-    	addConstraint("endtoendid",      "sepa.endtoendid",    createEndToEndId(), LogFilter.FILTER_NONE);
-    	addConstraint("mandateid",       "sepa.mandateid",     null,               LogFilter.FILTER_NONE);
-    	addConstraint("manddateofsig",   "sepa.manddateofsig", null,LogFilter.FILTER_NONE);
+    	addConstraint("sepaid",          "sepa.sepaid",        getSEPAMessageId(),      LogFilter.FILTER_NONE);
+    	addConstraint("endtoendid",      "sepa.endtoendid",    ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE);
+    	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_NONE);
+    	addConstraint("manddateofsig",   "sepa.manddateofsig", null,                    LogFilter.FILTER_NONE);
     	addConstraint("amendmandindic",  "sepa.amendmandindic",Boolean.toString(false), LogFilter.FILTER_NONE);
     }
 }

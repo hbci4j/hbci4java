@@ -91,9 +91,7 @@ public class GVUebSEPA extends AbstractSEPAGV
         addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
       
         //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
-        addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(), LogFilter.FILTER_NONE);
-        
-        // Pflicht bei neueren PAIN-Versionen - daher mit Default-Wert
-        addConstraint("endtoendid", "sepa.endtoendid", createEndToEndId(), LogFilter.FILTER_NONE);
+        addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
+        addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE);
     }
 }
