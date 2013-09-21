@@ -48,6 +48,14 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedSMNDACode;
  */
 public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 {
+    /**
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getSEPADescriptor()
+     */
+    public String getSEPADescriptor()
+    {
+        return "sepade.pain.008.002.01.xsd";
+    }
+
 
 	/**
 	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)

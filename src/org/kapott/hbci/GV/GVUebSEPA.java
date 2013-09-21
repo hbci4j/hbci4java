@@ -74,7 +74,7 @@ public class GVUebSEPA extends AbstractSEPAGV
         addConstraint("src.subnumber","My.subnumber",  "", LogFilter.FILTER_MOST);
         */
 
-        addConstraint("_sepadescriptor", "sepadescr", "sepade." + this.getSchema() + ".xsd", LogFilter.FILTER_NONE);
+        addConstraint("_sepadescriptor", "sepadescr", this.getSEPADescriptor(), LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
 
         /* dummy constraints to allow an application to set these values. the

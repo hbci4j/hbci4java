@@ -35,6 +35,15 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.RemittanceInformation3;
  */
 public class GenUebSEPA00100102 extends AbstractSEPAGenerator
 {
+    
+    /**
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getSEPADescriptor()
+     */
+    public String getSEPADescriptor()
+    {
+        return "sepade.pain.001.001.02.xsd";
+    }
+    
 	/**
 	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)
 	 */

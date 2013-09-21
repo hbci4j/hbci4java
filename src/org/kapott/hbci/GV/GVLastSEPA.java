@@ -52,7 +52,8 @@ public class GVLastSEPA extends AbstractSEPAGV
     	// Belasteten.
     	addConstraint("src.bic",         "My.bic", null, LogFilter.FILTER_MOST);
     	addConstraint("src.iban",        "My.iban", null, LogFilter.FILTER_IDS);
-    	addConstraint("_sepadescriptor", "sepadescr", "sepade." + this.getSchema() + ".xsd", LogFilter.FILTER_NONE);
+    	
+    	addConstraint("_sepadescriptor", "sepadescr", this.getSEPADescriptor(), LogFilter.FILTER_NONE);
     	addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
     
     	addConstraint("src.bic",         "sepa.src.bic",  null,   LogFilter.FILTER_MOST);

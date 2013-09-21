@@ -24,8 +24,6 @@ public class SEPAGeneratorFactory
 	 */
 	public static ISEPAGenerator get(HBCIJob job, String schema)
 	{
-
-
 		//Schmenamen parsen und entsprechenden Generator für Job/Schema Kombination laden
 		String pschema = parseScheme(schema);
 		ISEPAGenerator ret=null;

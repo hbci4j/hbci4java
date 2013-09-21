@@ -18,4 +18,10 @@ public interface ISEPAGenerator
 	 * @throws Exception
 	 */
 	public void generate(AbstractSEPAGV job, OutputStream os) throws Exception; 
+	
+	/**
+	 * Liefert den zu verwendenden SEPA-Descriptor fuer die HBCI-Nachricht.
+	 * @return der zu verwendende SEPA-Descriptor fuer die HBCI-Nachricht.
+	 */
+	public String getSEPADescriptor();
 }

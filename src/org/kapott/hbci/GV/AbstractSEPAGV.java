@@ -24,8 +24,9 @@ import org.kapott.hbci.manager.HBCIUtils;
  */
 public abstract class AbstractSEPAGV extends HBCIJobImpl
 {
-    private Properties sepaParams = new Properties();
-    private String schema         = null;
+    private Properties sepaParams    = new Properties();
+    private String schema            = null;
+    private ISEPAGenerator generator = null;
     
     /**
      * Liefert den Namen des Default-PAIN-Schemas, das verwendet werden soll,
@@ -51,15 +52,6 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         this.schema = this.determineSchema(handler);
     }
     
-    /**
-     * Liefert das Pain-Schema.
-     * @return das Pain-Schema.
-     */
-    protected String getSchema()
-    {
-        return this.schema;
-    }
-
     /**
      * Diese Methode schaut in den BPD nach den unterstzützen pain Versionen
      * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
@@ -234,6 +226,32 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     	return format.format(now);
     }
+    
+    /**
+     * Liefert den passenden SEPA-Generator.
+     * @return der SEPA-Generator.
+     */
+    private ISEPAGenerator getSEPAGenerator()
+    {
+        if (this.generator == null)
+            this.generator = SEPAGeneratorFactory.get(this, this.schema);
+        return this.generator;
+    }
+    
+    /**
+     * Liefert den zu verwendenden SEPA-Descriptor fuer die HBCI-Nachricht.
+     * @return der zu verwendende SEPA-Descriptor fuer die HBCI-Nachricht.
+     */
+    protected String getSEPADescriptor()
+    {
+        String descr = this.getSEPAGenerator().getSEPADescriptor();
+        
+        if (descr != null)
+            return descr;
+        
+        // fallback falls der Generator das nicht weiss
+        return "sepade." + this.schema + ".xsd";
+    }
 
     /**
      * Erstellt die XML für diesen Job und schreibt diese in den _sepapain
@@ -245,7 +263,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	ByteArrayOutputStream o = new ByteArrayOutputStream();
     
     	// Passenden SEPA Generator zur verwendeten pain Version laden
-    	ISEPAGenerator gen = SEPAGeneratorFactory.get(this, this.getSchema());
+    	ISEPAGenerator gen = this.getSEPAGenerator();
     
     	// Die XML in den baos schreiben, ggf fehler behandeln
     	try {

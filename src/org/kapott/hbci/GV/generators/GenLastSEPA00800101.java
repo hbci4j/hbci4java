@@ -44,6 +44,14 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification2;
  */
 public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 {
+    /**
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getSEPADescriptor()
+     */
+    public String getSEPADescriptor()
+    {
+        return "sepade.pain.008.001.01.xsd";
+    }
+
 	/**
 	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)
 	 */
