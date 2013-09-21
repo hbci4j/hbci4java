@@ -107,7 +107,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                         if (version.length == 3)
                             validPains.add(version);
                         else
-                            HBCIUtils.log("ignoring invalid pain version " + rawpain,HBCIUtils.LOG_INFO);
+                            HBCIUtils.log("ignoring invalid pain version " + rawpain,HBCIUtils.LOG_WARN);
                     }
                 }
             }
@@ -135,14 +135,14 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                 if (maxMajorVersion == maj && maxMinorVersion == min)
                 {
                     String s = "pain." + pain[0] + "." + pain[1] + "." + pain[2];
-                    HBCIUtils.log("using pain version " + s,HBCIUtils.LOG_INFO);
+                    HBCIUtils.log("using pain version " + s,HBCIUtils.LOG_DEBUG);
                     return s;
                 }
             }
         }
         
         String def = this.getDefaultSchema();
-        HBCIUtils.log("unable to determine matching pain version, using default: " + def,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("unable to determine matching pain version, using default: " + def,HBCIUtils.LOG_WARN);
         return def;
     }
 
@@ -279,7 +279,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     
     	try {
             String xml = o.toString("ISO-8859-1");
-            HBCIUtils.log("generated XML:\n" + xml,HBCIUtils.LOG_INFO);
+            HBCIUtils.log("generated XML:\n" + xml,HBCIUtils.LOG_DEBUG);
     	    setParam("_sepapain", "B" + xml);
     	}
     	catch (UnsupportedEncodingException e)

@@ -32,7 +32,7 @@ public class SEPAGeneratorFactory
 		String className = "org.kapott.hbci.GV.generators.Gen" + jobname + pschema;
 
         try {
-            HBCIUtils.log("trying to load SEPA creator class: " + className,HBCIUtils.LOG_INFO);
+            HBCIUtils.log("trying to load SEPA creator class: " + className,HBCIUtils.LOG_DEBUG);
             Class cl = Class.forName(className);
             Constructor cons=cl.getConstructor();
             ret=(ISEPAGenerator)cons.newInstance();
