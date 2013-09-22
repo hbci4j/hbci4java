@@ -1,13 +1,12 @@
 package org.kapott.hbci.GV.generators;
 
-import java.lang.reflect.Constructor;
-
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.sepa.PainVersion;
 
 /**
  * Factory zum Ermitteln des passenden Pain-Generators fuer den angegebenen Job.
@@ -15,61 +14,33 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 public class SEPAGeneratorFactory
 {
 	/**
-	 * Gibt den passenden SEPA Generator für ein gegebenes Schema. Das Schema
-	 * muss dabei derzeit die Form "pain.001.001.02" oder "00100102" haben um
-	 * erfoglreich geparst zu werden.
+	 * Gibt den passenden SEPA Generator für die angegebene PAIN-Version.
 	 * @param job der zu erzeugende Job.
-	 * @param schema
+	 * @param version die PAIN-Version.
 	 * @return ISEPAGenerator
 	 */
-	public static ISEPAGenerator get(HBCIJob job, String schema)
+	public static ISEPAGenerator get(HBCIJob job, PainVersion version)
 	{
-		//Schmenamen parsen und entsprechenden Generator für Job/Schema Kombination laden
-		String pschema = parseScheme(schema);
-		ISEPAGenerator ret=null;
+		String jobname = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
+		
+		if (!version.isSupported(jobname))
+            throw new InvalidUserDataException("PAIN version is not supported: " + version);
 
-		String jobname   = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
-		String className = "org.kapott.hbci.GV.generators.Gen" + jobname + pschema;
-
-        try {
-            HBCIUtils.log("trying to load SEPA creator class: " + className,HBCIUtils.LOG_DEBUG);
-            Class cl = Class.forName(className);
-            Constructor cons=cl.getConstructor();
-            ret=(ISEPAGenerator)cons.newInstance();
-        }
-        catch (ClassNotFoundException e)
+        ISEPAGenerator gen = null;
+		String className   = version.getGeneratorClass(jobname);
+        try
         {
-            throw new InvalidUserDataException("*** there is no ISEPAGenerator class named " + className +". Maybe the pain version is not supported");
+            HBCIUtils.log("trying to init SEPA creator: " + className,HBCIUtils.LOG_DEBUG);
+            Class cl = Class.forName(className);
+            gen = (ISEPAGenerator) cl.newInstance();
         }
         catch (Exception e)
         {
-            String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_GENERATOR_CREATE_ERR",job.getName()); //TODO: Msg anlegen
+            String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_JOB_CREATE_ERR",jobname);
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreCreateJobErrors",msg))
-            	throw new HBCI_Exception(msg,e);
+                throw new HBCI_Exception(msg,e);
         }
-        return ret;
+        
+        return gen;
 	}
-
-
-	/**
-	 * Parst ein Schma in einen für diese Factory brauchbaren String.
-	 * @param schema
-	 * @return Schema als String der Form "00100102"
-	 */
-	private static String parseScheme(String schema) {
-
-		//Schema der Form 00100102
-		if(schema != null && schema.length() > 0 && schema.matches("[0-9]+"))
-			return schema;
-
-
-		//Schema der Form pain.001.001.02
-		String ret = "";
-		for(String s : schema.split("\\.")){
-			if(s.length() > 0 && s.matches("[0-9]+"))
-				ret = ret + s;
-		}
-		return ret;
-	}
-
 }

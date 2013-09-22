@@ -140,6 +140,24 @@ public class PainVersion implements Comparable<PainVersion>
     }
     
     /**
+     * Prueft, ob die angegebene PAIN-Version fuer den angegebenen Job von HBCI4Java unterstuetzt wird.
+     * @param jobName der Job-Name. Z.Bsp. "UebSEPA".
+     * @return true, wenn sie unterstuetzt wird.
+     */
+    public boolean isSupported(String jobName)
+    {
+        try
+        {
+            Class.forName(this.getGeneratorClass(jobName));
+            return true;
+        }
+        catch (ClassNotFoundException e)
+        {
+            return false;
+        }
+    }
+    
+    /**
      * Liefert den Typ der PAIN-Version.
      * @return der Typ der PAIN-Version.
      */
@@ -167,31 +185,28 @@ public class PainVersion implements Comparable<PainVersion>
     }
     
     /**
-     * Findet in den beiden Listen die hoechste gemeinsame Pain-Version.
-     * @param list1 Liste 1.
-     * @param list2 Liste 2.
-     * @return die hoechste gemeinsame Version oder NULL wenn keine existiert.
+     * Liefert die URN der PAIN-Version.
+     * @return die URN der PAIN-Version.
      */
-    public static PainVersion findGreatestCommon(List<PainVersion> list1, List<PainVersion> list2)
+    public String getURN()
     {
-        // Wir sortieren beide Listen erstmal absteigend
-        Collections.sort(list1);
-        Collections.reverse(list1);
+        return this.urn;
+    }
+    
+    /**
+     * Findet in den der Liste die hoechste Pain-Version.
+     * @param list Liste mit PAIN-Versionen.
+     * @return die hoechste Version oder NULL wenn die Liste leer ist.
+     */
+    public static PainVersion findGreatest(List<PainVersion> list)
+    {
+        if (list == null || list.size() == 0)
+            return null;
+
+        // Sortieren, damit die hoechste Version hinten steht
+        Collections.sort(list);
         
-        Collections.sort(list2);
-        Collections.reverse(list2);
-        
-        // Jetzt iterieren wir drueber uns suchen die erste gemeinsame Version
-        for (PainVersion v1:list1)
-        {
-            for (PainVersion v2:list2)
-            {
-                if (v1.equals(v2))
-                    return v1;
-            }
-        }
-        
-        return null;
+        return list.get(list.size() - 1); // letztes Element
     }
     
     /**

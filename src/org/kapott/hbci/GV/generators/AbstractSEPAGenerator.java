@@ -26,14 +26,4 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.marshal(e, os);
     }
-    
-    /**
-     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#getSEPADescriptor()
-     */
-    @Override
-    public String getSEPADescriptor()
-    {
-        return null;
-    }
-
 }

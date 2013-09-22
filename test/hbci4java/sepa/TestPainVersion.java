@@ -82,13 +82,13 @@ public class TestPainVersion
     }
     
     /**
-     * Testet das Ermitteln der hoechsten gemeinsamen PAIN-Version.
+     * Testet das Ermitteln der hoechsten PAIN-Version.
      * @throws Exception
      */
     @Test
     public void test006() throws Exception
     {
-        List<PainVersion> list1 = new ArrayList<PainVersion>()
+        List<PainVersion> list = new ArrayList<PainVersion>()
         {{
             add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
             add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
@@ -96,25 +96,19 @@ public class TestPainVersion
             add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
         }};
         
-        List<PainVersion> list2 = new ArrayList<PainVersion>()
-        {{
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
-        }};
-        
-        PainVersion highest = PainVersion.findGreatestCommon(list1,list2);
+        PainVersion highest = PainVersion.findGreatest(list);
         Assert.assertNotNull(highest);
-        Assert.assertEquals(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"),highest);
+        Assert.assertEquals(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"),highest);
     }
     
     /**
-     * Testet das Fehlschlagen von Vergleichen nicht-kompatibler PAIN-Versionen.
+     * Testet das Fehlschlagen bei nicht-kompatibler PAIN-Versionen.
      * @throws Exception
      */
     @Test(expected=IllegalArgumentException.class)
     public void test007() throws Exception
     {
-        List<PainVersion> list1 = new ArrayList<PainVersion>()
+        List<PainVersion> list = new ArrayList<PainVersion>()
         {{
             add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
             add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.001.01"));
@@ -122,15 +116,31 @@ public class TestPainVersion
             add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
         }};
         
-        List<PainVersion> list2 = new ArrayList<PainVersion>()
-        {{
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
-        }};
-
-        PainVersion.findGreatestCommon(list1,list2);
+        PainVersion.findGreatest(list);
+    }
+    
+    
+    /**
+     * Testet, dass die PAIN-Version von HBCI4Java unterstuetzt wird.
+     * @throws Exception
+     */
+    @Test
+    public void test008() throws Exception
+    {
+        PainVersion v = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
+        Assert.assertTrue(v.isSupported("UebSEPA"));
     }
 
+    /**
+     * Testet, dass die PAIN-Version von HBCI4Java nicht unterstuetzt wird.
+     * @throws Exception
+     */
+    @Test
+    public void test009() throws Exception
+    {
+        PainVersion v = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.004.03");
+        Assert.assertFalse(v.isSupported("UebSEPA"));
+    }
 }
 
 

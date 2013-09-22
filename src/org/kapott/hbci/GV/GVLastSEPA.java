@@ -7,28 +7,32 @@ package org.kapott.hbci.GV;
 
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.PainVersion.Type;
 
 /**
  * Implementierung des HBCI-Jobs fuer die SEPA-Basis-Lastschrift.
  */
 public class GVLastSEPA extends AbstractSEPAGV
 {
-    private final static String SCHEMA_DEFAULT = "pain.008.001.01";
+    private final static PainVersion DEFAULT = new PainVersion("sepade.pain.008.001.01.xsd");
     
     /**
-     * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultSchema()
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
      */
     @Override
-    protected String getDefaultSchema() {
-        return SCHEMA_DEFAULT;
+    protected PainVersion getDefaultPainVersion()
+    {
+        return DEFAULT;
     }
-    
+
     /**
-     * @see org.kapott.hbci.GV.AbstractSEPAGV#getSchemaPattern()
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainType()
      */
     @Override
-    protected String getSchemaPattern() {
-        return "pain\\.(008\\.\\d\\d\\d\\.\\d\\d)";
+    protected Type getPainType()
+    {
+        return Type.PAIN_008;
     }
 
     /**
@@ -53,7 +57,7 @@ public class GVLastSEPA extends AbstractSEPAGV
     	addConstraint("src.bic",         "My.bic", null, LogFilter.FILTER_MOST);
     	addConstraint("src.iban",        "My.iban", null, LogFilter.FILTER_IDS);
     	
-    	addConstraint("_sepadescriptor", "sepadescr", this.getSEPADescriptor(), LogFilter.FILTER_NONE);
+    	addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);
     	addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
     
     	addConstraint("src.bic",         "sepa.src.bic",  null,   LogFilter.FILTER_MOST);

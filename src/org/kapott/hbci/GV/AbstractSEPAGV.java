@@ -2,15 +2,12 @@ package org.kapott.hbci.GV;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
@@ -18,6 +15,8 @@ import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.PainVersion.Type;
 
 /** 
  * Abstrakte Basis-Klasse fuer JAXB-basierte SEPA-Jobs.
@@ -33,21 +32,21 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     protected final static String ENDTOEND_ID_NOTPROVIDED = "NOTPROVIDED";
     
     private Properties sepaParams    = new Properties();
-    private String schema            = null;
+    private PainVersion pain         = null;
     private ISEPAGenerator generator = null;
     
     /**
-     * Liefert den Namen des Default-PAIN-Schemas, das verwendet werden soll,
+     * Liefert die Default-PAIN-Version, das verwendet werden soll,
      * wenn von der Bank keine geliefert wurden.
-     * @return Default-Schema. Z.Bsp. "pain.008.001.01".
+     * @return Default-Pain-Version.
      */
-    protected abstract String getDefaultSchema();
+    protected abstract PainVersion getDefaultPainVersion();
     
     /**
-     * Liefert das Suchmuster fuer den Schema-Namen (regex).
-     * @return das Suchmuster. Z.Bsp. "pain\\.(008\\.\\d\\d\\d\\.\\d\\d)"
+     * Liefert den PAIN-Type.
+     * @return der PAIN-Type.
      */
-    protected abstract String getSchemaPattern();
+    protected abstract Type getPainType();
     
     /**
      * ct.
@@ -57,27 +56,24 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     public AbstractSEPAGV(HBCIHandler handler, String name)
     {
         super(handler, name, new HBCIJobResultImpl());
-        this.schema = this.determineSchema(handler);
+        this.pain = this.determinePainVersion(handler);
     }
     
     /**
-     * Diese Methode schaut in den BPD nach den unterstzützen pain Versionen
+     * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
      * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
      * unterstützen pain Versionen. Der größte gemeinsamme Nenner wird
      * zurueckgeliefert.
      * @param handler
-     * @return die ermittelte Schema-Version.
+     * @return die ermittelte PAIN-Version.
      */
-    private String determineSchema(HBCIHandler handler)
+    private PainVersion determinePainVersion(HBCIHandler handler)
     {
         // Bank hat Infos ueber unterstuetzte Schema-Versionen geliefert.
         if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") != null)
         {
-            // Regex für die pain Version
-            Pattern pattern = Pattern.compile(this.getSchemaPattern());
-        
-            // Liste zum speichern aller gefundenen pain Versionen
-            List<String[]> validPains = new ArrayList<String[]>();
+            HBCIUtils.log("searching for supported pain versions",HBCIUtils.LOG_DEBUG);
+            List<PainVersion> found = new ArrayList<PainVersion>();
         
             // SEPAInfo laden und darüber iterieren
             Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
@@ -89,59 +85,35 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                 // Die Keys, welche die Schema-Versionen enthalten, heissen alle "suppformats*"
                 if (!key.startsWith("suppformats"))
                     continue;
-                
-                String val = props.getProperty(key);
 
-                // pain Version suchen
-                Matcher m = pattern.matcher(val);
-                while (m.find())
+                String urn = props.getProperty(key);
+                try
                 {
-                    // Prüfen ob die gefundene pain Version von HBCI4Java
-                    // unterstützt wird. Dazu einfach prüfen ob das pain Schema
-                    // vorhanden ist
-                    String rawpain = m.group(1);
-                    URL u = AbstractSEPAGV.class.getClassLoader().getResource("pain." + rawpain + ".xsd");
-                    if (u != null)
+                    PainVersion version = new PainVersion(urn);
+                    if (version.getType() == this.getPainType())
                     {
-                        String[] version = rawpain.split("\\.");
-                        if (version.length == 3)
-                            validPains.add(version);
-                        else
-                            HBCIUtils.log("ignoring invalid pain version " + rawpain,HBCIUtils.LOG_WARN);
+                        if (!version.isSupported(this.getJobName()))
+                        {
+                            HBCIUtils.log("  unsupported " + version,HBCIUtils.LOG_DEBUG);
+                            continue;
+                        }
+                        HBCIUtils.log("  found " + version,HBCIUtils.LOG_DEBUG);
+                        found.add(version);
                     }
                 }
-            }
-
-            int maxMajorVersion = 0;
-            int maxMinorVersion = 0;
-            
-            for (String[] pain : validPains)
-            {
-                maxMajorVersion = Math.max(Integer.parseInt(pain[1]),maxMajorVersion);
-            }
-            
-            for (String[] pain : validPains)
-            {
-                int maj = Integer.parseInt(pain[1]);
-                if (maj == maxMajorVersion)
+                catch (Exception ex)
                 {
-                    maxMinorVersion = Math.max(Integer.parseInt(pain[2]),maxMinorVersion);
+                    HBCIUtils.log("ignoring invalid pain version " + urn,HBCIUtils.LOG_WARN);
+                    HBCIUtils.log(ex,HBCIUtils.LOG_DEBUG);
                 }
             }
-            for (String[] pain : validPains)
-            {
-                int maj = Integer.parseInt(pain[1]);
-                int min = Integer.parseInt(pain[2]);
-                if (maxMajorVersion == maj && maxMinorVersion == min)
-                {
-                    String s = "pain." + pain[0] + "." + pain[1] + "." + pain[2];
-                    HBCIUtils.log("using pain version " + s,HBCIUtils.LOG_DEBUG);
-                    return s;
-                }
-            }
+            
+            PainVersion version = PainVersion.findGreatest(found);
+            if (version != null)
+                return version;
         }
         
-        String def = this.getDefaultSchema();
+        PainVersion def = this.getDefaultPainVersion();
         HBCIUtils.log("unable to determine matching pain version, using default: " + def,HBCIUtils.LOG_WARN);
         return def;
     }
@@ -233,23 +205,17 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     private ISEPAGenerator getSEPAGenerator()
     {
         if (this.generator == null)
-            this.generator = SEPAGeneratorFactory.get(this, this.schema);
+            this.generator = SEPAGeneratorFactory.get(this, this.getPainVersion());
         return this.generator;
     }
     
     /**
-     * Liefert den zu verwendenden SEPA-Descriptor fuer die HBCI-Nachricht.
-     * @return der zu verwendende SEPA-Descriptor fuer die HBCI-Nachricht.
+     * Liefert den zu verwendenden PAIN-Version fuer die HBCI-Nachricht.
+     * @return der zu verwendende PAIN-Version fuer die HBCI-Nachricht.
      */
-    protected String getSEPADescriptor()
+    protected PainVersion getPainVersion()
     {
-        String descr = this.getSEPAGenerator().getSEPADescriptor();
-        
-        if (descr != null)
-            return descr;
-        
-        // fallback falls der Generator das nicht weiss
-        return "sepade." + this.schema + ".xsd";
+        return this.pain;
     }
 
     /**

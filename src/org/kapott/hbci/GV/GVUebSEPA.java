@@ -23,30 +23,34 @@ package org.kapott.hbci.GV;
 
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.PainVersion.Type;
 
 /**
  * Job-Implementierung fuer SEPA-Ueberweisungen.
  */
 public class GVUebSEPA extends AbstractSEPAGV
 {
-    private final static String SCHEMA_DEFAULT = "pain.001.001.02";
+    private final static PainVersion DEFAULT = new PainVersion("sepade.pain.001.001.02.xsd");
     
     /**
-     * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultSchema()
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
      */
     @Override
-    protected String getDefaultSchema() {
-        return SCHEMA_DEFAULT;
-    }
-    
-    /**
-     * @see org.kapott.hbci.GV.AbstractSEPAGV#getSchemaPattern()
-     */
-    @Override
-    protected String getSchemaPattern() {
-        return "pain\\.(001\\.\\d\\d\\d\\.\\d\\d)";
+    protected PainVersion getDefaultPainVersion()
+    {
+        return DEFAULT;
     }
 
+    /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainType()
+     */
+    @Override
+    protected Type getPainType()
+    {
+        return Type.PAIN_001;
+    }
+    
     /**
      * Liefert den Lowlevel-Namen des Jobs.
      * @return der Lowlevel-Namen des Jobs.
@@ -74,7 +78,7 @@ public class GVUebSEPA extends AbstractSEPAGV
         addConstraint("src.subnumber","My.subnumber",  "", LogFilter.FILTER_MOST);
         */
 
-        addConstraint("_sepadescriptor", "sepadescr", this.getSEPADescriptor(), LogFilter.FILTER_NONE);
+        addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
 
         /* dummy constraints to allow an application to set these values. the
