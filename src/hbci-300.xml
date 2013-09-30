@@ -1317,17 +1317,17 @@
         </DEGdef>
         
         <DEGdef id="ParTermSepaEinzelLast">
-            <DE name="minVorlZeitFNALRCUR" type="num" maxsize="4"/>
-            <DE name="maxVorlZeitFNALRCUR" type="num" maxsize="4"/>
-            <DE name="minVorlZeitFRSTOOFF" type="num" maxsize="4"/>
-            <DE name="maxVorlZeitFRSTOOFF" type="num" maxsize="4"/>
+            <DE name="minVorlZeitFNALRCUR" type="Num" maxsize="4"/>
+            <DE name="maxVorlZeitFNALRCUR" type="Num" maxsize="4"/>
+            <DE name="minVorlZeitFRSTOOFF" type="Num" maxsize="4"/>
+            <DE name="maxVorlZeitFRSTOOFF" type="Num" maxsize="4"/>
         </DEGdef>
 
         <DEGdef id="ParTermSepaCOR1">
-            <DE name="minVorlZeitFNALRCUR" type="num" maxsize="4"/>
-            <DE name="maxVorlZeitFNALRCUR" type="num" maxsize="4"/>
-            <DE name="minVorlZeitFRSTOOFF" type="num" maxsize="4"/>
-            <DE name="maxVorlZeitFRSTOOFF" type="num" maxsize="4"/>
+            <DE name="minVorlZeitFNALRCUR" type="Num" maxsize="4"/>
+            <DE name="maxVorlZeitFNALRCUR" type="Num" maxsize="4"/>
+            <DE name="minVorlZeitFRSTOOFF" type="Num" maxsize="4"/>
+            <DE name="maxVorlZeitFRSTOOFF" type="Num" maxsize="4"/>
 			<DE name="PurposeCodes" type="AN" maxsize="4096" />
             <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
