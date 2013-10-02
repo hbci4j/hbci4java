@@ -299,4 +299,14 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     public String getSEPAParam(String name) {
         return this.sepaParams.getProperty(name);
     }
+    
+    /**
+     * Referenzierter pain-Jobname. Bei vielen Geschäftsvorfällen (z.B. Daueraufträgen) wird die pain der Einzeltransaktion verwendet.
+     * 
+     * @param name
+     * @return Value
+     */
+    public String getPainJobName() {
+        return this.getJobName();
+    }
 }

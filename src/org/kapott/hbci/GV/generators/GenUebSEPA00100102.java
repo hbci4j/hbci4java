@@ -19,6 +19,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.EuroMax9Amount;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitution2;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.FinancialInstitutionIdentification4;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.GroupHeader20;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Grouping2Code;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Pain00100102;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification20;
@@ -27,7 +28,10 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PartyIdentification23;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentInstructionInformation4;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentMethod5Code;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentTypeInformation7;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.RemittanceInformation3;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ServiceLevel3Code;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ServiceLevel4;
 
 
 /**
@@ -61,6 +65,7 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
 		doc.getPain00100102().getGrpHdr().setMsgId(job.getSEPAParam("sepaid"));
 		doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 	    doc.getPain00100102().getGrpHdr().setNbOfTxs("1");
+        doc.getPain00100102().getGrpHdr().setGrpg(Grouping2Code.GRPD);
 		doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentification20());
 		doc.getPain00100102().getGrpHdr().getInitgPty().setNm(job.getSEPAParam("src.name"));
 		
@@ -72,6 +77,13 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
 		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
 		pmtInf.setPmtInfId(job.getSEPAParam("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod5Code.TRF);
+		
+		// Payment Type Information
+		ServiceLevel4 sl4 = new ServiceLevel4();
+		sl4.setCd(ServiceLevel3Code.SEPA);
+		PaymentTypeInformation7 pti7 = new PaymentTypeInformation7();
+		pti7.setSvcLvl(sl4);
+		pmtInf.setPmtTpInf(pti7);
 		
 		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
 		pmtInf.setDbtr(new PartyIdentification23());

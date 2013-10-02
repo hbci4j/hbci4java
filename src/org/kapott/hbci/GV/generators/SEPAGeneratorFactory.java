@@ -1,7 +1,7 @@
 package org.kapott.hbci.GV.generators;
 
 import org.kapott.hbci.GV.HBCIJob;
-import org.kapott.hbci.GV.HBCIJobImpl;
+import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -21,7 +21,8 @@ public class SEPAGeneratorFactory
 	 */
 	public static ISEPAGenerator get(HBCIJob job, PainVersion version)
 	{
-		String jobname = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
+		//String jobname = ((HBCIJobImpl)job).getJobName(); // "getJobName()" ist ohne Versionsnummer, "getName()" ist mit Versionsnummer
+        String jobname = ((AbstractSEPAGV)job).getPainJobName(); // referenzierter pain-Geschäftsvorfall
 		
 		if (!version.isSupported(jobname))
             throw new InvalidUserDataException("PAIN version is not supported: " + version);
