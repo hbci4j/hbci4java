@@ -20,6 +20,11 @@ import org.kapott.hbci.GV.generators.ISEPAGenerator;
  */
 public class PainVersion implements Comparable<PainVersion>
 {
+    private final static DecimalFormat DF_MAJOR = new DecimalFormat("000");
+    private final static DecimalFormat DF_MINOR = new DecimalFormat("00");
+    
+    private final static Pattern PATTERN = Pattern.compile("(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
+
     @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_02 = new PainVersion("urn:sepade:xsd:pain.001.001.02",                "pain.001.001.02.xsd");
     @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_02 = new PainVersion("urn:swift:xsd:$pain.001.002.02",                "pain.001.002.02.xsd");
     @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03","pain.001.002.03.xsd");
@@ -106,11 +111,6 @@ public class PainVersion implements Comparable<PainVersion>
         }
     }
     
-    private final static DecimalFormat DF_MAJOR = new DecimalFormat("000");
-    private final static DecimalFormat DF_MINOR = new DecimalFormat("00");
-    
-    private final static Pattern PATTERN = Pattern.compile("(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
-
     private String urn  = null;
     private String file = null;
     private Type type   = null;
