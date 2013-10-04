@@ -6,13 +6,13 @@ import java.util.Properties;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
-import org.kapott.hbci.manager.LogFilter;
 
 public class GVDauerSEPANew extends AbstractSEPAGV {
 
-    private final static PainVersion DEFAULT = new PainVersion("sepade.pain.001.001.02.xsd");
+    private final static PainVersion DEFAULT = PainVersion.PAIN_001_001_02;
     
     /**
      * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()

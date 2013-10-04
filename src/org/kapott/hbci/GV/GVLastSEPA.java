@@ -15,7 +15,7 @@ import org.kapott.hbci.sepa.PainVersion.Type;
  */
 public class GVLastSEPA extends AbstractSEPAGV
 {
-    private final static PainVersion DEFAULT = new PainVersion("sepade.pain.008.001.01.xsd");
+    private final static PainVersion DEFAULT = PainVersion.PAIN_008_001_01;
     
     /**
      * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
