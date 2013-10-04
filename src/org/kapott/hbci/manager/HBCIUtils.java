@@ -278,6 +278,8 @@ import org.kapott.hbci.swift.Swift;
           dieser SOCKS-Server im Format <code>hostname:port</code> festgelegt werden. 
           Diese Einstellung wird <em>NICHT</em> für HBCI-PIN/TAN verwendet, sondern nur 
           für alle "richtigen" HBCI-Verbindungen (alle Passport-Varianten von RDH und DDV).</p></li>
+      <li><code>sepa.schema.validation</code>
+          <p>Kann auf 1 gesetzt werden, wenn das erzeugte XML gegen das Schema validiert werden soll.</p></li>
       <li><code>kernel.kernel.xmlpath</code>
           <p>(wird nicht gesetzt, zur Zeit nur intern benutzt)</p></li>
       <li><code>kernel.kernel.blzpath</code>

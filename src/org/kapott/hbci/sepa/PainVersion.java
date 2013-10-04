@@ -20,6 +20,19 @@ import org.kapott.hbci.GV.generators.ISEPAGenerator;
  */
 public class PainVersion implements Comparable<PainVersion>
 {
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_02 = new PainVersion("urn:sepade:xsd:pain.001.001.02",                "pain.001.001.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_02 = new PainVersion("urn:swift:xsd:$pain.001.002.02",                "pain.001.002.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03","pain.001.002.03.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_003_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03","pain.001.003.03.xsd");
+    
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_002_02 = new PainVersion("urn:swift:xsd:$pain.002.002.02",                "pain.002.002.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_003_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.002.003.03","pain.002.003.03.xsd");
+    
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_001_01 = new PainVersion("urn:sepade:xsd:pain.008.001.01",                "pain.008.001.01.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_01 = new PainVersion("urn:swift:xsd:$pain.008.002.01",                "pain.008.002.01.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_02 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.002.02","pain.008.002.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_003_02 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.003.02","pain.008.003.02.xsd");
+    
     /**
      * Enum fuer die Gruppierung der verschienden Typen von Geschaeftsvorfaellen.
      */
@@ -33,7 +46,7 @@ public class PainVersion implements Comparable<PainVersion>
         /**
          * Kontoauszuege.
          */
-        PAIN_002("002","paiment status"),
+        PAIN_002("002","payment status"),
         
         /**
          * Lastschriften.
@@ -98,10 +111,12 @@ public class PainVersion implements Comparable<PainVersion>
     
     private final static Pattern PATTERN = Pattern.compile("(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
 
-    private String urn = null;
-    private Type type  = null;
-    private int major  = 0;
-    private int minor  = 0;
+    private String urn  = null;
+    private String file = null;
+    private Type type   = null;
+    private int major   = 0;
+    private int minor   = 0;
+    
     
     /**
      * Erzeugt eine PAIN-Version aus dem URN bzw dem Dateinamen.
@@ -111,14 +126,40 @@ public class PainVersion implements Comparable<PainVersion>
      */
     public PainVersion(String urn)
     {
+        this(urn,null);
+    }
+    
+    /**
+     * Erzeugt eine PAIN-Version aus dem URN bzw dem Dateinamen.
+     * @param urn URN.
+     * In der Form "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" oder in
+     * der alten Form "sepade.pain.001.001.02.xsd".
+     * @param file Dateiname der Schema-Datei.
+     */
+    public PainVersion(String urn, String file)
+    {
         Matcher m = PATTERN.matcher(urn);
         if (!m.find() || m.groupCount() != 3)
             throw new IllegalArgumentException("invalid pain-version: " + urn);
         
         this.urn   = urn;
+        this.file  = file;
         this.type  = Type.getType(m.group(1));
         this.major = Integer.parseInt(m.group(2));
         this.minor = Integer.parseInt(m.group(3));
+    }
+    
+    /**
+     * Liefert einen String "<URN> <FILE>" zurueck, der im erzeugten XML als
+     * "xsi:schemaLocation" verwendet werden kann.
+     * @return Schema-Location oder NULL, wenn "file" nicht gesetzt wurde.
+     */
+    public String getSchemaLocation()
+    {
+        if (this.file == null)
+            return null;
+        
+        return this.urn + " " + this.file;
     }
     
     /**
@@ -191,6 +232,15 @@ public class PainVersion implements Comparable<PainVersion>
     public String getURN()
     {
         return this.urn;
+    }
+    
+    /**
+     * Liefert den Dateinamen des Schemas insofern bekannt.
+     * @return der Dateiname des Schema oder null.
+     */
+    public String getFile()
+    {
+        return this.file;
     }
     
     /**

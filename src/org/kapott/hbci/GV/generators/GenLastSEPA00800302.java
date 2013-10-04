@@ -9,6 +9,7 @@ import java.util.Date;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.GV.AbstractSEPAGV;
+import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ActiveOrHistoricCurrencyAndAmountSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ActiveOrHistoricCurrencyCodeEUR;
@@ -49,6 +50,15 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedSMNDACode;
  */
 public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 {
+    /**
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getPainVersion()
+     */
+    @Override
+    public PainVersion getPainVersion()
+    {
+        return PainVersion.PAIN_008_003_02;
+    }
+
 	/**
 	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)
 	 */

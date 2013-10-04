@@ -9,6 +9,7 @@ import java.util.Date;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.GV.AbstractSEPAGV;
+import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.AccountIdentificationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.AmendmentInformationDetailsSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.BranchAndFinancialInstitutionIdentificationSDD1;
@@ -48,6 +49,15 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedSMNDACode;
  */
 public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 {
+    /**
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getPainVersion()
+     */
+    @Override
+    public PainVersion getPainVersion()
+    {
+        return PainVersion.PAIN_008_002_01;
+    }
+
 	/**
 	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)
 	 */
