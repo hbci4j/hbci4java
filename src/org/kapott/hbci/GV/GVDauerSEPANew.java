@@ -1,14 +1,17 @@
 package org.kapott.hbci.GV;
 
 import java.text.DecimalFormat;
+import java.util.Enumeration;
 import java.util.Properties;
 
+import org.kapott.hbci.GV_Result.GVRDauerNew;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.status.HBCIMsgStatus;
 
 public class GVDauerSEPANew extends AbstractSEPAGV {
 
@@ -42,7 +45,7 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
     }
 
     public GVDauerSEPANew(HBCIHandler handler) {
-        super(handler,getLowlevelName());
+        super(handler,getLowlevelName(), new GVRDauerNew());
 
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
@@ -168,7 +171,28 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         super.setParam(paramName,value);
     }
     
+    protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
+    {
+        Properties result=msgstatus.getData();
+        String orderid=result.getProperty(header+".orderid");
+        ((GVRDauerNew)(jobResult)).setOrderId(orderid);
+
+        if (orderid!=null && orderid.length()!=0) {
+            Properties p=getLowlevelParams();
+            Properties p2=new Properties();
+
+            for (Enumeration e=p.propertyNames();e.hasMoreElements();) {
+                String key=(String)e.nextElement();
+                p2.setProperty(key.substring(key.indexOf(".")+1),
+                               p.getProperty(key));
+            }
+
+            getMainPassport().setPersistentData("dauer_"+orderid,p2);
+        }
+    }
+    
     public String getPainJobName() {
         return "UebSEPA";
     }
+
 }

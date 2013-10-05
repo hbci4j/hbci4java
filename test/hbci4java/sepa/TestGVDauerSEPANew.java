@@ -5,6 +5,8 @@ import org.junit.Test;
 import hbci4java.AbstractTest;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,17 +39,10 @@ public class TestGVDauerSEPANew extends AbstractTest {
     {{
       // Demo-Konto bei der GAD
       put(HBCICallback.NEED_COUNTRY,         "DE");
-      put(HBCICallback.NEED_BLZ,             "49999924");
-      put(HBCICallback.NEED_CUSTOMERID,      "XXXX");
       put(HBCICallback.NEED_FILTER,          "Base64");
-      put(HBCICallback.NEED_HOST,            "hbci-pintan.gad.de/cgi-bin/hbciservlet");
       put(HBCICallback.NEED_PASSPHRASE_LOAD, "test");
       put(HBCICallback.NEED_PASSPHRASE_SAVE, "test");
       put(HBCICallback.NEED_PORT,            "443");
-      put(HBCICallback.NEED_PT_PIN,          "XXXX");
-//      put(HBCICallback.NEED_PT_TAN,          "123456"); // hier geht jede 6-stellige Zahl
-      put(HBCICallback.NEED_USERID,          "XXXXX");
-      put(HBCICallback.NEED_PT_SECMECH,      "942"); 
       put(HBCICallback.NEED_CONNECTION,      ""); // ignorieren
       put(HBCICallback.CLOSE_CONNECTION,     ""); // ignorieren
     }};
@@ -56,6 +51,7 @@ public class TestGVDauerSEPANew extends AbstractTest {
     
     private HBCIPassportPinTan passport = null;
     private HBCIHandler handler         = null;
+    private Properties params           = new Properties();
     
     
     @Test
@@ -64,11 +60,11 @@ public class TestGVDauerSEPANew extends AbstractTest {
         HBCIJob job =  handler.newJob("DauerSEPANew");
         
         Konto acc = new Konto();
-        acc.blz = "XXXXX";
-        acc.number = "XXXXXX";
+        acc.blz = params.getProperty("target_blz");
+        acc.number = params.getProperty("target_number");
         acc.name = "Kurt Mustermann";
-        acc.bic = "XXXXXX";
-        acc.iban = "XXXXXX";
+        acc.bic = params.getProperty("target_bic");
+        acc.iban = params.getProperty("target_iban");
         
         
         job.setParam("src",passport.getAccounts()[0]);
@@ -98,6 +94,18 @@ public class TestGVDauerSEPANew extends AbstractTest {
     @Before
     public void beforeTest() throws Exception
     {
+      // Testdatei im Arbeitsverzeichnis - sollte in der Run-Konfiguration auf ein eigenes Verzeichnis zeigen  
+      String workDir = System.getProperty("user.dir");
+      InputStream in = new FileInputStream(workDir+"/DauerSEPANew.properties");
+      params.load(in);
+      
+      settings.put(HBCICallback.NEED_BLZ, params.getProperty("blz"));
+      settings.put(HBCICallback.NEED_CUSTOMERID, params.getProperty("customerid"));
+      settings.put(HBCICallback.NEED_HOST, params.getProperty("host"));
+      settings.put(HBCICallback.NEED_PT_PIN, params.getProperty("pin"));
+      settings.put(HBCICallback.NEED_USERID, params.getProperty("userid"));
+      settings.put(HBCICallback.NEED_PT_SECMECH, params.getProperty("secmech"));
+              
       Properties props = new Properties();
       props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
       props.put("infoPoint.enabled",Boolean.FALSE.toString());

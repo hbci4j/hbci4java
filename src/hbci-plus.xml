@@ -5571,6 +5571,35 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
         
+        <!-- ================================== SEPA Standing Orders ========================= -->
+        <SEGdef id="DauerSEPANew1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DEG type="DauerDetails"/>
+            
+            <value path="SegHead.code">HKCDE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="DauerSEPANewRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            
+            <value path="SegHead.code">HICDE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="DauerSEPANewPar1">
+            &GVP2;
+            <DEG type="ParDauerSEPANew"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HICDES</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        
+        
         <SEGdef id="Umb1"> <!-- 2.2 -->
             &SingleInlandUser3;
 

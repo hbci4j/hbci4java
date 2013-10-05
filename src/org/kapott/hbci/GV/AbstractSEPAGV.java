@@ -59,6 +59,12 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         this.pain = this.determinePainVersion(handler);
     }
     
+    public AbstractSEPAGV(HBCIHandler handler, String name, HBCIJobResultImpl jobResult)
+    {
+        super(handler, name, jobResult);
+        this.pain = this.determinePainVersion(handler);
+    }
+    
     /**
      * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
      * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
