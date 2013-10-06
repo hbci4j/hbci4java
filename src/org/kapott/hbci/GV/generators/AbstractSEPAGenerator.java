@@ -7,6 +7,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -53,7 +54,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                     {
                         HBCIUtils.log("activating schema validation " + schemaLocation,HBCIUtils.LOG_DEBUG);
                         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                        Schema schema = schemaFactory.newSchema();
+                        Schema schema = schemaFactory.newSchema(new StreamSource(is));
                         marshaller.setSchema(schema);
                     }
                 }
