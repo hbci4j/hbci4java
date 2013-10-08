@@ -37,12 +37,14 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartySEPA2;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PaymentIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PaymentInstructionInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PaymentMethod2Code;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PaymentTypeInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PersonIdentificationSEPA2;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RemittanceInformationSEPA1Choice;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedFinancialIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedPersonIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedPersonIdentificationSchemeNameSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedSMNDACode;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.SequenceType1Code;
 
 
 /**
@@ -115,6 +117,9 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		//Payment Information - ChargeBearer
 		pmtInf.setChrgBr(ChargeBearerTypeSEPACode.SLEV);
 		
+		pmtInf.setPmtTpInf(new PaymentTypeInformationSDD());
+		pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(job.getSEPAParam("sequencetype")));
+		
 		
 		//Payment Information - Credit Transfer Transaction Information
 		ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();
@@ -123,7 +128,6 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		
 		
 		
-		//FIXME: SEPA Mandant
 		drctDbtTxInf.setDrctDbtTx(new DirectDebitTransactionSDD());
 		drctDbtTxInf.getDrctDbtTx().setCdtrSchmeId(new PartyIdentificationSEPA3()); 
 		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().setId(new PartySEPA2());
@@ -136,15 +140,18 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		drctDbtTxInf.getDrctDbtTx().setMndtRltdInf(new MandateRelatedInformationSDD());
 		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setMndtId(job.getSEPAParam("mandateid"));
 		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(job.getSEPAParam("manddateofsig"))); //FIXME: Wird das datum richtig geparst?
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setAmdmntInd(Boolean.valueOf(job.getSEPAParam("amendmandindic")));
-		//FIXME: Ich glaube die AmdmntInfDtls wird nur gebraucht wenn AmdmntInd true ist. Wenn ja muss das hier in ne if
-//		if(Boolean.valueOf(job.getSEPAParam("amendmandindic")) == true){
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setAmdmntInfDtls(new AmendmentInformationDetailsSDD());
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().setOrgnlDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA2());
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().getOrgnlDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA2());
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().getOrgnlDbtrAgt().getFinInstnId().setOthr(new RestrictedFinancialIdentificationSEPA());
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().getOrgnlDbtrAgt().getFinInstnId().getOthr().setId(RestrictedSMNDACode.SMNDA);
-//		}
+		
+		
+		boolean amend = Boolean.valueOf(job.getSEPAParam("amendmandindic"));
+		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setAmdmntInd(amend);
+		if(amend)
+		{
+    		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setAmdmntInfDtls(new AmendmentInformationDetailsSDD());
+    		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().setOrgnlDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA2());
+    		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().getOrgnlDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA2());
+    		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().getOrgnlDbtrAgt().getFinInstnId().setOthr(new RestrictedFinancialIdentificationSEPA());
+    		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().getAmdmntInfDtls().getOrgnlDbtrAgt().getFinInstnId().getOthr().setId(RestrictedSMNDACode.SMNDA);
+		}
 		
 		
 		
@@ -175,12 +182,10 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		drctDbtTxInf.setInstdAmt(new ActiveOrHistoricCurrencyAndAmountSEPA());
 		drctDbtTxInf.getInstdAmt().setValue(new BigDecimal(job.getSEPAParam("btg.value")));
 		
-		//FIXME: Schema sagt es gibt nur "eur" aber besser wäre bestimmt trotzdem getSEPAParam("btg.curr") oder?
 		drctDbtTxInf.getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR); 
 		
 
 		//Payment Information - Credit Transfer Transaction Information - Usage
-		//FIXME: momentan nur unstrukturierter Verwendungszweck! Vielleicht gibt es einen Parameter dafür? Dann kann man per If entscheiden
 		drctDbtTxInf.setRmtInf(new RemittanceInformationSEPA1Choice());
 		drctDbtTxInf.getRmtInf().setUstrd(job.getSEPAParam("usage"));
 

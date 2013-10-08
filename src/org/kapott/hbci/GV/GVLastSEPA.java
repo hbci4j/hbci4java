@@ -75,5 +75,15 @@ public class GVLastSEPA extends AbstractSEPAGV
     	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_NONE);
     	addConstraint("manddateofsig",   "sepa.manddateofsig", null,                    LogFilter.FILTER_NONE);
     	addConstraint("amendmandindic",  "sepa.amendmandindic",Boolean.toString(false), LogFilter.FILTER_NONE);
+
+    	// Moegliche Werte:
+    	//   FRST = Erst-Einzug
+    	//   RCUR = Folge-Einzug
+    	//   OOFF = Einmal-Einzug
+    	//   FNAL = letztmaliger Einzug
+    	//
+    	// Ueblicherweise verwendet man bei einem Mandat bei der ersten Abbuchung "FRST"
+    	// und bei allen Folgeabbuchungen des selben Mandats "RCUR".
+    	addConstraint("sequencetype",    "sepa.sequencetype",  "FRST", LogFilter.FILTER_NONE);
     }
 }
