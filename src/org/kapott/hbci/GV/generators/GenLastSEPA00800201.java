@@ -130,7 +130,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().setId(new PartySDD());
 		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().setPrvtId(new PersonIdentificationSDD2());
 		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().setOthrId(new GenericIdentificationSDD());
-		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().setId(job.getSEPAParam("src.iban"));
+		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().setId(job.getSEPAParam("creditorid"));
 		drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().setIdTp(RestrictedSEPACode.SEPA);
 
 				

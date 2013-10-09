@@ -71,11 +71,12 @@ public class GVLastSEPA extends AbstractSEPAGV
     	addConstraint("usage",           "sepa.usage",     null,  LogFilter.FILTER_NONE);
     
     	addConstraint("sepaid",          "sepa.sepaid",        getSEPAMessageId(),      LogFilter.FILTER_NONE);
-    	addConstraint("endtoendid",      "sepa.endtoendid",    ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE);
-    	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_NONE);
+    	addConstraint("endtoendid",      "sepa.endtoendid",    ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_IDS);
+        addConstraint("creditorid",      "sepa.creditorid",    null,                    LogFilter.FILTER_IDS);
+    	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_IDS);
     	addConstraint("manddateofsig",   "sepa.manddateofsig", null,                    LogFilter.FILTER_NONE);
     	addConstraint("amendmandindic",  "sepa.amendmandindic",Boolean.toString(false), LogFilter.FILTER_NONE);
-
+    	
     	// Moegliche Werte:
     	//   FRST = Erst-Einzug
     	//   RCUR = Folge-Einzug
