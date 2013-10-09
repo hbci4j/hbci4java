@@ -1,6 +1,5 @@
 package hbci4java.sepa;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 import hbci4java.AbstractTest;
 
@@ -18,7 +17,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.callback.HBCICallback;

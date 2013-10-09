@@ -1,7 +1,5 @@
 package hbci4java.bpd;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import hbci4java.AbstractTest;
 import org.kapott.hbci.manager.HBCIKernelImpl;

@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.GVTAN2Step;
-import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
