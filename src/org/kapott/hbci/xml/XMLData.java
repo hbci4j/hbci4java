@@ -34,7 +34,7 @@ import org.w3c.dom.Node;
 public class XMLData
 {
     private Document   rootdoc;
-    private Map        nodes;   // path -> node
+    private Map<String,Node>        nodes;   // path -> node
     private Properties values;
     private Map        restrictions;
     private Map        errors;
@@ -43,7 +43,7 @@ public class XMLData
     
     public XMLData()
     {
-        this.nodes=new Hashtable();
+        this.nodes=new Hashtable<String, Node>();
         this.values=new Properties();
         this.restrictions=new Hashtable();
         this.errors=new Hashtable();

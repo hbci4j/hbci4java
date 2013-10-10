@@ -58,7 +58,7 @@ import org.w3c.dom.NodeList;
 public final class MsgGen
 {
     private Document syntax;         /**< @internal @brief The representation of the syntax used by this generator */
-    private Hashtable clientValues;  /**< @internal @brief A table of properties set by the user to specify the message to be generated */
+    private Hashtable<String, String> clientValues;  /**< @internal @brief A table of properties set by the user to specify the message to be generated */
     
     // Wird vom Server-Code benutzt. Wenn ein Dialog reinkommt mit einer HBCI-
     // Version, die schon mal benutzt wurde, dann wird nicht das entsprechende
@@ -66,7 +66,7 @@ public final class MsgGen
     public MsgGen(Document syntax)
     {
         this.syntax=syntax;
-        this.clientValues=new Hashtable();
+        this.clientValues=new Hashtable<String, String>();
     }
 
     /* Initialisieren eines Message-Generators. Der <syntaFileStream> ist ein
@@ -84,7 +84,7 @@ public final class MsgGen
             syntax=db.parse(syntaxFileStream);
             syntaxFileStream.close();
 
-            clientValues=new Hashtable();
+            clientValues=new Hashtable<String, String>();
         } catch (FactoryConfigurationError e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_MSGGEN_DBFAC"),e);
         } catch (ParserConfigurationException e) {
@@ -138,9 +138,9 @@ public final class MsgGen
         return syntax;
     }
     
-    public Hashtable getLowlevelGVs()
+    public Hashtable<String, List<String>> getLowlevelGVs()
     {
-        Hashtable result=new Hashtable();
+        Hashtable<String, List<String>> result=new Hashtable<String, List<String>>();
         
         Element      gvlist=syntax.getElementById("GV");
         NodeList     gvs=gvlist.getChildNodes();
@@ -161,10 +161,10 @@ public final class MsgGen
                 }
                 
                 String gvname=type.substring(0,pos+1);
-                List   entry=(List)result.get(gvname);
+                List<String>   entry= result.get(gvname);
                 
                 if (entry==null) {
-                    entry=new ArrayList();
+                    entry=new ArrayList<String>();
                     result.put(gvname,entry);
                 }
                 entry.add(type.substring(pos+1));
@@ -176,7 +176,7 @@ public final class MsgGen
     
     /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-parameter
      * zurück */
-    public List getGVParameterNames(String specname)
+    public List<String> getGVParameterNames(String specname)
     {
         int  versionPos=specname.length()-1;
         char ch;
@@ -192,9 +192,9 @@ public final class MsgGen
     
     /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-parameter
      * zurück */
-    public List getGVParameterNames(String gvname,String version)
+    public List<String> getGVParameterNames(String gvname,String version)
     {
-        ArrayList ret=new ArrayList();
+        ArrayList<String> ret=new ArrayList<String>();
         Element   gvdef=syntax.getElementById(gvname+version);
         NodeList  gvcontent=gvdef.getChildNodes();
         int       len=gvcontent.getLength();
@@ -218,7 +218,7 @@ public final class MsgGen
 
     /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-result-parameter
      * zurück */
-    public List getGVResultNames(String specname)
+    public List<String> getGVResultNames(String specname)
     {
         int  versionPos=specname.length()-1;
         char ch;
@@ -234,9 +234,9 @@ public final class MsgGen
     
     /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-result-parameter
      * zurück */
-    public List getGVResultNames(String gvname,String version)
+    public List<String> getGVResultNames(String gvname,String version)
     {
-        ArrayList ret=new ArrayList();
+        ArrayList<String> ret=new ArrayList<String>();
         Element   gvdef=syntax.getElementById(gvname+"Res"+version);
         
         if (gvdef!=null) {
@@ -262,7 +262,7 @@ public final class MsgGen
 
     /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-restriction-
      * parameter zurück */
-    public List getGVRestrictionNames(String specname)
+    public List<String> getGVRestrictionNames(String specname)
     {
         int  versionPos=specname.length()-1;
         char ch;
@@ -278,9 +278,9 @@ public final class MsgGen
     
     /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-restriction-
      * parameter zurück */
-    public List getGVRestrictionNames(String gvname,String version)
+    public List<String> getGVRestrictionNames(String gvname,String version)
     {
-        ArrayList ret=new ArrayList();
+        ArrayList<String> ret=new ArrayList<String>();
         
         // SEGdef id="TermUebPar1" finden
         Element   gvdef=syntax.getElementById(gvname+"Par"+version);
@@ -326,7 +326,7 @@ public final class MsgGen
         return ret;
     }
 
-    private void addLowlevelProperties(ArrayList result,String path,Element ref)
+    private void addLowlevelProperties(ArrayList<String> result,String path,Element ref)
     {
         if (ref.getAttribute("type").length()!=0) {
             if (ref.getNodeName().equals("DE")) {

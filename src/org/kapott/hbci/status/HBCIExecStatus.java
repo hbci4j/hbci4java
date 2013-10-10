@@ -41,32 +41,32 @@ import org.kapott.hbci.manager.HBCIUtils;
     Dialog enthält. */
 public class HBCIExecStatus 
 {
-    private Map statusData;
-    private Map exceptions;
+    private Map<String,HBCIDialogStatus> statusData;
+    private Map<String,ArrayList<Exception>> exceptions;
     
     public HBCIExecStatus()
     {
-        statusData=new Hashtable();
-        exceptions=new Hashtable();
+        statusData=new Hashtable<String, HBCIDialogStatus>();
+        exceptions=new Hashtable<String, ArrayList<Exception>>();
     }
     
     /** Gibt die Menge aller Kunden-IDs zurück, für die ein HBCI-Dialog geführt wurde.
         @return Liste mit Kunden-IDs */
-    public List getCustomerIds()
+    public List<String> getCustomerIds()
     {
-        Set ret=new HashSet();
+        Set<String> ret=new HashSet<String>();
         
-        Set sset=statusData.keySet();
+        Set<String> sset=statusData.keySet();
         if (sset!=null) {
             ret.addAll(sset);
         }
         
-        Set eset=exceptions.keySet();
+        Set<String> eset=exceptions.keySet();
         if (eset!=null) {
             ret.addAll(eset);
         }
         
-        return new ArrayList(ret);
+        return new ArrayList<String>(ret);
     }
     
     /** Wird von der <em>HBCI4Java</em>-Dialog-Engine aufgerufen */
@@ -82,9 +82,9 @@ public class HBCIExecStatus
     /** Wird von der <em>HBCI4Java</em>-Dialog-Engine aufgerufen */
     public void addException(String customerid,Exception e)
     {
-        ArrayList exc=(ArrayList)exceptions.get(customerid);
+        ArrayList<Exception> exc= exceptions.get(customerid);
         if (exc==null) {
-            exc=new ArrayList();
+            exc=new ArrayList<Exception>();
             exceptions.put(customerid,exc);
         }
         exc.add(e);
@@ -99,10 +99,10 @@ public class HBCIExecStatus
         verwendet werden.
         @return Menge aller gespeicherten HBCI-Dialog-Status-Informationen 
         @deprecated sinnlos */
-    public List getDialogStatusList()
+    public List<HBCIDialogStatus> getDialogStatusList()
     {
-        Collection values=statusData.values();
-        return (values!=null)?(new ArrayList(values)):(new ArrayList());
+        Collection<HBCIDialogStatus> values=statusData.values();
+        return (values!=null)?(new ArrayList<HBCIDialogStatus>(values)):(new ArrayList<HBCIDialogStatus>());
     }
     
     /** {@link HBCIDialogStatus} für den Dialog einer bestimmten Kunden-ID zurückgeben.
@@ -121,9 +121,9 @@ public class HBCIExecStatus
         @param customerid die Kunden-ID, für deren HBCI-Dialog die evtl. aufgetretenen
         Exceptions ermittelt werden sollen.
         @return Liste mit aufgetretenen Exceptions */
-    public List getExceptions(String customerid)
+    public List<Exception> getExceptions(String customerid)
     {
-        return (ArrayList)exceptions.get(customerid);
+        return exceptions.get(customerid);
     }
     
     /** Gibt einen String zurück, der alle Fehlermeldungen aller ausgeführten
@@ -135,11 +135,11 @@ public class HBCIExecStatus
         String       linesep=System.getProperty("line.separator");
         int          nofCustomerIds=getCustomerIds().size();
         
-        for (Iterator i=getCustomerIds().iterator();i.hasNext();) {
-            String customerid=(String)i.next();
+        for (Iterator<String> i=getCustomerIds().iterator();i.hasNext();) {
+            String customerid= i.next();
             boolean customeridWritten=false;
             
-            List exc=getExceptions(customerid);
+            List<Exception> exc=getExceptions(customerid);
             if (exc!=null && exc.size()!=0) {
                 if (nofCustomerIds>1) {
                     ret.append("Dialog for '").append(customerid).append("':").append(linesep);
@@ -147,8 +147,8 @@ public class HBCIExecStatus
                 }
                 
                 // ret.append(HBCIUtilsInternal.getLocMsg("STAT_EXCEPTIONS")).append(":").append(linesep);
-                for (Iterator j=exc.iterator();j.hasNext();) {
-                    ret.append(HBCIUtils.exception2StringShort((Exception)j.next()));
+                for (Iterator<Exception> j=exc.iterator();j.hasNext();) {
+                    ret.append(HBCIUtils.exception2StringShort(j.next()));
                     ret.append(linesep);
                 }
             }
@@ -174,10 +174,10 @@ public class HBCIExecStatus
         StringBuffer ret=new StringBuffer();
         String       linesep=System.getProperty("line.separator");
         
-        List exc=getExceptions(customerId);
+        List<Exception> exc=getExceptions(customerId);
         if (exc!=null) {
-            for (Iterator j=exc.iterator();j.hasNext();) {
-                ret.append(HBCIUtils.exception2StringShort((Exception)j.next()));
+            for (Iterator<Exception> j=exc.iterator();j.hasNext();) {
+                ret.append(HBCIUtils.exception2StringShort(j.next()));
                 ret.append(linesep);
             }
         }
@@ -198,8 +198,8 @@ public class HBCIExecStatus
         StringBuffer ret=new StringBuffer();
         String       linesep=System.getProperty("line.separator");
         
-        for (Iterator i=getCustomerIds().iterator();i.hasNext();) {
-            String customerid=(String)i.next();
+        for (Iterator<String> i=getCustomerIds().iterator();i.hasNext();) {
+            String customerid=i.next();
             ret.append("Dialog for '");
             ret.append(customerid);
             ret.append("':");
@@ -214,7 +214,7 @@ public class HBCIExecStatus
     public boolean isOK(String customerId)
     {
         boolean          ok=true;
-        List             exc=getExceptions(customerId);
+        List<Exception>             exc=getExceptions(customerId);
         HBCIDialogStatus status=getDialogStatus(customerId);
         
         ok&=(exc==null);
@@ -230,9 +230,9 @@ public class HBCIExecStatus
     public boolean isOK()
     {
         boolean ok=true;
-        List    customerIds=getCustomerIds();
+        List<String>    customerIds=getCustomerIds();
         
-        for (Iterator i=customerIds.iterator();i.hasNext();) {
+        for (Iterator<String> i=customerIds.iterator();i.hasNext();) {
             String customerId=(String)i.next();
             ok&=isOK(customerId);
         }

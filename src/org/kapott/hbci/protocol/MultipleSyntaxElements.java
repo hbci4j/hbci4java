@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.exceptions.NoValueGivenException;
@@ -55,7 +56,7 @@ import org.w3c.dom.Node;
     enthaelt eine menge (1 oder mehr) von syntaxelementen des gleichen typs */
 public abstract class MultipleSyntaxElements
 {
-    private List elements;
+    private List<SyntaxElement> elements;
     private String path;
     private String name;
     private String type;
@@ -74,7 +75,7 @@ public abstract class MultipleSyntaxElements
     protected abstract SyntaxElement createAndAppendNewElement(Node ref, String path, int idx, Document syntax);
 
     /** siehe SyntaxElement::parseElementList() */
-    protected abstract SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids);
+    protected abstract SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids);
 
     private void initData(Node ref, String path, Document syntax)
     {
@@ -84,7 +85,7 @@ public abstract class MultipleSyntaxElements
             name=type;
         }
         
-        this.elements=new ArrayList();
+        this.elements=new ArrayList<SyntaxElement>();
         this.parent=null;
         this.syntaxIdx=-1;
         this.ref=ref;
@@ -127,7 +128,7 @@ public abstract class MultipleSyntaxElements
                     child.setParent(this);
             }
         } catch (RuntimeException e) {
-            for (Iterator i=getElements().iterator();i.hasNext();) {
+            for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
                 Object o=i.next();
                 if (o instanceof SF) {
                     SFFactory.getInstance().unuseObject(o);
@@ -185,8 +186,8 @@ public abstract class MultipleSyntaxElements
             }
         }
         
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e = (SyntaxElement)(i.next());
+        for (ListIterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e = i.next();
             String        ePath = e.getPath();
             if (destPath.equals(ePath) || destPath.startsWith(ePath+".")) {
                 if (e.propagateValue(destPath, value, tryToCreate,allowOverwrite)) {
@@ -223,8 +224,8 @@ public abstract class MultipleSyntaxElements
     {
         boolean ret = false;
 
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e=(SyntaxElement)(i.next());
+        for (ListIterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e= i.next();
             String        ePath=e.getPath();
             if (destPath.equals(ePath) || destPath.startsWith(ePath+".")) {
                 if (e.storeValidValueInDE(destPath,value)) {
@@ -242,8 +243,8 @@ public abstract class MultipleSyntaxElements
     {
         String ret = null;
 
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e = (SyntaxElement)(i.next());
+        for (ListIterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e = i.next();
             String        ePath=e.getPath();
             if (path.equals(ePath) || path.startsWith(ePath+".")) {
                 ret=e.getValueOfDE(path);
@@ -258,8 +259,8 @@ public abstract class MultipleSyntaxElements
     {
         String ret = null;
 
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e = (SyntaxElement)(i.next());
+        for (ListIterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e = i.next();
             String        ePath = e.getPath();
             if (path.equals(ePath) || path.startsWith(ePath+".")) {
                 ret=e.getValueOfDE(path,0);
@@ -274,8 +275,8 @@ public abstract class MultipleSyntaxElements
     {
         SyntaxElement ret=null;
 
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e = (SyntaxElement)(i.next());
+        for (ListIterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e = i.next();
             String        ePath = e.getPath();
             if (path.equals(ePath) || path.startsWith(ePath+".")) {
                 ret=e.getElement(path);
@@ -303,8 +304,8 @@ public abstract class MultipleSyntaxElements
     protected void validate()
     {
         int idx = 0;
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e = (SyntaxElement)(i.next());
+        for (ListIterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e = i.next();
             validateOneElement(e, idx++);
         }
     }
@@ -314,7 +315,7 @@ public abstract class MultipleSyntaxElements
         elements.add(x);
     }
 
-    public List getElements()
+    public List<SyntaxElement> getElements()
     {
         return elements;
     }
@@ -338,8 +339,8 @@ public abstract class MultipleSyntaxElements
     {
         int idx = startValue;
 
-        for (Iterator i = getElements().iterator(); i.hasNext(); ) {
-            SyntaxElement s = (SyntaxElement)(i.next());
+        for (Iterator<SyntaxElement> i = getElements().iterator(); i.hasNext(); ) {
+            SyntaxElement s = i.next();
             if (s != null)
                 idx = s.enumerateSegs(idx,allowOverwrite);
         }
@@ -349,12 +350,12 @@ public abstract class MultipleSyntaxElements
 
     // ---------------------------------------------------------------------------------------------------------------
 
-    private void initData(Node ref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    private void initData(Node ref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         this.ref=null;
         this.syntax=null;
         this.syntaxIdx=-1;
-        this.elements = new ArrayList();
+        this.elements = new ArrayList<SyntaxElement>();
         this.type = ((Element)ref).getAttribute("type");
         this.name = ((Element)ref).getAttribute("name");
         if (name.length()==0) {
@@ -471,8 +472,8 @@ public abstract class MultipleSyntaxElements
                 }
             }
         } catch (RuntimeException e) {
-            for (Iterator i=getElements().iterator();i.hasNext();) {
-                Object o=i.next();
+            for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
+                SyntaxElement o=i.next();
                 if (o instanceof SF) {
                     SFFactory.getInstance().unuseObject(o);
                 } else if (o instanceof SEG) {
@@ -499,12 +500,12 @@ public abstract class MultipleSyntaxElements
           propagiert wird (z.b. wenn die syntaxelementlist selbst das erste syntaxelement 
           einer msg repraesentiert), predelim1 ist allerdings immer der delimiter, 
           der fuer das aktuell uebergeordnete syntaxelement zu verwenden ist) */
-    protected MultipleSyntaxElements(Node ref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements(Node ref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         initData(ref,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
     }
     
-    protected void init(Node ref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected void init(Node ref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         initData(ref,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
     }
@@ -512,16 +513,16 @@ public abstract class MultipleSyntaxElements
     /** siehe SyntaxElement.fillValues() */
     protected void extractValues(Hashtable values)
     {
-        for (Iterator i = elements.listIterator(); i.hasNext(); ) {
-            SyntaxElement e = (SyntaxElement)(i.next());
+        for (Iterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
+            SyntaxElement e = i.next();
             e.extractValues(values);
         }
     }
 
     protected int checkSegSeq(int value)
     {
-        for (Iterator i=elements.iterator();i.hasNext();) {
-            SyntaxElement e=(SyntaxElement)(i.next());
+        for (Iterator<SyntaxElement> i=elements.iterator();i.hasNext();) {
+            SyntaxElement e= i.next();
             value=e.checkSegSeq(value);
         }
 

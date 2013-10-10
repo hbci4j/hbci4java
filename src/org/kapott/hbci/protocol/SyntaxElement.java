@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.exceptions.HBCI_Exception;
@@ -45,7 +46,7 @@ import org.w3c.dom.NodeList;
     ein einzelnes de) */
 public abstract class SyntaxElement
 {
-    private List childContainers;  /**< @internal @brief alle in diesem element enthaltenen unterelemente */
+    private List<MultipleSyntaxElements> childContainers;  /**< @internal @brief alle in diesem element enthaltenen unterelemente */
     private String name;   /**< @internal @brief bezeichner fuer dieses element */
     private String type;
     private String path;   /**< @internal @brief pfadname dieses elementes innerhalb einer MSG */
@@ -95,7 +96,7 @@ public abstract class SyntaxElement
      auftauchen mueste (optional; z.b. fuer segmentcodes); 'predelim*' geben
      die delimiter an, die direkt vor dem zu erzeugenden syntaxelement
      auftauchen muessten */
-    protected abstract MultipleSyntaxElements parseNewChildContainer(Node ref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids);
+    protected abstract MultipleSyntaxElements parseNewChildContainer(Node ref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids);
     
     
     /** wird fuer datenelemente benoetigt, die sonst unbeabsichtigt generiert werden koennten.
@@ -155,7 +156,7 @@ public abstract class SyntaxElement
         this.parent=null;
         this.needsRequestTag=false;
         this.haveRequestTag=false;
-        this.childContainers = new ArrayList();
+        this.childContainers = new ArrayList<MultipleSyntaxElements>();
         this.predelim=0;
         this.syntax=syntax;
         this.def=null;
@@ -243,8 +244,8 @@ public abstract class SyntaxElement
                     }
                 }
             } catch (RuntimeException e) {
-                for (Iterator i=getChildContainers().iterator();i.hasNext();) {
-                    Object o=i.next();
+                for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
+                    MultipleSyntaxElements o=i.next();
                     if (o instanceof MultipleSFs) {
                         MultipleSFsFactory.getInstance().unuseObject(o);
                     } else if (o instanceof MultipleSEGs) {
@@ -286,8 +287,8 @@ public abstract class SyntaxElement
     {
         boolean ret=false;
         
-        for (Iterator i=childContainers.listIterator(); i.hasNext(); ) {
-            MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+        for (Iterator<MultipleSyntaxElements> i=childContainers.listIterator(); i.hasNext(); ) {
+            MultipleSyntaxElements l = i.next();
             if (l.storeValidValueInDE(destPath, value)) {
                 ret=true;
                 break;
@@ -308,8 +309,8 @@ public abstract class SyntaxElement
     {
         int idx = startValue;
 
-        for (Iterator i = getChildContainers().iterator(); i.hasNext(); ) {
-            MultipleSyntaxElements s = (MultipleSyntaxElements)(i.next());
+        for (Iterator<MultipleSyntaxElements> i = getChildContainers().iterator(); i.hasNext(); ) {
+            MultipleSyntaxElements s = i.next();
             if (s != null)
                 idx = s.enumerateSegs(idx,allowOverwrite);
         }
@@ -319,12 +320,12 @@ public abstract class SyntaxElement
 
     // -------------------------------------------------------------------------------------------
     
-    private void initData(String type, String name, String ppath, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    private void initData(String type, String name, String ppath, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         this.type=type;
         this.name=name;
         this.parent=null;
-        this.childContainers = new ArrayList();
+        this.childContainers = new ArrayList<MultipleSyntaxElements>();
         this.predelim = predelim;
         this.needsRequestTag=false;
         this.haveRequestTag=false;
@@ -412,8 +413,8 @@ public abstract class SyntaxElement
                 	}
                 }
             } catch (RuntimeException e) {
-                for (Iterator i=getChildContainers().iterator();i.hasNext();) {
-                    Object o=i.next();
+                for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
+                    MultipleSyntaxElements o=i.next();
                     if (o instanceof MultipleSFs) {
                         MultipleSFsFactory.getInstance().unuseObject(o);
                     } else if (o instanceof MultipleSEGs) {
@@ -441,17 +442,17 @@ public abstract class SyntaxElement
         der zu parsende String 'predefs' soll eine menge von pfad-wert-paaren
         enthalten, die fuer einige syntaxelemente den wert angeben, den diese
         elemente zwingend haben muessen (z.b. ein bestimmter segmentcode o.ae.) */
-    protected SyntaxElement(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    protected SyntaxElement(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         initData(type,name,path,predelim,idx,res,fullResLen,syntax,predefs,valids);
     }
     
-    protected void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    protected void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         initData(type,name,path,predelim,idx,res,fullResLen,syntax,predefs,valids);
     }
 
-    protected MultipleSyntaxElements parseAndAppendNewChildContainer(Node ref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements parseAndAppendNewChildContainer(Node ref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         MultipleSyntaxElements ret=parseNewChildContainer(ref,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
         if (ret!=null)
@@ -464,8 +465,8 @@ public abstract class SyntaxElement
      child-elemente durchlaufen und deren 'fillValues' methode aufgerufen */
     public void extractValues(Hashtable values)
     {
-        for (Iterator i = childContainers.listIterator(); i.hasNext(); ) {
-            MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+        for (Iterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
+            MultipleSyntaxElements l = i.next();
             l.extractValues(values);
         }
     }
@@ -480,7 +481,7 @@ public abstract class SyntaxElement
 
     /** @return the ArrayList containing all child-elements (the elements
         of the ArrayList are instances of the SyntaxElementArray class */
-    public List getChildContainers()
+    public List<MultipleSyntaxElements> getChildContainers()
     {
         return childContainers;
     }
@@ -504,8 +505,8 @@ public abstract class SyntaxElement
             // damit überspringen wir gleich elemente, bei denen es mit 
             // sicherheit nicht funktionieren kann
             if (destPath.startsWith(getPath())) {                
-                for (Iterator i = childContainers.listIterator(); i.hasNext(); ) {
-                    MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+                for (Iterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
+                    MultipleSyntaxElements l = i.next();
                     if (l.propagateValue(destPath,value,tryToCreate,allowOverwrite)) {
                         ret = true;
                         break;
@@ -542,8 +543,8 @@ public abstract class SyntaxElement
                     // (msg) soll dann nicht versucht werden, das nächste sub-element
                     // (gv) anzulegen - dieser test merkt, dass es "gv" schon gibt 
                     boolean found=false;
-                    for (Iterator i=childContainers.iterator();i.hasNext();) {
-                        MultipleSyntaxElements c=(MultipleSyntaxElements)i.next();
+                    for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
+                        MultipleSyntaxElements c= i.next();
                         if (c.getName().equals(subType)) {
                             found=true;
                             break;
@@ -585,8 +586,8 @@ public abstract class SyntaxElement
                             // aktuelle child-container-liste durchlaufen und den neu
                             // erzeugten child-container dort richtig einsortieren
                             int newPosi=0;
-                            for (Iterator i=childContainers.iterator(); i.hasNext(); ) {
-                                MultipleSyntaxElements c=(MultipleSyntaxElements)i.next();
+                            for (Iterator<MultipleSyntaxElements> i=childContainers.iterator(); i.hasNext(); ) {
+                                MultipleSyntaxElements c= i.next();
                                 if (c.getSyntaxIdx()>newChildIdx) {
                                     // der gerade betrachtete child-container hat einen idx
                                     // größer als den des einzufügenden elementes, also wird
@@ -619,8 +620,8 @@ public abstract class SyntaxElement
     {
         String ret = null;
         
-        for (Iterator i = childContainers.listIterator(); i.hasNext(); ) {
-            MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+        for (Iterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
+            MultipleSyntaxElements l = i.next();
             ret=l.getValueOfDE(path);
             if (ret!=null) {
                 break;
@@ -634,8 +635,8 @@ public abstract class SyntaxElement
     {
         String ret = null;
         
-        for (Iterator i = childContainers.listIterator(); i.hasNext(); ) {
-            MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+        for (ListIterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
+            MultipleSyntaxElements l = i.next();
             ret=l.getValueOfDE(path,0);
             if (ret!=null) {
                 break;
@@ -654,8 +655,8 @@ public abstract class SyntaxElement
         if (getPath().equals(path)) {
             ret=this;
         } else {
-            for (Iterator i = childContainers.listIterator(); i.hasNext(); ) {
-                MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+            for (ListIterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
+                MultipleSyntaxElements l = i.next();
                 ret=l.getElement(path);
                 if (ret!=null) {
                     break;
@@ -735,8 +736,8 @@ public abstract class SyntaxElement
 
     public int checkSegSeq(int value)
     {
-        for (Iterator i=childContainers.iterator();i.hasNext();) {
-            MultipleSyntaxElements a=(MultipleSyntaxElements)(i.next());
+        for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
+            MultipleSyntaxElements a= i.next();
             value=a.checkSegSeq(value);
         }
 
@@ -750,8 +751,8 @@ public abstract class SyntaxElement
     public void validate()
     {
         if (!needsRequestTag || haveRequestTag) {
-            for (Iterator i = childContainers.listIterator(); i.hasNext(); ) {
-                MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+            for (ListIterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
+                MultipleSyntaxElements l = i.next();
                 l.validate();
             }
 

@@ -46,7 +46,7 @@ public class SFFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.SF","128")));
     }
     
-    public SF createSF(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public SF createSF(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         SF ret=(SF)getFreeObject();
         

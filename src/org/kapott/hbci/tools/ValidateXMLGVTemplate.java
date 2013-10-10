@@ -75,10 +75,10 @@ public class ValidateXMLGVTemplate
         Element  root=doc.getDocumentElement();
         NodeList segdefs=root.getElementsByTagName("SEGdef");
         int      l=segdefs.getLength();
-        List     seen=new ArrayList();
-        List     gvs=new ArrayList();
-        List     gvrs=new ArrayList();
-        List     params=new ArrayList();
+        List<String>     seen=new ArrayList<String>();
+        List<String>     gvs=new ArrayList<String>();
+        List<String>     gvrs=new ArrayList<String>();
+        List<String>     params=new ArrayList<String>();
         for (int i=0; i<l; i++) {
             Element  segdef=(Element)segdefs.item(i);
             String   segdefid=segdef.getAttribute("id");

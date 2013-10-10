@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.FileSystemClassLoader;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -132,11 +133,11 @@ public final class AnalyzeReportOfTransactions
 
                 // kontoauszug durchlaufen, jeden eintrag einmal anfassen:
                 
-                List lines=result.getFlatData();
+                List<UmsLine> lines=result.getFlatData();
                 // int  numof_lines=lines.size();
 
-                for (Iterator j=lines.iterator(); j.hasNext(); ) { // alle Umsatzeinträge durchlaufen
-                    GVRKUms.UmsLine entry=(GVRKUms.UmsLine)j.next();
+                for (Iterator<UmsLine> j=lines.iterator(); j.hasNext(); ) { // alle Umsatzeinträge durchlaufen
+                    UmsLine entry= j.next();
 
                     // für jeden Eintrag ein Feld mit allen Verwendungszweckzeilen extrahieren
                     List<String> usages=entry.usage;

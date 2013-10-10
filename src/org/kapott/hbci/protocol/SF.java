@@ -24,6 +24,7 @@ package org.kapott.hbci.protocol;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.manager.HBCIUtils;
@@ -87,7 +88,7 @@ public final class SF
         StringBuffer ret = new StringBuffer(256);
 
         if (isValid())
-            for (Iterator i = getChildContainers().listIterator(); i.hasNext(); ) {
+            for (ListIterator<MultipleSyntaxElements> i = getChildContainers().listIterator(); i.hasNext(); ) {
                 MultipleSyntaxElements list = (MultipleSyntaxElements)(i.next());
 
                 if (list != null)
@@ -99,12 +100,12 @@ public final class SF
 
     // -------------------------------------------------------------------------------------------
 
-    public SF(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public SF(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super(type,name,path,predelim,idx,res,fullResLen,syntax,predefs,valids);
     }
 
-    public void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super.init(type,name,path,predelim,idx,res,fullResLen,syntax,predefs,valids);
     }
@@ -184,7 +185,7 @@ public final class SF
         return ret;
     }
 
-    protected MultipleSyntaxElements parseNewChildContainer(Node segref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements parseNewChildContainer(Node segref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         MultipleSyntaxElements ret=null;
 
@@ -197,7 +198,7 @@ public final class SF
         return ret;
     }
 
-    protected MultipleSyntaxElements parseAndAppendNewChildContainer(Node segref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements parseAndAppendNewChildContainer(Node segref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         MultipleSyntaxElements ret=null;
 
@@ -254,8 +255,8 @@ public final class SF
     public void getElementPaths(Properties p,int[] segref,int[] degref,int[] deref)
     {
         if (isValid()) {
-            for (Iterator i=getChildContainers().iterator();i.hasNext();) {
-                MultipleSyntaxElements l=(MultipleSyntaxElements)(i.next());
+            for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
+                MultipleSyntaxElements l= i.next();
                 if (l!=null) {
                     l.getElementPaths(p,segref,null,null);
                 }
@@ -265,9 +266,9 @@ public final class SF
     
     public void destroy()
     {
-        List childContainers=getChildContainers();
-        for (Iterator i=childContainers.iterator();i.hasNext();) {
-            Object child=i.next();
+        List<MultipleSyntaxElements> childContainers=getChildContainers();
+        for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
+            MultipleSyntaxElements child=i.next();
             if (child instanceof MultipleSFs) {
                 MultipleSFsFactory.getInstance().unuseObject(child);
             } else {

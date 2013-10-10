@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -191,7 +190,7 @@ public class GVRKUms
         /** Art des Saldos. <code>M</code> = Anfangssaldo; <code>F</code> = Zwischensaldo */
         public char      starttype;
         /** Liste der einzelnen Buchungen dieses Tages (Instanzen von {@link GVRKUms.UmsLine}) */
-        public List      lines;
+        public List<UmsLine>     lines;
         /** Saldo am Ende des Buchungstages */
         public Saldo     end;
         /** Art des Endsaldos (siehe {@link #starttype}) */
@@ -199,7 +198,7 @@ public class GVRKUms
 
         public BTag()
         {
-            lines=new ArrayList();
+            lines=new ArrayList<UmsLine>();
         }
 
         public void addLine(UmsLine line)
@@ -215,7 +214,7 @@ public class GVRKUms
             ret.append("Konto ").append(my.toString()).append(" - Auszugsnummer ").append(counter).append(linesep);
             ret.append("  ").append((starttype=='F'?"Anfangs":"Zwischen")).append("saldo: ").append(start.toString()).append(linesep);
 
-            for (Iterator i=lines.iterator(); i.hasNext(); ) {
+            for (Iterator<UmsLine> i=lines.iterator(); i.hasNext(); ) {
                 ret.append("  ").append(i.next().toString()).append(linesep);
             }
 
@@ -269,7 +268,7 @@ public class GVRKUms
 
     /** Gibt die Umsatzinformationen gruppiert nach Buchungstagen zurück.
         @return Liste mit Informationen zu einzelnen Buchungstagen ({@link GVRKUms.BTag}) */
-    public List getDataPerDay()
+    public List<BTag> getDataPerDay()
     {
         verifyMT94xParsing("getDataPerDay()");
         return tageMT940;
@@ -279,11 +278,11 @@ public class GVRKUms
         D.h. nicht in einzelne Buchungstage unterteilt, sondern in einer Liste
         analog zu einem "normalen" Kontoauszug.
         @return Liste mit Transaktionsdaten ({@link GVRKUms.UmsLine}) */
-    public List getFlatData()
+    public List<UmsLine> getFlatData()
     {
         verifyMT94xParsing("getFlatData()");
 
-        List result=new ArrayList();
+        List<UmsLine> result=new ArrayList<UmsLine>();
         for (Iterator<BTag> i=tageMT940.iterator(); i.hasNext(); ) {
             BTag tag= i.next();
             result.addAll(tag.lines);
@@ -294,11 +293,11 @@ public class GVRKUms
 
     /** Gibt eine Liste aller vorgemerkten Umsätze zurück
      * @return Liste von {@link GVRKUms.UmsLine}-Objekten der vorgemerkten Umsätze */
-    public List getFlatDataUnbooked()
+    public List<UmsLine> getFlatDataUnbooked()
     {
         verifyMT94xParsing("getFlatDataUnbooked()");
 
-        List result=new ArrayList();
+        List<UmsLine> result=new ArrayList<UmsLine>();
         for (Iterator<BTag> i=tageMT942.iterator(); i.hasNext(); ) {
             BTag tag= i.next();
             result.addAll(tag.lines);
@@ -315,14 +314,14 @@ public class GVRKUms
         String       linesep=System.getProperty("line.separator");
 
         // mt940
-        for (Iterator i=getFlatData().iterator(); i.hasNext(); ) {
+        for (Iterator<UmsLine> i=getFlatData().iterator(); i.hasNext(); ) {
             ret.append(i.next().toString()).append(linesep);
         }
         ret.append("rest: ").append(restMT940).append(linesep).append(linesep);
 
         // mt942
         ret.append("not yet booked:").append(linesep);
-        for (Iterator i=getFlatDataUnbooked().iterator(); i.hasNext(); ) {
+        for (Iterator<UmsLine> i=getFlatDataUnbooked().iterator(); i.hasNext(); ) {
             ret.append(i.next().toString()).append(linesep);
         }
         ret.append("rest: ").append(restMT942);
@@ -360,7 +359,7 @@ public class GVRKUms
         }
     }
 
-    private void parseMT94x(StringBuffer buffer, List tage, StringBuffer rest)
+    private void parseMT94x(StringBuffer buffer, List<BTag> tage, StringBuffer rest)
     {
         HBCIUtils.log("now parsing MT94x data", HBCIUtils.LOG_DEBUG);
         parsed=true;
@@ -701,8 +700,8 @@ public class GVRKUms
                     if (btag.start != null && btag.start.timestamp==null) {
                         btag.start.timestamp=btag.end.timestamp;
                     }
-                    for (Iterator j=btag.lines.iterator(); j.hasNext(); ) {
-                        UmsLine line=(UmsLine)j.next();
+                    for (Iterator<UmsLine> j=btag.lines.iterator(); j.hasNext(); ) {
+                        UmsLine line= j.next();
                         if (line.bdate==null) {
                             line.bdate=btag.end.timestamp;
                         }

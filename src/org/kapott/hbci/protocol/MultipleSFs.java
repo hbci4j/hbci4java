@@ -65,17 +65,17 @@ public final class MultipleSFs
 
     // ---------------------------------------------------------------------------------------------------------------
 
-    public MultipleSFs(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleSFs(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super(sfref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
     }
 
-    public void init(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super.init(sfref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
     }
 
-    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         SyntaxElement ret=null;
         addElement((ret=SFFactory.getInstance().createSF(getType(), getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
@@ -84,8 +84,8 @@ public final class MultipleSFs
 
     public void getElementPaths(Properties p,int[] segref,int[] degref,int[] deref)
     {
-        for (Iterator i=getElements().iterator();i.hasNext();) {
-            SyntaxElement e=(SyntaxElement)(i.next());
+        for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
+            SyntaxElement e= i.next();
             if (e!=null) {
                 e.getElementPaths(p,segref,degref,deref);
             }

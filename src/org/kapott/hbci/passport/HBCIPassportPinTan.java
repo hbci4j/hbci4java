@@ -234,10 +234,10 @@ public class HBCIPassportPinTan
             o.writeObject(getFilterType());
             
             // hier auch gewähltes zweischritt-verfahren abspeichern
-            List l=getAllowedTwostepMechanisms();
+            List<String> l=getAllowedTwostepMechanisms();
             // TODO: remove this
             StringBuffer sb=new StringBuffer();
-            for (Iterator i=l.iterator(); i.hasNext(); ) {
+            for (Iterator<String> i=l.iterator(); i.hasNext(); ) {
                 sb.append(i.next()+", ");
             }
             HBCIUtils.log("saving two step mechs: "+sb, HBCIUtils.LOG_DEBUG);

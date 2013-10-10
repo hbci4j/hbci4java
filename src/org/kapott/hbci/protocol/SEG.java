@@ -148,12 +148,12 @@ public final class SEG
         return '+';
     }
 
-    public SEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    public SEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super(type, name, path, predelim, idx, res, fullResLen, syntax, predefs,valids);
     }
 
-    public void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super.init(type, name, path, predelim, idx, res, fullResLen, syntax, predefs,valids);
     }
