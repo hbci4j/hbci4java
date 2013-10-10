@@ -12,5 +12,5 @@ bin/libhbci4java-card-linux.so: .make
 
 clean:
 	-rm -f lib/libhbci4java-card-linux.so
-	-rm -f bin bin.mac
+	-rm -rf bin bin.mac
 	-rm -f `find -name Makefile.depend`

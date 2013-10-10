@@ -1,7 +1,7 @@
-
-DEFINES  = -D__UNIX
-INCLUDES = -I../include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
-WARNINGS = -Wall
+JAVA_HOME = $(shell readlink -f /usr/bin/javac | sed "s:/bin/javac::")
+DEFINES   = -D__UNIX
+INCLUDES  = -I../include -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+WARNINGS  = -Wall
 # removed "-Werror -pedantic" because of dlsym() typecast problem
 
 CC       = g++
