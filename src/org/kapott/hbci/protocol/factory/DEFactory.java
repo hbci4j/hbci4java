@@ -46,7 +46,7 @@ public class DEFactory
         super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.DE","1024")));
     }
     
-    public DE createDE(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public DE createDE(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         DE ret=(DE)getFreeObject();
         

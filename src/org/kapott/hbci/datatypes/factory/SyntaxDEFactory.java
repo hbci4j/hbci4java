@@ -39,7 +39,7 @@ public class SyntaxDEFactory
 {
     private static SyntaxDEFactory instance;
     
-    private Hashtable factories;
+    private Hashtable<String, ObjectFactory> factories;
     
     public static synchronized SyntaxDEFactory getInstance()
     {
@@ -51,7 +51,7 @@ public class SyntaxDEFactory
     
     private SyntaxDEFactory()
     {
-        factories=new Hashtable();
+        factories=new Hashtable<String, ObjectFactory>();
     }
     
     public SyntaxDE createSyntaxDE(String dataType,String path,String value,int minsize,int maxsize)
@@ -183,7 +183,7 @@ public class SyntaxDEFactory
     {
         StringBuffer ret=new StringBuffer();
         
-        for (Enumeration e=factories.keys();e.hasMoreElements();) {
+        for (Enumeration<String> e=factories.keys();e.hasMoreElements();) {
             String        type=(String)e.nextElement();
             ObjectFactory fac=(ObjectFactory)factories.get(type);
             

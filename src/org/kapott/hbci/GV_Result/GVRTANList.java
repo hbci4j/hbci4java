@@ -119,11 +119,11 @@ public class GVRTANList
         /** Anzahl verbrauchter TANs pro Liste */
         public  int       nofUsedTANsPerList;
 
-        private List taninfos;
+        private List<TANInfo> taninfos;
         
         public TANList()
         {
-            taninfos=new ArrayList();
+            taninfos=new ArrayList<TANInfo>();
         }
     
         /** Gibt ein Feld mit Daten zu den einzelnen TANs dieser Liste zurück. 
@@ -145,7 +145,7 @@ public class GVRTANList
     
             ret.append("TANListe Nummer ").append(number).append(" Typ:").append(status+linesep);
             ret.append("nofTANsPerList: ").append(nofTANsPerList).append("; nofUsedTANsPerList: ").append(nofUsedTANsPerList+linesep);
-            for (Iterator i=taninfos.iterator();i.hasNext();) {
+            for (Iterator<TANInfo> i=taninfos.iterator();i.hasNext();) {
                 ret.append("  ").append(((TANInfo)i.next()).toString()).append(linesep);
             }
     
@@ -153,11 +153,11 @@ public class GVRTANList
         }
     }
     
-    private List tanlists;
+    private List<TANList> tanlists;
     
     public GVRTANList()
     {
-        tanlists=new ArrayList();
+        tanlists=new ArrayList<TANList>();
     }
     
     public void addTANList(TANList list)
@@ -176,7 +176,7 @@ public class GVRTANList
     {
         StringBuffer ret=new StringBuffer();
         
-        for (Iterator i=tanlists.iterator();i.hasNext();) {
+        for (Iterator<TANList> i=tanlists.iterator();i.hasNext();) {
             ret.append(((TANList)i.next()).toString()).append(System.getProperty("line.separator"));
         }
         

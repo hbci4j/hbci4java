@@ -106,7 +106,7 @@ public final class DE
     private void initData(Node dedef, String name, String path, int idx, Document syntax)
     {
         this.value=null;
-        this.valids=new ArrayList();
+        this.valids=new ArrayList<Object>();
 
         String st;
 
@@ -190,7 +190,7 @@ public final class DE
 
     // ---------------------------------------------------------------------------------------------------------------
 
-    protected MultipleSyntaxElements parseNewChildContainer(Node deref, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements parseNewChildContainer(Node deref, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         return null;
     }
@@ -256,12 +256,12 @@ public final class DE
         }
     }
 
-    private void initData(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    private void initData(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<?, ?> predefs,Hashtable<?, ?> valids)
     {
         setValid(false);
 
         value = null;
-        this.valids=new ArrayList();
+        this.valids=new ArrayList<Object>();
 
         String st;
 
@@ -284,13 +284,13 @@ public final class DE
         }
     }
     
-    public DE(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public DE(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super(((Element)dedef).getAttribute("type"),name,path,predelim,idx,res,fullResLen,null,predefs,valids);
         initData(dedef,name,path,predelim,idx,res,fullResLen,syntax,predefs,valids);
     }
 
-    public void init(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(Node dedef, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super.init(((Element)dedef).getAttribute("type"),name,path,predelim,idx,res,fullResLen,null,predefs,valids);
         initData(dedef,name,path,predelim,idx,res,fullResLen,syntax,predefs,valids);

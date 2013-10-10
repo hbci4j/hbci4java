@@ -53,7 +53,7 @@ public class ValidateXMLGVTemplate
             }
         }
         if (deflist.size()!=0) {
-            for (Iterator i=deflist.iterator(); i.hasNext();) {
+            for (Iterator<String> i=deflist.iterator(); i.hasNext();) {
                 System.out.println("warning: defined "+sfname+" '"+i.next()+"' not referenced in SF '"+sfname+"'");
             }
         }

@@ -63,7 +63,7 @@ public final class GVRInfoList
         
         public void addComment(String st)
         {
-            ArrayList a=new ArrayList(Arrays.asList(comment));
+            ArrayList<String> a=new ArrayList<String>(Arrays.asList(comment));
             a.add(st);
             comment=(String[])a.toArray(comment);
         }
@@ -98,11 +98,11 @@ public final class GVRInfoList
         }
     }
 
-    private List entries;
+    private List<Info> entries;
 
     public GVRInfoList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Info>();
     }
 
     public void addEntry(Info entry)

@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -36,9 +37,9 @@ public class HBCIUtilsInternal
 {
 
     public static Properties blzs;
-    public static Hashtable  callbacks;  // threadgroup->callbackObject
-    public static Hashtable  locMsgs;    // threadgroup->resourceBundle
-    public static Hashtable  locales;    // threadgroup->Locale
+    public static Hashtable<ThreadGroup, HBCICallback>  callbacks;  // threadgroup->callbackObject
+    public static Hashtable<ThreadGroup, ResourceBundle>  locMsgs;    // threadgroup->resourceBundle
+    public static Hashtable<ThreadGroup, Locale>  locales;    // threadgroup->Locale
     
     private static InfoPointConnector infoPointConnector;
 

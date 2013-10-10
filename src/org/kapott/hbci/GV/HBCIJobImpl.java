@@ -72,7 +72,7 @@ public abstract class HBCIJobImpl
     private boolean executed;
     private int contentCounter;       /* Zähler, wie viele Rückgabedaten bereits in outStore eingetragen wurden 
                                            (entspricht der anzahl der antwort-segmente!)*/
-    private Hashtable constraints;    /* Festlegungen, welche Parameter eine Anwendung setzen muss, wie diese im
+    private Hashtable<String, String[][]> constraints;    /* Festlegungen, welche Parameter eine Anwendung setzen muss, wie diese im
                                          HBCI-Kernel umgesetzt werden und welche default-Werte vorgesehen sind; 
                                          die Hashtable hat als Schlüssel einen String, der angibt, wie ein Wert aus einer
                                          Anwendung heraus zu setzen ist. Der dazugehörige Value ist ein Array. Jedes Element
@@ -81,7 +81,7 @@ public abstract class HBCIJobImpl
                                          default-Wert an, falls für diesen Namen *kein* Wert angebeben wurde. Ist der default-
                                          Wert="", so kann das Syntaxelement weggelassen werden. Ist der default-Wert=null,
                                          so *muss* die Anwendung einen Wert spezifizieren */
-    private Hashtable logFilterLevels; /* hier wird für jeden hl-param-name gespeichert, ob der dazugehörige wert
+    private Hashtable<String, Integer> logFilterLevels; /* hier wird für jeden hl-param-name gespeichert, ob der dazugehörige wert
                                           über den logfilter-Mechanimus geschützt werden soll */
     
     protected HBCIJobImpl(HBCIHandler parentHandler,String jobnameLL,HBCIJobResultImpl jobResult)
@@ -96,8 +96,8 @@ public abstract class HBCIJobImpl
         this.jobResult.setParentJob(this);
         
         this.contentCounter=0;
-        this.constraints=new Hashtable();
-        this.logFilterLevels=new Hashtable();
+        this.constraints=new Hashtable<String, String[][]>();
+        this.logFilterLevels=new Hashtable<String, Integer>();
         this.executed=false;
         
         this.parentHandler=parentHandler;
@@ -270,7 +270,7 @@ public abstract class HBCIJobImpl
       }
 
       // Destination-Namen in den LowLevel-Parameter auf den neuen Namen umbiegen
-      Enumeration e = constraints.keys();
+      Enumeration<String> e = constraints.keys();
       while (e.hasMoreElements())
       {
         String frontendName = (String) e.nextElement();
@@ -406,7 +406,7 @@ public abstract class HBCIJobImpl
             values=new String[1][];
             values[0]=value;
         } else {
-            ArrayList a=new ArrayList(Arrays.asList(values));
+            ArrayList<String[]> a=new ArrayList<String[]>(Arrays.asList(values));
             a.add(value);
             values=(String[][])(a.toArray(values));
         }
@@ -423,7 +423,7 @@ public abstract class HBCIJobImpl
         HBCIPassportInternal passport=getMainPassport();
         
         // durch alle gespeicherten constraints durchlaufen
-        for (Iterator i=constraints.keySet().iterator();i.hasNext();) {
+        for (Iterator<String> i=constraints.keySet().iterator();i.hasNext();) {
             // den frontendnamen für das constraint ermitteln
             String     frontendName=(String)(i.next());
             

@@ -956,18 +956,18 @@ public abstract class AbstractPinTanPassport
             String      segversion  = secmechInfo.getProperty("segversion");
             String      process     = secmechInfo.getProperty("process");
             
-            List msgs=dialog.getMessages();
-            List new_msgs=new ArrayList();
+            List<ArrayList<HBCIJobImpl>> msgs=dialog.getMessages();
+            List<ArrayList<HBCIJobImpl>> new_msgs=new ArrayList<ArrayList<HBCIJobImpl>>();
             
             // durch alle ursprünglichen nachrichten laufen
-            for (Iterator i=msgs.iterator();i.hasNext();) {
-                ArrayList msg_tasks=(ArrayList)i.next();
-                ArrayList new_msg_tasks=new ArrayList();
+            for (Iterator<ArrayList<HBCIJobImpl>> i=msgs.iterator();i.hasNext();) {
+                ArrayList<HBCIJobImpl> msg_tasks=(ArrayList<HBCIJobImpl>)i.next();
+                ArrayList<HBCIJobImpl> new_msg_tasks=new ArrayList<HBCIJobImpl>();
                 
-                ArrayList additional_msg_tasks=null;
+                ArrayList<HBCIJobImpl> additional_msg_tasks=null;
                 
                 // jeden task einer nachricht ansehen
-                for (Iterator j=msg_tasks.iterator();j.hasNext();) {
+                for (Iterator<HBCIJobImpl> j=msg_tasks.iterator();j.hasNext();) {
                     HBCIJobImpl task=(HBCIJobImpl)j.next();
                     String      segcode=task.getHBCICode();
 
@@ -980,7 +980,7 @@ public abstract class AbstractPinTanPassport
                             HBCIUtils.log("process #1: adding new message with HKTAN(p=1,hash=...) before current message",HBCIUtils.LOG_DEBUG);
                             
                             // neue msg erzeugen
-                            additional_msg_tasks=new ArrayList();
+                            additional_msg_tasks=new ArrayList<HBCIJobImpl>();
 
                             GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
                             
@@ -1101,7 +1101,7 @@ public abstract class AbstractPinTanPassport
                             
                             // eine neue msg für das einreichen der tan erzeugen
                             HBCIUtils.log("creating new msg with HKTAN(p=2,orderref=DELAYED)",HBCIUtils.LOG_DEBUG);
-                            additional_msg_tasks=new ArrayList();
+                            additional_msg_tasks=new ArrayList<HBCIJobImpl>();
                             
                             // HKTAN-job für das einreichen der TAN erzeugen
                             GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");

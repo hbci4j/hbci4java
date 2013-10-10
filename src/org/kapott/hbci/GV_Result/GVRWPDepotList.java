@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry;
+import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung;
+import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung.SubSaldo;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.structures.Konto;
@@ -172,7 +175,7 @@ public final class GVRWPDepotList
             /** Gesamtsaldo dieser Gattung. Das Währungsfeld ist in jedem
                 Fall ein leerer String! (TODO). */
             public Value      saldo;
-            private ArrayList saldi;
+            private ArrayList<SubSaldo> saldi;
             /** Anzahl der aufgelaufenen Tage (optional) */
             public int        days;
             /** Kurswert zum Gesamtsaldo {@link #saldo} (optional) */
@@ -212,7 +215,7 @@ public final class GVRWPDepotList
             
             public Gattung()
             {
-                saldi=new ArrayList();
+                saldi=new ArrayList<SubSaldo>();
             }
             
             public void addSubSaldo(SubSaldo subsaldo)
@@ -305,7 +308,7 @@ public final class GVRWPDepotList
         public  Date      timestamp;
         /** Depotkonto, auf das sich der Eintrag bezieht. */
         public  Konto     depot;
-        private ArrayList gattungen;
+        private ArrayList<Gattung> gattungen;
         /** Gesamtwert des Depots (optional!) */
         public  Value     total;
         
@@ -313,7 +316,7 @@ public final class GVRWPDepotList
         
         public Entry()
         {
-            gattungen=new ArrayList();
+            gattungen=new ArrayList<Gattung>();
         }
         
         public void addEntry(Gattung gattung)
@@ -348,7 +351,7 @@ public final class GVRWPDepotList
         }
     }
     
-    private List entries;
+    private List<Entry> entries;
     /** Dieses Feld enthält einen String, der den nicht-auswertbaren Teil der gelieferten Informationen
         enthält. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
         bzw. einen leeren String enthalten. Wenn das nicht der Fall ist, dann konnten die 
@@ -358,7 +361,7 @@ public final class GVRWPDepotList
     
     public GVRWPDepotList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Entry>();
     }
     
     public void addEntry(Entry entry)

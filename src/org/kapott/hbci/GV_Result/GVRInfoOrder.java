@@ -45,11 +45,11 @@ public final class GVRInfoOrder
         }
     }
 
-    private List infos;
+    private List<Info> infos;
 
     public GVRInfoOrder()
     {
-        infos=new ArrayList();
+        infos=new ArrayList<Info>();
     }
 
     public void addEntry(Info info)

@@ -99,7 +99,7 @@ public final class DEG
 
     // ---------------------------------------------------------------------------------------------------------------
 
-    protected MultipleSyntaxElements parseNewChildContainer(Node dataref, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements parseNewChildContainer(Node dataref, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         MultipleSyntaxElements ret=null;
 
@@ -116,12 +116,12 @@ public final class DEG
         return ':';
     }
 
-    public DEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public DEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super(type, name, path, predelim, idx, res, fullResLen, syntax, predefs,valids);
     }
 
-    public void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String,String> valids)
     {
         super.init(type, name, path, predelim, idx, res, fullResLen, syntax, predefs,valids);
     }

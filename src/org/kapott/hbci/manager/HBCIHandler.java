@@ -89,7 +89,7 @@ public final class HBCIHandler
     
     private HBCIKernelImpl       kernel;
     private HBCIPassportInternal passport;
-    private Map                  dialogs;
+    private Map<String, HBCIDialog>                  dialogs;
     
     /** Anlegen eines neuen HBCI-Handler-Objektes. Beim Anlegen wird
         überprüft, ob für die angegebene HBCI-Version eine entsprechende
@@ -136,7 +136,7 @@ public final class HBCIHandler
                 this.passport.saveChanges();
             }
 
-            dialogs=new Hashtable();
+            dialogs=new Hashtable<String, HBCIDialog>();
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_CREATE_HANDLE"),e);
         }

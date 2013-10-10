@@ -115,11 +115,11 @@ public final class GVRFestCondList
         }
     }
     
-    private List entries;
+    private List<Cond> entries;
     
     public GVRFestCondList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Cond>();
     }
     
     public void addEntry(Cond entry)

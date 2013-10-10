@@ -483,7 +483,7 @@ public final class HBCIUtils
     /** Loglevel für devel-Debugging - nicht benutzen! */
     public static final int LOG_INTERN=6;
     
-    private static Hashtable  configs;  // threadgroup->hashtable(paramname->paramvalue)
+    private static Hashtable<ThreadGroup, Properties>  configs;  // threadgroup->hashtable(paramname->paramvalue)
     private static char[] base64table={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
                                        'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
                                        'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
@@ -494,11 +494,11 @@ public final class HBCIUtils
     
     private static void initDataStructures()
     {
-        configs=new Hashtable();
-        HBCIUtilsInternal.callbacks=new Hashtable();
+        configs=new Hashtable<ThreadGroup, Properties>();
+        HBCIUtilsInternal.callbacks=new Hashtable<ThreadGroup, HBCICallback>();
         HBCIUtilsInternal.blzs=new Properties();
-        HBCIUtilsInternal.locMsgs=new Hashtable();
-        HBCIUtilsInternal.locales=new Hashtable();
+        HBCIUtilsInternal.locMsgs=new Hashtable<ThreadGroup, ResourceBundle>();
+        HBCIUtilsInternal.locales=new Hashtable<ThreadGroup, Locale>();
     }
     
     private HBCIUtils()
@@ -1506,7 +1506,7 @@ public final class HBCIUtils
     
     private static Method getAccountCRCMethodByAlg(String alg)
     {
-        Class cl=null;
+        Class<AccountCRCAlgs> cl=null;
         Method method=null;
         
         try {

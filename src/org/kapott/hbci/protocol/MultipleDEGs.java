@@ -80,25 +80,25 @@ public final class MultipleDEGs
 
     // --------------------------------------------------------------------------------------------------------------
 
-    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         SyntaxElement ret=null;
         addElement((ret=DEGFactory.getInstance().createDEG(getType(), getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
         return ret;
     }
     
-    private void initData(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    private void initData(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<?, ?> predefs,Hashtable<?, ?> valids)
     {
         this.delimiter = delimiter;
     }
 
-    public MultipleDEGs(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleDEGs(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super(degref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         initData(degref,delimiter,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
     }
 
-    public void init (Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    public void init (Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super.init(degref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         initData(degref,delimiter,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);

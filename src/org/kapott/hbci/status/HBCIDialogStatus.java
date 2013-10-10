@@ -167,7 +167,7 @@ public final class HBCIDialogStatus
         @deprecated wird nicht benutzt */
     public Exception[] getExceptions()
     {
-        List ret=new ArrayList();
+        List<Exception> ret=new ArrayList<Exception>();
         
         if (initStatus!=null) {
             ret.addAll(Arrays.asList(initStatus.getExceptions()));

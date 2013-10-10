@@ -46,7 +46,7 @@ public class MultipleDEGsFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.DEG","512")));
     }
     
-    public MultipleDEGs createMultipleDEGs(Node sfref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleDEGs createMultipleDEGs(Node sfref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         MultipleDEGs ret=(MultipleDEGs)getFreeObject();
         

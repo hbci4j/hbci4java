@@ -72,11 +72,11 @@ public final class GVRSaldoReq
         }
     }
 
-    private List saldi;
+    private List<Info> saldi;
 
     public GVRSaldoReq()
     {
-        saldi=new ArrayList();
+        saldi=new ArrayList<Info>();
     }
     
     public void store(GVRSaldoReq.Info info)

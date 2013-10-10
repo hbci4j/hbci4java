@@ -120,11 +120,11 @@ public final class GVRFestList
         }
     }
     
-    private List entries;
+    private List<Entry> entries;
     
     public GVRFestList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Entry>();
     }
     
     public void addEntry(Entry entry)

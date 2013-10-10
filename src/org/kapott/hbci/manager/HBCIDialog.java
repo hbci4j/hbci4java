@@ -75,7 +75,7 @@ public final class HBCIDialog
         this.isAnon=((HBCIPassportInternal)parentHandler.getPassport()).isAnonymous();
         this.anonSuffix=isAnon?"Anon":"";
         this.msgs=new ArrayList();
-        this.msgs.add(new ArrayList());
+        this.msgs.add(new ArrayList<Object>());
         this.listOfGVs=new Properties();
     }
     
@@ -207,7 +207,7 @@ public final class HBCIDialog
     {
         HBCIUtils.log("processing jobs",HBCIUtils.LOG_INFO);
         
-        ArrayList        msgstatus_a=new ArrayList();
+        ArrayList<HBCIMsgStatus>        msgstatus_a=new ArrayList<HBCIMsgStatus>();
         HBCIPassportList msgPassports=new HBCIPassportList();
         
         HBCIKernelImpl       kernel=(HBCIKernelImpl)getParentHandler().getKernel();
@@ -512,7 +512,7 @@ public final class HBCIDialog
 
             listOfGVs.setProperty(hbciCode,Integer.toString(gv_counter));
 
-            ((ArrayList)(msgs.get(msgs.size()-1))).add(job);
+            ((ArrayList<HBCIJobImpl>)(msgs.get(msgs.size()-1))).add(job);
         } catch (Exception e) {
             String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_CANTADDJOB",job.getName());
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreAddJobErrors",

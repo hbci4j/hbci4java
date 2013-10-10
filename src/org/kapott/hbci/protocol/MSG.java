@@ -160,16 +160,16 @@ public final class MSG
     {
         super(type,type,null,(char)0,0,new StringBuffer(res),fullResLen,
                 gen.getSyntax(),
-                new Hashtable(),
-                checkValids?new Hashtable():null);
+                new Hashtable<String, String>(),
+                checkValids?new Hashtable<String, String>():null);
         initData(type,res,fullResLen,gen,checkSeq,checkValids);
     }
     
     public void init(String type,String res,int fullResLen,MsgGen gen,boolean checkSeq,boolean checkValids)
     {
         super.init(type,type,null,(char)0,0,new StringBuffer(res),fullResLen,
-                gen.getSyntax(),new Hashtable(),
-                checkValids?new Hashtable():null);
+                gen.getSyntax(),new Hashtable<String, String>(),
+                checkValids?new Hashtable<String, String>():null);
         initData(type,res,fullResLen,gen,checkSeq,checkValids);
     }
 
@@ -178,7 +178,7 @@ public final class MSG
         return '\'';
     }
 
-    protected MultipleSyntaxElements parseNewChildContainer(Node segref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected MultipleSyntaxElements parseNewChildContainer(Node segref, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         MultipleSyntaxElements ret=null;
 

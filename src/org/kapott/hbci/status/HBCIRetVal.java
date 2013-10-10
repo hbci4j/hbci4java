@@ -108,7 +108,7 @@ public final class HBCIRetVal
             element=path+((value!=null)?("="+value):"");
         }
                 
-        ArrayList a=new ArrayList();
+        ArrayList<String> a=new ArrayList<String>();
         int i=0;
         String parm;
 

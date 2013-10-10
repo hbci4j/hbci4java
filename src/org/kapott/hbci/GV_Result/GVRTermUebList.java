@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.kapott.hbci.GV_Result.GVRTermUebList.Entry;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
@@ -63,7 +64,7 @@ public final class GVRTermUebList
         
         public void addUsage(String st)
         {
-            ArrayList l=new ArrayList(Arrays.asList(usage));
+            ArrayList<String> l=new ArrayList<String>(Arrays.asList(usage));
             l.add(st);
             usage=(String[])l.toArray(usage);
         }
@@ -104,11 +105,11 @@ public final class GVRTermUebList
         }
     }
     
-    private List list;
+    private List<Entry> list;
     
     public GVRTermUebList()
     {
-        list=new ArrayList();
+        list=new ArrayList<Entry>();
     }
     
     public void addEntry(Entry e)

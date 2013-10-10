@@ -154,7 +154,7 @@ public class HBCIPassportPinTan
                 setFilterType((String)o.readObject());
                 
                 try {
-                    setAllowedTwostepMechanisms((List)o.readObject());
+                    setAllowedTwostepMechanisms((List<String>)o.readObject());
                     try {
                         setCurrentTANMethod((String)o.readObject());
                     } catch (Exception e) {

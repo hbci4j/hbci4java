@@ -37,7 +37,7 @@ public final class MultipleDEs
      extends MultipleSyntaxElements
 {
     private char delimiter;
-    private List valids;
+    private List<String> valids;
 
     protected SyntaxElement createAndAppendNewElement(Node deref, String path, int idx, Document syntax)
     {
@@ -49,7 +49,7 @@ public final class MultipleDEs
     private void initData(Node dedef, char delimiter, String path, Document syntax)
     {
         this.delimiter = delimiter;
-        this.valids=new ArrayList();
+        this.valids=new ArrayList<String>();
     }
 
     public MultipleDEs(Node dedef, char delimiter, String path, Document syntax)
@@ -103,13 +103,13 @@ public final class MultipleDEs
 
     // -------------------------------------------------------------------------------------------------------
 
-    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen,Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         SyntaxElement ret=null;
         
         if (idx!=0 && valids!=null) {
             String header=getPath()+".value";
-            for (Enumeration e=valids.keys();e.hasMoreElements();) {
+            for (Enumeration<String> e=valids.keys();e.hasMoreElements();) {
                 String key=(String)(e.nextElement());
                 
                 if (key.startsWith(header) &&    
@@ -128,19 +128,19 @@ public final class MultipleDEs
         return ret;
     }
     
-    private void initData(Node deref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    private void initData(Node deref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<?, ?> predefs,Hashtable<?, ?> valids)
     {
         this.delimiter=delimiter;
-        this.valids=new ArrayList();
+        this.valids=new ArrayList<String>();
     }
 
-    public MultipleDEs(Node deref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleDEs(Node deref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super(deref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         initData(deref,delimiter,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
     }
 
-    public void init(Node deref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(Node deref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super.init(deref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         initData(deref,delimiter,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);

@@ -51,7 +51,7 @@ public class HITANSTest extends AbstractTest
       
     // Prefix abschneiden
     Properties bpd = new Properties();
-    for (Enumeration e=ht.keys();e.hasMoreElements();)
+    for (Enumeration<String> e=ht.keys();e.hasMoreElements();)
     {
       String name = (String) e.nextElement();
       String value = ht.get(name);

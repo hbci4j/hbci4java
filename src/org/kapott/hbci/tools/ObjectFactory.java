@@ -26,8 +26,8 @@ import java.util.Collection;
 
 public class ObjectFactory 
 {
-    protected final Collection freeObjects;
-    protected final Collection usedObjects;
+    protected final Collection<Object> freeObjects;
+    protected final Collection<Object> usedObjects;
     private   final int        maxPoolSize;
     protected int              currentPoolSize;
     
@@ -38,8 +38,8 @@ public class ObjectFactory
     
     public ObjectFactory(int maxPoolSize)
     {
-        this.freeObjects=new ArrayList();
-        this.usedObjects=new ArrayList();
+        this.freeObjects=new ArrayList<Object>();
+        this.usedObjects=new ArrayList<Object>();
         this.maxPoolSize=maxPoolSize;
         this.currentPoolSize=0;
     }
@@ -108,12 +108,12 @@ public class ObjectFactory
         return ret.toString();
     }
     
-    public synchronized Collection getUsedObjects() 
+    public synchronized Collection<Object> getUsedObjects() 
     {
         return usedObjects;
     }
     
-    public synchronized Collection getFreeObjects()
+    public synchronized Collection<Object> getFreeObjects()
     {
         return freeObjects;
     }

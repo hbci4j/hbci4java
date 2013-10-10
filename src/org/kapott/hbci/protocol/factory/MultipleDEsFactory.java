@@ -47,7 +47,7 @@ public class MultipleDEsFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.DE","1024")));
     }
     
-    public MultipleDEs createMultipleDEs(Node sfref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleDEs createMultipleDEs(Node sfref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         MultipleDEs ret=(MultipleDEs)getFreeObject();
         

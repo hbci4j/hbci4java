@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
  * unterstützten GV-Versionen) */
 public class ShowCumulatedLowlevelParams 
 {
-    private static void extractParams(Document doc, Element node, String path, List params)
+    private static void extractParams(Document doc, Element node, String path, List<String> params)
     {
         NodeList childs=node.getChildNodes();
         int      l=childs.getLength();
@@ -98,7 +98,7 @@ public class ShowCumulatedLowlevelParams
         Element  root=doc.getDocumentElement();
         NodeList segdefs=root.getElementsByTagName("SEGdef");
         int      l=segdefs.getLength();
-        Map      paramsByJob=new Hashtable();
+        Map<String, List>      paramsByJob=new Hashtable<String, List>();
         for (int i=0; i<l; i++) {
             Element  segdef=(Element)segdefs.item(i);
             String   segdefid=segdef.getAttribute("id");
@@ -124,9 +124,9 @@ public class ShowCumulatedLowlevelParams
             }
             
             String plainJobName=segdefid.substring(0,segdefid.length()-segversion.length());
-            List   params=(List)paramsByJob.get(plainJobName);
+            List<String>   params=(List<String>)paramsByJob.get(plainJobName);
             if (params==null) {
-                params=new ArrayList();
+                params=new ArrayList<String>();
                 paramsByJob.put(plainJobName,params);
             }
             extractParams(doc, segdef,"",params);

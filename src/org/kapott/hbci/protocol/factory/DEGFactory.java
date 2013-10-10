@@ -46,7 +46,7 @@ public class DEGFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.DEG","512")));
     }
     
-    public DEG createDEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public DEG createDEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         DEG ret=(DEG)getFreeObject();
         
