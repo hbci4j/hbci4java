@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.xml.datatype.DatatypeFactory;
 
-import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyAndAmountSEPA;
@@ -48,10 +48,11 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
         return PainVersion.PAIN_001_003_03;
     }
 
-	/**
-	 * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(org.kapott.hbci.GV.AbstractSEPAGV, java.io.OutputStream)
-	 */
-	public void generate(AbstractSEPAGV job, OutputStream os) throws Exception
+    /**
+     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(java.util.Properties, java.io.OutputStream, boolean)
+     */
+    @Override
+    public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception
 	{
 		//Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
 		Date now=new Date();
@@ -69,11 +70,11 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 		
 		
 		//Group Header
-		doc.getCstmrCdtTrfInitn().getGrpHdr().setMsgId(job.getSEPAParam("sepaid"));
+		doc.getCstmrCdtTrfInitn().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
 		doc.getCstmrCdtTrfInitn().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 		doc.getCstmrCdtTrfInitn().getGrpHdr().setNbOfTxs("1");
 		doc.getCstmrCdtTrfInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
-		doc.getCstmrCdtTrfInitn().getGrpHdr().getInitgPty().setNm(job.getSEPAParam("src.name"));
+		doc.getCstmrCdtTrfInitn().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
 		
 		
 		//Payment Information 
@@ -82,7 +83,7 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 		pmtInfs.add(pmtInf);
 		
 		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
-		pmtInf.setPmtInfId(job.getSEPAParam("sepaid")); 
+		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
 		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
@@ -92,17 +93,17 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 		
 		
 		//Payment Information - Debtor
-		pmtInf.getDbtr().setNm(job.getSEPAParam("src.name"));
+		pmtInf.getDbtr().setNm(sepaParams.getProperty("src.name"));
 		
 		
 		//Payment Information - DebtorAccount
 		pmtInf.getDbtrAcct().setId(new AccountIdentificationSEPA());
-		pmtInf.getDbtrAcct().getId().setIBAN(job.getSEPAParam("src.iban"));
+		pmtInf.getDbtrAcct().getId().setIBAN(sepaParams.getProperty("src.iban"));
 		
 		
 		//Payment Information - DebtorAgent
 		pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA3());
-		pmtInf.getDbtrAgt().getFinInstnId().setBIC(job.getSEPAParam("src.bic"));
+		pmtInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("src.bic"));
 		
 		
 		//Payment Information - ChargeBearer
@@ -117,28 +118,28 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 		
 		//Payment Information - Credit Transfer Transaction Information - Payment Identification
 		cdtTrxTxInf.setPmtId(new PaymentIdentificationSEPA());
-		cdtTrxTxInf.getPmtId().setEndToEndId(job.getSEPAParam("endtoendid"));
+		cdtTrxTxInf.getPmtId().setEndToEndId(sepaParams.getProperty("endtoendid"));
 		
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor
 		cdtTrxTxInf.setCdtr(new PartyIdentificationSEPA2());
-		cdtTrxTxInf.getCdtr().setNm(job.getSEPAParam("dst.name"));
+		cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty("dst.name"));
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor Account
 		cdtTrxTxInf.setCdtrAcct(new CashAccountSEPA2());
 		cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentificationSEPA());
-		cdtTrxTxInf.getCdtrAcct().getId().setIBAN(job.getSEPAParam("dst.iban"));
+		cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty("dst.iban"));
 		
 		//Payment Information - Credit Transfer Transaction Information - Creditor Agent
 		cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA1());
 		cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA1());
-		cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(job.getSEPAParam("dst.bic"));
+		cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("dst.bic"));
 
 
 		//Payment Information - Credit Transfer Transaction Information - Amount
 		cdtTrxTxInf.setAmt(new AmountTypeSEPA());
 		cdtTrxTxInf.getAmt().setInstdAmt(new ActiveOrHistoricCurrencyAndAmountSEPA());
-		cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(job.getSEPAParam("btg.value")));
+		cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty("btg.value")));
 		
 		//FIXME: Schema sagt es gibt nur "eur" aber besser wäre bestimmt trotzdem getSEPAParam("btg.curr") oder?
 		cdtTrxTxInf.getAmt().getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR); 
@@ -148,9 +149,9 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 		//Payment Information - Credit Transfer Transaction Information - Usage
 		//FIXME: momentan nur unstrukturierter Verwendungszweck! Vielleicht gibt es einen Parameter dafür? Dann kann man per If entscheiden
 		cdtTrxTxInf.setRmtInf(new RemittanceInformationSEPA1Choice());
-		cdtTrxTxInf.getRmtInf().setUstrd(job.getSEPAParam("usage"));
+		cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty("usage"));
 
         ObjectFactory of = new ObjectFactory();
-        this.marshal(of.createDocument(doc),os);
+        this.marshal(of.createDocument(doc), os, validate);
 	}
 }
