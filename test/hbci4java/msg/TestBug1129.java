@@ -15,7 +15,7 @@ import hbci4java.AbstractTest;
 
 import java.util.Hashtable;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.kapott.hbci.exceptions.ParseErrorException;
