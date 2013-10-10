@@ -244,7 +244,7 @@ public class XMLCreator2
     
     private void rememberMissingValue(XMLEntity target, XMLData xmldata)
     {
-        Map<String, Set> errors=xmldata.getErrors();
+        Map<String, Set<XMLEntity>> errors =xmldata.getErrors();
         Set<XMLEntity> missings=errors.get("missings");
         
         if (missings==null) {
@@ -951,9 +951,9 @@ public class XMLCreator2
             // alle errors durchlaufen
             
             // missings durchsehen - evtl. wurde ja einige inzwischen durch eindeutige "valids" repariert
-            Set missings=(Set)xmldata.getErrors().get("missings");
-            for (Iterator i=missings.iterator(); i.hasNext(); ) {
-                XMLEntity e=(XMLEntity)i.next();
+            Set<XMLEntity> missings= xmldata.getErrors().get("missings");
+            for (Iterator<XMLEntity> i=missings.iterator(); i.hasNext(); ) {
+                XMLEntity e=i.next();
                 Node      node=e.getNode();
                 boolean   empty=true;
                 

@@ -535,7 +535,7 @@ public final class HBCIHandler
         sync_main.startWaiting(Integer.parseInt(HBCIUtils.getParam("kernel.threaded.maxwaittime","300")), "no response from hbci thread - timeout");
         
         HBCIExecThreadedStatus threadStatus=new HBCIExecThreadedStatus();
-        threadStatus.setCallbackData((Hashtable)sync_main.getData("callbackData"));
+        threadStatus.setCallbackData((Hashtable<String, Object>)sync_main.getData("callbackData"));
         threadStatus.setExecStatus((HBCIExecStatus)sync_main.getData("execStatus"));
         
         HBCIUtils.log(
@@ -595,7 +595,7 @@ public final class HBCIHandler
         sync_main.startWaiting(Integer.parseInt(HBCIUtils.getParam("kernel.threaded.maxwaittime","300")), "no response from hbci thread - timeout");
         
         HBCIExecThreadedStatus threadStatus=new HBCIExecThreadedStatus();
-        threadStatus.setCallbackData((Hashtable)sync_main.getData("callbackData"));
+        threadStatus.setCallbackData((Hashtable<String, Object>)sync_main.getData("callbackData"));
         threadStatus.setExecStatus((HBCIExecStatus)sync_main.getData("execStatus"));
         
         HBCIUtils.log(

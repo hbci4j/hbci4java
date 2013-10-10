@@ -59,7 +59,7 @@ public final class HBCIDialog
     private String      anonSuffix;
     private String      dialogid;  /* The dialogID for this dialog (unique for each dialog) */
     private long        msgnum;    /* An automatically managed message counter. */
-    private List        msgs;    /* this array contains all messages to be sent (excluding
+    private  List<ArrayList<HBCIJobImpl>>        msgs;    /* this array contains all messages to be sent (excluding
                                              dialogInit and dialogEnd); each element of the arrayList
                                              is again an ArrayList, where each element is one
                                              task (GV) to be sent with this specific message */
@@ -74,8 +74,8 @@ public final class HBCIDialog
         this.parentHandler=parentHandler;
         this.isAnon=((HBCIPassportInternal)parentHandler.getPassport()).isAnonymous();
         this.anonSuffix=isAnon?"Anon":"";
-        this.msgs=new ArrayList();
-        this.msgs.add(new ArrayList());
+        this.msgs=new ArrayList<ArrayList<HBCIJobImpl>>();
+        this.msgs.add(new ArrayList<HBCIJobImpl>());
         this.listOfGVs=new Properties();
     }
     
@@ -217,7 +217,7 @@ public final class HBCIDialog
         int nof_messages=msgs.size();
         for (int j=0;j<nof_messages;j++) {
             // tasks ist liste aller jobs, die in dieser nachricht ausgeführt werden sollen
-            ArrayList<HBCIJobImpl>     tasks=(ArrayList<HBCIJobImpl>)(msgs.get(j));
+            ArrayList<HBCIJobImpl>     tasks= msgs.get(j);
             
             // loop wird benutzt, um zu zählen, wie oft bereits "nachgehakt" wurde,
             // falls ein bestimmter job nicht mit einem einzigen nachrichtenaustausch
@@ -422,8 +422,8 @@ public final class HBCIDialog
         try {
             dialogid=null;
             msgnum=1;
-            msgs=new ArrayList();
-            msgs.add(new ArrayList());
+            msgs=new ArrayList<ArrayList<HBCIJobImpl>>();
+            msgs.add(new ArrayList<HBCIJobImpl>());
             listOfGVs.clear();
         } catch (Exception e) {
             HBCIUtils.log(e);
@@ -512,7 +512,7 @@ public final class HBCIDialog
 
             listOfGVs.setProperty(hbciCode,Integer.toString(gv_counter));
 
-            ((ArrayList<HBCIJobImpl>)(msgs.get(msgs.size()-1))).add(job);
+            msgs.get(msgs.size()-1).add(job);
         } catch (Exception e) {
             String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_CANTADDJOB",job.getName());
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreAddJobErrors",
@@ -538,11 +538,11 @@ public final class HBCIDialog
     public void newMsg()
     {
         HBCIUtils.log("starting new message",HBCIUtils.LOG_DEBUG);
-        msgs.add(new ArrayList());
+        msgs.add(new ArrayList<HBCIJobImpl>());
         listOfGVs.clear();
     }
     
-    public List getMessages()
+    public List<ArrayList<HBCIJobImpl>> getMessages()
     {
         return this.msgs;
     }

@@ -75,7 +75,7 @@ public abstract class Comm
         try {
             // erzeugen der liste aller rewriter
             String rewriters_st=HBCIUtils.getParam("kernel.rewriter");
-            ArrayList al=new ArrayList();
+            ArrayList<Rewrite> al=new ArrayList<Rewrite>();
             StringTokenizer tok=new StringTokenizer(rewriters_st,",");
             while (tok.hasMoreTokens()) {
                 String rewriterName=tok.nextToken().trim();
@@ -87,7 +87,7 @@ public abstract class Comm
                     al.add(rewriter);
                 }
             }
-            Rewrite[] rewriters=(Rewrite[])al.toArray(new Rewrite[al.size()]);
+            Rewrite[] rewriters= al.toArray(new Rewrite[al.size()]);
     
             // alle rewriter für verschlüsselte nachricht durchlaufen
             for (int i=0;i<rewriters.length;i++) {
