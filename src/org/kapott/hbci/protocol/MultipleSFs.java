@@ -24,6 +24,7 @@ package org.kapott.hbci.protocol;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.protocol.factory.SFFactory;
@@ -54,7 +55,7 @@ public final class MultipleSFs
     {
         StringBuffer ret = new StringBuffer(256);
 
-        for (Iterator i = getElements().listIterator(); i.hasNext(); ) {
+        for (ListIterator<SyntaxElement> i = getElements().listIterator(); i.hasNext(); ) {
             SF sf = (SF)(i.next());
             if (sf != null)
                 ret.append(sf.toString(0));
@@ -94,8 +95,8 @@ public final class MultipleSFs
     
     public void destroy()
     {
-        List children=getElements();
-        for (Iterator i=children.iterator();i.hasNext();) {
+        List<SyntaxElement> children=getElements();
+        for (Iterator<SyntaxElement> i=children.iterator();i.hasNext();) {
             SFFactory.getInstance().unuseObject(i.next());
         }
         

@@ -110,7 +110,7 @@ public class HBCIExecStatus
         @return Status-Objekt für den ausgewählten Dialog */
     public HBCIDialogStatus getDialogStatus(String customerid)
     {
-        return (HBCIDialogStatus)statusData.get(customerid);
+        return statusData.get(customerid);
     }
     
     /** Exceptions zurückgeben, die beim Ausführen eines bestimmten Dialoges aufgetreten sind.
@@ -233,7 +233,7 @@ public class HBCIExecStatus
         List<String>    customerIds=getCustomerIds();
         
         for (Iterator<String> i=customerIds.iterator();i.hasNext();) {
-            String customerId=(String)i.next();
+            String customerId=i.next();
             ok&=isOK(customerId);
         }
         

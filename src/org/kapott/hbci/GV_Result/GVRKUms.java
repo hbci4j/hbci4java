@@ -716,11 +716,11 @@ public class GVRKUms
                 // and we have to re-calculate the balances for each statement
                 int numLines = btag.lines.size();
                 if(numLines > 0 && btag.end != null) {
-                    UmsLine lastLine = (UmsLine)btag.lines.get(numLines-1);
+                    UmsLine lastLine = btag.lines.get(numLines-1);
                     saldo = btag.end.value.getLongValue();
                     if(lastLine.saldo.value.getLongValue() != saldo) {
                     	for(int i=numLines-1; i>=0; i--) {
-                    		lastLine = (UmsLine)btag.lines.get(i);
+                    		lastLine = btag.lines.get(i);
                     		lastLine.saldo.value = new Value(saldo, btag.end.value.getCurr());
                     		saldo -= lastLine.value.getLongValue();
                     	}

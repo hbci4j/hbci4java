@@ -211,7 +211,7 @@ public final class InitAndTest
     {
         Properties gvcodes=getGVCodes();
         
-        String[] codes=(String[])gvcodes.keySet().toArray(new String[0]);
+        String[] codes=gvcodes.keySet().toArray(new String[0]);
         Arrays.sort(codes);
         
         System.out.println();

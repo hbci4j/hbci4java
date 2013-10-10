@@ -75,7 +75,7 @@ public final class HBCIDialog
         this.isAnon=((HBCIPassportInternal)parentHandler.getPassport()).isAnonymous();
         this.anonSuffix=isAnon?"Anon":"";
         this.msgs=new ArrayList();
-        this.msgs.add(new ArrayList<Object>());
+        this.msgs.add(new ArrayList());
         this.listOfGVs=new Properties();
     }
     
@@ -217,7 +217,7 @@ public final class HBCIDialog
         int nof_messages=msgs.size();
         for (int j=0;j<nof_messages;j++) {
             // tasks ist liste aller jobs, die in dieser nachricht ausgeführt werden sollen
-            ArrayList     tasks=(ArrayList)(msgs.get(j));
+            ArrayList<HBCIJobImpl>     tasks=(ArrayList<HBCIJobImpl>)(msgs.get(j));
             
             // loop wird benutzt, um zu zählen, wie oft bereits "nachgehakt" wurde,
             // falls ein bestimmter job nicht mit einem einzigen nachrichtenaustausch
@@ -241,8 +241,8 @@ public final class HBCIDialog
                     
                     // durch alle jobs loopen, die eigentlich in der aktuellen
                     // nachricht abgearbeitet werden müssten
-                    for (Iterator i=tasks.iterator();i.hasNext();) {
-                        HBCIJobImpl task=(HBCIJobImpl)(i.next());
+                    for (Iterator<HBCIJobImpl> i=tasks.iterator();i.hasNext();) {
+                        HBCIJobImpl task=i.next();
                         
                         // wenn der Task entweder noch gar nicht ausgeführt wurde
                         // oder in der letzten Antwortnachricht ein entsprechendes
@@ -311,8 +311,8 @@ public final class HBCIDialog
                     if (offset!=0) {           
                         // für jeden Task die entsprechenden Rückgabedaten-Klassen füllen
                         // in fillOutStore wird auch "executed" fuer den jeweiligen Task auf true gesetzt.
-                        for (Iterator i=tasks.iterator();i.hasNext();) {
-                            HBCIJobImpl task=(HBCIJobImpl)(i.next());
+                        for (Iterator<HBCIJobImpl> i=tasks.iterator();i.hasNext();) {
+                            HBCIJobImpl task=i.next();
                             if (task.needsContinue(loop)) {
                                 // nur wenn der auftrag auch tatsaechlich gesendet werden musste
                                 try {
@@ -343,7 +343,7 @@ public final class HBCIDialog
 
         HBCIMsgStatus[] ret=new HBCIMsgStatus[0];
         if (msgstatus_a.size()!=0)
-            ret=(HBCIMsgStatus[])(msgstatus_a.toArray(ret));
+            ret=(msgstatus_a.toArray(ret));
 
         return ret;
     }

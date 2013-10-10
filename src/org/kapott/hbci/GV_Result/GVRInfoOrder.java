@@ -62,7 +62,7 @@ public final class GVRInfoOrder
         @return Array mit Meldungen */
     public Info[] getEntries()
     {
-        return (Info[])infos.toArray(new Info[infos.size()]);
+        return infos.toArray(new Info[infos.size()]);
     }
 
     public String toString()
@@ -70,7 +70,7 @@ public final class GVRInfoOrder
         StringBuffer ret=new StringBuffer();
 
         for (int i=0;i<infos.size();i++) {
-            ret.append(((Info)infos.get(i)).toString()).append(System.getProperty("line.separator"));
+            ret.append(infos.get(i).toString()).append(System.getProperty("line.separator"));
         }
         
         return ret.toString().trim();

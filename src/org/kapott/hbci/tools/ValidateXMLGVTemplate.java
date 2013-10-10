@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
  * geprüft werden. */
 public class ValidateXMLGVTemplate 
 {
-    private static void validateRefs(Element sfelem, List deflist)
+    private static void validateRefs(Element sfelem, List<String> deflist)
     {
         String   sfname=sfelem.getAttribute("id");
         NodeList refs=sfelem.getElementsByTagName("SEG");

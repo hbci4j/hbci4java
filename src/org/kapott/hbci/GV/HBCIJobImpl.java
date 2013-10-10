@@ -273,8 +273,8 @@ public abstract class HBCIJobImpl
       Enumeration<String> e = constraints.keys();
       while (e.hasMoreElements())
       {
-        String frontendName = (String) e.nextElement();
-        String[][] values = (String[][]) constraints.get(frontendName);
+        String frontendName = e.nextElement();
+        String[][] values = constraints.get(frontendName);
         for (int i=0;i<values.length;++i)
         {
           String[] value = values[i];
@@ -399,7 +399,7 @@ public abstract class HBCIJobImpl
 
         // alle schon gespeicherten "ziel-lowlevelparameternamen" für den gewünschten
         // frontend-namen suchen
-        String[][] values=(String[][])(constraints.get(frontendName));
+        String[][] values=(constraints.get(frontendName));
 
         if (values==null) {
             // wenn es noch keine gibt, ein neues frontend-ding anlegen //FIXME: was ist ein "frontend-ding"?
@@ -408,7 +408,7 @@ public abstract class HBCIJobImpl
         } else {
             ArrayList<String[]> a=new ArrayList<String[]>(Arrays.asList(values));
             a.add(value);
-            values=(String[][])(a.toArray(values));
+            values=(a.toArray(values));
         }
 
         constraints.put(frontendName,values);
@@ -425,10 +425,10 @@ public abstract class HBCIJobImpl
         // durch alle gespeicherten constraints durchlaufen
         for (Iterator<String> i=constraints.keySet().iterator();i.hasNext();) {
             // den frontendnamen für das constraint ermitteln
-            String     frontendName=(String)(i.next());
+            String     frontendName=(i.next());
             
             // dazu alle ziel-lowlevelparameter mit default-wert extrahieren
-            String[][] values=(String[][])(constraints.get(frontendName));
+            String[][] values=(constraints.get(frontendName));
 
             // durch alle ziel-lowlevel-parameternamen durchlaufen, die gesetzt werden müssen
             for (int j=0;j<values.length;j++) {
@@ -503,13 +503,13 @@ public abstract class HBCIJobImpl
         return seg;
     }
     
-    public List getJobParameterNames()
+    public List<String> getJobParameterNames()
     {
         MsgGen gen=getParentHandler().getMsgGen();
         return gen.getGVParameterNames(name);
     }
     
-    public List getJobResultNames()
+    public List<String> getJobResultNames()
     {
         MsgGen gen=getParentHandler().getMsgGen();
         return gen.getGVResultNames(name);
@@ -619,12 +619,12 @@ public abstract class HBCIJobImpl
     {
     	// wenn der Parameter einen LogFilter-Level gesetzt hat, dann den
     	// betreffenden Wert zum Logfilter hinzufügen
-    	Integer logFilterLevel=(Integer)logFilterLevels.get(paramName);
+    	Integer logFilterLevel=logFilterLevels.get(paramName);
     	if (logFilterLevel!=null && logFilterLevel.intValue()!=0) {
     		LogFilter.getInstance().addSecretData(value,"X",logFilterLevel.intValue());
     	}
     	
-        String[][]           destinations=(String[][])constraints.get(paramName);
+        String[][]           destinations=constraints.get(paramName);
         HBCIPassportInternal passport=getMainPassport();
         
         if (destinations==null) {
@@ -744,7 +744,7 @@ public abstract class HBCIJobImpl
             
             // res-num --> segmentheader (wird für sortierung der 
             // antwort-segmente benötigt)
-            Hashtable keyHeaders=new Hashtable();
+            Hashtable<Integer,String> keyHeaders=new Hashtable<Integer, String>();
             for (Enumeration i=result.keys();i.hasMoreElements();) {
                 String key=(String)(i.nextElement());
                 if (key.startsWith("GVRes")&&
@@ -776,7 +776,7 @@ public abstract class HBCIJobImpl
             // alle antwortsegmente durchlaufen
             for (int i=0;i<resnums.length;i++) {
                 // dabei reihenfolge des eintreffens beachten
-                String header=(String)keyHeaders.get(resnums[i]);
+                String header=keyHeaders.get(resnums[i]);
                 
                 extractPlaintextResults(status,header,contentCounter);
                 extractResults(status,header,contentCounter++);
@@ -965,7 +965,7 @@ public abstract class HBCIJobImpl
 
     protected void checkAccountCRC(String frontendname)
     {
-        String[][] data=(String[][])constraints.get(frontendname+".blz");
+        String[][] data=constraints.get(frontendname+".blz");
         if (data!=null && data.length!=0) {
         	// wenn es tatsaechlich einen frontendparamter der form acc.blz gibt,
         	// brauchen wir zunaechst den "basis-namen" ("acc")
@@ -980,7 +980,7 @@ public abstract class HBCIJobImpl
         }
         
         // analoges fuer die IBAN
-        String[][] data2=(String[][])constraints.get(frontendname+".iban");
+        String[][] data2=constraints.get(frontendname+".iban");
         if (data2!=null && data2.length!=0) {
             String paramname=data2[0][0];
             String lowlevelHeader=paramname.substring(0,paramname.lastIndexOf(".iban"));

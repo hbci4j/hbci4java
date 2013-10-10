@@ -130,7 +130,7 @@ public abstract class AbstractPinTanPassport
                             String secfunc=p.getProperty(key);
 
                             // willuhn 2011-05-13 Checken, ob wir das Verfahren schon aus einer aktuelleren Segment-Version haben
-                            Properties prev = (Properties) twostepMechanisms.get(secfunc);
+                            Properties prev = twostepMechanisms.get(secfunc);
                             if (prev != null)
                             {
                               // Wir haben es schonmal. Mal sehen, welche Versionsnummer es hat
@@ -276,7 +276,7 @@ public abstract class AbstractPinTanPassport
                     }
                 } else {
                     // irgendein zweischritt-verfahren gewählt
-                    Properties entry=(Properties)twostepMechanisms.get(current);
+                    Properties entry=twostepMechanisms.get(current);
                     if (entry==null) {
                         // es gibt keinen info-eintrag für das gewählte verfahren
                         HBCIUtils.log("not supported: twostep-method "+current+" selected, but this is not supported",HBCIUtils.LOG_ERR);
@@ -370,7 +370,7 @@ public abstract class AbstractPinTanPassport
             for (int i=0;i<len;i++) {
                 String secfunc=secfuncs[i];
                 if (allowedTwostepMechanisms.size()==0 || allowedTwostepMechanisms.contains(secfunc)) {
-                    Properties entry=(Properties)twostepMechanisms.get(secfunc);
+                    Properties entry=twostepMechanisms.get(secfunc);
                     options.add(new String[] {secfunc,entry.getProperty("name")});
                 }
             }
@@ -512,7 +512,7 @@ public abstract class AbstractPinTanPassport
     
     public Properties getCurrentSecMechInfo()
     {
-        return (Properties)twostepMechanisms.get(getCurrentTANMethod(false));
+        return twostepMechanisms.get(getCurrentTANMethod(false));
     }
     
     public Hashtable<String, Properties> getTwostepMechanisms()
@@ -961,14 +961,14 @@ public abstract class AbstractPinTanPassport
             
             // durch alle ursprünglichen nachrichten laufen
             for (Iterator<ArrayList<HBCIJobImpl>> i=msgs.iterator();i.hasNext();) {
-                ArrayList<HBCIJobImpl> msg_tasks=(ArrayList<HBCIJobImpl>)i.next();
+                ArrayList<HBCIJobImpl> msg_tasks= i.next();
                 ArrayList<HBCIJobImpl> new_msg_tasks=new ArrayList<HBCIJobImpl>();
                 
                 ArrayList<HBCIJobImpl> additional_msg_tasks=null;
                 
                 // jeden task einer nachricht ansehen
                 for (Iterator<HBCIJobImpl> j=msg_tasks.iterator();j.hasNext();) {
-                    HBCIJobImpl task=(HBCIJobImpl)j.next();
+                    HBCIJobImpl task= j.next();
                     String      segcode=task.getHBCICode();
 
                     if (getPinTanInfo(segcode).equals("J")) {

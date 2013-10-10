@@ -411,7 +411,7 @@ public class HBCIBatch
                     try {
                         // alle bekannten job-bezeichner (IDs) durchlaufen
                         for (Enumeration<String> jobIds=jobs.keys();jobIds.hasMoreElements();) {
-                            jobid=(String)jobIds.nextElement();
+                            jobid=jobIds.nextElement();
                             if (jobid.endsWith("_resultMode")) {
                                 continue;
                             }
@@ -439,7 +439,7 @@ public class HBCIBatch
                                     if (result!=null) {
                                         // array mit result-properties holen und
                                         // sortieren
-                                        String[] keys=(String[])new ArrayList<Object>(result.keySet()).toArray(new String[0]);
+                                        String[] keys=(String[])new ArrayList(result.keySet()).toArray(new String[0]);
                                         Arrays.sort(keys);
                                         
                                         // ausgabe aller result-properties

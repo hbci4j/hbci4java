@@ -46,7 +46,7 @@ public class MSGFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.MSG","8")));
     }
     
-    public MSG createMSG(String type,MsgGen gen,Hashtable clientValues)
+    public MSG createMSG(String type,MsgGen gen,Hashtable<String,String> clientValues)
     {
         MSG ret=(MSG)getFreeObject();
         

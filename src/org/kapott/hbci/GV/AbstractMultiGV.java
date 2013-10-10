@@ -65,7 +65,7 @@ public abstract class AbstractMultiGV
                 long sum = 0;
                 ArrayList<Transaction> entries = dtaus.getEntries();
                 for (Iterator<Transaction> i = entries.iterator(); i.hasNext();) {
-                    DTAUS.Transaction entry = (DTAUS.Transaction) i.next();
+                    DTAUS.Transaction entry = i.next();
                     sum += entry.value.getLongValue();
                 }
                 // TODO: hier wird ziemlich unschön direkt auf

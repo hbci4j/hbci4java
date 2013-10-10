@@ -357,6 +357,6 @@ public final class MsgGen
     
     public String get(String key)
     {
-        return (String)clientValues.get(key);
+        return clientValues.get(key);
     }
 }

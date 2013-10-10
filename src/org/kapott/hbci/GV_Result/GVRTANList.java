@@ -130,7 +130,7 @@ public class GVRTANList
             @return Array mit TAN-Informationen */
         public TANInfo[] getTANInfos()
         {
-            return (TANInfo[])taninfos.toArray(new TANInfo[taninfos.size()]);
+            return taninfos.toArray(new TANInfo[taninfos.size()]);
         }
         
         public void addTANInfo(TANInfo info)
@@ -146,7 +146,7 @@ public class GVRTANList
             ret.append("TANListe Nummer ").append(number).append(" Typ:").append(status+linesep);
             ret.append("nofTANsPerList: ").append(nofTANsPerList).append("; nofUsedTANsPerList: ").append(nofUsedTANsPerList+linesep);
             for (Iterator<TANInfo> i=taninfos.iterator();i.hasNext();) {
-                ret.append("  ").append(((TANInfo)i.next()).toString()).append(linesep);
+                ret.append("  ").append(i.next().toString()).append(linesep);
             }
     
             return ret.toString().trim();
@@ -169,7 +169,7 @@ public class GVRTANList
         @return Array mit TAN-Listen-Informationen */
     public TANList[] getTANLists()
     {
-        return (TANList[])tanlists.toArray(new TANList[tanlists.size()]);
+        return tanlists.toArray(new TANList[tanlists.size()]);
     }
     
     public String toString()
@@ -177,7 +177,7 @@ public class GVRTANList
         StringBuffer ret=new StringBuffer();
         
         for (Iterator<TANList> i=tanlists.iterator();i.hasNext();) {
-            ret.append(((TANList)i.next()).toString()).append(System.getProperty("line.separator"));
+            ret.append(i.next().toString()).append(System.getProperty("line.separator"));
         }
         
         return ret.toString().trim();

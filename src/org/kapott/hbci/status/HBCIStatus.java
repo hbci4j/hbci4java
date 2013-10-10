@@ -137,7 +137,7 @@ public final class HBCIStatus
         
         HBCIRetVal[] ret=new HBCIRetVal[0];
         if (ret_a.size()!=0) {
-            ret=(HBCIRetVal[])ret_a.toArray(ret);
+            ret=ret_a.toArray(ret);
         }
         
         return ret;
@@ -148,7 +148,7 @@ public final class HBCIStatus
         aufgetreten sind. */
     public Exception[] getExceptions()
     {
-        return (Exception[])exceptions.toArray(new Exception[exceptions.size()]);
+        return exceptions.toArray(new Exception[exceptions.size()]);
     }
     
     /** Gibt alle in diesem Status-Objekt gespeicherten Rückgabewerte zurück
@@ -156,7 +156,7 @@ public final class HBCIStatus
      aufgetreten sind. */
     public HBCIRetVal[] getRetVals()
     {
-        return (HBCIRetVal[])retVals.toArray(new HBCIRetVal[retVals.size()]);
+        return retVals.toArray(new HBCIRetVal[retVals.size()]);
     }
     
     /** Gibt die in diesem Objekt gespeicherten Fehlermeldungen zurück

@@ -183,7 +183,7 @@ public class RDHXFile
             }
         }
         
-        return (TLV[])ret.toArray(new TLV[ret.size()]);
+        return ret.toArray(new TLV[ret.size()]);
     }
 
     public byte[] getFileData(int profileVersion)

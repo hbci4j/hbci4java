@@ -108,7 +108,7 @@ public class HBCICallbackSwing
         if (msg==null)
             msg="";
             
-        Hashtable<String, Object> currentData=(Hashtable<String, Object>)passports.get(passport);
+        Hashtable<String, Object> currentData= passports.get(passport);
         if (currentData==null) {
             currentData=new Hashtable<String, Object>();
             currentData.put("passport",passport);
@@ -1383,7 +1383,7 @@ public class HBCICallbackSwing
                 StringTokenizer tok2=new StringTokenizer(entry,";");
                 data.add(new String[] {tok2.nextToken(),tok2.nextToken(),tok2.nextToken()});
             }
-            String[][] tableData=(String[][])data.toArray(new String[data.size()][]);
+            String[][] tableData= data.toArray(new String[data.size()][]);
             final JTable table=new JTable(tableData,tableCols);
             table.setCellSelectionEnabled(false);
             table.setColumnSelectionAllowed(false);
@@ -1475,7 +1475,7 @@ public class HBCICallbackSwing
                 String[] values=entry.split(":");
                 data.add(new String[] {values[0], values[1]});
             }
-            String[][]   tableData=(String[][])data.toArray(new String[data.size()][]);
+            String[][]   tableData= data.toArray(new String[data.size()][]);
             final JTable table=new JTable(tableData,tableCols);
             table.setCellSelectionEnabled(false);
             table.setColumnSelectionAllowed(false);

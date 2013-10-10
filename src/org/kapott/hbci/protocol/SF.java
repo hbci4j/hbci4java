@@ -89,7 +89,7 @@ public final class SF
 
         if (isValid())
             for (ListIterator<MultipleSyntaxElements> i = getChildContainers().listIterator(); i.hasNext(); ) {
-                MultipleSyntaxElements list = (MultipleSyntaxElements)(i.next());
+                MultipleSyntaxElements list = (i.next());
 
                 if (list != null)
                     ret.append(list.toString(0));

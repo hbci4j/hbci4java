@@ -183,7 +183,7 @@ public final class HBCIDialogStatus
             ret.addAll(Arrays.asList(endStatus.getExceptions()));
         }
 
-        return (Exception[])ret.toArray(new Exception[ret.size()]);
+        return ret.toArray(new Exception[ret.size()]);
     }
     
     /** Gibt für einen Dialog alle Fehlermeldungen zurück. Für jede Nachricht

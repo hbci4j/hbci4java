@@ -210,7 +210,7 @@ public class GVRAccInfo
         <code>null</code>, kann aber die Länge <code>0</code> haben */
     public AccInfo[] getEntries()
     {
-        return (AccInfo[])entries.toArray(new AccInfo[entries.size()]);
+        return entries.toArray(new AccInfo[entries.size()]);
     }
 
     public String toString()

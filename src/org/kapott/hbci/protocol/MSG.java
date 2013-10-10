@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.exceptions.NoSuchPathException;
@@ -66,13 +67,13 @@ public final class MSG
         pfadnames und als wert den wert eines zu setzenden elementes enthaelt. mit
         der methode werden vom nutzer einzugebenede daten (wie kontonummern, namen
         usw.) in die generierte nachricht eingebaut */
-    private void propagateUserData(String name, Hashtable clientValues)
+    private void propagateUserData(String name, Hashtable<String,String> clientValues)
     {
         String dottedName = name+".";
-        Enumeration e     = clientValues.keys();
+        Enumeration<String> e     = clientValues.keys();
         while (e.hasMoreElements()) {
-            String key =   (String)(e.nextElement());
-            String value = (String)(clientValues.get(key));
+            String key =   e.nextElement();
+            String value = clientValues.get(key);
 
             if (key.startsWith(dottedName) && value.length()!=0) {
                 if (!propagateValue(key,value,TRY_TO_CREATE,DONT_ALLOW_OVERWRITE)) {
@@ -110,19 +111,19 @@ public final class MSG
     }
     
     /** @brief erstellen eines neuen nachrichten-syntaxelements */
-    public MSG(String type, MsgGen gen, Hashtable clientValues)
+    public MSG(String type, MsgGen gen, Hashtable<String,String> clientValues)
     {
         super(type,type,null,0,gen.getSyntax());
         initData(type,gen,clientValues);
     }
     
-    public void init(String type,MsgGen gen,Hashtable clientValues)
+    public void init(String type,MsgGen gen,Hashtable<String,String> clientValues)
     {
         super.init(type,type,null,0,gen.getSyntax());
         initData(type,gen,clientValues);
     }
     
-    private void initData(String type,MsgGen gen,Hashtable clientValues)
+    private void initData(String type,MsgGen gen,Hashtable<String,String> clientValues)
     {
         propagateUserData(getName(), clientValues);
 
@@ -138,8 +139,8 @@ public final class MSG
         StringBuffer ret = new StringBuffer(1024);
 
         if (isValid())
-            for (Iterator i = getChildContainers().listIterator(); i.hasNext(); ) {
-                MultipleSyntaxElements list = (MultipleSyntaxElements)(i.next());
+            for (Iterator<MultipleSyntaxElements> i = getChildContainers().listIterator(); i.hasNext(); ) {
+                MultipleSyntaxElements list = i.next();
 
                 if (list != null)
                     ret.append(list.toString(0));
@@ -194,8 +195,8 @@ public final class MSG
     {
         String ret = null;
 
-        for (Iterator i = getChildContainers().listIterator(); i.hasNext(); ) {
-            MultipleSyntaxElements l = (MultipleSyntaxElements)(i.next());
+        for (ListIterator<MultipleSyntaxElements> i = getChildContainers().listIterator(); i.hasNext(); ) {
+            MultipleSyntaxElements l = i.next();
 
             String temp = l.getValueOfDE(path);
             if (temp != null) {
@@ -214,15 +215,15 @@ public final class MSG
 
     public Properties getData()
     {
-        Hashtable  hash=new Hashtable();
+        Hashtable<String,String>  hash=new Hashtable<String, String>();
         Properties p=new Properties();
         int        nameskip=getName().length()+1;
         
         extractValues(hash);
         
-        for (Enumeration e = hash.keys(); e.hasMoreElements(); ) {
-            String key = (String)(e.nextElement());
-            p.setProperty(key.substring(nameskip), (String)(hash.get(key)));
+        for (Enumeration<String> e = hash.keys(); e.hasMoreElements(); ) {
+            String key = e.nextElement();
+            p.setProperty(key.substring(nameskip), hash.get(key));
         }
         
         return p;
@@ -233,8 +234,8 @@ public final class MSG
         segref=new int[1];
         segref[0]=1;
 
-        for (Iterator i=getChildContainers().iterator();i.hasNext();) {
-            MultipleSyntaxElements l=(MultipleSyntaxElements)(i.next());
+        for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
+            MultipleSyntaxElements l=i.next();
             if (l!=null) {
                 l.getElementPaths(p,segref,null,null);
             }
@@ -243,9 +244,9 @@ public final class MSG
     
     public void destroy()
     {
-        List childContainers=getChildContainers();
-        for (Iterator i=childContainers.iterator();i.hasNext();) {
-            Object child=i.next();
+        List<MultipleSyntaxElements> childContainers=getChildContainers();
+        for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
+            MultipleSyntaxElements child=i.next();
             if (child instanceof MultipleSFs) {
                 MultipleSFsFactory.getInstance().unuseObject(child);
             } else {

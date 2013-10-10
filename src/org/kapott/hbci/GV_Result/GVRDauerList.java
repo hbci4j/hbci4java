@@ -100,7 +100,7 @@ public final class GVRDauerList
         {
             ArrayList<String> a=new ArrayList<String>(Arrays.asList(usage));
             a.add(line);
-            usage=(String[])(a.toArray(usage));
+            usage=(a.toArray(usage));
         }
 
         public String toString()
@@ -147,7 +147,7 @@ public final class GVRDauerList
         @return Array mit Dauerauftrags-Informationen */
     public Dauer[] getEntries()
     {
-        return (Dauer[])entries.toArray(new Dauer[entries.size()]);
+        return entries.toArray(new Dauer[entries.size()]);
     }
     
     public String toString()

@@ -107,9 +107,9 @@ public final class HBCIUser
                 
                 RSAPublicKeySpec spec=null;
                 if (i==0) {
-                    spec=(RSAPublicKeySpec)fac.getKeySpec(sigKey[0].key,RSAPublicKeySpec.class);
+                    spec=fac.getKeySpec(sigKey[0].key,RSAPublicKeySpec.class);
                 } else if (i==1) {
-                    spec=(RSAPublicKeySpec)fac.getKeySpec(encKey[0].key,RSAPublicKeySpec.class);
+                    spec=fac.getKeySpec(encKey[0].key,RSAPublicKeySpec.class);
                 } else {
                     // TODO: dig key senden
                 }

@@ -229,7 +229,7 @@ public final class GVRWPDepotList
                 @return Array mit Untersaldoinformationen */
             public SubSaldo[] getEntries()
             {
-                return (SubSaldo[])saldi.toArray(new SubSaldo[saldi.size()]);
+                return saldi.toArray(new SubSaldo[saldi.size()]);
             }
             
             public String toString()
@@ -330,7 +330,7 @@ public final class GVRWPDepotList
             @return Array mit Informationen über Wertpapiergattungen */
         public Gattung[] getEntries()
         {
-            return (Gattung[])gattungen.toArray(new Gattung[gattungen.size()]);
+            return gattungen.toArray(new Gattung[gattungen.size()]);
         }
         
         public String toString()
@@ -342,7 +342,7 @@ public final class GVRWPDepotList
             ret.append("Depot ").append(depot.toString()).append(" ").append(df.format(timestamp)).append(linesep);
             for (int i=0;i<gattungen.size();i++) {
                 ret.append("Gattung:").append(linesep);
-                ret.append(((Gattung)gattungen.get(i)).toString()+linesep+linesep);
+                ret.append(gattungen.get(i).toString()+linesep+linesep);
             }
             if (total!=null)
                 ret.append("Total: ").append(total.toString());
@@ -374,7 +374,7 @@ public final class GVRWPDepotList
         @return Array mit Depotinformationen */
     public Entry[] getEntries()
     {
-        return (Entry[])entries.toArray(new Entry[entries.size()]);
+        return entries.toArray(new Entry[entries.size()]);
     }
     
     public String toString()
@@ -383,7 +383,7 @@ public final class GVRWPDepotList
         String       linesep=System.getProperty("line.separator");
             
         for (int i=0;i<entries.size();i++) {
-            Entry e=(Entry)entries.get(i);
+            Entry e=entries.get(i);
             ret.append("Entry #").append(i).append(":").append(linesep);
             ret.append(e.toString()+linesep+linesep);
         }

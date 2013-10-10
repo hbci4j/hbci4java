@@ -83,7 +83,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         
             // SEPAInfo laden und darüber iterieren
             Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
-            Enumeration<?> e = props.propertyNames();
+            Enumeration e = props.propertyNames();
             while (e.hasMoreElements())
             {
                 String key = (String) e.nextElement();

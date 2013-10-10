@@ -279,7 +279,7 @@ public abstract class AbstractHBCIPassport
             }
         }
         
-        return (Konto[])ret.toArray(new Konto[ret.size()]);
+        return ret.toArray(new Konto[ret.size()]);
     }
     
     public final void fillAccountInfo(Konto account)
@@ -453,7 +453,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0) 
-                ret=(String[])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
     
         return ret;
@@ -476,7 +476,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0)
-                ret=(String[])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
     
         return ret;
@@ -533,7 +533,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0)
-                ret=(String[][])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
             
         return ret;
@@ -561,7 +561,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0)
-                ret=(String[][])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
             
         return ret;

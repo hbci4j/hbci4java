@@ -60,7 +60,7 @@ public class SyntaxDEFactory
         ObjectFactory factory;
         
         synchronized(this) {
-        	factory=(ObjectFactory)factories.get(dataType);
+        	factory=factories.get(dataType);
 
         	if (factory==null) {
         		factory=new ObjectFactory(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.Syntax","1024")));
@@ -118,7 +118,7 @@ public class SyntaxDEFactory
         ObjectFactory factory;
         
         synchronized(this) {
-        	factory=(ObjectFactory)factories.get(dataType);
+        	factory=factories.get(dataType);
 
         	if (factory==null) {
         		factory=new ObjectFactory(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.Syntax","1024")));
@@ -174,7 +174,7 @@ public class SyntaxDEFactory
     {
         if (sde!=null) {
             sde.destroy();
-            ObjectFactory fac=(ObjectFactory)factories.get(type);
+            ObjectFactory fac=factories.get(type);
             fac.unuseObject(sde);
         }
     }
@@ -184,8 +184,8 @@ public class SyntaxDEFactory
         StringBuffer ret=new StringBuffer();
         
         for (Enumeration<String> e=factories.keys();e.hasMoreElements();) {
-            String        type=(String)e.nextElement();
-            ObjectFactory fac=(ObjectFactory)factories.get(type);
+            String        type=e.nextElement();
+            ObjectFactory fac=factories.get(type);
             
             ret.append(type).append(": ").append(fac.toString()).append(System.getProperty("line.separator"));
         }

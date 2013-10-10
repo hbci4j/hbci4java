@@ -463,7 +463,7 @@ public abstract class SyntaxElement
     /** fuellt die hashtable 'values' mit den werten der de-syntaxelemente; dazu
      wird in allen anderen typen von syntaxelementen die liste der
      child-elemente durchlaufen und deren 'fillValues' methode aufgerufen */
-    public void extractValues(Hashtable values)
+    public void extractValues(Hashtable<String,String> values)
     {
         for (Iterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
             MultipleSyntaxElements l = i.next();

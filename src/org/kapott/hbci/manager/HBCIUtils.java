@@ -707,7 +707,7 @@ public final class HBCIUtils
                 // initialize callback
                 if (callback==null) {
                     ThreadGroup parent=Thread.currentThread().getThreadGroup().getParent();
-                    callback=(HBCICallback)HBCIUtilsInternal.callbacks.get(parent);
+                    callback=HBCIUtilsInternal.callbacks.get(parent);
                     if (callback==null) {
                         throw new NullPointerException("no callback specified");
                     }
@@ -842,7 +842,7 @@ public final class HBCIUtils
     public static Locale getLocale()
     {
         ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return (Locale)HBCIUtilsInternal.locales.get(group);
+        return HBCIUtilsInternal.locales.get(group);
     }
 
     /** Gibt den aktuellen Wert eines bestimmten HBCI-Parameters zurück. 
@@ -868,7 +868,7 @@ public final class HBCIUtils
         ThreadGroup threadgroup=Thread.currentThread().getThreadGroup();
         
         synchronized (configs) {
-            params=(Properties)configs.get(threadgroup);
+            params=configs.get(threadgroup);
         }
         
         return params;

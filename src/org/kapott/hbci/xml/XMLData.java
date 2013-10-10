@@ -67,7 +67,7 @@ public class XMLData
     
     public Node getNodeByPath(String path)
     {
-        return (Node)nodes.get(path);
+        return nodes.get(path);
     }
 
     public void setValue(String key, String value)

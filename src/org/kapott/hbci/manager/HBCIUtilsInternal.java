@@ -81,13 +81,13 @@ public class HBCIUtilsInternal
     public static HBCICallback getCallback()
     {
         ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return (HBCICallback)callbacks.get(group);
+        return callbacks.get(group);
     }
     
     public static String getLocMsg(String key)
     {
         ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return ((ResourceBundle)locMsgs.get(group)).getString(key);
+        return locMsgs.get(group).getString(key);
     }
 
     public static String getLocMsg(String key,Object o)

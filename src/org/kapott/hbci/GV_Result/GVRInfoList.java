@@ -65,7 +65,7 @@ public final class GVRInfoList
         {
             ArrayList<String> a=new ArrayList<String>(Arrays.asList(comment));
             a.add(st);
-            comment=(String[])a.toArray(comment);
+            comment=a.toArray(comment);
         }
 
         public String toString()
@@ -114,7 +114,7 @@ public final class GVRInfoList
         @return Array, wobei jeder Eintrag eine solche Information beschreibt */
     public Info[] getEntries()
     {
-        return (Info[])entries.toArray(new Info[entries.size()]);
+        return entries.toArray(new Info[entries.size()]);
     }
 
     public String toString()
@@ -123,7 +123,7 @@ public final class GVRInfoList
         String       linesep=System.getProperty("line.separator");
 
         for (int i=0;i<entries.size();i++) {
-            Info entry=(Info)entries.get(i);
+            Info entry= entries.get(i);
             
             ret.append("Info #").append(i).append(linesep);
             ret.append(entry.toString());

@@ -259,7 +259,7 @@ public final class HBCIHandler
      * die Kunden-ID noch kein Dialog-Objekt, so wird eines erzeugt */
     private HBCIDialog getDialogFor(String customerId)
     {
-        HBCIDialog dialog=(HBCIDialog)dialogs.get(customerId);
+        HBCIDialog dialog=dialogs.get(customerId);
         if (dialog==null) {
             HBCIUtils.log("have to create new dialog for customerid "+customerId,HBCIUtils.LOG_DEBUG);
             dialog=new HBCIDialog(this);
@@ -447,7 +447,7 @@ public final class HBCIHandler
             HBCIExecStatus ret=new HBCIExecStatus();
             
             while (!dialogs.isEmpty()) {
-                String customerid=(String)dialogs.keySet().iterator().next();
+                String customerid=dialogs.keySet().iterator().next();
                 HBCIUtils.log("executing dialog for customerid "+customerid,HBCIUtils.LOG_INFO);
                 passport.setCustomerId(customerid);
                 
@@ -783,7 +783,7 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
      * verwendeten GV-Versionsnummer.*/
     public Properties getSupportedLowlevelJobs()
     {
-        Hashtable  allValidJobNames=kernel.getAllLowlevelJobs();
+        Hashtable<String, List<String>>  allValidJobNames=kernel.getAllLowlevelJobs();
         Properties paramSegments=passport.getParamSegmentNames();
         Properties result=new Properties();
         
@@ -829,7 +829,7 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
         @return eine Liste aller Parameter-Bezeichnungen, die in der Methode
         {@link org.kapott.hbci.GV.HBCIJob#setParam(String,String)}
         benutzt werden können */
-    public List getLowlevelJobParameterNames(String gvname)
+    public List<String> getLowlevelJobParameterNames(String gvname)
     {
         if (gvname==null || gvname.length()==0)
             throw new InvalidArgumentException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_JOBNAME"));
@@ -872,7 +872,7 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
         @param gvname Lowlevelname des Geschäftsvorfalls, für den die Namen der Rückgabedaten benötigt werden.
         @return Liste aller möglichen Property-Keys, für die im Result-Objekt eines Lowlevel-Jobs
         Werte vorhanden sein könnten */
-    public List getLowlevelJobResultNames(String gvname)
+    public List<String> getLowlevelJobResultNames(String gvname)
     {
         if (gvname==null || gvname.length()==0)
             throw new InvalidArgumentException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_JOBNAME"));

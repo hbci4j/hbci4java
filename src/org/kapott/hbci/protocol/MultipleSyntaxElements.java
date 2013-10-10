@@ -511,7 +511,7 @@ public abstract class MultipleSyntaxElements
     }
     
     /** siehe SyntaxElement.fillValues() */
-    protected void extractValues(Hashtable values)
+    protected void extractValues(Hashtable<String,String> values)
     {
         for (Iterator<SyntaxElement> i = elements.listIterator(); i.hasNext(); ) {
             SyntaxElement e = i.next();

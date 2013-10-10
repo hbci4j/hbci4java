@@ -99,7 +99,7 @@ public final class GVRStatus
         StringBuffer ret=new StringBuffer();
         
         for (Iterator<Entry> i=entries.iterator();i.hasNext();) {
-            Entry e=(Entry)i.next();
+            Entry e=i.next();
             ret.append(e.toString());
             ret.append(System.getProperty("line.separator"));
         }
@@ -111,7 +111,7 @@ public final class GVRStatus
         @return Array mit Statusprotokolleinträgen */
     public Entry[] getStatusData()
     {
-        return (Entry[])entries.toArray(new Entry[entries.size()]);
+        return entries.toArray(new Entry[entries.size()]);
     }
     
     /** Gibt den Protokoll-Eintrag zu einem bestimmten Job zurück.
@@ -125,7 +125,7 @@ public final class GVRStatus
         Entry ret=null;
         
         for (Iterator<Entry> i=entries.iterator();i.hasNext();) {
-            Entry entry=(Entry)i.next();
+            Entry entry=i.next();
             
             if (entry.getJobId().equals(jobId)) {
                 ret=entry;

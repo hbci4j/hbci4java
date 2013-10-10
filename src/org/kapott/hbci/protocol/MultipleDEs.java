@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -88,7 +89,7 @@ public final class MultipleDEs
         StringBuffer ret = new StringBuffer(128);
         boolean first=true;
 
-        for (Iterator i = getElements().listIterator(); i.hasNext(); ) {
+        for (ListIterator<SyntaxElement> i = getElements().listIterator(); i.hasNext(); ) {
             if (!first)
                 ret.append(delimiter);
             first=false;
@@ -110,7 +111,7 @@ public final class MultipleDEs
         if (idx!=0 && valids!=null) {
             String header=getPath()+".value";
             for (Enumeration<String> e=valids.keys();e.hasMoreElements();) {
-                String key=(String)(e.nextElement());
+                String key=(e.nextElement());
                 
                 if (key.startsWith(header) &&    
                         key.indexOf(".",header.length())==-1) {
@@ -149,8 +150,8 @@ public final class MultipleDEs
     public void getElementPaths(Properties p,int[] segref,int[] degref,int[] deref)
     {
         if (getElements().size()!=0) {
-            for (Iterator i=getElements().iterator();i.hasNext();) {
-                SyntaxElement e=(SyntaxElement)(i.next());
+            for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
+                SyntaxElement e=i.next();
                 if (e!=null) {
                     e.getElementPaths(p,segref,degref,deref);
                 }
@@ -174,8 +175,8 @@ public final class MultipleDEs
     
     public void destroy()
     {
-        List children=getElements();
-        for (Iterator i=children.iterator();i.hasNext();) {
+        List<SyntaxElement> children=getElements();
+        for (Iterator<SyntaxElement> i=children.iterator();i.hasNext();) {
             DEFactory.getInstance().unuseObject(i.next());
         }
         valids.clear();

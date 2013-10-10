@@ -245,7 +245,7 @@ public class XMLCreator2
     private void rememberMissingValue(XMLEntity target, XMLData xmldata)
     {
         Map<String, Set> errors=xmldata.getErrors();
-        Set<XMLEntity> missings=(Set<XMLEntity>)errors.get("missings");
+        Set<XMLEntity> missings=errors.get("missings");
         
         if (missings==null) {
             missings=new HashSet<XMLEntity>();
@@ -668,7 +668,7 @@ public class XMLCreator2
             throw new RuntimeException("Element description for '"+target+"' has no type attribute");
         }
 
-        Element typeDescr=(Element)types.get(typeName);
+        Element typeDescr= types.get(typeName);
         if (typeDescr==null) {
             // es handelt sich um einen typen, der nicht explizit definiert wird
             // evtl. ist es ein vordefinierter typ...

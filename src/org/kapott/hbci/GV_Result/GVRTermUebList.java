@@ -66,7 +66,7 @@ public final class GVRTermUebList
         {
             ArrayList<String> l=new ArrayList<String>(Arrays.asList(usage));
             l.add(st);
-            usage=(String[])l.toArray(usage);
+            usage=l.toArray(usage);
         }
         
         public String toString()
@@ -121,7 +121,7 @@ public final class GVRTermUebList
         @return Array, wobei jedes Element Daten über eine einzelne Terminüberweisung enthält */
     public Entry[] getEntries()
     {
-        return (Entry[])list.toArray(new Entry[list.size()]);
+        return list.toArray(new Entry[list.size()]);
     }
     
     public String toString()
@@ -130,7 +130,7 @@ public final class GVRTermUebList
         String       linesep=System.getProperty("line.separator");
         
         for (int i=0;i<list.size();i++) {
-            Entry e=(Entry)list.get(i);
+            Entry e=list.get(i);
             
             ret.append("#").append(i);
             ret.append(linesep);

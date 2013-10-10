@@ -98,7 +98,7 @@ public class ShowCumulatedLowlevelParams
         Element  root=doc.getDocumentElement();
         NodeList segdefs=root.getElementsByTagName("SEGdef");
         int      l=segdefs.getLength();
-        Map<String, List>      paramsByJob=new Hashtable<String, List>();
+        Map<String, List<String>>      paramsByJob=new Hashtable<String, List<String>>();
         for (int i=0; i<l; i++) {
             Element  segdef=(Element)segdefs.item(i);
             String   segdefid=segdef.getAttribute("id");
@@ -124,7 +124,7 @@ public class ShowCumulatedLowlevelParams
             }
             
             String plainJobName=segdefid.substring(0,segdefid.length()-segversion.length());
-            List<String>   params=(List<String>)paramsByJob.get(plainJobName);
+            List<String>   params= paramsByJob.get(plainJobName);
             if (params==null) {
                 params=new ArrayList<String>();
                 paramsByJob.put(plainJobName,params);
@@ -132,15 +132,15 @@ public class ShowCumulatedLowlevelParams
             extractParams(doc, segdef,"",params);
         }
         
-        String[] jobnames=(String[])paramsByJob.keySet().toArray(new String[0]);
+        String[] jobnames=paramsByJob.keySet().toArray(new String[0]);
         Arrays.sort(jobnames);
         l=jobnames.length;
         for (int i=0; i<l; i++) {
             String jobname=jobnames[i];
             System.out.println(jobname+":");
             
-            List     params=(List)paramsByJob.get(jobname);
-            String[] _params=(String[])params.toArray(new String[0]);
+            List<String>     params=paramsByJob.get(jobname);
+            String[] _params= params.toArray(new String[0]);
             Arrays.sort(_params);
             int l2=_params.length;
             for (int j=0; j<l2; j++) {

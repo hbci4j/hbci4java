@@ -101,13 +101,13 @@ public final class Crypt
         try {
             // remove msghead and msgtail first
             StringBuffer ret=new StringBuffer(1024);
-            List childs=msg.getChildContainers();
+            List<MultipleSyntaxElements> childs=msg.getChildContainers();
             int len=childs.size();
 
             /* skip one segment at start and one segment at end of message
                (msghead and msgtail), the rest will be encrypted */
             for (int i=1;i<len-1;i++) {
-                ret.append(((MultipleSyntaxElements)(childs.get(i))).toString(0));
+                ret.append(childs.get(i).toString(0));
             }
 
             // pad message
@@ -217,7 +217,7 @@ public final class Crypt
     private boolean isCrypted()
     {
         boolean ret = true;
-        MultipleSyntaxElements seglist = (MultipleSyntaxElements)(msg.getChildContainers().get(1));
+        MultipleSyntaxElements seglist = (msg.getChildContainers().get(1));
 
         if (seglist instanceof MultipleSEGs) {
             SEG crypthead = null;
@@ -251,7 +251,7 @@ public final class Crypt
                 try {
                     String msgName=msg.getName();
 
-                    List childs=msg.getChildContainers();
+                    List<MultipleSyntaxElements> childs=msg.getChildContainers();
                     SEG msghead=(SEG)(((MultipleSEGs)(childs.get(0))).getElements().get(0));
                     SEG msgtail=(SEG)(((MultipleSEGs)(childs.get(childs.size()-1))).getElements().get(0));
 

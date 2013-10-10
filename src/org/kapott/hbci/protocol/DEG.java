@@ -24,6 +24,7 @@ package org.kapott.hbci.protocol;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.protocol.factory.MultipleDEGsFactory;
@@ -69,12 +70,12 @@ public final class DEG
         if (isValid()) {
             int tooMuch=0;
             int saveLen;
-            for (Iterator i = getChildContainers().listIterator(); i.hasNext(); ) {
+            for (ListIterator<MultipleSyntaxElements> i = getChildContainers().listIterator(); i.hasNext(); ) {
                 if (!first)
                     ret.append(':');
 
                 saveLen=ret.length();
-                MultipleSyntaxElements dataList = (MultipleSyntaxElements)(i.next());
+                MultipleSyntaxElements dataList = i.next();
                 if (dataList != null)
                     ret.append(dataList.toString(0));
                 
@@ -135,8 +136,8 @@ public final class DEG
             deref=new int[1];
             deref[0]=1;
 
-            for (Iterator i=getChildContainers().iterator();i.hasNext();) {
-                MultipleSyntaxElements l=(MultipleSyntaxElements)(i.next());
+            for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
+                MultipleSyntaxElements l= i.next();
                 if (l!=null) {
                     l.getElementPaths(p,segref,degref,deref);
                 }
@@ -156,9 +157,9 @@ public final class DEG
     
     public void destroy()
     {
-        List childContainers=getChildContainers();
-        for (Iterator i=childContainers.iterator();i.hasNext();) {
-            Object child=i.next();
+        List<MultipleSyntaxElements> childContainers=getChildContainers();
+        for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
+            MultipleSyntaxElements child=i.next();
             if (child instanceof MultipleDEGs) {
                 MultipleDEGsFactory.getInstance().unuseObject(child);
             } else {
