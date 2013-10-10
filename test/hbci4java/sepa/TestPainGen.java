@@ -67,7 +67,7 @@ public class TestPainGen
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            gen.generate(props, bos, false);
+            gen.generate(props, bos, true);
         }
     }
     
