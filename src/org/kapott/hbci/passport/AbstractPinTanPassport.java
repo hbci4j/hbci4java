@@ -62,8 +62,8 @@ public abstract class AbstractPinTanPassport
 
     private boolean   verifyTANMode;
     
-    private Hashtable twostepMechanisms;
-    private List      allowedTwostepMechanisms;
+    private Hashtable<String,Properties> twostepMechanisms;
+    private List<String>      allowedTwostepMechanisms;
     
     private String    currentTANMethod;
     private boolean   currentTANMethodWasAutoSelected;
@@ -73,8 +73,8 @@ public abstract class AbstractPinTanPassport
     public AbstractPinTanPassport(Object initObject)
     {
         super(initObject);
-        this.twostepMechanisms=new Hashtable();
-        this.allowedTwostepMechanisms=new ArrayList();
+        this.twostepMechanisms=new Hashtable<String, Properties>();
+        this.allowedTwostepMechanisms=new ArrayList<String>();
     }
     
     public String getPassportTypeName()
@@ -331,7 +331,7 @@ public abstract class AbstractPinTanPassport
      * neu vom Server abgeholt wird und evtl. neu vom Nutzer abgefragt wird. */
     public void resetSecMechs()
     {
-        this.allowedTwostepMechanisms=new ArrayList();
+        this.allowedTwostepMechanisms=new ArrayList<String>();
         this.currentTANMethod=null;
         this.currentTANMethodWasAutoSelected=false;
     }
@@ -354,7 +354,7 @@ public abstract class AbstractPinTanPassport
             // aktuelle auswahl soll gegen die liste der tatsaechlich unterstuetzten
             // verfahren validiert werden
             
-            List options=new ArrayList(); // String[]: [secfunc, name]
+            List<String[]> options=new ArrayList<String[]>();
             
             if (isOneStepAllowed()) {
                 // wenn einschrittverfahren unterstützt, dass zur liste hinzufügen
@@ -364,7 +364,7 @@ public abstract class AbstractPinTanPassport
             }
             
             // alle zweischritt-verfahren zur auswahlliste hinzufügen
-            String[] secfuncs=(String[])twostepMechanisms.keySet().toArray(new String[twostepMechanisms.size()]);
+            String[] secfuncs= twostepMechanisms.keySet().toArray(new String[twostepMechanisms.size()]);
             Arrays.sort(secfuncs);
             int len=secfuncs.length;
             for (int i=0;i<len;i++) {
@@ -377,7 +377,7 @@ public abstract class AbstractPinTanPassport
             
             if (options.size()==1) {
                 // wenn nur ein verfahren unterstützt wird, das automatisch auswählen
-                String autoSelection=((String[])options.get(0))[0];
+                String autoSelection=(options.get(0))[0];
                 
                 HBCIUtils.log("autosecfunc: there is only one pintan method ("+autoSelection+") supported - choosing this automatically",HBCIUtils.LOG_DEBUG);
                 if (currentTANMethod!=null && !autoSelection.equals(currentTANMethod)) {
@@ -402,8 +402,8 @@ public abstract class AbstractPinTanPassport
                     // verfahren neu ermittelt wird
                     
                     boolean ok=false;
-                    for (Iterator i=options.iterator();i.hasNext();) {
-                        if (currentTANMethod.equals(((String[])i.next())[0])) {
+                    for (Iterator<String[]> i=options.iterator();i.hasNext();) {
+                        if (currentTANMethod.equals((i.next())[0])) {
                             ok=true;
                             break;
                         }
@@ -436,7 +436,7 @@ public abstract class AbstractPinTanPassport
                         // nur wenn wir die liste der gültigen secmechs noch gar 
                         // nicht haben KÖNNEN, wählen wir einen automatisch aus.
                         
-                        String autoSelection=((String[])options.get(0))[0];
+                        String autoSelection=(options.get(0))[0];
                         HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, but we don't know which of them are allowed for the current user, so we automatically choose "+autoSelection,HBCIUtils.LOG_DEBUG);
                         setCurrentTANMethod(autoSelection);
                         
@@ -462,11 +462,11 @@ public abstract class AbstractPinTanPassport
                         
                         // auswahlliste als string zusammensetzen
                         StringBuffer retData=new StringBuffer();
-                        for (Iterator i=options.iterator();i.hasNext();) {
+                        for (Iterator<String[]> i=options.iterator();i.hasNext();) {
                             if (retData.length()!=0) {
                                 retData.append("|");
                             }
-                            String[] entry=(String[])i.next();
+                            String[] entry= i.next();
                             retData.append(entry[0]).append(":").append(entry[1]);
                         }
                         
@@ -480,8 +480,8 @@ public abstract class AbstractPinTanPassport
                         // überprüfen, ob das gewählte verfahren einem aus der liste entspricht
                         String  selected=retData.toString();
                         boolean ok=false;
-                        for (Iterator i=options.iterator();i.hasNext();) {
-                            if (selected.equals(((String[])i.next())[0])) {
+                        for (Iterator<String[]> i=options.iterator();i.hasNext();) {
+                            if (selected.equals((i.next())[0])) {
                                 ok=true;
                                 break;
                             }
@@ -515,7 +515,7 @@ public abstract class AbstractPinTanPassport
         return (Properties)twostepMechanisms.get(getCurrentTANMethod(false));
     }
     
-    public Hashtable getTwostepMechanisms()
+    public Hashtable<String, Properties> getTwostepMechanisms()
     {
     	return twostepMechanisms;
     }
@@ -1230,12 +1230,12 @@ public abstract class AbstractPinTanPassport
         setPIN(null);
     }
     
-    public List getAllowedTwostepMechanisms() 
+    public List<String> getAllowedTwostepMechanisms() 
     {
         return this.allowedTwostepMechanisms;
     }
     
-    public void setAllowedTwostepMechanisms(List l)
+    public void setAllowedTwostepMechanisms(List<String> l)
     {
         this.allowedTwostepMechanisms=l;
     }

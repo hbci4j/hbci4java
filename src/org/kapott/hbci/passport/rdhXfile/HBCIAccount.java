@@ -580,13 +580,13 @@ public class HBCIAccount
     }
     
     private BankData bankdata;
-    private List     userkeys;
+    private List<UserKeys>     userkeys;
     
     public HBCIAccount()
     {
         super(0x564b);
         this.bankdata=new BankData();
-        this.userkeys=new ArrayList();
+        this.userkeys=new ArrayList<UserKeys>();
     }
     
     public HBCIAccount(TLV tlv)
@@ -594,7 +594,7 @@ public class HBCIAccount
         super(tlv);
         this.bankdata=new BankData(new TLV(tlv.getData(),0));
         
-        this.userkeys=new ArrayList();
+        this.userkeys=new ArrayList<UserKeys>();
         int size=this.getData().length;
         int posi=bankdata.getRawData().length;
         
@@ -685,7 +685,7 @@ public class HBCIAccount
         this.bankdata.setKeyStatus(keystatus);
     }
     
-    public List getUserKeys()
+    public List<UserKeys> getUserKeys()
     {
         return this.userkeys;
     }
@@ -722,8 +722,8 @@ public class HBCIAccount
     {
         HBCIKey[] ret=null;
         
-        for (Iterator i=userkeys.iterator();i.hasNext();) {
-            UserKeys key=(UserKeys)i.next();
+        for (Iterator<UserKeys> i=userkeys.iterator();i.hasNext();) {
+            UserKeys key= i.next();
             if (key.getKeyType().equals(keytype)) {
                 ret=new HBCIKey[2];
                 
@@ -746,8 +746,8 @@ public class HBCIAccount
     {
         if (keys!=null && keys.length==2 && keys[0]!=null && keys[1]!=null) {
             boolean found=false;
-            for (Iterator i=userkeys.iterator();i.hasNext();) {
-                UserKeys userkey=(UserKeys)i.next();
+            for (Iterator<UserKeys> i=userkeys.iterator();i.hasNext();) {
+                UserKeys userkey= i.next();
                 if (userkey.getKeyType().equals(keytype)) {
                     userkey.setKeyNum(Integer.parseInt(keys[0].num));
                     userkey.setKeyVersion(Integer.parseInt(keys[0].version));
@@ -778,8 +778,8 @@ public class HBCIAccount
             bankdata.updateData();
             os.write(bankdata.getRawData());
             
-            for (Iterator i=userkeys.iterator();i.hasNext();) {
-                UserKeys userkeys=(UserKeys)i.next();
+            for (Iterator<UserKeys> i=userkeys.iterator();i.hasNext();) {
+                UserKeys userkeys= i.next();
                 userkeys.updateData();
                 os.write(userkeys.getRawData());
             }
@@ -795,7 +795,7 @@ public class HBCIAccount
         StringBuffer ret=new StringBuffer();
         ret.append("hbciaccount: "+bankdata);
         
-        for (Iterator i=userkeys.iterator();i.hasNext();) {
+        for (Iterator<UserKeys> i=userkeys.iterator();i.hasNext();) {
             ret.append("; "+i.next());
         }
         

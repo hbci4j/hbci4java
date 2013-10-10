@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -104,7 +105,7 @@ public class GVRKUms
         /** Liste von Strings mit den Verwendungszweckzeilen.
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>)*/
-        public List usage;
+        public List<String> usage;
         /** Gegenkonto der Buchung (optional).
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
@@ -119,7 +120,7 @@ public class GVRKUms
 
         public UmsLine()
         {
-            usage=new ArrayList();
+            usage=new ArrayList<String>();
             isSepa=false;
         }
 
@@ -151,7 +152,7 @@ public class GVRKUms
             if (additional==null) {
                 ret.append("    text:").append(text).append(linesep);
                 ret.append("    primanota:").append(primanota).append(linesep);
-                for (Iterator i=usage.iterator(); i.hasNext(); ) {
+                for (Iterator<String> i=usage.iterator(); i.hasNext(); ) {
                     ret.append("    usage:").append(i.next()).append(linesep);
                 }
                 if (other!=null)
@@ -226,8 +227,8 @@ public class GVRKUms
     private StringBuffer bufferMT940;
     private StringBuffer bufferMT942;
 
-    private List tageMT940;
-    private List tageMT942;
+    private List<BTag> tageMT940;
+    private List<BTag> tageMT942;
 
     private boolean parsed;
 
@@ -247,8 +248,8 @@ public class GVRKUms
         bufferMT940=new StringBuffer();
         bufferMT942=new StringBuffer();
 
-        tageMT940=new ArrayList();
-        tageMT942=new ArrayList();
+        tageMT940=new ArrayList<BTag>();
+        tageMT942=new ArrayList<BTag>();
 
         restMT940=new StringBuffer();
         restMT942=new StringBuffer();
@@ -283,8 +284,8 @@ public class GVRKUms
         verifyMT94xParsing("getFlatData()");
 
         List result=new ArrayList();
-        for (Iterator i=tageMT940.iterator(); i.hasNext(); ) {
-            BTag tag=(BTag)i.next();
+        for (Iterator<BTag> i=tageMT940.iterator(); i.hasNext(); ) {
+            BTag tag= i.next();
             result.addAll(tag.lines);
         }
 
@@ -298,8 +299,8 @@ public class GVRKUms
         verifyMT94xParsing("getFlatDataUnbooked()");
 
         List result=new ArrayList();
-        for (Iterator i=tageMT942.iterator(); i.hasNext(); ) {
-            BTag tag=(BTag)i.next();
+        for (Iterator<BTag> i=tageMT942.iterator(); i.hasNext(); ) {
+            BTag tag= i.next();
             result.addAll(tag.lines);
         }
 

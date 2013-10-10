@@ -139,11 +139,11 @@ public final class AnalyzeReportOfTransactions
                     GVRKUms.UmsLine entry=(GVRKUms.UmsLine)j.next();
 
                     // für jeden Eintrag ein Feld mit allen Verwendungszweckzeilen extrahieren
-                    List usages=entry.usage;
+                    List<String> usages=entry.usage;
                     // int  numof_usagelines=usages.size();
 
-                    for (Iterator k=usages.iterator(); k.hasNext(); ) { // alle Verwendungszweckzeilen durchlaufen
-                        String usageline=(String)k.next();
+                    for (Iterator<String> k=usages.iterator(); k.hasNext(); ) { // alle Verwendungszweckzeilen durchlaufen
+                        String usageline= k.next();
 
                         // ist eine bestimmte Rechnungsnummer gefunden (oder welche
                         // Kriterien hier auch immer anzuwenden sind), ...
