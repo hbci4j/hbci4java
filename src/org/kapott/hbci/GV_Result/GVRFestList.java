@@ -120,11 +120,11 @@ public final class GVRFestList
         }
     }
     
-    private List entries;
+    private List<Entry> entries;
     
     public GVRFestList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Entry>();
     }
     
     public void addEntry(Entry entry)
@@ -136,7 +136,7 @@ public final class GVRFestList
         @return Array, wobei jeder Eintrag eine Festgeldanlage beschreibt */
     public Entry[] getEntries()
     {
-        return (Entry[])entries.toArray(new Entry[entries.size()]);
+        return entries.toArray(new Entry[entries.size()]);
     }
     
     public String toString()
@@ -145,7 +145,7 @@ public final class GVRFestList
         String       linesep=System.getProperty("line.separator");
         
         for (int i=0;i<entries.size();i++) {
-            Entry entry=(Entry)entries.get(i);
+            Entry entry= entries.get(i);
             
             ret.append("Festgeldanlage #").append(i).append(linesep);
             ret.append(entry.toString());

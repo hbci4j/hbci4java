@@ -193,11 +193,11 @@ public class GVRAccInfo
         }
     }
     
-    private List entries;
+    private List<AccInfo> entries;
     
     public GVRAccInfo()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<AccInfo>();
     }
     
     public void addEntry(AccInfo info)
@@ -210,7 +210,7 @@ public class GVRAccInfo
         <code>null</code>, kann aber die Länge <code>0</code> haben */
     public AccInfo[] getEntries()
     {
-        return (AccInfo[])entries.toArray(new AccInfo[entries.size()]);
+        return entries.toArray(new AccInfo[entries.size()]);
     }
 
     public String toString()
@@ -219,10 +219,10 @@ public class GVRAccInfo
         String       linesep=System.getProperty("line.separator");
 
         int num=0;
-        for (Iterator i=entries.iterator();i.hasNext();) {
+        for (Iterator<AccInfo> i=entries.iterator();i.hasNext();) {
             num++;
             ret.append("Kontoinfo #").append(num).append(linesep);
-            ret.append(((AccInfo)i.next()).toString()+linesep);
+            ret.append((i.next()).toString()+linesep);
         }
 
         return ret.toString().trim();

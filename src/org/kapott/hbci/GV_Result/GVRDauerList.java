@@ -98,9 +98,9 @@ public final class GVRDauerList
 
         public void addUsage(String line)
         {
-            ArrayList a=new ArrayList(Arrays.asList(usage));
+            ArrayList<String> a=new ArrayList<String>(Arrays.asList(usage));
             a.add(line);
-            usage=(String[])(a.toArray(usage));
+            usage=(a.toArray(usage));
         }
 
         public String toString()
@@ -131,11 +131,11 @@ public final class GVRDauerList
         }
     }
 
-    private List entries;
+    private List<Dauer> entries;
 
     public GVRDauerList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Dauer>();
     }
 
     public void addEntry(Dauer entry)
@@ -147,14 +147,14 @@ public final class GVRDauerList
         @return Array mit Dauerauftrags-Informationen */
     public Dauer[] getEntries()
     {
-        return (Dauer[])entries.toArray(new Dauer[entries.size()]);
+        return entries.toArray(new Dauer[entries.size()]);
     }
     
     public String toString()
     {
         StringBuffer ret=new StringBuffer();
 
-        for (Iterator i=entries.iterator();i.hasNext();) {
+        for (Iterator<Dauer> i=entries.iterator();i.hasNext();) {
             ret.append(HBCIUtilsInternal.getLocMsg("STANDINGORDER")).append(" #").append(i).append(System.getProperty("line.separator"));
             ret.append(i.next()).append(System.getProperty("line.separator"));
         }

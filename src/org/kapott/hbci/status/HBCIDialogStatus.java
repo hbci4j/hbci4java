@@ -167,7 +167,7 @@ public final class HBCIDialogStatus
         @deprecated wird nicht benutzt */
     public Exception[] getExceptions()
     {
-        List ret=new ArrayList();
+        List<Exception> ret=new ArrayList<Exception>();
         
         if (initStatus!=null) {
             ret.addAll(Arrays.asList(initStatus.getExceptions()));
@@ -183,7 +183,7 @@ public final class HBCIDialogStatus
             ret.addAll(Arrays.asList(endStatus.getExceptions()));
         }
 
-        return (Exception[])ret.toArray(new Exception[ret.size()]);
+        return ret.toArray(new Exception[ret.size()]);
     }
     
     /** Gibt für einen Dialog alle Fehlermeldungen zurück. Für jede Nachricht

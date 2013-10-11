@@ -48,13 +48,13 @@ public final class HBCIStatus
     /** Statuscode für "es ist mindestens ein Fehlercode enthalten" */
     public static final int STATUS_ERR=2;
     
-    private List retVals;
-    private List exceptions;
+    private List<HBCIRetVal> retVals;
+    private List<Exception> exceptions;
     
     public HBCIStatus()
     {
-        retVals=new ArrayList();
-        exceptions=new ArrayList();
+        retVals=new ArrayList<HBCIRetVal>();
+        exceptions=new ArrayList<Exception>();
     }
     
     /** Wird von der <em>HBCI4Java</em>-Dialog-Engine aufgerufen */
@@ -85,8 +85,8 @@ public final class HBCIStatus
     {
         boolean ret=false;
         
-        for (Iterator i=retVals.iterator(); i.hasNext();) {
-            HBCIRetVal retVal=(HBCIRetVal)i.next();
+        for (Iterator<HBCIRetVal> i=retVals.iterator(); i.hasNext();) {
+            HBCIRetVal retVal= i.next();
             if (retVal.code.charAt(0)==code) {
                 ret=true;
                 break;
@@ -125,10 +125,10 @@ public final class HBCIStatus
     
     private HBCIRetVal[] getX(char code)
     {
-        ArrayList ret_a=new ArrayList();
+        ArrayList<HBCIRetVal> ret_a=new ArrayList<HBCIRetVal>();
         
-        for (Iterator i=retVals.iterator(); i.hasNext();) {
-            HBCIRetVal retVal=(HBCIRetVal)i.next();
+        for (Iterator<HBCIRetVal> i=retVals.iterator(); i.hasNext();) {
+            HBCIRetVal retVal= i.next();
             
             if (retVal.code.charAt(0)==code) {
                 ret_a.add(retVal);
@@ -137,7 +137,7 @@ public final class HBCIStatus
         
         HBCIRetVal[] ret=new HBCIRetVal[0];
         if (ret_a.size()!=0) {
-            ret=(HBCIRetVal[])ret_a.toArray(ret);
+            ret=ret_a.toArray(ret);
         }
         
         return ret;
@@ -148,7 +148,7 @@ public final class HBCIStatus
         aufgetreten sind. */
     public Exception[] getExceptions()
     {
-        return (Exception[])exceptions.toArray(new Exception[exceptions.size()]);
+        return exceptions.toArray(new Exception[exceptions.size()]);
     }
     
     /** Gibt alle in diesem Status-Objekt gespeicherten Rückgabewerte zurück
@@ -156,7 +156,7 @@ public final class HBCIStatus
      aufgetreten sind. */
     public HBCIRetVal[] getRetVals()
     {
-        return (HBCIRetVal[])retVals.toArray(new HBCIRetVal[retVals.size()]);
+        return retVals.toArray(new HBCIRetVal[retVals.size()]);
     }
     
     /** Gibt die in diesem Objekt gespeicherten Fehlermeldungen zurück
@@ -234,8 +234,8 @@ public final class HBCIStatus
         StringBuffer ret=new StringBuffer();
         
         if (hasExceptions()) {
-            for (Iterator i = exceptions.iterator(); i.hasNext();) {
-                Exception ex = (Exception) i.next();
+            for (Iterator<Exception> i = exceptions.iterator(); i.hasNext();) {
+                Exception ex = i.next();
                 ret.append(HBCIUtils.exception2StringShort(ex));
                 ret.append(System.getProperty("line.separator"));
             }
@@ -259,8 +259,8 @@ public final class HBCIStatus
     {
         StringBuffer ret=new StringBuffer();
         
-        for (Iterator i = exceptions.iterator(); i.hasNext();) {
-            Exception ex = (Exception) i.next();
+        for (Iterator<Exception> i = exceptions.iterator(); i.hasNext();) {
+            Exception ex = i.next();
             ret.append(HBCIUtils.exception2StringShort(ex));
             ret.append(System.getProperty("line.separator"));
         }

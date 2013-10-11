@@ -28,10 +28,10 @@ import org.kapott.hbci.protocol.MSG;
 
 public abstract class Rewrite
 {
-    private static Hashtable kernelData;
+    private static Hashtable<String,Object> kernelData;
     
     static {
-        kernelData=new Hashtable();
+        kernelData=new Hashtable<String, Object>();
     }
     
     protected Rewrite()

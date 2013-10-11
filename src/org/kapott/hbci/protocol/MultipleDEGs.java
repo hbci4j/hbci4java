@@ -24,6 +24,7 @@ package org.kapott.hbci.protocol;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.protocol.factory.DEGFactory;
@@ -65,7 +66,7 @@ public final class MultipleDEGs
         StringBuffer ret=new StringBuffer(128);
         boolean first = true;
 
-        for (Iterator i = getElements().listIterator(); i.hasNext(); ) {
+        for (ListIterator<SyntaxElement> i = getElements().listIterator(); i.hasNext(); ) {
             if (!first)
                 ret.append(delimiter);
             first=false;
@@ -80,25 +81,25 @@ public final class MultipleDEGs
 
     // --------------------------------------------------------------------------------------------------------------
 
-    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         SyntaxElement ret=null;
         addElement((ret=DEGFactory.getInstance().createDEG(getType(), getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
         return ret;
     }
     
-    private void initData(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    private void initData(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<?, ?> predefs,Hashtable<?, ?> valids)
     {
         this.delimiter = delimiter;
     }
 
-    public MultipleDEGs(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleDEGs(Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super(degref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         initData(degref,delimiter,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
     }
 
-    public void init (Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable predefs,Hashtable valids)
+    public void init (Node degref, char delimiter, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen,Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         super.init(degref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         initData(degref,delimiter,path,predelim0,predelim1,res,fullResLen,syntax,predefs,valids);
@@ -107,8 +108,8 @@ public final class MultipleDEGs
     public void getElementPaths(Properties p,int[] segref,int[] degref,int[] deref)
     {
         if (getElements().size()!=0) {
-            for (Iterator i=getElements().iterator();i.hasNext();) {
-                SyntaxElement e=(SyntaxElement)(i.next());
+            for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
+                SyntaxElement e=i.next();
                 if (e!=null) {
                     e.getElementPaths(p,segref,degref,deref);
                 }
@@ -132,8 +133,8 @@ public final class MultipleDEGs
     
     public void destroy()
     {
-        List children=getElements();
-        for (Iterator i=children.iterator();i.hasNext();) {
+        List<SyntaxElement> children=getElements();
+        for (Iterator<SyntaxElement> i=children.iterator();i.hasNext();) {
             DEGFactory.getInstance().unuseObject(i.next());
         }
         

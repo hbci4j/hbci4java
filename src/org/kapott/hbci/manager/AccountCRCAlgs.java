@@ -1019,7 +1019,7 @@ public class AccountCRCAlgs
     public static boolean alg_87(int[] blz, int[] number)
     {
         // Ausnahme
-        int[] temp = (int[])number.clone();
+        int[] temp = number.clone();
         if (number[2]==9) {
             return alg_51(blz,number);
         }

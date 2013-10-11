@@ -12,7 +12,7 @@
 package hbci4java.secmech;
 
 import hbci4java.AbstractTest;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.kapott.hbci.manager.FlickerCode;

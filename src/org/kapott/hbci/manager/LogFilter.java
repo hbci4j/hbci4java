@@ -38,7 +38,7 @@ public class LogFilter
 
 	private static LogFilter _instance;
 	
-	private Map secretDataByLevel;
+	private Map<Integer,List<String[]>> secretDataByLevel;
 	
 	public static synchronized LogFilter getInstance()
 	{
@@ -50,7 +50,7 @@ public class LogFilter
 	
 	private LogFilter()
 	{
-		this.secretDataByLevel = new Hashtable();
+		this.secretDataByLevel = new Hashtable<Integer, List<String[]>>();
 	}
 	
 	public synchronized void clearSecretData()
@@ -62,16 +62,16 @@ public class LogFilter
 	{
 	    if (secret!=null && secret.length()!=0) {
 	        // liste der secrets im gewählten level holen bzw. erzeugen
-	        List secretData=(List)secretDataByLevel.get(new Integer(level));
+	        List<String[]> secretData= secretDataByLevel.get(new Integer(level));
 	        if (secretData==null) {
-	            secretData=new ArrayList();
+	            secretData=new ArrayList<String[]>();
 	            secretDataByLevel.put(new Integer(level),secretData);
 	        }
 
 	        // duplikats-check für "secret"
 	        boolean found=false;
-	        for (Iterator i=secretData.iterator();i.hasNext();) {
-	            String[] entry=(String[])i.next();
+	        for (Iterator<String[]> i=secretData.iterator();i.hasNext();) {
+	            String[] entry= i.next();
 	            if (entry[0].equals(secret)) {
 	                found=true;
 	                break;
@@ -112,13 +112,13 @@ public class LogFilter
 			StringBuffer line2=new StringBuffer(line);
 
 			for (int level=filterLevel; level>0; level--) {
-				List secretData=(List)secretDataByLevel.get(new Integer(level));
+				List<String[]> secretData= secretDataByLevel.get(new Integer(level));
 				if (secretData==null) {
 					continue;
 				}
 				
-				for (Iterator i = secretData.iterator(); i.hasNext();) {
-					String[] entry = (String[]) i.next();
+				for (Iterator<String[]> i = secretData.iterator(); i.hasNext();) {
+					String[] entry = i.next();
 
 					String secret=entry[0];
 					String replacement=entry[1];

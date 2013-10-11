@@ -124,7 +124,7 @@ public class XMLCreator2
 
     private DocumentBuilderFactory fac;
     private Element                schemaroot;
-    private Map                    types;
+    private Map<String, Element>                    types;
 
     
     public XMLCreator2(InputStream schemaStream)
@@ -154,7 +154,7 @@ public class XMLCreator2
     private void loadTypes(String elemName)
     {
         if (types == null) {
-            types = new Hashtable();
+            types = new Hashtable<String, Element>();
         }
 
         NodeList elements = schemaroot.getElementsByTagNameNS(uriSchema,
@@ -177,8 +177,8 @@ public class XMLCreator2
             String[] implChilds)
     {
         String elemName = elem.getNodeName();
-        List _implAttrs = Arrays.asList(implAttrs);
-        List _implChilds = Arrays.asList(implChilds);
+        List<String> _implAttrs = Arrays.asList(implAttrs);
+        List<String> _implChilds = Arrays.asList(implChilds);
 
         NamedNodeMap attrs = elem.getAttributes();
         int l = attrs.getLength();
@@ -244,11 +244,11 @@ public class XMLCreator2
     
     private void rememberMissingValue(XMLEntity target, XMLData xmldata)
     {
-        Map errors=xmldata.getErrors();
-        Set missings=(Set)errors.get("missings");
+        Map<String, Set<XMLEntity>> errors =xmldata.getErrors();
+        Set<XMLEntity> missings=errors.get("missings");
         
         if (missings==null) {
-            missings=new HashSet();
+            missings=new HashSet<XMLEntity>();
             errors.put("missings", missings);
         }
         
@@ -668,7 +668,7 @@ public class XMLCreator2
             throw new RuntimeException("Element description for '"+target+"' has no type attribute");
         }
 
-        Element typeDescr=(Element)types.get(typeName);
+        Element typeDescr= types.get(typeName);
         if (typeDescr==null) {
             // es handelt sich um einen typen, der nicht explizit definiert wird
             // evtl. ist es ein vordefinierter typ...
@@ -951,9 +951,9 @@ public class XMLCreator2
             // alle errors durchlaufen
             
             // missings durchsehen - evtl. wurde ja einige inzwischen durch eindeutige "valids" repariert
-            Set missings=(Set)xmldata.getErrors().get("missings");
-            for (Iterator i=missings.iterator(); i.hasNext(); ) {
-                XMLEntity e=(XMLEntity)i.next();
+            Set<XMLEntity> missings= xmldata.getErrors().get("missings");
+            for (Iterator<XMLEntity> i=missings.iterator(); i.hasNext(); ) {
+                XMLEntity e=i.next();
                 Node      node=e.getNode();
                 boolean   empty=true;
                 

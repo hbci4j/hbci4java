@@ -24,6 +24,7 @@ package org.kapott.hbci.protocol;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.protocol.factory.SFFactory;
@@ -54,7 +55,7 @@ public final class MultipleSFs
     {
         StringBuffer ret = new StringBuffer(256);
 
-        for (Iterator i = getElements().listIterator(); i.hasNext(); ) {
+        for (ListIterator<SyntaxElement> i = getElements().listIterator(); i.hasNext(); ) {
             SF sf = (SF)(i.next());
             if (sf != null)
                 ret.append(sf.toString(0));
@@ -65,17 +66,17 @@ public final class MultipleSFs
 
     // ---------------------------------------------------------------------------------------------------------------
 
-    public MultipleSFs(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleSFs(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super(sfref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
     }
 
-    public void init(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public void init(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         super.init(sfref, path, predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
     }
 
-    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String,String> predefs,Hashtable<String,String> valids)
     {
         SyntaxElement ret=null;
         addElement((ret=SFFactory.getInstance().createSF(getType(), getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
@@ -84,8 +85,8 @@ public final class MultipleSFs
 
     public void getElementPaths(Properties p,int[] segref,int[] degref,int[] deref)
     {
-        for (Iterator i=getElements().iterator();i.hasNext();) {
-            SyntaxElement e=(SyntaxElement)(i.next());
+        for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
+            SyntaxElement e= i.next();
             if (e!=null) {
                 e.getElementPaths(p,segref,degref,deref);
             }
@@ -94,8 +95,8 @@ public final class MultipleSFs
     
     public void destroy()
     {
-        List children=getElements();
-        for (Iterator i=children.iterator();i.hasNext();) {
+        List<SyntaxElement> children=getElements();
+        for (Iterator<SyntaxElement> i=children.iterator();i.hasNext();) {
             SFFactory.getInstance().unuseObject(i.next());
         }
         

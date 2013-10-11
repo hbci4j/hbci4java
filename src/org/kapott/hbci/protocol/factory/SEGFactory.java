@@ -46,7 +46,7 @@ public class SEGFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.SEG","128")));
     }
     
-    public SEG createSEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public SEG createSEG(String type, String name, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         SEG ret=(SEG)getFreeObject();
         

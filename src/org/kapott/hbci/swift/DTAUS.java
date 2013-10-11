@@ -99,7 +99,7 @@ public class DTAUS
             bzw. eingezogen (Sammellastschriften) werden soll */
         public Value value;
         
-        private ArrayList usage;
+        private ArrayList<String> usage;
         
         /** Erzeugen eine neuen Objektes für die Aufnahme von Daten für eine
             Transaktion */
@@ -107,7 +107,7 @@ public class DTAUS
         {
             addkey="000";
             key=(type==TYPE_CREDIT?"51":"05");
-            usage=new ArrayList();
+            usage=new ArrayList<String>();
         }
         
         /** Hinzufügen einer Verwendungszweckzeile zu diesem Auftrag. */
@@ -118,7 +118,7 @@ public class DTAUS
         }
         
         /** Gibt eine Liste der Verwendungszweckzeilen (String) zurück. */
-        public List getUsage()
+        public List<String> getUsage()
         {
             return usage;
         }
@@ -164,7 +164,7 @@ public class DTAUS
 
                 String st="";
                 if (usage.size()!=0)
-                    st=SyntaxDTAUS.check((String)usage.get(0));
+                    st=SyntaxDTAUS.check(usage.get(0));
                 ret.append(expand(st,27,(byte)0x20,ALIGN_LEFT));
 
                 ret.append((char)curr);
@@ -181,7 +181,7 @@ public class DTAUS
                 // TODO: name2 für myAccount und otherAccount vorerst weggelassen
 
                 for (int i=1;i<usage.size();i++) {
-                    st=SyntaxDTAUS.check((String)usage.get(i));
+                    st=SyntaxDTAUS.check(usage.get(i));
 
                     if (((realLenOfCSet%128)+29)>128) {
                         int diff=128-(realLenOfCSet%128);
@@ -229,7 +229,7 @@ public class DTAUS
     private Date      execdate;
     private byte      curr;
     private String    referenceId;
-    private ArrayList entries;
+    private ArrayList<Transaction> entries;
     
     private long sumDM;
     private long sumEUR;
@@ -270,7 +270,7 @@ public class DTAUS
         this.type=type;
         this.execdate=execdate;
         
-        entries=new ArrayList();
+        entries=new ArrayList<Transaction>();
         
         if (myAccount.curr.equals("EUR"))
             this.curr=CURR_EUR;
@@ -283,7 +283,7 @@ public class DTAUS
     /** TODO: doku fehlt */
     public DTAUS(String dtaus)
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Transaction>();
         parseDTAUS(dtaus);
     }
     
@@ -304,7 +304,7 @@ public class DTAUS
     }
 
     /** TODO: doku fehlt */
-    public ArrayList getEntries()
+    public ArrayList<Transaction> getEntries()
     {
         return entries;
     }
@@ -389,8 +389,8 @@ public class DTAUS
         ret.append((char)curr);
         
         // C-sets
-        for (Iterator i=entries.iterator();i.hasNext();) {
-            Transaction entry=(Transaction)i.next();
+        for (Iterator<Transaction> i=entries.iterator();i.hasNext();) {
+            Transaction entry= i.next();
             ret.append(entry.toString());
         }
         

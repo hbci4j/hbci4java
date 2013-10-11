@@ -91,7 +91,7 @@ public final class HBCICallbackThreaded
                 // wenn makeThreadedCallback "true" zurückgibt, dann den threaded
                 // callback mechanismus benutzen 
                 
-                Hashtable callbackData=new Hashtable();
+                Hashtable<String, Object> callbackData=new Hashtable<String, Object>();
                 callbackData.put("method","callback");
                 callbackData.put("passport",passport);
                 callbackData.put("reason",new Integer(reason));

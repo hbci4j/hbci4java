@@ -74,8 +74,8 @@ public class RSecTypeTAN
                 
                 // durch alle Elemente dieses Segmentes laufen, bis die Multiple-DEG
                 // mit den unterstützten SecMethods gefunden wurde
-                for (Iterator it=parent.getChildContainers().iterator();it.hasNext();) {
-                    MultipleSyntaxElements childContainer=(MultipleSyntaxElements)it.next();
+                for (Iterator<MultipleSyntaxElements> it=parent.getChildContainers().iterator();it.hasNext();) {
+                    MultipleSyntaxElements childContainer= it.next();
                     if (childContainer.getPath().equals(parentPath+".SuppSecMethods")) {
                         // die Anzahl der eingestellten unterstützten SecMethods herausholen
                         number=childContainer.getElements().size();

@@ -15,7 +15,7 @@ import hbci4java.AbstractTest;
 
 import java.util.Hashtable;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.kapott.hbci.exceptions.ParseErrorException;
@@ -35,7 +35,7 @@ public class TestBug1129 extends AbstractTest
    * @return die geparsten Daten.
    * @throws Exception
    */
-  private Hashtable parse() throws Exception
+  private Hashtable<String, String> parse() throws Exception
   {
     String data = getFile("msg/bugzilla-1129.txt");
     HBCIKernelImpl kernel = new HBCIKernelImpl(null,"plus");
@@ -88,7 +88,7 @@ public class TestBug1129 extends AbstractTest
   public void test003() throws Exception
   {
     HBCIUtils.setParam("client.errors.ignoreWrongDataSyntaxErrors","yes");
-    Hashtable ht = parse();
+    Hashtable<String, String> ht = parse();
     Assert.assertEquals("EBÜHREN Z.T. IM VORAUS",ht.get("CustomMsgRes.GVRes_6.DauerListRes4.usage.usage_3"));
   }
 
