@@ -281,7 +281,15 @@ public class PainVersion implements Comparable<PainVersion>
             return null;
 
         // Sortieren, damit die hoechste Version hinten steht
-        Collections.sort(list);
+        try
+        {
+            Collections.sort(list);
+        }
+        catch (UnsupportedOperationException e)
+        {
+            // passiert bei unmodifiable Lists. Dann ist es sehr wahrscheinlich
+            // die Liste der knownVersions von uns selbst. Das tolerieren wir.
+        }
         
         return list.get(list.size() - 1); // letztes Element
     }
