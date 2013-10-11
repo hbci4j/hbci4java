@@ -145,7 +145,7 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		
 		drctDbtTxInf.getDrctDbtTx().setMndtRltdInf(new MandateRelatedInformationSDD());
 		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setMndtId(sepaParams.getProperty("mandateid"));
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig"))); //FIXME: Wird das datum richtig geparst?
+		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig")));
 		
 		
 		boolean amend = Boolean.valueOf(sepaParams.getProperty("amendmandindic"));
