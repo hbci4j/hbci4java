@@ -90,6 +90,15 @@ public final class GVRDauerList
         public String   aus_breakcount;
         /** Geänderter Betrag während Aussetzung (Nur gültig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
         public Value    aus_newvalue;
+        
+        /** Auftrag kann geändert werden (optional) */
+        public boolean can_change;
+        
+        /** Auftrag kann ausgesetzt werden (optional) */
+        public boolean can_skip;
+        
+        /** Auftrag kann gelöscht werden (optional) */
+        public boolean can_delete;
 
         public Dauer()
         {

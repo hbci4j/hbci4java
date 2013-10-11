@@ -5773,7 +5773,7 @@
         </SEGdef>
         
         
-        <SEGdef id="DauerListSEPA1">
+        <SEGdef id="DauerSEPAList1">
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTVInt" name="My"/>
             <DE name="sepadescr" type="AN" maxsize="256" minnum="1" maxnum="99"/>
@@ -5784,7 +5784,7 @@
             <value path="SegHead.code">HKCDB</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
-        <SEGdef id="DauerListSEPARes1">
+        <SEGdef id="DauerSEPAListRes1">
             <DEG type="SegHeadInst" name="SegHead"/>
             <DEG type="KTVInt" name="My"/>
             <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
@@ -5799,7 +5799,7 @@
             <value path="SegHead.code">HICDB</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
-        <SEGdef id="DauerListSEPAPar1">
+        <SEGdef id="DauerSEPAListPar1">
             &GVP2;
             <DE name="maxentries_allowed" type="JN"/>
 
@@ -6748,6 +6748,7 @@
             <SEG type="DauerList3" minnum="0"/>
             <SEG type="DauerList4" minnum="0"/>
             <SEG type="DauerList5" minnum="0"/>
+            <SEG type="DauerSEPAList1" minnum="0"/>
             <SEG type="DauerNew2" minnum="0"/>
             <SEG type="DauerNew3" minnum="0"/>
             <SEG type="DauerNew4" minnum="0"/>
@@ -6891,6 +6892,7 @@
             <SEG type="DauerListRes3" minnum="0"/>
             <SEG type="DauerListRes4" minnum="0"/>
             <SEG type="DauerListRes5" minnum="0"/>
+            <SEG type="DauerSEPAListRes1" minnum="0"/>
             <SEG type="DauerNewRes2" minnum="0"/>
             <SEG type="DauerNewRes3" minnum="0"/>
             <SEG type="DauerNewRes4" minnum="0"/>
@@ -7010,6 +7012,7 @@
             <SEG type="DauerListPar3" minnum="0"/>
             <SEG type="DauerListPar4" minnum="0"/>
             <SEG type="DauerListPar5" minnum="0"/>
+            <SEG type="DauerSEPAListPar1" minnum="0"/>
             <SEG type="DauerNewPar2" minnum="0"/>
             <SEG type="DauerNewPar3" minnum="0"/>
             <SEG type="DauerNewPar4" minnum="0"/>

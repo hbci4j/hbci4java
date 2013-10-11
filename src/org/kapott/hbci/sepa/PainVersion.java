@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
+import org.kapott.hbci.GV.parsers.ISEPAParser;
 
 /**
  * Kapselt das Parsen und Vergleichen von SEPA Pain-Versionen.
@@ -173,6 +174,23 @@ public class PainVersion implements Comparable<PainVersion>
         sb.append(ISEPAGenerator.class.getPackage().getName());
         sb.append(".Gen");
         sb.append(jobName);
+        sb.append(this.type.getValue());
+        sb.append(DF_MAJOR.format(this.major));
+        sb.append(DF_MINOR.format(this.minor));
+        
+        return sb.toString();
+    }
+    
+    /**
+     * Erzeugt den Namen der Java-Klasse des zugehoerigen SEPA-Parsers.
+     * @param 
+     * @return der Name der Java-Klasse des zugehoerigen SEPA-Parsers.
+     */
+    public String getParserClass()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ISEPAParser.class.getPackage().getName());
+        sb.append(".ParsePain");
         sb.append(this.type.getValue());
         sb.append(DF_MAJOR.format(this.major));
         sb.append(DF_MINOR.format(this.minor));

@@ -98,7 +98,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                     PainVersion version = new PainVersion(urn);
                     if (version.getType() == this.getPainType())
                     {
-                        if (!version.isSupported(this.getJobName()))
+                        if (!version.isSupported(this.getPainJobName()))
                         {
                             HBCIUtils.log("  unsupported " + version,HBCIUtils.LOG_DEBUG);
                             continue;
@@ -284,7 +284,9 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     public void verifyConstraints()
     {
         // creating SEPA document and storing it in _sepapain
-        createSEPAFromParams();
+        if(this.acceptsParam("_sepapain")) {
+            createSEPAFromParams();            
+        }
         
     	super.verifyConstraints();
 
