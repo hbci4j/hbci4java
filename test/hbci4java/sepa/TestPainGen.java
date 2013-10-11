@@ -12,8 +12,6 @@
 package hbci4java.sepa;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 import org.junit.BeforeClass;
@@ -21,6 +19,7 @@ import org.junit.Test;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
 import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.PainVersion.Type;
 
 /**
  * Testet das pure Generieren von Pain XML-Dateien - ohne HBCI-Context.
@@ -58,11 +57,7 @@ public class TestPainGen
         props.setProperty("sepaid",     "abcde");
         props.setProperty("endtoendid", "fghij");
 
-        List<PainVersion> versions = Arrays.asList(PainVersion.PAIN_001_001_02,
-                                                   PainVersion.PAIN_001_002_02,
-                                                   PainVersion.PAIN_001_002_03,
-                                                   PainVersion.PAIN_001_003_03);
-        for (PainVersion version:versions)
+        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_001))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
@@ -90,17 +85,13 @@ public class TestPainGen
         props.setProperty("usage",          "Verwendungszweck");
         props.setProperty("sepaid",         "abcde");
         props.setProperty("endtoendid",     "fghij");
-        props.setProperty("creditorid",     "1234567890");
+        props.setProperty("creditorid",     "DE1234567890");
         props.setProperty("mandateid",      "0987654321");
         props.setProperty("manddateofsig",  "2013-11-23");
         props.setProperty("amendmandindic", "false");
         props.setProperty("sequencetype",   "FRST");
 
-        List<PainVersion> versions = Arrays.asList(PainVersion.PAIN_008_001_01,
-                                                   PainVersion.PAIN_008_002_01,
-                                                   PainVersion.PAIN_008_002_02,
-                                                   PainVersion.PAIN_008_003_02);
-        for (PainVersion version:versions)
+        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_008))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("LastSEPA", version);

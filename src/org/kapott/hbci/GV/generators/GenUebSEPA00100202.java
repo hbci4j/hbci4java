@@ -22,6 +22,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CurrencyCodeSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.FinancialInstitutionIdentificationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.GroupHeaderSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Grouping1CodeSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Pain00100102;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PartyIdentificationSCT1;
@@ -72,6 +73,8 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 		doc.getPain00100102().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
 		doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 	    doc.getPain00100102().getGrpHdr().setNbOfTxs("1");
+	    doc.getPain00100102().getGrpHdr().setCtrlSum(new BigDecimal(sepaParams.getProperty("btg.value")));
+	    doc.getPain00100102().getGrpHdr().setGrpg(Grouping1CodeSCT.MIXD);	    
 		doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentificationSCT1());
 		doc.getPain00100102().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
 		

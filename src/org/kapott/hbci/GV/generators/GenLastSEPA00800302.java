@@ -27,6 +27,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.FinancialInstitutionIdentificat
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.FinancialInstitutionIdentificationSEPA3;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.GroupHeaderSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.IdentificationSchemeNameSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.LocalInstrumentSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.MandateRelatedInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA1;
@@ -45,6 +46,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedPersonIdentificationS
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedPersonIdentificationSchemeNameSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedSMNDACode;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.SequenceType1Code;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ServiceLevelSEPA;
 
 
 /**
@@ -117,10 +119,13 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		
 		//Payment Information - ChargeBearer
 		pmtInf.setChrgBr(ChargeBearerTypeSEPACode.SLEV);
-		
+
 		pmtInf.setPmtTpInf(new PaymentTypeInformationSDD());
-		pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype")));
-		
+		pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSEPA());
+		pmtInf.getPmtTpInf().getSvcLvl().setCd("SEPA");
+		pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSEPA());
+		pmtInf.getPmtTpInf().getLclInstrm().setCd("CORE");
+		pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype"))); 
 		
 		//Payment Information - Credit Transfer Transaction Information
 		ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();

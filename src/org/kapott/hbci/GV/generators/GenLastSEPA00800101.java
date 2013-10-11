@@ -23,6 +23,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.FinancialInstitution3;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.FinancialInstitutionIdentification4;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.FinancialInstitutionIdentification5;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.GroupHeader20;
+import org.kapott.hbci.sepa.jaxb.pain_008_001_01.Grouping2Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.MandateRelatedInformation4;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.Pain00800101;
@@ -40,6 +41,8 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RemittanceInformation3;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification2;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.SequenceType1Code;
+import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ServiceLevel3Code;
+import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ServiceLevel4;
 
 
 /**
@@ -81,9 +84,11 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 		doc.getPain00800101().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
 		doc.getPain00800101().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 		doc.getPain00800101().getGrpHdr().setNbOfTxs("1");
+        doc.getPain00800101().getGrpHdr().setCtrlSum(new BigDecimal(sepaParams.getProperty("btg.value")));
+        doc.getPain00800101().getGrpHdr().setGrpg(Grouping2Code.GRPD);
+
 		doc.getPain00800101().getGrpHdr().setInitgPty(new PartyIdentification20());
 		doc.getPain00800101().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
-		
 		
 		//Payment Information 
 		PaymentInstructionInformation5 pmtInf = new PaymentInstructionInformation5();
@@ -113,6 +118,8 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 		pmtInf.setChrgBr(ChargeBearerType2Code.SLEV);
 		
         pmtInf.setPmtTpInf(new PaymentTypeInformation8());
+        pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevel4());
+        pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevel3Code.SEPA);
         pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype")));
 		
 		//Payment Information - Credit Transfer Transaction Information
