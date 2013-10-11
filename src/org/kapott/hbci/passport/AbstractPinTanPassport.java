@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.GVTAN2Step;
-import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -63,8 +62,8 @@ public abstract class AbstractPinTanPassport
 
     private boolean   verifyTANMode;
     
-    private Hashtable twostepMechanisms;
-    private List      allowedTwostepMechanisms;
+    private Hashtable<String,Properties> twostepMechanisms;
+    private List<String>      allowedTwostepMechanisms;
     
     private String    currentTANMethod;
     private boolean   currentTANMethodWasAutoSelected;
@@ -74,8 +73,8 @@ public abstract class AbstractPinTanPassport
     public AbstractPinTanPassport(Object initObject)
     {
         super(initObject);
-        this.twostepMechanisms=new Hashtable();
-        this.allowedTwostepMechanisms=new ArrayList();
+        this.twostepMechanisms=new Hashtable<String, Properties>();
+        this.allowedTwostepMechanisms=new ArrayList<String>();
     }
     
     public String getPassportTypeName()
@@ -131,7 +130,7 @@ public abstract class AbstractPinTanPassport
                             String secfunc=p.getProperty(key);
 
                             // willuhn 2011-05-13 Checken, ob wir das Verfahren schon aus einer aktuelleren Segment-Version haben
-                            Properties prev = (Properties) twostepMechanisms.get(secfunc);
+                            Properties prev = twostepMechanisms.get(secfunc);
                             if (prev != null)
                             {
                               // Wir haben es schonmal. Mal sehen, welche Versionsnummer es hat
@@ -277,7 +276,7 @@ public abstract class AbstractPinTanPassport
                     }
                 } else {
                     // irgendein zweischritt-verfahren gewählt
-                    Properties entry=(Properties)twostepMechanisms.get(current);
+                    Properties entry=twostepMechanisms.get(current);
                     if (entry==null) {
                         // es gibt keinen info-eintrag für das gewählte verfahren
                         HBCIUtils.log("not supported: twostep-method "+current+" selected, but this is not supported",HBCIUtils.LOG_ERR);
@@ -332,7 +331,7 @@ public abstract class AbstractPinTanPassport
      * neu vom Server abgeholt wird und evtl. neu vom Nutzer abgefragt wird. */
     public void resetSecMechs()
     {
-        this.allowedTwostepMechanisms=new ArrayList();
+        this.allowedTwostepMechanisms=new ArrayList<String>();
         this.currentTANMethod=null;
         this.currentTANMethodWasAutoSelected=false;
     }
@@ -355,7 +354,7 @@ public abstract class AbstractPinTanPassport
             // aktuelle auswahl soll gegen die liste der tatsaechlich unterstuetzten
             // verfahren validiert werden
             
-            List options=new ArrayList(); // String[]: [secfunc, name]
+            List<String[]> options=new ArrayList<String[]>();
             
             if (isOneStepAllowed()) {
                 // wenn einschrittverfahren unterstützt, dass zur liste hinzufügen
@@ -365,20 +364,20 @@ public abstract class AbstractPinTanPassport
             }
             
             // alle zweischritt-verfahren zur auswahlliste hinzufügen
-            String[] secfuncs=(String[])twostepMechanisms.keySet().toArray(new String[twostepMechanisms.size()]);
+            String[] secfuncs= twostepMechanisms.keySet().toArray(new String[twostepMechanisms.size()]);
             Arrays.sort(secfuncs);
             int len=secfuncs.length;
             for (int i=0;i<len;i++) {
                 String secfunc=secfuncs[i];
                 if (allowedTwostepMechanisms.size()==0 || allowedTwostepMechanisms.contains(secfunc)) {
-                    Properties entry=(Properties)twostepMechanisms.get(secfunc);
+                    Properties entry=twostepMechanisms.get(secfunc);
                     options.add(new String[] {secfunc,entry.getProperty("name")});
                 }
             }
             
             if (options.size()==1) {
                 // wenn nur ein verfahren unterstützt wird, das automatisch auswählen
-                String autoSelection=((String[])options.get(0))[0];
+                String autoSelection=(options.get(0))[0];
                 
                 HBCIUtils.log("autosecfunc: there is only one pintan method ("+autoSelection+") supported - choosing this automatically",HBCIUtils.LOG_DEBUG);
                 if (currentTANMethod!=null && !autoSelection.equals(currentTANMethod)) {
@@ -403,8 +402,8 @@ public abstract class AbstractPinTanPassport
                     // verfahren neu ermittelt wird
                     
                     boolean ok=false;
-                    for (Iterator i=options.iterator();i.hasNext();) {
-                        if (currentTANMethod.equals(((String[])i.next())[0])) {
+                    for (Iterator<String[]> i=options.iterator();i.hasNext();) {
+                        if (currentTANMethod.equals((i.next())[0])) {
                             ok=true;
                             break;
                         }
@@ -437,7 +436,7 @@ public abstract class AbstractPinTanPassport
                         // nur wenn wir die liste der gültigen secmechs noch gar 
                         // nicht haben KÖNNEN, wählen wir einen automatisch aus.
                         
-                        String autoSelection=((String[])options.get(0))[0];
+                        String autoSelection=(options.get(0))[0];
                         HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, but we don't know which of them are allowed for the current user, so we automatically choose "+autoSelection,HBCIUtils.LOG_DEBUG);
                         setCurrentTANMethod(autoSelection);
                         
@@ -463,11 +462,11 @@ public abstract class AbstractPinTanPassport
                         
                         // auswahlliste als string zusammensetzen
                         StringBuffer retData=new StringBuffer();
-                        for (Iterator i=options.iterator();i.hasNext();) {
+                        for (Iterator<String[]> i=options.iterator();i.hasNext();) {
                             if (retData.length()!=0) {
                                 retData.append("|");
                             }
-                            String[] entry=(String[])i.next();
+                            String[] entry= i.next();
                             retData.append(entry[0]).append(":").append(entry[1]);
                         }
                         
@@ -481,8 +480,8 @@ public abstract class AbstractPinTanPassport
                         // überprüfen, ob das gewählte verfahren einem aus der liste entspricht
                         String  selected=retData.toString();
                         boolean ok=false;
-                        for (Iterator i=options.iterator();i.hasNext();) {
-                            if (selected.equals(((String[])i.next())[0])) {
+                        for (Iterator<String[]> i=options.iterator();i.hasNext();) {
+                            if (selected.equals((i.next())[0])) {
                                 ok=true;
                                 break;
                             }
@@ -513,10 +512,10 @@ public abstract class AbstractPinTanPassport
     
     public Properties getCurrentSecMechInfo()
     {
-        return (Properties)twostepMechanisms.get(getCurrentTANMethod(false));
+        return twostepMechanisms.get(getCurrentTANMethod(false));
     }
     
-    public Hashtable getTwostepMechanisms()
+    public Hashtable<String, Properties> getTwostepMechanisms()
     {
     	return twostepMechanisms;
     }
@@ -957,19 +956,19 @@ public abstract class AbstractPinTanPassport
             String      segversion  = secmechInfo.getProperty("segversion");
             String      process     = secmechInfo.getProperty("process");
             
-            List msgs=dialog.getMessages();
-            List new_msgs=new ArrayList();
+            List<ArrayList<HBCIJobImpl>> msgs=dialog.getMessages();
+            List<ArrayList<HBCIJobImpl>> new_msgs=new ArrayList<ArrayList<HBCIJobImpl>>();
             
             // durch alle ursprünglichen nachrichten laufen
-            for (Iterator i=msgs.iterator();i.hasNext();) {
-                ArrayList msg_tasks=(ArrayList)i.next();
-                ArrayList new_msg_tasks=new ArrayList();
+            for (Iterator<ArrayList<HBCIJobImpl>> i=msgs.iterator();i.hasNext();) {
+                ArrayList<HBCIJobImpl> msg_tasks= i.next();
+                ArrayList<HBCIJobImpl> new_msg_tasks=new ArrayList<HBCIJobImpl>();
                 
-                ArrayList additional_msg_tasks=null;
+                ArrayList<HBCIJobImpl> additional_msg_tasks=null;
                 
                 // jeden task einer nachricht ansehen
-                for (Iterator j=msg_tasks.iterator();j.hasNext();) {
-                    HBCIJobImpl task=(HBCIJobImpl)j.next();
+                for (Iterator<HBCIJobImpl> j=msg_tasks.iterator();j.hasNext();) {
+                    HBCIJobImpl task= j.next();
                     String      segcode=task.getHBCICode();
 
                     if (getPinTanInfo(segcode).equals("J")) {
@@ -981,7 +980,7 @@ public abstract class AbstractPinTanPassport
                             HBCIUtils.log("process #1: adding new message with HKTAN(p=1,hash=...) before current message",HBCIUtils.LOG_DEBUG);
                             
                             // neue msg erzeugen
-                            additional_msg_tasks=new ArrayList();
+                            additional_msg_tasks=new ArrayList<HBCIJobImpl>();
 
                             GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
                             
@@ -1102,7 +1101,7 @@ public abstract class AbstractPinTanPassport
                             
                             // eine neue msg für das einreichen der tan erzeugen
                             HBCIUtils.log("creating new msg with HKTAN(p=2,orderref=DELAYED)",HBCIUtils.LOG_DEBUG);
-                            additional_msg_tasks=new ArrayList();
+                            additional_msg_tasks=new ArrayList<HBCIJobImpl>();
                             
                             // HKTAN-job für das einreichen der TAN erzeugen
                             GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
@@ -1231,12 +1230,12 @@ public abstract class AbstractPinTanPassport
         setPIN(null);
     }
     
-    public List getAllowedTwostepMechanisms() 
+    public List<String> getAllowedTwostepMechanisms() 
     {
         return this.allowedTwostepMechanisms;
     }
     
-    public void setAllowedTwostepMechanisms(List l)
+    public void setAllowedTwostepMechanisms(List<String> l)
     {
         this.allowedTwostepMechanisms=l;
     }

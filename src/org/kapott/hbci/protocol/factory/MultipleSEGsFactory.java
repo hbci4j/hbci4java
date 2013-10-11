@@ -47,7 +47,7 @@ public class MultipleSEGsFactory
     	super(Integer.parseInt(HBCIUtils.getParam("kernel.objpool.SEG","128")));
     }
     
-    public MultipleSEGs createMultipleSEGs(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable predefs,Hashtable valids)
+    public MultipleSEGs createMultipleSEGs(Node sfref, String path, char predelim0, char predelim1, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         MultipleSEGs ret=(MultipleSEGs)getFreeObject();
         

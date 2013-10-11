@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry;
+import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung;
+import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung.SubSaldo;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.structures.Konto;
@@ -172,7 +175,7 @@ public final class GVRWPDepotList
             /** Gesamtsaldo dieser Gattung. Das Währungsfeld ist in jedem
                 Fall ein leerer String! (TODO). */
             public Value      saldo;
-            private ArrayList saldi;
+            private ArrayList<SubSaldo> saldi;
             /** Anzahl der aufgelaufenen Tage (optional) */
             public int        days;
             /** Kurswert zum Gesamtsaldo {@link #saldo} (optional) */
@@ -212,7 +215,7 @@ public final class GVRWPDepotList
             
             public Gattung()
             {
-                saldi=new ArrayList();
+                saldi=new ArrayList<SubSaldo>();
             }
             
             public void addSubSaldo(SubSaldo subsaldo)
@@ -226,7 +229,7 @@ public final class GVRWPDepotList
                 @return Array mit Untersaldoinformationen */
             public SubSaldo[] getEntries()
             {
-                return (SubSaldo[])saldi.toArray(new SubSaldo[saldi.size()]);
+                return saldi.toArray(new SubSaldo[saldi.size()]);
             }
             
             public String toString()
@@ -305,7 +308,7 @@ public final class GVRWPDepotList
         public  Date      timestamp;
         /** Depotkonto, auf das sich der Eintrag bezieht. */
         public  Konto     depot;
-        private ArrayList gattungen;
+        private ArrayList<Gattung> gattungen;
         /** Gesamtwert des Depots (optional!) */
         public  Value     total;
         
@@ -313,7 +316,7 @@ public final class GVRWPDepotList
         
         public Entry()
         {
-            gattungen=new ArrayList();
+            gattungen=new ArrayList<Gattung>();
         }
         
         public void addEntry(Gattung gattung)
@@ -327,7 +330,7 @@ public final class GVRWPDepotList
             @return Array mit Informationen über Wertpapiergattungen */
         public Gattung[] getEntries()
         {
-            return (Gattung[])gattungen.toArray(new Gattung[gattungen.size()]);
+            return gattungen.toArray(new Gattung[gattungen.size()]);
         }
         
         public String toString()
@@ -339,7 +342,7 @@ public final class GVRWPDepotList
             ret.append("Depot ").append(depot.toString()).append(" ").append(df.format(timestamp)).append(linesep);
             for (int i=0;i<gattungen.size();i++) {
                 ret.append("Gattung:").append(linesep);
-                ret.append(((Gattung)gattungen.get(i)).toString()+linesep+linesep);
+                ret.append(gattungen.get(i).toString()+linesep+linesep);
             }
             if (total!=null)
                 ret.append("Total: ").append(total.toString());
@@ -348,7 +351,7 @@ public final class GVRWPDepotList
         }
     }
     
-    private List entries;
+    private List<Entry> entries;
     /** Dieses Feld enthält einen String, der den nicht-auswertbaren Teil der gelieferten Informationen
         enthält. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
         bzw. einen leeren String enthalten. Wenn das nicht der Fall ist, dann konnten die 
@@ -358,7 +361,7 @@ public final class GVRWPDepotList
     
     public GVRWPDepotList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Entry>();
     }
     
     public void addEntry(Entry entry)
@@ -371,7 +374,7 @@ public final class GVRWPDepotList
         @return Array mit Depotinformationen */
     public Entry[] getEntries()
     {
-        return (Entry[])entries.toArray(new Entry[entries.size()]);
+        return entries.toArray(new Entry[entries.size()]);
     }
     
     public String toString()
@@ -380,7 +383,7 @@ public final class GVRWPDepotList
         String       linesep=System.getProperty("line.separator");
             
         for (int i=0;i<entries.size();i++) {
-            Entry e=(Entry)entries.get(i);
+            Entry e=entries.get(i);
             ret.append("Entry #").append(i).append(":").append(linesep);
             ret.append(e.toString()+linesep+linesep);
         }

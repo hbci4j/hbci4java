@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
  * unterstützten GV-Versionen) */
 public class ShowCumulatedLowlevelParams 
 {
-    private static void extractParams(Document doc, Element node, String path, List params)
+    private static void extractParams(Document doc, Element node, String path, List<String> params)
     {
         NodeList childs=node.getChildNodes();
         int      l=childs.getLength();
@@ -98,7 +98,7 @@ public class ShowCumulatedLowlevelParams
         Element  root=doc.getDocumentElement();
         NodeList segdefs=root.getElementsByTagName("SEGdef");
         int      l=segdefs.getLength();
-        Map      paramsByJob=new Hashtable();
+        Map<String, List<String>>      paramsByJob=new Hashtable<String, List<String>>();
         for (int i=0; i<l; i++) {
             Element  segdef=(Element)segdefs.item(i);
             String   segdefid=segdef.getAttribute("id");
@@ -124,23 +124,23 @@ public class ShowCumulatedLowlevelParams
             }
             
             String plainJobName=segdefid.substring(0,segdefid.length()-segversion.length());
-            List   params=(List)paramsByJob.get(plainJobName);
+            List<String>   params= paramsByJob.get(plainJobName);
             if (params==null) {
-                params=new ArrayList();
+                params=new ArrayList<String>();
                 paramsByJob.put(plainJobName,params);
             }
             extractParams(doc, segdef,"",params);
         }
         
-        String[] jobnames=(String[])paramsByJob.keySet().toArray(new String[0]);
+        String[] jobnames=paramsByJob.keySet().toArray(new String[0]);
         Arrays.sort(jobnames);
         l=jobnames.length;
         for (int i=0; i<l; i++) {
             String jobname=jobnames[i];
             System.out.println(jobname+":");
             
-            List     params=(List)paramsByJob.get(jobname);
-            String[] _params=(String[])params.toArray(new String[0]);
+            List<String>     params=paramsByJob.get(jobname);
+            String[] _params= params.toArray(new String[0]);
             Arrays.sort(_params);
             int l2=_params.length;
             for (int j=0; j<l2; j++) {

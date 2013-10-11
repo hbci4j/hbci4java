@@ -74,7 +74,7 @@ public abstract class AbstractHBCIPassport
     private Long       sigid;
     private String     cid;
     private Comm       comm;
-    private Hashtable  persistentData;
+    private Hashtable<String, Object>  persistentData;
     
     private IHandlerData parentHandlerData;
     
@@ -83,7 +83,7 @@ public abstract class AbstractHBCIPassport
     
     public AbstractHBCIPassport(Object init)
     {
-        persistentData=new Hashtable();
+        persistentData=new Hashtable<String, Object>();
         setClientData("init",init);
     }
 
@@ -232,7 +232,7 @@ public abstract class AbstractHBCIPassport
     
     public final Konto[] getAccounts()
     {
-        ArrayList ret=new ArrayList();
+        ArrayList<Konto> ret=new ArrayList<Konto>();
         
         if (upd!=null) {
             for (int i=0;;i++) {
@@ -279,7 +279,7 @@ public abstract class AbstractHBCIPassport
             }
         }
         
-        return (Konto[])ret.toArray(new Konto[ret.size()]);
+        return ret.toArray(new Konto[ret.size()]);
     }
     
     public final void fillAccountInfo(Konto account)
@@ -441,7 +441,7 @@ public abstract class AbstractHBCIPassport
         String[] ret=new String[0];
 
         if (bpd!=null) {
-            ArrayList temp=new ArrayList();
+            ArrayList<String> temp=new ArrayList<String>();
             String header;
             String value;
             int i=0;
@@ -453,7 +453,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0) 
-                ret=(String[])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
     
         return ret;
@@ -464,7 +464,7 @@ public abstract class AbstractHBCIPassport
         String[] ret=new String[0];
 
         if (bpd!=null) {
-            ArrayList temp=new ArrayList();
+            ArrayList<String> temp=new ArrayList<String>();
             String header;
             String value;
             int i=0;
@@ -476,7 +476,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0)
-                ret=(String[])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
     
         return ret;
@@ -507,7 +507,7 @@ public abstract class AbstractHBCIPassport
         String[][] ret=new String[0][];
 
         if (bpd!=null) {
-            ArrayList temp=new ArrayList();
+            ArrayList<String[]> temp=new ArrayList<String[]>();
             String header;
             String method;
             int i=0;
@@ -533,7 +533,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0)
-                ret=(String[][])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
             
         return ret;
@@ -544,7 +544,7 @@ public abstract class AbstractHBCIPassport
         String[][] ret=new String[0][];
 
         if (bpd!=null) {
-            ArrayList temp=new ArrayList();
+            ArrayList<String[]> temp=new ArrayList<String[]>();
             String header;
             String method;
             int i=0;
@@ -561,7 +561,7 @@ public abstract class AbstractHBCIPassport
             }
 
             if (temp.size()!=0)
-                ret=(String[][])(temp.toArray(ret));
+                ret=(temp.toArray(ret));
         }
             
         return ret;

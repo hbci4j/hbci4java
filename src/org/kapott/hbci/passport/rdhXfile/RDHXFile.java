@@ -40,15 +40,16 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.passport.rdhXfile.HBCIAccount.UserKeys;
 
 public class RDHXFile
 {
-    private List   fields;
+    private List<TLV>   fields;
     private byte[] passphrase;
     
     public RDHXFile(byte[] passphrase)
     {
-        this.fields=new ArrayList();
+        this.fields=new ArrayList<TLV>();
         this.passphrase=passphrase;
     }
     
@@ -128,10 +129,10 @@ public class RDHXFile
         	TLV[] accounts=getFields(HBCIAccount.class);
         	for (int i=0;i<accounts.length;i++) {
         		HBCIAccount account=(HBCIAccount)accounts[i];
-        		List        userkeys=account.getUserKeys();
+        		List<UserKeys>        userkeys=account.getUserKeys();
 
-        		for (Iterator j=userkeys.iterator();j.hasNext();) {
-        			HBCIAccount.UserKeys userkey=(HBCIAccount.UserKeys)j.next();
+        		for (Iterator<UserKeys> j=userkeys.iterator();j.hasNext();) {
+        			HBCIAccount.UserKeys userkey= j.next();
         			userkey.decrypt(key);
         			HBCIUtils.log(userkey.toString(),HBCIUtils.LOG_INTERN);
         		}
@@ -160,8 +161,8 @@ public class RDHXFile
     {
         TLV ret=null;
         
-        for (Iterator i=fields.iterator();i.hasNext();) {
-            TLV tlv=(TLV)i.next();
+        for (Iterator<TLV> i=fields.iterator();i.hasNext();) {
+            TLV tlv= i.next();
             if (tlv.getClass().equals(cl)) {
                 ret=tlv;
                 break;
@@ -173,16 +174,16 @@ public class RDHXFile
 
     public TLV[] getFields(Class cl)
     {
-        List ret=new ArrayList();
+        List<TLV> ret=new ArrayList<TLV>();
         
-        for (Iterator i=fields.iterator();i.hasNext();) {
-            TLV tlv=(TLV)i.next();
+        for (Iterator<TLV> i=fields.iterator();i.hasNext();) {
+            TLV tlv= i.next();
             if (tlv.getClass().equals(cl)) {
                 ret.add(tlv);
             }
         }
         
-        return (TLV[])ret.toArray(new TLV[ret.size()]);
+        return ret.toArray(new TLV[ret.size()]);
     }
 
     public byte[] getFileData(int profileVersion)
@@ -229,10 +230,10 @@ public class RDHXFile
                 TLV[] accounts=getFields(HBCIAccount.class);
                 for (int i=0;i<accounts.length;i++) {
                         HBCIAccount account=(HBCIAccount)accounts[i];
-                        List        userkeys=account.getUserKeys();
+                        List<UserKeys>        userkeys=account.getUserKeys();
 
-                        for (Iterator j=userkeys.iterator();j.hasNext();) {
-                                HBCIAccount.UserKeys userkey=(HBCIAccount.UserKeys)j.next();
+                        for (Iterator<UserKeys> j=userkeys.iterator();j.hasNext();) {
+                                HBCIAccount.UserKeys userkey= j.next();
                                 userkey.encrypt(key);
                         }
                 }
@@ -241,7 +242,7 @@ public class RDHXFile
         }
 
         // reorder fields to standard order
-        List newFields=new ArrayList();
+        List<TLV> newFields=new ArrayList<TLV>();
         Class[] order=new Class[] {FileHeader.class, HBCIAccount.class, 
                                    BankKeys.class, DateField.class, 
                                    MACField.class};
@@ -253,8 +254,8 @@ public class RDHXFile
         this.fields = newFields;
 
         // update all rawdata fields
-        for (Iterator i=this.fields.iterator();i.hasNext();) {
-            TLV tlv=(TLV)i.next();
+        for (Iterator<TLV> i=this.fields.iterator();i.hasNext();) {
+            TLV tlv= i.next();
             tlv.updateData();
         }
 
@@ -267,8 +268,8 @@ public class RDHXFile
         try {
             ByteArrayOutputStream os=new ByteArrayOutputStream();
             
-            for (Iterator i=this.fields.iterator();i.hasNext();) {
-                TLV tlv=(TLV)i.next();
+            for (Iterator<TLV> i=this.fields.iterator();i.hasNext();) {
+                TLV tlv= i.next();
                 os.write(tlv.getRawData());
             }
             
@@ -361,8 +362,8 @@ public class RDHXFile
         try {
             ByteArrayOutputStream os=new ByteArrayOutputStream();
             
-            for (Iterator i=this.fields.iterator();i.hasNext();) {
-                TLV tlv=(TLV)i.next();
+            for (Iterator<TLV> i=this.fields.iterator();i.hasNext();) {
+                TLV tlv= i.next();
                 if (!tlv.getClass().equals(MACField.class)) {
                     tlv.updateData();
                     os.write(tlv.getRawData());

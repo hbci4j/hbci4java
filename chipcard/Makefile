@@ -7,9 +7,10 @@ lib/libhbci4java-card-linux.so: bin/libhbci4java-card-linux.so
 bin/libhbci4java-card-linux.so: .make
 
 .make:
+	mkdir -p bin bin.mac
 	make -C src all
 
 clean:
 	-rm -f lib/libhbci4java-card-linux.so
-	-rm -f bin/*
+	-rm -rf bin bin.mac
 	-rm -f `find -name Makefile.depend`

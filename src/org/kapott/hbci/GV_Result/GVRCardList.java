@@ -78,11 +78,11 @@ public class GVRCardList
         }
     }
     
-    private List entries;
+    private List<CardInfo> entries;
     
     public GVRCardList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<CardInfo>();
     }
     
     public void addEntry(CardInfo info)
@@ -95,7 +95,7 @@ public class GVRCardList
         <code>null</code>, kann aber die Länge <code>0</code> haben */
     public CardInfo[] getEntries()
     {
-        return (CardInfo[])entries.toArray(new CardInfo[entries.size()]);
+        return entries.toArray(new CardInfo[entries.size()]);
     }
     
     public String toString()
@@ -104,10 +104,10 @@ public class GVRCardList
         String       linesep=System.getProperty("line.separator");
         
         int num=0;
-        for (Iterator i=entries.iterator();i.hasNext();) {
+        for (Iterator<CardInfo> i=entries.iterator();i.hasNext();) {
             num++;
             ret.append("Karteninfo #").append(num).append(linesep);
-            ret.append(((CardInfo)i.next()).toString()+linesep);
+            ret.append(i.next().toString()+linesep);
         }
         
         return ret.toString().trim();

@@ -209,11 +209,11 @@ public final class HBCIMsgStatus
     {
         boolean result=false;
         
-        List retvals=new ArrayList(Arrays.asList(globStatus.getErrors()));
-        retvals.addAll(new ArrayList(Arrays.asList(segStatus.getErrors())));
+        List<HBCIRetVal> retvals=new ArrayList<HBCIRetVal>(Arrays.asList(globStatus.getErrors()));
+        retvals.addAll(new ArrayList<HBCIRetVal>(Arrays.asList(segStatus.getErrors())));
         
-        for (Iterator i=retvals.iterator(); i.hasNext();) {
-            HBCIRetVal ret=(HBCIRetVal)i.next();
+        for (Iterator<HBCIRetVal> i=retvals.iterator(); i.hasNext();) {
+            HBCIRetVal ret=i.next();
             
             if (ret.code.equals("9942") ||      // PIN falsch (konkret)
                     ret.code.equals("9340"))    // Signatur falsch (generisch)

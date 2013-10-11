@@ -26,6 +26,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -34,19 +35,19 @@ import org.w3c.dom.Node;
 public class XMLData
 {
     private Document   rootdoc;
-    private Map        nodes;   // path -> node
+    private Map<String,Node>        nodes;   // path -> node
     private Properties values;
     private Map        restrictions;
-    private Map        errors;
+    private Map<String, Set<XMLEntity>>        errors;
     
     private boolean createOptionalElements;
     
     public XMLData()
     {
-        this.nodes=new Hashtable();
+        this.nodes=new Hashtable<String, Node>();
         this.values=new Properties();
         this.restrictions=new Hashtable();
-        this.errors=new Hashtable();
+        this.errors=new Hashtable<String, Set<XMLEntity>>();
     }
     
 
@@ -67,7 +68,7 @@ public class XMLData
     
     public Node getNodeByPath(String path)
     {
-        return (Node)nodes.get(path);
+        return nodes.get(path);
     }
 
     public void setValue(String key, String value)
@@ -87,7 +88,7 @@ public class XMLData
         return this.values.propertyNames();
     }
     
-    public Map getErrors()
+    public Map<String, Set<XMLEntity>> getErrors()
     {
         return this.errors;
     }

@@ -108,7 +108,7 @@ public final class HBCIRetVal
             element=path+((value!=null)?("="+value):"");
         }
                 
-        ArrayList a=new ArrayList();
+        ArrayList<String> a=new ArrayList<String>();
         int i=0;
         String parm;
 
@@ -119,7 +119,7 @@ public final class HBCIRetVal
 
         params=new String[0];
         if (a.size()!=0)
-            params=(String[])(a.toArray(params));
+            params=(a.toArray(params));
     }
 
     /** Gibt diesen Rückgabewert in einer lesbaren Darstellung zurück.

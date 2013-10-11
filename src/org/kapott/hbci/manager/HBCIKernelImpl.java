@@ -221,7 +221,7 @@ public final class HBCIKernelImpl implements HBCIKernel
 
             // liste der rewriter erzeugen
             String rewriters_st=HBCIUtils.getParam("kernel.rewriter");
-            ArrayList al=new ArrayList();
+            ArrayList<Rewrite> al=new ArrayList<Rewrite>();
             StringTokenizer tok=new StringTokenizer(rewriters_st,",");
             while (tok.hasMoreTokens()) {
                 String rewriterName=tok.nextToken().trim();
@@ -233,7 +233,7 @@ public final class HBCIKernelImpl implements HBCIKernel
                     al.add(rewriter);
                 }
             }
-            Rewrite[] rewriters=(Rewrite[])al.toArray(new Rewrite[al.size()]);
+            Rewrite[] rewriters=al.toArray(new Rewrite[al.size()]);
             
             // alle rewriter durchlaufen und plaintextnachricht patchen
             for (int i=0;i<rewriters.length;i++) {
@@ -282,12 +282,12 @@ public final class HBCIKernelImpl implements HBCIKernel
             
             /* für alle Elemente (Pfadnamen) die aktuellen Werte speichern,
                wie sie bei der ausgehenden Nachricht versandt werden */
-            Hashtable current=new Hashtable();
+            Hashtable<String,String> current=new Hashtable<String,String>();
             msg.extractValues(current);
             Properties origs=new Properties();
-            for (Enumeration e=current.keys();e.hasMoreElements();) {
-                String key=(String)(e.nextElement());
-                String value=(String)(current.get(key));
+            for (Enumeration<String> e=current.keys();e.hasMoreElements();) {
+                String key= e.nextElement();
+                String value= current.get(key);
                 origs.setProperty("orig_"+key,value);
             }
             ret.addData(origs);
@@ -489,22 +489,22 @@ public final class HBCIKernelImpl implements HBCIKernel
         currentMsgName=null;
     }
     
-    public Hashtable getAllLowlevelJobs()
+    public Hashtable<String, List<String>> getAllLowlevelJobs()
     {
         return getMsgGen().getLowlevelGVs();
     }
 
-    public List getLowlevelJobParameterNames(String gvname,String version)
+    public List<String> getLowlevelJobParameterNames(String gvname,String version)
     {
         return getMsgGen().getGVParameterNames(gvname,version);
     }
     
-    public List getLowlevelJobResultNames(String gvname,String version)
+    public List<String> getLowlevelJobResultNames(String gvname,String version)
     {
         return getMsgGen().getGVResultNames(gvname,version);
     }
 
-    public List getLowlevelJobRestrictionNames(String gvname,String version)
+    public List<String> getLowlevelJobRestrictionNames(String gvname,String version)
     {
         return getMsgGen().getGVRestrictionNames(gvname,version);
     }

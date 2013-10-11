@@ -29,7 +29,7 @@ public class ThreadSyncer
     private boolean   waiting;
     private boolean   notified;
     private boolean   timeouted;
-    private Hashtable data;
+    private Hashtable<String, Object> data;
     
     public ThreadSyncer(String name)
     {
@@ -37,7 +37,7 @@ public class ThreadSyncer
         this.waiting=false;
         this.notified=false;
         this.timeouted=false;
-        this.data=new Hashtable();
+        this.data=new Hashtable<String, Object>();
     }
     
     public synchronized void startWaiting(long seconds, String errMsg)

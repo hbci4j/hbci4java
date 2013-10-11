@@ -72,11 +72,11 @@ public final class GVRSaldoReq
         }
     }
 
-    private List saldi;
+    private List<Info> saldi;
 
     public GVRSaldoReq()
     {
-        saldi=new ArrayList();
+        saldi=new ArrayList<Info>();
     }
     
     public void store(GVRSaldoReq.Info info)
@@ -89,7 +89,7 @@ public final class GVRSaldoReq
         @return Array mit Saldeninformationen */
     public Info[] getEntries()
     {
-        return (Info[])saldi.toArray(new Info[saldi.size()]);
+        return saldi.toArray(new Info[saldi.size()]);
     }
     
     public String toString()
@@ -97,7 +97,7 @@ public final class GVRSaldoReq
         StringBuffer ret=new StringBuffer();
         
         for (int i=0;i<saldi.size();i++) {
-            GVRSaldoReq.Info info=(GVRSaldoReq.Info)(saldi.get(i));
+            GVRSaldoReq.Info info= saldi.get(i);
             ret.append(info.toString()).append(System.getProperty("line.separator"));
         }
         

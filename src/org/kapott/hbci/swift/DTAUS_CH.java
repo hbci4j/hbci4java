@@ -40,7 +40,7 @@ public class DTAUS_CH
     {
         public Konto other;
         public Value value;
-        public List  usage;
+        public List<String>  usage;
         
         public int idx;
         
@@ -48,7 +48,7 @@ public class DTAUS_CH
         {
             this.other=other;
             this.value=value;
-            this.usage=new ArrayList();
+            this.usage=new ArrayList<String>();
         }
         
         public void addUsage(String st)
@@ -110,7 +110,7 @@ public class DTAUS_CH
         }
     }
     
-    private List     entries;
+    private List<Transaction>     entries;
     private Konto    myAccount;
     private String[] myAddress;
     private int      counter;
@@ -126,7 +126,7 @@ public class DTAUS_CH
         if (!myAccount.country.equals("CH"))
             throw new InvalidArgumentException("*** can only be used with swiss accounts");
         
-        this.entries=new ArrayList();
+        this.entries=new ArrayList<Transaction>();
         this.myAccount=myAccount;
         this.myAddress=((myAddress!=null)?myAddress:new String[0]);
         this.counter=0;
@@ -145,8 +145,8 @@ public class DTAUS_CH
         now=new Date();
         total=0;
         
-        for (Iterator i=entries.iterator();i.hasNext();) {
-            Transaction trans=(Transaction)i.next();
+        for (Iterator<Transaction> i=entries.iterator();i.hasNext();) {
+            Transaction trans= i.next();
             ret.append(trans.toString());
         }
         

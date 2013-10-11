@@ -95,12 +95,12 @@ public class HBCICallbackSwing
         }
     }
     
-    protected Hashtable passports;
+    protected Hashtable<HBCIPassport, Hashtable<String, Object>> passports;
     
     public HBCICallbackSwing()
     {
         super();
-        passports=new Hashtable();
+        passports=new Hashtable<HBCIPassport, Hashtable<String, Object>>();
     }
     
     public void callback(final HBCIPassport passport,int reason,String msg,int datatype,StringBuffer retData)
@@ -108,9 +108,9 @@ public class HBCICallbackSwing
         if (msg==null)
             msg="";
             
-        Hashtable currentData=(Hashtable)passports.get(passport);
+        Hashtable<String, Object> currentData= passports.get(passport);
         if (currentData==null) {
-            currentData=new Hashtable();
+            currentData=new Hashtable<String, Object>();
             currentData.put("passport",passport);
             currentData.put("dataRequested",Boolean.FALSE);
             currentData.put("proxyRequested",Boolean.FALSE);
@@ -247,7 +247,7 @@ public class HBCICallbackSwing
         }
     }
     
-    private void needSecret(final Hashtable currentData,final String winname)
+    private void needSecret(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
         
@@ -344,7 +344,7 @@ public class HBCICallbackSwing
             throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PWDONTMATCH"));
     }
     
-    private void correctAccountData(final Hashtable currentData,final String winname)
+    private void correctAccountData(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
 
@@ -443,7 +443,7 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT")); 
     }
 
-    private void correctIBANData(final Hashtable currentData,final String winname)
+    private void correctIBANData(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
 
@@ -532,7 +532,7 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT")); 
     }
 
-    private void needRDHData(final Hashtable currentData)
+    private void needRDHData(final Hashtable<String, Object> currentData)
     {
         final SyncObject sync=new SyncObject();
         
@@ -664,7 +664,7 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT"));
     }
     
-    private void needProxyData(final Hashtable currentData)
+    private void needProxyData(final Hashtable<String, Object> currentData)
     {
         final SyncObject sync=new SyncObject();
         
@@ -760,7 +760,7 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT"));
     }
     
-    private void needAction(final Hashtable currentData,final boolean blocking,final String winname)
+    private void needAction(final Hashtable<String, Object> currentData,final boolean blocking,final String winname)
     {
         final SyncObject sync=new SyncObject();
         
@@ -818,12 +818,12 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
     
-    private void removeActionWindow(Hashtable currentData,String winname)
+    private void removeActionWindow(Hashtable<String, Object> currentData,String winname)
     {
         removeWin(currentData,winname);
     }
     
-    private void ackInstKeys(final Hashtable currentData,final String winname)
+    private void ackInstKeys(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
         
@@ -962,7 +962,7 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
     
-    private void handleError(final Hashtable currentData,final String winname)
+    private void handleError(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
 
@@ -1041,7 +1041,7 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
 
-    private void haveNewMyKeys(final Hashtable currentData,final String winname)
+    private void haveNewMyKeys(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
         
@@ -1201,12 +1201,12 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
     
-    protected void showInstMessage(final Hashtable currentData,final String winname)
+    protected void showInstMessage(final Hashtable<String, Object> currentData,final String winname)
     {
         showInstMessage(currentData,winname,true);
     }
     
-    protected void showInstMessage(final Hashtable currentData,final String winname,final boolean blocking)
+    protected void showInstMessage(final Hashtable<String, Object> currentData,final String winname,final boolean blocking)
     {
         final SyncObject sync=new SyncObject();
         
@@ -1278,7 +1278,7 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
 
-    protected void showConnectionMessage(final Hashtable currentData,final String winname)
+    protected void showConnectionMessage(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
         
@@ -1335,7 +1335,7 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
 
-    private void needSIZEntrySelect(final Hashtable currentData,final String winname)
+    private void needSIZEntrySelect(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
 
@@ -1376,14 +1376,14 @@ public class HBCICallbackSwing
             final StringBuffer retData=(StringBuffer)currentData.get("retData");
             
             String[] tableCols={"ID",HBCIUtilsInternal.getLocMsg("BLZ"),HBCIUtilsInternal.getLocMsg("USERID")};
-            ArrayList data=new ArrayList();
+            ArrayList<String[]> data=new ArrayList<String[]>();
             StringTokenizer tok=new StringTokenizer(retData.toString(),"|");
             while (tok.hasMoreTokens()) {
                 String entry=tok.nextToken();
                 StringTokenizer tok2=new StringTokenizer(entry,";");
                 data.add(new String[] {tok2.nextToken(),tok2.nextToken(),tok2.nextToken()});
             }
-            String[][] tableData=(String[][])data.toArray(new String[data.size()][]);
+            String[][] tableData= data.toArray(new String[data.size()][]);
             final JTable table=new JTable(tableData,tableCols);
             table.setCellSelectionEnabled(false);
             table.setColumnSelectionAllowed(false);
@@ -1426,7 +1426,7 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT")); 
     }
 
-    private void needPTSecMech(final Hashtable currentData,final String winname)
+    private void needPTSecMech(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
 
@@ -1467,7 +1467,7 @@ public class HBCICallbackSwing
             final StringBuffer retData=(StringBuffer)currentData.get("retData");
             
             String[]  tableCols={"ID","Name"};
-            ArrayList data=new ArrayList();
+            ArrayList<String[]> data=new ArrayList<String[]>();
             String[]  entries=retData.toString().split("\\|");
             int       len=entries.length;
             for (int i=0;i<len;i++) {
@@ -1475,7 +1475,7 @@ public class HBCICallbackSwing
                 String[] values=entry.split(":");
                 data.add(new String[] {values[0], values[1]});
             }
-            String[][]   tableData=(String[][])data.toArray(new String[data.size()][]);
+            String[][]   tableData= data.toArray(new String[data.size()][]);
             final JTable table=new JTable(tableData,tableCols);
             table.setCellSelectionEnabled(false);
             table.setColumnSelectionAllowed(false);
@@ -1518,7 +1518,7 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT")); 
     }
 
-    private void ackInfoPoint(final Hashtable currentData,final String winname)
+    private void ackInfoPoint(final Hashtable<String, Object> currentData,final String winname)
     {
         final SyncObject sync=new SyncObject();
         
@@ -1590,7 +1590,7 @@ public class HBCICallbackSwing
         sync.startWaiting();
     }
     
-    protected Container createWin(Hashtable currentData,String title,String winname)
+    protected Container createWin(Hashtable<String, Object> currentData,String title,String winname)
     {
         JDialog swingDialog=new JDialog((JFrame)(null),title,DIALOG_MODAL);
         
@@ -1601,13 +1601,13 @@ public class HBCICallbackSwing
         return swingDialog.getContentPane();
     }
     
-    protected void removeWin(Hashtable currentData,String winname)
+    protected void removeWin(Hashtable<String, Object> currentData,String winname)
     {
         JDialog swingDialog=(JDialog)currentData.get("win_"+winname);
         swingDialog.dispose();
     }
     
-    protected void drawWin(Hashtable currentData,String winname)
+    protected void drawWin(Hashtable<String, Object> currentData,String winname)
     {
         JDialog swingDialog=(JDialog)currentData.get("win_"+winname);
         swingDialog.pack();

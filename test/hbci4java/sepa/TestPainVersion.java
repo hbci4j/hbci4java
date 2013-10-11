@@ -10,7 +10,7 @@ package hbci4java.sepa;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.GenLastSEPA00800101;

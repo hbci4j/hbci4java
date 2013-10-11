@@ -205,9 +205,9 @@ public final class Sig
         int          numOfPassports=passports.size();
         StringBuffer ret=new StringBuffer(1024);
 
-        List msgelementslist = msg.getChildContainers();
-        List sigheads = ((MultipleSEGs)(msgelementslist.get(1))).getElements();
-        List sigtails = ((MultipleSEGs)(msgelementslist.get(msgelementslist.size() - 2))).getElements();
+        List<MultipleSyntaxElements> msgelementslist = msg.getChildContainers();
+        List<SyntaxElement> sigheads = ((MultipleSEGs)(msgelementslist.get(1))).getElements();
+        List<SyntaxElement> sigtails = ((MultipleSEGs)(msgelementslist.get(msgelementslist.size() - 2))).getElements();
 
         // alle benötigten sighead-segmente zusammensuchen
         for (int i=numOfPassports-1-idx; i<(u_range.equals("1")?(numOfPassports-idx):numOfPassports);i++) {
@@ -216,7 +216,7 @@ public final class Sig
 
         // alle nutzdaten hinzufügen
         for (int i=2; i<msgelementslist.size()-2;i++) {
-            ret.append(((MultipleSyntaxElements)(msgelementslist.get(i))).toString(0));
+            ret.append(msgelementslist.get(i).toString(0));
         }
 
         // bei schalen-modell-signaturen alle "inneren" sigtails mit hinzufügen
@@ -256,9 +256,9 @@ public final class Sig
                         SEG sighead=SEGFactory.getInstance().createSEG("SigHeadUser","SigHead",msgName,numOfPassports-1-idx,gen.getSyntax());
                         SEG sigtail=SEGFactory.getInstance().createSEG("SigTailUser","SigTail",msgName,idx,gen.getSyntax());
                         
-                        List msgelements=msg.getChildContainers();
-                        List sigheads=((MultipleSEGs)(msgelements.get(1))).getElements();
-                        List sigtails=((MultipleSEGs)(msgelements.get(msgelements.size()-2))).getElements();
+                        List<MultipleSyntaxElements> msgelements=msg.getChildContainers();
+                        List<SyntaxElement> sigheads=((MultipleSEGs)(msgelements.get(1))).getElements();
+                        List<SyntaxElement> sigtails=((MultipleSEGs)(msgelements.get(msgelements.size()-2))).getElements();
 
                         // insert sighead segment in msg
                         if ((numOfPassports-1-idx)<sigheads.size()) {
@@ -303,9 +303,9 @@ public final class Sig
                         passport.incSigId();
                         passport.saveChanges();
                         
-                        List msgelements=msg.getChildContainers();
-                        List sigheads=((MultipleSEGs)(msgelements.get(1))).getElements();
-                        List sigtails=((MultipleSEGs)(msgelements.get(msgelements.size()-2))).getElements();
+                        List<MultipleSyntaxElements> msgelements=msg.getChildContainers();
+                        List<SyntaxElement> sigheads=((MultipleSEGs)(msgelements.get(1))).getElements();
+                        List<SyntaxElement> sigtails=((MultipleSEGs)(msgelements.get(msgelements.size()-2))).getElements();
 
                         SEG sighead=(SEG)sigheads.get(numOfPassports-1-idx);
                         SEG sigtail=(SEG)sigtails.get(idx);
@@ -321,8 +321,8 @@ public final class Sig
                     // calculate signatures for each segment
                     for (int idx=0;idx<numOfPassports;idx++) {
                         HBCIPassportInternal passport=passports.getPassport(idx);
-                        List                 msgelements=msg.getChildContainers();
-                        List                 sigtails=((MultipleSEGs)(msgelements.get(msgelements.size()-2))).getElements();
+                        List<MultipleSyntaxElements>                 msgelements=msg.getChildContainers();
+                        List<SyntaxElement>                 sigtails=((MultipleSEGs)(msgelements.get(msgelements.size()-2))).getElements();
                         SEG                  sigtail=(SEG)sigtails.get(idx);
 
                         /* first calculate hash-result, then sign the hashresult. In
@@ -429,11 +429,11 @@ public final class Sig
 
         if (mainPassport.needUserSig()) {
             // TODO: bei anderen user-signaturen hier allgemeineren code schreiben
-            Hashtable values=new Hashtable();
+            Hashtable<String,String> values=new Hashtable<String, String>();
             msg.extractValues(values);
             
-            String pin=(String)values.get(msg.getName()+".SigTail.UserSig.pin");
-            String tan=(String)values.get(msg.getName()+".SigTail.UserSig.tan");
+            String pin=values.get(msg.getName()+".SigTail.UserSig.pin");
+            String tan=values.get(msg.getName()+".SigTail.UserSig.tan");
             
             sigstring=((pin!=null)?pin:"")+"|"+((tan!=null)?tan:"");
         } else {
@@ -478,7 +478,7 @@ public final class Sig
     private boolean hasSig()
     {
         boolean ret = true;
-        MultipleSyntaxElements seglist = (MultipleSyntaxElements)(msg.getChildContainers().get(1));
+        MultipleSyntaxElements seglist = (msg.getChildContainers().get(1));
 
         if (seglist instanceof MultipleSEGs) {
             SEG sighead = null;

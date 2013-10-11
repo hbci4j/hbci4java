@@ -122,7 +122,7 @@ public class InfoPointConnector
             int    startpos=msg_st.indexOf("'HIBPA:")+1;
             int    posi=startpos;
             char   prevDelimiter='\'';
-            List   bpdSegCodes=Arrays.asList(new String[] {"HIBPA", "HIKOM", "HISHV", "HIKPV"});
+            List<String>   bpdSegCodes=Arrays.asList(new String[] {"HIBPA", "HIKOM", "HISHV", "HIKPV"});
             String bpd_st="";
             
             while (true) {

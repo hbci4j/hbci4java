@@ -47,7 +47,7 @@ public interface HBCIKernel
      * <em>HBCI4Java</em> für diesen GV unterstützt werden.</p>
      * @return Hashtable aller Lowlevel-Jobs, die prinzipiell vom aktuellen
      * Handler-Objekt unterstützt werden. */
-    public Hashtable getAllLowlevelJobs();
+    public Hashtable<String, List<String>> getAllLowlevelJobs();
 
     /** <p>Gibt alle für einen bestimmten Lowlevel-Job möglichen Job-Parameter-Namen
      * zurück. Der übergebene Job-Name ist einer der von <em>HBCI4Java</em>

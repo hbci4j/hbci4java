@@ -40,12 +40,12 @@ import java.util.Hashtable;
  * {@link org.kapott.hbci.manager.HBCIHandler#execute()}.</p> */ 
 public class HBCIExecThreadedStatus 
 {
-    private Hashtable      callbackData;
+    private Hashtable<String,Object>      callbackData;
     private HBCIExecStatus execStatus;
     
     /** Callback-Daten in diesem Objekt speichern. Wird nur vom HBCI-Kernel
      * aufgerufen. */
-    public void setCallbackData(Hashtable callbackData)
+    public void setCallbackData(Hashtable<String,Object> callbackData)
     {
         this.callbackData=callbackData;
     }
@@ -67,7 +67,7 @@ public class HBCIExecThreadedStatus
      * (<code>StringBuffer</code>), in welches die Callback-Daten hineingeschrieben
      * werden müssen.</li>
      * </ul> */
-    public Hashtable getCallbackData()
+    public Hashtable<String,Object> getCallbackData()
     {
         return this.callbackData;
     }

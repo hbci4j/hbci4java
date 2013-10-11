@@ -1,7 +1,5 @@
 package hbci4java.bpd;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import hbci4java.AbstractTest;
 import org.kapott.hbci.manager.HBCIKernelImpl;
@@ -26,7 +24,7 @@ public class TanMediaListTest extends AbstractTest {
 	    Rewrite.setData("msgName","CustomMsg");
       // liste der rewriter erzeugen
       String rewriters_st=HBCIUtils.getParam("kernel.rewriter");
-      ArrayList al=new ArrayList();
+      ArrayList<Rewrite> al=new ArrayList<Rewrite>();
       StringTokenizer tok=new StringTokenizer(rewriters_st,",");
       while (tok.hasMoreTokens()) {
           String rewriterName=tok.nextToken().trim();
@@ -38,7 +36,7 @@ public class TanMediaListTest extends AbstractTest {
               al.add(rewriter);
           }
       }
-      Rewrite[] rewriters=(Rewrite[])al.toArray(new Rewrite[al.size()]);
+      Rewrite[] rewriters= al.toArray(new Rewrite[al.size()]);
 
 	    kernel.rawNewMsg("CustomMsg");
 	    

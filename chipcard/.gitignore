@@ -1,0 +1,5 @@
+bin
+bin.mac
+Makefile.depend
+lib/libhbci4java-card-linux.so
+src/include/frontend.h

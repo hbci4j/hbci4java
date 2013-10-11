@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
  * geprüft werden. */
 public class ValidateXMLGVTemplate 
 {
-    private static void validateRefs(Element sfelem, List deflist)
+    private static void validateRefs(Element sfelem, List<String> deflist)
     {
         String   sfname=sfelem.getAttribute("id");
         NodeList refs=sfelem.getElementsByTagName("SEG");
@@ -53,7 +53,7 @@ public class ValidateXMLGVTemplate
             }
         }
         if (deflist.size()!=0) {
-            for (Iterator i=deflist.iterator(); i.hasNext();) {
+            for (Iterator<String> i=deflist.iterator(); i.hasNext();) {
                 System.out.println("warning: defined "+sfname+" '"+i.next()+"' not referenced in SF '"+sfname+"'");
             }
         }
@@ -75,10 +75,10 @@ public class ValidateXMLGVTemplate
         Element  root=doc.getDocumentElement();
         NodeList segdefs=root.getElementsByTagName("SEGdef");
         int      l=segdefs.getLength();
-        List     seen=new ArrayList();
-        List     gvs=new ArrayList();
-        List     gvrs=new ArrayList();
-        List     params=new ArrayList();
+        List<String>     seen=new ArrayList<String>();
+        List<String>     gvs=new ArrayList<String>();
+        List<String>     gvrs=new ArrayList<String>();
+        List<String>     params=new ArrayList<String>();
         for (int i=0; i<l; i++) {
             Element  segdef=(Element)segdefs.item(i);
             String   segdefid=segdef.getAttribute("id");

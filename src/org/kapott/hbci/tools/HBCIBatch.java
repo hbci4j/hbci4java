@@ -265,7 +265,7 @@ public class HBCIBatch
                     HBCIJob   job=null;              // job-objekt
                     String    jobid=null;            // job-bezeichner
                     String    customerId=null;       // customer-id für job
-                    Hashtable jobs=new Hashtable();  // liste aller jobs
+                    Hashtable<String, Object> jobs=new Hashtable<String, Object>();  // liste aller jobs
                         
                     // batch-datei zeilenweise einlesen und auswerten
                     while ((line=reader.readLine())!=null) {
@@ -410,8 +410,8 @@ public class HBCIBatch
                     
                     try {
                         // alle bekannten job-bezeichner (IDs) durchlaufen
-                        for (Enumeration jobIds=jobs.keys();jobIds.hasMoreElements();) {
-                            jobid=(String)jobIds.nextElement();
+                        for (Enumeration<String> jobIds=jobs.keys();jobIds.hasMoreElements();) {
+                            jobid=jobIds.nextElement();
                             if (jobid.endsWith("_resultMode")) {
                                 continue;
                             }

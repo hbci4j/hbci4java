@@ -17,7 +17,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.kapott.hbci.manager.HBCIKernelImpl;
@@ -51,9 +51,9 @@ public class HITANSTest extends AbstractTest
       
     // Prefix abschneiden
     Properties bpd = new Properties();
-    for (Enumeration e=ht.keys();e.hasMoreElements();)
+    for (Enumeration<String> e=ht.keys();e.hasMoreElements();)
     {
-      String name = (String) e.nextElement();
+      String name = e.nextElement();
       String value = ht.get(name);
         
       if (name.startsWith("DialogInitAnonRes."))
@@ -81,7 +81,7 @@ public class HITANSTest extends AbstractTest
     while (names.hasMoreElements())
     {
       String name  = (String) names.nextElement();
-      String value = (String) bpd.getProperty(name);
+      String value = bpd.getProperty(name);
       
       // Das darf kein Template-Parameter sein
       if (value.equals("HITANS"))

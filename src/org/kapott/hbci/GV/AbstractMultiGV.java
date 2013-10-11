@@ -21,14 +21,15 @@
 
 package org.kapott.hbci.GV;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.datatypes.SyntaxWrt;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.swift.DTAUS;
+import org.kapott.hbci.swift.DTAUS.Transaction;
 
 public abstract class AbstractMultiGV 
   extends HBCIJobImpl 
@@ -49,9 +50,9 @@ public abstract class AbstractMultiGV
             if (path.equals("sumOthers")) {
             	// summe der ziel-kontonummern
             	long sum=0;
-            	List entries=dtaus.getEntries();
-            	for (Iterator i=entries.iterator();i.hasNext();) {
-            		DTAUS.Transaction entry=(DTAUS.Transaction)i.next();
+            	ArrayList<Transaction> entries=dtaus.getEntries();
+            	for (Iterator<Transaction> i=entries.iterator();i.hasNext();) {
+            		DTAUS.Transaction entry= i.next();
             		sum += Long.parseLong(entry.otherAccount.number);
             	}
             	ret=Long.toString(sum);
@@ -62,9 +63,9 @@ public abstract class AbstractMultiGV
             } else if (path.equals("sumValue")) {
                 // summe der beträge
                 long sum = 0;
-                List entries = dtaus.getEntries();
-                for (Iterator i = entries.iterator(); i.hasNext();) {
-                    DTAUS.Transaction entry = (DTAUS.Transaction) i.next();
+                ArrayList<Transaction> entries = dtaus.getEntries();
+                for (Iterator<Transaction> i = entries.iterator(); i.hasNext();) {
+                    DTAUS.Transaction entry = i.next();
                     sum += entry.value.getLongValue();
                 }
                 // TODO: hier wird ziemlich unschön direkt auf

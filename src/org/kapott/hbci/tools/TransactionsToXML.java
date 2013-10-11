@@ -37,6 +37,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.structures.Konto;
 import org.w3c.dom.Document;
@@ -45,10 +46,10 @@ import org.w3c.dom.Element;
 // TODO: API-Dok.
 public class TransactionsToXML
 {
-    public void createTransactionElements(Document doc, Element troot, List transactions)
+    public void createTransactionElements(Document doc, Element troot, List<GVRKUms.UmsLine> transactions)
     {
-        for (Iterator i=transactions.iterator(); i.hasNext(); ) {
-            GVRKUms.UmsLine transaction=(GVRKUms.UmsLine)i.next();
+        for (Iterator<GVRKUms.UmsLine> i=transactions.iterator(); i.hasNext(); ) {
+            GVRKUms.UmsLine transaction= i.next();
             Element         transElem=doc.createElement("transaction");
             troot.appendChild(transElem);
             
@@ -105,9 +106,9 @@ public class TransactionsToXML
                 Element descr=doc.createElement("description");
                 structured.appendChild(descr);
 
-                for (Iterator j=transaction.usage.iterator(); j.hasNext(); ) {
+                for (Iterator<String> j=transaction.usage.iterator(); j.hasNext(); ) {
                     Element line=doc.createElement("line");
-                    String  usage=(String)j.next();
+                    String  usage= j.next();
                     line.appendChild(doc.createTextNode(nullAsEmpty(usage)));
                     descr.appendChild(line);
                 }
@@ -137,7 +138,7 @@ public class TransactionsToXML
         }
     }
     
-    public Document createXMLDocument(List transactions, String rawMT940)
+    public Document createXMLDocument(List<UmsLine> transactions, String rawMT940)
     {
         // Empfangene Transaktionen als XML-Datei aufbereiten
         DocumentBuilderFactory fac=DocumentBuilderFactory.newInstance();

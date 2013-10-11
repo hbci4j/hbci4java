@@ -35,9 +35,9 @@ public class RWrongStatusSegOrder
     extends Rewrite
 {
     // Liste mit segmentInfo-Properties aus der Nachricht erzeugen
-    private List createSegmentListFromMessage(String msg)
+    private List<Properties> createSegmentListFromMessage(String msg)
     {
-        List segmentList=new ArrayList();
+        List<Properties> segmentList=new ArrayList<Properties>();
         
         boolean quoteNext=false;
         int     startPosi=0;
@@ -68,12 +68,12 @@ public class RWrongStatusSegOrder
     
     public String incomingClearText(String st,MsgGen gen)
     {
-        List segmentList=createSegmentListFromMessage(st);
+        List<Properties> segmentList=createSegmentListFromMessage(st);
         
-        List headerList=new ArrayList();
-        List HIRMGList=new ArrayList();
-        List HIRMSList=new ArrayList();
-        List dataList=new ArrayList();
+        List<Properties> headerList=new ArrayList<Properties>();
+        List<Properties> HIRMGList=new ArrayList<Properties>();
+        List<Properties> HIRMSList=new ArrayList<Properties>();
+        List<Properties> dataList=new ArrayList<Properties>();
         
         boolean inHeader=true;
         boolean inGlob=false;
@@ -83,8 +83,8 @@ public class RWrongStatusSegOrder
         
         // alle segmente aus der nachricht durchlaufen und der richtigen liste
         // zuordnen (header, globstatus, segstatus, rest)
-        for (Iterator i=segmentList.iterator();i.hasNext();) {
-            Properties segmentInfo=(Properties)i.next();
+        for (Iterator<Properties> i=segmentList.iterator();i.hasNext();) {
+            Properties segmentInfo= i.next();
             String     segmentCode=segmentInfo.getProperty("code");
             
             if (segmentCode.equals("HNHBK") || segmentCode.equals("HNSHK")) {
@@ -168,12 +168,12 @@ public class RWrongStatusSegOrder
         return new_msg.toString();
     }
     
-    private String getDataForSegmentList(String origMsg,List list,int counter)
+    private String getDataForSegmentList(String origMsg,List<Properties> list,int counter)
     {
         StringBuffer data=new StringBuffer();
         
-        for (Iterator i=list.iterator();i.hasNext();) {
-            Properties segmentInfo=(Properties)i.next();
+        for (Iterator<Properties> i=list.iterator();i.hasNext();) {
+            Properties segmentInfo= i.next();
             int        start=Integer.parseInt(segmentInfo.getProperty("start"));
             int        len=Integer.parseInt(segmentInfo.getProperty("length"));
             

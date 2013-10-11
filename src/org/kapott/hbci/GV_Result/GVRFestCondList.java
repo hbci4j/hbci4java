@@ -115,11 +115,11 @@ public final class GVRFestCondList
         }
     }
     
-    private List entries;
+    private List<Cond> entries;
     
     public GVRFestCondList()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Cond>();
     }
     
     public void addEntry(Cond entry)
@@ -131,7 +131,7 @@ public final class GVRFestCondList
         @return Array mit Festgeldkonditionen */
     public Cond[] getEntries()
     {
-        return (Cond[])entries.toArray(new Cond[entries.size()]);
+        return entries.toArray(new Cond[entries.size()]);
     }
     
     public String toString()
@@ -140,7 +140,7 @@ public final class GVRFestCondList
         String       linesep=System.getProperty("line.separator");
         
         for (int i=0;i<entries.size();i++) {
-            Cond entry=(Cond)entries.get(i);
+            Cond entry= entries.get(i);
             
             ret.append("#").append(i).append(linesep);
             ret.append(entry.toString());

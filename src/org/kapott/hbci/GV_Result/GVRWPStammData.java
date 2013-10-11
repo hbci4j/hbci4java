@@ -109,15 +109,15 @@ public class GVRWPStammData
         Date date_of_emission;
     }
     
-    private List entries;
+    private List<Entry[]> entries;
     
     public GVRWPStammData()
     {
-        entries=new ArrayList();
+        entries=new ArrayList<Entry[]>();
     }
     
     public Entry[] getEntries()
     {
-        return (Entry[])entries.toArray(new Entry[entries.size()]);
+        return entries.toArray(new Entry[entries.size()]);
     }
 }

@@ -15,6 +15,7 @@ import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
 
@@ -59,6 +60,12 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         this.pain = this.determinePainVersion(handler);
     }
     
+    /**
+     * ct.
+     * @param handler
+     * @param name
+     * @param jobResult
+     */
     public AbstractSEPAGV(HBCIHandler handler, String name, HBCIJobResultImpl jobResult)
     {
         super(handler, name, jobResult);
@@ -83,7 +90,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         
             // SEPAInfo laden und darüber iterieren
             Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
-            Enumeration<?> e = props.propertyNames();
+            Enumeration e = props.propertyNames();
             while (e.hasMoreElements())
             {
                 String key = (String) e.nextElement();
@@ -211,7 +218,19 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     private ISEPAGenerator getSEPAGenerator()
     {
         if (this.generator == null)
-            this.generator = SEPAGeneratorFactory.get(this, this.getPainVersion());
+        {
+            try
+            {
+                this.generator = SEPAGeneratorFactory.get(this, this.getPainVersion());
+            }
+            catch (Exception e)
+            {
+                String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_JOB_CREATE_ERR",this.getPainJobName());
+                if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreCreateJobErrors",msg))
+                    throw new HBCI_Exception(msg,e);
+            }
+            
+        }
         return this.generator;
     }
     
@@ -237,8 +256,11 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	ISEPAGenerator gen = this.getSEPAGenerator();
     
     	// Die XML in den baos schreiben, ggf fehler behandeln
-    	try {
-    	    gen.generate(this, o);
+    	try
+    	{
+            boolean validate = HBCIUtils.getParam("sepa.schema.validation","0").equals("1");
+            HBCIUtils.log("schema validation enabled: " + validate,HBCIUtils.LOG_DEBUG);
+    	    gen.generate(this.sepaParams, o, validate);
     	}
     	catch (Exception e)
     	{

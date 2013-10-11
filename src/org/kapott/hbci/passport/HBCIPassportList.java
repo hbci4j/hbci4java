@@ -54,11 +54,11 @@ public class HBCIPassportList
         }
     }
     
-    private List passports;
+    private List<Entry> passports;
     
     public HBCIPassportList()
     {
-        this.passports=new ArrayList();
+        this.passports=new ArrayList<Entry>();
     }
     
     /* check whether a certain passport object is already in list */
@@ -66,8 +66,8 @@ public class HBCIPassportList
     {
         boolean ret=false;
         
-        for (Iterator i=passports.iterator();i.hasNext();) {
-            if (((Entry)i.next()).getPassport()==passport) {
+        for (Iterator<Entry> i=passports.iterator();i.hasNext();) {
+            if (i.next().getPassport()==passport) {
                 ret=true;
                 break;
             }
@@ -93,8 +93,8 @@ public class HBCIPassportList
     /* add all entries from another passportlist to this list */
     public void addAll(HBCIPassportList passportList) 
     {
-        for (Iterator i=passportList.iterator();i.hasNext();) {
-            addPassport((Entry)i.next());
+        for (Iterator<Entry> i=passportList.iterator();i.hasNext();) {
+            addPassport(i.next());
         }
     }
     
@@ -106,15 +106,15 @@ public class HBCIPassportList
     
     public HBCIPassportInternal getPassport(int idx)
     {
-        return ((Entry)passports.get(idx)).getPassport();
+        return passports.get(idx).getPassport();
     }
     
     public String getRole(int idx)
     {
-        return ((Entry)passports.get(idx)).getRole();
+        return passports.get(idx).getRole();
     }
     
-    private Iterator iterator()
+    private Iterator<Entry> iterator()
     {
         return passports.iterator();
     }

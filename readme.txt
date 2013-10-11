@@ -17,8 +17,9 @@ anschliessend noch ein paar weitere Patches. Verlauf also bisher:
 Ich werde versuchen, fuer alle weiteren Aenderungen, die ich hier vornehme,
 nummerierte Diff-Dateien in log/patches abzulegen.
 
-
 Wichtig: Damit das Projekt compiliert, muss einmal das Ant-Script
-"thirdparty/cryptalgs4java/build.xml" mit dem Target "compile" ausghefuehrt
+"thirdparty/cryptalgs4java/build.xml" mit dem Target "compile" ausgefuehrt
 werden. Es erzeugt Klassen in "thirdparty/cryptalgs4java/bin/classes", die
-von HBCI4Java benoetigt werden.
+von HBCI4Java benoetigt werden (JAVA_HOME muss gesetzt sein, damit das compile target in 
+"thirdparty/cryptalgs4java/build.xml" ausgefuehrt werden kann.)
+
