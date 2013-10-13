@@ -102,7 +102,7 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 		
-		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar(sepaParams.getProperty("targetdate")));
 		pmtInf.setCdtr(new PartyIdentificationSEPA5());
 		pmtInf.setCdtrAcct(new CashAccountSEPA1());
 		pmtInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA1());
@@ -128,7 +128,7 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator
         pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSEPA());
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSEPACode.SEPA);
         pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSEPA());
-        pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentSEPACode.CORE);              
+        pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentSEPACode.valueOf(sepaParams.getProperty("type")));              
 		
 		//Payment Information - Credit Transfer Transaction Information
 		ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();

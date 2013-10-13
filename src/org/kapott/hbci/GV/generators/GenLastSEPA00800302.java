@@ -30,6 +30,8 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.IdentificationSchemeNameSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.LocalInstrumentSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.MandateRelatedInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ObjectFactory;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.OthrIdentification;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.OthrIdentificationCode;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA1;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA2;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA3;
@@ -100,7 +102,7 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 		
-		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar(sepaParams.getProperty("targetdate")));
 		pmtInf.setCdtr(new PartyIdentificationSEPA5());
 		pmtInf.setCdtrAcct(new CashAccountSEPA1());
 		pmtInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA3());
@@ -124,7 +126,7 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSEPA());
 		pmtInf.getPmtTpInf().getSvcLvl().setCd("SEPA");
 		pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSEPA());
-		pmtInf.getPmtTpInf().getLclInstrm().setCd("CORE");
+		pmtInf.getPmtTpInf().getLclInstrm().setCd(sepaParams.getProperty("type"));
 		pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype"))); 
 		
 		//Payment Information - Credit Transfer Transaction Information
@@ -181,7 +183,17 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		//Payment Information - Credit Transfer Transaction Information - Creditor Agent
 		drctDbtTxInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA3());
 		drctDbtTxInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA3());
-		drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("dst.bic"));
+		
+		String bic = sepaParams.getProperty("dst.bic");
+		if (bic != null && bic.length() > 0)
+		{
+            drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(bic);
+		}
+		else
+		{
+		    drctDbtTxInf.getDbtrAgt().getFinInstnId().setOthr(new OthrIdentification());
+		    drctDbtTxInf.getDbtrAgt().getFinInstnId().getOthr().setId(OthrIdentificationCode.NOTPROVIDED);
+		}
 
 
 		//Payment Information - Credit Transfer Transaction Information - Amount

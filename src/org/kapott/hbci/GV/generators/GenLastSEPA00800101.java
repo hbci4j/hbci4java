@@ -43,6 +43,8 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification2;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.SequenceType1Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ServiceLevel3Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ServiceLevel4;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.LocalInstrumentCodeSDD;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.LocalInstrumentSDD;
 
 
 /**
@@ -97,7 +99,7 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 		
-		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar(sepaParams.getProperty("targetdate")));
 		pmtInf.setCdtr(new PartyIdentification22());
 		pmtInf.setCdtrAcct(new CashAccount8());
 		pmtInf.setCdtrAgt(new FinancialInstitution2());
