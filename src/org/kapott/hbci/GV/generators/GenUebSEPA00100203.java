@@ -78,12 +78,9 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
 		PaymentInstructionInformationSCT pmtInf = new PaymentInstructionInformationSCT();
 		pmtInfs.add(pmtInf);
 		
-		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
-		/*FIXME: Hier schreiben wir den 1.1.1999 rein. Die Transaktion wird dann am nächsten Werktag ausgeführt. Nimmt man hier jedoch
-				 das aktuelle Datum so erhält man den HBCI Fehler: "Das Ausführungsdatum darf nicht gesetzt sein.*/
 		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01")); 
 		
 		pmtInf.setDbtr(new PartyIdentificationSEPA2());
@@ -143,10 +140,8 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
 		
 
 		//Payment Information - Credit Transfer Transaction Information - Usage
-		//FIXME: momentan nur unstrukturierter Verwendungszweck! BPD auslesen oder Anwendung bestimmen lassen
 		cdtTrxTxInf.setRmtInf(new RemittanceInformationSEPA1Choice());
 		
-		//FIXME: Usage kann umlaute, Fragezeichen oder andere Sonderzeichen enthalten. Diese sollten vorher entfernt oder ersetzt werden
 		cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty("usage"));
 
         ObjectFactory of = new ObjectFactory();
