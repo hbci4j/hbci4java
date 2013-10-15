@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.kapott.hbci.GV_Result.GVRDauerEdit;
 import org.kapott.hbci.GV_Result.GVRDauerNew;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -13,7 +14,7 @@ import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
-public class GVDauerSEPANew extends AbstractSEPAGV {
+public class GVDauerSEPADel extends AbstractSEPAGV {
 
     private final static PainVersion DEFAULT = PainVersion.PAIN_001_001_02;
     
@@ -41,16 +42,17 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
      */
     public static String getLowlevelName()
     {
-        return "DauerSEPANew";
+        return "DauerSEPADel";
     }
 
-    public GVDauerSEPANew(HBCIHandler handler) {
-        super(handler,getLowlevelName(), new GVRDauerNew());
+    public GVDauerSEPADel(HBCIHandler handler) {
+        super(handler,getLowlevelName(), new GVRDauerEdit());
 
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
         addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
+        addConstraint("orderid","orderid",null, LogFilter.FILTER_NONE);
 
         /* dummy constraints to allow an application to set these values. the
          * overriden setLowlevelParam() stores these values in a special structure
@@ -64,6 +66,7 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE);
         addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
         addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
+        addConstraint("date",      "date",           "",   LogFilter.FILTER_NONE);
       
         //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
         addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
@@ -75,6 +78,7 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         addConstraint("turnus","DauerDetails.turnus",null, LogFilter.FILTER_NONE);
         addConstraint("execday","DauerDetails.execday",null, LogFilter.FILTER_NONE);
         addConstraint("lastdate","DauerDetails.lastdate","", LogFilter.FILTER_NONE);
+        
     }
     
     public void setParam(String paramName,String value)
@@ -152,7 +156,8 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
     {
         Properties result=msgstatus.getData();
         String orderid=result.getProperty(header+".orderid");
-        ((GVRDauerNew)(jobResult)).setOrderId(orderid);
+        ((GVRDauerEdit)(jobResult)).setOrderId(orderid);
+        ((GVRDauerEdit)(jobResult)).setOrderIdOld(result.getProperty(header+".orderidold"));
 
         if (orderid!=null && orderid.length()!=0) {
             Properties p=getLowlevelParams();
