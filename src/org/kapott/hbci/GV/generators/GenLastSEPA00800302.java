@@ -27,8 +27,11 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.FinancialInstitutionIdentificat
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.FinancialInstitutionIdentificationSEPA3;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.GroupHeaderSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.IdentificationSchemeNameSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.LocalInstrumentSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.MandateRelatedInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ObjectFactory;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.OthrIdentification;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.OthrIdentificationCode;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA1;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA2;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.PartyIdentificationSEPA3;
@@ -45,6 +48,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedPersonIdentificationS
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedPersonIdentificationSchemeNameSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.RestrictedSMNDACode;
 import org.kapott.hbci.sepa.jaxb.pain_008_003_02.SequenceType1Code;
+import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ServiceLevelSEPA;
 
 
 /**
@@ -98,7 +102,7 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 		
-		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar(sepaParams.getProperty("targetdate")));
 		pmtInf.setCdtr(new PartyIdentificationSEPA5());
 		pmtInf.setCdtrAcct(new CashAccountSEPA1());
 		pmtInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA3());
@@ -117,10 +121,13 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		
 		//Payment Information - ChargeBearer
 		pmtInf.setChrgBr(ChargeBearerTypeSEPACode.SLEV);
-		
+
 		pmtInf.setPmtTpInf(new PaymentTypeInformationSDD());
-		pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype")));
-		
+		pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSEPA());
+		pmtInf.getPmtTpInf().getSvcLvl().setCd("SEPA");
+		pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSEPA());
+		pmtInf.getPmtTpInf().getLclInstrm().setCd(sepaParams.getProperty("type"));
+		pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype"))); 
 		
 		//Payment Information - Credit Transfer Transaction Information
 		ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();
@@ -140,7 +147,7 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		
 		drctDbtTxInf.getDrctDbtTx().setMndtRltdInf(new MandateRelatedInformationSDD());
 		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setMndtId(sepaParams.getProperty("mandateid"));
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig"))); //FIXME: Wird das datum richtig geparst?
+		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig")));
 		
 		
 		boolean amend = Boolean.valueOf(sepaParams.getProperty("amendmandindic"));
@@ -176,7 +183,17 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 		//Payment Information - Credit Transfer Transaction Information - Creditor Agent
 		drctDbtTxInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA3());
 		drctDbtTxInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA3());
-		drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("dst.bic"));
+		
+		String bic = sepaParams.getProperty("dst.bic");
+		if (bic != null && bic.length() > 0)
+		{
+            drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(bic);
+		}
+		else
+		{
+		    drctDbtTxInf.getDbtrAgt().getFinInstnId().setOthr(new OthrIdentification());
+		    drctDbtTxInf.getDbtrAgt().getFinInstnId().getOthr().setId(OthrIdentificationCode.NOTPROVIDED);
+		}
 
 
 		//Payment Information - Credit Transfer Transaction Information - Amount

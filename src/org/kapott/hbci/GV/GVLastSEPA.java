@@ -74,6 +74,8 @@ public class GVLastSEPA extends AbstractSEPAGV
     	addConstraint("endtoendid",      "sepa.endtoendid",    ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_IDS);
         addConstraint("creditorid",      "sepa.creditorid",    null,                    LogFilter.FILTER_IDS);
     	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_IDS);
+    	
+    	// Datum als java.util.Date oder als ISO-Date-String im Format yyyy-MM-dd
     	addConstraint("manddateofsig",   "sepa.manddateofsig", null,                    LogFilter.FILTER_NONE);
     	addConstraint("amendmandindic",  "sepa.amendmandindic",Boolean.toString(false), LogFilter.FILTER_NONE);
     	
@@ -86,5 +88,16 @@ public class GVLastSEPA extends AbstractSEPAGV
     	// Ueblicherweise verwendet man bei einem Mandat bei der ersten Abbuchung "FRST"
     	// und bei allen Folgeabbuchungen des selben Mandats "RCUR".
     	addConstraint("sequencetype",    "sepa.sequencetype",  "FRST", LogFilter.FILTER_NONE);
+    	
+    	// Typ der Lastschrift. Moegliche Werte:
+    	// CORE = Basis-Lastschrift (Default)
+    	// COR1 = Basis-Lastschrift mit verkuerzter Vorlaufzeit
+    	// B2B  = Business-2-Business-Lastschrift mit eingeschraenkter Rueckgabe-Moeglichkeit
+        addConstraint("type",            "sepa.type",          "CORE", LogFilter.FILTER_NONE);
+        
+        // Ziel-Datum fuer den Einzug. Default: 1999-01-01 als Platzhalter fuer "zum naechstmoeglichen Zeitpunkt
+        // Datum als java.util.Date oder als ISO-Date-String im Format yyyy-MM-dd
+        addConstraint("targetdate",      "sepa.targetdate",    "1999-01-01", LogFilter.FILTER_NONE);
+
     }
 }

@@ -85,7 +85,6 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
 		PaymentInstructionInformation4 pmtInf = new PaymentInstructionInformation4();
 		doc.getPain00100102().setPmtInf(pmtInf);
 		
-		//FIXME: Wo kommt die ID her und wie muss sie aussehen?
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod5Code.TRF);
 		
@@ -151,13 +150,9 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
 		cdtTrxTxInf.getAmt().setInstdAmt(new EuroMax9Amount());
 		cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty("btg.value")));
 		
-		//FIXME: Schema sagt es gibt nur "eur" aber besser wäre bestimmt trotzdem getSEPAParam("btg.curr") oder?
 		cdtTrxTxInf.getAmt().getInstdAmt().setCcy("EUR"); 
-		
-		
 
 		//Payment Information - Credit Transfer Transaction Information - Usage
-		//FIXME: momentan nur unstrukturierter Verwendungszweck! Vielleicht gibt es einen Parameter dafür? Dann kann man per If entscheiden
 		cdtTrxTxInf.setRmtInf(new RemittanceInformation3());
 		cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty("usage"));
 		

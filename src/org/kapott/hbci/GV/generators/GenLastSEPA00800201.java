@@ -26,6 +26,9 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.FinancialInstitutionIdentificat
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.FinancialInstitutionIdentificationSDD2;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.GenericIdentificationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.GroupHeaderSDD;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.Grouping1CodeSDD;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.LocalInstrumentCodeSDD;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.LocalInstrumentSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.MandateRelatedInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.Pain00800101;
@@ -44,6 +47,8 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedIdentificationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedSEPACode;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedSMNDACode;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.SequenceType1Code;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.ServiceLevelSDD;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.ServiceLevelSDDCode;
 
 
 /**
@@ -84,6 +89,8 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 		doc.getPain00800101().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
 		doc.getPain00800101().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
 		doc.getPain00800101().getGrpHdr().setNbOfTxs("1");
+		doc.getPain00800101().getGrpHdr().setCtrlSum(new BigDecimal(sepaParams.getProperty("btg.value")));
+		doc.getPain00800101().getGrpHdr().setGrpg(Grouping1CodeSDD.MIXD);
 		doc.getPain00800101().getGrpHdr().setInitgPty(new PartyIdentificationSDD1());
 		doc.getPain00800101().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
 		
@@ -96,7 +103,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 		
-		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar(sepaParams.getProperty("targetdate")));
 		pmtInf.setCdtr(new PartyIdentificationSDD2());
 		pmtInf.setCdtrAcct(new CashAccountSDD1());
 		pmtInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSDD1());
@@ -116,8 +123,12 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 		//Payment Information - ChargeBearer
 		pmtInf.setChrgBr(ChargeBearerTypeSDDCode.SLEV);
 		
-        pmtInf.setPmtTpInf(new PaymentTypeInformationSDD());
+	    pmtInf.setPmtTpInf(new PaymentTypeInformationSDD());
         pmtInf.getPmtTpInf().setSeqTp(SequenceType1Code.fromValue(sepaParams.getProperty("sequencetype")));
+        pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSDD());
+        pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSDDCode.SEPA);
+        pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSDD());
+        pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentCodeSDD.valueOf(sepaParams.getProperty("type")));
 		
 		//Payment Information - Credit Transfer Transaction Information
 		ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();
@@ -136,7 +147,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
 				
 		drctDbtTxInf.getDrctDbtTx().setMndtRltdInf(new MandateRelatedInformationSDD());
 		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setMndtId(sepaParams.getProperty("mandateid"));
-		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig"))); //FIXME: Wird das datum richtig geparst?
+		drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig")));
 
         boolean amend = Boolean.valueOf(sepaParams.getProperty("amendmandindic"));
 		

@@ -8,8 +8,11 @@
 package org.kapott.hbci.sepa;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +41,13 @@ public class PainVersion implements Comparable<PainVersion>
     @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_01 = new PainVersion("urn:swift:xsd:$pain.008.002.01",                "pain.008.002.01.xsd");
     @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_02 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.002.02","pain.008.002.02.xsd");
     @SuppressWarnings("javadoc") public static PainVersion PAIN_008_003_02 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.003.02","pain.008.003.02.xsd");
+    
+    private final static Map<Type,List<PainVersion>> knownVersion = new HashMap<Type,List<PainVersion>>()
+    {{
+        put(Type.PAIN_001,Collections.unmodifiableList(Arrays.asList(PAIN_001_001_02,PAIN_001_002_02,PAIN_001_002_03,PAIN_001_003_03)));
+        put(Type.PAIN_002,Collections.unmodifiableList(Arrays.asList(PAIN_002_002_02,PAIN_002_003_03)));
+        put(Type.PAIN_008,Collections.unmodifiableList(Arrays.asList(PAIN_008_001_01,PAIN_008_002_01,PAIN_008_002_02,PAIN_008_003_02)));
+    }};
     
     /**
      * Enum fuer die Gruppierung der verschienden Typen von Geschaeftsvorfaellen.
@@ -183,7 +193,6 @@ public class PainVersion implements Comparable<PainVersion>
     
     /**
      * Erzeugt den Namen der Java-Klasse des zugehoerigen SEPA-Parsers.
-     * @param 
      * @return der Name der Java-Klasse des zugehoerigen SEPA-Parsers.
      */
     public String getParserClass()
@@ -272,11 +281,29 @@ public class PainVersion implements Comparable<PainVersion>
             return null;
 
         // Sortieren, damit die hoechste Version hinten steht
-        Collections.sort(list);
+        try
+        {
+            Collections.sort(list);
+        }
+        catch (UnsupportedOperationException e)
+        {
+            // passiert bei unmodifiable Lists. Dann ist es sehr wahrscheinlich
+            // die Liste der knownVersions von uns selbst. Das tolerieren wir.
+        }
         
         return list.get(list.size() - 1); // letztes Element
     }
-    
+
+    /**
+     * Liefert eine Liste der bekannten PAIN-Versionen fuer den angegebenen Typ.
+     * @param t der Typ.
+     * @return Liste der bekannten PAIN-Versionen fuer den angegebenen Typ.
+     */
+    public static List<PainVersion> getKnownVersions(Type t)
+    {
+        return knownVersion.get(t);
+    }
+
     /**
      * @see java.lang.Object#hashCode()
      */
