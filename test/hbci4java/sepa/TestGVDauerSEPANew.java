@@ -64,12 +64,17 @@ public class TestGVDauerSEPANew extends AbstractTest {
         acc.bic = params.getProperty("target_bic");
         acc.iban = params.getProperty("target_iban");
         
-        
-        job.setParam("src",passport.getAccounts()[0]);
+        int source_acc_idx = Integer.parseInt(params.getProperty("source_account_idx"));
+        job.setParam("src",passport.getAccounts()[source_acc_idx]);
         job.setParam("dst",acc);
-        job.setParam("btg",new Value(100L,"EUR"));
+        
+        String value = params.getProperty("value");
+        if(value == null) value = "100";
+        job.setParam("btg",new Value(Integer.parseInt(value),"EUR"));
+
         job.setParam("usage","SEPA Dauerauftrag");
-        job.setParam("firstdate", "2014-01-01");
+        
+        job.setParam("firstdate", params.getProperty("firstdate"));
         job.setParam("timeunit", "M");
         job.setParam("turnus", "1");
         job.setParam("execday", "1");
@@ -138,7 +143,7 @@ public class TestGVDauerSEPANew extends AbstractTest {
       this.passport = (HBCIPassportPinTan) AbstractHBCIPassport.getInstance("PinTan");
       
       // init handler
-      this.handler = new HBCIHandler("300",passport);
+      this.handler = new HBCIHandler(params.getProperty("hbciversion"),passport);
 
       // dump bpd
       //this.dump("BPD",this.passport.getBPD());
