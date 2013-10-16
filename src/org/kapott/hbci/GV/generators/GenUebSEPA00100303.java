@@ -11,6 +11,7 @@ import java.util.Properties;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ServiceLevelSEPACode;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyAndAmountSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyCodeEUR;
@@ -85,7 +86,9 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
-		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
+        String date = sepaParams.getProperty("date");
+        if(date == null) date = "1999-01-01";
+		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar(date));
 		pmtInf.setDbtr(new PartyIdentificationSEPA2());
 		pmtInf.setDbtrAcct(new CashAccountSEPA1());
 		pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA3());

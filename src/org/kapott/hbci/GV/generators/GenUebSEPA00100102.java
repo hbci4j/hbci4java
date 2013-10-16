@@ -89,13 +89,13 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
 		pmtInf.setPmtMtd(PaymentMethod5Code.TRF);
 		
 		// Payment Type Information
-		ServiceLevel4 sl4 = new ServiceLevel4();
-		sl4.setCd(ServiceLevel3Code.SEPA);
-		PaymentTypeInformation7 pti7 = new PaymentTypeInformation7();
-		pti7.setSvcLvl(sl4);
-		pmtInf.setPmtTpInf(pti7);
+		pmtInf.setPmtTpInf(new PaymentTypeInformation7());
+		pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevel4());
+		pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevel3Code.SEPA);
 		
-		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
+		String date = sepaParams.getProperty("date");
+		if(date == null) date = "1999-01-01";
+		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar(date));
 		pmtInf.setDbtr(new PartyIdentification23());
 		pmtInf.setDbtrAcct(new CashAccount8());
 		pmtInf.setDbtrAgt(new FinancialInstitution2());

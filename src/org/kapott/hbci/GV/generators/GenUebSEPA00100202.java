@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ServiceLevel3Code;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AccountIdentificationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AmountTypeSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.BranchAndFinancialInstitutionIdentificationSCT;
@@ -31,6 +32,9 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentInstructionInformationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentMethodSCTCode;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.RemittanceInformationSCTChoice;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCTCode;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentTypeInformationSCT1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCT;
 
 
 /**
@@ -87,7 +91,14 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
 		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 		
-		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar("1999-01-01"));
+	    // Payment Type Information
+		pmtInf.setPmtTpInf(new PaymentTypeInformationSCT1());
+		pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSCT());
+        pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSCTCode.SEPA);
+
+        String date = sepaParams.getProperty("date");
+        if(date == null) date = "1999-01-01";
+		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar(date));
 		pmtInf.setDbtr(new PartyIdentificationSCT2());
 		pmtInf.setDbtrAcct(new CashAccountSCT1());
 		pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
