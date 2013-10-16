@@ -1,20 +1,38 @@
-Hinweis zu "Hibiscus-Branch" von HBCI4Java.
+# HBCI4Java
+
+## Vorab
+
+Dies ist ein aktuell gepflegter Fork von [HBCI4Java](http://hbci4java.kapott.org/),
+welcher u.a. in [Hibiscus](http://www.willuhn.de/products/hibiscus) und
+[Pecunia-Banking](http://www.pecuniabanking.de/) zum Einsatz kommt.
+
+## Kontakt
+
+Unter https://groups.google.com/forum/?hl=de#!forum/hbci4java findet ihr die
+zugehörige Mailingliste.
+
+## Entstehung
 
 Das SVN von hbci4java.kapott.org ist schon seit einiger Zeit nicht mehr
-oeffentlich, weil da drin wegen HBCI4Java 3 grundlegende Aenderungen
-stattfinden. Fuer 2.5.12 haben sich im Laufe der Zeit aber einige Patches
-angesammelt, die auf http://hbci4java.kapott.org nicht veroeffentlicht wurden.
+öffentlich, weil da drin wegen HBCI4Java 3 grundlegende Änderungen
+stattfinden (wobei ich nicht weiss, ob Stefan wirklich noch daran arbeitet)
+Für die letzte veröffentlichte Version 2.5.12 haben sich im Laufe der Zeit aber viele Patches
+angesammelt, die auf http://hbci4java.kapott.org nicht veröffentlicht wurden.
 
-Daher habe ich im Hibiscus CVS diese HBCI4Java-Version eingecheckt.
-Ausgangsbasis ist Version 2.5.12 mit einigen Patches von Stefan
-(konkret seine SVN-Revision r227 vom 28.05.2010). Hinzugekommen sind
-anschliessend noch ein paar weitere Patches. Verlauf also bisher:
+Inzwischen enthält diese Fork hier nicht mehr nur Patches sondern auch umfangreiche
+Weiterentwicklungen wie etwa 
 
-2.5.12 (http://hbci4java.kapott.org/hbci4java-2.5.12-src.zip)
- -> r227 (log/hbci4java-r227.tgz)
-   -> "Hibiscus-Branch" (r227+log/patches/*)
-   
-Ich werde versuchen, fuer alle weiteren Aenderungen, die ich hier vornehme,
-nummerierte Diff-Dateien in log/patches abzulegen.
+- die Unterstützung der neuen TAN-Verfahren (smsTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
+- Unterstützung von PC/SC-Kartenlesern via javax.smartcardio API
+- eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
+- Unterstützung für alle aktuellen SEPA-PAIN-Versionen bei SEPA-Überweisungen
+- erste Unterstützung für SEPA-Lastschriften und SEPA-Daueraufträge 
 
+Ausgangsbasis dieser Weiterentwicklung war HBCI4Java 2.5.12 mit einigen Patches von
+Stefan (konkret seine SVN-Revision r227 vom 28.05.2010). Im Ordner "log" dieses
+Repositories hatte ich sämtliche Änderungen in Form von diff-Dateien gepflegt, um
+diese auch ohne Versionsverwaltungssystem noch nachvollziehen zu können. Im Zuge der
+Erweiterungen am SEPA-Code wurde das jedoch zu umfangreich. Der Ordner wurde
+zwischenzeitlich gelöscht. Die Historie der Weiterentwicklung kann über die History
+des GIT-Repositories nachvollzogen werden.
 
