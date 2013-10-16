@@ -92,7 +92,7 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         entry.my.number=result.getProperty(header+".My.number");
         entry.my.subnumber=result.getProperty(header+".My.subnumber");
         entry.my.iban = result.getProperty(header+".My.iban");
-        entry.my.iban = result.getProperty(header+".My.bic");
+        entry.my.bic = result.getProperty(header+".My.bic");
         getMainPassport().fillAccountInfo(entry.my);
 
         entry.other=new Konto();
