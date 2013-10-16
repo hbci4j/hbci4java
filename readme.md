@@ -29,10 +29,10 @@ Weiterentwicklungen wie etwa
 - erste Unterstützung für SEPA-Lastschriften und SEPA-Daueraufträge 
 
 Ausgangsbasis dieser Weiterentwicklung war HBCI4Java 2.5.12 mit einigen Patches von
-Stefan (konkret seine SVN-Revision r227 vom 28.05.2010). Im Ordner "log" dieses
-Repositories hatte ich sämtliche Änderungen in Form von diff-Dateien gepflegt, um
-diese auch ohne Versionsverwaltungssystem noch nachvollziehen zu können. Im Zuge der
-Erweiterungen am SEPA-Code wurde das jedoch zu umfangreich. Der Ordner wurde
-zwischenzeitlich gelöscht. Die Historie der Weiterentwicklung kann über die History
-des GIT-Repositories nachvollzogen werden.
+Stefan (konkret seine SVN-Revision r227 vom 28.05.2010 - liegt im Ordner "log").
+Im Ordner "log/patches" dieses Repositories hatte ich sämtliche Änderungen in Form von
+diff-Dateien gepflegt, um diese auch ohne Versionsverwaltungssystem noch nachvollziehen
+zu können. Im Zuge der Erweiterungen am SEPA-Code wurde das jedoch zu umfangreich. Der
+Ordner wurde zwischenzeitlich gelöscht. Die Historie der Weiterentwicklung kann über
+die History des GIT-Repositories nachvollzogen werden.
 
