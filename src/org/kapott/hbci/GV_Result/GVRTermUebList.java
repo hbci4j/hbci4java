@@ -57,6 +57,12 @@ public final class GVRTermUebList
         /** Auftrags-Identifikationsnummer (optional) */
         public String   orderid;
         
+        /** Auftrag kann geändert werden (optional) */
+        public boolean can_change;
+        
+        /** Auftrag kann gelöscht werden (optional) */
+        public boolean can_delete;
+        
         public Entry()
         {
             usage=new String[0];

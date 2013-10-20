@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Properties;
 import javax.xml.bind.JAXB;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CreditTransferTransactionInformationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentInstructionInformationSCT;
@@ -40,6 +42,9 @@ public class ParsePain00100202 implements ISEPAParser {
                 sepaResult.setProperty("value", value.toString());
                 sepaResult.setProperty("curr", "EUR");
                 sepaResult.setProperty("usage", cdtTrxTxInf.getRmtInf().getUstrd());
+                
+                XMLGregorianCalendar date = pmtInf.getReqdExctnDt();
+                sepaResult.setProperty("date", date.toString());
                 
                 sepaResults.add(sepaResult);
             }

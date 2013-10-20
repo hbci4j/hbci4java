@@ -1493,6 +1493,11 @@
         <DEGdef id="ParTermUebList">
             <DE name="cantimerange" type="JN"/>
         </DEGdef>
+        
+        <DEGdef id="ParTermUebSEPAList">
+            <DE name="canmaxentries" type="JN"/>
+            <DE name="cantimerange" type="JN"/>
+        </DEGdef>
 
         <DEGdef id="ParUeb">
             <DE name="maxusage" type="Num" maxsize="2"/>
@@ -5802,6 +5807,41 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
         
+        <SEGdef id="TermUebSEPAList1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="1" maxnum="99"/>
+            
+            <DE name="startdate" type="Date" minnum="0"/>
+            <DE name="enddate" type="Date" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            
+            <value path="SegHead.code">HKCSB</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermUebSEPAListRes1"> 
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="candel" type="JN" minnum="0"/>
+            <DE name="canchange" type="JN" minnum="0"/>
+            
+            <value path="SegHead.code">HICSB</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermUebSEPAListPar1"> 
+            &GVP2;
+            <DEG type="ParTermUebSEPAList"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HICSBS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        
         
         <!-- ================================== SEPA Standing Orders ========================= -->
         <SEGdef id="DauerSEPANew1">
@@ -6953,6 +6993,7 @@
             <SEG type="TermUebList1" minnum="0"/>
             <SEG type="TermUebList2" minnum="0"/>
             <SEG type="TermUebList3" minnum="0"/>
+            <SEG type="TermUebSEPAList1" minnum="0"/>
             <SEG type="Ueb2" minnum="0"/>
             <SEG type="Ueb3" minnum="0"/>
             <SEG type="Ueb4" minnum="0"/>
@@ -7075,6 +7116,7 @@
             <SEG type="TermUebListRes1" minnum="0"/>
             <SEG type="TermUebListRes2" minnum="0"/>
             <SEG type="TermUebListRes3" minnum="0"/>
+            <SEG type="TermUebSEPAListRes1" minnum="0"/>
             <SEG type="UebGarRes1" minnum="0"/>
             <SEG type="VormerkpostenRes1" minnum="0"/>
             <SEG type="WPDepotListRes2" minnum="0"/>
@@ -7222,6 +7264,7 @@
             <SEG type="TermUebListPar1" minnum="0"/>
             <SEG type="TermUebListPar2" minnum="0"/>
             <SEG type="TermUebListPar3" minnum="0"/>
+            <SEG type="TermUebSEPAListPar1" minnum="0"/>
             <SEG type="UebPar2" minnum="0"/>
             <SEG type="UebPar3" minnum="0"/>
             <SEG type="UebPar4" minnum="0"/>

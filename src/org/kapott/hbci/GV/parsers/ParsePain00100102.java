@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Properties;
 import javax.xml.bind.JAXB;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.CreditTransferTransactionInformation2;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Document;
@@ -26,8 +27,7 @@ public class ParsePain00100102 implements ISEPAParser {
         for(CreditTransferTransactionInformation2 cdtTrxTxInf : cdtTrxTxInfs) {
             Properties sepaResult = new Properties();
 
-            sepaResult.setProperty("src.name", doc.getPain00100102().getGrpHdr().getInitgPty().getNm());
-            
+            sepaResult.setProperty("src.name", doc.getPain00100102().getGrpHdr().getInitgPty().getNm());            
             sepaResult.setProperty("src.iban", pmtInf.getDbtrAcct().getId().getIBAN());
             sepaResult.setProperty("src.bic", pmtInf.getDbtrAgt().getFinInstnId().getBIC());
             
@@ -40,6 +40,9 @@ public class ParsePain00100102 implements ISEPAParser {
             sepaResult.setProperty("curr", "EUR");
             sepaResult.setProperty("usage", cdtTrxTxInf.getRmtInf().getUstrd());
             
+            XMLGregorianCalendar date = pmtInf.getReqdExctnDt();
+            sepaResult.setProperty("date", date.toString());
+           
             sepaResults.add(sepaResult);
         }
     }
