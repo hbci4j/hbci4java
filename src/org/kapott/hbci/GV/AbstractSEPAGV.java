@@ -110,7 +110,26 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                             HBCIUtils.log("  unsupported " + version,HBCIUtils.LOG_DEBUG);
                             continue;
                         }
+                        
                         HBCIUtils.log("  found " + version,HBCIUtils.LOG_DEBUG);
+                        
+                        //////////////////////
+                        // Checken, ob wir die Version in den "known versions" haben
+                        // Wenn das der Fall ist, nehmen wir die, damit immer unsere
+                        // URN verwendet wird und nicht jene, die die Bank in HISPAS
+                        // geschickt hat. Es gibt naemlich Banken, die in HISPAS das alte
+                        // Bezeichner-Format senden (also etwa "sepade.pain.001.002.03.xsd"),
+                        // anschliessend aber meckern, wenn man denen beim Einreichen
+                        // eines Auftrages genau dieses Format uebergibt. Dort wollen die
+                        // dann ploetzlich stattdessen den neuen URN haben (also "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03").
+                        // Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=95160#95160
+                        List<PainVersion> known = PainVersion.getKnownVersions(version.getType());
+                        int pos = known.indexOf(version);
+                        if (pos != -1)
+                        {
+                            version = known.get(pos);
+                            HBCIUtils.log("  replacing with known-version " + version,HBCIUtils.LOG_DEBUG);
+                        }
                         found.add(version);
                     }
                 }
@@ -331,9 +350,8 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
     
     /**
-     * Referenzierter pain-Jobname. Bei vielen Geschäftsvorfällen (z.B. Daueraufträgen) wird die pain der Einzeltransaktion verwendet.
-     * 
-     * @param name
+     * Referenzierter pain-Jobname. Bei vielen Geschäftsvorfällen
+     * (z.B. Daueraufträgen) wird die pain der Einzeltransaktion verwendet.
      * @return Value
      */
     public String getPainJobName() {
