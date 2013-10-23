@@ -636,11 +636,23 @@ public class GVRKUms
                             Konto acc=new Konto();
                             acc.blz=Swift.getMultiTagValue(st_multi,"30");
                             acc.number=Swift.getMultiTagValue(st_multi,"31");
+                            
+                            // fuer den Fall, dass in der BLZ sowas hier drin steht: "GENODEF1S06 SVWZ+ ja"
+                            // Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?t=16182
+                            if (acc.blz != null)
+                            {
+                                int space = acc.blz.indexOf(" ");
+                                if (space != -1)
+                                {
+                                    HBCIUtils.log("blz/bic \"" + acc.blz + "\" contains invalid chars, trimming after first space", HBCIUtils.LOG_DEBUG);
+                                    acc.blz = acc.blz.substring(0,space);
+                                }
+                            }
 
                             if (line.isSepa)
                             {
-                              acc.bic = Swift.getMultiTagValue(st_multi, "30");
-                              acc.iban = Swift.getMultiTagValue(st_multi,"31");
+                              acc.bic = acc.blz;
+                              acc.iban = acc.number;
                             }
 
                             acc.name=Swift.getMultiTagValue(st_multi,"32");
