@@ -5,10 +5,16 @@
 
 package org.kapott.hbci.GV;
 
+import java.util.Enumeration;
+import java.util.Properties;
+
+import org.kapott.hbci.GV_Result.GVRLastSEPA;
+import org.kapott.hbci.GV_Result.GVRTermUeb;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.status.HBCIMsgStatus;
 
 /**
  * Implementierung des HBCI-Jobs fuer die SEPA-Basis-Lastschrift.
@@ -50,7 +56,7 @@ public class GVLastSEPA extends AbstractSEPAGV
      */
     public GVLastSEPA(HBCIHandler handler)
     {
-        super(handler, getLowlevelName());
+        super(handler, getLowlevelName(), new GVRLastSEPA());
 
     	// My bzw. src ist das Konto des Ausführenden. Dst ist das Konto des
     	// Belasteten.
@@ -99,5 +105,25 @@ public class GVLastSEPA extends AbstractSEPAGV
         // Datum als java.util.Date oder als ISO-Date-String im Format yyyy-MM-dd
         addConstraint("targetdate",      "sepa.targetdate",    "1999-01-01", LogFilter.FILTER_NONE);
 
+    }
+    
+    protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
+    {
+        Properties result=msgstatus.getData();
+        String orderid=result.getProperty(header+".orderid");
+        ((GVRLastSEPA)(jobResult)).setOrderId(orderid);
+        
+        if (orderid!=null && orderid.length()!=0) {
+            Properties p=getLowlevelParams();
+            Properties p2=new Properties();
+            
+            for (Enumeration e=p.propertyNames();e.hasMoreElements();) {
+                String key=(String)e.nextElement();
+                p2.setProperty(key.substring(key.indexOf(".")+1),
+                               p.getProperty(key));
+            }
+            
+            getMainPassport().setPersistentData("termlast_"+orderid,p2);
+        }
     }
 }

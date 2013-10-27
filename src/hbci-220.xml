@@ -5228,6 +5228,33 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
         
+        <SEGdef id="LastSEPA1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            
+            <value path="SegHead.code">HKDSE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="LastSEPARes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            
+            <value path="SegHead.code">HIDSE</value>
+            <value path="SegHead.version">1</value>                
+        </SEGdef>
+        <SEGdef id="LastSEPAPar1">
+            &GVP2;
+
+			<DEG type="ParTermSepaEinzelLast" name="ParTermSepaEinzelLast"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HIDSES</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        
         <SEGdef id="Umb1"> <!-- 2.2 -->
             &SingleInlandUser3;
 
@@ -6199,10 +6226,11 @@
             <SEG type="Last3" minnum="0"/>
             <SEG type="Last4" minnum="0"/>
             <SEG type="Last5" minnum="0"/>
+            <SEG type="LastSEPA1" minnum="0"/>
             <SEG type="LastObjection1" minnum="0"/>
             <SEG type="LastObjection2" minnum="0"/>
             <SEG type="OrderHistory1" minnum="0"/>
-	    <SEG type="Receipt1" minnum="0"/>
+	        <SEG type="Receipt1" minnum="0"/>
             <SEG type="Saldo3" minnum="0"/>
             <SEG type="Saldo4" minnum="0"/>
             <SEG type="Saldo5" minnum="0"/>
@@ -6331,6 +6359,7 @@
             <SEG type="KUmsZeitRes5" minnum="0"/>
             <SEG type="KUmsZeitRes6" minnum="0"/>
             <SEG type="KUmsZeitSEPARes7" minnum="0"/>
+            <SEG type="LastSEPARes1" minnum="0"/>
             <SEG type="OrderHistoryRes1" minnum="0"/>
             <SEG type="SaldoRes3" minnum="0"/>
             <SEG type="SaldoRes4" minnum="0"/>
@@ -6391,8 +6420,8 @@
             <SEG type="AccInfoPar2" minnum="0"/>
             <SEG type="CardListPar1" minnum="0"/>
             <SEG type="CardListPar2" minnum="0"/>
-	    <SEG type="ChangePINPar1" minnum="0" />
-	    <SEG type="ChangePINOldPar1" minnum="0" />
+	        <SEG type="ChangePINPar1" minnum="0" />
+	        <SEG type="ChangePINOldPar1" minnum="0" />
             <SEG type="CommListPar2" minnum="0"/>
             <SEG type="CommListPar3" minnum="0"/>
             <SEG type="CommListPar4" minnum="0"/>
@@ -6450,6 +6479,7 @@
             <SEG type="LastPar3" minnum="0"/>
             <SEG type="LastPar4" minnum="0"/>
             <SEG type="LastPar5" minnum="0"/>
+            <SEG type="LastSEPAPar1" minnum="0"/>
             <SEG type="LastObjectionPar1" minnum="0"/>
             <SEG type="LastObjectionPar2" minnum="0"/>
             <SEG type="OrderHistoryPar1" minnum="0"/>

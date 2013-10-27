@@ -5750,6 +5750,13 @@
             <value path="SegHead.code">HKDSE</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
+        <SEGdef id="LastSEPARes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            
+            <value path="SegHead.code">HIDSE</value>
+            <value path="SegHead.version">1</value>                
+        </SEGdef>
         <SEGdef id="LastSEPAPar1">
             &GVP2;
 
@@ -5760,6 +5767,7 @@
             <value path="SegHead.code">HIDSES</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
+        
         <SEGdef id="LastCOR1SEPA1">
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTVInt" name="My"/>
@@ -7082,6 +7090,7 @@
             <SEG type="KUmsZeitRes5" minnum="0"/>
             <SEG type="KUmsZeitRes6" minnum="0"/>
             <SEG type="KUmsZeitSEPARes7" minnum="0"/>
+            <SEG type="LastSEPARes1" minnum="0"/>
             <SEG type="OrderHistoryRes1" minnum="0"/>
             <SEG type="SaldoRes3" minnum="0"/>
             <SEG type="SaldoRes4" minnum="0"/>
