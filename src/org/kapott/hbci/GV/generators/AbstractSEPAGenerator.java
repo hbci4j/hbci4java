@@ -71,8 +71,8 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                         
                         // Der Pfad-Prafix ist eigentlich nur fuer die Unit-Tests.
                         // Im normalen Betrieb ist der nicht gesetzt. Siehe "TestPainGen".
-                        String path = System.getProperty("hbci4java.pain.path",null);
-                        File f = path != null ? new File(path,file) : new File(file);
+                        boolean debug = Boolean.parseBoolean(System.getProperty("hbci4java.pain.debugmode","false"));
+                        File f = debug ? new File("src",file) : new File(file);
                         if (f.isFile() && f.canRead())
                             source = new StreamSource(f);
                     }

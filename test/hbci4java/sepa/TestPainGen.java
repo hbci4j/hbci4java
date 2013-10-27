@@ -34,7 +34,7 @@ public class TestPainGen
     public static void beforeClass() throws Exception
     {
         // Siehe AbstractSEPAGenerator#marshal - damit werden die Schema-Files auch im Unit-Test gefunden.
-        System.setProperty("hbci4java.pain.path","src");
+        System.setProperty("hbci4java.pain.debugmode","true");
     }
 
     /**
