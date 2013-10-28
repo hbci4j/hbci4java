@@ -5,14 +5,14 @@
 
 package org.kapott.hbci.GV;
 
-import org.kapott.hbci.GV_Result.GVRLastSEPA;
+import org.kapott.hbci.GV_Result.GVRLastCOR1SEPA;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
 
 /**
- * Implementierung des HBCI-Jobs fuer die SEPA-Basis-Lastschrift.
+ * Implementierung des HBCI-Jobs fuer die SEPA-COR1-Lastschrift.
  */
-public class GVLastSEPA extends AbstractGVLastSEPA
+public class GVLastCOR1SEPA extends AbstractGVLastSEPA
 {
     /**
      * Liefert den Lowlevel-Jobnamen.
@@ -20,24 +20,24 @@ public class GVLastSEPA extends AbstractGVLastSEPA
      */
     public static String getLowlevelName()
     {
-        return "LastSEPA";
+        return "LastCOR1SEPA";
     }
 
     /**
      * ct.
      * @param handler
      */
-    public GVLastSEPA(HBCIHandler handler)
+    public GVLastCOR1SEPA(HBCIHandler handler)
     {
-        super(handler, getLowlevelName(), new GVRLastSEPA());
+        super(handler, getLowlevelName(), new GVRLastCOR1SEPA());
 
     	// Typ der Lastschrift. Moegliche Werte:
     	// CORE = Basis-Lastschrift (Default)
     	// COR1 = Basis-Lastschrift mit verkuerzter Vorlaufzeit
     	// B2B  = Business-2-Business-Lastschrift mit eingeschraenkter Rueckgabe-Moeglichkeit
         //
-        // TODO: Wobei eigentlich nur "CORE" erlaubt ist, da dieser GV nur die CORE-Lastschrift
+        // TODO: Wobei eigentlich nur "COR1" erlaubt ist, da dieser GV nur die COR1-Lastschrift
         // kapselt. Eigentlich sollte das gar nicht konfigurierbar sein
-        addConstraint("type", "sepa.type", "CORE", LogFilter.FILTER_NONE);
+        addConstraint("type", "sepa.type", "COR1", LogFilter.FILTER_NONE);
     }
 }

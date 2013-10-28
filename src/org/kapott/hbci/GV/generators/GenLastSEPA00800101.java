@@ -43,8 +43,6 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.RestrictedIdentification2;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.SequenceType1Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ServiceLevel3Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.ServiceLevel4;
-import org.kapott.hbci.sepa.jaxb.pain_008_002_01.LocalInstrumentCodeSDD;
-import org.kapott.hbci.sepa.jaxb.pain_008_002_01.LocalInstrumentSDD;
 
 
 /**
