@@ -5748,7 +5748,7 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
 
-        <!-- BEGIN SEPA-Lastschrift CORE ----------------------------------- -->
+        <!-- BEGIN SEPA-Lastschrift CORE -->
         <!-- Request -->
         <SEGdef id="LastSEPA1">
             <DEG type="SegHeadUser" name="SegHead"/>
@@ -5777,9 +5777,9 @@
             <value path="SegHead.code">HIDSES</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
-        <!-- END SEPA-Lastschrift CORE ------------------------------------- -->
+        <!-- END SEPA-Lastschrift CORE -->
         
-        <!-- BEGIN SEPA-Lastschrift COR1 ----------------------------------- -->
+        <!-- BEGIN SEPA-Lastschrift COR1 -->
         <!-- Request -->
         <SEGdef id="LastCOR1SEPA1">
             <DEG type="SegHeadUser" name="SegHead"/>
@@ -5808,9 +5808,9 @@
             <value path="SegHead.code">HIDSCS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
-        <!-- END SEPA-Lastschrift COR1 ------------------------------------- -->
+        <!-- END SEPA-Lastschrift COR1 -->
         
-        <!-- BEGIN SEPA-Lastschrift B2B ------------------------------------ -->
+        <!-- BEGIN SEPA-Lastschrift B2B -->
         <!-- Request -->
         <SEGdef id="LastB2BSEPA1">
             <DEG type="SegHeadUser" name="SegHead"/>
@@ -5839,7 +5839,7 @@
             <value path="SegHead.code">HIBSES</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
-        <!-- END SEPA-Lastschrift B2B -------------------------------------- -->
+        <!-- END SEPA-Lastschrift B2B -->
 
         
         <!-- ================================== SEPA Dated Transfers ========================= -->
