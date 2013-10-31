@@ -70,7 +70,7 @@ public class TestGVLastSEPA2 extends AbstractTestGV {
         HBCIJobResult res = job.getJobResult();
         System.out.println("----------Result: "+res.toString());
         
-        Assert.assertEquals("Job Result ist nicht OK!", true, res.isOK());
+        Assert.assertEquals("Job Result ist nicht OK!", true, res.isOK() && ret.isOK());
     }
 
     protected String getJobname()

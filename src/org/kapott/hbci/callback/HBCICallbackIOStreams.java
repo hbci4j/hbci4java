@@ -307,6 +307,10 @@ public class HBCICallbackIOStreams
                     getOutStream().flush();
                     getInStream().readLine();
                     break;
+                    
+                case USERID_CHANGED:
+                    getOutStream().println(msg);
+                    break;
     
                 default:
                     throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
