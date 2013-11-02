@@ -154,7 +154,7 @@ public final class HBCIHandler
      * SEPA-Konten umgehen kann. In diesem Fall holen wir die SEPA-Informationen
      * über die Konten von der Bank ab - für jedes SEPA-fähige Konto werden u.a. 
      * BIC/IBAN geliefert */
-    private void updateSEPAInfo()
+    public void updateSEPAInfo()
     {
         Properties bpd = passport.getBPD();
         if (bpd == null)

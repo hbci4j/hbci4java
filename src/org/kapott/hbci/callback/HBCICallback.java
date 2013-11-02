@@ -340,7 +340,7 @@ public interface HBCICallback
     public final static int WRONG_PIN=40;
     
     /** <p>Ursache des Callbacks: Dialogantwort 3072 der GAD - UserID und CustomerID werden ausgetauscht */
-    /** <p>im Parameter retData steht die neue UserID drin */
+    /** <p>im Parameter retData stehen die neuen Daten im Format UserID|CustomerID drin */
     public final static int USERID_CHANGED=41;
 
     /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */

@@ -199,17 +199,23 @@ public abstract class AbstractPinTanPassport
         int l=rets.length;
         for (int i=0; i<l; i++) {
             HBCIRetVal ret=rets[i];
-            if (ret.code.equals("3072")) {                
+            if (ret.code.equals("3072")) {
+                String newCustomerId = null;
+                String newUserId = null;
                 int l2=ret.params.length;
                 if(l2>0) {
-                    this.setUserId(ret.params[0]);
-                    this.setCustomerId(ret.params[0]);                    
+                    newUserId = ret.params[0];
+                    newCustomerId = ret.params[0];
                 }
                 if(l2>1) {
-                    this.setCustomerId(ret.params[1]);                    
+                    newCustomerId = ret.params[1];
                 }
                 if(l2>0) {
                     HBCIUtils.log("autosecfunc: found 3072 in response - change user id", HBCIUtils.LOG_DEBUG);
+                    // Aufrufer informieren, dass UserID und CustomerID geändert wurde
+                    StringBuffer retData=new StringBuffer();
+                    retData.append(newUserId+"|"+newCustomerId);
+                    HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.TYPE_TEXT,retData);
                     return true;                    
                 }
             }
@@ -239,14 +245,7 @@ public abstract class AbstractPinTanPassport
         searchFor3920s(msgStatus.globStatus.getWarnings());
         searchFor3920s(msgStatus.segStatus.getWarnings());
         
-        if(searchFor3072s(msgStatus.segStatus.getWarnings())) {
-            // Aufrufer informieren, dass UserID und CustomerID geändert wurde 
-            StringBuffer retData=new StringBuffer();
-            retData.append(this.getUserId()+"|"+this.getCustomerId());
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.TYPE_TEXT,retData);
-            this.saveChanges();
-            restart_needed = true;
-        }
+        searchFor3072s(msgStatus.segStatus.getWarnings());
 
         if (!anonDialog) {
             setPersistentData("_authed_dialog_executed", Boolean.TRUE);
