@@ -92,6 +92,7 @@
     </challengeinfo>
   </job>
 
+  <!-- SEPA-Einzelueberweisung -->
   <job code="HKCCS">
     <challengeinfo spec="hhd12">
       <klass>22</klass>
@@ -112,6 +113,38 @@
       <param>sepa.dst.iban</param>
     </challengeinfo>
   </job>
+
+  <!-- SEPA-Einzellastschrift CORE -->
+  <job code="HKDSE">
+    <challengeinfo spec="hhd14">
+      <klass>29</klass>
+      <param type="Wrt">sepa.btg.value</param>
+      <param>sepa.dst.iban</param>
+      <param type="Date">sepa.targetdate</param>
+    </challengeinfo>
+  </job>
+
+  <!-- SEPA-Einzellastschrift COR1 -->
+  <job code="HKDSC">
+    <challengeinfo spec="hhd14">
+      <klass>29</klass>
+      <param type="Wrt">sepa.btg.value</param>
+      <param>sepa.dst.iban</param>
+      <param type="Date">sepa.targetdate</param>
+    </challengeinfo>
+  </job>
+
+  <!-- SEPA-Einzellastschrift B2B -->
+  <job code="HKBSE">
+    <challengeinfo spec="hhd14">
+      <klass>29</klass>
+      <param type="Wrt">sepa.btg.value</param>
+      <param>sepa.dst.iban</param>
+      <param type="Date">sepa.targetdate</param>
+    </challengeinfo>
+  </job>
+  
+  
 
   <job code="HKDAB">
     <challengeinfo spec="hhd12">
