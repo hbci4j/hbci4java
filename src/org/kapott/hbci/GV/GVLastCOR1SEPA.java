@@ -24,6 +24,14 @@ public class GVLastCOR1SEPA extends AbstractGVLastSEPA
     }
 
     /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
+     */
+    public String getPainJobName()
+    {
+        return "LastSEPA";
+    }
+
+    /**
      * ct.
      * @param handler
      */
