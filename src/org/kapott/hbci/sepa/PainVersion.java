@@ -24,8 +24,8 @@ import org.kapott.hbci.GV.parsers.ISEPAParser;
  */
 public class PainVersion implements Comparable<PainVersion>
 {
-    private final static DecimalFormat DF_MAJOR = new DecimalFormat("000");
-    private final static DecimalFormat DF_MINOR = new DecimalFormat("00");
+    private final static String DF_MAJOR = "000";
+    private final static String DF_MINOR = "00";
     
     private final static Pattern PATTERN = Pattern.compile("(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
 
@@ -185,8 +185,8 @@ public class PainVersion implements Comparable<PainVersion>
         sb.append(".Gen");
         sb.append(jobName);
         sb.append(this.type.getValue());
-        sb.append(DF_MAJOR.format(this.major));
-        sb.append(DF_MINOR.format(this.minor));
+        sb.append(new DecimalFormat(DF_MAJOR).format(this.major));
+        sb.append(new DecimalFormat(DF_MINOR).format(this.minor));
         
         return sb.toString();
     }
@@ -201,8 +201,8 @@ public class PainVersion implements Comparable<PainVersion>
         sb.append(ISEPAParser.class.getPackage().getName());
         sb.append(".ParsePain");
         sb.append(this.type.getValue());
-        sb.append(DF_MAJOR.format(this.major));
-        sb.append(DF_MINOR.format(this.minor));
+        sb.append(new DecimalFormat(DF_MAJOR).format(this.major));
+        sb.append(new DecimalFormat(DF_MINOR).format(this.minor));
         
         return sb.toString();
     }
@@ -342,6 +342,7 @@ public class PainVersion implements Comparable<PainVersion>
     /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
+    @Override
     public int compareTo(PainVersion v)
     {
         if (v.type != this.type)
