@@ -54,6 +54,8 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
     @Override
     public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception
     {
+        Integer maxIndex = maxIndex(sepaParams);
+
         //Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
         Date now=new Date();
         SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -71,7 +73,8 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
         //Group Header
         doc.getCstmrCdtTrfInitn().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
         doc.getCstmrCdtTrfInitn().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
-        doc.getCstmrCdtTrfInitn().getGrpHdr().setNbOfTxs("1");
+        doc.getCstmrCdtTrfInitn().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
+        doc.getCstmrCdtTrfInitn().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
         doc.getCstmrCdtTrfInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
         doc.getCstmrCdtTrfInitn().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
 
@@ -118,43 +121,59 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
 
         //Payment Information - Credit Transfer Transaction Information
         ArrayList<CreditTransferTransactionInformationSCT> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformationSCT>) pmtInf.getCdtTrfTxInf();
-        CreditTransferTransactionInformationSCT cdtTrxTxInf = new CreditTransferTransactionInformationSCT();
-        cdtTrxTxInfs.add(cdtTrxTxInf);
+        if (maxIndex != null)
+        {
+            for (int tnr = 0; tnr <= maxIndex; tnr++)
+            {
+                cdtTrxTxInfs.add(createCreditTransferTransactionInformationSCT(sepaParams, tnr));
+            }
+        }
+        else
+        {
+            cdtTrxTxInfs.add(createCreditTransferTransactionInformationSCT(sepaParams, null));
+        }
 
+        ObjectFactory of = new ObjectFactory();
+        this.marshal(of.createDocument(doc), os, validate);
+    }
+
+    private CreditTransferTransactionInformationSCT createCreditTransferTransactionInformationSCT(Properties sepaParams, Integer index)
+    {
+        CreditTransferTransactionInformationSCT cdtTrxTxInf = new CreditTransferTransactionInformationSCT();
 
         //Payment Information - Credit Transfer Transaction Information - Payment Identification
         cdtTrxTxInf.setPmtId(new PaymentIdentificationSEPA());
-        cdtTrxTxInf.getPmtId().setEndToEndId(sepaParams.getProperty("endtoendid"));
+        cdtTrxTxInf.getPmtId().setEndToEndId(sepaParams.getProperty(insertIndex("endtoendid", index)));
 
 
         //Payment Information - Credit Transfer Transaction Information - Creditor
         cdtTrxTxInf.setCdtr(new PartyIdentificationSEPA2());
-        cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty("dst.name"));
+        cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty(insertIndex("dst.name", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Creditor Account
         cdtTrxTxInf.setCdtrAcct(new CashAccountSEPA2());
         cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentificationSEPA());
-        cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty("dst.iban"));
+        cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty(insertIndex("dst.iban", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Creditor Agent
         cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA1());
         cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA1());
-        cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("dst.bic"));
+        cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(insertIndex("dst.bic", index)));
 
 
         //Payment Information - Credit Transfer Transaction Information - Amount
         cdtTrxTxInf.setAmt(new AmountTypeSEPA());
         cdtTrxTxInf.getAmt().setInstdAmt(new ActiveOrHistoricCurrencyAndAmountSEPA());
-        cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty("btg.value")));
+        cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(insertIndex("btg.value", index))));
         cdtTrxTxInf.getAmt().getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR); //FIXME: Schema sagt es gibt nur eur aber besser wäre bestimmt getSEPAParam("btg.curr")
 
 
         //Payment Information - Credit Transfer Transaction Information - Usage
         cdtTrxTxInf.setRmtInf(new RemittanceInformationSEPA1Choice());
 
-        cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty("usage"));
+        cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty(insertIndex("usage", index)));
 
-        ObjectFactory of = new ObjectFactory();
-        this.marshal(of.createDocument(doc), os, validate);
+        return cdtTrxTxInf;
     }
+
 }

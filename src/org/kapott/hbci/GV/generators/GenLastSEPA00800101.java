@@ -65,6 +65,8 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
     @Override
     public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception
     {
+        Integer maxIndex = maxIndex(sepaParams);
+
         //Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
         Date now=new Date();
         SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -83,8 +85,8 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
         //Group Header
         doc.getPain00800101().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
         doc.getPain00800101().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
-        doc.getPain00800101().getGrpHdr().setNbOfTxs("1");
-        doc.getPain00800101().getGrpHdr().setCtrlSum(new BigDecimal(sepaParams.getProperty("btg.value")));
+        doc.getPain00800101().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
+        doc.getPain00800101().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
         doc.getPain00800101().getGrpHdr().setGrpg(Grouping2Code.GRPD);
 
         doc.getPain00800101().getGrpHdr().setInitgPty(new PartyIdentification20());
@@ -124,24 +126,40 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 
         //Payment Information - Credit Transfer Transaction Information
         ArrayList<DirectDebitTransactionInformation2> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformation2>) pmtInf.getDrctDbtTxInf();
-        DirectDebitTransactionInformation2 drctDbtTxInf = new DirectDebitTransactionInformation2();
-        drctDbtTxInfs.add(drctDbtTxInf);
+        if (maxIndex != null)
+        {
+            for (int tnr = 0; tnr <= maxIndex; tnr++)
+            {
+                drctDbtTxInfs.add(createDirectDebitTransactionInformation2(sepaParams, tnr, df));
+            }
+        }
+        else
+        {
+            drctDbtTxInfs.add(createDirectDebitTransactionInformation2(sepaParams, null, df));
+        }
 
+        ObjectFactory of = new ObjectFactory();
+        this.marshal(of.createDocument(doc), os, validate);
+    }
+
+    private DirectDebitTransactionInformation2 createDirectDebitTransactionInformation2(Properties sepaParams, Integer index, DatatypeFactory df)
+    {
+        DirectDebitTransactionInformation2 drctDbtTxInf = new DirectDebitTransactionInformation2();
 
         drctDbtTxInf.setDrctDbtTx(new DirectDebitTransaction4());
         drctDbtTxInf.getDrctDbtTx().setCdtrSchmeId(new PartyIdentification11());
         drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().setId(new PartyPrivate1());
         drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().setPrvtId(new PersonIdentification4());
         drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().setOthrId(new RestrictedIdentification2());
-        drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().setId(sepaParams.getProperty("creditorid"));
+        drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().setId(sepaParams.getProperty(insertIndex("creditorid", index)));
         drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().setIdTp("SEPA");
 
 
         drctDbtTxInf.getDrctDbtTx().setMndtRltdInf(new MandateRelatedInformation4());
-        drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setMndtId(sepaParams.getProperty("mandateid"));
-        drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty("manddateofsig")));
+        drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setMndtId(sepaParams.getProperty(insertIndex("mandateid", index)));
+        drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setDtOfSgntr(df.newXMLGregorianCalendar(sepaParams.getProperty(insertIndex("manddateofsig", index))));
 
-        boolean amend = Boolean.valueOf(sepaParams.getProperty("amendmandindic"));
+        boolean amend = Boolean.valueOf(sepaParams.getProperty(insertIndex("amendmandindic", index)));
 
         drctDbtTxInf.getDrctDbtTx().getMndtRltdInf().setAmdmntInd(amend);
 
@@ -156,36 +174,36 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 
         //Payment Information - Credit Transfer Transaction Information - Payment Identification
         drctDbtTxInf.setPmtId(new PaymentIdentification1());
-        drctDbtTxInf.getPmtId().setEndToEndId(sepaParams.getProperty("endtoendid"));
+        drctDbtTxInf.getPmtId().setEndToEndId(sepaParams.getProperty(insertIndex("endtoendid", index)));
 
 
         //Payment Information - Credit Transfer Transaction Information - Debitor
         drctDbtTxInf.setDbtr(new PartyIdentification23());
-        drctDbtTxInf.getDbtr().setNm(sepaParams.getProperty("dst.name"));
+        drctDbtTxInf.getDbtr().setNm(sepaParams.getProperty(insertIndex("dst.name", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Debitor Account
         drctDbtTxInf.setDbtrAcct(new CashAccount8());
         drctDbtTxInf.getDbtrAcct().setId(new AccountIdentification2());
-        drctDbtTxInf.getDbtrAcct().getId().setIBAN(sepaParams.getProperty("dst.iban"));
+        drctDbtTxInf.getDbtrAcct().getId().setIBAN(sepaParams.getProperty(insertIndex("dst.iban", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Creditor Agent
         drctDbtTxInf.setDbtrAgt(new FinancialInstitution2());
         drctDbtTxInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentification4());
-        drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("dst.bic"));
+        drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(insertIndex("dst.bic", index)));
 
 
         //Payment Information - Credit Transfer Transaction Information - Amount
         drctDbtTxInf.setInstdAmt(new EuroMax9Amount());
-        drctDbtTxInf.getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty("btg.value")));
+        drctDbtTxInf.getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(insertIndex("btg.value", index))));
 
-        drctDbtTxInf.getInstdAmt().setCcy(sepaParams.getProperty("btg.curr"));
+        drctDbtTxInf.getInstdAmt().setCcy(sepaParams.getProperty(insertIndex("btg.curr", index)));
 
 
         //Payment Information - Credit Transfer Transaction Information - Usage
         drctDbtTxInf.setRmtInf(new RemittanceInformation3());
-        drctDbtTxInf.getRmtInf().setUstrd(sepaParams.getProperty("usage"));
+        drctDbtTxInf.getRmtInf().setUstrd(sepaParams.getProperty(insertIndex("usage", index)));
 
-        ObjectFactory of = new ObjectFactory();
-        this.marshal(of.createDocument(doc), os, validate);
+        return drctDbtTxInf;
     }
+
 }
