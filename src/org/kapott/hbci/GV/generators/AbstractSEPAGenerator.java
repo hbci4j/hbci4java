@@ -27,7 +27,7 @@ import org.kapott.hbci.sepa.PainVersion;
 public abstract class AbstractSEPAGenerator implements ISEPAGenerator
 {
     private final static Logger LOG = Logger.getLogger(AbstractSEPAGenerator.class.getName());
-    
+
     /**
      * Schreibt die Bean mittels JAXB in den Strean.
      * @param e das zu schreibende JAXBElement mit der Bean.
@@ -42,7 +42,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-    
+
         PainVersion version = this.getPainVersion();
         if (version != null)
         {
@@ -52,7 +52,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                 LOG.fine("appending schemaLocation " + schemaLocation);
                 marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,schemaLocation);
             }
-            
+
             String file = version.getFile();
             if (file != null)
             {
@@ -60,7 +60,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                 {
                     Source source  = null;
                     InputStream is = this.getClass().getResourceAsStream(file);
-                    
+
                     if (is != null)
                     {
                         source = new StreamSource(is);
@@ -68,7 +68,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                     else
                     {
                         // Fallback auf File-Objekt
-                        
+
                         // Der Pfad-Prafix ist eigentlich nur fuer die Unit-Tests.
                         // Im normalen Betrieb ist der nicht gesetzt. Siehe "TestPainGen".
                         boolean debug = Boolean.parseBoolean(System.getProperty("hbci4java.pain.debugmode","false"));
@@ -76,7 +76,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                         if (f.isFile() && f.canRead())
                             source = new StreamSource(f);
                     }
-                    
+
                     if (source != null)
                     {
                         LOG.fine("activating schema validation against " + file);
@@ -91,8 +91,8 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                 }
             }
         }
-        
-        
+
+
         marshaller.marshal(e, os);
     }
 
