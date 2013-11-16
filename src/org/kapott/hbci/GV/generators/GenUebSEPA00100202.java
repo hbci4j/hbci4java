@@ -10,7 +10,6 @@ import java.util.Properties;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.jaxb.pain_001_001_02.ServiceLevel3Code;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AccountIdentificationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AmountTypeSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.BranchAndFinancialInstitutionIdentificationSCT;
@@ -56,110 +55,128 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
      */
     @Override
     public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception
-	{
-		//Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
-		Date now=new Date();
-		SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	    DatatypeFactory df = DatatypeFactory.newInstance();
-		
-		
-		//Document
-		Document doc = new Document();
-		
-		
-		//Pain00100102
-		doc.setPain00100102(new Pain00100102());
-		
-		
-		doc.getPain00100102().setGrpHdr(new GroupHeaderSCT());
-				
-		//Group Header
-		doc.getPain00100102().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
-		doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
-	    doc.getPain00100102().getGrpHdr().setNbOfTxs("1");
-	    doc.getPain00100102().getGrpHdr().setCtrlSum(new BigDecimal(sepaParams.getProperty("btg.value")));
-	    doc.getPain00100102().getGrpHdr().setGrpg(Grouping1CodeSCT.MIXD);	    
-		doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentificationSCT1());
-		doc.getPain00100102().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
-		
-		
-		//Payment Information 
-		ArrayList<PaymentInstructionInformationSCT> pmtInfs = (ArrayList<PaymentInstructionInformationSCT>) doc.getPain00100102().getPmtInf();
-		PaymentInstructionInformationSCT pmtInf = new PaymentInstructionInformationSCT();
-		pmtInfs.add(pmtInf);
-		
-		pmtInf.setPmtInfId(sepaParams.getProperty("sepaid")); 
-		pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
-		
-	    // Payment Type Information
-		pmtInf.setPmtTpInf(new PaymentTypeInformationSCT1());
-		pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSCT());
+    {
+        Integer maxIndex = maxIndex(sepaParams);
+
+        //Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
+        Date now=new Date();
+        SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        DatatypeFactory df = DatatypeFactory.newInstance();
+
+
+        //Document
+        Document doc = new Document();
+
+
+        //Pain00100102
+        doc.setPain00100102(new Pain00100102());
+
+
+        doc.getPain00100102().setGrpHdr(new GroupHeaderSCT());
+
+        //Group Header
+        doc.getPain00100102().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
+        doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
+        doc.getPain00100102().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
+        doc.getPain00100102().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
+        doc.getPain00100102().getGrpHdr().setGrpg(Grouping1CodeSCT.MIXD);
+        doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentificationSCT1());
+        doc.getPain00100102().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
+
+
+        //Payment Information
+        ArrayList<PaymentInstructionInformationSCT> pmtInfs = (ArrayList<PaymentInstructionInformationSCT>) doc.getPain00100102().getPmtInf();
+        PaymentInstructionInformationSCT pmtInf = new PaymentInstructionInformationSCT();
+        pmtInfs.add(pmtInf);
+
+        pmtInf.setPmtInfId(sepaParams.getProperty("sepaid"));
+        pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
+
+        // Payment Type Information
+        pmtInf.setPmtTpInf(new PaymentTypeInformationSCT1());
+        pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSCT());
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSCTCode.SEPA);
 
         String date = sepaParams.getProperty("date");
         if(date == null) date = "1999-01-01";
-		pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar(date));
-		pmtInf.setDbtr(new PartyIdentificationSCT2());
-		pmtInf.setDbtrAcct(new CashAccountSCT1());
-		pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
-		
-		
-		//Payment Information - Debtor
-		pmtInf.getDbtr().setNm(sepaParams.getProperty("src.name"));
-		
-		
-		//Payment Information - DebtorAccount
-		pmtInf.getDbtrAcct().setId(new AccountIdentificationSCT());
-		pmtInf.getDbtrAcct().getId().setIBAN(sepaParams.getProperty("src.iban"));
-		
-		
-		//Payment Information - DebtorAgent
-		pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
-		pmtInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("src.bic"));
-		
-		
-		//Payment Information - ChargeBearer
-		pmtInf.setChrgBr(ChargeBearerTypeSCTCode.SLEV);
-		
-		
-		//Payment Information - Credit Transfer Transaction Information
-		ArrayList<CreditTransferTransactionInformationSCT> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformationSCT>) pmtInf.getCdtTrfTxInf();
-		CreditTransferTransactionInformationSCT cdtTrxTxInf = new CreditTransferTransactionInformationSCT();
-		cdtTrxTxInfs.add(cdtTrxTxInf);
-		
-		
-		//Payment Information - Credit Transfer Transaction Information - Payment Identification
-		cdtTrxTxInf.setPmtId(new PaymentIdentification1());
-		cdtTrxTxInf.getPmtId().setEndToEndId(sepaParams.getProperty("endtoendid"));
-		
-		
-		//Payment Information - Credit Transfer Transaction Information - Creditor
-		cdtTrxTxInf.setCdtr(new PartyIdentificationSCT2());
-		cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty("dst.name"));
-		
-		//Payment Information - Credit Transfer Transaction Information - Creditor Account
-		cdtTrxTxInf.setCdtrAcct(new CashAccountSCT2());
-		cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentificationSCT());
-		cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty("dst.iban"));
-		
-		//Payment Information - Credit Transfer Transaction Information - Creditor Agent
-		cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
-		cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
-		cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("dst.bic"));
+        pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar(date));
+        pmtInf.setDbtr(new PartyIdentificationSCT2());
+        pmtInf.setDbtrAcct(new CashAccountSCT1());
+        pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
 
 
-		//Payment Information - Credit Transfer Transaction Information - Amount
-		cdtTrxTxInf.setAmt(new AmountTypeSCT());
-		cdtTrxTxInf.getAmt().setInstdAmt(new CurrencyAndAmountSCT());
-		cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty("btg.value")));
-		
-		cdtTrxTxInf.getAmt().getInstdAmt().setCcy(CurrencyCodeSCT.EUR); 
-		
-		//Payment Information - Credit Transfer Transaction Information - Usage
-		cdtTrxTxInf.setRmtInf(new RemittanceInformationSCTChoice());
-		cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty("usage"));
+        //Payment Information - Debtor
+        pmtInf.getDbtr().setNm(sepaParams.getProperty("src.name"));
+
+
+        //Payment Information - DebtorAccount
+        pmtInf.getDbtrAcct().setId(new AccountIdentificationSCT());
+        pmtInf.getDbtrAcct().getId().setIBAN(sepaParams.getProperty("src.iban"));
+
+
+        //Payment Information - DebtorAgent
+        pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
+        pmtInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("src.bic"));
+
+
+        //Payment Information - ChargeBearer
+        pmtInf.setChrgBr(ChargeBearerTypeSCTCode.SLEV);
+
+
+        //Payment Information - Credit Transfer Transaction Information
+        ArrayList<CreditTransferTransactionInformationSCT> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformationSCT>) pmtInf.getCdtTrfTxInf();
+        if (maxIndex != null)
+        {
+            for (int tnr = 0; tnr <= maxIndex; tnr++)
+            {
+                cdtTrxTxInfs.add(createCreditTransferTransactionInformationSCT(sepaParams, tnr));
+            }
+        }
+        else
+        {
+            cdtTrxTxInfs.add(createCreditTransferTransactionInformationSCT(sepaParams, null));
+        }
 
         ObjectFactory of = new ObjectFactory();
         this.marshal(of.createDocument(doc), os, validate);
-	}
+    }
+
+    private CreditTransferTransactionInformationSCT createCreditTransferTransactionInformationSCT(Properties sepaParams, Integer index)
+    {
+        CreditTransferTransactionInformationSCT cdtTrxTxInf = new CreditTransferTransactionInformationSCT();
+
+        //Payment Information - Credit Transfer Transaction Information - Payment Identification
+        cdtTrxTxInf.setPmtId(new PaymentIdentification1());
+        cdtTrxTxInf.getPmtId().setEndToEndId(sepaParams.getProperty(insertIndex("endtoendid", index)));
+
+
+        //Payment Information - Credit Transfer Transaction Information - Creditor
+        cdtTrxTxInf.setCdtr(new PartyIdentificationSCT2());
+        cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty(insertIndex("dst.name", index)));
+
+        //Payment Information - Credit Transfer Transaction Information - Creditor Account
+        cdtTrxTxInf.setCdtrAcct(new CashAccountSCT2());
+        cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentificationSCT());
+        cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty(insertIndex("dst.iban", index)));
+
+        //Payment Information - Credit Transfer Transaction Information - Creditor Agent
+        cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
+        cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
+        cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(insertIndex("dst.bic", index)));
+
+
+        //Payment Information - Credit Transfer Transaction Information - Amount
+        cdtTrxTxInf.setAmt(new AmountTypeSCT());
+        cdtTrxTxInf.getAmt().setInstdAmt(new CurrencyAndAmountSCT());
+        cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(insertIndex("btg.value", index))));
+
+        cdtTrxTxInf.getAmt().getInstdAmt().setCcy(CurrencyCodeSCT.EUR);
+
+        //Payment Information - Credit Transfer Transaction Information - Usage
+        cdtTrxTxInf.setRmtInf(new RemittanceInformationSCTChoice());
+        cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty(insertIndex("usage", index)));
+
+        return cdtTrxTxInf;
+    }
+
 }
