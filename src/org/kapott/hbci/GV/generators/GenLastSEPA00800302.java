@@ -92,7 +92,6 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
         doc.getCstmrDrctDbtInitn().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
         doc.getCstmrDrctDbtInitn().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
         doc.getCstmrDrctDbtInitn().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
-        doc.getCstmrDrctDbtInitn().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
         doc.getCstmrDrctDbtInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
         doc.getCstmrDrctDbtInitn().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
 
@@ -104,6 +103,9 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 
         pmtInf.setPmtInfId(sepaParams.getProperty("sepaid"));
         pmtInf.setPmtMtd(PaymentMethod2Code.DD);
+
+        pmtInf.setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
+        pmtInf.setCtrlSum(sumBtgValue(sepaParams, maxIndex));
 
         pmtInf.setReqdColltnDt(df.newXMLGregorianCalendar(sepaParams.getProperty("targetdate")));
         pmtInf.setCdtr(new PartyIdentificationSEPA5());
