@@ -36,6 +36,15 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     }
 
     /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
+     */
+    @Override
+    public String getPainJobName()
+    {
+        return "LastSEPA";
+    }
+
+    /**
      * ct.
      * @param handler
      * @param lowlevelName der Lowlevel-GV-Name.

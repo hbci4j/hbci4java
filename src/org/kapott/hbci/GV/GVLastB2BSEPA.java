@@ -25,15 +25,6 @@ public class GVLastB2BSEPA extends AbstractGVLastSEPA
     }
     
     /**
-     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
-     */
-    @Override
-    public String getPainJobName()
-    {
-        return "LastSEPA";
-    }
-
-    /**
      * ct.
      * @param handler
      */

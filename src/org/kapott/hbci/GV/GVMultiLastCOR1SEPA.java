@@ -24,15 +24,6 @@ public class GVMultiLastCOR1SEPA extends GVLastCOR1SEPA
     }
 
     /**
-     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
-     */
-    @Override
-    public String getPainJobName()
-    {
-        return "LastSEPA";
-    }
-
-    /**
      * ct.
      * @param handler
      */
