@@ -66,7 +66,17 @@ public class GVUebSEPA extends AbstractSEPAGV
      */
     public GVUebSEPA(HBCIHandler handler)
     {
-        super(handler,getLowlevelName());
+        this(handler, getLowlevelName());
+    }
+
+    /**
+     * ct.
+     * @param handler
+     * @param name
+     */
+    public GVUebSEPA(HBCIHandler handler, String name)
+    {
+        super(handler, name);
 
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
