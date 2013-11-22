@@ -5,6 +5,7 @@
 
 package org.kapott.hbci.GV;
 
+import org.kapott.hbci.GV_Result.AbstractGVRLastSEPA;
 import org.kapott.hbci.GV_Result.GVRLastSEPA;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
@@ -29,7 +30,18 @@ public class GVLastSEPA extends AbstractGVLastSEPA
      */
     public GVLastSEPA(HBCIHandler handler)
     {
-        super(handler, getLowlevelName(), new GVRLastSEPA());
+        this(handler, getLowlevelName(), new GVRLastSEPA());
+    }
+
+    /**
+     * ct.
+     * @param handler
+     * @param lowlevelName
+     * @param result
+     */
+    public GVLastSEPA(HBCIHandler handler, String lowlevelName, AbstractGVRLastSEPA result)
+    {
+        super(handler, lowlevelName, result);
 
     	// Typ der Lastschrift. Moegliche Werte:
     	// CORE = Basis-Lastschrift (Default)
