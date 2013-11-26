@@ -14,6 +14,7 @@
     <target name="compile">
         <mkdir dir="${classes}"/>
         <javac srcdir="${srccode}" destdir="${classes}" 
+               source="1.5" target="1.5"
                debug="on" encoding="UTF-8"
                deprecation="on" 
                includeAntRuntime="no" />
