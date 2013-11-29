@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.GV_Result;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,7 +99,7 @@ public final class GVRFestCondList
             ret.append(linesep);
             
             ret.append("  Zinssatz: ");
-            ret.append(HBCIUtilsInternal.double2String(zinssatz/1000.0));
+            ret.append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(zinssatz).divide(new BigDecimal("1000.0"))));
             ret.append("% (");
             switch (zinsmethode) {
                 case METHOD_2831_360:    ret.append("28/31 Tage bzw. 360 Tage"); break;

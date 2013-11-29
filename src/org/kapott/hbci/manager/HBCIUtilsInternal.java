@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.manager;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
@@ -44,7 +45,7 @@ public class HBCIUtilsInternal
     
     private static InfoPointConnector infoPointConnector;
 
-    public static String double2String(double value)
+    public static String bigDecimal2String(BigDecimal value)
     {
         DecimalFormat format=new DecimalFormat("0.##");
         DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
@@ -127,14 +128,11 @@ public class HBCIUtilsInternal
         return ret;
     }
 
-    public static double string2Double(String st)
-    {
-        return Double.parseDouble(st);
-    }
-    
     public static long string2Long(String st,long factor)
     {
-        return Math.round(string2Double(st)*factor);
+        BigDecimal result = new BigDecimal(st);
+        result = result.multiply(new BigDecimal(factor));
+        return result.longValue();
     }
 
     public static String withCounter(String st, int idx)

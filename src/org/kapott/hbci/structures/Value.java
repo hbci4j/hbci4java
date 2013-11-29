@@ -22,14 +22,16 @@
 package org.kapott.hbci.structures;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 /** Darstellung eines Geldbetrages. */
 public final class Value
     implements Serializable
 {
+    private static final BigDecimal ONE_HUNDRED = new BigDecimal("100.00");
+    
     /** Numerischer Wert des Betrages mal 100*/
     private long   value;
     
@@ -46,6 +48,7 @@ public final class Value
     /** Anlegen eines Geldbetrag-Objektes. Die Währung wird mit <code>EUR</code> vorbelegt.
         @param value der Geldbetrag (1.23)
         @deprecated */
+    @Deprecated
     public Value(double value)
     {
         this(Math.round(100.0*value),"EUR");
@@ -64,19 +67,27 @@ public final class Value
     {
         this(value,"EUR");
     }
-    
+
+    /** Anlegen eines Geldbetrag-Objektes. Die Währung wird mit <code>EUR</code> vorbelegt.
+    @param value der Geldbetrag als String ("1.23") */
+    public Value(BigDecimal value)
+    {
+        this(value,"EUR");
+    }
+
     /** Anlegen eines Geldbetrag-Objektes.
         @param value der Geldbetrag als String ("1.23")
         @param curr die Währung des Geldbetrages */
     public Value(String value,String curr)
     {
-        this(HBCIUtilsInternal.string2Long(value,100),curr);
+        this(new BigDecimal(value),curr);
     }
 
     /** Anlegen eines Geldbetrag-Objektes.
         @param value der Geldbetrag (1.23)
         @param curr die Währung des Geldbetrages 
         @deprecated */
+    @Deprecated
     public Value(double value,String curr)
     {
         this(Math.round(100.0*value),curr);
@@ -90,7 +101,16 @@ public final class Value
         this.value=value;
         this.curr=curr;
     }
-    
+
+    /** Anlegen eines Geldbetrag-Objektes.
+    @param value der Geldbetrag mal 100 (123)
+    @param curr die Währung des Geldbetrages */
+    public Value(BigDecimal value,String curr)
+    {
+        this.value=value.multiply(ONE_HUNDRED).longValueExact();
+        this.curr=curr;
+    }
+
     /** Erstellt eine neue Instanz eines Geldbetrag-Objektes als Kopie
         eines bestehenden Objektes.
         @param v ein Objekt, welches geklont werden soll */
@@ -102,9 +122,10 @@ public final class Value
     /** Umwandeln in einen String. Die Rückgabe erfolgt im Format 
         <pre>&lt;value> " " &lt;curr></pre>
         @return Stringdarstellung des Geldbetrages */
+    @Override
     public String toString()
     {
-        return HBCIUtils.value2String(value/100.0)+" "+curr;
+        return HBCIUtils.value2String(new BigDecimal(value).divide(ONE_HUNDRED))+" "+curr;
     }
     
     /** Gibt den Betrag mal 100 als Ganzzahl zurück */
@@ -114,9 +135,16 @@ public final class Value
     }
     
     /** Gibt den Betrag als Fließkommazahl zurück */
+    @Deprecated
     public double getDoubleValue()
     {
         return value/100.0;
+    }
+    
+    public BigDecimal getBigDecimalValue() {
+        BigDecimal result = new BigDecimal(value).divide(ONE_HUNDRED);
+        result.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return result;
     }
     
     /** Gibt die Währung zurück */
@@ -139,6 +167,17 @@ public final class Value
     public void setValue(long value)
     {
         this.value=value;
+    }
+    
+    /**
+     * Setzt den Betrag neu. Der hier angegebene Wert entspricht dem Betrag mal 100. Wenn der
+     * Wert Centbruchteile enthält, welche wegfallen würden, wird eine Exception geworfen.
+     * 
+     * @param value Der Betrag mal 100
+     */
+    public void setValue(BigDecimal value)
+    {
+        this.value = value.multiply(ONE_HUNDRED).longValueExact();
     }
     
     /** Setzt die Währung neu.

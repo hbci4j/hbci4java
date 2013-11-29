@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.Security;
 import java.text.DateFormat;
@@ -1691,20 +1692,21 @@ public final class HBCIUtils
         }
     }
 
-    /** Konvertiert einen String in einen double-Wert (entspricht 
-     * <code>Double.parseDouble(st)</code>).
+    /** Konvertiert einen String in einen BigDecimal-Wert mit zwei Nachkommastellen.
      * @param st String, der konvertiert werden soll (Format "<code>1234.56</code>");
-     * @return double-Wert */
-    public static double string2Value(String st)
+     * @return BigDecimal-Wert */
+    public static BigDecimal string2Value(String st)
     {
-        return Double.parseDouble(st);
+        BigDecimal result = new BigDecimal(st);
+        result.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return result;
     }
 
-    /** Wandelt einen Double-Wert in einen String im Format "<code>1234.56</code>"
+    /** Wandelt einen BigDecimal-Wert in einen String im Format "<code>1234.56</code>"
      * um (also ohne Tausender-Trennzeichen und mit "." als Dezimaltrennzeichen).
-     * @param value zu konvertierender Double-Wert
+     * @param value zu konvertierender BigDecimal-Wert
      * @return String-Darstellung dieses Wertes */
-    public static String value2String(double value)
+    public static String value2String(BigDecimal value)
     {
         DecimalFormat format=new DecimalFormat("0.00");
         DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();

@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.datatypes;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
@@ -39,6 +40,7 @@ public class SyntaxFloat
         super(double2string(x),minsize,maxsize);
     }
 
+    @Override
     public void init(String x, int minsize, int maxsize)
     {
         super.init(double2string(x),minsize,maxsize);
@@ -96,11 +98,13 @@ public class SyntaxFloat
         initData(res,minsize,maxsize);
     }
 
+    @Override
     public void init(StringBuffer res, int minsize, int maxsize)
     {
         initData(res,minsize,maxsize);
     }
 
+    @Override
     public String toString()
     {
         try {
@@ -113,8 +117,9 @@ public class SyntaxFloat
                 symbols.setDecimalSeparator(',');
                 hbciFormat.setDecimalFormatSymbols(symbols);
                 hbciFormat.setDecimalSeparatorAlwaysShown(true);
+                hbciFormat.setParseBigDecimal(true);
                 
-                ret=HBCIUtils.value2String(hbciFormat.parse(c).doubleValue());
+                ret=HBCIUtils.value2String((BigDecimal) hbciFormat.parse(c));
             }
             
             return ret;
