@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
@@ -35,7 +36,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     private Properties sepaParams    = new Properties();
     private PainVersion pain         = null;
     private ISEPAGenerator generator = null;
-    
+
     /**
      * Liefert die Default-PAIN-Version, das verwendet werden soll,
      * wenn von der Bank keine geliefert wurden.
@@ -302,14 +303,15 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
 
     /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#addConstraint(java.lang.String, java.lang.String, java.lang.String, int)
+     * @see org.kapott.hbci.GV.HBCIJobImpl#addConstraint(java.lang.String, java.lang.String, java.lang.String, int, boolean)
      * Ueberschrieben, um die Default-Werte der SEPA-Parameter vorher rauszufischen und in "this.sepaParams" zu
      * speichern. Die brauchen wir "createSEPAFromParams" beim Erstellen des XML - sie wuerden dort sonst aber
      * fehlen, weil Default-Werte eigentlich erst in "verifyConstraints" uebernommen werden.
      */
-    protected void addConstraint(String frontendName, String destinationName, String defValue, int logFilterLevel)
+    @Override
+    protected void addConstraint(String frontendName, String destinationName, String defValue, int logFilterLevel, boolean indexed)
     {
-        super.addConstraint(frontendName, destinationName, defValue, logFilterLevel);
+        super.addConstraint(frontendName, destinationName, defValue, logFilterLevel, indexed);
         
         if (destinationName.startsWith("sepa.") && defValue != null)
         {

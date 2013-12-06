@@ -200,7 +200,22 @@ public interface HBCIJob
      @param paramName der Name des zu setzenden Parameters.
      @param value Wert, auf den der Parameter gesetzt werden soll */
     public void setParam(String paramName,String value);
-    
+
+    /** <p>Setzen eines Job-Parameters. Für alle Highlevel-Jobs ist in der Package-Beschreibung zum
+     Package <code>org.kapott.hbci.GV</code> eine Auflistung aller Jobs und deren Parameter zu finden.
+     Für alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
+     {@link org.kapott.hbci.tools.ShowLowlevelGVs} oder zur Laufzeit durch Aufruf
+     der Methode {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobParameterNames(String)} 
+     ermittelt werden.</p>
+     <p>Bei Verwendung dieser oder einer der anderen <code>setParam()</code>-Methoden werden zusätzlich
+     einige der Job-Restriktionen (siehe {@link #getJobRestrictions()}) analysiert. Beim Verletzen einer
+     der überprüften Einschränkungen wird eine Exception mit einer entsprechenden Meldung erzeugt.
+     Diese Überprüfung findet allerdings nur bei Highlevel-Jobs statt.</p>
+     @param paramName der Name des zu setzenden Parameters.
+     @param index der Index bei Index-Parametern, sonst <code>null</code>
+     @param value Wert, auf den der Parameter gesetzt werden soll */
+    public void setParam(String paramName,Integer index,String value);
+
     /** <p>Hinzufügen dieses Jobs zu einem HBCI-Dialog. Diese Methode arbeitet analog zu 
         {@link #addToQueue(String)}, nur dass hier
         die <code>customerid</code> mit der Kunden-ID vorbelegt ist, wie sie

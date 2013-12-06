@@ -97,15 +97,15 @@ public class GVUebSEPA extends AbstractSEPAGV
         addConstraint("src.bic",   "sepa.src.bic",   null, LogFilter.FILTER_MOST);
         addConstraint("src.iban",  "sepa.src.iban",  null, LogFilter.FILTER_IDS);
         addConstraint("src.name",  "sepa.src.name",  null, LogFilter.FILTER_IDS);
-        addConstraint("dst.bic",   "sepa.dst.bic",   null, LogFilter.FILTER_MOST);
-        addConstraint("dst.iban",  "sepa.dst.iban",  null, LogFilter.FILTER_IDS);
-        addConstraint("dst.name",  "sepa.dst.name",  null, LogFilter.FILTER_IDS);
-        addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE);
-        addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
-        addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
+        addConstraint("dst.bic",   "sepa.dst.bic",   null, LogFilter.FILTER_MOST, true);
+        addConstraint("dst.iban",  "sepa.dst.iban",  null, LogFilter.FILTER_IDS, true);
+        addConstraint("dst.name",  "sepa.dst.name",  null, LogFilter.FILTER_IDS, true);
+        addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE, true);
+        addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE, true);
+        addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE, true);
       
         //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
         addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
-        addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE);
+        addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE, true);
     }
 }
