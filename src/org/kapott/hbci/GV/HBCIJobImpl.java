@@ -25,10 +25,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
@@ -83,6 +87,7 @@ public abstract class HBCIJobImpl
                                          so *muss* die Anwendung einen Wert spezifizieren */
     private Hashtable<String, Integer> logFilterLevels; /* hier wird für jeden hl-param-name gespeichert, ob der dazugehörige wert
                                           über den logfilter-Mechanimus geschützt werden soll */
+    private HashSet<String> indexedConstraints;
     
     protected HBCIJobImpl(HBCIHandler parentHandler,String jobnameLL,HBCIJobResultImpl jobResult)
     {
@@ -98,6 +103,7 @@ public abstract class HBCIJobImpl
         this.contentCounter=0;
         this.constraints=new Hashtable<String, String[][]>();
         this.logFilterLevels=new Hashtable<String, Integer>();
+        this.indexedConstraints=new HashSet<String>();
         this.executed=false;
         
         this.parentHandler=parentHandler;
@@ -389,8 +395,13 @@ public abstract class HBCIJobImpl
         
         return ret;
     }
-    
+
     protected void addConstraint(String frontendName,String destinationName,String defValue,int logFilterLevel)
+    {
+        addConstraint(frontendName, destinationName, defValue, logFilterLevel, false);
+    }
+
+    protected void addConstraint(String frontendName,String destinationName,String defValue,int logFilterLevel,boolean indexed)
     {
         // value ist array:(lowlevelparamname, defaultvalue)
         String[] value=new String[2];
@@ -412,6 +423,10 @@ public abstract class HBCIJobImpl
         }
 
         constraints.put(frontendName,values);
+        
+        if (indexed) {
+            indexedConstraints.add(frontendName);
+        }
         
         if (logFilterLevel>0) {
         	logFilterLevels.put(frontendName,new Integer(logFilterLevel));
@@ -440,6 +455,10 @@ public abstract class HBCIJobImpl
                 String   defValue=value[1];
 
                 String   givenContent=getLowlevelParam(destination);
+                if (givenContent==null && indexedConstraints.contains(frontendName)) {
+                    givenContent = getLowlevelParam(insertIndex(destination, 0));
+                }
+
                 String   content=null;
 
                 content=defValue;
@@ -615,7 +634,27 @@ public abstract class HBCIJobImpl
         Diese Überprüfung findet allerdings nur bei Highlevel-Jobs statt.</p>
         @param paramName der Name des zu setzenden Parameters.
         @param value Wert, auf den der Parameter gesetzt werden soll */
+    @Override
     public void setParam(String paramName,String value)
+    {
+        setParam(paramName,null,value);
+    }
+
+    /** <p>Setzen eines Job-Parameters. Für alle Highlevel-Jobs ist in der Package-Beschreibung zum
+        Package {@link org.kapott.hbci.GV} eine Auflistung aller Jobs und deren Parameter zu finden.
+        Für alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
+        {@link org.kapott.hbci.tools.ShowLowlevelGVs} oder zur Laufzeit durch Aufruf
+        der Methode {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobParameterNames(String)} 
+        ermittelt werden.</p>
+        <p>Bei Verwendung dieser oder einer der anderen <code>setParam()</code>-Methoden werden zusätzlich
+        einige der Job-Restriktionen (siehe {@link #getJobRestrictions()}) analysiert. Beim Verletzen einer
+        der überprüften Einschränkungen wird eine Exception mit einer entsprechenden Meldung erzeugt.
+        Diese Überprüfung findet allerdings nur bei Highlevel-Jobs statt.</p>
+        @param paramName der Name des zu setzenden Parameters.
+        @param index Der index oder <code>null</code>, wenn kein Index gewünscht ist
+        @param value Wert, auf den der Parameter gesetzt werden soll */
+    @Override
+    public void setParam(String paramName,Integer index,String value)
     {
     	// wenn der Parameter einen LogFilter-Level gesetzt hat, dann den
     	// betreffenden Wert zum Logfilter hinzufügen
@@ -623,7 +662,7 @@ public abstract class HBCIJobImpl
     	if (logFilterLevel!=null && logFilterLevel.intValue()!=0) {
     		LogFilter.getInstance().addSecretData(value,"X",logFilterLevel.intValue());
     	}
-    	
+
         String[][]           destinations=constraints.get(paramName);
         HBCIPassportInternal passport=getMainPassport();
         
@@ -641,9 +680,20 @@ public abstract class HBCIJobImpl
             value="";
         }
         
+        if (index!=null && !indexedConstraints.contains(paramName)) {
+            String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_PARAM_NOTINDEXED",new String[] {paramName,getName()});
+            if (!HBCIUtilsInternal.ignoreError(passport,"client.errors.ignoreWrongJobDataErrors",msg))
+                throw new InvalidUserDataException(msg);
+        }
+
         for (int i=0;i<destinations.length;i++) {
             String[] valuePair=destinations[i];
             String   lowlevelname=valuePair[0];
+
+            if (index != null && indexedConstraints.contains(paramName)) {
+                lowlevelname = insertIndex(lowlevelname, index);
+            }
+            
             setLowlevelParam(lowlevelname,value);
         }
     }
@@ -1083,5 +1133,17 @@ public abstract class HBCIJobImpl
         }
         
         return found;
+    }
+    
+    private static final Pattern INDEX_PATTERN = Pattern.compile("(\\w+\\.\\w+\\.\\w+)(\\.\\w+)?");
+    private String insertIndex(String key, Integer index)
+    {
+        if (index != null) {
+            Matcher m = INDEX_PATTERN.matcher(key);
+            if (m.matches()) {
+                return m.group(1) + '[' + index + ']' + (m.group(2) != null ? m.group(2) : "");
+            }
+        }
+        return key;
     }
 }
