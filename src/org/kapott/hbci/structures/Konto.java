@@ -42,9 +42,14 @@ public class Konto
     public String number;
     /** Unterkontomerkmal des Kontos, kann <code>null</code> sein */
     public String subnumber;
+    /** Kontoart (Girokonto, Sparkonto, Festgeldkonto, Kreditkartenkonto, etc.)
+        laut Segmentversion 5,6 von HIUPD.
+        Wird bspw. bei DeuBa-Konten benötigt da dort verschiedene Konten genau die gleiche
+        Kontonummer haben bzw. sich nur in der Kontoart unterscheiden */
+    public String acctype;
     /** Name (Typ) des Kontos. Dieses Feld ist nur für
-        Konten verfügbar, auf die der Anwender via HBCI Zugriff
-        hat. Für alle anderen Konten ist dieser Wert <code>null</code> */
+    Konten verfügbar, auf die der Anwender via HBCI Zugriff
+    hat. Für alle anderen Konten ist dieser Wert <code>null</code> */
     public String type;
     /** Währung des Kontos. Hier ist in der Regel <code>EUR</code>
         für EURO gespeichert. */

@@ -254,6 +254,7 @@ public abstract class AbstractHBCIPassport
                 entry.name2=upd.getProperty(header+".name2");
                 entry.bic=upd.getProperty(header+".KTV.bic");
                 entry.iban=upd.getProperty(header+".KTV.iban");
+                entry.acctype=upd.getProperty(header+".acctype");
                 
                 String st;
                 if ((st=upd.getProperty(header+".KLimit.limittype"))!=null) {
@@ -308,6 +309,7 @@ public abstract class AbstractHBCIPassport
                 account.name=accounts[i].name;
                 account.bic=accounts[i].bic;
                 account.iban=accounts[i].iban;
+                account.acctype=accounts[i].acctype;
                 break;
             }
         }
