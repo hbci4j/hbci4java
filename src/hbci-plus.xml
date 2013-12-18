@@ -588,7 +588,9 @@
             <DE name="code" type="AN" maxsize="6"/>
             <DE name="reqSigs" type="Num" maxsize="2"/>
             <DE name="limittype" type="AN" maxsize="1" minnum="0"/>
-            <DEG type="BTG" minnum="0"/>
+            <!-- DEG type="BTG" minnum="0"/-->
+            <DE name="value" type="Wrt" minnum="0"/>
+            <DE name="curr" type="Cur" minnum="0"/>            
             <DE name="limitdays" type="Num" maxsize="3" minnum="0"/>
 
             <valids path="reqSigs">
