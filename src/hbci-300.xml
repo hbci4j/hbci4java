@@ -1539,6 +1539,11 @@
             <DE name="canmaxentries" type="JN"/>
             <DE name="cantimerange" type="JN"/>
         </DEGdef>
+        
+        <DEGdef id="ParTermUebSEPADel">
+          <DE name="orderdata_required" type="JN"/>
+        </DEGdef>
+        
 
         <DEGdef id="ParUeb">
             <DE name="maxusage" type="Num" maxsize="2"/>
@@ -6022,6 +6027,29 @@
             <value path="SegHead.code">HICSBS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
+
+        <!-- Terminueberweisung loeschen -->
+        <!-- Request -->
+        <SEGdef id="TermUebSEPADel1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+            
+            <value path="SegHead.code">HKCSL</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- BPD -->
+        <SEGdef id="TermUebSEPADelPar1">
+            &GVP2;
+            <DEG type="ParTermUebSEPADel"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HICSLS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
         
         
         <!-- ================================== SEPA Standing Orders ========================= -->
@@ -7180,6 +7208,7 @@
             <SEG type="TermUebList2" minnum="0"/>
             <SEG type="TermUebList3" minnum="0"/>
             <SEG type="TermUebSEPAList1" minnum="0"/>
+            <SEG type="TermUebSEPADel1" minnum="0"/>
             <SEG type="Ueb2" minnum="0"/>
             <SEG type="Ueb3" minnum="0"/>
             <SEG type="Ueb4" minnum="0"/>
@@ -7463,6 +7492,7 @@
             <SEG type="TermUebListPar2" minnum="0"/>
             <SEG type="TermUebListPar3" minnum="0"/>
             <SEG type="TermUebSEPAListPar1" minnum="0"/>
+            <SEG type="TermUebSEPADelPar1" minnum="0"/>
             <SEG type="UebPar2" minnum="0"/>
             <SEG type="UebPar3" minnum="0"/>
             <SEG type="UebPar4" minnum="0"/>
