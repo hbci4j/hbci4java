@@ -23,25 +23,21 @@ package org.kapott.hbci.GV;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.kapott.hbci.GV.parsers.ISEPAParser;
+import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 import org.kapott.hbci.GV_Result.GVRDauerList;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
-import org.kapott.hbci.GV.AbstractSEPAGV;
-import org.kapott.hbci.GV.parsers.ISEPAParser;
-import org.kapott.hbci.GV.parsers.ParsePain00100203;
-import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 
 public final class GVDauerSEPAList extends AbstractSEPAGV
 {
@@ -76,6 +72,15 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
 
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
+        
+        if (this.canNationalAcc(handler)) // nationale Bankverbindung mitschicken, wenn erlaubt
+        {
+            addConstraint("src.country",  "My.KIK.country", "", LogFilter.FILTER_NONE);
+            addConstraint("src.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);
+            addConstraint("src.number",   "My.number",      "", LogFilter.FILTER_IDS);
+            addConstraint("src.subnumber","My.subnumber",   "", LogFilter.FILTER_MOST);
+        }
+        
         addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);
         addConstraint("orderid","orderid","", LogFilter.FILTER_NONE);        
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);

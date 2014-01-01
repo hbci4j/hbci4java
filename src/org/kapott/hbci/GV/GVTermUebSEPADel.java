@@ -50,6 +50,15 @@ public class GVTermUebSEPADel extends AbstractSEPAGV
         
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
+        
+        if (this.canNationalAcc(handler)) // nationale Bankverbindung mitschicken, wenn erlaubt
+        {
+            addConstraint("src.country",  "My.KIK.country", "", LogFilter.FILTER_NONE);
+            addConstraint("src.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);
+            addConstraint("src.number",   "My.number",      "", LogFilter.FILTER_IDS);
+            addConstraint("src.subnumber","My.subnumber",   "", LogFilter.FILTER_MOST);
+        }
+        
         addConstraint("orderid",  "orderid", null, LogFilter.FILTER_NONE);
         
         addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);

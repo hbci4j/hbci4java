@@ -5,7 +5,6 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRDauerEdit;
-import org.kapott.hbci.GV_Result.GVRDauerNew;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -50,6 +49,15 @@ public class GVDauerSEPADel extends AbstractSEPAGV {
 
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
+
+        if (this.canNationalAcc(handler)) // nationale Bankverbindung mitschicken, wenn erlaubt
+        {
+            addConstraint("src.country",  "My.KIK.country", "", LogFilter.FILTER_NONE);
+            addConstraint("src.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);
+            addConstraint("src.number",   "My.number",      "", LogFilter.FILTER_IDS);
+            addConstraint("src.subnumber","My.subnumber",   "", LogFilter.FILTER_MOST);
+        }
+
         addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);
         addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
         addConstraint("orderid","orderid",null, LogFilter.FILTER_NONE);
