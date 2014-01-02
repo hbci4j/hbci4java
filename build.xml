@@ -90,6 +90,7 @@
 				<include name="pain.*.xsd" />
 				<include name="challengedata.xml" />
 				<include name="blz.properties" />
+				<include name="messages*.properties" />
 			</fileset>
 		</copy>
 
