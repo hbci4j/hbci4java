@@ -832,7 +832,7 @@ public final class HBCIUtils
         synchronized (HBCIUtilsInternal.locMsgs) {
             HBCIUtilsInternal.locMsgs.put(
                     threadgroup,
-                    ResourceBundle.getBundle("org.kapott.hbci.resources.HBCIMessages",locale));
+                    ResourceBundle.getBundle("messages",locale));
         }
     }
     
