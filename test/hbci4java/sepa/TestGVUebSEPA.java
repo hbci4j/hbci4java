@@ -134,7 +134,7 @@ public class TestGVUebSEPA extends AbstractTest
     
     props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
     props.put("client.passport.PinTan.init","1");
-    props.put("client.passport.PinTan.checkcert","1"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
+    props.put("client.passport.PinTan.checkcert","0"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
     
     // falls noetig
     props.put("client.passport.PinTan.proxy",""); // host:port
