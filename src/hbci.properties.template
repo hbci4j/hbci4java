@@ -125,10 +125,23 @@ client.passport.RDH.init=1
 # -------------------------------------------------------------------
 
 # These settings specify parameters of an PinTan account.
+
 # The filename is the name of a file where all your HBCI account 
 # data will be stored (userid, url, some internally cached data,
 # etc.).
 client.passport.PinTan.filename=./passports/institute_X_user_Y_pintan.dat
+
+# If used, this parameter must contain the fully qualified name of a (custom)
+# implementation of org.kapott.hbci.passport.io.ResourceStreamFactory.
+# This allows you to inject your own persistency layer and replace the default
+# one which writes to the file specified by client.passport.PinTan.filename.
+# Available implementations are:
+# - org.kapott.hbci.passport.io.PinTanFileStreamFactory (default)
+# - org.kapott.hbci.passport.io.ByteArrayStreamFactory (temporary, in-memory)
+# - ...yours? (e.g. JDBC, ...)
+# You only need this if for some reason you can't save the PinTan passport
+# on disk, e.g. in certain (shared) server environments.
+#client.passport.PinTan.streamfactory=org.kapott.hbci.passport.io.PinTanFileStreamFactory
 
 # PinTan uses HTTPS communication. When setting checkcert=1 the
 # SSL certificate will be checked for validity. If the root
