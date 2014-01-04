@@ -90,12 +90,13 @@ public final class AnalyzeReportOfTransactions
         }
     }
     
-    private static HBCIPassport passport;
-    private static HBCIHandler  hbciHandle;
-
     public static void main(String[] args)
         throws Exception
     {
+        // HBCI Objekte
+        HBCIPassport passport   = null;
+        HBCIHandler  hbciHandle = null;
+
         // HBCI4Java initialisieren
         HBCIUtils.init(HBCIUtils.loadPropertiesFile(new FileSystemClassLoader(),"/home/stefan.palme/temp/a.props"),
                        new MyHBCICallback());
@@ -109,64 +110,7 @@ public final class AnalyzeReportOfTransactions
             String version=passport.getHBCIVersion();
             hbciHandle=new HBCIHandler((version.length()!=0)?version:"plus",passport);
 
-            // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
-            Konto myaccount=passport.getAccounts()[0];
-            // wenn der obige Aufruf nicht funktioniert, muss die abzufragende
-            // Kontoverbindung manuell gesetzt werden:
-            // Konto myaccount=new Konto("DE","86055592","1234567890");
-
-            // Job zur Abholung der Kontoauszüge erzeugen
-            HBCIJob auszug=hbciHandle.newJob("KUmsAll");
-            auszug.setParam("my",myaccount);
-            // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
-            // job.setParam("startdate","21.5.2003");
-            auszug.addToQueue();
-
-            // alle Jobs in der Job-Warteschlange ausführen
-            HBCIExecStatus ret=hbciHandle.execute();
-
-            GVRKUms result=(GVRKUms)auszug.getJobResult();
-            // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
-            if (result.isOK()) {
-                // kompletten kontoauszug als string ausgeben:
-                System.out.println(result.toString());
-
-                // kontoauszug durchlaufen, jeden eintrag einmal anfassen:
-                
-                List<UmsLine> lines=result.getFlatData();
-                // int  numof_lines=lines.size();
-
-                for (Iterator<UmsLine> j=lines.iterator(); j.hasNext(); ) { // alle Umsatzeinträge durchlaufen
-                    UmsLine entry= j.next();
-
-                    // für jeden Eintrag ein Feld mit allen Verwendungszweckzeilen extrahieren
-                    List<String> usages=entry.usage;
-                    // int  numof_usagelines=usages.size();
-
-                    for (Iterator<String> k=usages.iterator(); k.hasNext(); ) { // alle Verwendungszweckzeilen durchlaufen
-                        String usageline= k.next();
-
-                        // ist eine bestimmte Rechnungsnummer gefunden (oder welche
-                        // Kriterien hier auch immer anzuwenden sind), ...
-                        if (usageline.equals("Rechnung 12345")) { 
-                            // hier diesen Umsatzeintrag (<entry>) auswerten
-
-                            // entry.bdate enthält Buchungsdatum
-                            // entry.value enthält gebuchten Betrag
-                            // entry.usage enthält die Verwendungszweck-zeilen
-                            // mehr Informationen sie Dokumentation zu
-                            //   org.kapott.hbci.GV_Result.GVRKUms
-                        }
-                    }
-                }
-                
-            } else {
-                // Fehlermeldungen ausgeben
-                System.out.println("Job-Error");
-                System.out.println(result.getJobStatus().getErrorString());
-                System.out.println("Global Error");
-                System.out.println(ret.getErrorString());
-            }
+            analyzeReportOfTransactions(passport, hbciHandle);
         } finally {
             if (hbciHandle!=null) {
                 hbciHandle.close();
@@ -175,4 +119,66 @@ public final class AnalyzeReportOfTransactions
             }
         }
     }
+
+    private static void analyzeReportOfTransactions(HBCIPassport hbciPassport, HBCIHandler hbciHandle) {
+        // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
+        Konto myaccount=hbciPassport.getAccounts()[0];
+        // wenn der obige Aufruf nicht funktioniert, muss die abzufragende
+        // Kontoverbindung manuell gesetzt werden:
+        // Konto myaccount=new Konto("DE","86055592","1234567890");
+
+        // Job zur Abholung der Kontoauszüge erzeugen
+        HBCIJob auszug=hbciHandle.newJob("KUmsAll");
+        auszug.setParam("my",myaccount);
+        // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
+        // job.setParam("startdate","21.5.2003");
+        auszug.addToQueue();
+
+        // alle Jobs in der Job-Warteschlange ausführen
+        HBCIExecStatus ret=hbciHandle.execute();
+
+        GVRKUms result=(GVRKUms)auszug.getJobResult();
+        // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
+        if (result.isOK()) {
+            // kompletten kontoauszug als string ausgeben:
+            System.out.println(result.toString());
+
+            // kontoauszug durchlaufen, jeden eintrag einmal anfassen:
+
+            List<UmsLine> lines=result.getFlatData();
+            // int  numof_lines=lines.size();
+
+            for (Iterator<UmsLine> j=lines.iterator(); j.hasNext(); ) { // alle Umsatzeinträge durchlaufen
+                UmsLine entry= j.next();
+
+                // für jeden Eintrag ein Feld mit allen Verwendungszweckzeilen extrahieren
+                List<String> usages=entry.usage;
+                // int  numof_usagelines=usages.size();
+
+                for (Iterator<String> k=usages.iterator(); k.hasNext(); ) { // alle Verwendungszweckzeilen durchlaufen
+                    String usageline= k.next();
+
+                    // ist eine bestimmte Rechnungsnummer gefunden (oder welche
+                    // Kriterien hier auch immer anzuwenden sind), ...
+                    if (usageline.equals("Rechnung 12345")) {
+                        // hier diesen Umsatzeintrag (<entry>) auswerten
+
+                        // entry.bdate enthält Buchungsdatum
+                        // entry.value enthält gebuchten Betrag
+                        // entry.usage enthält die Verwendungszweck-zeilen
+                        // mehr Informationen sie Dokumentation zu
+                        //   org.kapott.hbci.GV_Result.GVRKUms
+                    }
+                }
+            }
+
+        } else {
+            // Fehlermeldungen ausgeben
+            System.out.println("Job-Error");
+            System.out.println(result.getJobStatus().getErrorString());
+            System.out.println("Global Error");
+            System.out.println(ret.getErrorString());
+        }
+    }
+
 }
