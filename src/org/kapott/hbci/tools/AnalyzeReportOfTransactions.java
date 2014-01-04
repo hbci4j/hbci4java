@@ -23,11 +23,21 @@ package org.kapott.hbci.tools;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
+import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.callback.HBCICallbackUnsupported;
+import org.kapott.hbci.concurrent.DefaultHBCIPassportFactory;
+import org.kapott.hbci.concurrent.HBCIPassportFactory;
+import org.kapott.hbci.concurrent.HBCIRunnable;
+import org.kapott.hbci.concurrent.HBCIThreadFactory;
 import org.kapott.hbci.manager.FileSystemClassLoader;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -41,6 +51,9 @@ import org.kapott.hbci.structures.Konto;
     out-of-the-box benutzt werden, da erst einige Anpassungen im Quelltext
     vorgenommen werden müssen. Es dient eher als Vorlage, wie <em>HBCI4Java</em>
     im konkreten Anwendungsfall eingesetzt werden kann.</p>
+    <p>Die Methode {@link #main(String[])} zeigt die Verwendung mit einem einzelnen Haupt-
+    Thread. die Methode {@link #main_multithreaded(String[])} skizziert die Implementierung
+    für Anwendungen mit mehreren Threads.</p>
     <p>Im Quelltext müssen folgende Stellen angepasst werden:</p>
     <ul>
       <li><p>Beim Aufruf der Methode <code>HBCIUtils.init()</code> wird
@@ -90,12 +103,13 @@ public final class AnalyzeReportOfTransactions
         }
     }
     
-    private static HBCIPassport passport;
-    private static HBCIHandler  hbciHandle;
-
     public static void main(String[] args)
         throws Exception
     {
+        // HBCI Objekte
+        HBCIPassport passport   = null;
+        HBCIHandler  hbciHandle = null;
+
         // HBCI4Java initialisieren
         HBCIUtils.init(HBCIUtils.loadPropertiesFile(new FileSystemClassLoader(),"/home/stefan.palme/temp/a.props"),
                        new MyHBCICallback());
@@ -109,64 +123,9 @@ public final class AnalyzeReportOfTransactions
             String version=passport.getHBCIVersion();
             hbciHandle=new HBCIHandler((version.length()!=0)?version:"plus",passport);
 
-            // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
-            Konto myaccount=passport.getAccounts()[0];
-            // wenn der obige Aufruf nicht funktioniert, muss die abzufragende
-            // Kontoverbindung manuell gesetzt werden:
-            // Konto myaccount=new Konto("DE","86055592","1234567890");
+            // Kontoauszüge auflisten
+            analyzeReportOfTransactions(passport, hbciHandle);
 
-            // Job zur Abholung der Kontoauszüge erzeugen
-            HBCIJob auszug=hbciHandle.newJob("KUmsAll");
-            auszug.setParam("my",myaccount);
-            // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
-            // job.setParam("startdate","21.5.2003");
-            auszug.addToQueue();
-
-            // alle Jobs in der Job-Warteschlange ausführen
-            HBCIExecStatus ret=hbciHandle.execute();
-
-            GVRKUms result=(GVRKUms)auszug.getJobResult();
-            // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
-            if (result.isOK()) {
-                // kompletten kontoauszug als string ausgeben:
-                System.out.println(result.toString());
-
-                // kontoauszug durchlaufen, jeden eintrag einmal anfassen:
-                
-                List<UmsLine> lines=result.getFlatData();
-                // int  numof_lines=lines.size();
-
-                for (Iterator<UmsLine> j=lines.iterator(); j.hasNext(); ) { // alle Umsatzeinträge durchlaufen
-                    UmsLine entry= j.next();
-
-                    // für jeden Eintrag ein Feld mit allen Verwendungszweckzeilen extrahieren
-                    List<String> usages=entry.usage;
-                    // int  numof_usagelines=usages.size();
-
-                    for (Iterator<String> k=usages.iterator(); k.hasNext(); ) { // alle Verwendungszweckzeilen durchlaufen
-                        String usageline= k.next();
-
-                        // ist eine bestimmte Rechnungsnummer gefunden (oder welche
-                        // Kriterien hier auch immer anzuwenden sind), ...
-                        if (usageline.equals("Rechnung 12345")) { 
-                            // hier diesen Umsatzeintrag (<entry>) auswerten
-
-                            // entry.bdate enthält Buchungsdatum
-                            // entry.value enthält gebuchten Betrag
-                            // entry.usage enthält die Verwendungszweck-zeilen
-                            // mehr Informationen sie Dokumentation zu
-                            //   org.kapott.hbci.GV_Result.GVRKUms
-                        }
-                    }
-                }
-                
-            } else {
-                // Fehlermeldungen ausgeben
-                System.out.println("Job-Error");
-                System.out.println(result.getJobStatus().getErrorString());
-                System.out.println("Global Error");
-                System.out.println(ret.getErrorString());
-            }
         } finally {
             if (hbciHandle!=null) {
                 hbciHandle.close();
@@ -175,4 +134,109 @@ public final class AnalyzeReportOfTransactions
             }
         }
     }
+
+    public static void main_multithreaded(String[] args)
+        throws Exception
+    {
+
+        // Da im main-Thread keine HBCI Aktionen laufen sollen, reicht es hier, die Umgebung
+        // nur "notdürftig" zu initialisieren. Leere Konfiguration, und keine Callback-Unterstützung.
+        HBCIUtils.init(new Properties(), new HBCICallbackUnsupported());
+
+        // Die Verwendung der HBCIThreadFactory ist für die korrekte Funktionsweise von HBCI4Java zwingend erforderlich
+        // (Alternativ müsste manuell sichergestellt werden, dass jeder Thread in einer eigenen Thread-Gruppe läuft.)
+        ExecutorService executor = Executors.newCachedThreadPool(new HBCIThreadFactory());
+
+        // Einstellungen für die Aufgabe erstellen
+        Properties properties = HBCIUtils.loadPropertiesFile(new FileSystemClassLoader(),"/home/stefan.palme/temp/a.props");
+        HBCICallback callback = new MyHBCICallback();
+        HBCIPassportFactory passportFactory = new DefaultHBCIPassportFactory((Object) "Passport für Kontoauszugs-Demo");
+
+        // Aufgabe implementieren. Die HBCIRunnable übernimmt Initialisierung
+        // und Schließen von Passport und Handler automatisch.
+        Runnable runnable = new HBCIRunnable(properties, callback, passportFactory) {
+            @Override
+            protected void execute() throws Exception {
+
+                // Kontoauszüge auflisten
+                analyzeReportOfTransactions(passport, handler);
+
+            }
+        };
+
+        // Aufgabe ausführen
+        executor.submit(runnable);
+
+        // Executor runterfahren und warten, bis alle Aufgaben fertig sind
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            executor.awaitTermination(1, TimeUnit.SECONDS);
+        }
+
+        // Haupt-Thread beenden
+        HBCIUtils.done();
+
+    }
+
+    private static void analyzeReportOfTransactions(HBCIPassport hbciPassport, HBCIHandler hbciHandle) {
+        // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
+        Konto myaccount=hbciPassport.getAccounts()[0];
+        // wenn der obige Aufruf nicht funktioniert, muss die abzufragende
+        // Kontoverbindung manuell gesetzt werden:
+        // Konto myaccount=new Konto("DE","86055592","1234567890");
+
+        // Job zur Abholung der Kontoauszüge erzeugen
+        HBCIJob auszug=hbciHandle.newJob("KUmsAll");
+        auszug.setParam("my",myaccount);
+        // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
+        // job.setParam("startdate","21.5.2003");
+        auszug.addToQueue();
+
+        // alle Jobs in der Job-Warteschlange ausführen
+        HBCIExecStatus ret=hbciHandle.execute();
+
+        GVRKUms result=(GVRKUms)auszug.getJobResult();
+        // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
+        if (result.isOK()) {
+            // kompletten kontoauszug als string ausgeben:
+            System.out.println(result.toString());
+
+            // kontoauszug durchlaufen, jeden eintrag einmal anfassen:
+
+            List<UmsLine> lines=result.getFlatData();
+            // int  numof_lines=lines.size();
+
+            for (Iterator<UmsLine> j=lines.iterator(); j.hasNext(); ) { // alle Umsatzeinträge durchlaufen
+                UmsLine entry= j.next();
+
+                // für jeden Eintrag ein Feld mit allen Verwendungszweckzeilen extrahieren
+                List<String> usages=entry.usage;
+                // int  numof_usagelines=usages.size();
+
+                for (Iterator<String> k=usages.iterator(); k.hasNext(); ) { // alle Verwendungszweckzeilen durchlaufen
+                    String usageline= k.next();
+
+                    // ist eine bestimmte Rechnungsnummer gefunden (oder welche
+                    // Kriterien hier auch immer anzuwenden sind), ...
+                    if (usageline.equals("Rechnung 12345")) {
+                        // hier diesen Umsatzeintrag (<entry>) auswerten
+
+                        // entry.bdate enthält Buchungsdatum
+                        // entry.value enthält gebuchten Betrag
+                        // entry.usage enthält die Verwendungszweck-zeilen
+                        // mehr Informationen sie Dokumentation zu
+                        //   org.kapott.hbci.GV_Result.GVRKUms
+                    }
+                }
+            }
+
+        } else {
+            // Fehlermeldungen ausgeben
+            System.out.println("Job-Error");
+            System.out.println(result.getJobStatus().getErrorString());
+            System.out.println("Global Error");
+            System.out.println(ret.getErrorString());
+        }
+    }
+
 }
