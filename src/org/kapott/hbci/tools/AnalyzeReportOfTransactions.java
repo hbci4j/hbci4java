@@ -23,11 +23,21 @@ package org.kapott.hbci.tools;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
+import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.callback.HBCICallbackUnsupported;
+import org.kapott.hbci.concurrent.DefaultHBCIPassportFactory;
+import org.kapott.hbci.concurrent.HBCIPassportFactory;
+import org.kapott.hbci.concurrent.HBCIRunnable;
+import org.kapott.hbci.concurrent.HBCIThreadFactory;
 import org.kapott.hbci.manager.FileSystemClassLoader;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -41,6 +51,9 @@ import org.kapott.hbci.structures.Konto;
     out-of-the-box benutzt werden, da erst einige Anpassungen im Quelltext
     vorgenommen werden müssen. Es dient eher als Vorlage, wie <em>HBCI4Java</em>
     im konkreten Anwendungsfall eingesetzt werden kann.</p>
+    <p>Die Methode {@link #main(String[])} zeigt die Verwendung mit einem einzelnen Haupt-
+    Thread. die Methode {@link #main_multithreaded(String[])} skizziert die Implementierung
+    für Anwendungen mit mehreren Threads.</p>
     <p>Im Quelltext müssen folgende Stellen angepasst werden:</p>
     <ul>
       <li><p>Beim Aufruf der Methode <code>HBCIUtils.init()</code> wird
@@ -110,7 +123,9 @@ public final class AnalyzeReportOfTransactions
             String version=passport.getHBCIVersion();
             hbciHandle=new HBCIHandler((version.length()!=0)?version:"plus",passport);
 
+            // Kontoauszüge auflisten
             analyzeReportOfTransactions(passport, hbciHandle);
+
         } finally {
             if (hbciHandle!=null) {
                 hbciHandle.close();
@@ -118,6 +133,49 @@ public final class AnalyzeReportOfTransactions
                 passport.close();
             }
         }
+    }
+
+    public static void main_multithreaded(String[] args)
+        throws Exception
+    {
+
+        // Da im main-Thread keine HBCI Aktionen laufen sollen, reicht es hier, die Umgebung
+        // nur "notdürftig" zu initialisieren. Leere Konfiguration, und keine Callback-Unterstützung.
+        HBCIUtils.init(new Properties(), new HBCICallbackUnsupported());
+
+        // Die Verwendung der HBCIThreadFactory ist für die korrekte Funktionsweise von HBCI4Java zwingend erforderlich
+        // (Alternativ müsste manuell sichergestellt werden, dass jeder Thread in einer eigenen Thread-Gruppe läuft.)
+        ExecutorService executor = Executors.newCachedThreadPool(new HBCIThreadFactory());
+
+        // Einstellungen für die Aufgabe erstellen
+        Properties properties = HBCIUtils.loadPropertiesFile(new FileSystemClassLoader(),"/home/stefan.palme/temp/a.props");
+        HBCICallback callback = new MyHBCICallback();
+        HBCIPassportFactory passportFactory = new DefaultHBCIPassportFactory((Object) "Passport für Kontoauszugs-Demo");
+
+        // Aufgabe implementieren. Die HBCIRunnable übernimmt Initialisierung
+        // und Schließen von Passport und Handler automatisch.
+        Runnable runnable = new HBCIRunnable(properties, callback, passportFactory) {
+            @Override
+            protected void execute() throws Exception {
+
+                // Kontoauszüge auflisten
+                analyzeReportOfTransactions(passport, handler);
+
+            }
+        };
+
+        // Aufgabe ausführen
+        executor.submit(runnable);
+
+        // Executor runterfahren und warten, bis alle Aufgaben fertig sind
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            executor.awaitTermination(1, TimeUnit.SECONDS);
+        }
+
+        // Haupt-Thread beenden
+        HBCIUtils.done();
+
     }
 
     private static void analyzeReportOfTransactions(HBCIPassport hbciPassport, HBCIHandler hbciHandle) {
