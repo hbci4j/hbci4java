@@ -20,6 +20,11 @@ public class DefaultHBCIPassportFactory implements HBCIPassportFactory
         this(name, null);
     }
 
+    public DefaultHBCIPassportFactory(Object init)
+    {
+        this(null, init);
+    }
+
     public DefaultHBCIPassportFactory(String name, Object init)
     {
         this.name = name;
@@ -29,7 +34,14 @@ public class DefaultHBCIPassportFactory implements HBCIPassportFactory
     @Override
     public HBCIPassport createPassport() throws Exception
     {
-        return AbstractHBCIPassport.getInstance(name, init);
+        if (name == null)
+        {
+            return AbstractHBCIPassport.getInstance(init);
+        }
+        else
+        {
+            return AbstractHBCIPassport.getInstance(name, init);
+        }
     }
 
 }
