@@ -1541,9 +1541,13 @@
         </DEGdef>
         
         <DEGdef id="ParTermUebSEPADel">
-          <DE name="orderdata_required" type="JN"/>
+            <DE name="orderdata_required" type="JN"/>
         </DEGdef>
         
+        <DEGdef id="ParTermUebSEPAEdit">
+            <DE name="minpretime" type="Num" maxsize="4"/>
+            <DE name="maxpretime" type="Num" maxsize="4"/>
+        </DEGdef>
 
         <DEGdef id="ParUeb">
             <DE name="maxusage" type="Num" maxsize="2"/>
@@ -6051,6 +6055,34 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
         
+        <!-- Terminueberweisung aendern -->
+        <SEGdef id="TermUebSEPAEdit1">
+        	<DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+            
+            <value path="SegHead.code">HKCSA</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermUebSEPAEditRes1"> 
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="orderidold" type="AN" maxsize="99" minnum="0"/>
+            
+            <value path="SegHead.code">HICSA</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermUebSEPAEditPar1">
+            &GVP2;
+            <DEG type="ParTermUebSEPAEdit"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HICSAS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
         
         <!-- ================================== SEPA Standing Orders ========================= -->
         <SEGdef id="DauerSEPANew1">
@@ -7209,6 +7241,7 @@
             <SEG type="TermUebList3" minnum="0"/>
             <SEG type="TermUebSEPAList1" minnum="0"/>
             <SEG type="TermUebSEPADel1" minnum="0"/>
+            <SEG type="TermUebSEPAEdit1" minnum="0"/>
             <SEG type="Ueb2" minnum="0"/>
             <SEG type="Ueb3" minnum="0"/>
             <SEG type="Ueb4" minnum="0"/>
@@ -7338,6 +7371,7 @@
             <SEG type="TermUebListRes2" minnum="0"/>
             <SEG type="TermUebListRes3" minnum="0"/>
             <SEG type="TermUebSEPAListRes1" minnum="0"/>
+            <SEG type="TermUebSEPAEditRes1" minnum="0"/>
             <SEG type="UebGarRes1" minnum="0"/>
             <SEG type="VormerkpostenRes1" minnum="0"/>
             <SEG type="WPDepotListRes2" minnum="0"/>
@@ -7493,6 +7527,7 @@
             <SEG type="TermUebListPar3" minnum="0"/>
             <SEG type="TermUebSEPAListPar1" minnum="0"/>
             <SEG type="TermUebSEPADelPar1" minnum="0"/>
+            <SEG type="TermUebSEPAEditPar1" minnum="0"/>
             <SEG type="UebPar2" minnum="0"/>
             <SEG type="UebPar3" minnum="0"/>
             <SEG type="UebPar4" minnum="0"/>
