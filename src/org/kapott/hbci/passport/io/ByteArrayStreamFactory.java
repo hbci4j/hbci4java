@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 
 /**
  * Diese Implementierung hält die Daten im Speicher.
@@ -24,6 +25,11 @@ public class ByteArrayStreamFactory implements ResourceStreamFactory {
     @Override
     public InputStream newInputStream() throws IOException {
         return new ByteArrayInputStream(outputStream.toByteArray());
+    }
+
+    @Override
+    public URI getURI() {
+        return null;
     }
 
 }

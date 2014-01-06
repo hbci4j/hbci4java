@@ -3,6 +3,7 @@ package org.kapott.hbci.passport.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 
 /**
  * Implementierungen dieser Schnittstelle kapseln den schreibenden und lesenden Zugriff auf einzelne Resourcen.
@@ -24,5 +25,11 @@ public interface ResourceStreamFactory {
      * die mit dem letzten Aufruf von {@link #newOutputStream()} geschrieben wurden.
      */
     InputStream newInputStream() throws IOException;
+
+    /**
+     * Gibt an, wo die Resource hinterlegt ist. Kann <code>null</code> sein, wenn die Angabe im Rahmen der
+     * Implementierung nicht sinnvoll ist (z.B. in-memory Resourcen).
+     */
+    URI getURI();
 
 }
