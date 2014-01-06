@@ -232,6 +232,18 @@ public class HBCIPassportPinTan
         return file.getAbsolutePath();
     }
 
+    /**
+     * Ersetzt die Persistenz-Implementierung durch eine mit dem gegebenen Dateinamen initialisierte {@link PinTanFileStreamFactory}.
+     *
+     * <p>Darauf folgende Aufrufe von {@link #saveChanges()} werden nicht mehr die bei Initialisierung des Passports konfigurierte
+     * Persistenz-Implementierung verwenden, sondern in die Datei <code>fname</code> schreiben.</p>
+     *
+     * @param fname Dateiname der Schüsseldatei, nicht null
+     */
+    public void setFileName(String fname) {
+        streamFactory = new PinTanFileStreamFactory(fname);
+    }
+
     public void resetPassphrase()
     {
         passportKey=null;
