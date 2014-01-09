@@ -14,7 +14,6 @@ package hbci4java.sepa;
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
@@ -26,17 +25,6 @@ import org.kapott.hbci.sepa.PainVersion.Type;
  */
 public class TestPainGen
 {
-    /**
-     * Initialisiert den Test.
-     * @throws Exception
-     */
-    @BeforeClass
-    public static void beforeClass() throws Exception
-    {
-        // Siehe AbstractSEPAGenerator#marshal - damit werden die Schema-Files auch im Unit-Test gefunden.
-        System.setProperty("hbci4java.pain.debugmode","true");
-    }
-
     /**
      * Testet das Erstellen von SEPA-Ueberweisungen.
      * @throws Exception

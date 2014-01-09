@@ -18,6 +18,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.sepa.PainVersion;
 
@@ -65,7 +66,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                 if (validate)
                 {
                     Source source  = null;
-                    InputStream is = this.getClass().getResourceAsStream(file);
+                    InputStream is = this.getClass().getClassLoader().getResourceAsStream(file);
 
                     if (is != null)
                     {
@@ -74,30 +75,21 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
                     else
                     {
                         // Fallback auf File-Objekt
-
-                        // Der Pfad-Prafix ist eigentlich nur fuer die Unit-Tests.
-                        // Im normalen Betrieb ist der nicht gesetzt. Siehe "TestPainGen".
-                        boolean debug = Boolean.parseBoolean(System.getProperty("hbci4java.pain.debugmode","false"));
-                        File f = debug ? new File("src",file) : new File(file);
+                        File f = new File(file);
                         if (f.isFile() && f.canRead())
                             source = new StreamSource(f);
                     }
 
-                    if (source != null)
-                    {
-                        LOG.fine("activating schema validation against " + file);
-                        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                        Schema schema = schemaFactory.newSchema(source);
-                        marshaller.setSchema(schema);
-                    }
-                    else
-                    {
-                        LOG.warning("schema validation activated against " + file + " - but schema file could not be found");
-                    }
+                    if (source == null)
+                        throw new HBCI_Exception("schema validation activated against " + file + " - but schema file could not be found");
+
+                    LOG.fine("activating schema validation against " + file);
+                    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                    Schema schema = schemaFactory.newSchema(source);
+                    marshaller.setSchema(schema);
                 }
             }
         }
-
 
         marshaller.marshal(e, os);
     }
