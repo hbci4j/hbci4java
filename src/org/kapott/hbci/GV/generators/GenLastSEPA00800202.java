@@ -132,7 +132,7 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator
         pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSEPA());
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSEPACode.SEPA);
         pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSEPA());
-        pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentSEPACode.valueOf(sepaParams.getProperty("type")));
+        pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentSEPACode.fromValue(sepaParams.getProperty("type")));
 
         //Payment Information - Credit Transfer Transaction Information
         ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();
