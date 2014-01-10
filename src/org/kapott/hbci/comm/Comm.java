@@ -63,11 +63,13 @@ public abstract class Comm
         
         // ausgehende nachricht versenden
         HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_SEND,null);
+        HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_RAW_SEND,msg.toString(0));
         ping(msg);
 
         // nachricht empfangen
         HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_RECV,null);
         String st = pong(gen).toString();
+        HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_RAW_RECV,st);
 
         HBCIUtils.log("received message: "+st,HBCIUtils.LOG_DEBUG2);
         MSG retmsg=null;

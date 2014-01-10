@@ -515,7 +515,27 @@ public interface HBCICallback
      * Als zusätzlicher Parameter wird das XML-Dokument (als String) übergeben,
      * welches an den InfoPoint-Server gesendet wird. */
     public final static int STATUS_SEND_INFOPOINT_DATA=29;
+
+    /**
+     * Wird aufgerufen unmittelbar bevor die HBCI-Nachricht an den Server gesendet wird.
+     * Als zusaetzliche Information wird die zu sendende Nachricht als String uebergeben.
+     * Sie kann dann z.Bsp. in einem Log gesammelt werden, welches ausschliesslich
+     * (zusammen mit {@link HBCICallback#STATUS_MSG_RAW_RECV}) die gesendeten und
+     * empfangenen rohen HBCI-Nachrichten enthaelt. Sinnvoll zum Debuggen der Kommunikation
+     * mit der Bank.
+     */
+    public final static int STATUS_MSG_RAW_SEND=30;
     
+    /**
+     * Wird aufgerufen unmittelbar nachdem die HBCI-Nachricht vom Server empfangen wurde.
+     * Als zusaetzliche Information wird die empfangene Nachricht als String uebergeben.
+     * Sie kann dann z.Bsp. in einem Log gesammelt werden, welches ausschliesslich
+     * (zusammen mit {@link HBCICallback#STATUS_MSG_RAW_SEND}) die gesendeten und
+     * empfangenen rohen HBCI-Nachrichten enthaelt. Sinnvoll zum Debuggen der Kommunikation
+     * mit der Bank.
+     */
+    public final static int STATUS_MSG_RAW_RECV=31;
+
     /** Wird aufgerufen, wenn der HBCI-Kernel eine Log-Ausgabe
         erzeugt. <em>HBCI4Java</em> gibt Logging-Ausgaben nicht selbst auf
         irgendeinem Device aus, sondern sendet diese mit Hilfe der

@@ -418,6 +418,15 @@ public class HBCICallbackIOStreams
             case STATUS_SEND_INFOPOINT_DATA:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_SEND_INFOPOINT_DATA"));
                 break;
+                
+            case STATUS_MSG_RAW_SEND:
+                getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_SEND",o[0].toString()));
+                break;
+
+            case STATUS_MSG_RAW_RECV:
+                getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_RECV",o[0].toString()));
+                break;
+
             default:
                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("STATUS_INVALID",Integer.toString(statusTag)));
         }
