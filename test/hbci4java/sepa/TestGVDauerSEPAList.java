@@ -1,7 +1,5 @@
 package hbci4java.sepa;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
 import hbci4java.AbstractTest;
 
 import java.io.File;
@@ -48,6 +46,7 @@ public class TestGVDauerSEPAList extends AbstractTest {
     
     private static File dir             = null;
     
+    private String pinTanFilename       = null;
     private HBCIPassportPinTan passport = null;
     private HBCIHandler handler         = null;
     private Properties params           = new Properties();
@@ -95,7 +94,8 @@ public class TestGVDauerSEPAList extends AbstractTest {
       props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
       props.put("infoPoint.enabled",Boolean.FALSE.toString());
       
-      props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
+      pinTanFilename = dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt";
+      props.put("client.passport.PinTan.filename",pinTanFilename);
       props.put("client.passport.PinTan.init","1");
       props.put("client.passport.PinTan.checkcert","0"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
       
@@ -146,7 +146,7 @@ public class TestGVDauerSEPAList extends AbstractTest {
         if (this.passport != null)
           this.passport.close();
         
-        File file = new File(this.passport.getFileName());
+        File file = new File(pinTanFilename);
         if (!file.delete())
           throw new Exception("unable to delete " + file);
       }

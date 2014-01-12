@@ -1,9 +1,5 @@
 package hbci4java;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-import hbci4java.AbstractTest;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -47,6 +43,7 @@ public class AbstractTestGV extends AbstractTest {
     
     protected static File dir             = null;
     
+    protected String      pinTanFilename  = null;
     protected HBCIPassportPinTan passport = null;
     protected HBCIHandler handler         = null;
     protected Properties  params          = new Properties();
@@ -94,7 +91,8 @@ public class AbstractTestGV extends AbstractTest {
       props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
       props.put("infoPoint.enabled",Boolean.FALSE.toString());
       
-      props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
+      pinTanFilename = dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt";
+      props.put("client.passport.PinTan.filename",pinTanFilename);
       props.put("client.passport.PinTan.init","1");
       props.put("client.passport.PinTan.checkcert","0"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
       
@@ -139,7 +137,7 @@ public class AbstractTestGV extends AbstractTest {
         if (this.passport != null)
           this.passport.close();
         
-        File file = new File(this.passport.getFileName());
+        File file = new File(pinTanFilename);
         if (!file.delete())
           throw new Exception("unable to delete " + file);
       }
