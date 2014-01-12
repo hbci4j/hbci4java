@@ -121,7 +121,15 @@ public class GenLastSEPA00800302 extends AbstractSEPAGenerator
 
         //Payment Information
         pmtInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA3());
-        pmtInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("src.bic"));
+        if (sepaParams.getProperty("src.bic") != null) // BIC ist inzwischen optional
+        {
+            pmtInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("src.bic"));
+        }
+        else
+        {
+            pmtInf.getCdtrAgt().getFinInstnId().setOthr(new OthrIdentification());
+            pmtInf.getCdtrAgt().getFinInstnId().getOthr().setId(OthrIdentificationCode.NOTPROVIDED);
+        }
 
 
         //Payment Information - ChargeBearer
