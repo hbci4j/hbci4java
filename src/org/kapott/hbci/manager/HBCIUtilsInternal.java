@@ -287,7 +287,7 @@ public class HBCIUtilsInternal
             Class<T> typesafeClazz = (Class<T>) impl;
             return typesafeClazz.newInstance();
         }
-        catch (ReflectiveOperationException e)
+        catch (Exception e)
         {
             throw new HBCI_Exception("Could not create instance of class '" + impl.getName() + "'", e);
         }
