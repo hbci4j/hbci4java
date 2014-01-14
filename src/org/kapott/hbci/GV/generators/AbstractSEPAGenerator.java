@@ -48,7 +48,10 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         JAXBContext jaxbContext = JAXBContext.newInstance(e.getDeclaredType());
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        // Siehe https://groups.google.com/d/msg/hbci4java/RYHCai_TzHM/72Bx51B9bXUJ
+        if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         PainVersion version = this.getPainVersion();
         if (version != null)
