@@ -1695,7 +1695,7 @@ public final class HBCIUtils
     /** Konvertiert einen String in einen BigDecimal-Wert mit zwei Nachkommastellen.
      * @param st String, der konvertiert werden soll (Format "<code>1234.56</code>");
      * @return BigDecimal-Wert */
-    public static BigDecimal string2Value(String st)
+    public static BigDecimal string2BigDecimal(String st)
     {
         BigDecimal result = new BigDecimal(st);
         result.setScale(2, BigDecimal.ROUND_HALF_EVEN);
@@ -1706,7 +1706,34 @@ public final class HBCIUtils
      * um (also ohne Tausender-Trennzeichen und mit "." als Dezimaltrennzeichen).
      * @param value zu konvertierender BigDecimal-Wert
      * @return String-Darstellung dieses Wertes */
-    public static String value2String(BigDecimal value)
+    public static String bigDecimal2String(BigDecimal value)
+    {
+        DecimalFormat format=new DecimalFormat("0.00");
+        DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        format.setDecimalFormatSymbols(symbols);
+        format.setDecimalSeparatorAlwaysShown(true);
+        return format.format(value);
+    }
+
+    /** Konvertiert einen String in einen double-Wert (entspricht 
+     * <code>Double.parseDouble(st)</code>).
+     * @param st String, der konvertiert werden soll (Format "<code>1234.56</code>");
+     * @return double-Wert
+     * @deprecated use {@link #string2BigDecimal(String)} */
+    @Deprecated
+    public static double string2Value(String st)
+    {
+        return Double.parseDouble(st);
+    }
+
+    /** Wandelt einen Double-Wert in einen String im Format "<code>1234.56</code>"
+     * um (also ohne Tausender-Trennzeichen und mit "." als Dezimaltrennzeichen).
+     * @param value zu konvertierender Double-Wert
+     * @return String-Darstellung dieses Wertes
+     * @deprecated use {@link #bigDecimal2String(BigDecimal)} */
+    @Deprecated
+    public static String value2String(double value)
     {
         DecimalFormat format=new DecimalFormat("0.00");
         DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();

@@ -590,7 +590,7 @@ public abstract class HBCIJobImpl
     public void setParam(String paramname,Value v)
     {
     	if (acceptsParam(paramname+".value"))
-    		setParam(paramname+".value",HBCIUtils.value2String(v.getBigDecimalValue()));
+    		setParam(paramname+".value",HBCIUtils.bigDecimal2String(v.getBigDecimalValue()));
         
         String curr=v.getCurr();
         if (acceptsParam(paramname+".curr") && curr!=null && curr.length()!=0)

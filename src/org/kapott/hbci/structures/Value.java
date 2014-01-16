@@ -125,7 +125,7 @@ public final class Value
     @Override
     public String toString()
     {
-        return HBCIUtils.value2String(new BigDecimal(value).divide(ONE_HUNDRED))+" "+curr;
+        return HBCIUtils.bigDecimal2String(new BigDecimal(value).divide(ONE_HUNDRED))+" "+curr;
     }
     
     /** Gibt den Betrag mal 100 als Ganzzahl zurück */

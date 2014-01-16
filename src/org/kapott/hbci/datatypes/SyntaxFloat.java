@@ -62,7 +62,7 @@ public class SyntaxFloat
         hbciFormat.setDecimalFormatSymbols(symbols);
         hbciFormat.setDecimalSeparatorAlwaysShown(true);
         
-        return hbciFormat.format(HBCIUtils.string2Value(st));
+        return hbciFormat.format(HBCIUtils.string2BigDecimal(st));
     }
 
     // --------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ public class SyntaxFloat
                 hbciFormat.setDecimalSeparatorAlwaysShown(true);
                 hbciFormat.setParseBigDecimal(true);
                 
-                ret=HBCIUtils.value2String((BigDecimal) hbciFormat.parse(c));
+                ret=HBCIUtils.bigDecimal2String((BigDecimal) hbciFormat.parse(c));
             }
             
             return ret;

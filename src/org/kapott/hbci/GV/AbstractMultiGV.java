@@ -71,7 +71,7 @@ public abstract class AbstractMultiGV
                 }
                 // TODO: hier wird ziemlich unschön direkt auf
                 // die SyntaxDE-Funktionen zugegriffen
-                String v = HBCIUtils.value2String(new BigDecimal(sum).divide(new BigDecimal("100.0")));
+                String v = HBCIUtils.bigDecimal2String(new BigDecimal(sum).divide(new BigDecimal("100.0")));
                 ret = new SyntaxWrt(v, 1, 0).toString();
             	
             } else if (path.equals("sumCurr")) {
