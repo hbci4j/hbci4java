@@ -63,12 +63,12 @@ public class TransactionsToXML
             
             Element amount=doc.createElement("amount");
             amount.setAttribute("curr", transaction.value.getCurr());
-            amount.appendChild(doc.createTextNode(HBCIUtils.value2String(transaction.value.getDoubleValue())));
+            amount.appendChild(doc.createTextNode(HBCIUtils.bigDecimal2String(transaction.value.getBigDecimalValue())));
             transElem.appendChild(amount);
             
             Element saldo=doc.createElement("saldo");
             saldo.setAttribute("curr", transaction.saldo.value.getCurr());
-            saldo.appendChild(doc.createTextNode(HBCIUtils.value2String(transaction.saldo.value.getDoubleValue())));
+            saldo.appendChild(doc.createTextNode(HBCIUtils.bigDecimal2String(transaction.saldo.value.getBigDecimalValue())));
             transElem.appendChild(saldo);
             
             if (!transaction.gvcode.equals("999")) {

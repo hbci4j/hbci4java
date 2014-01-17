@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.GV_Result;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -35,6 +36,8 @@ import org.kapott.hbci.structures.Value;
 public class GVRAccInfo 
     extends HBCIJobResultImpl
 {
+    private static final BigDecimal ONE_THOUSAND = new BigDecimal("1000.00");
+    
     /** Informationen zu genau einem Konto */
     public static class AccInfo
     {
@@ -171,9 +174,9 @@ public class GVRAccInfo
             
             if (created!=null)
                 ret.append("Eröffnungsdatum: ").append(HBCIUtils.date2StringLocal(created)).append(linesep);
-            ret.append("Sollzins:").append(HBCIUtilsInternal.double2String(sollzins/1000.0));
-            ret.append(" Habenzins:").append(HBCIUtilsInternal.double2String(habenzins/1000.0));
-            ret.append(" Überziehungszins:").append(HBCIUtilsInternal.double2String(ueberzins/1000.0));
+            ret.append("Sollzins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(sollzins).divide(ONE_THOUSAND)));
+            ret.append(" Habenzins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(habenzins).divide(ONE_THOUSAND)));
+            ret.append(" Überziehungszins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(ueberzins).divide(ONE_THOUSAND)));
             ret.append(" Kredit: ").append(kredit).append(linesep);
             
             if (refAccount!=null)

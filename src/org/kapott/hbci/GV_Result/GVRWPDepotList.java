@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.GV_Result;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -280,7 +281,7 @@ public final class GVRWPDepotList
                 if (einstandspreis!=null)
                     ret.append("Einstandspreis: ").append(einstandspreis.toString()).append(linesep);
                 if (zinssatz!=0)
-                    ret.append("Zinssatz: ").append(HBCIUtilsInternal.double2String(zinssatz/1000.0)).append(linesep);
+                    ret.append("Zinssatz: ").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(zinssatz).divide(new BigDecimal("1000.0")))).append(linesep);
                 ret.append("Typ:").append(wptype).append(" Branche:").append(branche).append(" Emittent:").append(countryEmittent).append(linesep);
                 if (kauf!=null)
                     ret.append("Kauf: ").append(HBCIUtils.date2StringLocal(kauf)).append(linesep);
