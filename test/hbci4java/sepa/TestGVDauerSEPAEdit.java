@@ -47,7 +47,6 @@ public class TestGVDauerSEPAEdit extends AbstractTest {
     
     private static File dir             = null;
     
-    private String pinTanFilename       = null;
     private HBCIPassportPinTan passport = null;
     private HBCIHandler handler         = null;
     private Properties params           = new Properties();
@@ -113,8 +112,7 @@ public class TestGVDauerSEPAEdit extends AbstractTest {
       props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
       props.put("infoPoint.enabled",Boolean.FALSE.toString());
       
-      pinTanFilename = dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt";
-      props.put("client.passport.PinTan.filename",pinTanFilename);
+      props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
       props.put("client.passport.PinTan.init","1");
       props.put("client.passport.PinTan.checkcert","0"); // Check der SSL-Zertifikate abschalten - brauchen wir nicht fuer den Test
       
@@ -165,7 +163,7 @@ public class TestGVDauerSEPAEdit extends AbstractTest {
         if (this.passport != null)
           this.passport.close();
         
-        File file = new File(pinTanFilename);
+        File file = new File(this.passport.getFileName());
         if (!file.delete())
           throw new Exception("unable to delete " + file);
       }
