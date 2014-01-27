@@ -78,7 +78,7 @@ public class DTAUS_CH
             
             ret.append(expand("",6,(byte)0x20,ALIGN_LEFT));
             ret.append(value.getCurr());
-            ret.append(expand(new DecimalFormat("0.00").format(value.getDoubleValue()).replace('.',','),12,(byte)0x20,ALIGN_LEFT));
+            ret.append(expand(new DecimalFormat("0.00").format(value.getBigDecimalValue()).replace('.',','),12,(byte)0x20,ALIGN_LEFT));
             total+=value.getLongValue();
             
             ret.append(expand("",14,(byte)0x20,ALIGN_LEFT));

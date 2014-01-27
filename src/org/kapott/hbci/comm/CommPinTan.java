@@ -133,6 +133,7 @@ public final class CommPinTan
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/octet-stream");
+            conn.setFixedLengthStreamingMode(b.length);
 
             conn.connect();                        
             OutputStream out=conn.getOutputStream();
