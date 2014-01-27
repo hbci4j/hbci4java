@@ -23,6 +23,7 @@ package org.kapott.hbci.passport;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -44,7 +45,6 @@ import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.passport.io.TemporaryFileOutputStream;
 import org.kapott.hbci.security.Sig;
 
 /** <p>Passport-Klasse für HBCI mit PIN/TAN. Dieses Sicherheitsverfahren wird erst
@@ -214,7 +214,11 @@ public class HBCIPassportPinTan
             cipher.init(Cipher.ENCRYPT_MODE,passportKey,paramspec);
 
             File passportfile=new File(getFileName());
-            ObjectOutputStream o=new ObjectOutputStream(new CipherOutputStream(TemporaryFileOutputStream.create(passportfile),cipher));
+            File directory=passportfile.getAbsoluteFile().getParentFile();
+            String prefix=passportfile.getName()+"_";
+            File tempfile=File.createTempFile(prefix,"",directory);
+
+            ObjectOutputStream o=new ObjectOutputStream(new CipherOutputStream(new FileOutputStream(tempfile),cipher));
 
             o.writeObject(getCountry());
             o.writeObject(getBLZ());
@@ -245,6 +249,8 @@ public class HBCIPassportPinTan
             o.writeObject(s);
 
             o.close();
+            passportfile.delete();
+            tempfile.renameTo(passportfile);
         } catch (Exception e) {
             throw new HBCI_Exception("*** saving of passport file failed",e);
         }
