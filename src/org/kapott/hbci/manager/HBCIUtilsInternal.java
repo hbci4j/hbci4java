@@ -31,7 +31,6 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.kapott.hbci.callback.HBCICallback;
-import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 
@@ -253,43 +252,4 @@ public class HBCIUtilsInternal
             getInfoPointConnector().sendPublicKeys(passport, msgData);
         }
     }
-
-    /**
-     * Erzeugt eine neue Instanz einer Klasse.
-     *
-     * <p>Dabei wird geprüft, ob die angeforderte Klasse ein gegebenes Interface implementiert bzw. eine gegebene
-     * Superklasse erweitert.</p>
-     *
-     * @param iface Interface oder Superklasse der angeforderten Klasse
-     * @param name Name der Klasse
-     * @return eine neue Instanz der Klasse
-     * @throws HBCI_Exception falls die Instanz aus irgendeinem Grund nicht erzeugt werden kann
-     */
-    public static <T> T newInstance(Class<T> iface, String name) {
-
-        Class<?> impl;
-        try {
-            impl = Class.forName(name);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new HBCI_Exception("Class '" + name + "' not found", e);
-        }
-
-        if (!iface.isAssignableFrom(impl)) {
-            throw new HBCI_Exception("Class '" + impl.getName() + "' is not a subclass of '" + iface.getName() + "'");
-        }
-
-        try {
-            @SuppressWarnings("unchecked") // actually, this *is* checked above
-            Class<T> typesafeClazz = (Class<T>) impl;
-            return typesafeClazz.newInstance();
-        }
-        catch (ReflectiveOperationException e)
-        {
-            throw new HBCI_Exception("Could not create instance of class '" + impl.getName() + "'", e);
-        }
-
-    }
-
 }

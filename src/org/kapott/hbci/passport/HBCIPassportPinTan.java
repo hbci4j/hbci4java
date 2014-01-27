@@ -21,7 +21,9 @@
 
 package org.kapott.hbci.passport;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -43,8 +45,7 @@ import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.passport.io.PinTanFileStreamFactory;
-import org.kapott.hbci.passport.io.ResourceStreamFactory;
+import org.kapott.hbci.passport.io.TemporaryFileOutputStream;
 import org.kapott.hbci.security.Sig;
 
 /** <p>Passport-Klasse für HBCI mit PIN/TAN. Dieses Sicherheitsverfahren wird erst
@@ -71,7 +72,7 @@ import org.kapott.hbci.security.Sig;
 public class HBCIPassportPinTan
     extends AbstractPinTanPassport
 {
-    private ResourceStreamFactory streamFactory;
+    private String    filename;
     private SecretKey passportKey;
 
     private final static byte[] CIPHER_SALT={(byte)0x26,(byte)0x19,(byte)0x38,(byte)0xa7,
@@ -88,20 +89,15 @@ public class HBCIPassportPinTan
         this(initObject,0);
 
         String  header="client.passport.PinTan.";
-        String  factory=HBCIUtils.getParam(header+"streamfactory");
+        String  fname=HBCIUtils.getParam(header+"filename");
         boolean init=HBCIUtils.getParam(header+"init","1").equals("1");
         
-        if (factory==null)
-        {
-            // Default, wenn keine eigene Factory konfiguriert ist
-            factory = PinTanFileStreamFactory.class.getName();
+        if (fname==null) {
+            throw new NullPointerException("client.passport.PinTan.filename must not be null");
         }
-
-        HBCIUtils.log("loading passport data through "+factory,HBCIUtils.LOG_DEBUG);
-
-        ResourceStreamFactory instance = HBCIUtilsInternal.newInstance(ResourceStreamFactory.class, factory);
-        setStreamFactory(instance);
-
+        
+        HBCIUtils.log("loading passport data from file "+fname,HBCIUtils.LOG_DEBUG);
+        setFileName(fname);
         setCertFile(HBCIUtils.getParam(header+"certfile"));
         setCheckCert(HBCIUtils.getParam(header+"checkcert","1").equals("1"));
         
@@ -110,23 +106,23 @@ public class HBCIPassportPinTan
         setProxyPass(HBCIUtils.getParam(header+"proxypass",""));
 
         if (init) {
-            HBCIUtils.log("loading passport data",HBCIUtils.LOG_DEBUG);
+            HBCIUtils.log("loading data from file "+fname,HBCIUtils.LOG_DEBUG);
             
             ObjectInputStream o=null;
             try {
 
-                InputStream fs = null;
+                FileInputStream fs = null;
                 try {
-                    fs = streamFactory.newInputStream();
+                    fs = new FileInputStream(fname);
                 }
-                catch (Exception e) {
+                catch (IOException e) {
                 }
 
                 if (fs == null) {
                     HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
                     askForMissingData(true,true,true,true,true,true,true);
                     saveChanges();
-                    fs = streamFactory.newInputStream();
+                    fs = new FileInputStream(fname);
                 }
 
                 int retries=Integer.parseInt(HBCIUtils.getParam("client.retries.passphrase","3"));
@@ -200,11 +196,18 @@ public class HBCIPassportPinTan
         }
     }
     
-    private void setStreamFactory(ResourceStreamFactory instance)
+    /** Gibt den Dateinamen der Schlüsseldatei zurück.
+        @return Dateiname der Schlüsseldatei */
+    public String getFileName() 
     {
-        streamFactory = instance;
+        return filename;
     }
 
+    public void setFileName(String filename) 
+    { 
+        this.filename=filename;
+    }
+    
     public void resetPassphrase()
     {
         passportKey=null;
@@ -220,7 +223,8 @@ public class HBCIPassportPinTan
             Cipher cipher=Cipher.getInstance("PBEWithMD5AndDES");
             cipher.init(Cipher.ENCRYPT_MODE,passportKey,paramspec);
 
-            ObjectOutputStream o=new ObjectOutputStream(new CipherOutputStream(streamFactory.newOutputStream(),cipher));
+            File passportfile=new File(getFileName());
+            ObjectOutputStream o=new ObjectOutputStream(new CipherOutputStream(TemporaryFileOutputStream.create(passportfile),cipher));
 
             o.writeObject(getCountry());
             o.writeObject(getBLZ());
