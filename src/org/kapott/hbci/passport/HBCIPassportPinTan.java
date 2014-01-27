@@ -23,7 +23,6 @@ package org.kapott.hbci.passport;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -108,23 +107,14 @@ public class HBCIPassportPinTan
         if (init) {
             HBCIUtils.log("loading data from file "+fname,HBCIUtils.LOG_DEBUG);
             
+            if (!new File(fname).canRead()) {
+                HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
+                askForMissingData(true,true,true,true,true,true,true);
+                saveChanges();
+            }
+
             ObjectInputStream o=null;
             try {
-
-                FileInputStream fs = null;
-                try {
-                    fs = new FileInputStream(fname);
-                }
-                catch (IOException e) {
-                }
-
-                if (fs == null) {
-                    HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
-                    askForMissingData(true,true,true,true,true,true,true);
-                    saveChanges();
-                    fs = new FileInputStream(fname);
-                }
-
                 int retries=Integer.parseInt(HBCIUtils.getParam("client.retries.passphrase","3"));
                 
                 while (true) {
@@ -137,7 +127,7 @@ public class HBCIPassportPinTan
                     
                     o=null;
                     try {
-                        o=new ObjectInputStream(new CipherInputStream(fs,cipher));
+                        o=new ObjectInputStream(new CipherInputStream(new FileInputStream(fname),cipher));
                     } catch (StreamCorruptedException e) {
                         passportKey=null;
                         
