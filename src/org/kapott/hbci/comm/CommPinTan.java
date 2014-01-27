@@ -147,6 +147,7 @@ public final class CommPinTan
         } catch (Exception e) {
             HBCI_Exception he = new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_SENDERR"),e);
             he.setFatal(true); // Abbruch. Auch dann, wenn es ein anonymer BPD-Abruf war
+            throw he;
         }
     }
 
