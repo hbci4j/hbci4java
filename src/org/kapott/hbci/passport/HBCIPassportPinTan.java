@@ -207,9 +207,6 @@ public class HBCIPassportPinTan
         streamFactory = instance;
     }
 
-    /** Gibt den Dateinamen der Schlüsseldatei zurück, sofern die konfigurierte {@link ResourceStreamFactory} dies unterstützt.
-        @see <code>client.passport.PinTan.streamfactory</code>
-        @return Dateiname der Schlüsseldatei, ggf. null */
     public String getFileName()
     {
         URI resourceLocation = streamFactory.getURI();
