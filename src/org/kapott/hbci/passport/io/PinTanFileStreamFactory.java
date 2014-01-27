@@ -19,13 +19,9 @@ public class PinTanFileStreamFactory implements ResourceStreamFactory {
     private String fname;
 
     public PinTanFileStreamFactory() {
-        this(HBCIUtils.getParam("client.passport.PinTan.filename"));
-    }
-
-    public PinTanFileStreamFactory(String fname) {
-        this.fname = fname;
+        fname = HBCIUtils.getParam("client.passport.PinTan.filename");
         if (fname == null) {
-            throw new NullPointerException("file name (client.passport.PinTan.filename?) must not be null");
+            throw new NullPointerException("client.passport.PinTan.filename must not be null");
         }
         HBCIUtils.log("loading passport data from file "+fname,HBCIUtils.LOG_DEBUG);
     }
