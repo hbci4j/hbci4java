@@ -30,7 +30,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1091,6 +1090,8 @@ public abstract class HBCIJobImpl
       }
       Konto k = new Konto();
       k.number    = number;
+      k.iban      = this.getLowlevelParam(prefix + "iban");
+      k.bic       = this.getLowlevelParam(prefix + "bic");
       k.subnumber = this.getLowlevelParam(prefix + "subnumber");
       k.blz       = this.getLowlevelParam(prefix + "KIK.blz");
       k.country   = this.getLowlevelParam(prefix + "KIK.country");

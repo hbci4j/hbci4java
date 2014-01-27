@@ -1042,7 +1042,7 @@ public abstract class AbstractPinTanPassport
                                 if (k != null)
                                   hktan.setParam("orderaccount",k);
                                 else
-                                  HBCIUtils.log("orderaccount needed, but not found in " + task.getHBCICode(),HBCIUtils.LOG_DEBUG);
+                                  HBCIUtils.log("orderaccount needed, but not found in " + task.getHBCICode(),HBCIUtils.LOG_WARN);
                               }
                             }
                             

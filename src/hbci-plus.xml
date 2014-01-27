@@ -5003,7 +5003,7 @@
             <DEG type="SegHeadUser" name="SegHead"/>
             <DE name="process" type="Code" maxsize="1"/>
             <DE name="ordersegcode" type="AN" maxsize="6" minnum="0"/>
-            <DEG name="OrderAccount" type="KTV3" minnum="0" />
+            <DEG name="OrderAccount" type="KTVInt" minnum="0" />
             <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
             <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
             <DE name="listidx" type="AN" maxsize="20" minnum="0"/>

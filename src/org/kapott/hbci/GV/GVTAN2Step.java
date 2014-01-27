@@ -71,6 +71,8 @@ public class GVTAN2Step
 
         addConstraint("ordersegcode", "ordersegcode","", LogFilter.FILTER_NONE);
 
+        addConstraint("orderaccount.bic","OrderAccount.bic",null, LogFilter.FILTER_MOST);
+        addConstraint("orderaccount.iban","OrderAccount.iban",null, LogFilter.FILTER_IDS);
         addConstraint("orderaccount.number","OrderAccount.number",null, LogFilter.FILTER_IDS);
         addConstraint("orderaccount.subnumber","OrderAccount.subnumber","", LogFilter.FILTER_MOST);
         addConstraint("orderaccount.blz","OrderAccount.KIK.blz",null, LogFilter.FILTER_MOST);
