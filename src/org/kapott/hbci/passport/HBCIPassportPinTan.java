@@ -21,12 +21,10 @@
 
 package org.kapott.hbci.passport;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
-import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -205,28 +203,6 @@ public class HBCIPassportPinTan
     private void setStreamFactory(ResourceStreamFactory instance)
     {
         streamFactory = instance;
-    }
-
-    public String getFileName()
-    {
-        URI resourceLocation = streamFactory.getURI();
-        if (resourceLocation == null)
-        {
-            HBCIUtils.log("file name expected, but passport data is not backed by any URI (" + streamFactory.getClass() + ")", HBCIUtils.LOG_WARN);
-            return null;
-        }
-        File file;
-        try
-        {
-            file = new File(resourceLocation);
-        }
-        catch (IllegalArgumentException e)
-        {
-            HBCIUtils.log("file name expected, but passport data is not backed by compatible URI (" + streamFactory.getClass()
-                            + " returned " + resourceLocation + ")", HBCIUtils.LOG_WARN);
-            return null;
-        }
-        return file.getAbsolutePath();
     }
 
     public void resetPassphrase()

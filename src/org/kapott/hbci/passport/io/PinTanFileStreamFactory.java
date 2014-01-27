@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 
 import org.kapott.hbci.manager.HBCIUtils;
 
@@ -34,11 +33,6 @@ public class PinTanFileStreamFactory implements ResourceStreamFactory {
     @Override
     public OutputStream newOutputStream() throws IOException {
         return TemporaryFileOutputStream.create(new File(fname));
-    }
-
-    @Override
-    public URI getURI() {
-        return new File(fname).toURI();
     }
 
 }
