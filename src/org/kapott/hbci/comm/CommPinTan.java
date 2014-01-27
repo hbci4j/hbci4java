@@ -184,6 +184,8 @@ public final class CommPinTan
             conn.disconnect();
             return new StringBuffer(filter.decode(ret.toString()));
         } catch (Exception e) {
+            // Die hier marieren wir nicht als fatal - ich meine mich zu erinnern,
+            // dass es Banken gibt, die einen anonymen BPD-Abruf mit einem HTTP-Fehlercode quittieren
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_RECVERR"),e);
         }
     }
