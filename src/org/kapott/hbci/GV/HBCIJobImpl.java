@@ -1076,21 +1076,23 @@ public abstract class HBCIJobImpl
      */
     public Konto getOrderAccount()
     {
-      // Checken, ob wir das Konto unter "My.number" haben
+      // Checken, ob wir das Konto unter "My.[number/iban]" haben
       String prefix = this.getName() + ".My.";
       String number = this.getLowlevelParam(prefix + "number");
-      if (number == null || number.length() == 0)
+      String iban   = this.getLowlevelParam(prefix + "iban");
+      if ((number == null || number.length() == 0) && (iban == null || iban.length() == 0))
       {
-        // OK, vielleicht unter "KTV.number"?
+        // OK, vielleicht unter "KTV.[number/iban]"?
         prefix = this.getName() + ".KTV.";
         number = this.getLowlevelParam(prefix + "number");
+        iban   = this.getLowlevelParam(prefix + "iban");
 
-        if (number == null || number.length() == 0)
+        if ((number == null || number.length() == 0) && (iban == null || iban.length() == 0))
           return null; // definitiv kein Konto vorhanden
       }
       Konto k = new Konto();
       k.number    = number;
-      k.iban      = this.getLowlevelParam(prefix + "iban");
+      k.iban      = iban;
       k.bic       = this.getLowlevelParam(prefix + "bic");
       k.subnumber = this.getLowlevelParam(prefix + "subnumber");
       k.blz       = this.getLowlevelParam(prefix + "KIK.blz");

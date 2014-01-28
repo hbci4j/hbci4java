@@ -1036,13 +1036,20 @@ public abstract class AbstractPinTanPassport
                               // (ggf. kostenpflichtigen!) TAN.
                               //  0: Auftraggeberkonto darf nicht angegeben werden
                               //  2: Auftraggeberkonto muss angegeben werden, wenn im Geschäftsvorfall enthalten
-                              if (secmechInfo.getProperty("needorderaccount","").equals("2"))
+                              String noa = secmechInfo.getProperty("needorderaccount","");
+                              HBCIUtils.log("needorderaccount=" + noa,HBCIUtils.LOG_INFO);
+                              if (noa.equals("2"))
                               {
                                 Konto k = task.getOrderAccount();
                                 if (k != null)
-                                  hktan.setParam("orderaccount",k);
+                                {
+                                    HBCIUtils.log("applying orderaccount to HKTAN for " + task.getHBCICode(),HBCIUtils.LOG_INFO);
+                                    hktan.setParam("orderaccount",k);
+                                }
                                 else
-                                  HBCIUtils.log("orderaccount needed, but not found in " + task.getHBCICode(),HBCIUtils.LOG_WARN);
+                                {
+                                    HBCIUtils.log("orderaccount needed, but not found in " + task.getHBCICode(),HBCIUtils.LOG_WARN);
+                                }
                               }
                             }
                             
