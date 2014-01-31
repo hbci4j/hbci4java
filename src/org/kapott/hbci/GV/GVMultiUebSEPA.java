@@ -22,6 +22,7 @@
 package org.kapott.hbci.GV;
 
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.LogFilter;
 
 /**
  * Job-Implementierung fuer SEPA-Multi-Ueberweisungen.
@@ -63,5 +64,8 @@ public class GVMultiUebSEPA extends GVUebSEPA
     public GVMultiUebSEPA(HBCIHandler handler, String name)
     {
         super(handler, name);
+
+        // batch-booking, sepa default rule is 'true' = 1
+        addConstraint("batchbook", "sepa.batchbook", "1", LogFilter.FILTER_NONE);
     }
 }

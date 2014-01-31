@@ -8,6 +8,7 @@ package org.kapott.hbci.GV;
 import org.kapott.hbci.GV_Result.AbstractGVRLastSEPA;
 import org.kapott.hbci.GV_Result.GVRLastSEPA;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.LogFilter;
 
 /**
  * Implementierung des HBCI-Jobs fuer die SEPA-Basis-Multi-Lastschrift.
@@ -41,5 +42,8 @@ public class GVMultiLastSEPA extends GVLastSEPA
     public GVMultiLastSEPA(HBCIHandler handler, String lowlevelName, AbstractGVRLastSEPA result)
     {
         super(handler, lowlevelName, result);
+
+        // batch-booking, sepa default rule is 'true' = 1
+        addConstraint("batchbook", "sepa.batchbook", "1", LogFilter.FILTER_NONE);
     }
 }

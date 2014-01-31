@@ -134,6 +134,9 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
             cdtTrxTxInfs.add(createCreditTransferTransactionInformationSCT(sepaParams, null));
         }
 
+        if ( "0".equals(sepaParams.getProperty("batchbook")))
+            pmtInf.setBtchBookg(false);
+
         ObjectFactory of = new ObjectFactory();
         this.marshal(of.createDocument(doc), os, validate);
     }
