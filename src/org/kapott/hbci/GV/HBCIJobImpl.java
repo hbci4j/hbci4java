@@ -586,25 +586,35 @@ public abstract class HBCIJobImpl
         @param paramname die Basis der Parameter für die Geldbetragsdaten (für "<code>btg.value</code>" und
         "<code>btg.curr</code>" wäre das also "<code>btg</code>")
         @param v ein Value-Objekt, aus welchem die zu setzenden Parameterdaten entnommen werden */
-    public void setParam(String paramname,Value v)
+    public void setParam(String paramname, Value v)
     {
-    	if (acceptsParam(paramname+".value"))
-    		setParam(paramname+".value",HBCIUtils.bigDecimal2String(v.getBigDecimalValue()));
-        
+        setParam(paramname, null, v);
+    }
+
+    public void setParam(String paramname, Integer index, Value v)
+    {
+        if (acceptsParam(paramname+".value"))
+            setParam(paramname+".value",index,HBCIUtils.bigDecimal2String(v.getBigDecimalValue()));
+
         String curr=v.getCurr();
         if (acceptsParam(paramname+".curr") && curr!=null && curr.length()!=0)
-            setParam(paramname+".curr",curr);
+            setParam(paramname+".curr",index,curr);
     }
-    
+
     /** Setzen eines Job-Parameters, bei dem ein Datums als Wert erwartet wird. Diese Methode
         dient als Wrapper für {@link #setParam(String,String)}, um das Datum in einen korrekt
         formatierten String umzuwandeln. Das "richtige" Datumsformat ist dabei abhängig vom
         aktuellen Locale.
         @param paramName Name des zu setzenden Job-Parameters
-        @param date Datum, welches als Wert für den Job-Parameter benutzt werden soll */     
-    public void setParam(String paramName,Date date)
+        @param date Datum, welches als Wert für den Job-Parameter benutzt werden soll */
+    public void setParam(String paramName, Date date)
     {
-        setParam(paramName,HBCIUtils.date2StringISO(date));
+        setParam(paramName, null, date);
+    }
+
+    public void setParam(String paramName, Integer index, Date date)
+    {
+        setParam(paramName, index, HBCIUtils.date2StringISO(date));
     }
 
     /** Setzen eines Job-Parameters, bei dem ein Integer-Wert Da als Wert erwartet wird. Diese Methode

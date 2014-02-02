@@ -181,6 +181,8 @@ public interface HBCIJob
      @param date Datum, welches als Wert für den Job-Parameter benutzt werden soll */
     public void setParam(String paramName,Date date);
 
+    public void setParam(String paramName, Integer index, Date date);
+
     /** Setzen eines Job-Parameters, bei dem ein Integer-Wert Da als Wert erwartet wird. Diese Methode
      dient nur als Wrapper für {@link #setParam(String,String)}.
      @param paramName Name des zu setzenden Job-Parameters
@@ -215,6 +217,8 @@ public interface HBCIJob
      @param index der Index bei Index-Parametern, sonst <code>null</code>
      @param value Wert, auf den der Parameter gesetzt werden soll */
     public void setParam(String paramName,Integer index,String value);
+
+    public void setParam(String paramname, Integer index, Value v);
 
     /** <p>Hinzufügen dieses Jobs zu einem HBCI-Dialog. Diese Methode arbeitet analog zu 
         {@link #addToQueue(String)}, nur dass hier
