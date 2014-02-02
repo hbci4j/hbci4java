@@ -34,7 +34,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      */
     protected final static String ENDTOEND_ID_NOTPROVIDED = "NOTPROVIDED";
     
-    private Properties sepaParams    = new Properties();
+    protected final Properties sepaParams = new Properties();
     private PainVersion pain         = null;
     private ISEPAGenerator generator = null;
 
@@ -289,7 +289,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * Liefert den passenden SEPA-Generator.
      * @return der SEPA-Generator.
      */
-    private ISEPAGenerator getSEPAGenerator()
+    protected final ISEPAGenerator getSEPAGenerator()
     {
         if (this.generator == null)
         {

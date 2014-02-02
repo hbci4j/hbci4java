@@ -21,6 +21,7 @@ import javax.xml.validation.SchemaFactory;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.structures.Value;
 
 /**
  * Abstrakte Basis-Implementierung der SEPA-Generatoren.
@@ -191,4 +192,10 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         }
     }
 
+    public Value sumBtgValueObject(Properties properties) {
+        Integer maxIndex = maxIndex(properties);
+        BigDecimal btg = sumBtgValue(properties, maxIndex);
+        String curr = properties.getProperty(insertIndex("btg.curr", maxIndex == null ? null : 1));
+        return new Value(btg.doubleValue(), curr);
+    }
 }
