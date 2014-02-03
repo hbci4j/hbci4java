@@ -21,7 +21,9 @@
 
 package org.kapott.hbci.GV;
 
+import org.kapott.hbci.GV.generators.AbstractSEPAGenerator;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.LogFilter;
 
 /**
  * Job-Implementierung fuer SEPA-Multi-Ueberweisungen.
@@ -63,5 +65,17 @@ public class GVMultiUebSEPA extends GVUebSEPA
     public GVMultiUebSEPA(HBCIHandler handler, String name)
     {
         super(handler, name);
+
+        // batch-booking, sepa default rule is 'true' = 1
+        addConstraint("batchbook", "sepa.batchbook", "1", LogFilter.FILTER_NONE);
+
+        addConstraint("Total.value", "Total.value", null, LogFilter.FILTER_MOST);
+        addConstraint("Total.curr", "Total.curr", null, LogFilter.FILTER_NONE);
+    }
+
+    @Override protected void createSEPAFromParams()
+    {
+        super.createSEPAFromParams();
+        setParam("Total", ((AbstractSEPAGenerator) getSEPAGenerator()).sumBtgValueObject(sepaParams));
     }
 }
