@@ -195,7 +195,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
     public Value sumBtgValueObject(Properties properties) {
         Integer maxIndex = maxIndex(properties);
         BigDecimal btg = sumBtgValue(properties, maxIndex);
-        String curr = properties.getProperty(insertIndex("btg.curr", maxIndex == null ? null : 1));
+        String curr = properties.getProperty(insertIndex("btg.curr", maxIndex == null ? null : 0));
         return new Value(btg.doubleValue(), curr);
     }
 }
