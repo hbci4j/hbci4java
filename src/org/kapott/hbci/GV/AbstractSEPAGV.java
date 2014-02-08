@@ -336,6 +336,10 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
             HBCIUtils.log("schema validation enabled: " + validate,HBCIUtils.LOG_DEBUG);
     	    gen.generate(this.sepaParams, o, validate);
     	}
+    	catch (HBCI_Exception he)
+    	{
+    	    throw he;
+    	}
     	catch (Exception e)
     	{
     	    throw new HBCI_Exception("*** the _sepapain segment for this job can not be created",e);
