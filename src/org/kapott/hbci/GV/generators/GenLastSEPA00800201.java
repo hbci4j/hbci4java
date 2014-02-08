@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import javax.xml.datatype.DatatypeFactory;
 
+import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.AccountIdentificationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.AmendmentInformationDetailsSDD;
@@ -131,8 +132,17 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
         pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSDD());
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSDDCode.SEPA);
         pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSDD());
-        pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentCodeSDD.fromValue(sepaParams.getProperty("type")));
-
+        
+        String type = sepaParams.getProperty("type");
+        try
+        {
+            pmtInf.getPmtTpInf().getLclInstrm().setCd(LocalInstrumentCodeSDD.fromValue(type));
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new HBCI_Exception("Lastschrift-Art " + type + " wird in der SEPA-Version 008.002.01 Ihrer Bank noch nicht unterstützt",e);
+        }
+        
         //Payment Information - Credit Transfer Transaction Information
         ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();
         if (maxIndex != null)
