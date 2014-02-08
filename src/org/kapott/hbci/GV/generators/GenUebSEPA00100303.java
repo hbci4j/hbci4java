@@ -27,6 +27,8 @@ import org.kapott.hbci.sepa.jaxb.pain_001_003_03.FinancialInstitutionIdentificat
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.FinancialInstitutionIdentificationSEPA3;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.GroupHeaderSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ObjectFactory;
+import org.kapott.hbci.sepa.jaxb.pain_001_003_03.OthrIdentification;
+import org.kapott.hbci.sepa.jaxb.pain_001_003_03.OthrIdentificationCode;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PartyIdentificationSEPA1;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PartyIdentificationSEPA2;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PaymentIdentificationSEPA;
@@ -115,7 +117,16 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
 
         //Payment Information - DebtorAgent
         pmtInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA3());
-        pmtInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty("src.bic"));
+        String srcBic = sepaParams.getProperty("src.bic");
+        if (srcBic != null && srcBic.length() > 0) // BIC ist inzwischen optional
+        {
+            pmtInf.getDbtrAgt().getFinInstnId().setBIC(srcBic);
+        }
+        else
+        {
+            pmtInf.getDbtrAgt().getFinInstnId().setOthr(new OthrIdentification());
+            pmtInf.getDbtrAgt().getFinInstnId().getOthr().setId(OthrIdentificationCode.NOTPROVIDED);
+        }
 
 
         //Payment Information - ChargeBearer
