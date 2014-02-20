@@ -95,6 +95,7 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator
         doc.getCstmrDrctDbtInitn().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         doc.getCstmrDrctDbtInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
         doc.getCstmrDrctDbtInitn().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
+        doc.getCstmrDrctDbtInitn().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
 
 
         //Payment Information

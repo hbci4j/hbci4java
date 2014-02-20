@@ -29,10 +29,10 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PartyIdentificationSEPA2;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentInstructionInformationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentMethodSCTCode;
-import org.kapott.hbci.sepa.jaxb.pain_001_002_03.RemittanceInformationSEPA1Choice;
-import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ServiceLevelSEPACode;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentTypeInformationSCT1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.RemittanceInformationSEPA1Choice;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ServiceLevelSEPA;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ServiceLevelSEPACode;
 
 /**
  * SEPA-Generator fuer pain.001.002.03.
@@ -76,6 +76,7 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
         doc.getCstmrCdtTrfInitn().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         doc.getCstmrCdtTrfInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
         doc.getCstmrCdtTrfInitn().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
+        doc.getCstmrCdtTrfInitn().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
 
 
         //Payment Information

@@ -81,7 +81,8 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
         doc.getCstmrCdtTrfInitn().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         doc.getCstmrCdtTrfInitn().getGrpHdr().setInitgPty(new PartyIdentificationSEPA1());
         doc.getCstmrCdtTrfInitn().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
-
+        doc.getCstmrCdtTrfInitn().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
+        
 
         //Payment Information
         ArrayList<PaymentInstructionInformationSCT> pmtInfs = (ArrayList<PaymentInstructionInformationSCT>) doc.getCstmrCdtTrfInitn().getPmtInf();
