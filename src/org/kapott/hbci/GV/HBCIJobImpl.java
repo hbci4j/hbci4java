@@ -217,8 +217,14 @@ public abstract class HBCIJobImpl
             }
         }
         
-        if (maxVersion==0) {
-            throw new JobNotSupportedException(jobnameLL);
+        if (maxVersion==0)
+        {
+            String msg=HBCIUtilsInternal.getLocMsg("EXCMSG_GVNOTSUPP",jobnameLL);
+            if (!HBCIUtilsInternal.ignoreError(handler.getPassport(),"client.errors.ignoreJobNotSupported",msg))
+                throw new JobNotSupportedException(jobnameLL);
+            
+            maxVersion = 1;
+            HBCIUtils.log("Using segment version " + maxVersion + " for job " + jobnameLL + ", although not found in BPD. This may fail", HBCIUtils.LOG_WARN);
         }
         
         // namen+versionsnummer speichern
@@ -550,29 +556,37 @@ public abstract class HBCIJobImpl
         @param acc ein Konto-Objekt, aus welchem die zu setzenden Parameterdaten entnommen werden */
     public void setParam(String paramname,Konto acc)
     {
+        setParam(paramname, null, acc);
+    }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJob#setParam(java.lang.String, java.lang.Integer, org.kapott.hbci.structures.Konto)
+     */
+    public void setParam(String paramname,Integer index,Konto acc)
+    {
         if (acceptsParam(paramname+".country") && acc.country!=null && acc.country.length()!=0)
-            setParam(paramname+".country",acc.country);
+            setParam(paramname+".country",index,acc.country);
         
         if (acceptsParam(paramname+".blz") && acc.blz!=null && acc.blz.length()!=0)
-            setParam(paramname+".blz",acc.blz);
+            setParam(paramname+".blz",index,acc.blz);
         
         if (acceptsParam(paramname+".number") && acc.number!=null && acc.number.length()!=0)
-            setParam(paramname+".number",acc.number);
+            setParam(paramname+".number",index,acc.number);
         
         if (acceptsParam(paramname+".subnumber") && acc.subnumber!=null && acc.subnumber.length()!=0)
-            setParam(paramname+".subnumber",acc.subnumber);
+            setParam(paramname+".subnumber",index,acc.subnumber);
         
         if (acceptsParam(paramname+".name") && acc.name!=null && acc.name.length()!=0)
-            setParam(paramname+".name",acc.name);
+            setParam(paramname+".name",index,acc.name);
         
         if (acceptsParam(paramname+".curr") && acc.curr!=null && acc.curr.length()!=0) 
-        	setParam(paramname+".curr",acc.curr);
+        	setParam(paramname+".curr",index,acc.curr);
 
         if (acceptsParam(paramname+".bic") && acc.bic!=null && acc.bic.length()!=0)
-            setParam(paramname+".bic",acc.bic);
+            setParam(paramname+".bic",index,acc.bic);
         
         if (acceptsParam(paramname+".iban") && acc.iban!=null && acc.iban.length()!=0)
-            setParam(paramname+".iban",acc.iban);
+            setParam(paramname+".iban",index,acc.iban);
         
     }
 

@@ -161,6 +161,14 @@ public interface HBCIJob
      @param acc ein Konto-Objekt, aus welchem die zu setzenden Parameterdaten entnommen werden */
     public void setParam(String paramname,Konto acc);
 
+    /**
+     * @see HBCIJob#setParam(String, Konto) - jedoch mit Index.
+     * @param paramname
+     * @param index
+     * @param acc
+     */
+    public void setParam(String paramname,Integer index,Konto acc);
+
     /** Setzen eines komplexen Job-Parameters (Geldbetrag). Einige Jobs benötigten Geldbeträge
      als Parameter. Diese müssten auf "normalem" Wege durch zwei Aufrufe von 
      {@link #setParam(String,String)} erzeugt werden (je einer für
