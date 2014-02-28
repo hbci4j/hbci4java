@@ -32,7 +32,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * Nach Ruecksprache mit Holger vom onlinebanking-forum.de weiss ich aber, dass VRNetworld
      * den auch verwendet und er von Banken als solcher erkannt wird.
      */
-    protected final static String ENDTOEND_ID_NOTPROVIDED = "NOTPROVIDED";
+    public final static String ENDTOEND_ID_NOTPROVIDED = "NOTPROVIDED";
     
     protected final Properties sepaParams = new Properties();
     private PainVersion pain         = null;
@@ -263,28 +263,14 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	String result = getSEPAParam("messageId");
     	if (result == null)
     	{
-    	    Date now = new Date();
-    	    result = now.getTime() + "-" + getMainPassport().getUserId();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss:SSSS");
+    	    result = "hbci4java-" + format.format(new Date());
     	    result = result.substring(0, Math.min(result.length(), 35));
     	    setSEPAParam("messageId", result);
     	}
     	return result;
     }
 
-    /**
-     * Erstellt einen Timestamp im ISODateTime Forma.
-     * 
-     * @discuss Diese methode wäre bestimmt auch gut in der SEPAGeneratorFactory
-     *          oder den einzelnen Generator Klassen nützlich
-     * @return Aktuelles Datum als ISODateTime String
-     */
-    public String createSEPATimestamp()
-    {
-    	Date now = new Date();
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    	return format.format(now);
-    }
-    
     /**
      * Liefert den passenden SEPA-Generator.
      * @return der SEPA-Generator.
