@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Properties;
+
 import javax.xml.bind.JAXB;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -41,10 +42,15 @@ public class ParsePain00100303 implements ISEPAParser {
                 BigDecimal value = cdtTrxTxInf.getAmt().getInstdAmt().getValue();
                 sepaResult.setProperty("value", value.toString());
                 sepaResult.setProperty("curr", "EUR");
-                sepaResult.setProperty("usage", cdtTrxTxInf.getRmtInf().getUstrd());
+
+                if(cdtTrxTxInf.getRmtInf() != null) {
+                    sepaResult.setProperty("usage", cdtTrxTxInf.getRmtInf().getUstrd());
+                }
                 
                 XMLGregorianCalendar date = pmtInf.getReqdExctnDt();
-                sepaResult.setProperty("date", date.toString());
+                if (date != null) {
+                    sepaResult.setProperty("date", date.toString());
+                }
                 
                 sepaResults.add(sepaResult);
             }

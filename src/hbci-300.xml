@@ -1145,14 +1145,6 @@
             <DE name="bic" type="AN" maxsize="11" minnum="0"/>
             <DE name="number" type="ID" minnum="0"/>
             <DE name="subnumber" type="ID" minnum="0"/>
-            <DEG type="KIK" minnum="0"/>
-        </DEGdef>
-        
-        <DEGdef id="KTVIntOpt">
-            <DE name="iban" type="AN" maxsize="34" minnum="0"/>
-            <DE name="bic" type="AN" maxsize="11" minnum="0"/>
-            <DE name="number" type="ID" minnum="0"/>
-            <DE name="subnumber" type="ID" minnum="0"/>
             <DE name="KIK.country" type="Ctr" minnum="0"/>
             <DE name="KIK.blz" type="AN" maxsize="30" minnum="0"/>
         </DEGdef>
@@ -1844,7 +1836,7 @@
             <DE name="validto" type="Date" minnum="0"/>
             <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
             <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
-            <DEG type="KTVIntOpt" name="smsaccount" minnum="0"/>
+            <DEG type="KTVInt" name="smsaccount" minnum="0"/>
             <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
             <DE name="lastuse" type="Date" minnum="0"/>
             <DE name="activatedon" type="Date" minnum="0"/>
@@ -1874,7 +1866,7 @@
             <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
             <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
             <DE name="mobilenumber_secure" type="AN" maxsize="35" minnum="0"/>
-            <DEG type="KTVIntOpt" name="smsaccount" minnum="0"/>
+            <DEG type="KTVInt" name="smsaccount" minnum="0"/>
             <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
             <DE name="lastuse" type="Date" minnum="0"/>
             <DE name="activatedon" type="Date" minnum="0"/>
@@ -1906,7 +1898,7 @@
             <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
             <DE name="mobilenumber_secure" type="AN" maxsize="35" minnum="0"/>
             <DE name="mobilenumber" type="AN" maxsize="35" minnum="0"/>
-            <DEG type="KTVIntOpt" name="smsaccount" minnum="0"/>
+            <DEG type="KTVInt" name="smsaccount" minnum="0"/>
             <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
             <DE name="lastuse" type="Date" minnum="0"/>
             <DE name="activatedon" type="Date" minnum="0"/>
