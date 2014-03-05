@@ -2,13 +2,11 @@ package org.kapott.hbci.GV.generators;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Properties;
 
-import javax.xml.datatype.DatatypeFactory;
-
+import org.kapott.hbci.GV.AbstractSEPAGV;
+import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AccountIdentificationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.AmountTypeSCT;
@@ -30,10 +28,10 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PartyIdentificationSCT2;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentInstructionInformationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentMethodSCTCode;
-import org.kapott.hbci.sepa.jaxb.pain_001_002_02.RemittanceInformationSCTChoice;
-import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCTCode;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentTypeInformationSCT1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.RemittanceInformationSCTChoice;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCTCode;
 
 
 /**
@@ -56,13 +54,7 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
     @Override
     public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception
     {
-        Integer maxIndex = maxIndex(sepaParams);
-
-        //Formatter um Dates ins gewünschte ISODateTime Format zu bringen.
-        Date now=new Date();
-        SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        DatatypeFactory df = DatatypeFactory.newInstance();
-
+        Integer maxIndex = SepaUtil.maxIndex(sepaParams);
 
         //Document
         Document doc = new Document();
@@ -76,9 +68,9 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 
         //Group Header
         doc.getPain00100102().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
-        doc.getPain00100102().getGrpHdr().setCreDtTm(df.newXMLGregorianCalendar(sdtf.format(now)));
+        doc.getPain00100102().getGrpHdr().setCreDtTm(SepaUtil.createCalendar(null));
         doc.getPain00100102().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
-        doc.getPain00100102().getGrpHdr().setCtrlSum(sumBtgValue(sepaParams, maxIndex));
+        doc.getPain00100102().getGrpHdr().setCtrlSum(SepaUtil.sumBtgValue(sepaParams, maxIndex));
         doc.getPain00100102().getGrpHdr().setGrpg(Grouping1CodeSCT.MIXD);
         doc.getPain00100102().getGrpHdr().setInitgPty(new PartyIdentificationSCT1());
         doc.getPain00100102().getGrpHdr().getInitgPty().setNm(sepaParams.getProperty("src.name"));
@@ -99,7 +91,7 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 
         String date = sepaParams.getProperty("date");
         if(date == null) date = "1999-01-01";
-        pmtInf.setReqdExctnDt(df.newXMLGregorianCalendar(date));
+        pmtInf.setReqdExctnDt(SepaUtil.createCalendar(date));
         pmtInf.setDbtr(new PartyIdentificationSCT2());
         pmtInf.setDbtrAcct(new CashAccountSCT1());
         pmtInf.setDbtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
@@ -147,34 +139,34 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 
         //Payment Information - Credit Transfer Transaction Information - Payment Identification
         cdtTrxTxInf.setPmtId(new PaymentIdentification1());
-        cdtTrxTxInf.getPmtId().setEndToEndId(sepaParams.getProperty(insertIndex("endtoendid", index)));
+        cdtTrxTxInf.getPmtId().setEndToEndId(SepaUtil.getProperty(sepaParams,SepaUtil.insertIndex("endtoendid", index),AbstractSEPAGV.ENDTOEND_ID_NOTPROVIDED)); // sicherstellen, dass "NOTPROVIDED" eingetragen wird, wenn keine ID angegeben ist
 
 
         //Payment Information - Credit Transfer Transaction Information - Creditor
         cdtTrxTxInf.setCdtr(new PartyIdentificationSCT2());
-        cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty(insertIndex("dst.name", index)));
+        cdtTrxTxInf.getCdtr().setNm(sepaParams.getProperty(SepaUtil.insertIndex("dst.name", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Creditor Account
         cdtTrxTxInf.setCdtrAcct(new CashAccountSCT2());
         cdtTrxTxInf.getCdtrAcct().setId(new AccountIdentificationSCT());
-        cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty(insertIndex("dst.iban", index)));
+        cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty(SepaUtil.insertIndex("dst.iban", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Creditor Agent
         cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSCT());
         cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSCT());
-        cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(insertIndex("dst.bic", index)));
+        cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index)));
 
 
         //Payment Information - Credit Transfer Transaction Information - Amount
         cdtTrxTxInf.setAmt(new AmountTypeSCT());
         cdtTrxTxInf.getAmt().setInstdAmt(new CurrencyAndAmountSCT());
-        cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(insertIndex("btg.value", index))));
+        cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(SepaUtil.insertIndex("btg.value", index))));
 
         cdtTrxTxInf.getAmt().getInstdAmt().setCcy(CurrencyCodeSCT.EUR);
 
         //Payment Information - Credit Transfer Transaction Information - Usage
         cdtTrxTxInf.setRmtInf(new RemittanceInformationSCTChoice());
-        cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty(insertIndex("usage", index)));
+        cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty(SepaUtil.insertIndex("usage", index)));
 
         return cdtTrxTxInf;
     }

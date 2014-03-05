@@ -21,7 +21,6 @@
 
 package org.kapott.hbci.GV;
 
-import org.kapott.hbci.GV.generators.AbstractSEPAGenerator;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
 
@@ -76,6 +75,6 @@ public class GVMultiUebSEPA extends GVUebSEPA
     @Override protected void createSEPAFromParams()
     {
         super.createSEPAFromParams();
-        setParam("Total", ((AbstractSEPAGenerator) getSEPAGenerator()).sumBtgValueObject(sepaParams));
+        setParam("Total", SepaUtil.sumBtgValueObject(sepaParams));
     }
 }

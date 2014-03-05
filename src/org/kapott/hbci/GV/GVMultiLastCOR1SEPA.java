@@ -5,7 +5,6 @@
 
 package org.kapott.hbci.GV;
 
-import org.kapott.hbci.GV.generators.AbstractSEPAGenerator;
 import org.kapott.hbci.GV_Result.AbstractGVRLastSEPA;
 import org.kapott.hbci.GV_Result.GVRLastCOR1SEPA;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -54,6 +53,6 @@ public class GVMultiLastCOR1SEPA extends GVLastCOR1SEPA
     @Override protected void createSEPAFromParams()
     {
         super.createSEPAFromParams();
-        setParam("Total", ((AbstractSEPAGenerator) getSEPAGenerator()).sumBtgValueObject(sepaParams));
+        setParam("Total", SepaUtil.sumBtgValueObject(sepaParams));
     }
 }
