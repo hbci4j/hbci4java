@@ -1,1 +1,6 @@
 bin
+/build
+/classes
+/.settings
+/.classpath
+/.project
