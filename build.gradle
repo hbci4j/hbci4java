@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':thirdparty/cryptalgs4java')
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+sourceCompatibility = 1.5
+compileJava.options.encoding = 'ISO-8859-1'
+
+version = '2.5.13-SNAPSHOT'
+
+sourceSets{
+    main {
+        java {
+            srcDir 'src'
+        }
+        output.classesDir 'classes'
+    }
+ 
+    test {
+        java {
+            srcDirs 'test'
+        }
+    }
+}

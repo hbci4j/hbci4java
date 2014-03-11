@@ -1,3 +1,6 @@
 /classes
 /dist
 /bin
+/build
+/gradle-app.setting
+/.gradle
