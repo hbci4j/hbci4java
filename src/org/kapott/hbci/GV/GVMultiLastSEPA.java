@@ -43,9 +43,7 @@ public class GVMultiLastSEPA extends GVLastSEPA
     {
         super(handler, lowlevelName, result);
 
-        // batch-booking, sepa default rule is 'true' = 1
-        addConstraint("batchbook", "sepa.batchbook", "1", LogFilter.FILTER_NONE);
-
+        addConstraint("batchbook", "sepa.batchbook", null, LogFilter.FILTER_NONE);
         addConstraint("Total.value", "Total.value", null, LogFilter.FILTER_MOST);
         addConstraint("Total.curr", "Total.curr", null, LogFilter.FILTER_NONE);
     }

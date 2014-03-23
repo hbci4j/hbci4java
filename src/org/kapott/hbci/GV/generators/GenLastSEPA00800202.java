@@ -151,8 +151,9 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator
             drctDbtTxInfs.add(createDirectDebitTransactionInformationSDD(sepaParams, null));
         }
 
-        String batch = SepaUtil.getProperty(sepaParams,"batchbook","1");
-        pmtInf.setBtchBookg(batch.equals("1"));
+        String batch = SepaUtil.getProperty(sepaParams,"batchbook",null);
+        if (batch != null)
+            pmtInf.setBtchBookg(batch.equals("1"));
 
         ObjectFactory of = new ObjectFactory();
         this.marshal(of.createDocument(doc), os, validate);
