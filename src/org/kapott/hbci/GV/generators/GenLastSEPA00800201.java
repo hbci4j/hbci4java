@@ -79,6 +79,10 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
         //Customer Credit Transfer Initiation
         doc.setPain00800101(new Pain00800101());
         doc.getPain00800101().setGrpHdr(new GroupHeaderSDD());
+        
+        String batch = SepaUtil.getProperty(sepaParams,"batchbook",null);
+        if (batch != null)
+            doc.getPain00800101().getGrpHdr().setBtchBookg(batch.equals("1"));
 
 
         //Group Header

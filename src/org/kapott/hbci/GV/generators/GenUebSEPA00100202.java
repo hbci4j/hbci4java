@@ -65,6 +65,10 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 
 
         doc.getPain00100102().setGrpHdr(new GroupHeaderSCT());
+        
+        String batch = SepaUtil.getProperty(sepaParams,"batchbook",null);
+        if (batch != null)
+            doc.getPain00100102().getGrpHdr().setBtchBookg(batch.equals("1"));
 
         //Group Header
         doc.getPain00100102().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
@@ -113,8 +117,7 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
 
         //Payment Information - ChargeBearer
         pmtInf.setChrgBr(ChargeBearerTypeSCTCode.SLEV);
-
-
+        
         //Payment Information - Credit Transfer Transaction Information
         ArrayList<CreditTransferTransactionInformationSCT> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformationSCT>) pmtInf.getCdtTrfTxInf();
         if (maxIndex != null)
