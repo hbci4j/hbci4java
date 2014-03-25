@@ -1656,13 +1656,15 @@ public final class HBCIUtils
     	return AccountCRCAlgs.checkIBAN(iban);
     }
     
-    /** Überprüfen der Gültigkeit einer Gläubiger-ID. Diese Methode prüft anhand eines
+    /**
+     * Überprüfen der Gültigkeit einer Gläubiger-ID. Diese Methode prüft anhand eines
      * Prüfziffer-Algorithmus, ob die übergebene ID prinzipiell gültig ist.
+     * @param creditorId die zu pruefende Creditor-ID.
      * @return <code>false</code> wenn der Prüfzifferntest fehlschlägt, sonst
      * <code>true</code>  */
-    public static boolean checkCredtitorIdCRC(String iban)
+    public static boolean checkCredtitorIdCRC(String creditorId)
     {
-        return AccountCRCAlgs.checkCreditorId(iban);
+        return AccountCRCAlgs.checkCreditorId(creditorId);
     }
 
     private static void refreshBLZList(ClassLoader cl)
