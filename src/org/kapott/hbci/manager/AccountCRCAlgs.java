@@ -1612,4 +1612,32 @@ public class AccountCRCAlgs
     	
     	return rest.intValue()==1;
     }
+    
+    public static boolean checkCreditorId(String creditorId)
+    {
+        //DE: Immer Länge 18
+        if ("DE".equals(creditorId.substring(0,2).toUpperCase()) && creditorId.length()!=18)
+            return false;
+                
+        //Rest wie bei IBAN
+        StringBuffer s=new StringBuffer();
+        
+        s.append(creditorId.substring(7));
+        s.append(creditorId.substring(0,4));
+        
+        StringBuffer s2=new StringBuffer();
+        for (int i=0; i<s.length(); i++) {
+            char ch=s.charAt(i);
+            if (ch>='0' && ch<='9') {
+                s2.append(ch);
+            } else {
+                s2.append(ch-'A'+10);
+            }
+        }
+        
+        BigInteger x=new BigInteger(s2.toString());
+        BigInteger rest=x.mod(new BigInteger("97"));
+        
+        return rest.intValue()==1;
+    }
 }
