@@ -23,6 +23,7 @@ package org.kapott.hbci.smartcardio;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -205,6 +206,10 @@ public abstract class HBCICardService
     }
   }
   
+  public Map<Byte, Integer> getFeatures() {
+      return Collections.unmodifiableMap(features);
+  }
+  
   /**
    * Prueft die PIN via Kartenleser.
    * @param pwdId PIN-ID.
@@ -213,7 +218,7 @@ public abstract class HBCICardService
   {
     try
     {
-      byte[] response = this.smartCard.transmitControlCommand(features.get(FEATURE_VERIFY_PIN_DIRECT),this.createPINVerificationDataStructure());
+      byte[] response = this.smartCard.transmitControlCommand(features.get(FEATURE_VERIFY_PIN_DIRECT),this.createPINVerificationDataStructure(pwdId));
       
       ResponseAPDU apdu = new ResponseAPDU(response);
 
@@ -471,7 +476,7 @@ public abstract class HBCICardService
    * @return
    * @throws IOException
    */
-  private byte[] createPINVerificationDataStructure() throws IOException
+  protected byte[] createPINVerificationDataStructure(int pwdId) throws IOException
   {
     ByteArrayOutputStream verifyCommand = new ByteArrayOutputStream();
     verifyCommand.write(0x0f); // bTimeOut
@@ -489,7 +494,7 @@ public abstract class HBCICardService
         SECCOS_CLA_STD, // CLA
         SECCOS_INS_VERIFY, // INS
         0x00, // P1
-        (byte)0x81, // P2 volker: 01=>81
+        (byte) (SECCOS_PWD_TYPE_DF|pwdId), // P2 volker: 01=>81
         0x08, // Lc = 8 bytes in command data
         (byte) 0x25, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,//volker:0x20=>0x25
         (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
