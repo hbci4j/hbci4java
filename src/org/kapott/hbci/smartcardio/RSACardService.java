@@ -129,24 +129,20 @@ public class RSACardService extends HBCICardService {
         return verifyCommand.toByteArray();
     }
     
-    private void verifySecondPIN(int pwdId) {
-        byte[] body = new byte[] {(byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, 
-                                  (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20};
-        
-        System.arraycopy(cid, 0, body, 0, cid.length);
-        
-        CommandAPDU command = new CommandAPDU(ISO7816_CLA_STD, ISO7816_INS_VERIFY,
-                                              (byte) 0x00, (byte) (ISO7816_PWD_TYPE_DF | pwdId),
-                                              body);
-        send(command);
-    }
-    
-    @Override
-    public void verifyHardPIN(int pwdId) {
-        super.verifyHardPIN(pwdId);
-        
-        verifySecondPIN(pwdId | 1);
-    }
+    //
+    // this seems to be needed only when data on chip card should be changed
+    //
+//    private void verifyModifyPIN(int pwdId) {
+//        byte[] body = new byte[] {(byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, 
+//                                  (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20};
+//        
+//        System.arraycopy(cid, 0, body, 0, cid.length);
+//        
+//        CommandAPDU command = new CommandAPDU(ISO7816_CLA_STD, ISO7816_INS_VERIFY,
+//                                              (byte) 0x00, (byte) (ISO7816_PWD_TYPE_DF | pwdId),
+//                                              body);
+//        send(command);
+//    }
     
     @Override
     public void verifySoftPIN(int pwdId, byte[] softPin) {
@@ -162,8 +158,6 @@ public class RSACardService extends HBCICardService {
                                               (byte) 0x00, (byte) (ISO7816_PWD_TYPE_DF | pwdId),
                                               body);
         send(command);
-        
-        verifySecondPIN(pwdId | 1);
     }
     
     public RSABankData readBankData(int idx) {
