@@ -171,7 +171,27 @@ public class RSACardService extends HBCICardService {
         byte[] rawData  = readRecordBySFI(0x00, idx);
         if (rawData == null)
             return null;
-        return new RSABankData(idx, rawData);
+        
+        byte[] customerIdData = null;
+        try {
+            selectFile(0xA604);
+            byte[] prefix = readBinary(0, 1);
+            HBCIUtils.log("A604 prefix = " + prefix[0], HBCIUtils.LOG_DEBUG);
+            int max = prefix[0] >> 4;
+            byte[] states = readBinary(1, max);
+            for (int n = 0; n < max; n++) {
+                if ((states[n] >> 4) == (idx + 1) && (states[n] & 0x01) != 0) {
+                    customerIdData = readBinary(1 + max + (n * 3 * 30), 30);
+                    break;
+                }
+            }
+        } catch (HBCI_Exception e) {
+            HBCIUtils.log(e, HBCIUtils.LOG_DEBUG);
+            // properly there are no information about customer id on this card
+            customerIdData = null;
+        }
+        
+        return new RSABankData(idx, rawData, customerIdData);
     }
     
     private String toHex(byte[] bytes)

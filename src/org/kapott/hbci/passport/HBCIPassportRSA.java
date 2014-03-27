@@ -67,6 +67,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
     private int entryIdx;
     private String forcedProfileVersion;
     private String bankId;
+    private String defaultCustomerId;
     
     private Card smartCard;
     private RSACardService cardService;
@@ -165,9 +166,9 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
                     setBPD((Properties) is.readObject());
                     setUPD((Properties) is.readObject());
                     setHBCIVersion((String) is.readObject());
-                    setCustomerId((String) is.readObject());
                     // this could be stored on the chipcard, but we use the file
                     setSysId((String) is.readObject());
+                    setCustomerId((String) is.readObject());
                     break;
                 }
             }
@@ -197,6 +198,27 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
         }
     }
     
+    @Override
+    public String getCustomerId() {
+        if (getStoredCustomerId() == null || getStoredCustomerId().length() == 0) {
+            if (getDefaultCustomerId() == null || getDefaultCustomerId().length() == 0) {
+                return getUserId();
+            } else {
+                return getDefaultCustomerId();
+            }
+        } else {
+            return getStoredCustomerId();
+        }
+    }
+    
+    public String getDefaultCustomerId() {
+        return defaultCustomerId;
+    }
+
+    public void setDefaultCustomerId(String defaultCustomerId) {
+        this.defaultCustomerId = defaultCustomerId;
+    }
+
     public void setBankId(String bankId) {
         this.bankId = bankId;
     }
@@ -650,9 +672,9 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
             o.writeObject(getBPD());
             o.writeObject(getUPD());
             o.writeObject(getHBCIVersion());
-            o.writeObject(getCustomerId());
             // this could be stored on the chipcard, but we use the file
             o.writeObject(getSysId());
+            o.writeObject(getCustomerId());
             
             o.close();
             passportfile.delete();
@@ -805,8 +827,9 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
         setHost(bankData.getComAddress());
         setUserId(bankData.getUserId());
         setBankId(bankData.getBankId());
-        // this could be stored on the chipcard, but we use the file
-        // setSysId(bankData.getSystemId());
+        // this could be stored on the chipcard - use it for first initialization
+        setSysId(bankData.getSystemId());
+        setDefaultCustomerId(bankData.getCustomerId());
     }
     
     protected void ctSaveBankData() {

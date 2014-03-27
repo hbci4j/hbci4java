@@ -25,11 +25,12 @@ public class RSABankData {
     private String comSuffix;
     private String bankId;
     private String systemId;
+    private String customerId;
     
     public RSABankData() {
     }
     
-    public RSABankData(int index, byte[] record) {
+    public RSABankData(int index, byte[] record, byte[] customerIdData) {
         this.index = index;
         this.country = new String(record, 0, 3, CHARSET).trim();
         this.bankCode = new String(record, 3, 30, CHARSET).trim();
@@ -39,6 +40,7 @@ public class RSABankData {
         this.comSuffix = new String(record, 92, 2, CHARSET).trim();
         this.bankId = new String(record, 94, 30, CHARSET).trim();
         this.systemId = new String(record, 124, 30, CHARSET).trim();
+        this.customerId = customerIdData == null ? "" :new String(customerIdData, CHARSET).trim();
     }
     
     private void fillRecord(byte[] record, int offset, int length, String value) {
@@ -60,6 +62,12 @@ public class RSABankData {
         fillRecord(result, 92, 2, comSuffix);
         fillRecord(result, 94, 30, bankId);
         fillRecord(result, 124, 30, systemId);
+        return result;
+    }
+    
+    public byte[] toCustomerIdData() {
+        byte[] result = new byte[30];
+        fillRecord(result, 0, 30, customerId);
         return result;
     }
 
@@ -135,6 +143,14 @@ public class RSABankData {
         this.systemId = systemId;
     }
     
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
     @Override
     public String toString() {
         return "index=" + index
@@ -145,7 +161,8 @@ public class RSABankData {
              + " comAddress=" + comAddress
              + " comSuffix=" + comSuffix
              + " bankId=" + bankId
-             + " systemid=" + systemId;
+             + " systemId=" + systemId
+             + " customerId=" + customerId;
     }
 
 }
