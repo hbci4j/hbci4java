@@ -43,7 +43,7 @@ public class GVMultiLastCOR1SEPA extends GVLastCOR1SEPA
     {
         super(handler, lowlevelName, result);
 
-        addConstraint("batchbook", "sepa.batchbook", null, LogFilter.FILTER_NONE);
+        addConstraint("batchbook", "sepa.batchbook", "", LogFilter.FILTER_NONE);
         addConstraint("Total.value", "Total.value", null, LogFilter.FILTER_MOST);
         addConstraint("Total.curr", "Total.curr", null, LogFilter.FILTER_NONE);
     }
