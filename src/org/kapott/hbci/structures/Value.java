@@ -103,7 +103,7 @@ public final class Value
     }
 
     /** Anlegen eines Geldbetrag-Objektes.
-    @param value der Geldbetrag mal 100 (123)
+    @param value der Geldbetrag (1.23).
     @param curr die Währung des Geldbetrages */
     public Value(BigDecimal value,String curr)
     {
