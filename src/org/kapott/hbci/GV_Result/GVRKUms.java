@@ -103,10 +103,13 @@ public class GVRKUms
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
         public String   primanota;
-        /** Liste von Strings mit den Verwendungszweckzeilen.
+        /** Liste von Strings mit den Verwendungszweckzeilen (nicht geparst, kann strukturierte Daten (IBAN, BIC, etc.) enthalten).
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>)*/
         public List<String> usage;
+        /** Verwendungszweck (geparst nach SEPA Spezifikation) */
+        public String usage_sepa;
+        
         /** Gegenkonto der Buchung (optional).
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
@@ -124,7 +127,19 @@ public class GVRKUms
         public String credId;
         /** Debitor Identifier */
         public String debId;
-
+        /** Purpose Code, siehe http://wiki.windata-banking.de/index.php?title=Purpose-SEPA-Codes */
+        public String purposeCode;
+        /** SEPA Mandatsdatum */
+        public String mdat;
+        /** SEPA First/One Off/RECC */
+        public String sqtp;
+        /** SEPA alter Creditor Identifier */
+        public String credIdOld;
+        /** SEPA alte Mandatsreferenz */
+        public String mandRefOld;
+        /** SEPA Settlement Date für R-Transaktionen */
+        public String settlementDate; 
+        
         /** Gibt an, ob ein Umsatz ein SEPA-Umsatz ist **/
         public boolean isSepa;
 
@@ -173,6 +188,8 @@ public class GVRKUms
                 for (Iterator<String> i=usage.iterator(); i.hasNext(); ) {
                     ret.append("    usage:").append(i.next()).append(linesep);
                 }
+                if (usage_sepa != null)
+                    ret.append("    usage_sepa:").append(usage_sepa).append(linesep);
                 if (other!=null)
                     ret.append("    konto:").append(other.toString()).append(linesep);
                 ret.append("    addkey:").append(addkey);
@@ -718,12 +735,7 @@ public class GVRKUms
                     }
                     
                     // Fall 2: nicht getreu Spezifikation (zB manche Raiffeisenbanken, Sparda-/Netbanken)
-                    
                     line = extractUsageNonSpec(line);
-
-                   // theoretisch müsste nun entweder line.usage oder newUsage leer sein - zur Sicherheit wird aber nicht davon ausgegangen
-                    
-                   line.usage.addAll(newUsage);
 
                     btag.addLine(line);
                     ums_counter++;
@@ -800,7 +812,7 @@ public class GVRKUms
         }
     }
     
-    /** SEPA Verwendungszweck parsen, wenn dieser nicht laut Spezifikation, sondern einfach durchgehend mit ":" getrennt wird.
+    /** SEPA Verwendungszweck parsen, wenn dieser nicht laut Spezifikation, sondern einfach durchgehend mit ":" (MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC) getrennt wird.
      * Der eigentliche Verwendungszweck kann mit "SVWZ:" gekennzeichnet sein oder einfach als Text ohne Präfix.
      * Die verschiedenen Bezeichner-Werte werden nur durch Leerzeichen getrennt.
      * Beispiel:
@@ -823,7 +835,7 @@ public class GVRKUms
                 sb.append(" ");
             }
             sb.append(s);
-            previousLineEndedWithColon = s.endsWith(":");
+            previousLineEndedWithColon = s.endsWith(MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC);
             previousLineEndedWithSpace = s.endsWith(" ");
         }
         
@@ -832,7 +844,7 @@ public class GVRKUms
         List<String> newUsage = new ArrayList<String>();
         
         for (String bezeichner : MT940_FIELD86_BEZEICHNER) {
-            String search = bezeichner + ": ";
+            String search = bezeichner + MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC + " ";
             int start = plainUsage.indexOf(search);
             if (start > -1) {
                 int end = plainUsage.indexOf(" ", start + search.length());
@@ -850,11 +862,18 @@ public class GVRKUms
                 plainUsage = part1 + part2.trim();
             }
         }
+
+        // "übriggebliebene" unstrukturierte verwendungszweck-daten nur in usage_sepa übernehmen wenn daten vorhanden sind und wenn sich diese von usage unterscheiden
+        if (plainUsage.trim().length() > 0 && !plainUsage.equals(sb.toString()))
+            newUsage.add(plainUsage);
         
-        umsLine.usage = new ArrayList<String>();
-        
-        if (plainUsage.trim().length() > 0)
-            umsLine.usage.add(plainUsage);
+        // wenn verwendungszweck-daten nach parsen vorhanden, in usage_sepa ablegen
+        String newUsageString = toString(newUsage);
+        if (umsLine.usage_sepa == null) {
+            umsLine.usage_sepa = newUsageString;
+        } else if (newUsageString != null) {
+            umsLine.usage_sepa = umsLine.usage_sepa + newUsageString;
+        }
         
         return umsLine;
         
@@ -886,24 +905,18 @@ public class GVRKUms
                 umsLine.other.iban = fieldValue;
             } else if (bezeichner.equals("BIC") && (umsLine.other.bic == null || umsLine.other.bic.equals("99999999") || umsLine.other.bic.equals("BIC+"))) {
                 umsLine.other.bic = fieldValue;
-                
-            // die folgenden Informationen werden nur in Textform weitergegeben
-                
             } else if (bezeichner.equals("PURP")) {
-                // Purpose Code, siehe http://wiki.windata-banking.de/index.php?title=Purpose-SEPA-Codes
-                newUsage.add("SEPA Purpose Code: " + fieldValue);
+                umsLine.purposeCode = fieldValue;
             } else if (bezeichner.equals("MDAT")) {
-                // SEPA Mandatsdatum
-                newUsage.add("SEPA Mandatsdatum: " + fieldValue);
+                umsLine.mdat = fieldValue;
             } else if (bezeichner.equals("SQTP")) {
-                newUsage.add("SEPA First/One Off/RECC: " + fieldValue);
+                umsLine.sqtp = fieldValue;
             } else if (bezeichner.equals("ORCR")) {
-                newUsage.add("SEPA alter Creditor Identifier: " + fieldValue);
+                umsLine.credIdOld = fieldValue;
             } else if (bezeichner.equals("ORMR")) {
-                newUsage.add("SEPA alte Mandatsreferenz: " + fieldValue);
+                umsLine.mandRefOld = fieldValue;
             } else if (bezeichner.equals("DDAT")) {
-                // SEPA Settlement Day für R-Transaktionen
-                newUsage.add("SEPA Settlement Day: " + fieldValue);
+                umsLine.settlementDate = fieldValue;
             }
         }
     }
@@ -914,12 +927,10 @@ public class GVRKUms
     private UmsLine extractUsageSpec(UmsLine umsLine, String bezeichner, List<String> newUsage) {
         String search = bezeichner + MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC;
         
-        List<String> remainingUsage = new ArrayList<String>();
-        
         for (int i=0; i<umsLine.usage.size();) {
             if (umsLine.usage.get(i).startsWith(search)) {
                 String fieldValue = umsLine.usage.get(i).substring(search.length());
-                // Wert kann über mehrere Subfelder gehen - daher nächste Zeilen berücksichtigen und erst stoppen wenn wieder ein Bezeichner (erkennbar am "+") gefunden wird
+                // Wert kann über mehrere Subfelder gehen - daher nächste Zeilen berücksichtigen und erst stoppen wenn wieder ein Bezeichner gefunden wird
                 for (int j=i+1; j<=umsLine.usage.size(); j++) {
                     i = j;
                     String nextLine = umsLine.usage.size() <= j ? null : umsLine.usage.get(j);
@@ -933,12 +944,11 @@ public class GVRKUms
                 setFieldValue(umsLine, bezeichner, fieldValue, newUsage);
                 
             } else {
-                remainingUsage.add(umsLine.usage.get(i));
                 i++;
             }
         }
         
-        umsLine.usage = remainingUsage;
+        umsLine.usage_sepa = toString(newUsage);
 
         return umsLine;
     }
@@ -975,6 +985,17 @@ public class GVRKUms
         sb.append(").*");
         
         return sb.toString();
+    }
+    
+    private String toString(List<String> list) {
+        if (list == null || list.isEmpty())
+            return null;
+        StringBuilder sb = new StringBuilder();
+        for (String s : list) {
+            if (!s.trim().equals(""))
+                sb.append(s);
+        }
+        return sb.length() == 0 ? null : sb.toString();
     }
 
 }
