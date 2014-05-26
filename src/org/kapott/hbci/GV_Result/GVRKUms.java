@@ -731,11 +731,11 @@ public class GVRKUms
                     // Fall 1: gem‰ﬂ Spezifikation
                     
                     for (String bezeichner : MT940_FIELD86_BEZEICHNER) {
-                        line = extractUsageSpec(line, bezeichner, newUsage);
+                        extractUsageSpec(line, bezeichner, newUsage);
                     }
                     
                     // Fall 2: nicht getreu Spezifikation (zB manche Raiffeisenbanken, Sparda-/Netbanken)
-                    line = extractUsageNonSpec(line);
+                    extractUsageNonSpec(line);
 
                     btag.addLine(line);
                     ums_counter++;
@@ -820,7 +820,7 @@ public class GVRKUms
      * weck IBAN: DE68210501700012
      * 345678 BIC: DEUTDEFF 
      */
-    private UmsLine extractUsageNonSpec(UmsLine umsLine) {
+    private void extractUsageNonSpec(UmsLine umsLine) {
         StringBuilder sb = new StringBuilder();
         boolean previousLineEndedWithColon = false;
         boolean previousLineEndedWithSpace = false;
@@ -874,9 +874,6 @@ public class GVRKUms
         } else if (newUsageString != null) {
             umsLine.usage_sepa = umsLine.usage_sepa + newUsageString;
         }
-        
-        return umsLine;
-        
     }
     
     /** Entsprechenden Wert je nach Bezeichner setzen - z.B. umsLine.customerref bei "KREF"
@@ -924,7 +921,7 @@ public class GVRKUms
     /** SEPA Verwendungszweck parsen
      * Informationen tlw. von http://www.hettwer-beratung.de/sepa-spezialwissen/sepa-technische-anforderungen/dti-format-sepa-kontoinformationen/
      */
-    private UmsLine extractUsageSpec(UmsLine umsLine, String bezeichner, List<String> newUsage) {
+    private void extractUsageSpec(UmsLine umsLine, String bezeichner, List<String> newUsage) {
         String search = bezeichner + MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC;
         
         for (int i=0; i<umsLine.usage.size();) {
@@ -949,8 +946,6 @@ public class GVRKUms
         }
         
         umsLine.usage_sepa = toString(newUsage);
-
-        return umsLine;
     }
     
     private static String toPatternSpec(List<String> strings) {
