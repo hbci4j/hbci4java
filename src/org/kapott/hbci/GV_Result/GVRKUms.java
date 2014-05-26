@@ -24,7 +24,6 @@ package org.kapott.hbci.GV_Result;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -52,6 +51,30 @@ import org.kapott.hbci.swift.Swift;
 public class GVRKUms
     extends HBCIJobResultImpl
 {
+    public static enum SepaLabel
+    {
+        EREF,
+        KREF,
+        MREF,
+        CRED,
+        DEBT,
+        COAM,
+        OAMT,
+        SVWZ,
+        ABWA,
+        ABWE,
+        IBAN,
+        BIC,
+        PURP,
+        MDAT,
+        SQTP,
+        ORCR,
+        ORMR,
+        DDAT,
+        
+        ;
+    }
+    
     /** Eine "Zeile" des Kontoauszuges (enthält Daten einer Transaktion) */
     public static class UmsLine
         implements Serializable
@@ -278,13 +301,15 @@ public class GVRKUms
     public StringBuffer restMT942;
 
     /** Separator der Bezeichner (zB "EREF+") */
-    private static String MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC = "+";
-    private static String MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC = ":";
-
+    private final static String MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC = "+";
+    private final static String MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC = ":";
+    
     /** Gültige Bezeichner im Verwendungszweck von Feld 86 in MT940 */
-    private static List<String> MT940_FIELD86_BEZEICHNER = Arrays.asList(new String[]{"EREF", "KREF", "MREF", "CRED", "DEBT", "COAM", "OAMT", "SVWZ", "ABWA", "ABWE", "IBAN", "BIC", "PURP", "MDAT", "SQTP", "ORCR", "ORMR", "DDAT"});
-    private static String MT940_FIELD86_BEZEICHNER_PATTERN_SPEC = toPatternSpec(MT940_FIELD86_BEZEICHNER);
-    private static String MT940_FIELD86_BEZEICHNER_PATTERN_NONSPEC = toPatternNonSpec(MT940_FIELD86_BEZEICHNER);
+    private final static String MT940_FIELD86_BEZEICHNER_PATTERN_SPEC = toPatternSpec(SepaLabel.values());
+    private final static String MT940_FIELD86_BEZEICHNER_PATTERN_NONSPEC = toPatternNonSpec(SepaLabel.values());
+    
+    private final static String NOTPROVIDED = "NOTPROVIDED";
+    private final static String NONREF = "NONREF";
 
     public GVRKUms()
     {
@@ -730,7 +755,8 @@ public class GVRKUms
                     
                     // Fall 1: gemäß Spezifikation
                     
-                    for (String bezeichner : MT940_FIELD86_BEZEICHNER) {
+                    for (SepaLabel bezeichner : SepaLabel.values())
+                    {
                         extractUsageSpec(line, bezeichner, newUsage);
                     }
                     
@@ -843,8 +869,9 @@ public class GVRKUms
         
         List<String> newUsage = new ArrayList<String>();
         
-        for (String bezeichner : MT940_FIELD86_BEZEICHNER) {
-            String search = bezeichner + MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC + " ";
+        for (SepaLabel bezeichner : SepaLabel.values())
+        {
+            String search = bezeichner.name() + MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC + " ";
             int start = plainUsage.indexOf(search);
             if (start > -1) {
                 int end = plainUsage.indexOf(" ", start + search.length());
@@ -878,50 +905,83 @@ public class GVRKUms
     
     /** Entsprechenden Wert je nach Bezeichner setzen - z.B. umsLine.customerref bei "KREF"
      */
-    private void setFieldValue(UmsLine umsLine, String bezeichner, String fieldValue, List<String> newUsage) {
-        if (!fieldValue.equals("NOTPROVIDED") && !fieldValue.equals("NONREF")) {
-            if (bezeichner.equals("EREF")) {
-                umsLine.eref = fieldValue;
-            } else if (bezeichner.equals("MREF")) {
-                umsLine.mandRef = fieldValue;
-            } else if (bezeichner.equals("CRED")) {
-                umsLine.credId = fieldValue;
-            } else if (bezeichner.equals("DEBT")) {
-                umsLine.debId = fieldValue;
-            } else if (bezeichner.equals("COAM") && umsLine.charge_value == null) {
-                // COAM sollte lt. Spezifikation immer nur ZUSÄTZLICH zu CHGS (Feld 61, Subfeld 9) eingestellt werden. Wird hier zur Sicherheit berücksichtigt.
-                umsLine.charge_value = new Value(fieldValue.substring(3).replace(',','.'), fieldValue.substring(0,3));
-            } else if (bezeichner.equals("OAMT") && umsLine.orig_value == null) {
-                // OAMT sollte lt. Spezifikation immer nur ZUSÄTZLICH zu OCMT (Feld 61, Subfeld 9) eingestellt werden. Wird hier zur Sicherheit berücksichtigt.
-                umsLine.charge_value = new Value(fieldValue.substring(3).replace(',','.'), fieldValue.substring(0,3));
-            } else if (bezeichner.equals("KREF") && (umsLine.customerref == null || umsLine.customerref.equals("NONREF") || umsLine.customerref.equals("NOTPROVIDED") || umsLine.customerref.equals("KREF+"))) {
-                umsLine.customerref = fieldValue;
-            } else if (bezeichner.equals("SVWZ")) {
-                newUsage.add(fieldValue);
-            } else if (bezeichner.equals("IBAN") && (umsLine.other.iban == null || umsLine.other.iban.equals("9999999999") || umsLine.other.iban.equals("IBAN+"))) {
-                umsLine.other.iban = fieldValue;
-            } else if (bezeichner.equals("BIC") && (umsLine.other.bic == null || umsLine.other.bic.equals("99999999") || umsLine.other.bic.equals("BIC+"))) {
-                umsLine.other.bic = fieldValue;
-            } else if (bezeichner.equals("PURP")) {
-                umsLine.purposeCode = fieldValue;
-            } else if (bezeichner.equals("MDAT")) {
-                umsLine.mdat = fieldValue;
-            } else if (bezeichner.equals("SQTP")) {
-                umsLine.sqtp = fieldValue;
-            } else if (bezeichner.equals("ORCR")) {
-                umsLine.credIdOld = fieldValue;
-            } else if (bezeichner.equals("ORMR")) {
-                umsLine.mandRefOld = fieldValue;
-            } else if (bezeichner.equals("DDAT")) {
-                umsLine.settlementDate = fieldValue;
-            }
+    private void setFieldValue(UmsLine umsLine, SepaLabel bezeichner, String fieldValue, List<String> newUsage)
+    {
+        if (fieldValue.equals(NOTPROVIDED) || fieldValue.equals(NONREF))
+            return;
+        
+        if (bezeichner == SepaLabel.EREF)
+        {
+            umsLine.eref = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.MREF)
+        {
+            umsLine.mandRef = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.CRED)
+        {
+            umsLine.credId = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.DEBT)
+        {
+            umsLine.debId = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.COAM && umsLine.charge_value == null)
+        {
+            // COAM sollte lt. Spezifikation immer nur ZUSÄTZLICH zu CHGS (Feld 61, Subfeld 9) eingestellt werden. Wird hier zur Sicherheit berücksichtigt.
+            umsLine.charge_value = new Value(fieldValue.substring(3).replace(',','.'), fieldValue.substring(0,3));
+        }
+        else if (bezeichner == SepaLabel.OAMT && umsLine.orig_value == null)
+        {
+            // OAMT sollte lt. Spezifikation immer nur ZUSÄTZLICH zu OCMT (Feld 61, Subfeld 9) eingestellt werden. Wird hier zur Sicherheit berücksichtigt.
+            umsLine.charge_value = new Value(fieldValue.substring(3).replace(',','.'), fieldValue.substring(0,3));
+        }
+        else if (bezeichner == SepaLabel.KREF && (umsLine.customerref == null || umsLine.customerref.equals(NONREF) || umsLine.customerref.equals(NOTPROVIDED) || umsLine.customerref.equals("KREF+")))
+        {
+            umsLine.customerref = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.SVWZ)
+        {
+            newUsage.add(fieldValue);
+        }
+        else if (bezeichner == SepaLabel.IBAN && (umsLine.other.iban == null || umsLine.other.iban.equals("9999999999") || umsLine.other.iban.equals("IBAN+")))
+        {
+            umsLine.other.iban = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.BIC && (umsLine.other.bic == null || umsLine.other.bic.equals("99999999") || umsLine.other.bic.equals("BIC+")))
+        {
+            umsLine.other.bic = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.PURP)
+        {
+            umsLine.purposeCode = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.MDAT)
+        {
+            umsLine.mdat = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.SQTP)
+        {
+            umsLine.sqtp = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.ORCR)
+        {
+            umsLine.credIdOld = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.ORMR)
+        {
+            umsLine.mandRefOld = fieldValue;
+        }
+        else if (bezeichner == SepaLabel.DDAT)
+        {
+            umsLine.settlementDate = fieldValue;
         }
     }
     
     /** SEPA Verwendungszweck parsen
      * Informationen tlw. von http://www.hettwer-beratung.de/sepa-spezialwissen/sepa-technische-anforderungen/dti-format-sepa-kontoinformationen/
      */
-    private void extractUsageSpec(UmsLine umsLine, String bezeichner, List<String> newUsage) {
+    private void extractUsageSpec(UmsLine umsLine, SepaLabel bezeichner, List<String> newUsage) {
         String search = bezeichner + MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC;
         
         for (int i=0; i<umsLine.usage.size();) {
@@ -948,13 +1008,13 @@ public class GVRKUms
         umsLine.usage_sepa = toString(newUsage);
     }
     
-    private static String toPatternSpec(List<String> strings) {
+    private static String toPatternSpec(SepaLabel[] labels) {
         StringBuilder sb = new StringBuilder();
         
         sb.append("^(");
-        for (String s : strings) {
+        for (SepaLabel s : labels) {
             sb.append("(");
-            sb.append(s);
+            sb.append(s.name());
             sb.append(Pattern.quote(MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC));
             sb.append(")|");
         }
@@ -965,13 +1025,13 @@ public class GVRKUms
         return sb.toString();
     }
 
-    private static String toPatternNonSpec(List<String> strings) {
+    private static String toPatternNonSpec(SepaLabel[] labels) {
         StringBuilder sb = new StringBuilder();
         
         sb.append("^(");
-        for (String s : strings) {
+        for (SepaLabel s : labels) {
             sb.append("(");
-            sb.append(s);
+            sb.append(s.name());
             sb.append(MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC + " ");
             sb.append(")|");
         }
