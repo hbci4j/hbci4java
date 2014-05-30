@@ -43,6 +43,7 @@ import java.util.ResourceBundle;
 import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
@@ -1420,7 +1421,7 @@ public final class HBCIUtils
     public static byte[] decodeBase64(String st)
     {
         try {
-            byte[] source=st.getBytes("ISO-8859-1");
+            byte[] source=st.getBytes(Comm.ENCODING);
             byte[] ret=new byte[st.length()];
             int    retlen=0;
 

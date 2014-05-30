@@ -14,9 +14,11 @@ package hbci4java.sepa;
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
 
@@ -211,6 +213,37 @@ public class TestPainGen
             ISEPAGenerator gen = SEPAGeneratorFactory.get("LastSEPA", version);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             gen.generate(props, bos, true);
+        }
+    }
+
+    /**
+     * Testet die korrekte Codierung von Umlauten im erzeugten PAIN-Dokument.
+     * @throws Exception
+     */
+    @Test
+    public void test006() throws Exception
+    {
+        String umlaute = "üöäÜÖÄ";
+        Properties props = new Properties();
+        props.setProperty("src.bic",    "ABCDEFAA123");
+        props.setProperty("src.iban",   "DE1234567890");
+        props.setProperty("src.name",   umlaute);
+        props.setProperty("dst.bic",    "ABCDEFAA123");
+        props.setProperty("dst.iban",   "DE0987654321");
+        props.setProperty("dst.name",   "SEPAstian");
+        props.setProperty("btg.value",  "100.00");
+        props.setProperty("btg.curr",   "EUR");
+        props.setProperty("usage",      "Verwendungszweck");
+        props.setProperty("sepaid",     "abcde");
+        props.setProperty("endtoendid", "fghij");
+
+        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_001))
+        {
+            ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            gen.generate(props, bos, true);
+            String xml = bos.toString(Comm.ENCODING);
+            Assert.assertTrue(xml.contains(umlaute));
         }
     }
 

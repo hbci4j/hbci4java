@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.NeedKeyAckException;
 import org.kapott.hbci.exceptions.ProcessException;
@@ -120,7 +121,7 @@ public final class HBCIUser
                 while (startpos<len && ba[startpos]==0) {
                     startpos++;
                 }
-                exponent[i] = new String(ba,startpos,len-startpos,"ISO-8859-1");
+                exponent[i] = new String(ba,startpos,len-startpos,Comm.ENCODING);
 
                 ba=spec.getModulus().toByteArray();
                 len=ba.length;
@@ -128,7 +129,7 @@ public final class HBCIUser
                 while (startpos<len && ba[startpos]==0) {
                     startpos++;
                 }
-                modulus[i] = new String(ba,startpos,len-startpos,"ISO-8859-1");
+                modulus[i] = new String(ba,startpos,len-startpos,Comm.ENCODING);
             }
     
             if (!passport.hasMySigKey()) {

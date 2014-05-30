@@ -12,6 +12,7 @@ import java.util.Properties;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -336,7 +337,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	    throw new HBCI_Exception("*** the _sepapain segment for this job can not be created");
     
     	try {
-            String xml = o.toString("ISO-8859-1");
+            String xml = o.toString(Comm.ENCODING);
             HBCIUtils.log("generated XML:\n" + xml,HBCIUtils.LOG_DEBUG);
     	    setParam("_sepapain", "B" + xml);
     	}

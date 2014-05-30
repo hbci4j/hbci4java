@@ -40,6 +40,11 @@ import org.kapott.hbci.rewrite.Rewrite;
 
 public abstract class Comm
 {
+    /**
+     * Der zu verwendende Zeichensatz.
+     */
+    public final static String ENCODING = "ISO-8859-1";
+    
     protected Filter               filter;
     private   HBCIPassportInternal parentPassport;
     

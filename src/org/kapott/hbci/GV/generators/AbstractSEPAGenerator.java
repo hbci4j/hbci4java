@@ -14,6 +14,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.sepa.PainVersion;
 
@@ -39,9 +40,23 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
      */
     protected void marshal(JAXBElement e, OutputStream os, boolean validate) throws Exception
     {
+        // Wir verwenden per Default nicht mehr UTF-8 zum Codieren sondern ISO-8859-1.
+        // Zum einen ist das gemaess Anlage3_Datenformate_V2.7.pdf (Seite 22, Zeichensaetze)
+        // der Default-Zeichensatz (obschon auch UTF-8) erlaubt ist. Da die HBCI-Message
+        // selbst aber seit jeher mit ISO-8859-1 ueber die Leitung geschickt wird (siehe CommPinTan
+        // und CommStandard), wuerde das sonst eine ISO-8859-1 HBCI-Nachricht ergeben, die
+        // ein Binaer-DE enthaelt, welches das XML enthaelt und welches dann aber als UTF-8
+        // codiert ist. Bei XML mag das noch gehen, weil das XML ja im Header den verwendeten
+        // Zeichensatz selbst mitbringt. Bei anderen Datenarten, kann das aber zu Problemen fuehren
+        // 
+        // Da ich hiermit aber das Default-Verhalten aendere (vorher stand hier hart "UTF-8"),
+        // mache ich es per System-Property konfigurierbar.
+        final String charset = System.getProperty("sepa.pain.charset",Comm.ENCODING);
+        LOG.fine("using charset " + charset);
+
         JAXBContext jaxbContext = JAXBContext.newInstance(e.getDeclaredType());
         Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, charset);
 
         // Siehe https://groups.google.com/d/msg/hbci4java/RYHCai_TzHM/72Bx51B9bXUJ
         if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))

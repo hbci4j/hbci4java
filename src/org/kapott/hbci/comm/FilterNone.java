@@ -36,7 +36,7 @@ public final class FilterNone
     public byte[] encode(String st)
     {
         try {
-            return st.getBytes("ISO-8859-1");
+            return st.getBytes(Comm.ENCODING);
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_ISOERR"),e);
         }

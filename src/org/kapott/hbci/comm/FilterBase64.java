@@ -36,7 +36,7 @@ public final class FilterBase64
     public String decode(String st)
     {
         try {
-            return new String(HBCIUtils.decodeBase64(st),"ISO-8859-1");
+            return new String(HBCIUtils.decodeBase64(st),Comm.ENCODING);
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_B64DECODEERR"),e);
         }
@@ -45,7 +45,7 @@ public final class FilterBase64
     public byte[] encode(String st)
     {
         try {
-            return HBCIUtils.encodeBase64(st.getBytes("ISO-8859-1")).getBytes("ISO-8859-1");
+            return HBCIUtils.encodeBase64(st.getBytes(Comm.ENCODING)).getBytes(Comm.ENCODING);
         } catch (Exception ex) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_B64ENCODEERR"),ex);
         }

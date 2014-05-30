@@ -23,6 +23,7 @@ package org.kapott.hbci.datatypes;
 
 import java.math.BigInteger;
 
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -56,7 +57,7 @@ public class SyntaxBin
     private static String expandNumber(String x)
     {
         try {
-            return new String((new BigInteger(x)).toByteArray(),"ISO-8859-1");
+            return new String((new BigInteger(x)).toByteArray(),Comm.ENCODING);
         } catch (Exception ex) {
             throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_BINNUMERR"),ex);
         }

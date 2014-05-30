@@ -171,7 +171,7 @@ public final class CommPinTan
 
             while (msgsize!=0 && (num=i.read(b))>0) {
                 HBCIUtils.log("received "+num+" bytes",HBCIUtils.LOG_DEBUG2);
-                ret.append(new String(b,0,num,"ISO-8859-1"));
+                ret.append(new String(b,0,num,ENCODING));
                 msgsize-=num;
                 if (msgsize>=0) {
                     HBCIUtils.log("we still need "+msgsize+" bytes",HBCIUtils.LOG_DEBUG2);

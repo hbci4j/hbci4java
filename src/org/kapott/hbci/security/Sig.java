@@ -27,6 +27,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -332,11 +333,11 @@ public final class Sig
                          * round of hashing must be executed before applying the 
                          * signature process */
                         String hashdata=collectHashData(idx);
-                        byte[] hashresult=passport.hash(hashdata.getBytes("ISO-8859-1"));
+                        byte[] hashresult=passport.hash(hashdata.getBytes(Comm.ENCODING));
                         byte[] signature=passport.sign(hashresult);
 
                         if (passport.needUserSig()) {
-                            String pintan=new String(signature,"ISO-8859-1");
+                            String pintan=new String(signature,Comm.ENCODING);
                             int pos=pintan.indexOf("|");
                             
                             if (pos!=-1) {
@@ -355,7 +356,7 @@ public final class Sig
                                 }
                             }
                         } else { // normale signatur
-                            msg.propagateValue(sigtail.getPath()+".sig","B"+new String(signature,"ISO-8859-1"),
+                            msg.propagateValue(sigtail.getPath()+".sig","B"+new String(signature,Comm.ENCODING),
                                     SyntaxElement.DONT_TRY_TO_CREATE,
                                     SyntaxElement.DONT_ALLOW_OVERWRITE);
                         }
@@ -524,8 +525,8 @@ public final class Sig
                          * round of hashing must be executed before applying the 
                          * signature process */
                         String hashdata=collectHashData(0,0);
-                        byte[] hashresult=mainPassport.hash(hashdata.getBytes("ISO-8859-1"));
-                        ret=mainPassport.verify(hashresult, sigstring.getBytes("ISO-8859-1"));
+                        byte[] hashresult=mainPassport.hash(hashdata.getBytes(Comm.ENCODING));
+                        ret=mainPassport.verify(hashresult, sigstring.getBytes(Comm.ENCODING));
                     } catch (Exception e) {
                         ret=false;
                     }

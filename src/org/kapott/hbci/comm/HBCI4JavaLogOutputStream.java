@@ -64,7 +64,7 @@ public class HBCI4JavaLogOutputStream
         throws IOException
     {
         if (this.logdata.size()!=0) {
-            HBCIUtils.log("socket log: "+this.logdata.toString("ISO-8859-1"), HBCIUtils.LOG_DEBUG2);
+            HBCIUtils.log("socket log: "+this.logdata.toString(Comm.ENCODING), HBCIUtils.LOG_DEBUG2);
         }
         this.logdata.reset();
     }

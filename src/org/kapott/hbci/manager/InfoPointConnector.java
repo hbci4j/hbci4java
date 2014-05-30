@@ -42,6 +42,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -165,7 +166,7 @@ public class InfoPointConnector
             rootElem.appendChild(bpdElem);
             
             // store BPD in element
-            String  bpd_encoded=HBCIUtils.encodeBase64(bpd_st.getBytes("ISO-8859-1"));
+            String  bpd_encoded=HBCIUtils.encodeBase64(bpd_st.getBytes(Comm.ENCODING));
             bpdElem.appendChild(doc.createTextNode(bpd_encoded));
             
             // create XML string
@@ -174,7 +175,7 @@ public class InfoPointConnector
             
             trans.setOutputProperty(OutputKeys.METHOD,               "xml");
             trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            trans.setOutputProperty(OutputKeys.ENCODING,             "ISO-8859-1");
+            trans.setOutputProperty(OutputKeys.ENCODING,             Comm.ENCODING);
             trans.setOutputProperty(OutputKeys.INDENT,               "yes");
 
             Source                source=new DOMSource(doc);
@@ -182,7 +183,7 @@ public class InfoPointConnector
             Result                target=new StreamResult(xmlStream);
             
             trans.transform(source, target);
-            return xmlStream.toString("ISO-8859-1");
+            return xmlStream.toString(Comm.ENCODING);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

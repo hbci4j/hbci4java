@@ -1078,10 +1078,10 @@ public abstract class AbstractPinTanPassport
                                 HBCIUtils.log("using "+alg+"/"+provider+" for generating order hash", HBCIUtils.LOG_DEBUG);
                                 MessageDigest digest=MessageDigest.getInstance(alg,provider);
                                 
-                                digest.update(segdata.getBytes("ISO-8859-1"));
+                                digest.update(segdata.getBytes(Comm.ENCODING));
                                 byte[] hash=digest.digest();
                                 SEGFactory.getInstance().unuseObject(seg);
-                                hktan.setParam("orderhash",new String(hash,"ISO-8859-1"));
+                                hktan.setParam("orderhash",new String(hash,Comm.ENCODING));
                             } catch (Exception e) {
                                 throw new HBCI_Exception(e);
                             }

@@ -22,7 +22,6 @@
 package org.kapott.hbci.GV;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -30,6 +29,8 @@ import java.util.Properties;
 import org.kapott.hbci.GV.parsers.ISEPAParser;
 import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 import org.kapott.hbci.GV_Result.GVRTermUebList;
+import org.kapott.hbci.comm.Comm;
+import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
@@ -108,14 +109,23 @@ public final class GVTermUebSEPAList extends AbstractSEPAGV
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();
         String pain = result.getProperty(header+".sepapain");
-        InputStream is = null;
-        try {
-            is = new ByteArrayInputStream(pain.getBytes("UTF-8"));            
-            parser.parse(is, sepaResults);
+        try
+        {
+            // Wir duerfen das hier nicht als UTF-8 interpretieren (das war vorher hier das Fall),
+            // auch dann nicht, wenn wir genau wissen, dass das XML mit "<?xml version="1.0" encoding="UTF-8"?>"
+            // beginnt. Stattdessen muessen wir den selben Zeichensatz nehmen, der bei der Byte->String Conversion
+            // beim Empfamg der rohen HBCI-Daten ueber TCP verwendet wurde. Siehe CommStandard/CommPinTan.
+            // Die eigentliche Codierung der XML-Datei spielt hier keine Rolle - wichtig ist, dass die
+            // Rueckwandlung String->Bytes (in pain.getBytes) den selben Zeichensatz verwendet wie beim Empfang der
+            // Daten vom Server. Nur so ist sichergestellt, dass die Bytes wieder genauso aussehen, wie sie
+            // beim Empfang vom Server kamen, wenn der XML-Parser sie kriegt. Er macht dann die Conversion Byte->String
+            // korrekt basierend auf dem im XML angegebenen Header.
+            // Siehe auch AbstractSEPAGenerator#marshal
+            parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)), sepaResults);
         }
-        catch(Exception e) {
-            HBCIUtils.log("Error parsing SEPA pain document: ", HBCIUtils.LOG_ERR);
-            HBCIUtils.log(e);
+        catch(Exception e)
+        {
+            throw new HBCI_Exception("Error parsing SEPA pain document",e);
         }
 
         if(sepaResults.isEmpty()) return;

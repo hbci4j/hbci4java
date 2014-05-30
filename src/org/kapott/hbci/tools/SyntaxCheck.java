@@ -31,6 +31,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
@@ -76,7 +77,7 @@ public final class SyntaxCheck
         StringBuffer    st=new StringBuffer();
         
         while ((len=fi.read(buffer))>0) {
-            st.append(new String(buffer,0,len,"ISO-8859-1"));
+            st.append(new String(buffer,0,len,Comm.ENCODING));
         }
         fi.close();
         

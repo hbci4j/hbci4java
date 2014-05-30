@@ -114,7 +114,7 @@ public final class CommStandard
             while ((!sizeknown || msgsize>0) && (num=i.read(b))!=-1) {
                 HBCIUtils.log("received "+num+" bytes",HBCIUtils.LOG_DEBUG2);
 
-                String st=new String(b,0,num,"ISO-8859-1");
+                String st=new String(b,0,num,ENCODING);
 
                 ret.append(st);
 
@@ -138,7 +138,7 @@ public final class CommStandard
             }
 
             // FileOutputStream fo=new FileOutputStream("pong.dat");
-            // fo.write(ret.toString().getBytes("ISO-8859-1"));
+            // fo.write(ret.toString().getBytes(ENCODING));
             // fo.close();
 
             return new StringBuffer(filter.decode(ret.toString()));

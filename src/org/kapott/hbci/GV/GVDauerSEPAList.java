@@ -22,7 +22,6 @@
 package org.kapott.hbci.GV;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -30,6 +29,8 @@ import java.util.Properties;
 import org.kapott.hbci.GV.parsers.ISEPAParser;
 import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 import org.kapott.hbci.GV_Result.GVRDauerList;
+import org.kapott.hbci.comm.Comm;
+import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
@@ -107,14 +108,14 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();
         String pain = result.getProperty(header+".sepapain");
-        InputStream is = null;
-        try {
-            is = new ByteArrayInputStream(pain.getBytes("UTF-8"));            
-            parser.parse(is, sepaResults);
+        try
+        {
+            // Encoding siehe GVTermUebSEPAList
+            parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)), sepaResults);
         }
-        catch(Exception e) {
-            HBCIUtils.log("Error parsing SEPA pain document: ", HBCIUtils.LOG_ERR);
-            HBCIUtils.log(e);
+        catch(Exception e)
+        {
+            throw new HBCI_Exception("Error parsing SEPA pain document",e);
         }
 
         if(sepaResults.isEmpty()) return;

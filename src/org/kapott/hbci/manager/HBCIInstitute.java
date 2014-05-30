@@ -31,6 +31,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.exceptions.ProcessException;
@@ -116,8 +117,8 @@ public final class HBCIInstitute
                         keyNum+"_"+keyVersion,
                         HBCIUtils.LOG_INFO);
 
-                byte[] keyExponent=result.getProperty(head+".PubKey.exponent").getBytes("ISO-8859-1");
-                byte[] keyModulus=result.getProperty(head+".PubKey.modulus").getBytes("ISO-8859-1");
+                byte[] keyExponent=result.getProperty(head+".PubKey.exponent").getBytes(Comm.ENCODING);
+                byte[] keyModulus=result.getProperty(head+".PubKey.modulus").getBytes(Comm.ENCODING);
 
                 KeyFactory fac=KeyFactory.getInstance("RSA");
                 KeySpec spec=new RSAPublicKeySpec(new BigInteger(+1,keyModulus),

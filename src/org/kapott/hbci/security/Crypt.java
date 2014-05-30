@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -117,7 +118,7 @@ public final class Crypt
             }
             ret.append((char)(padLength));
 
-            return ret.toString().getBytes("ISO-8859-1");
+            return ret.toString().getBytes(Comm.ENCODING);
         } catch (Exception ex) {
             throw new HBCI_Exception("*** error while extracting plain message string",ex);
         }
@@ -159,10 +160,10 @@ public final class Crypt
                     
                     Date d=new Date();
 
-                    gen.set(newName+".CryptData.data","B"+new String(crypteds[1],"ISO-8859-1"));
+                    gen.set(newName+".CryptData.data","B"+new String(crypteds[1],Comm.ENCODING));
                     gen.set(newName+".CryptHead.CryptAlg.alg",u_alg);
                     gen.set(newName+".CryptHead.CryptAlg.mode",u_mode);
-                    gen.set(newName+".CryptHead.CryptAlg.enckey","B"+new String(crypteds[0],"ISO-8859-1"));
+                    gen.set(newName+".CryptHead.CryptAlg.enckey","B"+new String(crypteds[0],Comm.ENCODING));
                     gen.set(newName+".CryptHead.CryptAlg.keytype",u_keytype);
                     gen.set(newName+".CryptHead.SecIdnDetails.func",(newmsg.getName().endsWith("Res")?"2":"1"));
                     gen.set(newName+".CryptHead.KeyName.KIK.blz",u_blz);
@@ -257,12 +258,12 @@ public final class Crypt
 
                     // verschluesselte daten extrahieren
                     SEG cryptdata=(SEG)(((MultipleSEGs)(childs.get(2))).getElements().get(0));
-                    byte[] cryptedstring=cryptdata.getValueOfDE(msgName+".CryptData.data").getBytes("ISO-8859-1");
+                    byte[] cryptedstring=cryptdata.getValueOfDE(msgName+".CryptData.data").getBytes(Comm.ENCODING);
 
                     // key extrahieren
                     SEG crypthead=(SEG)(((MultipleSEGs)(childs.get(1))).getElements().get(0));
                     byte[] cryptedkey=crypthead.getValueOfDE(msgName+
-                                      ".CryptHead.CryptAlg.enckey").getBytes("ISO-8859-1");
+                                      ".CryptHead.CryptAlg.enckey").getBytes(Comm.ENCODING);
 
                     // neues secfunc (klartext/encrypted)
                     String secfunc=crypthead.getValueOfDE(msgName+".CryptHead.secfunc");
@@ -329,7 +330,7 @@ public final class Crypt
                     // neuen nachrichtenstring zusammenbauen
                     ret=new StringBuffer(1024);
                     ret.append(msghead.toString(0)).
-                        append(new String(plainMsg,0,plainMsg.length-padLength,"ISO-8859-1")).
+                        append(new String(plainMsg,0,plainMsg.length-padLength,Comm.ENCODING)).
                         append(msgtail.toString(0));
                     
                     HBCIUtils.log("decrypted message: "+ret,HBCIUtils.LOG_DEBUG2);
