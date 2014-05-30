@@ -3,6 +3,7 @@ package org.kapott.hbci.GV.parsers;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.xml.bind.JAXB;
@@ -13,9 +14,17 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentInstructionInformation4;
 
 
-public class ParsePain00100102 implements ISEPAParser {
+/**
+ * Parser-Implementierung fuer Pain 001.001.02.
+ */
+public class ParsePain00100102 implements ISEPAParser
+{
     
-    public void parse(InputStream xml, ArrayList<Properties> sepaResults) {
+    /**
+     * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.util.List)
+     */
+    public void parse(InputStream xml, List<Properties> sepaResults)
+    {
         
         Document doc = JAXB.unmarshal(xml, Document.class);
                 

@@ -7,6 +7,7 @@
 
 package org.kapott.hbci.sepa;
 
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,8 +17,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.parsers.ISEPAParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * Kapselt das Parsen und Vergleichen von SEPA Pain-Versionen.
@@ -302,6 +308,46 @@ public class PainVersion implements Comparable<PainVersion>
     public static List<PainVersion> getKnownVersions(Type t)
     {
         return knownVersion.get(t);
+    }
+    
+    /**
+     * Ermittelt die PAIN-Version aus dem uebergebenen XML-Stream.
+     * @param xml der XML-Stream.
+     * Achtung: Da der Stream hierbei gelesen werden muss, sollte eine Kopie des Streams uebergeben werden.
+     * Denn nach dem Lesen des Streams, kann er nicht erneut gelesen werden.
+     * Der Stream wird von dieser Methode nicht geschlossen. Das ist Aufgabe des Aufrufers.
+     * @return die ermittelte PAIN-Version oder NULL wenn das XML-Document keine entsprechenden Informationen enthielt.
+     */
+    public static PainVersion autodetect(InputStream xml)
+    {
+        try
+        {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setIgnoringComments(true);
+            factory.setValidating(false);
+            factory.setNamespaceAware(true);
+            
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xml);
+            Node root = doc.getFirstChild(); // Das ist das Element mit dem Namen "Document"
+            
+            if (root == null)
+                throw new IllegalArgumentException("XML data did not contain a root element");
+            
+            String uri = root.getNamespaceURI();
+            if (uri == null)
+                return null;
+            
+            return new PainVersion(uri);
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw e;
+        }
+        catch (Exception e2)
+        {
+            throw new IllegalArgumentException(e2);
+        }
     }
 
     /**

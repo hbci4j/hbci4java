@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<Document xsi:schemaLocation="urn:swift:xsd:$pain.001.002.02 pain.001.002.02.xsd"
+  xmlns="urn:swift:xsd:$pain.001.002.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pain.001.001.02 />
+</Document>

@@ -13,6 +13,7 @@ package hbci4java;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 import java.util.Properties;
@@ -39,7 +40,7 @@ public abstract class AbstractTest
     try
     {
       StringBuffer sb = new StringBuffer();
-      reader = new BufferedReader(new InputStreamReader(new FileInputStream("test/hbci4java/" + name)));
+      reader = new BufferedReader(new InputStreamReader(this.getStream(name)));
       String line = null;
       while ((line = reader.readLine()) != null)
         sb.append(line.trim());
@@ -50,6 +51,17 @@ public abstract class AbstractTest
       if (reader != null)
         reader.close();
     }
+  }
+  
+  /**
+   * Liefert einen Inputstream fuer die angegebene Datei.
+   * @param name der Dateiname.
+   * @return der Stream.
+   * @throws Exception
+   */
+  public InputStream getStream(String name) throws Exception
+  {
+      return new FileInputStream("test/hbci4java/" + name);
   }
 
   /**
