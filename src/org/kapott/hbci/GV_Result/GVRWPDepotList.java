@@ -27,13 +27,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry;
-import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung;
-import org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung.SubSaldo;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.structures.BigDecimalValue;
 import org.kapott.hbci.structures.Konto;
-import org.kapott.hbci.structures.Value;
 
 /** Ergebnisdaten für die Abfrage einer Depotaufstellung.
     Diese Klasse enthält für jedes Depot ein separates
@@ -72,7 +69,7 @@ public final class GVRWPDepotList
                 public boolean locked;
                 /** Saldobetrag. Das Währungsfeld <code>curr</code> ist hier zur Zeit
                     immer der leere String. */
-                public Value   saldo;
+                public BigDecimalValue   saldo;
                 /** Lagerland der Depotstelle (optional). Der Ländercode ist
                     der ISO-3166-Ländercode (z.B. DE für Deutschland) */
                 public String  country;
@@ -153,7 +150,7 @@ public final class GVRWPDepotList
             public int        pricequalifier;
             /** Preis pro Einheit (optional). Die Währung ist bei
                 {@link #pricetype}={@link #PRICE_TYPE_PRCT} auf "%" gesetzt. */
-            public Value      price;
+            public BigDecimalValue      price;
             /** Herkunft von Preis/Kurs (optional).
                 <ul>
                   <li>{@link #SOURCE_LOC} - lokale Börse</li>
@@ -175,14 +172,14 @@ public final class GVRWPDepotList
             public int        saldo_type;
             /** Gesamtsaldo dieser Gattung. Das Währungsfeld ist in jedem
                 Fall ein leerer String! (TODO). */
-            public Value      saldo;
+            public BigDecimalValue      saldo;
             private ArrayList<SubSaldo> saldi;
             /** Anzahl der aufgelaufenen Tage (optional) */
             public int        days;
             /** Kurswert zum Gesamtsaldo {@link #saldo} (optional) */
-            public Value      depotwert;
+            public BigDecimalValue      depotwert;
             /** Betrag der   Stückzinsen (optional) */
-            public Value      stueckzinsbetrag;
+            public BigDecimalValue      stueckzinsbetrag;
             // TODO: dafuer muessen depotwert2 und stueckzinsbetrag2 eingefuehrt werden
             public String     xchg_cur1;
             public String     xchg_cur2;
@@ -201,7 +198,7 @@ public final class GVRWPDepotList
             public Date       faellig;
             /** Einstandspreis/-kurs (optional). Die Währung ist "%", 
                 wenn es sich um eine Prozentabgabe handelt */
-            public Value      einstandspreis;
+            public BigDecimalValue      einstandspreis;
             /** Zinssatz als Prozentangabe bei verzinslichen Papieren (optional) */
             public long       zinssatz;
             // TODO: das ist noch nicht gemacht
@@ -212,7 +209,7 @@ public final class GVRWPDepotList
             public String     symbol;
             public String     underlyingwkn;
             public String     underlyingisin;
-            public Value      kontraktbasispreis;
+            public BigDecimalValue      kontraktbasispreis;
             
             public Gattung()
             {
@@ -311,7 +308,7 @@ public final class GVRWPDepotList
         public  Konto     depot;
         private ArrayList<Gattung> gattungen;
         /** Gesamtwert des Depots (optional!) */
-        public  Value     total;
+        public  BigDecimalValue     total;
         
         /* TODO: Zusatzinformationen aus Feld 72 */
         
