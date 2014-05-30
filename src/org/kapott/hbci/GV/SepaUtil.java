@@ -18,7 +18,9 @@ import org.kapott.hbci.structures.Value;
  */
 public class SepaUtil
 {
-    private final static String DATE_PATTERN   = "yyyy-MM-dd'T'HH:mm:ss";
+    public final static String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    public final static String DATE_FORMAT     = "yyyy-MM-dd";
+    
     private final static Pattern INDEX_PATTERN = Pattern.compile("\\w+\\[(\\d+)\\](\\..*)?");
 
     /**
@@ -32,14 +34,42 @@ public class SepaUtil
     {
         if (isoDate == null)
         {
-            SimpleDateFormat format = new SimpleDateFormat(DATE_PATTERN);
+            SimpleDateFormat format = new SimpleDateFormat(DATETIME_FORMAT);
             isoDate = format.format(new Date());
         }
         
         DatatypeFactory df = DatatypeFactory.newInstance();
         return df.newXMLGregorianCalendar(isoDate);
     }
-
+    
+    /**
+     * Formatiert den XML-Kalender im angegebenen Format.
+     * @param cal der Kalender.
+     * @param format das zu verwendende Format. Fuer Beispiele siehe
+     * {@link SepaUtil#DATE_FORMAT}
+     * {@link SepaUtil#DATETIME_FORMAT}
+     * Wenn keines angegeben ist, wird per Default {@link SepaUtil#DATE_FORMAT} verwendet.
+     * @return die String das formatierte Datum.
+     */
+    public static String format(XMLGregorianCalendar cal, String format)
+    {
+        if (format == null)
+            format = DATE_FORMAT;
+        
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        return df.format(cal.toGregorianCalendar().getTime());
+    }
+    
+    /**
+     * Formatiert die Dezimalzahl als String.
+     * Zur Zeit macht die Funktion lediglich ein "toString",
+     * @param value der zu formatierende Betrag.
+     * @return der formatierte Betrag.
+     */
+    public static String format(BigDecimal value)
+    {
+        return value.toString();
+    }
 
     /**
      * Ermittelt den maximalen Index aller indizierten Properties. Nicht indizierte Properties

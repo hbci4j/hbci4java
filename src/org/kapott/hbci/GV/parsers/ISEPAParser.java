@@ -10,6 +10,49 @@ import java.util.Properties;
 public interface ISEPAParser
 {
     /**
+     * Enums fuer die verwendeten Schluessel-Namen in den Properties.
+     */
+    public static enum Names
+    {
+        SRC_NAME("src.name"),
+        SRC_IBAN("src.iban"),
+        SRC_BIC("src.bic"),
+        
+        DST_NAME("dst.name"),
+        DST_IBAN("dst.iban"),
+        DST_BIC("dst.bic"),
+        
+        VALUE("value"),
+        CURR("curr"),
+
+        USAGE("usage"),
+        DATE("date"),
+        ENDTOENDID("endtoendid"),
+        
+        ;
+        
+        private String value = null;
+        
+        /**
+         * ct.
+         * @param value der Schluessel-Name.
+         */
+        private Names(String value)
+        {
+            this.value = value;
+        }
+        
+        /**
+         * Liefert den Schluessel-Namen.
+         * @return der Schluessel-Name.
+         */
+        public String getValue()
+        {
+            return this.value;
+        }
+    }
+
+    /**
      * Parst SEPA-XML-Daten aus dem Stream und schreib die Ergebnisse in die Liste von Properties-Objekten. 
      * @param xml der Stream mit den XML-Daten.
      * @param target Die Liste mit Properties. Pro Geschaeftsvorfall wird ein Properties-Objekt eingefuegt.

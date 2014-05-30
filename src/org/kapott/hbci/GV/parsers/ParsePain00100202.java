@@ -1,23 +1,25 @@
 package org.kapott.hbci.GV.parsers;
 
 import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import javax.xml.bind.JAXB;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CreditTransferTransactionInformationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.CurrencyAndAmountSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Document;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.Pain00100102;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentInstructionInformationSCT;
 
 
 /**
  * Parser-Implementierung fuer Pain 001.002.02.
  */
-public class ParsePain00100202 implements ISEPAParser
+public class ParsePain00100202 extends AbstractSepaParser
 {
     
     /**
@@ -29,39 +31,46 @@ public class ParsePain00100202 implements ISEPAParser
         Document doc = JAXB.unmarshal(xml, Document.class);
                 
         //Payment Information 
-        ArrayList<PaymentInstructionInformationSCT> pmtInfs = (ArrayList<PaymentInstructionInformationSCT>) doc.getPain00100102().getPmtInf();
+        Pain00100102 pain = doc.getPain00100102();
         
-        for(PaymentInstructionInformationSCT pmtInf : pmtInfs) {
-
+        List<PaymentInstructionInformationSCT> pmtInfs = pain.getPmtInf();
+        
+        for (PaymentInstructionInformationSCT pmtInf : pmtInfs)
+        {
             //Payment Information - Credit Transfer Transaction Information
-            ArrayList<CreditTransferTransactionInformationSCT> cdtTrxTxInfs = (ArrayList<CreditTransferTransactionInformationSCT>) pmtInf.getCdtTrfTxInf();
+            List<CreditTransferTransactionInformationSCT> txList = pmtInf.getCdtTrfTxInf();
             
-            for(CreditTransferTransactionInformationSCT cdtTrxTxInf : cdtTrxTxInfs) {
-                Properties sepaResult = new Properties();
+            for (CreditTransferTransactionInformationSCT tx : txList)
+            {
+                Properties prop = new Properties();
+                
+                put(prop,Names.SRC_NAME, pain.getGrpHdr().getInitgPty().getNm());
+                put(prop,Names.SRC_IBAN, pmtInf.getDbtrAcct().getId().getIBAN());
+                put(prop,Names.SRC_BIC, pmtInf.getDbtrAgt().getFinInstnId().getBIC());
+                
+                put(prop,Names.DST_NAME, tx.getCdtr().getNm());
+                put(prop,Names.DST_IBAN, tx.getCdtrAcct().getId().getIBAN());
+                put(prop,Names.DST_BIC, tx.getCdtrAgt().getFinInstnId().getBIC());
+                
+                CurrencyAndAmountSCT amt = tx.getAmt().getInstdAmt();
+                put(prop,Names.VALUE, SepaUtil.format(amt.getValue()));
+                put(prop,Names.CURR, amt.getCcy().name());
 
-                sepaResult.setProperty("src.name", doc.getPain00100102().getGrpHdr().getInitgPty().getNm());
-                
-                sepaResult.setProperty("src.iban", pmtInf.getDbtrAcct().getId().getIBAN());
-                sepaResult.setProperty("src.bic", pmtInf.getDbtrAgt().getFinInstnId().getBIC());
-                
-                sepaResult.setProperty("dst.name", cdtTrxTxInf.getCdtr().getNm());
-                sepaResult.setProperty("dst.iban", cdtTrxTxInf.getCdtrAcct().getId().getIBAN());
-                sepaResult.setProperty("dst.bic", cdtTrxTxInf.getCdtrAgt().getFinInstnId().getBIC());
-                
-                BigDecimal value = cdtTrxTxInf.getAmt().getInstdAmt().getValue();
-                sepaResult.setProperty("value", value.toString());
-                sepaResult.setProperty("curr", "EUR");
-
-                if(cdtTrxTxInf.getRmtInf() != null) {
-                    sepaResult.setProperty("usage", cdtTrxTxInf.getRmtInf().getUstrd());
+                if(tx.getRmtInf() != null) {
+                    put(prop,Names.USAGE, tx.getRmtInf().getUstrd());
                 }
                 
                 XMLGregorianCalendar date = pmtInf.getReqdExctnDt();
                 if (date != null) {
-                    sepaResult.setProperty("date", date.toString());
+                    put(prop,Names.DATE, SepaUtil.format(date,null));
                 }
-                
-                sepaResults.add(sepaResult);
+
+                PaymentIdentification1 pmtId = tx.getPmtId();
+                if (pmtId != null) {
+                    put(prop,Names.ENDTOENDID, pmtId.getEndToEndId());
+                }
+
+                sepaResults.add(prop);
             }
         }
     }
