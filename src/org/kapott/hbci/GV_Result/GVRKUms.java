@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -51,30 +50,6 @@ import org.kapott.hbci.swift.Swift;
 public class GVRKUms
     extends HBCIJobResultImpl
 {
-    public static enum SepaLabel
-    {
-        EREF,
-        KREF,
-        MREF,
-        CRED,
-        DEBT,
-        COAM,
-        OAMT,
-        SVWZ,
-        ABWA,
-        ABWE,
-        IBAN,
-        BIC,
-        PURP,
-        MDAT,
-        SQTP,
-        ORCR,
-        ORMR,
-        DDAT,
-        
-        ;
-    }
-    
     /** Eine "Zeile" des Kontoauszuges (enthält Daten einer Transaktion) */
     public static class UmsLine
         implements Serializable
@@ -111,9 +86,9 @@ public class GVRKUms
         /** <p>Zusatzinformationen im Rohformat. Wenn Zusatzinformationen zu dieser
             Transaktion in einem unbekannten Format vorliegen, dann enthält dieser
             String diese Daten (u.U. ist dieser String leer, aber nicht <code>null</code>).
-	    Das ist genau dann der Fall, wenn der Wert von  <code>gvcode</code> gleich <code>999</code> ist.</p>
+        Das ist genau dann der Fall, wenn der Wert von  <code>gvcode</code> gleich <code>999</code> ist.</p>
             <p>Wenn die Zusatzinformationen aber ausgewertet werden können (und <code>gvcode!=999</code>),
-	    so ist dieser String <code>null</code>, und die Felder <code>text</code>, <code>primanota</code>,
+        so ist dieser String <code>null</code>, und die Felder <code>text</code>, <code>primanota</code>,
             <code>usage</code>, <code>other</code> und <code>addkey</code>
             enthalten die entsprechenden Werte (siehe auch <code>gvcode</code>)</p> */
         public String   additional;
@@ -126,13 +101,10 @@ public class GVRKUms
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
         public String   primanota;
-        /** Liste von Strings mit den Verwendungszweckzeilen (nicht geparst, kann strukturierte Daten (IBAN, BIC, etc.) enthalten).
+        /** Liste von Strings mit den Verwendungszweckzeilen.
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>)*/
         public List<String> usage;
-        /** Verwendungszweck (geparst nach SEPA Spezifikation) */
-        public String usage_sepa;
-        
         /** Gegenkonto der Buchung (optional).
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
@@ -141,27 +113,6 @@ public class GVRKUms
          * Nur wenn <code>gvcode!=999</code>! (siehe auch <code>additional</code>
          * und <code>gvcode</code>) */
         public String   addkey;
-        
-        /** Ende-zu-Ende Referenz */
-        public String eref;
-        /** Mandatsreferenz */
-        public String mandRef;
-        /** Creditor Identifier */
-        public String credId;
-        /** Debitor Identifier */
-        public String debId;
-        /** Purpose Code, siehe http://wiki.windata-banking.de/index.php?title=Purpose-SEPA-Codes */
-        public String purposeCode;
-        /** SEPA Mandatsdatum */
-        public String mdat;
-        /** SEPA First/One Off/RECC */
-        public String sqtp;
-        /** SEPA alter Creditor Identifier */
-        public String credIdOld;
-        /** SEPA alte Mandatsreferenz */
-        public String mandRefOld;
-        /** SEPA Settlement Date für R-Transaktionen */
-        public String settlementDate; 
         
         /** Gibt an, ob ein Umsatz ein SEPA-Umsatz ist **/
         public boolean isSepa;
@@ -200,19 +151,9 @@ public class GVRKUms
             if (additional==null) {
                 ret.append("    text:").append(text).append(linesep);
                 ret.append("    primanota:").append(primanota).append(linesep);
-                if (eref != null)
-                    ret.append("    eref:").append(eref).append(linesep);
-                if (mandRef != null)
-                    ret.append("    mandRef:").append(mandRef).append(linesep);
-                if (credId != null)
-                    ret.append("    credId:").append(credId).append(linesep);
-                if (debId != null)
-                    ret.append("    debId:").append(debId).append(linesep);
                 for (Iterator<String> i=usage.iterator(); i.hasNext(); ) {
                     ret.append("    usage:").append(i.next()).append(linesep);
                 }
-                if (usage_sepa != null)
-                    ret.append("    usage_sepa:").append(usage_sepa).append(linesep);
                 if (other!=null)
                     ret.append("    konto:").append(other.toString()).append(linesep);
                 ret.append("    addkey:").append(addkey);
@@ -300,16 +241,6 @@ public class GVRKUms
     /** Wie restMT940, allerdings für die Daten der *vorgemerkten* Umsätze. */
     public StringBuffer restMT942;
 
-    /** Separator der Bezeichner (zB "EREF+") */
-    private final static String MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC = "+";
-    private final static String MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC = ":";
-    
-    /** Gültige Bezeichner im Verwendungszweck von Feld 86 in MT940 */
-    private final static String MT940_FIELD86_BEZEICHNER_PATTERN_SPEC = toPatternSpec(SepaLabel.values());
-    private final static String MT940_FIELD86_BEZEICHNER_PATTERN_NONSPEC = toPatternNonSpec(SepaLabel.values());
-    
-    private final static String NOTPROVIDED = "NOTPROVIDED";
-    private final static String NONREF = "NONREF";
 
     public GVRKUms()
     {
@@ -578,11 +509,11 @@ public class GVRKUms
                     // extract credit/debit
                     String cd;
                     if (st_ums.charAt(next)=='C' || st_ums.charAt(next)=='D') {
-                    	line.isStorno=false;
+                        line.isStorno=false;
                         cd=st_ums.substring(next,next+1);
                         next++;
                     } else {
-                    	line.isStorno=true;
+                        line.isStorno=true;
                         cd=st_ums.substring(next+1,next+2);
                         next+=2;
                     }
@@ -748,20 +679,6 @@ public class GVRKUms
                             line.additional=st_multi;
                         }
                     }
-                    
-                    // Verwendungszweck (Felder 20-29 und 60-63) kann strukturierte Daten enthalten, diese parsen und in eine neue Liste speichern
-                    // die extractUsage-Methoden geben jeweils ein UmsLine Objekt zurück, das die noch nicht verarbeiteten usage Zeilen enthält, die verarbeiteten Zeilen werden in die übergebene Liste geschrieben
-                    List<String> newUsage = new ArrayList<String>();
-                    
-                    // Fall 1: gemäß Spezifikation
-                    
-                    for (SepaLabel bezeichner : SepaLabel.values())
-                    {
-                        extractUsageSpec(line, bezeichner, newUsage);
-                    }
-                    
-                    // Fall 2: nicht getreu Spezifikation (zB manche Raiffeisenbanken, Sparda-/Netbanken)
-                    extractUsageNonSpec(line);
 
                     btag.addLine(line);
                     ums_counter++;
@@ -814,11 +731,11 @@ public class GVRKUms
                     UmsLine lastLine = btag.lines.get(numLines-1);
                     saldo = btag.end.value.getLongValue();
                     if(lastLine.saldo.value.getLongValue() != saldo) {
-                    	for(int i=numLines-1; i>=0; i--) {
-                    		lastLine = btag.lines.get(i);
-                    		lastLine.saldo.value = new Value(saldo, btag.end.value.getCurr());
-                    		saldo -= lastLine.value.getLongValue();
-                    	}
+                        for(int i=numLines-1; i>=0; i--) {
+                            lastLine = btag.lines.get(i);
+                            lastLine.saldo.value = new Value(saldo, btag.end.value.getCurr());
+                            saldo -= lastLine.value.getLongValue();
+                        }
                     }
                 }
 
@@ -837,220 +754,4 @@ public class GVRKUms
             rest.append(buffer.toString());
         }
     }
-    
-    /** SEPA Verwendungszweck parsen, wenn dieser nicht laut Spezifikation, sondern einfach durchgehend mit ":" (MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC) getrennt wird.
-     * Der eigentliche Verwendungszweck kann mit "SVWZ:" gekennzeichnet sein oder einfach als Text ohne Präfix.
-     * Die verschiedenen Bezeichner-Werte werden nur durch Leerzeichen getrennt.
-     * Beispiel:
-     * Hier steht der Verwendungsz
-     * weck IBAN: DE68210501700012
-     * 345678 BIC: DEUTDEFF 
-     */
-    private void extractUsageNonSpec(UmsLine umsLine) {
-        StringBuilder sb = new StringBuilder();
-        boolean previousLineEndedWithColon = false;
-        boolean previousLineEndedWithSpace = false;
-        
-        for (String s: umsLine.usage) {
-            // wenn direkt nach dem ":" das Subfeld wechselt, wird manchmal das Leerzeichen weggelassen
-            if (previousLineEndedWithColon && !s.startsWith(" ")) {
-                sb.append(" ");
-            }
-            // wenn direkt vor dem "<BEZEICHNER>:" das subfeld gewechselt hat, wird manchmal das leerzeichen weggelassen
-            if (!previousLineEndedWithSpace && s.matches(MT940_FIELD86_BEZEICHNER_PATTERN_NONSPEC)) {
-                sb.append(" ");
-            }
-            sb.append(s);
-            previousLineEndedWithColon = s.endsWith(MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC);
-            previousLineEndedWithSpace = s.endsWith(" ");
-        }
-        
-        String plainUsage = sb.toString();
-        
-        List<String> newUsage = new ArrayList<String>();
-        
-        for (SepaLabel bezeichner : SepaLabel.values())
-        {
-            String search = bezeichner.name() + MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC + " ";
-            int start = plainUsage.indexOf(search);
-            if (start > -1) {
-                int end = plainUsage.indexOf(" ", start + search.length());
-                String fieldValue;
-                if (end > 0) {
-                    fieldValue = plainUsage.substring(start + search.length(), end);
-                } else {
-                    fieldValue = plainUsage.substring(start + search.length());
-                }
-                
-                setFieldValue(umsLine, bezeichner, fieldValue, newUsage);
-                
-                String part1 = start > 0 ? plainUsage.substring(0, start) : "";
-                String part2 = end > 0 ? plainUsage.substring(end) : "";
-                plainUsage = part1 + part2.trim();
-            }
-        }
-
-        // "übriggebliebene" unstrukturierte verwendungszweck-daten nur in usage_sepa übernehmen wenn daten vorhanden sind und wenn sich diese von usage unterscheiden
-        if (plainUsage.trim().length() > 0 && !plainUsage.equals(sb.toString()))
-            newUsage.add(plainUsage);
-        
-        // wenn verwendungszweck-daten nach parsen vorhanden, in usage_sepa ablegen
-        String newUsageString = toString(newUsage);
-        if (umsLine.usage_sepa == null) {
-            umsLine.usage_sepa = newUsageString;
-        } else if (newUsageString != null) {
-            umsLine.usage_sepa = umsLine.usage_sepa + newUsageString;
-        }
-    }
-    
-    /** Entsprechenden Wert je nach Bezeichner setzen - z.B. umsLine.customerref bei "KREF"
-     */
-    private void setFieldValue(UmsLine umsLine, SepaLabel bezeichner, String fieldValue, List<String> newUsage)
-    {
-        if (fieldValue.equals(NOTPROVIDED) || fieldValue.equals(NONREF))
-            return;
-        
-        if (bezeichner == SepaLabel.EREF)
-        {
-            umsLine.eref = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.MREF)
-        {
-            umsLine.mandRef = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.CRED)
-        {
-            umsLine.credId = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.DEBT)
-        {
-            umsLine.debId = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.COAM && umsLine.charge_value == null)
-        {
-            // COAM sollte lt. Spezifikation immer nur ZUSÄTZLICH zu CHGS (Feld 61, Subfeld 9) eingestellt werden. Wird hier zur Sicherheit berücksichtigt.
-            umsLine.charge_value = new Value(fieldValue.substring(3).replace(',','.'), fieldValue.substring(0,3));
-        }
-        else if (bezeichner == SepaLabel.OAMT && umsLine.orig_value == null)
-        {
-            // OAMT sollte lt. Spezifikation immer nur ZUSÄTZLICH zu OCMT (Feld 61, Subfeld 9) eingestellt werden. Wird hier zur Sicherheit berücksichtigt.
-            umsLine.charge_value = new Value(fieldValue.substring(3).replace(',','.'), fieldValue.substring(0,3));
-        }
-        else if (bezeichner == SepaLabel.KREF && (umsLine.customerref == null || umsLine.customerref.equals(NONREF) || umsLine.customerref.equals(NOTPROVIDED) || umsLine.customerref.equals("KREF+")))
-        {
-            umsLine.customerref = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.SVWZ)
-        {
-            newUsage.add(fieldValue);
-        }
-        else if (bezeichner == SepaLabel.IBAN && (umsLine.other.iban == null || umsLine.other.iban.equals("9999999999") || umsLine.other.iban.equals("IBAN+")))
-        {
-            umsLine.other.iban = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.BIC && (umsLine.other.bic == null || umsLine.other.bic.equals("99999999") || umsLine.other.bic.equals("BIC+")))
-        {
-            umsLine.other.bic = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.PURP)
-        {
-            umsLine.purposeCode = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.MDAT)
-        {
-            umsLine.mdat = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.SQTP)
-        {
-            umsLine.sqtp = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.ORCR)
-        {
-            umsLine.credIdOld = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.ORMR)
-        {
-            umsLine.mandRefOld = fieldValue;
-        }
-        else if (bezeichner == SepaLabel.DDAT)
-        {
-            umsLine.settlementDate = fieldValue;
-        }
-    }
-    
-    /** SEPA Verwendungszweck parsen
-     * Informationen tlw. von http://www.hettwer-beratung.de/sepa-spezialwissen/sepa-technische-anforderungen/dti-format-sepa-kontoinformationen/
-     */
-    private void extractUsageSpec(UmsLine umsLine, SepaLabel bezeichner, List<String> newUsage) {
-        String search = bezeichner + MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC;
-        
-        for (int i=0; i<umsLine.usage.size();) {
-            if (umsLine.usage.get(i).startsWith(search)) {
-                String fieldValue = umsLine.usage.get(i).substring(search.length());
-                // Wert kann über mehrere Subfelder gehen - daher nächste Zeilen berücksichtigen und erst stoppen wenn wieder ein Bezeichner gefunden wird
-                for (int j=i+1; j<=umsLine.usage.size(); j++) {
-                    i = j;
-                    String nextLine = umsLine.usage.size() <= j ? null : umsLine.usage.get(j);
-                    if (nextLine != null && !nextLine.matches(MT940_FIELD86_BEZEICHNER_PATTERN_SPEC)) {
-                        fieldValue = fieldValue + nextLine;
-                    } else {
-                        break;
-                    }
-                }
-                // Wert je nach Bezeichner in passendes Feld setzen
-                setFieldValue(umsLine, bezeichner, fieldValue, newUsage);
-                
-            } else {
-                i++;
-            }
-        }
-        
-        umsLine.usage_sepa = toString(newUsage);
-    }
-    
-    private static String toPatternSpec(SepaLabel[] labels) {
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("^(");
-        for (SepaLabel s : labels) {
-            sb.append("(");
-            sb.append(s.name());
-            sb.append(Pattern.quote(MT940_FIELD86_BEZEICHNER_SEPARATOR_SPEC));
-            sb.append(")|");
-        }
-        // strip last "|"
-        sb.setLength(sb.length()-1);
-        sb.append(").*");
-        
-        return sb.toString();
-    }
-
-    private static String toPatternNonSpec(SepaLabel[] labels) {
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("^(");
-        for (SepaLabel s : labels) {
-            sb.append("(");
-            sb.append(s.name());
-            sb.append(MT940_FIELD86_BEZEICHNER_SEPARATOR_NONSPEC + " ");
-            sb.append(")|");
-        }
-        // strip last "|"
-        sb.setLength(sb.length()-1);
-        sb.append(").*");
-        
-        return sb.toString();
-    }
-    
-    private String toString(List<String> list) {
-        if (list == null || list.isEmpty())
-            return null;
-        StringBuilder sb = new StringBuilder();
-        for (String s : list) {
-            if (!s.trim().equals(""))
-                sb.append(s);
-        }
-        return sb.length() == 0 ? null : sb.toString();
-    }
-
 }
