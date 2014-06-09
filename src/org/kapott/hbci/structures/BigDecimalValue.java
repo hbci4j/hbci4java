@@ -3,7 +3,7 @@ package org.kapott.hbci.structures;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public final class BigDecimalValue implements Serializable {
+public class BigDecimalValue implements Serializable {
 
     private BigDecimal value;
     
