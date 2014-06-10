@@ -51,7 +51,7 @@ public class ParsePain00100303 extends AbstractSepaParser
                 
                 ActiveOrHistoricCurrencyAndAmountSEPA amt = tx.getAmt().getInstdAmt();
                 put(prop,Names.VALUE, SepaUtil.format(amt.getValue()));
-                put(prop,Names.CURR, amt.getCcy().name());
+                put(prop,Names.CURR, amt.getCcy().value());
 
                 if(tx.getRmtInf() != null) {
                     put(prop,Names.USAGE, tx.getRmtInf().getUstrd());

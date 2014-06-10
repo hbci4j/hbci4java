@@ -54,11 +54,25 @@ public class ParsePain00800101 extends AbstractSepaParser
             }
             
             XMLGregorianCalendar date = pmtInf.getReqdColltnDt();
-            if (date != null) {
-                put(prop,Names.DATE, SepaUtil.format(date,null));
+            if (date != null)
+            {
+                put(prop,Names.TARGETDATE, SepaUtil.format(date,null));
             }
 
             put(prop,Names.ENDTOENDID, tx.getPmtId().getEndToEndId());
+            
+            put(prop,Names.CREDITORID,tx.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthrId().getId());
+            put(prop,Names.MANDATEID,tx.getDrctDbtTx().getMndtRltdInf().getMndtId());
+
+            XMLGregorianCalendar mandDate = tx.getDrctDbtTx().getMndtRltdInf().getDtOfSgntr();
+            if (mandDate != null)
+            {
+                put(prop,Names.MANDDATEOFSIG, SepaUtil.format(mandDate,null));
+            }
+
+            put(prop,Names.SEQUENCETYPE,pmtInf.getPmtTpInf().getSeqTp().value());
+
+            // CORE/COR1/B2B gibts in 008.001.01 noch nicht
             
             sepaResults.add(prop);
         }

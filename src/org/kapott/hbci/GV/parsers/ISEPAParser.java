@@ -29,6 +29,13 @@ public interface ISEPAParser
         DATE("date"),
         ENDTOENDID("endtoendid"),
         
+        LAST_TYPE("type"), // CORE,COR1,B2B
+        CREDITORID("creditorid"),
+        MANDATEID("mandateid"),
+        MANDDATEOFSIG("manddateofsig"),
+        SEQUENCETYPE("sequencetype"),
+        TARGETDATE("targetdate"),
+        
         ;
         
         private String value = null;
