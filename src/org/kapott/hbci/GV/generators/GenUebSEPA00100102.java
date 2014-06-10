@@ -88,7 +88,7 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevel3Code.SEPA);
 
         String date = sepaParams.getProperty("date");
-        if(date == null) date = "1999-01-01";
+        if(date == null) date = SepaUtil.DATE_UNDEFINED;
         pmtInf.setReqdExctnDt(SepaUtil.createCalendar(date));
         pmtInf.setDbtr(new PartyIdentification23());
         pmtInf.setDbtrAcct(new CashAccount8());

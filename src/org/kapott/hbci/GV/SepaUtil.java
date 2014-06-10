@@ -21,6 +21,11 @@ public class SepaUtil
     public final static String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public final static String DATE_FORMAT     = "yyyy-MM-dd";
     
+    /**
+     * Das Platzhalter-Datum, welches verwendet werden soll, wenn kein Datum angegeben ist.
+     */
+    public final static String DATE_UNDEFINED  = "1999-01-01";
+    
     private final static Pattern INDEX_PATTERN = Pattern.compile("\\w+\\[(\\d+)\\](\\..*)?");
 
     /**

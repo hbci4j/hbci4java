@@ -101,7 +101,7 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     	
         // Ziel-Datum fuer den Einzug. Default: 1999-01-01 als Platzhalter fuer "zum naechstmoeglichen Zeitpunkt
         // Datum als java.util.Date oder als ISO-Date-String im Format yyyy-MM-dd
-        addConstraint("targetdate",      "sepa.targetdate",    "1999-01-01", LogFilter.FILTER_NONE);
+        addConstraint("targetdate",      "sepa.targetdate",    SepaUtil.DATE_UNDEFINED, LogFilter.FILTER_NONE);
         
         // Der folgende Constraint muss in der jeweiligen abgeleiteten Klasse passend gesetzt werden.
         // Typ der Lastschrift. Moegliche Werte:
