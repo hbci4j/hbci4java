@@ -29,12 +29,12 @@ import org.kapott.hbci.structures.BigDecimalValue;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.TypedValue;
 
-/** Ergebnisdaten für die Abfrage einer Depotaufstellung.
+/** Ergebnisdaten für die Abfrage von Depotumsätzen
     Diese Klasse enthält für jedes Depot ein separates
     Datenobjekt. Innerhalb eines Depots werden für jede
     in diesem Depot vorhandene Wertpapiergattung separate
     Datenobjekte gehalten. Für jede Wertpapiergattung wiederum
-    gibt es u.U. mehrere Objekte, die Saldeninformationen
+    gibt es u.U. mehrere Objekte, die Umsatzinformationen
     enthalten. */
 public final class GVRWPDepotUms
 extends HBCIJobResultImpl
