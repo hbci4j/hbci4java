@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRWPDepotList;
+import org.kapott.hbci.GV_Result.GVRWPDepotUms;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.FileSystemClassLoader;
@@ -133,11 +134,17 @@ public final class DepotAbrufTest
         // Nutzer-Passport initialisieren
         Object passportDescription="Passport für Kontoauszugs-Demo";
         passport=AbstractHBCIPassport.getInstance(passportDescription);
+        //passport.clearBPD();
 
         try {
             // ein HBCI-Handle für einen Nutzer erzeugen
             String version=passport.getHBCIVersion();
-            hbciHandle=new HBCIHandler("300", passport); //(version.length()!=0)?version:"plus",passport);
+            //hbciHandle=new HBCIHandler("300", passport);
+            hbciHandle=new HBCIHandler((version.length()!=0)?version:"plus",passport);
+
+            System.out.println("Alle Geschäftsvorfälle in HBCI4Java: " + hbciHandle.getKernel().getAllLowlevelJobs().toString());
+            System.out.println("Unterstützte Geschäftsvorfälle der Bank: " + hbciHandle.getSupportedLowlevelJobs().toString());
+            
 
             //Konten ausgeben
             System.out.println("Kontenliste:");
@@ -145,7 +152,8 @@ public final class DepotAbrufTest
             Konto[] konten = passport.getAccounts();
             for (int i=0; i<konten.length; i++) {
                 System.out.println("Konto " + i + ":  " + konten[i]);
-            }
+            }            
+            
             BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
             String line;
             int umsatzkto=-1, depotkto=-1;
@@ -178,6 +186,9 @@ public final class DepotAbrufTest
                     e.printStackTrace();
                 }
             } while (line != null);
+            
+            //"Trockentest" des Umsatzparsers mit vorgebenen Daten
+            //test_ums(passport, hbciHandle, konten[0]);
             
             // Umsätze auflisten (als Demo, dass es grundsätzlich funktioniert)
             if (umsatzkto >= 0)
@@ -303,26 +314,20 @@ public final class DepotAbrufTest
     }
     
     private static void analyzeDepot(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
-        // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
-        // wenn der obige Aufruf nicht funktioniert, muss die abzufragende
-        // Kontoverbindung manuell gesetzt werden:
-        //Konto myaccount=new Konto("DE","50050222","8007580007");
         myaccount.curr = null;
 
-        // Job zur Abholung der Kontoauszüge erzeugen
+        // Job zur Abholung des Depotbestands erzeugen
         HBCIJob auszug=hbciHandle.newJob("WPDepotList");
         auszug.setParam("my",myaccount);
-        // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
-        // job.setParam("startdate","21.5.2003");
         auszug.addToQueue();
 
         // alle Jobs in der Job-Warteschlange ausführen
         HBCIExecStatus ret=hbciHandle.execute();
 
         GVRWPDepotList result=(GVRWPDepotList)auszug.getJobResult();
-        // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
+        // wenn der Job "Depotbestand abholen" erfolgreich ausgeführt wurde
         if (result.isOK()) {
-            // kompletten kontoauszug als string ausgeben:
+            // kompletten Depotbestand als string ausgeben:
             System.out.println("##############################");
             System.out.println("#####    Depotliste    #######");
             System.out.println("##############################");
@@ -336,6 +341,76 @@ public final class DepotAbrufTest
             System.out.println("Global Error");
             System.out.println(ret.getErrorString());
         }
+        
+        // Prüfen, ob Depotumsatzabruf unterstützt wird
+        if (!hbciHandle.getSupportedLowlevelJobs().containsKey("WPDepotUms")) {
+            System.out.println("Abruf der Depotumsätze nicht unterstützt!");
+        } else {
+            // Job zur Abholung der Depotumsätze erzeugen
+            HBCIJob ums=hbciHandle.newJob("WPDepotUms");
+            ums.setParam("my",myaccount);
+            // evtl. Datum setzen, ab welchem die Umsätze geholt werden sollen
+            // job.setParam("startdate","21.5.2003");
+            ums.addToQueue();
+
+            // alle Jobs in der Job-Warteschlange ausführen
+            ret=hbciHandle.execute();
+
+            GVRWPDepotUms umsRes =(GVRWPDepotUms)ums.getJobResult();
+            // wenn der Job "Depotumsätze abholen" erfolgreich ausgeführt wurde
+            if (umsRes.isOK()) {
+                // komplette Depotumsätze als string ausgeben:
+                System.out.println("################################");
+                System.out.println("#####    Depotumsätze    #######");
+                System.out.println("################################");
+                System.out.println(umsRes.toString());
+
+
+            } else {
+                // Fehlermeldungen ausgeben
+                System.out.println("Job-Error");
+                System.out.println(umsRes.getJobStatus().getErrorString());
+                System.out.println("Global Error");
+                System.out.println(ret.getErrorString());
+            }
+        }
     }
 
+    // Testcode für Beispielumsatzdaten, die aus einer Textdatei gelesen werden
+//    private static class MyGVUms extends GVWPDepotUms {
+//        public MyGVUms(HBCIHandler handler) {
+//            super(handler);
+//            // TODO Auto-generated constructor stub
+//        }
+//
+//        public GVRWPDepotUms myExtract(String testdata) {
+//            HBCIMsgStatus stat = new HBCIMsgStatus();
+//            stat.getData().put("foo.data536", testdata);
+//            extractResults(stat, "foo", 0);
+//            return (GVRWPDepotUms)jobResult;
+//        }
+//    }
+//    
+//    
+//    private static void test_ums(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
+//        try {
+//            MyGVUms test = new MyGVUms(hbciHandle);
+//            FileReader rd=new FileReader("/home/jonas/java/hbci/msg536.txt");
+//            StringBuilder res = new StringBuilder();
+//            char[] buf = new char[4000];
+//            int sz;
+//            while ((sz=rd.read(buf)) >= 0) {
+//                res.append(buf, 0, sz);
+//            }
+//            rd.close();
+//            
+//            System.out.println(test.myExtract(res.toString()));
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
 }
