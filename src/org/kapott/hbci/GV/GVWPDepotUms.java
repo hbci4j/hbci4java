@@ -62,6 +62,11 @@ extends HBCIJobImpl
         //addConstraint("my.curr","curr",passport.getUPD().getProperty("KInfo.cur",""), LogFilter.FILTER_NONE);
         addConstraint("quality","quality","", LogFilter.FILTER_NONE);
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
+        
+        addConstraint("startdate","startdate","", LogFilter.FILTER_NONE);
+        addConstraint("enddate","enddate","", LogFilter.FILTER_NONE);
+        
+        addConstraint("dummy","alldepots","N", LogFilter.FILTER_NONE);
     }
 
     private TypedValue parseTypedValue(String st) {

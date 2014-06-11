@@ -22,12 +22,8 @@
 package org.kapott.hbci.tools;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.kapott.hbci.GV.GVWPDepotUms;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRWPDepotList;
@@ -40,7 +36,6 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.status.HBCIExecStatus;
-import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.structures.Konto;
 
 /** <p>Tool zum Abholen und Auswerten von Kontoauszügen, gleichzeitig
@@ -159,7 +154,7 @@ public final class DepotAbrufTest
                 System.out.println("Konto " + i + ":  " + konten[i]);
             }
             
-            test_ums(passport, hbciHandle, konten[0]);
+            //test_ums(passport, hbciHandle, konten[0]);
             
             
             BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
@@ -366,7 +361,7 @@ public final class DepotAbrufTest
             // alle Jobs in der Job-Warteschlange ausführen
             ret=hbciHandle.execute();
 
-            GVRWPDepotList umsRes =(GVRWPDepotList)ums.getJobResult();
+            GVRWPDepotUms umsRes =(GVRWPDepotUms)ums.getJobResult();
             // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
             if (umsRes.isOK()) {
                 // kompletten kontoauszug als string ausgeben:
@@ -386,40 +381,41 @@ public final class DepotAbrufTest
         }
     }
 
-    private static class MyGVUms extends GVWPDepotUms {
-        public MyGVUms(HBCIHandler handler) {
-            super(handler);
-            // TODO Auto-generated constructor stub
-        }
-
-        public GVRWPDepotUms myExtract(String testdata) {
-            HBCIMsgStatus stat = new HBCIMsgStatus();
-            stat.getData().put("foo.data536", testdata);
-            extractResults(stat, "foo", 0);
-            return (GVRWPDepotUms)jobResult;
-        }
-    }
-    
-    
-    private static void test_ums(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
-        try {
-            MyGVUms test = new MyGVUms(hbciHandle);
-            FileReader rd=new FileReader("/home/jonas/java/hbci/msg536.txt");
-            StringBuilder res = new StringBuilder();
-            char[] buf = new char[4000];
-            int sz;
-            while ((sz=rd.read(buf)) >= 0) {
-                res.append(buf, 0, sz);
-            }
-            rd.close();
-            
-            System.out.println(test.myExtract(res.toString()));
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+    // Testcode für vorgegebene Beispielnachricht
+//    private static class MyGVUms extends GVWPDepotUms {
+//        public MyGVUms(HBCIHandler handler) {
+//            super(handler);
+//            // TODO Auto-generated constructor stub
+//        }
+//
+//        public GVRWPDepotUms myExtract(String testdata) {
+//            HBCIMsgStatus stat = new HBCIMsgStatus();
+//            stat.getData().put("foo.data536", testdata);
+//            extractResults(stat, "foo", 0);
+//            return (GVRWPDepotUms)jobResult;
+//        }
+//    }
+//    
+//    
+//    private static void test_ums(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
+//        try {
+//            MyGVUms test = new MyGVUms(hbciHandle);
+//            FileReader rd=new FileReader("/home/jonas/java/hbci/msg536.txt");
+//            StringBuilder res = new StringBuilder();
+//            char[] buf = new char[4000];
+//            int sz;
+//            while ((sz=rd.read(buf)) >= 0) {
+//                res.append(buf, 0, sz);
+//            }
+//            rd.close();
+//            
+//            System.out.println(test.myExtract(res.toString()));
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
 }
