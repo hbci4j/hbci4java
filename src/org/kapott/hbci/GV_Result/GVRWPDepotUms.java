@@ -42,13 +42,11 @@ extends HBCIJobResultImpl
     /** Ein Eintrag zu genau einem Depot */
     public static final class Entry
     {
-
-
         /** Zeitpunkt der Erstellung dieser Daten */
         public  Date      timestamp;
         /** Depotkonto, auf das sich der Eintrag bezieht. */
         public  Konto     depot;
-        /** Liste der Umsätze */
+        /** Liste der Wertpapiere mit Umsätzen */
         public final List<FinancialInstrument> instruments = new ArrayList<FinancialInstrument>();
         
         public static class FinancialInstrument {
@@ -59,34 +57,52 @@ extends HBCIJobResultImpl
             /** Wertpapierbezeichnung */
             public String     name;
 
+            /** Startsaldo des Finanzinstruments **/
             public TypedValue startSaldo;
+            /** Endsaldo des Finanzinstruments **/
             public TypedValue endSaldo;
 
+            /** Liste der Transaktionen/Umsätze **/
             public final List<Transaction> transactions = new ArrayList<Transaction>();
             
             public static class Transaction {
+                /** The transaction relates to settlement and clearing **/
                 public static final int INDICATOR_SETTLEMENT_CLEARING = 1;
+                /** The transaction relates to corporate action. **/
                 public static final int INDICATOR_KAPITALMASSNAHME = 2;
                 
+                /** The transaction is a delivery. **/
                 public static final int RICHTUNG_LIEFERUNG = 1;
+                /** The transaction is a receipt. **/
                 public static final int RICHTUNG_ERHALT = 2;
                 
+                /** The transaction is versus payment. **/
                 public static final int BEZAHLUNG_GEGEN_ZAHLUNG = 1;
+                /** The transaction is free of payment. **/
                 public static final int BEZAHLUNG_FREI = 2;
                 
-                
+                /** Kundenreferenznummer **/
                 public String kundenreferenz;
+                /** Anzahl/Betrag der Papiere im Umsatz **/
                 public TypedValue anzahl;
+                /** Betrag des Umsatzes **/
                 public BigDecimalValue betrag;
                 
+                /** Art der Transaktion (siehe Konstanten INDICATOR*) */
                 public int transaction_indicator;
+                /** Lieferung oder Erhalt? (siehe Konstanten RICHTUNG*) */
                 public int richtung;
+                /** Gegen Bezahlung oder frei? (siehe Konstanten BEZAHLUNG*) */
                 public int bezahlung;
                 
+                /** The transaction was initiated by CCP.A. */ 
                 public boolean ccp_eligibility;
+                /** Datum der Transaktion */
                 public Date datum;
+                /** Transaktion ist ein Storno einer anderen Transaktion */
                 public boolean storno;
                 
+                /** Gegenpartei der Transaktion */
                 public String gegenpartei;
                 
                 @Override

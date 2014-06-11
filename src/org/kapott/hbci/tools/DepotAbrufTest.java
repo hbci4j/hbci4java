@@ -152,10 +152,7 @@ public final class DepotAbrufTest
             Konto[] konten = passport.getAccounts();
             for (int i=0; i<konten.length; i++) {
                 System.out.println("Konto " + i + ":  " + konten[i]);
-            }
-            
-            //test_ums(passport, hbciHandle, konten[0]);
-            
+            }            
             
             BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
             String line;
@@ -189,6 +186,9 @@ public final class DepotAbrufTest
                     e.printStackTrace();
                 }
             } while (line != null);
+            
+            //"Trockentest" des Umsatzparsers mit vorgebenen Daten
+            //test_ums(passport, hbciHandle, konten[0]);
             
             // Umsätze auflisten (als Demo, dass es grundsätzlich funktioniert)
             if (umsatzkto >= 0)
@@ -314,26 +314,20 @@ public final class DepotAbrufTest
     }
     
     private static void analyzeDepot(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
-        // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
-        // wenn der obige Aufruf nicht funktioniert, muss die abzufragende
-        // Kontoverbindung manuell gesetzt werden:
-        //Konto myaccount=new Konto("DE","50050222","8007580007");
         myaccount.curr = null;
 
         // Job zur Abholung des Depotbestands erzeugen
         HBCIJob auszug=hbciHandle.newJob("WPDepotList");
         auszug.setParam("my",myaccount);
-        // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
-        // job.setParam("startdate","21.5.2003");
         auszug.addToQueue();
 
         // alle Jobs in der Job-Warteschlange ausführen
         HBCIExecStatus ret=hbciHandle.execute();
 
         GVRWPDepotList result=(GVRWPDepotList)auszug.getJobResult();
-        // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
+        // wenn der Job "Depotbestand abholen" erfolgreich ausgeführt wurde
         if (result.isOK()) {
-            // kompletten kontoauszug als string ausgeben:
+            // kompletten Depotbestand als string ausgeben:
             System.out.println("##############################");
             System.out.println("#####    Depotliste    #######");
             System.out.println("##############################");
@@ -348,13 +342,14 @@ public final class DepotAbrufTest
             System.out.println(ret.getErrorString());
         }
         
+        // Prüfen, ob Depotumsatzabruf unterstützt wird
         if (!hbciHandle.getSupportedLowlevelJobs().containsKey("WPDepotUms")) {
             System.out.println("Abruf der Depotumsätze nicht unterstützt!");
         } else {
             // Job zur Abholung der Depotumsätze erzeugen
             HBCIJob ums=hbciHandle.newJob("WPDepotUms");
             ums.setParam("my",myaccount);
-            // evtl. Datum setzen, ab welchem die Auszüge geholt werden sollen
+            // evtl. Datum setzen, ab welchem die Umsätze geholt werden sollen
             // job.setParam("startdate","21.5.2003");
             ums.addToQueue();
 
@@ -362,9 +357,9 @@ public final class DepotAbrufTest
             ret=hbciHandle.execute();
 
             GVRWPDepotUms umsRes =(GVRWPDepotUms)ums.getJobResult();
-            // wenn der Job "Kontoauszüge abholen" erfolgreich ausgeführt wurde
+            // wenn der Job "Depotumsätze abholen" erfolgreich ausgeführt wurde
             if (umsRes.isOK()) {
-                // kompletten kontoauszug als string ausgeben:
+                // komplette Depotumsätze als string ausgeben:
                 System.out.println("################################");
                 System.out.println("#####    Depotumsätze    #######");
                 System.out.println("################################");
@@ -381,7 +376,7 @@ public final class DepotAbrufTest
         }
     }
 
-    // Testcode für vorgegebene Beispielnachricht
+    // Testcode für Beispielumsatzdaten, die aus einer Textdatei gelesen werden
 //    private static class MyGVUms extends GVWPDepotUms {
 //        public MyGVUms(HBCIHandler handler) {
 //            super(handler);
