@@ -238,11 +238,21 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
         return bankId;
     }
     
-    public void setFileName(String filename) {
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportChipcard#setFileName(java.lang.String)
+     */
+    @Override
+    public void setFileName(String filename)
+    {
         this.filename = filename;
     }
     
-    public String getFileName() {
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportChipcard#getFileName()
+     */
+    @Override
+    public String getFileName()
+    {
         return filename;
     }
     

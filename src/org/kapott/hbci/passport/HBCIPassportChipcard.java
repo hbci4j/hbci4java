@@ -17,7 +17,27 @@ public interface HBCIPassportChipcard extends HBCIPassport
      * HBCI-Server.
      */
     public void saveBankData();
+    
+    /**
+     * Gibt den Dateinamen für die zusätzliche Schlüsseldatei zurück.
+     * Diese Datei enthält gecachte Daten, um das Initialisieren eines
+     * {@link org.kapott.hbci.manager.HBCIHandler} mit einem DDV-Passport zu
+     * beschleunigen. Defaultmäßig setzt sich der Dateiname aus einem
+     * definiertbaren Prefix (Pfad) und der Seriennummer der Chipkarte zusammen.
+     * Da diese Datei vertrauliche Daten enthält (z.B. die Kontodaten des
+     * Bankkunden), wird diese Datei verschlüsselt. Vor dem erstmaligen Lesen
+     * bzw. beim Erzeugen dieser Datei wird deshalb via Callback-Mechanismus
+     * nach einem Passwort gefragt, das zur Erzeugung des kryptografischen
+     * Schlüssels für die Verschlüsselung benutzt wird.
+     * @return Dateiname der Cache-Datei
+     */
+    public String getFileName();
 
+    /**
+     * Legt den Dateinamen fuer die zusaetzliche Schluesseldatei fest.
+     * @param filename
+     */
+    public void setFileName(String filename);
 }
 
 

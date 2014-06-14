@@ -248,20 +248,19 @@ public class HBCIPassportDDV
         }
     }
 
-    /** <p>Gibt den Dateinamen für die zusätzliche Schlüsseldatei zurück. Diese Datei enthält
-        gecachte Daten, um das Initialisieren eines {@link org.kapott.hbci.manager.HBCIHandler}
-        mit einem DDV-Passport zu beschleunigen. Defaultmäßig setzt sich der Dateiname aus einem
-        definiertbaren Prefix (Pfad) und der Seriennummer der Chipkarte zusammen.</p><p>
-        Da diese Datei vertrauliche Daten enthält (z.B. die Kontodaten des Bankkunden), wird diese
-        Datei verschlüsselt. Vor dem erstmaligen Lesen bzw. beim Erzeugen dieser Datei wird
-        deshalb via Callback-Mechanismus nach einem Passwort gefragt, das zur Erzeugung
-        des kryptografischen Schlüssels für die Verschlüsselung benutzt wird. 
-        @return Dateiname der Cache-Datei */
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportChipcard#getFileName()
+     */
+    @Override
     public String getFileName() 
     {
         return filename;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportChipcard#setFileName(java.lang.String)
+     */
+    @Override
     public void setFileName(String filename) 
     { 
         this.filename=filename;
