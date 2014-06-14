@@ -43,10 +43,10 @@ import org.kapott.hbci.smartcardio.RSACardService;
 import org.kapott.hbci.smartcardio.RSAKeyData;
 
 /**
- * @author axel
- *
+ * HBCI-Passport fuer RDH-Chipkarten.
  */
-public class HBCIPassportRSA extends AbstractRDHPassport {
+public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassportChipcard
+{
 
     protected final static byte[] CIPHER_SALT={(byte) 0x56, (byte) 0xbc, (byte) 0x1c, (byte) 0x88,
                                                (byte) 0x1f, (byte) 0xe3, (byte) 0x73, (byte) 0xcc};
@@ -72,7 +72,13 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
     private Card smartCard;
     private RSACardService cardService;
     
-    public HBCIPassportRSA(Object init, int dummy) {
+    /**
+     * ct.
+     * @param init
+     * @param dummy
+     */
+    public HBCIPassportRSA(Object init, int dummy)
+    {
         super(init);
         
         setParamHeader("client.passport.RSA");
@@ -85,7 +91,12 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
         }
     }
     
-    public HBCIPassportRSA(Object init) {
+    /**
+     * ct.
+     * @param init
+     */
+    public HBCIPassportRSA(Object init)
+    {
         this(init, 0);
         
         ObjectInputStream is = null;
@@ -584,6 +595,21 @@ public class HBCIPassportRSA extends AbstractRDHPassport {
         closeCT();
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportChipcard#saveBankData()
+     */
+    @Override
+    public void saveBankData()
+    {
+        try {
+            checkPIN();
+            ctSaveBankData();
+        } catch (Exception e) {
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INSTSAVEERR"),e);
+        }
+    }
+
+    
     @Override
     public void resetPassphrase() {
         passportKey = null;

@@ -590,15 +590,10 @@ public class HBCIPassportDDV
         }
     }
     
-    /** Schreiben der aktuellen Zugangsdaten auf die Chipkarte. Werden Zugangsdaten
-        des Passport verändert (z.B. mit {@link org.kapott.hbci.passport.HBCIPassport#setHost(String)},
-        so werden diese Daten durch die Methode
-        {@link org.kapott.hbci.passport.HBCIPassport#saveChanges()}
-        <em>nicht</em> auf der Chipkarte gespeichert. Durch Aufruf dieser Methode
-        wird das Schreiben der aktuellen Zugangsdaten erzwungen. Zu den hiervon
-        betroffenen Daten zählen der Ländercode der Bank, die Bankleitzahl, 
-        die Hostadresse des HBCI-Servers sowie die User-ID zur Anmeldung am
-        HBCI-Server.*/
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportChipcard#saveBankData()
+     */
+    @Override
     public void saveBankData()
     {
         try {
@@ -609,11 +604,17 @@ public class HBCIPassportDDV
         }
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#resetPassphrase()
+     */
     public void resetPassphrase()
     {
         passportKey=null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
+     */
     public void saveChanges()
     {
         try {

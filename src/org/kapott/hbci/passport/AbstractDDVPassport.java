@@ -26,7 +26,7 @@ import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
 
 public abstract class AbstractDDVPassport 
-    extends AbstractHBCIPassport
+    extends AbstractHBCIPassport implements HBCIPassportChipcard
 {
     protected AbstractDDVPassport(Object init)
     {
