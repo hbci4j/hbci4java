@@ -63,7 +63,17 @@ public class ParsePain00800302 extends AbstractSepaParser
 
                 put(prop,Names.ENDTOENDID, tx.getPmtId().getEndToEndId());
                 
-                put(prop,Names.CREDITORID,tx.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthr().getId());
+                try
+                {
+                    // Auf Auftragsebene suchen
+                    put(prop,Names.CREDITORID,tx.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthr().getId());
+                }
+                catch (Exception e)
+                {
+                    // Auf Header-Ebene suchen
+                    put(prop,Names.CREDITORID,pmtInf.getCdtrSchmeId().getId().getPrvtId().getOthr().getId());
+                }
+                
                 put(prop,Names.MANDATEID,tx.getDrctDbtTx().getMndtRltdInf().getMndtId());
 
                 XMLGregorianCalendar mandDate = tx.getDrctDbtTx().getMndtRltdInf().getDtOfSgntr();
