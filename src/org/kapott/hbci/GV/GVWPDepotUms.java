@@ -99,8 +99,7 @@ extends HBCIJobImpl
     {
         Properties result=msgstatus.getData();
 
-        StringBuffer paramName=new StringBuffer(header).append(".data536");
-        buffer.append(Swift.decodeUmlauts(result.getProperty(paramName.toString())));
+        buffer.append(Swift.decodeUmlauts(result.getProperty(header + ".data536")));
 
         final SimpleDateFormat date_time_format = new SimpleDateFormat("yyyyMMdd hhmmss");
         final SimpleDateFormat date_only_format = new SimpleDateFormat("yyyyMMdd");
@@ -174,7 +173,14 @@ extends HBCIJobImpl
 
                         FinancialInstrument instrument=new GVRWPDepotUms.Entry.FinancialInstrument();
 
-                        st=Swift.getTagValue(oneinstrument,"35B",0);
+                        int trans_start = oneinstrument.indexOf(":16R:TRAN\r\n");
+                        String oneinstrument_header;
+                        if (trans_start >= 0)
+                            oneinstrument_header = oneinstrument.substring(0, trans_start);
+                        else
+                            oneinstrument_header = oneinstrument;
+                        
+                        st=Swift.getTagValue(oneinstrument_header,"35B",0);
                         boolean haveISIN=st.substring(0,5).equals("ISIN ");
 
                         if (haveISIN) {
@@ -207,7 +213,7 @@ extends HBCIJobImpl
                         }
                         i=0;
                         while (true) {
-                            st=Swift.getTagValue(oneinstrument,"93B",i++);
+                            st=Swift.getTagValue(oneinstrument_header,"93B",i++);
                             if (st==null)
                                 break;
                             String qualifier = st.substring(1,5);
@@ -217,16 +223,26 @@ extends HBCIJobImpl
                             } else if ("FICL".equals(qualifier)) {
                                 instrument.endSaldo   = parseTypedValue(st);
                             } else {
-                                System.out.println("Unknown qualifier: " + qualifier + "; value=" + st);
+                                System.out.println("Unbekannter 93B: " + st);
+                            }
+                        }
+                        
+                        i=0;
+                        while (true) {
+                            st=Swift.getTagValue(oneinstrument_header,"98A",i++);
+                            if (st==null)
+                                break;
+                            String qualifier = st.substring(1,5);
+
+                            if ("PRIC".equals(qualifier)) {
+                                instrument.preisdatum = date_only_format.parse(st.substring(7, 15));
+                            } else {
+                                System.out.println("Unbekannter 98A: " + st);
                             }
                         }
 
-                        int trans_start = 0;
                         //Parse einzelne Transaktionen 
-                        while (true) {
-                            trans_start = oneinstrument.indexOf(":16R:TRAN\r\n", trans_start);
-                            if (trans_start<0)
-                                break;
+                        while (trans_start >= 0) {
                             int trans_end = oneinstrument.indexOf(":16S:TRAN\r\n", trans_start);
                             if (trans_end<0)
                                 break;
@@ -239,7 +255,7 @@ extends HBCIJobImpl
                             if (link_start >=0) {
                                 int link_end = onetransaction.indexOf(":16S:LINK", link_start);
                                 if (link_end >= 0) {
-                                    String onelink = onetransaction.substring(link_start, link_end);
+                                    String onelink = onetransaction.substring(link_start, link_end+8);
                                     String rela = Swift.getTagValue(onelink, "20C", 0);
 
                                     if (rela != null) {
@@ -252,7 +268,7 @@ extends HBCIJobImpl
                             if (detail_start >= 0) {
                                 int detail_end = onetransaction.indexOf(":16S:TRANSDET", detail_start);
                                 if (detail_end >= 0) {
-                                    String onedetail = onetransaction.substring(detail_start, detail_end);
+                                    String onedetail = onetransaction.substring(detail_start, detail_end+12);
 
                                     String quantity = Swift.getTagValue(onedetail, "36B", 0);
                                     if (quantity != null)
@@ -331,15 +347,23 @@ extends HBCIJobImpl
                                         }
                                     }
 
-                                    String eset = Swift.getTagValue(onedetail, "98A", 0);
-                                    if (eset != null) 
-                                        if (eset.startsWith(":ESET")) {
-                                            String datum = eset.substring(7);
+                                    tagidx=0;
+                                    while (true) {
+                                        String t98a = Swift.getTagValue(onedetail, "98A", tagidx++);
+                                        if (t98a == null)
+                                            break;
+                                        
+                                        if (t98a.startsWith(":ESET")) {
+                                            String datum = t98a.substring(7);
                                             transaction.datum = date_only_format.parse(datum);
+                                        } else if (t98a.startsWith(":SETT")) {
+                                            String datum = t98a.substring(7);
+                                            transaction.datum_valuta = date_only_format.parse(datum);
                                         } else {
-                                            System.out.println("Unbekannter 98A: " + eset);
+                                            System.out.println("Unbekannter 98A: " + t98a);
                                         }
-
+                                    }
+                                    
                                     String move = Swift.getTagValue(onedetail, "25D", 0);
                                     if (move != null) 
                                         if (move.startsWith(":MOVE")) {
@@ -348,6 +372,14 @@ extends HBCIJobImpl
                                         } else  {
                                             System.out.println("Unbekannter 25D: " + move);
                                         }
+                                    
+                                    String freitext = Swift.getTagValue(onedetail, "70E", 0);
+                                    if (freitext != null) 
+                                        if (freitext.startsWith(":TRDE")) {
+                                            transaction.freitext_details = freitext.substring(7);
+                                        } else  {
+                                            System.out.println("Unbekannter 70E: " + freitext);
+                                        }
                                 }
                             }
 
@@ -355,7 +387,7 @@ extends HBCIJobImpl
                             if (party_start >=0) {
                                 int party_end = onetransaction.indexOf(":16S:SETPRTY", party_start);
                                 if (party_end >= 0) {
-                                    String oneparty = onetransaction.substring(party_start, party_end);
+                                    String oneparty = onetransaction.substring(party_start, party_end+10);
                                     String deag = Swift.getTagValue(oneparty, "95Q", 0);
 
                                     if (deag != null) {
@@ -363,7 +395,9 @@ extends HBCIJobImpl
                                     }
                                 }
                             }
+                            
                             instrument.transactions.add(transaction);
+                            trans_start = oneinstrument.indexOf(":16R:TRAN\r\n", trans_start);
                         }
                         entry.instruments.add(instrument);
                     }

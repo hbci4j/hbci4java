@@ -62,6 +62,9 @@ extends HBCIJobResultImpl
             /** Endsaldo des Finanzinstruments **/
             public TypedValue endSaldo;
 
+            /** Preisdatum */
+            public Date preisdatum;
+            
             /** Liste der Transaktionen/Umsätze **/
             public final List<Transaction> transactions = new ArrayList<Transaction>();
             
@@ -97,13 +100,18 @@ extends HBCIJobResultImpl
                 
                 /** The transaction was initiated by CCP.A. */ 
                 public boolean ccp_eligibility;
-                /** Datum der Transaktion */
+                /** Effektives Datum der Transaktion */
                 public Date datum;
+                /** Valutadatum der Transaktion */
+                public Date datum_valuta;
                 /** Transaktion ist ein Storno einer anderen Transaktion */
                 public boolean storno;
                 
                 /** Gegenpartei der Transaktion */
                 public String gegenpartei;
+                
+                /** Freitext mit Transaktionsdetails */
+                public String freitext_details;
                 
                 @Override
                 public String toString() {
@@ -156,8 +164,10 @@ extends HBCIJobResultImpl
                     
                     rv.append("ccp_eligibility: ").append(ccp_eligibility).append(sep);
                     rv.append("datum: ").append(datum).append(sep);
+                    rv.append("datum_valuta: ").append(datum_valuta).append(sep);
                     rv.append("storno: ").append(storno).append(sep);
                     rv.append("gegenpartei: ").append(gegenpartei).append(sep);
+                    rv.append("freitext_details: ").append(freitext_details).append(sep);
                     
                     return rv.toString();
                 }
@@ -172,6 +182,7 @@ extends HBCIJobResultImpl
                 rv.append("name: ").append(name).append(sep);
                 rv.append("startSaldo: ").append(startSaldo).append(sep);
                 rv.append("endSaldo: ").append(endSaldo).append(sep);
+                rv.append("preisdatum: ").append(preisdatum).append(sep);
                 
                 for (int i=0; i<transactions.size(); i++) {
                     rv.append("--> Transaction ").append(i).append(":").append(sep);
