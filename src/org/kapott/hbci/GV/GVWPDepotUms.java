@@ -225,7 +225,7 @@ extends HBCIJobImpl
 
                             if ("FIOP".equals(qualifier) || (instrument.startSaldo == null && "INOP".equals(qualifier))) {
                                 instrument.startSaldo = parseTypedValue(st);
-                            } else if ("FICL".equals(qualifier) || (instrument.startSaldo == null && "INCL".equals(qualifier))) {
+                            } else if ("FICL".equals(qualifier) || (instrument.endSaldo == null && "INCL".equals(qualifier))) {
                                 instrument.endSaldo   = parseTypedValue(st);
                             } else {
                                 System.out.println("Unbekannter 93B: " + st);
