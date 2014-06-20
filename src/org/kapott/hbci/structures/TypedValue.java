@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 public class TypedValue extends BigDecimalValue {
     public static final int TYPE_STCK=1;
     public static final int TYPE_WERT=2;
+    public static final int TYPE_PROZENT=3;
     
     private int type;
     
@@ -25,7 +26,17 @@ public class TypedValue extends BigDecimalValue {
     
     @Override
     public String toString() {
-        return getValue().toPlainString()+" "+getCurr() 
-                        + (type==TYPE_STCK ? " Stück" : "");
+        String sType;
+        switch (type) {
+        case TYPE_STCK:
+            sType = "Stück";
+            break;
+        case TYPE_PROZENT:
+            sType = "%";
+            break;
+        default:
+            sType = "";
+        }
+        return getValue().toPlainString()+" "+getCurr() + " " + sType;
     }
 }

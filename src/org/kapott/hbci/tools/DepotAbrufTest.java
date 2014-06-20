@@ -22,8 +22,12 @@
 package org.kapott.hbci.tools;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.kapott.hbci.GV.GVWPDepotUms;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRWPDepotList;
@@ -36,6 +40,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.status.HBCIExecStatus;
+import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.structures.Konto;
 
 /** <p>Tool zum Abholen und Auswerten von Kontoauszügen, gleichzeitig
@@ -145,7 +150,10 @@ public final class DepotAbrufTest
             System.out.println("Alle Geschäftsvorfälle in HBCI4Java: " + hbciHandle.getKernel().getAllLowlevelJobs().toString());
             System.out.println("Unterstützte Geschäftsvorfälle der Bank: " + hbciHandle.getSupportedLowlevelJobs().toString());
             
-
+            //"Trockentest" des Umsatzparsers mit vorgebenen Daten
+            //test_ums(hbciHandle, "/home/jonas/java/hbci/msg536.txt");
+            //test_ums(hbciHandle, "/home/jonas/java/hbci/msg536_hbci-zka.txt");
+            
             //Konten ausgeben
             System.out.println("Kontenliste:");
             System.out.println("------------");
@@ -187,9 +195,6 @@ public final class DepotAbrufTest
                 }
             } while (line != null);
             
-            //"Trockentest" des Umsatzparsers mit vorgebenen Daten
-            //test_ums(passport, hbciHandle, konten[0]);
-            
             // Umsätze auflisten (als Demo, dass es grundsätzlich funktioniert)
             if (umsatzkto >= 0)
                 analyzeReportOfTransactions(passport, hbciHandle, konten[umsatzkto]);
@@ -206,49 +211,6 @@ public final class DepotAbrufTest
             }
         }
     }
-
-//    public static void main_multithreaded(String[] args)
-//        throws Exception
-//    {
-//
-//        // Da im main-Thread keine HBCI Aktionen laufen sollen, reicht es hier, die Umgebung
-//        // nur "notdürftig" zu initialisieren. Leere Konfiguration, und keine Callback-Unterstützung.
-//        HBCIUtils.init(new Properties(), new HBCICallbackUnsupported());
-//
-//        // Die Verwendung der HBCIThreadFactory ist für die korrekte Funktionsweise von HBCI4Java zwingend erforderlich
-//        // (Alternativ müsste manuell sichergestellt werden, dass jeder Thread in einer eigenen Thread-Gruppe läuft.)
-//        ExecutorService executor = Executors.newCachedThreadPool(new HBCIThreadFactory());
-//
-//        // Einstellungen für die Aufgabe erstellen
-//        Properties properties = HBCIUtils.loadPropertiesFile(new FileSystemClassLoader(),"/home/stefan.palme/temp/a.props");
-//        HBCICallback callback = new MyHBCICallback();
-//        HBCIPassportFactory passportFactory = new DefaultHBCIPassportFactory((Object) "Passport für Kontoauszugs-Demo");
-//
-//        // Aufgabe implementieren. Die HBCIRunnable übernimmt Initialisierung
-//        // und Schließen von Passport und Handler automatisch.
-//        Runnable runnable = new HBCIRunnable(properties, callback, passportFactory) {
-//            @Override
-//            protected void execute() throws Exception {
-//
-//                // Kontoauszüge auflisten
-//                analyzeReportOfTransactions(passport, handler);
-//
-//            }
-//        };
-//
-//        // Aufgabe ausführen
-//        executor.submit(runnable);
-//
-//        // Executor runterfahren und warten, bis alle Aufgaben fertig sind
-//        executor.shutdown();
-//        while (!executor.isTerminated()) {
-//            executor.awaitTermination(1, TimeUnit.SECONDS);
-//        }
-//
-//        // Haupt-Thread beenden
-//        HBCIUtils.done();
-//
-//    }
 
     private static void analyzeReportOfTransactions(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
         // auszuwertendes Konto automatisch ermitteln (das erste verfügbare HBCI-Konto)
@@ -377,40 +339,40 @@ public final class DepotAbrufTest
     }
 
     // Testcode für Beispielumsatzdaten, die aus einer Textdatei gelesen werden
-//    private static class MyGVUms extends GVWPDepotUms {
-//        public MyGVUms(HBCIHandler handler) {
-//            super(handler);
-//            // TODO Auto-generated constructor stub
-//        }
-//
-//        public GVRWPDepotUms myExtract(String testdata) {
-//            HBCIMsgStatus stat = new HBCIMsgStatus();
-//            stat.getData().put("foo.data536", testdata);
-//            extractResults(stat, "foo", 0);
-//            return (GVRWPDepotUms)jobResult;
-//        }
-//    }
-//    
-//    
-//    private static void test_ums(HBCIPassport hbciPassport, HBCIHandler hbciHandle, Konto myaccount) {
-//        try {
-//            MyGVUms test = new MyGVUms(hbciHandle);
-//            FileReader rd=new FileReader("/home/jonas/java/hbci/msg536.txt");
-//            StringBuilder res = new StringBuilder();
-//            char[] buf = new char[4000];
-//            int sz;
-//            while ((sz=rd.read(buf)) >= 0) {
-//                res.append(buf, 0, sz);
-//            }
-//            rd.close();
-//            
-//            System.out.println(test.myExtract(res.toString()));
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
+    private static class MyGVUms extends GVWPDepotUms {
+        public MyGVUms(HBCIHandler handler) {
+            super(handler);
+            // TODO Auto-generated constructor stub
+        }
+
+        public GVRWPDepotUms myExtract(String testdata) {
+            HBCIMsgStatus stat = new HBCIMsgStatus();
+            stat.getData().put("foo.data536", testdata);
+            extractResults(stat, "foo", 0);
+            return (GVRWPDepotUms)jobResult;
+        }
+    }
+    
+    
+    private static void test_ums(HBCIHandler hbciHandle, String fileName) {
+        try {
+            MyGVUms test = new MyGVUms(hbciHandle);
+            FileReader rd=new FileReader(fileName);
+            StringBuilder res = new StringBuilder();
+            char[] buf = new char[4000];
+            int sz;
+            while ((sz=rd.read(buf)) >= 0) {
+                res.append(buf, 0, sz);
+            }
+            rd.close();
+            
+            System.out.println(test.myExtract(res.toString()));
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }
