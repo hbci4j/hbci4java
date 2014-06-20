@@ -62,6 +62,8 @@ extends HBCIJobResultImpl
             /** Endsaldo des Finanzinstruments **/
             public TypedValue endSaldo;
 
+            /** Endsaldo des Finanzinstruments **/
+            public TypedValue preis;
             /** Preisdatum */
             public Date preisdatum;
             
@@ -72,7 +74,13 @@ extends HBCIJobResultImpl
                 /** The transaction relates to settlement and clearing **/
                 public static final int INDICATOR_SETTLEMENT_CLEARING = 1;
                 /** The transaction relates to corporate action. **/
-                public static final int INDICATOR_KAPITALMASSNAHME = 2;
+                public static final int INDICATOR_CORPORATE_ACTION = 2;
+                @Deprecated
+                public static final int INDICATOR_KAPITALMASSNAHME = INDICATOR_CORPORATE_ACTION;
+                /** Transaktion im Zusammenhang mit Leihe **/
+                public static final int INDICATOR_LEIHE = 3;
+                /** Transaktion im Zusammenhang mit Sicherheiten **/
+                public static final int INDICATOR_SICHERHEITEN = 4;
                 
                 /** The transaction is a delivery. **/
                 public static final int RICHTUNG_LIEFERUNG = 1;
@@ -90,6 +98,10 @@ extends HBCIJobResultImpl
                 public TypedValue anzahl;
                 /** Betrag des Umsatzes **/
                 public BigDecimalValue betrag;
+                /** Betrag der Stueckzinsen **/
+                public BigDecimalValue stueckzinsen;
+                /** Anzahl der aufgelaufenen Tage für Stückzinsen */
+                public int stueckzins_tage;
                 
                 /** Art der Transaktion (siehe Konstanten INDICATOR*) */
                 public int transaction_indicator;
@@ -120,13 +132,21 @@ extends HBCIJobResultImpl
                     rv.append("kundenreferenz: ").append(kundenreferenz).append(sep);
                     rv.append("anzahl: ").append(anzahl).append(sep);
                     rv.append("betrag: ").append(betrag).append(sep);
+                    rv.append("stueckzinsen: ").append(stueckzinsen).append(sep);
+                    rv.append("stueckzins_tage: ").append(stueckzins_tage).append(sep);
                     rv.append("transaction_indicator: ").append(transaction_indicator).append(": ");
                     switch (transaction_indicator) {
-                    case (INDICATOR_KAPITALMASSNAHME):
-                        rv.append("Kapitalmassnahme");
+                    case (INDICATOR_CORPORATE_ACTION):
+                        rv.append("Corporate Action");
                         break;
                     case (INDICATOR_SETTLEMENT_CLEARING):
                         rv.append("Settlement/Clearing");
+                        break;
+                    case (INDICATOR_LEIHE):
+                        rv.append("Leihe");
+                        break;
+                    case (INDICATOR_SICHERHEITEN):
+                        rv.append("Sicherheiten");
                         break;
                     default:
                         rv.append("Unbekannt");
@@ -182,6 +202,7 @@ extends HBCIJobResultImpl
                 rv.append("name: ").append(name).append(sep);
                 rv.append("startSaldo: ").append(startSaldo).append(sep);
                 rv.append("endSaldo: ").append(endSaldo).append(sep);
+                rv.append("preis: ").append(preis).append(sep);
                 rv.append("preisdatum: ").append(preisdatum).append(sep);
                 
                 for (int i=0; i<transactions.size(); i++) {

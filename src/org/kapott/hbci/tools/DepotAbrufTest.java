@@ -150,7 +150,10 @@ public final class DepotAbrufTest
             System.out.println("Alle Geschäftsvorfälle in HBCI4Java: " + hbciHandle.getKernel().getAllLowlevelJobs().toString());
             System.out.println("Unterstützte Geschäftsvorfälle der Bank: " + hbciHandle.getSupportedLowlevelJobs().toString());
             
-
+            //"Trockentest" des Umsatzparsers mit vorgebenen Daten
+            //test_ums(hbciHandle, "/home/jonas/java/hbci/msg536.txt");
+            //test_ums(hbciHandle, "/home/jonas/java/hbci/msg536_hbci-zka.txt");
+            
             //Konten ausgeben
             System.out.println("Kontenliste:");
             System.out.println("------------");
@@ -191,10 +194,6 @@ public final class DepotAbrufTest
                     e.printStackTrace();
                 }
             } while (line != null);
-            
-            //"Trockentest" des Umsatzparsers mit vorgebenen Daten
-            //test_ums(hbciHandle, "/home/jonas/java/hbci/msg536.txt");
-            //test_ums(hbciHandle, "/home/jonas/java/hbci/msg536_hbci-zka.txt");
             
             // Umsätze auflisten (als Demo, dass es grundsätzlich funktioniert)
             if (umsatzkto >= 0)
