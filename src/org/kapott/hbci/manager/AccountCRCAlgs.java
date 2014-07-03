@@ -467,8 +467,17 @@ public class AccountCRCAlgs
             
             if (!ok) {
                 // Method C
+                sum = addProducts(number, 3, 8, new int[] {1, 2, 1, 2, 1, 2 }, false);
+                crc = (10 - sum % 10) % 10;
+                ok = (number[9] == crc);
+            }
+            
+            if (!ok && number[9]<7) {
+                // Method D
                 sum = addProducts(number, 4, 8, new int[] { 6, 5, 4, 3, 2 }, false);
-                crc = 7-(sum%7);
+                crc = (7 - (sum % 7))%7;
+                if (crc > 9)
+                    crc = 0;
                 ok = (number[9] == crc);
             }
             
@@ -989,7 +998,7 @@ public class AccountCRCAlgs
 
         //Methode C
         sum = addProducts(number,4,8,new int[] {6,5,4,3,2},false);
-        crc=7-(sum%7);
+        crc=(7-(sum%7))%7;
         return number[9]==crc;
     }
     
@@ -1248,9 +1257,11 @@ public class AccountCRCAlgs
         if (number[0]==0) {
             long bigint=calculateIntFromNumber(number);
             if (bigint>=1 && bigint<=1999999 ||
-                    bigint>=9000000 && bigint<=25999999 ||
-                    bigint>=396000000 && bigint<=499999999 ||
-                    bigint>=700000000 && bigint<=799999999)
+                bigint>=9000000 && bigint<=25999999 ||
+                bigint>=396000000 && bigint<=499999999 ||
+                bigint>=700000000 && bigint<=799999999 ||
+                bigint>=910000000 && bigint<=989999999                
+                            )
             {
                 return true;
             }
