@@ -11,6 +11,7 @@ dependencies {
 
 sourceCompatibility = 1.5
 compileJava.options.encoding = 'ISO-8859-1'
+compileTestJava.options.encoding = 'ISO-8859-1'
 
 version = '2.5.13-SNAPSHOT'
 
