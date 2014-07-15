@@ -1,4 +1,4 @@
-# HBCI4Java
+# [![Build Status](https://travis-ci.org/willuhn/hbci4java.svg?branch=master)](https://travis-ci.org/willuhn/hbci4java) HBCI4Java
 
 ## Vorab
 
