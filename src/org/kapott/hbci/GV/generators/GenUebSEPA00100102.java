@@ -79,7 +79,7 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
         PaymentInstructionInformation4 pmtInf = new PaymentInstructionInformation4();
         doc.getPain00100102().setPmtInf(pmtInf);
 
-        pmtInf.setPmtInfId(sepaParams.getProperty("sepaid"));
+        pmtInf.setPmtInfId(sepaParams.getProperty("pmtinfid"));
         pmtInf.setPmtMtd(PaymentMethod5Code.TRF);
 
         // Payment Type Information

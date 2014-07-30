@@ -95,7 +95,7 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator
         PaymentInstructionInformationSDD pmtInf = new PaymentInstructionInformationSDD();
         pmtInfs.add(pmtInf);
 
-        pmtInf.setPmtInfId(sepaParams.getProperty("sepaid"));
+        pmtInf.setPmtInfId(sepaParams.getProperty("pmtinfid"));
         pmtInf.setPmtMtd(PaymentMethod2Code.DD);
         pmtInf.setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         pmtInf.setCtrlSum(SepaUtil.sumBtgValue(sepaParams, maxIndex));

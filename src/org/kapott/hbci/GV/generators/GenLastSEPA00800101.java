@@ -87,7 +87,7 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
         PaymentInstructionInformation5 pmtInf = new PaymentInstructionInformation5();
         doc.getPain00800101().setPmtInf(pmtInf);
 
-        pmtInf.setPmtInfId(sepaParams.getProperty("sepaid"));
+        pmtInf.setPmtInfId(sepaParams.getProperty("pmtinfid"));
         pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 
         pmtInf.setReqdColltnDt(SepaUtil.createCalendar(sepaParams.getProperty("targetdate")));

@@ -77,7 +77,7 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
         PaymentInstructionInformationSCT pmtInf = new PaymentInstructionInformationSCT();
         pmtInfs.add(pmtInf);
 
-        pmtInf.setPmtInfId(sepaParams.getProperty("sepaid"));
+        pmtInf.setPmtInfId(sepaParams.getProperty("pmtinfid"));
         pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
         pmtInf.setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         pmtInf.setCtrlSum(SepaUtil.sumBtgValue(sepaParams, maxIndex));

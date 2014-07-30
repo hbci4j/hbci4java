@@ -81,6 +81,7 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     	addConstraint("usage",           "sepa.usage",     "",    LogFilter.FILTER_NONE, true);
     
     	addConstraint("sepaid",          "sepa.sepaid",        getSEPAMessageId(),      LogFilter.FILTER_NONE);
+        addConstraint("pmtinfid",        "sepa.pmtinfid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
     	addConstraint("endtoendid",      "sepa.endtoendid",    ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_IDS,  true);
         addConstraint("creditorid",      "sepa.creditorid",    null,                    LogFilter.FILTER_IDS,  true);
     	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_IDS,  true);
