@@ -22,6 +22,9 @@ import org.kapott.hbci.sepa.jaxb.pain_001_003_03.PaymentInstructionInformationSC
 public class ParsePain00100303 extends AbstractSepaParser
 {
     
+    /**
+     * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.util.List)
+     */
     public void parse(InputStream xml, List<Properties> sepaResults)
     {
         
@@ -41,6 +44,7 @@ public class ParsePain00100303 extends AbstractSepaParser
             {
                 Properties prop = new Properties();
 
+                put(prop,Names.PMTINFID,pmtInf.getPmtInfId());
                 put(prop,Names.SRC_NAME, pain.getGrpHdr().getInitgPty().getNm());
                 put(prop,Names.SRC_IBAN, pmtInf.getDbtrAcct().getId().getIBAN());
                 put(prop,Names.SRC_BIC, pmtInf.getDbtrAgt().getFinInstnId().getBIC());

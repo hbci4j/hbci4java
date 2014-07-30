@@ -37,6 +37,7 @@ public class ParsePain00800101 extends AbstractSepaParser
         {
             Properties prop = new Properties();
 
+            put(prop,Names.PMTINFID,pmtInf.getPmtInfId());
             put(prop,Names.SRC_NAME, pain.getGrpHdr().getInitgPty().getNm());            
             put(prop,Names.SRC_IBAN, pmtInf.getCdtrAcct().getId().getIBAN());
             put(prop,Names.SRC_BIC, pmtInf.getCdtrAgt().getFinInstnId().getBIC());
