@@ -163,8 +163,12 @@ public class GenUebSEPA00100102 extends AbstractSEPAGenerator
         cdtTrxTxInf.getAmt().getInstdAmt().setCcy("EUR");
 
         //Payment Information - Credit Transfer Transaction Information - Usage
-        cdtTrxTxInf.setRmtInf(new RemittanceInformation3());
-        cdtTrxTxInf.getRmtInf().setUstrd(sepaParams.getProperty(SepaUtil.insertIndex("usage", index)));
+        String usage = sepaParams.getProperty(SepaUtil.insertIndex("usage", index));
+        if (usage != null && usage.length() > 0)
+        {
+            cdtTrxTxInf.setRmtInf(new RemittanceInformation3());
+            cdtTrxTxInf.getRmtInf().setUstrd(usage);
+        }
 
         return cdtTrxTxInf;
     }

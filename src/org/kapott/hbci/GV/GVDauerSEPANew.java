@@ -72,7 +72,7 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         addConstraint("dst.name",  "sepa.dst.name",  null, LogFilter.FILTER_IDS);
         addConstraint("btg.value", "sepa.btg.value", null, LogFilter.FILTER_NONE);
         addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE);
-        addConstraint("usage",     "sepa.usage",     null, LogFilter.FILTER_NONE);
+        addConstraint("usage",     "sepa.usage",     "",   LogFilter.FILTER_NONE);
       
         //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
         addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);

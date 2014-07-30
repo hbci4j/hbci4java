@@ -189,10 +189,13 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
 
         drctDbtTxInf.getInstdAmt().setCcy(sepaParams.getProperty(SepaUtil.insertIndex("btg.curr", index)));
 
-
         //Payment Information - Credit Transfer Transaction Information - Usage
-        drctDbtTxInf.setRmtInf(new RemittanceInformation3());
-        drctDbtTxInf.getRmtInf().setUstrd(sepaParams.getProperty(SepaUtil.insertIndex("usage", index)));
+        String usage = sepaParams.getProperty(SepaUtil.insertIndex("usage", index));
+        if (usage != null && usage.length() > 0)
+        {
+            drctDbtTxInf.setRmtInf(new RemittanceInformation3());
+            drctDbtTxInf.getRmtInf().setUstrd(usage);
+        }
 
         return drctDbtTxInf;
     }

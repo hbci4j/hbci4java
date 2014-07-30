@@ -265,7 +265,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	if (result == null)
     	{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss:SSSS");
-    	    result = "hbci4java-" + format.format(new Date());
+    	    result = format.format(new Date());
     	    result = result.substring(0, Math.min(result.length(), 35));
     	    setSEPAParam("messageId", result);
     	}
