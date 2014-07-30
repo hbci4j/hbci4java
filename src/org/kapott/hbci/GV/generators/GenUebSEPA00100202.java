@@ -70,8 +70,11 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
         if (batch != null)
             doc.getPain00100102().getGrpHdr().setBtchBookg(batch.equals("1"));
 
+        final String sepaId   = sepaParams.getProperty("sepaid");
+        final String pmtInfId = sepaParams.getProperty("pmtinfid");
+
         //Group Header
-        doc.getPain00100102().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
+        doc.getPain00100102().getGrpHdr().setMsgId(sepaId);
         doc.getPain00100102().getGrpHdr().setCreDtTm(SepaUtil.createCalendar(null));
         doc.getPain00100102().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         doc.getPain00100102().getGrpHdr().setCtrlSum(SepaUtil.sumBtgValue(sepaParams, maxIndex));
@@ -85,7 +88,7 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
         PaymentInstructionInformationSCT pmtInf = new PaymentInstructionInformationSCT();
         pmtInfs.add(pmtInf);
 
-        pmtInf.setPmtInfId(sepaParams.getProperty("pmtinfid"));
+        pmtInf.setPmtInfId(pmtInfId != null && pmtInfId.length() > 0 ? pmtInfId : sepaId);
         pmtInf.setPmtMtd(PaymentMethodSCTCode.TRF);
 
         // Payment Type Information

@@ -84,9 +84,11 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
         if (batch != null)
             doc.getPain00800101().getGrpHdr().setBtchBookg(batch.equals("1"));
 
+        final String sepaId   = sepaParams.getProperty("sepaid");
+        final String pmtInfId = sepaParams.getProperty("pmtinfid");
 
         //Group Header
-        doc.getPain00800101().getGrpHdr().setMsgId(sepaParams.getProperty("sepaid"));
+        doc.getPain00800101().getGrpHdr().setMsgId(sepaId);
         doc.getPain00800101().getGrpHdr().setCreDtTm(SepaUtil.createCalendar(null));
         doc.getPain00800101().getGrpHdr().setNbOfTxs(String.valueOf(maxIndex != null ? maxIndex + 1 : 1));
         doc.getPain00800101().getGrpHdr().setCtrlSum(SepaUtil.sumBtgValue(sepaParams, maxIndex));
@@ -100,7 +102,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
         PaymentInstructionInformationSDD pmtInf = new PaymentInstructionInformationSDD();
         pmtInfs.add(pmtInf);
 
-        pmtInf.setPmtInfId(sepaParams.getProperty("pmtinfid"));
+        pmtInf.setPmtInfId(pmtInfId != null && pmtInfId.length() > 0 ? pmtInfId : sepaId);
         pmtInf.setPmtMtd(PaymentMethod2Code.DD);
 
         pmtInf.setReqdColltnDt(SepaUtil.createCalendar(sepaParams.getProperty("targetdate")));
