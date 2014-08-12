@@ -32,7 +32,10 @@ public class ParsePain00100202 extends AbstractSepaParser
                 
         //Payment Information 
         Pain00100102 pain = doc.getPain00100102();
-        
+
+        if (pain == null)
+            return;
+
         List<PaymentInstructionInformationSCT> pmtInfs = pain.getPmtInf();
         
         for (PaymentInstructionInformationSCT pmtInf : pmtInfs)

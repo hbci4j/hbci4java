@@ -30,7 +30,10 @@ public class ParsePain00100203 extends AbstractSepaParser
         
         Document doc = JAXB.unmarshal(xml, Document.class);
         CustomerCreditTransferInitiationV03 pain = doc.getCstmrCdtTrfInitn();
-                
+
+        if (pain == null)
+            return;
+
         //Payment Information 
         List<PaymentInstructionInformationSCT> pmtInfs = pain.getPmtInf();
         
