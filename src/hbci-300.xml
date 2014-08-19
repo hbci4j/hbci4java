@@ -1400,6 +1400,12 @@
             <DE name="needtotal" type="JN" />
             <DE name="cansingletransfer" type="JN" />
         </DEGdef>
+        
+        <DEGdef id="ParUmbSepa">
+            <DE name="PurposeCodes" type="AN" maxsize="4096" minnum="0" maxnum="1"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+        
 
         <DEGdef id="ParTAN2Step1">
             <DE name="can1step" type="JN"/>
@@ -5868,6 +5874,27 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
 
+        <!-- BEGIN SEPA-Umbuchung aka 'SEPA-Überweisung auf ein Empfängerkonto' -->
+        <!-- Request -->
+        <SEGdef id="UmbSEPA1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            
+            <value path="SegHead.code">HKCUM</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- BPD -->
+        <SEGdef id="UmbSEPAPar1">
+            &GVP2;
+            <DEG type="ParUmbSepa" name="ParUmbSepa"/>
+            &SecClassValids;
+            <value path="SegHead.code">HICUMS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- END SEPA-Umbuchung aka 'SEPA-Überweisung auf ein Empfängerkonto' -->
+
         <!-- BEGIN SEPA-Lastschrift CORE -->
         <!-- Request -->
         <SEGdef id="LastSEPA1">
@@ -7243,6 +7270,7 @@
             <SEG type="UebForeign2" minnum="0"/>
             <SEG type="UebGar1" minnum="0"/>
             <SEG type="UebSEPA1" minnum="0"/>
+            <SEG type="UmbSEPA1" minnum="0"/>
             <SEG type="Umb1" minnum="0"/>
             <SEG type="Umb2" minnum="0"/>
             <SEG type="Vormerkposten1" minnum="0"/>
@@ -7529,6 +7557,7 @@
             <SEG type="UebForeignPar2" minnum="0"/>
             <SEG type="UebGarPar1" minnum="0"/>
             <SEG type="UebSEPAPar1" minnum="0"/>
+            <SEG type="UmbSEPAPar1" minnum="0"/>
             <SEG type="UmbPar1" minnum="0"/>
             <SEG type="UmbPar2" minnum="0"/>
             <SEG type="VormerkpostenPar1" minnum="0"/>
