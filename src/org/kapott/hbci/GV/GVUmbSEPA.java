@@ -110,4 +110,13 @@ public class GVUmbSEPA extends AbstractSEPAGV
         addConstraint("pmtinfid",  "sepa.pmtinfid",    getSEPAMessageId(),      LogFilter.FILTER_NONE);
         addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE, true);
     }
+
+    /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
+     */
+    public String getPainJobName()
+    {
+        // Als Job-Namen nehmen wir die normale SEPA-Ueberweisung, weil das die selbe SEPA-Message ist
+        return "UebSEPA";
+    }
 }
