@@ -276,12 +276,18 @@ import org.kapott.hbci.swift.Swift;
           eine HTTPS-Verbindung mit dem HBCI-Server aufgebaut, f�r diese 
           Verbindung wird der localPort-Parameter im Moment noch nicht ausgewertet.</p></li>
       <li><code>comm.standard.socks.server</code>
-          <p>Soll für ausgehende Verbindungen ein SOCKS-Server verwendet werden, kann
+          <p>Soll fuer ausgehende Verbindungen ein SOCKS-Server verwendet werden, kann
           dieser SOCKS-Server im Format <code>hostname:port</code> festgelegt werden. 
-          Diese Einstellung wird <em>NICHT</em> für HBCI-PIN/TAN verwendet, sondern nur 
-          für alle "richtigen" HBCI-Verbindungen (alle Passport-Varianten von RDH und DDV).</p></li>
+          Diese Einstellung wird <em>NICHT</em> fuer HBCI-PIN/TAN verwendet, sondern nur 
+          fuer alle "richtigen" HBCI-Verbindungen (alle Passport-Varianten von RDH und DDV).</p></li>
       <li><code>sepa.schema.validation</code>
           <p>Kann auf 1 gesetzt werden, wenn das erzeugte XML gegen das Schema validiert werden soll.</p></li>
+      <li><code>bpd.maxage.days</code>
+          <p>Maximales Alter der BPD in Tagen nach deren Ablauf die BPD erneut abgerufen werden - auch dann,
+          wenn sich deren Versionsnummer nicht geaendert hat. Das ermoeglicht das automatische Aktualisieren
+          der BPD, wenn die Bank die Versionsnummer nicht erhoeht. Ein Wert von "-1" bedeutet: Jedesmal
+          BPD erneut abrufen. Ein Wert von "0" bedeutet: Niemals BPD ohne Versionsaenderung erneut abrufen.
+          Der Default-Wet ist 7 - also einmal pro Woche.</p></li>
       <li><code>kernel.kernel.xmlpath</code>
           <p>(wird nicht gesetzt, zur Zeit nur intern benutzt)</p></li>
       <li><code>kernel.kernel.blzpath</code>

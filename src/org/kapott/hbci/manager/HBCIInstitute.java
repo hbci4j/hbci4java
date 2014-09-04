@@ -27,6 +27,7 @@ import java.security.KeyFactory;
 import java.security.spec.KeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -47,6 +48,9 @@ import org.kapott.hbci.status.HBCIMsgStatus;
 public final class HBCIInstitute
 	implements IHandlerData
 {
+    private final static String BPD_KEY_LASTUPDATE  = "_lastupdate";
+    private final static String BPD_KEY_HBCIVERSION = "_hbciversion";
+    
     private HBCIPassportInternal passport;
     private HBCIKernelImpl       kernel;
 
@@ -82,7 +86,8 @@ public final class HBCIInstitute
         }
 
         if (p.size()!=0) {
-            p.setProperty("_hbciversion",kernel.getHBCIVersion());
+            p.setProperty(BPD_KEY_HBCIVERSION,kernel.getHBCIVersion());
+            p.setProperty(BPD_KEY_LASTUPDATE,String.valueOf(System.currentTimeMillis()));
             passport.setBPD(p);
             HBCIUtils.log("installed new BPD with version "+passport.getBPDVersion(),HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_BPD_INIT_DONE,passport.getBPD());
@@ -194,14 +199,74 @@ public final class HBCIInstitute
             }
         }
     }
+    
+    /**
+     * Prueft, ob die BPD abgelaufen sind und neu geladen werden muessen.
+     * @return true, wenn die BPD abgelaufen sind.
+     */
+    private boolean isBPDExpired()
+    {
+        Properties bpd = passport.getBPD();
+        String maxAge = HBCIUtils.getParam("bpd.maxage.days","7");
+        HBCIUtils.log("[BPD] max age: " + maxAge + " days",HBCIUtils.LOG_INFO);
+        
+        long maxMillis = -1L;
+        try
+        {
+            int days = Integer.parseInt(maxAge);
+            if (days == 0)
+            {
+                HBCIUtils.log("[BPD] auto-expiry disabled",HBCIUtils.LOG_INFO);
+                return false;
+            }
+            
+            if (days > 0)
+                maxMillis = days * 24 * 60 * 60 * 1000L;
+        }
+        catch (NumberFormatException e)
+        {
+            HBCIUtils.log(e);
+            return false;
+        }
+        
+        long lastUpdate = 0L;
+        if (bpd != null)
+        {
+            String s = bpd.getProperty(BPD_KEY_LASTUPDATE,Long.toString(lastUpdate));
+            try
+            {
+                lastUpdate = Long.parseLong(s);
+            }
+            catch (NumberFormatException e)
+            {
+                HBCIUtils.log(e);
+                return false;
+            }
+            HBCIUtils.log("[BPD] last update: " + (lastUpdate == 0 ? "never" : new Date(lastUpdate)),HBCIUtils.LOG_INFO);
+        }
 
+        long now = System.currentTimeMillis();
+        if (maxMillis < 0 || (now - lastUpdate) > maxMillis)
+        {
+            HBCIUtils.log("[BPD] expired, will be updated now",HBCIUtils.LOG_INFO);
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Aktualisiert die BPD bei Bedarf.
+     */
     public void fetchBPD()
     {
         // BPD abholen, wenn nicht vorhanden oder HBCI-Version geaendert
         Properties bpd=passport.getBPD();
-        String     hbciVersionOfBPD=(bpd!=null)?bpd.getProperty("_hbciversion"):null;
+        String     hbciVersionOfBPD=(bpd!=null)?bpd.getProperty(BPD_KEY_HBCIVERSION):null;
+        
             
         if (passport.getBPDVersion().equals("0") ||
+            isBPDExpired() ||
             hbciVersionOfBPD==null ||
             !hbciVersionOfBPD.equals(kernel.getHBCIVersion())) {
                 
