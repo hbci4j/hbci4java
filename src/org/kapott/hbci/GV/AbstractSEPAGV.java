@@ -60,7 +60,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     public AbstractSEPAGV(HBCIHandler handler, String name)
     {
         super(handler, name, new HBCIJobResultImpl());
-        this.pain = this.determinePainVersion(handler);
+        this.pain = this.determinePainVersion(handler,name);
     }
     
     /**
@@ -72,7 +72,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     public AbstractSEPAGV(HBCIHandler handler, String name, HBCIJobResultImpl jobResult)
     {
         super(handler, name, jobResult);
-        this.pain = this.determinePainVersion(handler);
+        this.pain = this.determinePainVersion(handler,name);
     }
     
     /**
@@ -127,6 +127,44 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         return value != null && value.equalsIgnoreCase("J");
     }
     
+    /**
+     * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
+     * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
+     * unterstützen pain Versionen. Der größte gemeinsamme Nenner wird
+     * zurueckgeliefert.
+     * @param handler
+     * @param gvName der Geschaeftsvorfall fuer den in den BPD nach dem PAIN-Versionen
+     * gesucht werden soll.
+     * @return die ermittelte PAIN-Version.
+     */
+    private PainVersion determinePainVersion(HBCIHandler handler, String gvName)
+    {
+        // Schritt 1: Wir holen uns die globale maximale PAIN-Version
+        PainVersion globalVersion = this.determinePainVersionInternal(handler,GVSEPAInfo.getLowlevelName());
+        
+        // Schritt 2: Die des Geschaeftsvorfalls - fuer den Fall, dass die Bank
+        // dort weitere Einschraenkungen hinterlegt hat
+        PainVersion jobVersion = this.determinePainVersionInternal(handler,gvName);
+        
+        // Wir haben gar keine PAIN-Version gefunden
+        if (globalVersion == null && jobVersion == null)
+        {
+            PainVersion def = this.getDefaultPainVersion();
+            HBCIUtils.log("unable to determine matching pain version, using default: " + def,HBCIUtils.LOG_WARN);
+            return def;
+        }
+        
+        // Wenn wir keine GV-spezifische haben, dann nehmen wir die globale
+        if (jobVersion == null)
+        {
+            HBCIUtils.log("have no job-specific pain version, using global pain version: " + globalVersion,HBCIUtils.LOG_DEBUG);
+            return globalVersion;
+        }
+        
+        // Ansonsten hat die vom Job Vorrang:
+        HBCIUtils.log("using job-specific pain version: " + jobVersion,HBCIUtils.LOG_DEBUG);
+        return jobVersion;
+    }
     
     /**
      * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
@@ -134,76 +172,75 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * unterstützen pain Versionen. Der größte gemeinsamme Nenner wird
      * zurueckgeliefert.
      * @param handler
-     * @return die ermittelte PAIN-Version.
+     * @param gvName der Geschaeftsvorfall fuer den in den BPD nach dem PAIN-Versionen
+     * gesucht werden soll.
+     * @return die ermittelte PAIN-Version oder NULL wenn keine ermittelt werden konnte.
      */
-    private PainVersion determinePainVersion(HBCIHandler handler)
+    private PainVersion determinePainVersionInternal(HBCIHandler handler, final String gvName)
     {
-        // Bank hat Infos ueber unterstuetzte Schema-Versionen geliefert.
-        if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") != null)
-        {
-            HBCIUtils.log("searching for supported pain versions",HBCIUtils.LOG_DEBUG);
-            List<PainVersion> found = new ArrayList<PainVersion>();
+        HBCIUtils.log("searching for supported pain versions for GV " + gvName,HBCIUtils.LOG_DEBUG);
         
-            // SEPAInfo laden und darüber iterieren
-            Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
-            Enumeration e = props.propertyNames();
-            while (e.hasMoreElements())
+        if (handler.getSupportedLowlevelJobs().getProperty(gvName) == null)
+        {
+            HBCIUtils.log("don't have any BPD for GV " + gvName,HBCIUtils.LOG_DEBUG);
+            return null;
+        }
+
+        List<PainVersion> found = new ArrayList<PainVersion>();
+    
+        // GV-Restrictions laden und darüber iterieren
+        Properties props = handler.getLowlevelJobRestrictions(gvName);
+        Enumeration e = props.propertyNames();
+        while (e.hasMoreElements())
+        {
+            String key = (String) e.nextElement();
+    
+            // Die Keys, welche die Schema-Versionen enthalten, heissen alle "suppformats*"
+            if (!key.startsWith("suppformats"))
+                continue;
+    
+            String urn = props.getProperty(key);
+            try
             {
-                String key = (String) e.nextElement();
-
-                // Die Keys, welche die Schema-Versionen enthalten, heissen alle "suppformats*"
-                if (!key.startsWith("suppformats"))
-                    continue;
-
-                String urn = props.getProperty(key);
-                try
+                PainVersion version = new PainVersion(urn);
+                if (version.getType() == this.getPainType())
                 {
-                    PainVersion version = new PainVersion(urn);
-                    if (version.getType() == this.getPainType())
+                    if (!version.isSupported(this.getPainJobName()))
                     {
-                        if (!version.isSupported(this.getPainJobName()))
-                        {
-                            HBCIUtils.log("  unsupported " + version,HBCIUtils.LOG_DEBUG);
-                            continue;
-                        }
-                        
-                        HBCIUtils.log("  found " + version,HBCIUtils.LOG_DEBUG);
-                        
-                        //////////////////////
-                        // Checken, ob wir die Version in den "known versions" haben
-                        // Wenn das der Fall ist, nehmen wir die, damit immer unsere
-                        // URN verwendet wird und nicht jene, die die Bank in HISPAS
-                        // geschickt hat. Es gibt naemlich Banken, die in HISPAS das alte
-                        // Bezeichner-Format senden (also etwa "sepade.pain.001.002.03.xsd"),
-                        // anschliessend aber meckern, wenn man denen beim Einreichen
-                        // eines Auftrages genau dieses Format uebergibt. Dort wollen die
-                        // dann ploetzlich stattdessen den neuen URN haben (also "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03").
-                        // Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=95160#95160
-                        List<PainVersion> known = PainVersion.getKnownVersions(version.getType());
-                        int pos = known.indexOf(version);
-                        if (pos != -1)
-                        {
-                            version = known.get(pos);
-                            HBCIUtils.log("  replacing with known-version " + version,HBCIUtils.LOG_DEBUG);
-                        }
-                        found.add(version);
+                        HBCIUtils.log("  unsupported " + version,HBCIUtils.LOG_DEBUG);
+                        continue;
                     }
-                }
-                catch (Exception ex)
-                {
-                    HBCIUtils.log("ignoring invalid pain version " + urn,HBCIUtils.LOG_WARN);
-                    HBCIUtils.log(ex,HBCIUtils.LOG_DEBUG);
+                    
+                    HBCIUtils.log("  found " + version,HBCIUtils.LOG_DEBUG);
+                    
+                    //////////////////////
+                    // Checken, ob wir die Version in den "known versions" haben
+                    // Wenn das der Fall ist, nehmen wir die, damit immer unsere
+                    // URN verwendet wird und nicht jene, die die Bank in HISPAS
+                    // geschickt hat. Es gibt naemlich Banken, die in HISPAS das alte
+                    // Bezeichner-Format senden (also etwa "sepade.pain.001.002.03.xsd"),
+                    // anschliessend aber meckern, wenn man denen beim Einreichen
+                    // eines Auftrages genau dieses Format uebergibt. Dort wollen die
+                    // dann ploetzlich stattdessen den neuen URN haben (also "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03").
+                    // Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=95160#95160
+                    List<PainVersion> known = PainVersion.getKnownVersions(version.getType());
+                    int pos = known.indexOf(version);
+                    if (pos != -1)
+                    {
+                        version = known.get(pos);
+                        HBCIUtils.log("  replacing with known-version " + version,HBCIUtils.LOG_DEBUG);
+                    }
+                    found.add(version);
                 }
             }
-            
-            PainVersion version = PainVersion.findGreatest(found);
-            if (version != null)
-                return version;
+            catch (Exception ex)
+            {
+                HBCIUtils.log("ignoring invalid pain version " + urn,HBCIUtils.LOG_WARN);
+                HBCIUtils.log(ex,HBCIUtils.LOG_DEBUG);
+            }
         }
         
-        PainVersion def = this.getDefaultPainVersion();
-        HBCIUtils.log("unable to determine matching pain version, using default: " + def,HBCIUtils.LOG_WARN);
-        return def;
+        return PainVersion.findGreatest(found);
     }
 
     /**
