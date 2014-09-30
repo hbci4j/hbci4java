@@ -323,7 +323,7 @@ public final class HBCIInstitute
                   if (he.isFatal())
                     throw he;
                 }
-                HBCIUtils.log(e);
+                HBCIUtils.log(e,HBCIUtils.LOG_INFO);
                 // Viele Kreditinstitute unterstützen den anonymen Login nicht. Dass sollte nicht als Fehler den Anwender beunruhigen
                 HBCIUtils.log("FAILED! - maybe this institute does not support anonymous logins",HBCIUtils.LOG_INFO);
                 HBCIUtils.log("we will nevertheless go on",HBCIUtils.LOG_INFO);
