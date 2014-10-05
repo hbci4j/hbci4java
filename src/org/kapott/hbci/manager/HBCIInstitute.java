@@ -263,14 +263,32 @@ public final class HBCIInstitute
         // BPD abholen, wenn nicht vorhanden oder HBCI-Version geaendert
         Properties bpd=passport.getBPD();
         String     hbciVersionOfBPD=(bpd!=null)?bpd.getProperty(BPD_KEY_HBCIVERSION):null;
-        
             
-        if (passport.getBPDVersion().equals("0") ||
-            isBPDExpired() ||
-            hbciVersionOfBPD==null ||
-            !hbciVersionOfBPD.equals(kernel.getHBCIVersion())) {
+        final String version = passport.getBPDVersion();
+        if (version.equals("0") || isBPDExpired() || hbciVersionOfBPD==null || !hbciVersionOfBPD.equals(kernel.getHBCIVersion()))
+        {
                 
             try {
+                
+                // Wenn wir die BPP per anonymem Dialog neu abrufen, muessen wir sicherstellen,
+                // dass die BPD-Version im Passport auf "0" zurueckgesetzt ist. Denn wenn die
+                // Bank den anonymen Abruf nicht unterstuetzt, wuerde dieser Abruf hier fehlschlagen,
+                // der erneute Versuch mit authentifiziertem Dialog wuerde jedoch nicht zum
+                // Neuabruf der BPD fuehren, da dort (in HBCIUser#fetchUPD bzw. HBCIDialog#doDialogInit)
+                // weiterhin die (u.U. ja noch aktuelle) BPD-Version an die Bank geschickt wird
+                // und diese daraufhin keine neuen BPD schickt. Das wuerde in einer endlosen
+                // Schleife enden, in der wir hier immer wieder versuchen wuerden, neu abzurufen
+                // (weil expired). Siehe https://www.willuhn.de/bugzilla/show_bug.cgi?id=1567
+                // Also muessen wir die BPD-Version auf 0 setzen. Fuer den Fall, dass wir in dem
+                // "if" hier aus einem der anderen beiden o.g. Gruende (BPD-Expiry oder neue HBCI-Version)
+                // gelandet sind.
+                if (!version.equals("0"))
+                {
+                    HBCIUtils.log("resetting BPD version to 0",HBCIUtils.LOG_INFO);
+                    passport.getBPD().setProperty("BPA.version","0");
+                    passport.saveChanges();
+                }
+                
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_BPD_INIT,null);
                 HBCIUtils.log("fetching BPD",HBCIUtils.LOG_INFO);
                 
