@@ -284,7 +284,7 @@ public final class HBCIInstitute
                 // gelandet sind.
                 if (!version.equals("0"))
                 {
-                    HBCIUtils.log("resetting BPD version to 0",HBCIUtils.LOG_INFO);
+                    HBCIUtils.log("resetting BPD version from " + version + " to 0",HBCIUtils.LOG_INFO);
                     passport.getBPD().setProperty("BPA.version","0");
                     passport.saveChanges();
                 }
