@@ -467,7 +467,7 @@ public class AccountCRCAlgs
             
             if (!ok) {
                 // Method C
-                sum = addProducts(number, 3, 8, new int[] {1, 2, 1, 2, 1, 2 }, false);
+                sum = addProducts(number, 3, 8, new int[] {1, 2, 1, 2, 1, 2 }, true);
                 crc = (10 - sum % 10) % 10;
                 ok = (number[9] == crc);
             }

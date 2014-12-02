@@ -26,4 +26,10 @@ public class TestAccountCRCAlgs {
         }
     }
 
+    @Test
+    public void test51_a()
+    {
+        Assert.assertTrue(AccountCRCAlgs.alg_51(null,new int[]{0,0,0,2,6,7,1,0,7,1}));
+    }
+
 }
