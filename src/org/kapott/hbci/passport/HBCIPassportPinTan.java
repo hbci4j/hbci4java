@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -203,9 +202,18 @@ public class HBCIPassportPinTan
         passportKey=null;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
+     */
+    @Override
     public void saveChanges()
     {
-        try {
+        File passportfile = new File(getFileName());
+        File tempfile     = null;
+        boolean rollback  = false;
+        
+        try
+        {
             if (passportKey==null) 
                 passportKey=calculatePassportKey(FOR_SAVE);
             
@@ -213,12 +221,12 @@ public class HBCIPassportPinTan
             Cipher cipher=Cipher.getInstance("PBEWithMD5AndDES");
             cipher.init(Cipher.ENCRYPT_MODE,passportKey,paramspec);
 
-            File passportfile=new File(getFileName());
-            File directory=passportfile.getAbsoluteFile().getParentFile();
-            String prefix=passportfile.getName()+"_";
-            File tempfile=File.createTempFile(prefix,"",directory);
+            File directory = passportfile.getAbsoluteFile().getParentFile();
+            String prefix  = passportfile.getName()+"_";
+            tempfile       = File.createTempFile(prefix,"",directory);
 
-            ObjectOutputStream o=new ObjectOutputStream(new CipherOutputStream(new FileOutputStream(tempfile),cipher));
+            HBCIUtils.log("writing to passport file " + tempfile, HBCIUtils.LOG_DEBUG);
+            ObjectOutputStream o = new ObjectOutputStream(new CipherOutputStream(new FileOutputStream(tempfile),cipher));
 
             o.writeObject(getCountry());
             o.writeObject(getBLZ());
@@ -234,28 +242,81 @@ public class HBCIPassportPinTan
             o.writeObject(getFilterType());
             
             // hier auch gewähltes zweischritt-verfahren abspeichern
-            List<String> l=getAllowedTwostepMechanisms();
-            // TODO: remove this
-            StringBuffer sb=new StringBuffer();
-            for (Iterator<String> i=l.iterator(); i.hasNext(); ) {
-                sb.append(i.next()+", ");
-            }
-            HBCIUtils.log("saving two step mechs: "+sb, HBCIUtils.LOG_DEBUG);
+            List<String> l = getAllowedTwostepMechanisms();
+            HBCIUtils.log("saving two step mechs: " + l, HBCIUtils.LOG_DEBUG);
             o.writeObject(l);
             
-            // TODO: remove this
             String s=getCurrentTANMethod(false);
             HBCIUtils.log("saving current tan method: "+s, HBCIUtils.LOG_DEBUG);
             o.writeObject(s);
 
+            HBCIUtils.log("closing output stream", HBCIUtils.LOG_DEBUG);
             o.close();
-            passportfile.delete();
-            tempfile.renameTo(passportfile);
-        } catch (Exception e) {
+            
+            HBCIUtils.log("deleting old passport file " + passportfile, HBCIUtils.LOG_DEBUG);
+            if (!passportfile.delete())
+                throw new HBCI_Exception("could not delete old passport file, changes in passport have not been saved");
+
+            // Wenn die Datei noch existiert, warten wir noch etwas
+            int retry = 0;
+            while (passportfile.exists() && retry++ < 10)
+            {
+                hold();
+            }
+            
+            HBCIUtils.log("renaming " + tempfile.getName() + " to " + passportfile.getName(), HBCIUtils.LOG_DEBUG);
+            if (!tempfile.renameTo(passportfile))
+            {
+                rollback = true;
+                throw new HBCI_Exception("could not rename " + tempfile.getName() + " to " + passportfile.getName());
+            }
+        }
+        catch (HBCI_Exception he)
+        {
+            throw he;
+        }
+        catch (Exception e)
+        {
             throw new HBCI_Exception("*** saving of passport file failed",e);
+        }
+        finally
+        {
+            if (rollback)
+            {
+                hold();
+                HBCIUtils.log("passport file " + passportfile.getName() + " exists: " + passportfile.exists(), HBCIUtils.LOG_DEBUG);
+                if (!passportfile.exists() && tempfile.exists())
+                {
+                    HBCIUtils.log("trying to " + tempfile.getName() + " to " + passportfile.getName(), HBCIUtils.LOG_DEBUG);
+                    if (!tempfile.renameTo(passportfile))
+                    {
+                        HBCIUtils.log("renaming of " + tempfile.getName() + " to " + passportfile.getName() + " failed again",HBCIUtils.LOG_ERR);
+                    }
+                }
+            }
         }
     }
     
+    /**
+     * Wartet kurz.
+     */
+    private void hold()
+    {
+        try
+        {
+            HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) is currently locking the file", HBCIUtils.LOG_WARN);
+            Thread.sleep(1000L);
+        }
+        catch (InterruptedException e)
+        {
+            HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
+        }
+    }
+    
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#hash(byte[])
+     */
+    @Override
     public byte[] hash(byte[] data)
     {
         /* there is no hashing before signing, so we return the original message,
@@ -263,6 +324,10 @@ public class HBCIPassportPinTan
         return data;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#sign(byte[])
+     */
+    @Override
     public byte[] sign(byte[] data)
     {
         try {
