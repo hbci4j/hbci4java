@@ -210,7 +210,6 @@ public class HBCIPassportPinTan
     {
         File passportfile = new File(getFileName());
         File tempfile     = null;
-        boolean rollback  = false;
         
         try
         {
@@ -255,19 +254,36 @@ public class HBCIPassportPinTan
             
             HBCIUtils.log("deleting old passport file " + passportfile, HBCIUtils.LOG_DEBUG);
             if (!passportfile.delete())
-                throw new HBCI_Exception("could not delete old passport file, changes in passport have not been saved");
+                HBCIUtils.log("delete method for " + passportfile + " returned false", HBCIUtils.LOG_ERR);
 
             // Wenn die Datei noch existiert, warten wir noch etwas
             int retry = 0;
             while (passportfile.exists() && retry++ < 10)
             {
-                hold();
+                try
+                {
+                    HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) is currently locking the file", HBCIUtils.LOG_INFO);
+                    Thread.sleep(1000L);
+                }
+                catch (InterruptedException e)
+                {
+                    HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
+                    break;
+                }
+                if (!passportfile.exists())
+                {
+                    HBCIUtils.log("passport file now gone: " + passportfile, HBCIUtils.LOG_INFO);
+                    break;
+                }
             }
+            
+            // Datei existiert immer noch, dann brauchen wir das Rename gar nicht erst versuchen
+            if (passportfile.exists())
+                throw new HBCI_Exception("could not delete " + passportfile);
             
             HBCIUtils.log("renaming " + tempfile.getName() + " to " + passportfile.getName(), HBCIUtils.LOG_DEBUG);
             if (!tempfile.renameTo(passportfile))
             {
-                rollback = true;
                 throw new HBCI_Exception("could not rename " + tempfile.getName() + " to " + passportfile.getName());
             }
         }
@@ -278,38 +294,6 @@ public class HBCIPassportPinTan
         catch (Exception e)
         {
             throw new HBCI_Exception("*** saving of passport file failed",e);
-        }
-        finally
-        {
-            if (rollback)
-            {
-                hold();
-                HBCIUtils.log("passport file " + passportfile.getName() + " exists: " + passportfile.exists(), HBCIUtils.LOG_DEBUG);
-                if (!passportfile.exists() && tempfile.exists())
-                {
-                    HBCIUtils.log("trying to " + tempfile.getName() + " to " + passportfile.getName(), HBCIUtils.LOG_DEBUG);
-                    if (!tempfile.renameTo(passportfile))
-                    {
-                        HBCIUtils.log("renaming of " + tempfile.getName() + " to " + passportfile.getName() + " failed again",HBCIUtils.LOG_ERR);
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * Wartet kurz.
-     */
-    private void hold()
-    {
-        try
-        {
-            HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) is currently locking the file", HBCIUtils.LOG_WARN);
-            Thread.sleep(1000L);
-        }
-        catch (InterruptedException e)
-        {
-            HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
         }
     }
     
