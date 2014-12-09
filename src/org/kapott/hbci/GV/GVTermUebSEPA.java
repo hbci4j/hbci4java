@@ -102,9 +102,10 @@ public class GVTermUebSEPA extends AbstractSEPAGV
         addConstraint("date",      "sepa.date",      null, LogFilter.FILTER_NONE);
      
         //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
-        addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
-        addConstraint("pmtinfid",  "sepa.pmtinfid",    getSEPAMessageId(),      LogFilter.FILTER_NONE);
-        addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE);
+        addConstraint("sepaid",     "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
+        addConstraint("pmtinfid",   "sepa.pmtinfid",    getSEPAMessageId(),      LogFilter.FILTER_NONE);
+        addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED,  LogFilter.FILTER_NONE);
+        addConstraint("purposecode","sepa.purposecode", null,                    LogFilter.FILTER_NONE);
     }
     
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)

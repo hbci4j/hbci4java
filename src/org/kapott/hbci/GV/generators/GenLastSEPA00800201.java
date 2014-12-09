@@ -41,6 +41,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentInstructionInformationSD
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentMethod2Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentTypeInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PersonIdentificationSDD2;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PurposeSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RemittanceInformationSDDChoice;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedIdentificationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedSEPACode;
@@ -223,6 +224,15 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
             drctDbtTxInf.setRmtInf(new RemittanceInformationSDDChoice());
             drctDbtTxInf.getRmtInf().setUstrd(usage);
         }
+        
+        String purposeCode = sepaParams.getProperty(SepaUtil.insertIndex("purposecode", index));
+        if (purposeCode != null && purposeCode.length() > 0)
+        {
+            PurposeSDD p = new PurposeSDD();
+            p.setCd(purposeCode);
+            drctDbtTxInf.setPurp(p);
+        }
+        
 
         return drctDbtTxInf;
     }

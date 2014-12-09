@@ -123,6 +123,9 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         entry.other.iban = sepaResult.getProperty("dst.iban");
         entry.other.bic = sepaResult.getProperty("dst.bic");
         entry.other.name = sepaResult.getProperty("dst.name");
+        entry.pmtinfid = sepaResult.getProperty("pmtinfid");
+        entry.purposecode = sepaResult.getProperty("purposecode");
+        
         entry.value=new Value(
                         sepaResult.getProperty("value"),
                         sepaResult.getProperty("curr"));

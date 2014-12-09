@@ -13,6 +13,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.DirectDebitTransactionInformati
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.Document;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.Pain00800101;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentInstructionInformationSDD;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PurposeSDD;
 
 /**
  * Parser-Implementierung fuer Pain 008.002.01.
@@ -55,6 +56,11 @@ public class ParsePain00800201 extends AbstractSepaParser
                 if(tx.getRmtInf() != null) {
                     put(prop,Names.USAGE, tx.getRmtInf().getUstrd());
                 }
+                
+                PurposeSDD purp = tx.getPurp();
+                if (purp != null)
+                    put(prop,Names.PURPOSECODE,purp.getCd());
+
                 
                 XMLGregorianCalendar date = pmtInf.getReqdColltnDt();
                 if (date != null)

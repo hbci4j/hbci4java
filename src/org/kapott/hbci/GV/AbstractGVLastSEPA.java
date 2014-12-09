@@ -85,6 +85,7 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     	addConstraint("endtoendid",      "sepa.endtoendid",    ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_IDS,  true);
         addConstraint("creditorid",      "sepa.creditorid",    null,                    LogFilter.FILTER_IDS,  true);
     	addConstraint("mandateid",       "sepa.mandateid",     null,                    LogFilter.FILTER_IDS,  true);
+        addConstraint("purposecode",     "sepa.purposecode",   null,                    LogFilter.FILTER_IDS,  true);
     	
     	// Datum als java.util.Date oder als ISO-Date-String im Format yyyy-MM-dd
     	addConstraint("manddateofsig",   "sepa.manddateofsig", null,                    LogFilter.FILTER_NONE, true);

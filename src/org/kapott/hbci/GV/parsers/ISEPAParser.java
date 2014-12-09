@@ -29,6 +29,7 @@ public interface ISEPAParser
         DATE("date"),
         ENDTOENDID("endtoendid"),
         PMTINFID("pmtinfid"),
+        PURPOSECODE("purposecode"),
         
         LAST_TYPE("type"), // CORE,COR1,B2B
         CREDITORID("creditorid"),

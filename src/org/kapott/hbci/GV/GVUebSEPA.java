@@ -109,5 +109,6 @@ public class GVUebSEPA extends AbstractSEPAGV
         addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
         addConstraint("pmtinfid",  "sepa.pmtinfid",    getSEPAMessageId(),      LogFilter.FILTER_NONE);
         addConstraint("endtoendid", "sepa.endtoendid", ENDTOEND_ID_NOTPROVIDED, LogFilter.FILTER_NONE, true);
+        addConstraint("purposecode","sepa.purposecode", null,                   LogFilter.FILTER_NONE, true);
     }
 }

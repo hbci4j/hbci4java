@@ -29,6 +29,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentInstructionInformationSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentMethodSCTCode;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PaymentTypeInformationSCT1;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PurposeSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.RemittanceInformationSCTChoice;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCT;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_02.ServiceLevelSCTCode;
@@ -176,6 +177,14 @@ public class GenUebSEPA00100202 extends AbstractSEPAGenerator
         {
             cdtTrxTxInf.setRmtInf(new RemittanceInformationSCTChoice());
             cdtTrxTxInf.getRmtInf().setUstrd(usage);
+        }
+
+        String purposeCode = sepaParams.getProperty(SepaUtil.insertIndex("purposecode", index));
+        if (purposeCode != null && purposeCode.length() > 0)
+        {
+            PurposeSCT p = new PurposeSCT();
+            p.setCd(purposeCode);
+            cdtTrxTxInf.setPurp(p);
         }
 
         return cdtTrxTxInf;

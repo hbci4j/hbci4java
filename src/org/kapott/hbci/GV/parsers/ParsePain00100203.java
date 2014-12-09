@@ -14,6 +14,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_03.CustomerCreditTransferInitiatio
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.Document;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PaymentInstructionInformationSCT;
+import org.kapott.hbci.sepa.jaxb.pain_001_002_03.PurposeSEPA;
 
 
 /**
@@ -64,6 +65,10 @@ public class ParsePain00100203 extends AbstractSepaParser
                     put(prop,Names.USAGE, tx.getRmtInf().getUstrd());
                 }
                 
+                PurposeSEPA purp = tx.getPurp();
+                if (purp != null)
+                    put(prop,Names.PURPOSECODE,purp.getCd());
+
                 XMLGregorianCalendar date = pmtInf.getReqdExctnDt();
                 if (date != null) {
                     put(prop,Names.DATE, SepaUtil.format(date,null));

@@ -99,6 +99,17 @@ public final class GVRDauerList
         
         /** Auftrag kann gelöscht werden (optional) */
         public boolean can_delete;
+        
+        /**
+         * SEPA Payment-Information-ID.
+         */
+        public String pmtinfid;
+        
+        /**
+         * SEPA Purpose-Code.
+         */
+        public String purposecode;
+        
 
         public Dauer()
         {
