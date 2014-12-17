@@ -54,8 +54,15 @@ public final class CommPinTan
     // nicht verifiziert werden sollen
     private HostnameVerifier   myHostnameVerifier;
     
-    // Timeout for HTTP connect and read operations in milliseconds
-    private final static int HTTP_TIMEOUT = 60000;
+    /**
+     * Timeout fuer HTTP connect in Millisekunden.
+     */
+    private final static int HTTP_CONNECT_TIMEOUT = 60 * 1000;
+    
+    /**
+     * Timeout fuer HTTP Read in Millisekunden.
+     */
+    private final static int HTTP_READ_TIMEOUT    = 5 * HTTP_CONNECT_TIMEOUT;
 
     
     public CommPinTan(HBCIPassportInternal parentPassport)
@@ -112,8 +119,8 @@ public final class CommPinTan
 
             HBCIUtils.log("connecting to server",HBCIUtils.LOG_DEBUG);
             conn=(HttpURLConnection)url.openConnection();
-            conn.setConnectTimeout(HTTP_TIMEOUT);
-            conn.setReadTimeout(HTTP_TIMEOUT);
+            conn.setConnectTimeout(HTTP_CONNECT_TIMEOUT);
+            conn.setReadTimeout(HTTP_READ_TIMEOUT);
             
             boolean checkCert=((AbstractPinTanPassport)getParentPassport()).getCheckCert();
             boolean debugging=((PinTanSSLSocketFactory)this.mySocketFactory).debug();
