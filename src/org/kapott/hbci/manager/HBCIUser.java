@@ -565,8 +565,26 @@ public final class HBCIUser
 
         if (p.size()!=0) {
             p.setProperty("_hbciversion",kernel.getHBCIVersion());
+            
+            // Wir sichern wenigstens noch die TAN-Media-Infos, die vom HBCIHandler vorher abgerufen wurden
+            // Das ist etwas unschoen. Sinnvollerweise sollten die SEPA-Infos und TAN-Medien nicht in den
+            // UPD gespeichert werden. Dann gehen die auch nicht jedesmal wieder verloren und muessen nicht
+            // dauernd neu abgerufen werden. Das wuerde aber einen groesseren Umbau erfordern
+            Properties upd = passport.getUPD();
+            if (upd != null)
+            {
+                String mediaInfo = upd.getProperty("tanmedia.names");
+                if (mediaInfo != null)
+                {
+                    HBCIUtils.log("rescued TAN media info to new UPD: " + mediaInfo,HBCIUtils.LOG_INFO);
+                    p.setProperty("tanmedia.names",mediaInfo);
+                }
+            }
+            
+            String oldVersion = passport.getUPDVersion();
             passport.setUPD(p);
-            HBCIUtils.log("installed new UPD with version "+passport.getUPDVersion(),HBCIUtils.LOG_INFO);
+            
+            HBCIUtils.log("installed new UPD [old version: " + oldVersion + ", new version: " + passport.getUPDVersion() + "]",HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_UPD_DONE,passport.getUPD());
         }
     }

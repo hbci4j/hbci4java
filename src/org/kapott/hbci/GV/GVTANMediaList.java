@@ -1,6 +1,7 @@
 package org.kapott.hbci.GV;
 
 import java.util.Properties;
+
 import org.kapott.hbci.GV_Result.GVRTANMediaList;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -18,7 +19,7 @@ public class GVTANMediaList extends HBCIJobImpl {
     public GVTANMediaList(HBCIHandler handler)
     {
         super(handler,getLowlevelName(),new GVRTANMediaList());
-        addConstraint("mediatype","mediatype","1", LogFilter.FILTER_NONE);
+        addConstraint("mediatype","mediatype","0", LogFilter.FILTER_NONE); // "1" gibts nicht. Siehe FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf "TAN-Medium-Art"
         addConstraint("mediacategory", "mediacategory", "A", LogFilter.FILTER_NONE);
     }
     
@@ -30,6 +31,9 @@ public class GVTANMediaList extends HBCIJobImpl {
         if(s != null) {
         	((GVRTANMediaList)jobResult).setTanOption(Integer.parseInt(s));
         }
+
+        // Da drin speichern wir die Namen der TAN-Medien - kommt direkt in die UPD im Passport
+        StringBuffer mediaNames = new StringBuffer();
         
         for (int i=0;;i++) {
             String mediaheader=HBCIUtilsInternal.withCounter(header+".MediaInfo",i);
@@ -76,6 +80,28 @@ public class GVTANMediaList extends HBCIJobImpl {
             }
 
             ((GVRTANMediaList)jobResult).add(info);
+            
+            // Es gibt auch noch "verfuegbar", da muss das Medium aber erst noch freigeschaltet werden
+            boolean isActive    = info.status != null && info.status.equals("1");
+            boolean haveName    = info.mediaName != null && info.mediaName.length() > 0;
+            // boolean isMobileTan = info.mediaCategory != null && info.mediaCategory.equalsIgnoreCase("M");
+
+            // Zu den UPD hinzufuegen
+            if (isActive && haveName)
+            {
+                if (mediaNames.length() != 0)
+                    mediaNames.append("|");
+                
+                mediaNames.append(info.mediaName);
+            }
+        }
+        
+        String names = mediaNames.toString();
+        if (names.length() > 0)
+        {
+            HBCIUtils.log("adding TAN media names to UPD: " + names, HBCIUtils.LOG_INFO);
+            Properties upd = getParentHandler().getPassport().getUPD();
+            upd.setProperty("tanmedia.names",names);
         }
     }
 

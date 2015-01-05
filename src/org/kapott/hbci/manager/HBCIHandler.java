@@ -23,6 +23,7 @@ package org.kapott.hbci.manager;
 
 import java.lang.reflect.Constructor;
 import java.security.KeyPair;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -141,19 +142,77 @@ public final class HBCIHandler
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_CREATE_HANDLE"),e);
         }
         
-        // wenn in den UPD noch keine SEPA-Informationen ueber die Konten enthalten
+        // wenn in den UPD noch keine SEPA- und TAN-Medien-Informationen ueber die Konten enthalten
         // sind, versuchen wir, diese zu holen
         Properties upd=passport.getUPD();
-        if (upd!=null && !upd.getProperty("_fetchedSEPA","").equals("1")) {
-        	// wir haben UPD, in denen aber nicht "_fetchedSEPA=1" drinsteht
-        	updateSEPAInfo();
+        if (upd!=null && !upd.containsKey("_fetchedMetaInfo"))
+        {
+        	// wir haben UPD, in denen aber nicht "_fetchedMetaInfo" drinsteht
+        	updateMetaInfo();
         }
     }
     
-    /* wenn der GV SEPAInfo unterstützt wird, heißt das, dass die Bank mit
+    /**
+     * Ruft die SEPA-Infos der Konten sowie die TAN-Medienbezeichnungen ab.
+     * unterstuetzt wird und speichert diese Infos in den UPD.
+     */
+    public void updateMetaInfo()
+    {
+        Properties bpd = passport.getBPD();
+        if (bpd == null)
+        {
+          HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_WARN);
+          return;
+        }
+
+        try
+        {
+            final Properties lowlevel = this.getSupportedLowlevelJobs();
+            
+            // SEPA-Infos abrufen
+            if (lowlevel.getProperty("SEPAInfo") != null)
+            {
+                HBCIUtils.log("fetching SEPA information", HBCIUtils.LOG_INFO);
+                HBCIJob sepainfo = this.newJob("SEPAInfo");
+                sepainfo.addToQueue();
+            }
+
+            // TAN-Medien abrufen - aber nur bei PIN/TAN-Verfahren
+            if (lowlevel.getProperty("TANMediaList") != null && (this.passport instanceof AbstractPinTanPassport))
+            {
+                HBCIUtils.log("fetching TAN media list", HBCIUtils.LOG_INFO);
+                HBCIJob tanMedia = this.newJob("TANMediaList");
+                tanMedia.addToQueue();
+            }
+
+            HBCIExecStatus status = this.execute();
+            if (status.isOK())
+            {
+                HBCIUtils.log("successfully fetched meta info", HBCIUtils.LOG_INFO);
+                passport.getUPD().setProperty("_fetchedMetaInfo",new Date().toString());
+                passport.saveChanges();
+            }
+            else
+            {
+                HBCIUtils.log("error while fetching meta info: " + status.toString(), HBCIUtils.LOG_ERR);
+            }
+        }
+        catch (Exception e)
+        {
+            // Wir werfen das nicht als Exception. Unschoen, wenn das nicht klappt.
+            // Aber kein Grund zur Panik.
+            HBCIUtils.log(e);
+        }
+    }
+
+    
+    /**
+     * Wenn der GV SEPAInfo unterstützt wird, heißt das, dass die Bank mit
      * SEPA-Konten umgehen kann. In diesem Fall holen wir die SEPA-Informationen
      * über die Konten von der Bank ab - für jedes SEPA-fähige Konto werden u.a. 
-     * BIC/IBAN geliefert */
+     * BIC/IBAN geliefert
+     * @deprecated Bitte <code>updateMetaInfo</code> verwenden. Das aktualisiert auch die TAN-Medien.
+     */
     public void updateSEPAInfo()
     {
         Properties bpd = passport.getBPD();

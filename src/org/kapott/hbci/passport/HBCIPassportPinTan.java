@@ -252,9 +252,12 @@ public class HBCIPassportPinTan
             HBCIUtils.log("closing output stream", HBCIUtils.LOG_DEBUG);
             o.close();
             
-            HBCIUtils.log("deleting old passport file " + passportfile, HBCIUtils.LOG_DEBUG);
-            if (!passportfile.delete())
-                HBCIUtils.log("delete method for " + passportfile + " returned false", HBCIUtils.LOG_ERR);
+            if (passportfile.exists()) // Nur loeschen, wenn es ueberhaupt existiert
+            {
+                HBCIUtils.log("deleting old passport file " + passportfile, HBCIUtils.LOG_DEBUG);
+                if (!passportfile.delete())
+                    HBCIUtils.log("delete method for " + passportfile + " returned false", HBCIUtils.LOG_ERR);
+            }
 
             // Wenn die Datei noch existiert, warten wir noch etwas
             int retry = 0;

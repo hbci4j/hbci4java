@@ -1237,6 +1237,7 @@ public abstract class AbstractPinTanPassport
           HBCIUtils.log("we have to add the tan media",HBCIUtils.LOG_DEBUG);
 
           StringBuffer retData=new StringBuffer();
+          retData.append(this.getUPD().getProperty("tanmedia.names",""));
           HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,
               "*** Enter the name of your TAN media",
               HBCICallback.TYPE_TEXT,
