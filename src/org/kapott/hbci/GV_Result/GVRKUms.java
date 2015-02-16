@@ -720,7 +720,7 @@ public class GVRKUms
                     }
 
                     btag.end.value=new Value(
-                            (cd.equals("D")?"-":"")+st_end.substring(10).replace(',','.'),
+                            (cd.equals("D")?"-":"")+st_end.substring(10).replaceAll("\\s","").replace(',','.'),
                             st_end.substring(7,10));
                 }
 
