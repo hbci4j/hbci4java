@@ -164,6 +164,10 @@ import org.kapott.hbci.swift.Swift;
       <li><code>client.passport.RDHNew.init</code> (für RDHNew-Passports)
           <p>Dieser Parameter ist immer auf "1" zu 
           setzen (wird nur intern anders verwendet).</p></li>
+      <li><code>client.passport.RDHNew.defaultprofile</code> (für RDHNew-Passports)
+          <p>Kann verwendet werden, wenn die RDH-Profilversion beim Erstellen eines
+          Schluessel nicht ermittelbar ist, weil die Bank den anonymen BPD-Abruf nicht
+          unterstuetzt. Per Default wird hier "10" verwendet.</p></li>
       <li><code>client.passport.RDH.filename</code> (für RDH-Passports; <b><em>diese Variante der
           RDH-Passports sollte nicht mehr benutzt werden, sondern <code>RDHNew</code></em></b>;
           siehe Datei <code>README.RDHNew</code>)

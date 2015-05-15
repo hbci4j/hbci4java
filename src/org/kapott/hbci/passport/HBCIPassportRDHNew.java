@@ -538,6 +538,12 @@ public class HBCIPassportRDHNew
                         HBCIUtils.LOG_DEBUG);
             }
         }
+        
+        if (ret == null || ret.length() == 0)
+        {
+            ret = HBCIUtils.getParam(getParamHeader()+".defaultprofile","10");
+            HBCIUtils.log("unable to determine rdh-profile-version using BPD, using default version " + ret, HBCIUtils.LOG_WARN);
+        }
 
         // in jedem fall merken wir uns die gerade ermittelte profil-nummer
         setProfileVersion(ret);
