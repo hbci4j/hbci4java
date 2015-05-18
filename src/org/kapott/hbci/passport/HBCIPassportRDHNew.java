@@ -541,7 +541,7 @@ public class HBCIPassportRDHNew
         
         if (ret == null || ret.length() == 0)
         {
-            ret = HBCIUtils.getParam(getParamHeader()+".defaultprofile","10");
+            ret = HBCIUtils.getParam(getParamHeader()+".defaultprofile",null);
             HBCIUtils.log("unable to determine rdh-profile-version using BPD, using default version " + ret, HBCIUtils.LOG_WARN);
         }
 
