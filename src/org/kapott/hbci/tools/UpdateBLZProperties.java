@@ -72,7 +72,7 @@ public class UpdateBLZProperties
         if (blz.length() == 0) continue; // Die Zeile enthaelt keine BLZ
         if (lookup.get(blz) != null) continue; // die Zeile haben wir schon
         
-        String url = values.get(20).trim();
+        String url = values.get(23).trim();
         if (url.length() == 0) continue; // keine URL gefunden
 
         lookup.put(blz,url);
