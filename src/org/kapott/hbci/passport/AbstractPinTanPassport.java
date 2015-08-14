@@ -260,7 +260,7 @@ public abstract class AbstractPinTanPassport
                 // einen dialog-restart fordern, weil während eines dialoges
                 // das secmech nicht gewechselt werden darf
                 restart_needed=true;
-                HBCIUtils.log("autosecfunc: after this dialog-init we had to change selected pintan method, so a restart of this dialog is needed", HBCIUtils.LOG_INFO);
+                HBCIUtils.log("autosecfunc: after this dialog-init we had to change selected pintan method from "+oldTANMethod+" to "+updatedTANMethod+", so a restart of this dialog is needed", HBCIUtils.LOG_INFO);
             }
         }
         
