@@ -54,8 +54,8 @@ public class RSAKeyData {
         this.type = type;
         this.status = keyLogData[offset];
         this.keyType = keyLogData[offset + 1];
-        this.keyNum = Integer.valueOf(new String(keyLogData, offset + 2, 3, CHARSET));
-        this.keyVersion = Integer.valueOf(new String(keyLogData, offset + 5, 3, CHARSET));
+        this.keyNum = Integer.valueOf(new String(keyLogData, offset + 2, 3, CHARSET).trim());
+        this.keyVersion = Integer.valueOf(new String(keyLogData, offset + 5, 3, CHARSET).trim());
         
         if (publicKeyData == null || status != 0x10) {
             this.publicKey = null;
