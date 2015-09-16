@@ -53,7 +53,8 @@ public class UpdateBLZProperties
     String line       = null;
     try
     {
-      Map<String,String> lookup = new HashMap<String,String>();
+      Map<String,String> lookup   = new HashMap<String,String>();
+      Map<String,String> versions = new HashMap<String,String>();
 
       //////////////////////////////////////////////////////////////////////////
       // fints_institute.csv lesen
@@ -76,6 +77,7 @@ public class UpdateBLZProperties
         if (url.length() == 0) continue; // keine URL gefunden
 
         lookup.put(blz,url);
+        versions.put(blz,values.get(24).trim());
       }
       //
       //////////////////////////////////////////////////////////////////////////
@@ -90,9 +92,13 @@ public class UpdateBLZProperties
         Line current    = new Line(values[0],values[1]);
 
         String url = lookup.get(current.blz);
+        String version = versions.get(current.blz);
         
         // URL uebernehmen
         current.updateUrl(url);
+        
+        // Version uebernehmen
+        current.updateVersion(version);
         
         // Neue Zeile schreiben
         f3.write(current.toString());
@@ -147,7 +153,32 @@ public class UpdateBLZProperties
         this.values[5] = url;
       }
     }
-    
+
+    /**
+     * Speichert die neue HBCI-Version, wenn vorher keine da war oder eine andere.
+     * @param die neue HBCI-Version.
+     */
+    private void updateVersion(String version)
+    {
+      // Keine neue Version
+      if (version == null || version.length() == 0)
+        return;
+      
+      version = version.toLowerCase();
+      if (version.contains("3.0"))
+          version = "300";
+      else if (version.contains("2.2"))
+          version = "plus";
+      
+      String current = this.values[7];
+      current = current != null ? current.trim() : "";
+      if (!current.equals(version))
+      {
+        System.out.println(blz + ": Version \"" + current + "\" -> \"" + version + "\"");
+        this.values[7] = version;
+      }
+    }
+
     /**
      * Wandelt die Zeile wieder zurueck in einen String.
      * @see java.lang.Object#toString()
