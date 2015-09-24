@@ -22,11 +22,11 @@ angesammelt, die auf http://hbci4java.kapott.org nicht veröffentlicht wurden.
 Inzwischen enthält diese Fork hier nicht mehr nur Patches sondern auch umfangreiche
 Weiterentwicklungen wie etwa 
 
-- die Unterstützung der neuen TAN-Verfahren (smsTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
+- Die Unterstützung der neuen TAN-Verfahren (smsTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
 - Unterstützung von PC/SC-Kartenlesern via javax.smartcardio API
-- eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
-- Unterstützung für alle aktuellen SEPA-PAIN-Versionen bei SEPA-Überweisungen
-- erste Unterstützung für SEPA-Lastschriften und SEPA-Daueraufträge 
+- Eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
+- Unterstützung für alle aktuellen SEPA-PAIN-Versionen
+- Unterstützung für SEPA-Überweisungen und -Lastschriften (jeweils Einzel- und Sammelaufträge) sowie SEPA-Daueraufträge 
 
 Ausgangsbasis dieser Weiterentwicklung war HBCI4Java 2.5.12 mit einigen Patches von
 Stefan (konkret seine SVN-Revision r227 vom 28.05.2010 - liegt im Ordner "log").
