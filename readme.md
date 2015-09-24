@@ -45,7 +45,7 @@ Du kannst HBCI4Java entweder selbst compilieren (siehe folgender Absatz) - oder 
 
 *Hinweise*
 
-- Lass dich nicht von der Versionsnummer 2.5.12 irritieren. Es ist die aktuelle Version. Ich habe mir nur abgewöhnt, die Versionsnummer im Dateinamen zu erhöhen, weil ds regelmäßig dazu führte, dass User die Datei lediglich in ihren "lib"-Ordner kopierten und dort dann ein Durcheinander aus mehreren Versionen entstand. durch Beibehalten der Versionsnummer im Dateinamen wird die alte Version immer überschrieben.
+- Lass dich nicht von der Versionsnummer 2.5.12 irritieren. Es ist die aktuelle Version. Ich habe mir nur abgewöhnt, die Versionsnummer im Dateinamen zu erhöhen, weil das regelmäßig dazu führte, dass User die Datei lediglich in ihren "lib"-Ordner kopierten und dort dann ein Durcheinander aus mehreren Versionen entstand. Durch Beibehalten der Versionsnummer im Dateinamen wird die alte Version immer überschrieben.
 - Immer wenn es eine Änderung im Code von [HBCI4Java](https://github.com/willuhn/hbci4java) gab, erzeuge ich auch neue JARs in [Hibiscus](https://github.com/willuhn/hibiscus/tree/master/lib)
 - In der [History](https://github.com/willuhn/hibiscus/commits/master/lib/hbci4java-2.5.12.jar) siehst du auch, welche Änderungen jeweils eingeflossen sind. 
 
