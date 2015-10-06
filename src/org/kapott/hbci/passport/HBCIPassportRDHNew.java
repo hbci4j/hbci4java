@@ -222,7 +222,7 @@ public class HBCIPassportRDHNew
                 ret=content.getNodeValue();
         }
             
-        return ret;
+        return ret != null && ret.length() > 0 ? ret : null;
     }
     
     protected Properties getElementProps(Element root,String name)
@@ -389,8 +389,18 @@ public class HBCIPassportRDHNew
     {
         Node elem=doc.createElement(elemName);
         root.appendChild(elem);
-        Node data=doc.createTextNode(elemValue);
+        Node data=doc.createTextNode(notNull(elemValue));
         elem.appendChild(data);
+    }
+    
+    /**
+     * Liefert den Wert oder einen Leerstring, wenn "value" NULL ist.
+     * @param value der Wert.
+     * @return Leerstring oder der Wert, aber niemals NULL.
+     */
+    private String notNull(String value)
+    {
+        return value != null ? value : "";
     }
     
     protected void createPropsElement(Document doc,Element root,String elemName,Properties p)
@@ -405,7 +415,7 @@ public class HBCIPassportRDHNew
                 
                 Element data=doc.createElement("entry");
                 data.setAttribute("name",key);
-                data.setAttribute("value",value);
+                data.setAttribute("value",notNull(value)); // Der Wert kann bei Properties eigentlich nicht null sein.
                 base.appendChild(data);
             }
         }
@@ -420,11 +430,11 @@ public class HBCIPassportRDHNew
             base.setAttribute("part",part);
             root.appendChild(base);
             
-            createElement(doc,base,"country",key.country);
-            createElement(doc,base,"blz",key.blz);
-            createElement(doc,base,"userid",key.userid);
-            createElement(doc,base,"keynum",key.num);
-            createElement(doc,base,"keyversion",key.version);
+            createElement(doc,base,"country",notNull(key.country));
+            createElement(doc,base,"blz",notNull(key.blz));
+            createElement(doc,base,"userid",notNull(key.userid));
+            createElement(doc,base,"keynum",notNull(key.num));
+            createElement(doc,base,"keyversion",notNull(key.version));
             
             Element keydata=doc.createElement("keydata");
             base.appendChild(keydata);
@@ -442,7 +452,7 @@ public class HBCIPassportRDHNew
                 data.appendChild(content);
             }
             
-            if (part.equals("public")) {
+            if (part.equals("public") && key.key != null) {
                 createElement(doc,keydata,"modulus",((RSAPublicKey)key.key).getModulus().toString());
                 createElement(doc,keydata,"exponent",((RSAPublicKey)key.key).getPublicExponent().toString());
             } else {
