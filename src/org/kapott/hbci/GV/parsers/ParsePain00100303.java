@@ -55,7 +55,15 @@ public class ParsePain00100303 extends AbstractSepaParser
                 
                 put(prop,Names.DST_NAME, tx.getCdtr().getNm());
                 put(prop,Names.DST_IBAN, tx.getCdtrAcct().getId().getIBAN());
-                put(prop,Names.DST_BIC, tx.getCdtrAgt().getFinInstnId().getBIC());
+                
+                try
+                {
+                    put(prop,Names.DST_BIC, tx.getCdtrAgt().getFinInstnId().getBIC());
+                }
+                catch (Exception e)
+                {
+                    // BIC darf fehlen
+                }
                 
                 ActiveOrHistoricCurrencyAndAmountSEPA amt = tx.getAmt().getInstdAmt();
                 put(prop,Names.VALUE, SepaUtil.format(amt.getValue()));
