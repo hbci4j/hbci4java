@@ -134,7 +134,10 @@ public class GVTAN2Step
                 // für PV#2 (die antwort auf das einreichen des auftrages)
                 // in jedem fall muss mit der nächsten nachricht die TAN übertragen werden
                 getMainPassport().setPersistentData("pintan_challenge",challenge);
-                
+
+                // External-ID des originalen Jobs durchreichen
+                getMainPassport().setPersistentData("externalid",this.getExternalId());
+
                 // TODO: es muss hier evtl. noch überprüft werden, ob
                 // der zurückgegebene auftragshashwert mit dem ursprünglich versandten
                 // übereinstimmt

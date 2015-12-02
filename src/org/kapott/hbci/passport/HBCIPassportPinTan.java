@@ -415,6 +415,7 @@ public class HBCIPassportPinTan
                         secmechInfo.getProperty("name")+"\n"+secmechInfo.getProperty("inputinfo")+"\n\n"+challenge,
                         HBCICallback.TYPE_TEXT,
                         s);
+                    setPersistentData("externalid",null); // External-ID aus Passport entfernen
                     if (s.length()==0) {
                         throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_TANZERO"));
                     }

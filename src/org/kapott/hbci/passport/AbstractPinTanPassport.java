@@ -1014,6 +1014,7 @@ public abstract class AbstractPinTanPassport
                             additional_msg_tasks=new ArrayList<HBCIJobImpl>();
 
                             GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
+                            hktan.setExternalId(task.getExternalId()); // externe ID durchreichen
                             
                             // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
                             // schicken, in der das HITANS kam.
@@ -1120,6 +1121,7 @@ public abstract class AbstractPinTanPassport
                             
                             // dazu noch einen hktan-job hinzufügen
                             GVTAN2Step hktan1 = (GVTAN2Step) handler.newJob("TAN2Step");
+                            hktan1.setExternalId(task.getExternalId()); // externe ID durchreichen
 
                             // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
                             // schicken, in der das HITANS kam.
@@ -1143,6 +1145,7 @@ public abstract class AbstractPinTanPassport
                             
                             // HKTAN-job für das einreichen der TAN erzeugen
                             GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
+                            hktan2.setExternalId(task.getExternalId()); // externe ID durchreichen
 
                             // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
                             // schicken, in der das HITANS kam.

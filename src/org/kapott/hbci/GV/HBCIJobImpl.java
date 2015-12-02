@@ -86,6 +86,9 @@ public abstract class HBCIJobImpl
                                          so *muss* die Anwendung einen Wert spezifizieren */
     private Hashtable<String, Integer> logFilterLevels; /* hier wird für jeden hl-param-name gespeichert, ob der dazugehörige wert
                                           über den logfilter-Mechanimus geschützt werden soll */
+    
+    private String externalId;
+    
     private HashSet<String> indexedConstraints;
     
     protected HBCIJobImpl(HBCIHandler parentHandler,String jobnameLL,HBCIJobResultImpl jobResult)
@@ -1137,6 +1140,24 @@ public abstract class HBCIJobImpl
     public void addToQueue()
     {
     	addToQueue(null);
+    }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJob#getExternalId()
+     */
+    @Override
+    public String getExternalId()
+    {
+        return this.externalId;
+    }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJob#setExternalId(java.lang.String)
+     */
+    @Override
+    public void setExternalId(String id)
+    {
+        this.externalId = id;
     }
     
     protected boolean twoDigitValueInList(String value, String list)

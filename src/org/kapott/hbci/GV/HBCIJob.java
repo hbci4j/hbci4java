@@ -293,4 +293,20 @@ public interface HBCIJob
      *  @param role die Rolle, in der sich der Eigentümer des zusätzlichen 
      *         Passport-Objektes bezüglich dieses Jobs befindet */
     public void addSignaturePassport(HBCIPassport passport,String role);
+    
+    /**
+     * Kann von der Banking-Anwendung genutzt werden, um einen eigenen Identifier im Job zu speichern, um im spaeteren
+     * Verlauf des HBCI-Dialoges (z.Bsp. bei der TAN-Eingabe) einen Bezug zum urspruenglichen Auftrag wiederherstellen zu
+     * koennen.
+     * @param id optionale ID.
+     */
+    public void setExternalId(String id);
+
+    /**
+     * Liefert eine optionalen Identifier, der von der Banking-Anwendung genutzt werden kann, um einen Bezug zum urspruenglichen
+     * Auftrag herstellen zu koennen.
+     * @return der Identifier.
+     */
+    public String getExternalId();
+    
 }
