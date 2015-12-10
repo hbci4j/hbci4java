@@ -123,10 +123,14 @@ public class LogFilter
 					String secret=entry[0];
 					String replacement=entry[1];
 
+					if (secret.isEmpty()) {
+						continue;
+					}
+
 					int posi=0;
 					while ((posi=line2.indexOf(secret,posi))!=-1) {
 						line2.replace(posi,posi+secret.length(),replacement);
-						posi+=secret.length();
+						posi+=replacement.length();
 					}
 				}
 			}
