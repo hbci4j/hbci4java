@@ -47,7 +47,7 @@ public class Swift
     public static String getTagValue(String st,String tag,int counter)
     {
         String  ret=null;
-        Pattern patternNLTag=Pattern.compile("\\r\\n(-)?:\\d{2}[A-Z]?:"); // Zu dem "(-)?" siehe TestBrokenMT940.java
+        Pattern patternNLTag=Pattern.compile("\\r\\n(-|-\\r\\n)?:\\d{2}[A-Z]?:"); // Zu dem "(-)?" siehe TestBrokenMT940.java
         
         int endpos=0;
         while (true) {
