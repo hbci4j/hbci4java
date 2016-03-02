@@ -75,20 +75,21 @@ public abstract class DDVCardService extends HBCICardService
       StringBuffer blz=new StringBuffer();
       for (int i=0;i<4;i++)
       {
-        if (rawData[20+i]!=(byte)0x20)
-        {
-        	byte nibble=(byte)((rawData[20+i]>>4)&0x0F);
-        	if (nibble>9) {
-        		nibble^=0x0F;
-        	}
-          blz.append((char)(nibble+0x30));
-          
-          nibble=(byte)(rawData[20+i]&0x0F);
-          if (nibble>9) {
-          	nibble^=0x0F;
-          }
-          blz.append((char)(nibble+0x30));
-        }
+        // Linker Nibble ;)
+        // 4 Byte nach rechts verschoben
+        byte ch = rawData[20+i];
+    	byte nibble=(byte)((ch>>4) & 0x0F);
+    	if (nibble > 0x09)
+           nibble ^= 0x0F;
+    	
+        blz.append((char)(nibble + 0x30)); // In ASCII-Bereich verschieben
+
+        // Rechter Nibble
+        nibble=(byte)(ch & 0x0F);
+        if (nibble > 0x09)
+          nibble ^= 0x0F;
+        
+        blz.append((char)(nibble + 0x30));
       }
       ret.blz=blz.toString();
       
