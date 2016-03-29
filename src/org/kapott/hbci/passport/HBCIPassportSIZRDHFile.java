@@ -135,8 +135,8 @@ public class HBCIPassportSIZRDHFile
 
             saveData(tempfile.getAbsolutePath());
 
-            passportfile.delete();
-            tempfile.renameTo(passportfile);
+            this.safeReplace(passportfile,tempfile);
+            
         } catch (Exception e) {
             throw new HBCI_Exception("*** saving of passport file failed",e);
         }

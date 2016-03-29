@@ -522,8 +522,8 @@ public class HBCIPassportAnonymous
             tform.transform(new DOMSource(root),new StreamResult(co));
 
             co.close();
-            passportfile.delete();
-            tempfile.renameTo(passportfile);
+            this.safeReplace(passportfile,tempfile);
+            
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_WRITEERR"),e);
         }

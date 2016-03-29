@@ -104,7 +104,7 @@ public final class HBCIDialog
             boolean s=mainPassport.isSupported();
             HBCIUtils.log("passport supported: "+s,HBCIUtils.LOG_DEBUG);
             
-            HBCIUtils.log("processing dialog init",HBCIUtils.LOG_INFO);
+            HBCIUtils.log(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_INIT"),HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT,null);
             String country=mainPassport.getCountry();
             String blz=mainPassport.getBLZ();
@@ -465,7 +465,7 @@ public final class HBCIDialog
         // signatur-anforderungen (anzahl) in einer msg stehen
         
         try {
-            HBCIUtils.log("adding job "+job.getName()+" to dialog",HBCIUtils.LOG_INFO);
+            HBCIUtils.log(HBCIUtilsInternal.getLocMsg("EXCMSG_ADDJOB",job.getName()),HBCIUtils.LOG_INFO);
             job.verifyConstraints();
             
             // check bpd.numgva here

@@ -201,8 +201,8 @@ public class HBCIPassportRDH
             o.writeObject(getCustomerId());
 
             o.close();
-            passportfile.delete();
-            tempfile.renameTo(passportfile);
+            
+            this.safeReplace(passportfile,tempfile);
 
             HBCIKey k=getMyPrivateSigKey();
             if (k!=null && k.key!=null && !(k.key instanceof RSAPrivateCrtKey)) {

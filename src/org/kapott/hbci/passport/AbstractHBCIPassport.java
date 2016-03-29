@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.passport;
 
+import java.io.File;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -1009,5 +1010,58 @@ public abstract class AbstractHBCIPassport
     public int getMaxGVSegsPerMsg()
     {
         return 0;
+    }
+    
+    /**
+     * Ersetzt die Datei origFile gegen tmpFile.
+     * Nach dem Loeschen der Datei origFile wartet die Methode jedoch maximal 20 Sekunden,
+     * um sicherzustellen, dass z.Bsp. Virenscanner die Datei wieder losgelassen haben und
+     * sie wirklich verschwunden ist, bevor tmpFile auf den Namen von origFile umbenannt wird.
+     * Wichtig ist, dass zum Zeitpunkt des Aufrufes dieser Methode alle Streams auf die
+     * Dateien bereits geschlossen wurden. Die Schreibvorgaenge auf die Dateien muessen also
+     * abgeschlossen sein. Heisst: "os.close()" nicht erst im finally-Block machen sondern
+     * VOR dem Aufruf dieser Methode.
+     * @param origFile die originale zu ersetzende Datei.
+     * @param tmpFile die neue Datei, welche die originale ersetzen soll.
+     */
+    protected void safeReplace(File origFile, File tmpFile)
+    {
+        if (origFile.exists()) // Nur loeschen, wenn es ueberhaupt existiert
+        {
+            HBCIUtils.log("deleting old passport file " + origFile, HBCIUtils.LOG_DEBUG);
+            if (!origFile.delete())
+                HBCIUtils.log("delete method for " + origFile + " returned false", HBCIUtils.LOG_ERR);
+        }
+
+        // Wenn die Datei noch existiert, warten wir noch etwas
+        int retry = 0;
+        while (origFile.exists() && retry++ < 20)
+        {
+            try
+            {
+                HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) holds a lock, file still exists", HBCIUtils.LOG_WARN);
+                Thread.sleep(1000L);
+            }
+            catch (InterruptedException e)
+            {
+                HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
+                break;
+            }
+            if (!origFile.exists())
+            {
+                HBCIUtils.log("passport file now gone: " + origFile, HBCIUtils.LOG_INFO);
+                break;
+            }
+        }
+        
+        // Datei existiert immer noch, dann brauchen wir das Rename gar nicht erst versuchen
+        if (origFile.exists())
+            throw new HBCI_Exception("could not delete " + origFile);
+        
+        HBCIUtils.log("renaming " + tmpFile.getName() + " to " + origFile.getName(), HBCIUtils.LOG_DEBUG);
+        if (!tmpFile.renameTo(origFile))
+        {
+            throw new HBCI_Exception("could not rename " + tmpFile.getName() + " to " + origFile.getName());
+        }
     }
 }

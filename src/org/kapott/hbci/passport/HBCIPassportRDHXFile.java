@@ -238,8 +238,8 @@ public class HBCIPassportRDHXFile
             fo.write(data);
             fo.close();
 
-            passportfile.delete();
-            tempfile.renameTo(passportfile);
+            this.safeReplace(passportfile,tempfile);
+            
         } catch (Exception e) {
             throw new HBCI_Exception("*** saving of passport file failed", e);
         }

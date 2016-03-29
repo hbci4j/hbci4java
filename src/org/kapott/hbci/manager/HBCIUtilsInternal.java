@@ -27,6 +27,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -88,7 +89,16 @@ public class HBCIUtilsInternal
     public static String getLocMsg(String key)
     {
         ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return locMsgs.get(group).getString(key);
+        try
+        {
+            return locMsgs.get(group).getString(key);
+        }
+        catch (MissingResourceException re)
+        {
+            // tolerieren wir
+            HBCIUtils.log(re,HBCIUtils.LOG_ERR);
+            return key;
+        }
     }
 
     public static String getLocMsg(String key,Object o)

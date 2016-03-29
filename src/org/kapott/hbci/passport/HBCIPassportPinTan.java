@@ -252,43 +252,7 @@ public class HBCIPassportPinTan
             HBCIUtils.log("closing output stream", HBCIUtils.LOG_DEBUG);
             o.close();
             
-            if (passportfile.exists()) // Nur loeschen, wenn es ueberhaupt existiert
-            {
-                HBCIUtils.log("deleting old passport file " + passportfile, HBCIUtils.LOG_DEBUG);
-                if (!passportfile.delete())
-                    HBCIUtils.log("delete method for " + passportfile + " returned false", HBCIUtils.LOG_ERR);
-            }
-
-            // Wenn die Datei noch existiert, warten wir noch etwas
-            int retry = 0;
-            while (passportfile.exists() && retry++ < 10)
-            {
-                try
-                {
-                    HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) is currently locking the file", HBCIUtils.LOG_INFO);
-                    Thread.sleep(1000L);
-                }
-                catch (InterruptedException e)
-                {
-                    HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
-                    break;
-                }
-                if (!passportfile.exists())
-                {
-                    HBCIUtils.log("passport file now gone: " + passportfile, HBCIUtils.LOG_INFO);
-                    break;
-                }
-            }
-            
-            // Datei existiert immer noch, dann brauchen wir das Rename gar nicht erst versuchen
-            if (passportfile.exists())
-                throw new HBCI_Exception("could not delete " + passportfile);
-            
-            HBCIUtils.log("renaming " + tempfile.getName() + " to " + passportfile.getName(), HBCIUtils.LOG_DEBUG);
-            if (!tempfile.renameTo(passportfile))
-            {
-                throw new HBCI_Exception("could not rename " + tempfile.getName() + " to " + passportfile.getName());
-            }
+            this.safeReplace(passportfile,tempfile);
         }
         catch (HBCI_Exception he)
         {
