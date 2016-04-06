@@ -1057,11 +1057,31 @@ public abstract class AbstractHBCIPassport
         // Datei existiert immer noch, dann brauchen wir das Rename gar nicht erst versuchen
         if (origFile.exists())
             throw new HBCI_Exception("could not delete " + origFile);
-        
+
+        // Das Rename versuchen wir jetzt auch wiederholt mehrfach
+        retry = 0;
         HBCIUtils.log("renaming " + tmpFile.getName() + " to " + origFile.getName(), HBCIUtils.LOG_DEBUG);
-        if (!tmpFile.renameTo(origFile))
+        while (!tmpFile.renameTo(origFile) && retry++ < 20)
         {
+            try
+            {
+                HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) holds a lock, file still not renamed", HBCIUtils.LOG_WARN);
+                Thread.sleep(1000L);
+            }
+            catch (InterruptedException e)
+            {
+                HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
+                break;
+            }
+            if (origFile.exists())
+            {
+                HBCIUtils.log("new passport file now exists: " + origFile, HBCIUtils.LOG_INFO);
+                break;
+            }
             throw new HBCI_Exception("could not rename " + tmpFile.getName() + " to " + origFile.getName());
         }
+        
+        if (!origFile.exists())
+            throw new HBCI_Exception("could not rename " + tmpFile.getName() + " to " + origFile.getName());
     }
 }
