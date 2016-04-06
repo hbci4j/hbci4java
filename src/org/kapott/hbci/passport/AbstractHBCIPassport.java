@@ -774,6 +774,11 @@ public abstract class AbstractHBCIPassport
         closeComm();
     }
     
+    /**
+     * Fragt den User per Callback nach dem Passwort fuer die Passport-Datei.
+     * @param forSaving true, wenn das Passwort zum Speichern erfragt werden soll.
+     * @return der Secret-Key.
+     */
     protected SecretKey calculatePassportKey(boolean forSaving)
     {
         try {

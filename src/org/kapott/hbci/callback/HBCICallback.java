@@ -209,12 +209,16 @@ public interface HBCICallback
     
     /** Ursache des Callback-Aufrufes: Passwort für das Einlesen der Schlüsseldatei
         benötigt. Dieser Callback tritt beim Laden eines Passport-Files auf, um nach dem 
-        Passwort für die Entschlüsselung zu fragen. */
+        Passwort für die Entschlüsselung zu fragen. 
+        ACHTUNG: Die folgenden Zeichen duerfen NICHT im Passwort enthalten sein: ß´°§üÜöäÖÄ
+        */
     public final static int NEED_PASSPHRASE_LOAD=21;
     /** Ursache des Callback-Aufrufes: Passwort für das Erzeugen der Schlüsseldatei
         benötigt. Dieser Callback tritt beim Erzeugen eines neuen Passport-Files bzw. beim
         Ändern der Passphrase für eine Schlüsseldatei auf, um nach dem 
-        Passwort für die Verschlüsselung zu fragen. */
+        Passwort für die Verschlüsselung zu fragen.
+        ACHTUNG: Die folgenden Zeichen duerfen NICHT im Passwort enthalten sein: ß´°§üÜöäÖÄ
+         */
     public final static int NEED_PASSPHRASE_SAVE=22;
     /** <p>Ursache des Callback-Aufrufes: Auswahl eines Eintrages aus einer SIZ-RDH-Datei
         benötigt. Dieser Callback tritt nur bei Verwendung der Passport-Variante

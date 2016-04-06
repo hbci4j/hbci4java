@@ -205,7 +205,12 @@ public class HBCIPassportRDHNew
                 
                 if (askForMissingData(true,true,true,true,false,true,true))
                     saveChanges();
-            } catch (Exception e) {
+            }
+            catch (HBCI_Exception e1)
+            {
+                throw e1;
+            }
+            catch (Exception e) {
                 throw new HBCI_Exception("*** error while reading passport file",e);
             }
         }
@@ -323,6 +328,9 @@ public class HBCIPassportRDHNew
         return ret;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
+     */
     public void saveChanges()
     {
         try {
@@ -379,8 +387,13 @@ public class HBCIPassportRDHNew
             
             co.close();
             this.safeReplace(passportfile,tempfile);
-            
-        } catch (Exception e) {
+        }
+        catch (HBCI_Exception e1)
+        {
+            throw e1;
+        }
+        catch (Exception e)
+        {
             throw new HBCI_Exception("*** saving of passport file failed",e);
         }
     }
