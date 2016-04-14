@@ -909,8 +909,10 @@ public final class HBCIUtils
                 so wird ein leerer String zurückgegeben */
     public static String getNameForBLZ(String blz)
     {
-        String result=HBCIUtilsInternal.getBLZData(blz);
-        return HBCIUtilsInternal.getNthToken(result,1);
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return "";
+        return info.getName() != null ? info.getName() : "";
     }
     
     /**
@@ -997,14 +999,19 @@ public final class HBCIUtils
         return list;
     }
     
-    /** Gibt zu einer gegebenen Bankleitzahl den BIC-Code zurück.
-        @param blz Bankleitzahl der Bank
-        @return BIC-Code dieser Bank. Falls kein BIC-Code bekannt ist, wird ein
-        leerer String zurückgegeben. */
+    /**
+     * Gibt zu einer gegebenen Bankleitzahl den BIC-Code zurück.
+     * @param blz Bankleitzahl der Bank
+     * @return BIC-Code dieser Bank. Falls kein BIC-Code bekannt ist, wird ein
+     * leerer String zurückgegeben.
+     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
+     */
     public static String getBICForBLZ(String blz)
     {
-        String data=HBCIUtilsInternal.getBLZData(blz);
-        return HBCIUtilsInternal.getNthToken(data,3);
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return "";
+        return info.getBic() != null ? info.getBic() : "";
     }
     
     /**
@@ -1061,11 +1068,14 @@ public final class HBCIUtils
      * @param blz Bankleitzahl der Bank
      * @return HBCI-Host (DNS-Name oder IP-Adresse). Falls kein Host bekannt
      *         ist, wird ein leerer String zurückgegeben.
+     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
      */
     public static String getHBCIHostForBLZ(String blz)
     {
-        String data=HBCIUtilsInternal.getBLZData(blz);
-        return HBCIUtilsInternal.getNthToken(data,5);
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return "";
+        return info.getRdhAddress() != null ? info.getRdhAddress() : "";
     }
 
     /**
@@ -1074,11 +1084,14 @@ public final class HBCIUtils
      * @param blz Bankleitzahl der Bank
      * @return PIN/TAN-URL. Falls keine URL bekannt
      *         ist, wird ein leerer String zurückgegeben.
+     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
      */
     public static String getPinTanURLForBLZ(String blz)
     {
-        String data=HBCIUtilsInternal.getBLZData(blz);
-        return HBCIUtilsInternal.getNthToken(data,6);
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return "";
+        return info.getPinTanAddress() != null ? info.getPinTanAddress() : "";
     }
     
     /**
@@ -1086,11 +1099,14 @@ public final class HBCIUtils
      * bzw. RDH zu verwenden ist. Siehe auch {@link #getPinTanVersionForBLZ(String)}. 
      * @param blz
      * @return HBCI-Version
+     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
      */
     public static String getHBCIVersionForBLZ(String blz)
     {
-        String data=HBCIUtilsInternal.getBLZData(blz);
-        return HBCIUtilsInternal.getNthToken(data,7);
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return "";
+        return info.getRdhVersion() != null ? info.getRdhVersion().getId() : "";
     }
 
     /**
@@ -1098,11 +1114,14 @@ public final class HBCIUtils
      * bzw. RDH zu verwenden ist. Siehe auch {@link #getHBCIVersionForBLZ(String)} 
      * @param blz
      * @return HBCI-Version
+     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
      */
     public static String getPinTanVersionForBLZ(String blz)
     {
-        String data=HBCIUtilsInternal.getBLZData(blz);
-        return HBCIUtilsInternal.getNthToken(data,8);
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return "";
+        return info.getPinTanVersion() != null ? info.getPinTanVersion().getId() : "";
     }
 
     /** Setzt den Wert eines HBCI-Parameters. Eine Beschreibung aller vom Kernel ausgewerteten Parameter
@@ -1634,19 +1653,16 @@ public final class HBCIUtils
      * <em>HBCI4Java</em> validiert werden können, sonst <code>false</code> */
     public static boolean canCheckAccountCRC(String blz)
     {
-        boolean ret=false;
+        BankInfo info = getBankInfo(blz);
+        if (info == null)
+            return false;
+
+        String alg = info.getChecksumMethod();
+        if (alg == null || alg.length() != 2)
+            return false;
         
-        String info=HBCIUtilsInternal.getBLZData(blz);
-        String alg=HBCIUtilsInternal.getNthToken(info,4);
-        
-        if (alg.length()==2) {
-            Method method=getAccountCRCMethodByAlg(alg);
-            if (method!=null) {
-                ret=true;
-            }
-        }
-        
-        return ret;
+        Method method = getAccountCRCMethodByAlg(alg);
+        return method != null;
     }
     
     /** <p>Überprüft, ob gegebene BLZ und Kontonummer zueinander passen.
@@ -1665,19 +1681,17 @@ public final class HBCIUtils
         zum Überprüfen verwendet wurde und die Prüfung einen Fehler ergab */ 
     public static boolean checkAccountCRC(String blz, String number)
     {
-        boolean ret=true;
-        
-        String info=HBCIUtilsInternal.getBLZData(blz);
-        String alg=HBCIUtilsInternal.getNthToken(info,4);
+        BankInfo info = getBankInfo(blz);
+        String alg = info != null ? info.getChecksumMethod() : null;
 
-        if (alg.length()==2) {
-            HBCIUtils.log("crc-checking "+blz+"/"+number, HBCIUtils.LOG_DEBUG);
-            ret=checkAccountCRCByAlg(alg,blz,number);
-        } else {
+        // Im Zweifel lassen wir die Bankverbindung lieber durch
+        if (alg == null || alg.length() != 2) {
             HBCIUtils.log("no crc information about "+blz+" in database", HBCIUtils.LOG_WARN);
+            return true;
         }
-        
-        return ret;
+
+        HBCIUtils.log("crc-checking "+blz+"/"+number, HBCIUtils.LOG_DEBUG);
+        return checkAccountCRCByAlg(alg,blz,number);
     }
     
     /** Used to convert a blz or an account number to an array of ints, one

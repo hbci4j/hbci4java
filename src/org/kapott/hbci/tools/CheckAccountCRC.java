@@ -22,8 +22,8 @@
 package org.kapott.hbci.tools;
 
 import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 // TODO: doku anpassen
 /** <p>Tool zum Verifizieren der Gültigkeit von BLZ/Kontonummer.
@@ -55,13 +55,14 @@ public class CheckAccountCRC
         if (args.length==2) {
         	String blz=args[0];
         	String number=args[1];
-        	String data=HBCIUtilsInternal.getBLZData(blz);
-        	String kiname=data.substring(0,data.indexOf("|"));
-        	String alg=HBCIUtilsInternal.getAlgForBLZ(blz);
+        	
+        	BankInfo info = HBCIUtils.getBankInfo(blz);
+        	String kiname = info != null ? info.getName() : null;
+            String alg = info != null ? info.getChecksumMethod() : null;
 
         	if (kiname.length()!=0) {
-        		System.out.println("institute name: "+kiname);
-        		System.out.println("algorithmus: "+alg);
+        		System.out.println("institute name: " + (kiname != null ? kiname : ""));
+        		System.out.println("algorithmus: " + (alg != null ? alg : ""));
         		System.out.println("blz: "+blz);
         		System.out.println("account number: "+number);
         		System.out.println(HBCIUtils.checkAccountCRC(blz,number)?"OK":"not OK");
