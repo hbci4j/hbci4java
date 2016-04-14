@@ -27,6 +27,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -39,6 +40,7 @@ public class HBCIUtilsInternal
 {
 
     public static Properties blzs;
+    public static Map<String,BankInfo> banks = null;
     public static Hashtable<ThreadGroup, HBCICallback>  callbacks;  // threadgroup->callbackObject
     public static Hashtable<ThreadGroup, ResourceBundle>  locMsgs;    // threadgroup->resourceBundle
     public static Hashtable<ThreadGroup, Locale>  locales;    // threadgroup->Locale
