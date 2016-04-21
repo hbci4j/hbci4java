@@ -941,25 +941,22 @@ public abstract class AbstractPinTanPassport
         
         Properties bpd=getBPD();
         if (bpd!=null) {
-            for (Enumeration e=bpd.propertyNames();e.hasMoreElements();) {
+            for (Enumeration<?> e=bpd.propertyNames();e.hasMoreElements();) {
                 String key=(String)e.nextElement();
-                
-                // TODO: willuhn 2011-05-13: Das nimmt einfach das Hash-Verfahren
-                // aus dem ersten gefundenen Element. HITANS kann inzwischen
-                // aber mehrfach auftreten. muss es von genau dem aktuell gewaehlten
-                // genommen werden.
-                // Hier muesste man vermutlich stattdessen folgendes machen
 
-                // Properties props = getCurrentSecMechInfo();
-                // String version = props.getProperty("segversion");
-                // Und dann nicht subkey.startsWith("TAN2StepPar") sondern
-                // subkey.startsWith("TAN2StepPar" + version)
-                // Muesste man aber noch testen
+                Properties props = getCurrentSecMechInfo();
+                String segVersion = "";
+                try {
+                    int value = Integer.parseInt(props.getProperty("segversion"));
+                    segVersion += value;
+                } catch (NumberFormatException nfe) {
+                    //Not an integer, hence ignored
+                }
                 
                 // p.getProperty("Params_x.TAN2StepParY.ParTAN2StepZ.can1step")
                 if (key.startsWith("Params")) {
                     String subkey=key.substring(key.indexOf('.')+1);
-                    if (subkey.startsWith("TAN2StepPar") && 
+                    if (subkey.startsWith("TAN2StepPar" + segVersion) && 
                             subkey.endsWith(".orderhashmode")) 
                     {
                         ret=bpd.getProperty(key);
