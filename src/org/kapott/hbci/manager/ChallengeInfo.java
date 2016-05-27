@@ -48,21 +48,6 @@ import org.w3c.dom.NodeList;
 public class ChallengeInfo
 {
   /**
-   * Versionskennung fuer HHD 1.2
-   */
-  public final static String VERSION_HHD_1_2 = "hhd12";
-  
-  /**
-   * Versionskennung fuer HHD 1.3
-   */
-  public final static String VERSION_HHD_1_3 = "hhd13";
-
-  /**
-   * Versionskennung fuer HHD 1.4
-   */
-  public final static String VERSION_HHD_1_4 = "hhd14";
-
-  /**
    * Das Singleton.
    */
   private static ChallengeInfo singleton = null;
@@ -136,49 +121,6 @@ public class ChallengeInfo
   }
   
   /**
-   * Ermittelt die zu verwendende HHD-Version aus den BPD-Informationen des TAN-Verfahrens.
-   * @param secmech die BPD-Informationen zum TAN-Verfahren.
-   * @return die HHD-Version.
-   */
-  private String getVersion(Properties secmech)
-  {
-    // Das ist die "Technische Kennung"
-    // Siehe "Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf"
-    // Der Name ist standardisiert, wenn er mit "HHD1...." beginnt, ist
-    // das die HHD-Version
-    String id = secmech.getProperty("id","");
-    if (id.startsWith("HHD1.4")) return VERSION_HHD_1_4;
-    if (id.startsWith("HHD1.3")) return VERSION_HHD_1_3;
-    
-    // Fallback 1. Wir schauen noch in "ZKA-Version bei HKTAN"
-    String version = secmech.getProperty("zkamethod_version");
-    if (version != null && version.length() > 0)
-    {
-      if (version.startsWith("1.4")) return VERSION_HHD_1_4;
-      if (version.startsWith("1.3")) return VERSION_HHD_1_3;
-    }
-    
-    // Fallback 2. Wir checken noch die HITAN/HKTAN-Version
-    // Bei HKTAN5 kann es HHD 1.3 oder 1.4 sein, bei HKTAN4 bleibt eigentlich nur noch 1.3
-    // Ich weiss nicht, ob Fallback 2 ueberhaupt notwendig ist. Denn angeblich
-    // ist zkamethod_version seit HHD 1.3.1 Pflicht (siehe
-    // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf,
-    // Data dictionary "Version ZKA-TAN-Verfahren"
-    String segversion = secmech.getProperty("segversion");
-    if (segversion != null && segversion.length() > 0)
-    {
-      int i = Integer.parseInt(segversion);
-      if (i == 5)
-        return VERSION_HHD_1_4; // Genau wissen wir es nicht, aber HHD 1.4 ist wahrscheinlich
-      if (i == 4)
-        return VERSION_HHD_1_3; // 1.4 ist in HKTAN4 noch nicht erlaubt, damit bleibt eigentlich nur 1.3
-    }
-    
-    // Default:
-    return VERSION_HHD_1_2;
-  }
-  
-  /**
    * Liefert die Challenge-Daten fuer einen Geschaeftsvorfall.
    * @param code die Segmentkennung des Geschaeftsvorfalls.
    * @return die Challenge-Daten.
@@ -209,11 +151,11 @@ public class ChallengeInfo
       return;
     }
     
-    String version = this.getVersion(secmech); // HHD-Version
+    HHDVersion version = HHDVersion.find(secmech);
     HBCIUtils.log("using hhd version " + version, HBCIUtils.LOG_DEBUG2);
 
     // Parameter fuer die passende HHD-Version holen
-    HhdVersion hhd = job.getVersion(version);
+    HhdVersion hhd = job.getVersion(version.getChallengeVersion());
     
     // Wir haben keine Parameter fuer diese HHD-Version
     if (hhd == null)

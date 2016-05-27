@@ -43,6 +43,7 @@ import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.HHDVersion;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.security.Sig;
 
@@ -363,7 +364,10 @@ public class HBCIPassportPinTan
                 String hhduc = (String) getPersistentData("pintan_challenge_hhd_uc");
                 setPersistentData("pintan_challenge_hhd_uc",null); // gleich wieder aus dem Passport loeschen
                 String flicker = parseFlickercode(challenge,hhduc);
-                
+
+                HHDVersion hhd = HHDVersion.find(secmechInfo);
+                HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
+
                 if (challenge==null) {
                     // es gibt noch keine challenge
                     HBCIUtils.log("will not sign with a TAN, because there is no challenge",HBCIUtils.LOG_DEBUG);
