@@ -18,13 +18,13 @@ public enum HHDVersion
      * HHD-Version 1.4
      * Zur HKTAN-Segment-Version: Genau wissen wir es nicht, aber HHD 1.4 ist wahrscheinlich.
      */
-    HHD_1_4("HHD1.4","1.4",5,"hhd14"),
+    HHD_1_4(Type.CHIPTAN,"HHD1.4","1.4",5,"hhd14"),
     
     /**
      * HHD-Version 1.3
      * Zur HKTAN-Segment-Version: 1.4 ist in HKTAN4 noch nicht erlaubt, damit bleibt eigentlich nur 1.3
      */
-    HHD_1_3("HHD1.3","1.3",4,"hhd13"),
+    HHD_1_3(Type.CHIPTAN,"HHD1.3","1.3",4,"hhd13"),
 
     /**
      * Server-seitig generierter Matrix-Code (photoTAN), Version 1.4
@@ -34,21 +34,38 @@ public enum HHDVersion
      * dass dann nicht Matrix-Code ist.
      * Generell unterstuetzen wir nur server-seitig generierte Matrix-Codes.
      */
-    MS_1_4("MS1.4",null,-1,"hhd14"),
+    MS_1_4(Type.PHOTOTAN,"MS1.4",null,-1,"hhd14"),
 
     /**
      * Server-seitig generierter Matrix-Code (photoTAN), Version 1.3
      */
-    MS_1_3("MS1.3",null,-1,"hhd14"), // Hier gibt es HKTAN in Segment-Version 4 und 5.
+    MS_1_3(Type.PHOTOTAN,"MS1.3",null,-1,"hhd14"), // Hier gibt es HKTAN in Segment-Version 4 und 5.
 
     /**
      * HHD-Version 1.2.
      * Fallback.
      */
-    HHD_1_2(null,null,-1,"hhd12"),
+    HHD_1_2(Type.CHIPTAN,null,null,-1,"hhd12"),
     
     ;
     
+    /**
+     * Definiert die Art des TAN-Verfahrens.
+     */
+    public static enum Type
+    {
+        /**
+         * chipTAN oder smsTAN.
+         */
+        CHIPTAN,
+        
+        /**
+         * photoTAN.
+         */
+        PHOTOTAN,
+    }
+    
+    private Type type = null;
     private String idStart = null;
     private String versionStart = null;
     private int segVersion = 0;
@@ -56,6 +73,7 @@ public enum HHDVersion
     
     /**
      * ct.
+     * @param type die Art des TAN-Verfahrens.
      * @param idStart Technische Kennung beginnt mit diesem Text.
      * Siehe "Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf"
      * Der Name ist standardisiert, wenn er mit "HHD1...." beginnt, ist das die HHD-Version
@@ -63,8 +81,9 @@ public enum HHDVersion
      * @param segVersion Segment-Version des HKTAN-Elements.
      * @param challengeVersion die Kennung fuer das Lookup in den ChallengeInfo-Daten.
      */
-    private HHDVersion(String idStart, String versionStart, int segVersion, String challengeVersion)
+    private HHDVersion(Type type, String idStart, String versionStart, int segVersion, String challengeVersion)
     {
+        this.type = type;
         this.idStart = idStart;
         this.versionStart = versionStart;
         this.segVersion = segVersion;
@@ -78,6 +97,15 @@ public enum HHDVersion
     public String getChallengeVersion()
     {
         return this.challengeVersion;
+    }
+    
+    /**
+     * Liefert die Art des TAN-Verfahrens.
+     * @return die Art des TAN-Verfahrens.
+     */
+    public Type getType()
+    {
+        return this.type;
     }
 
     /**

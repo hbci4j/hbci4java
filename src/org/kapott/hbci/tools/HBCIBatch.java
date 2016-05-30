@@ -179,6 +179,7 @@ public class HBCIBatch
                     retData.replace(0,retData.length(),answers.getProperty("pin"));
                     break;
                 case NEED_PT_TAN:
+                case NEED_PT_PHOTOTAN:
                     // TODO tan-liste aktivieren
                     retData.replace(0,retData.length(),answers.getProperty("tan"));
                     break;

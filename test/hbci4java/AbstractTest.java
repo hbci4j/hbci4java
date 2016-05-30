@@ -12,6 +12,7 @@
 package hbci4java;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -62,6 +63,35 @@ public abstract class AbstractTest
   public InputStream getStream(String name) throws Exception
   {
       return new FileInputStream("test/hbci4java/" + name);
+  }
+  
+  /**
+   * Liest die angegebene Datei und liefert den Inhalt zurueck.
+   * @param name der Dateiname.
+   * @return die Binaer-Daten aus der Datei.
+   * @throws Exception
+   */
+  public byte[] getBytes(String name) throws Exception
+  {
+      InputStream is = null;
+      try
+      {
+          is = this.getStream(name);
+          ByteArrayOutputStream bos = new ByteArrayOutputStream();
+          
+          int len = 0;
+          byte[] buf = new byte[1024];
+          while ((len = is.read(buf)) != -1)
+          {
+              bos.write(buf,0,len);
+          }
+          return bos.toByteArray();
+      }
+      finally
+      {
+          if (is != null)
+              is.close();
+      }
   }
 
   /**
