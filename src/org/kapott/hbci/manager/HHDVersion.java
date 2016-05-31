@@ -115,11 +115,13 @@ public enum HHDVersion
      */
     public static HHDVersion find(Properties secmech)
     {
+      HBCIUtils.log("trying to determine HHD version for secmech: " + secmech,HBCIUtils.LOG_DEBUG);
       // Das ist die "Technische Kennung"
       // Siehe "Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf"
       // Der Name ist standardisiert, wenn er mit "HHD1...." beginnt, ist
       // das die HHD-Version
       String id = secmech.getProperty("id","");
+      HBCIUtils.log("  technical HHD id: " + id,HBCIUtils.LOG_DEBUG);
       for (HHDVersion v:values())
       {
           String s = v.idStart;
@@ -131,6 +133,7 @@ public enum HHDVersion
       
       // Fallback 1. Wir schauen noch in "ZKA-Version bei HKTAN"
       String version = secmech.getProperty("zkamethod_version");
+      HBCIUtils.log("  ZKA version: " + version,HBCIUtils.LOG_DEBUG);
       if (version != null && version.length() > 0)
       {
           for (HHDVersion v:values())
@@ -150,6 +153,7 @@ public enum HHDVersion
       // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf,
       // Data dictionary "Version ZKA-TAN-Verfahren"
       String segversion = secmech.getProperty("segversion");
+      HBCIUtils.log("  segment version: " + segversion,HBCIUtils.LOG_DEBUG);
       if (segversion != null && segversion.length() > 0)
       {
           int i = Integer.parseInt(segversion);
