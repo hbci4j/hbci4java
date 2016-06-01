@@ -27,19 +27,14 @@ public enum HHDVersion
     HHD_1_3(Type.CHIPTAN,"HHD1.3","1.3",4,"hhd13"),
 
     /**
-     * Server-seitig generierter Matrix-Code (photoTAN), Version 1.4
+     * Server-seitig generierter Matrix-Code (photoTAN)
      * ZKA-Version und HKTAN-Version bleiben hier frei, weil wir anhand diesen
      * Merkmalen das Matrix-Code-Verfahren nicht eindeutig erkennen koennen.
      * Und da chipTAN/smsTAN deutlich gebrauechlicher ist, ist es erheblich wahrscheinlicher,
      * dass dann nicht Matrix-Code ist.
      * Generell unterstuetzen wir nur server-seitig generierte Matrix-Codes.
      */
-    MS_1_4(Type.PHOTOTAN,"MS1.4",null,-1,"hhd14"),
-
-    /**
-     * Server-seitig generierter Matrix-Code (photoTAN), Version 1.3
-     */
-    MS_1_3(Type.PHOTOTAN,"MS1.3",null,-1,"hhd14"), // Hier gibt es HKTAN in Segment-Version 4 und 5.
+    MS_1(Type.PHOTOTAN,"MS1",null,-1,"hhd14"),
 
     /**
      * HHD-Version 1.2.

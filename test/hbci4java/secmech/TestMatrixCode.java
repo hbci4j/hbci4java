@@ -7,8 +7,11 @@
 
 package hbci4java.secmech;
 
+import java.util.Properties;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.kapott.hbci.manager.HHDVersion;
 import org.kapott.hbci.manager.MatrixCode;
 
 import hbci4java.AbstractTest;
@@ -58,6 +61,21 @@ public class TestMatrixCode extends AbstractTest
     public void test004() throws Exception
     {
         new MatrixCode("zu kurz");
+    }
+    
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void test005() throws Exception
+    {
+        // Testet die Erkennung des Matrix-Code-Verfahrens aus dem Secmech.
+        Properties props = new Properties();
+        props.put("id","MS1.0.0");
+        props.put("segversion","5");
+        
+        HHDVersion version = HHDVersion.find(props);
+        Assert.assertEquals("Matrix-Code-Verfahren nicht erkannt",HHDVersion.MS_1,version);
     }
 
 }
