@@ -72,4 +72,16 @@ public class TestBrokenMT940
         Assert.assertEquals("C140106EUR1,00",value);
     }
     
+    /**
+     * Fehlendes "-" auf der letzten Zeile.
+     * Muss aber trotzdem korrekt geparst werden.
+     * @throws Exception
+     */
+    @Test
+    public void test004() throws Exception
+    {
+        String st = "\r\n:62F:C150626EUR91,32\r\n";
+        String value = Swift.getTagValue(st,"62F",0);
+        Assert.assertEquals("C150626EUR91,32",value);
+    }
 }

@@ -36,6 +36,13 @@ zu können. Im Zuge der Erweiterungen am SEPA-Code wurde das jedoch zu umfangreic
 Ordner wurde zwischenzeitlich gelöscht. Die Historie der Weiterentwicklung kann über
 die History des GIT-Repositories nachvollzogen werden.
 
+## Lizenz
+
+LGPL 2.1 - GNU Lesser General Public License, version 2.1 (http://www.gnu.org/licenses/old-licenses/lgpl-2.1)
+
+*Hinweis*
+Bis 02.05.2016 unterlag HBCI4Java der GPLv2 - wurde mit https://github.com/willuhn/hbci4java/issues/36 aber auf LGPL 2.1 geändert.
+
 ## Releases
 
 Du kannst HBCI4Java entweder selbst compilieren (siehe folgender Absatz) - oder du nimmst einfach fertige Releases. Aktuelle Versionen findest du immer im GitHub-Projekt von [Hibiscus](https://github.com/willuhn/hibiscus):

@@ -66,7 +66,10 @@ public class Swift
                 } else {
                     /* no next tag found - use end of stream without the
                      * trailing \r\n- */
-                    endpos=st.length()-3;
+                    // Es gibt Dateien, die nicht auf "-" enden sondern nur mit "\r\n".
+                    // hier wuerde sonst der letzte Cent des Schluss-Saldo ggf. abgeschnitten werden
+                    int cut = st.endsWith("-") ? 3 : 2;
+                    endpos=st.length()-cut;
                 } 
                 
                 ret=st.substring(startpos, endpos);

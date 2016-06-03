@@ -136,6 +136,7 @@ public class HBCICallbackSwing
                     needSecret(currentData,"ptpin");
                     break;
                 case NEED_PT_TAN:
+                case NEED_PT_PHOTOTAN:
                     needSecret(currentData,"pttan");
                     break;
                     

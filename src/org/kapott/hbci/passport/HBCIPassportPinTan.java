@@ -43,6 +43,8 @@ import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.HHDVersion;
+import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.security.Sig;
 
@@ -359,31 +361,47 @@ public class HBCIPassportPinTan
                 String challenge=(String)getPersistentData("pintan_challenge");
                 setPersistentData("pintan_challenge",null);
                 
-                // willuhn 2011-05-27 Wir versuchen, den Flickercode zu ermitteln und zu parsen
-                String hhduc = (String) getPersistentData("pintan_challenge_hhd_uc");
-                setPersistentData("pintan_challenge_hhd_uc",null); // gleich wieder aus dem Passport loeschen
-                String flicker = parseFlickercode(challenge,hhduc);
-                
-                if (challenge==null) {
+                if (challenge==null)
+                {
                     // es gibt noch keine challenge
                     HBCIUtils.log("will not sign with a TAN, because there is no challenge",HBCIUtils.LOG_DEBUG);
-                } else {
+                }
+                else
+                {
                     HBCIUtils.log("found challenge in passport, so we ask for a TAN",HBCIUtils.LOG_DEBUG);
-                    // es gibt eine challenge, also damit tan ermitteln
                     
-                    // willuhn 2011-05-27: Flicker-Code uebergeben, falls vorhanden
-                    // bei NEED_PT_SECMECH wird das auch so gemacht.
-                    StringBuffer s = flicker != null ? new StringBuffer(flicker) : new StringBuffer();
-                    HBCIUtilsInternal.getCallback().callback(this,
-                        HBCICallback.NEED_PT_TAN,
-                        secmechInfo.getProperty("name")+"\n"+secmechInfo.getProperty("inputinfo")+"\n\n"+challenge,
-                        HBCICallback.TYPE_TEXT,
-                        s);
+                    // willuhn 2011-05-27 Wir versuchen, den Flickercode zu ermitteln und zu parsen
+                    String hhduc = (String) getPersistentData("pintan_challenge_hhd_uc");
+                    setPersistentData("pintan_challenge_hhd_uc",null); // gleich wieder aus dem Passport loeschen
+
+                    HHDVersion hhd = HHDVersion.find(secmechInfo);
+                    HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
+
+                    final StringBuffer payload = new StringBuffer();
+                    final String msg = secmechInfo.getProperty("name")+"\n"+secmechInfo.getProperty("inputinfo")+"\n\n"+challenge;
+                    
+                    if (hhd.getType() == Type.PHOTOTAN)
+                    {
+                        // Bei PhotoTAN haengen wir ungeparst das HHDuc an. Das kann dann auf
+                        // Anwendungsseite per MatrixCode geparst werden
+                        payload.append(hhduc);
+                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_PHOTOTAN,msg,HBCICallback.TYPE_TEXT,payload);
+                    }
+                    else
+                    {
+                        // willuhn 2011-05-27: Flicker-Code anhaengen, falls vorhanden
+                        String flicker = parseFlickercode(challenge,hhduc);
+                        if (flicker != null)
+                            payload.append(flicker);
+                        
+                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TAN,msg,HBCICallback.TYPE_TEXT,payload);
+                    }
+
                     setPersistentData("externalid",null); // External-ID aus Passport entfernen
-                    if (s.length()==0) {
+                    if (payload == null || payload.length()==0) {
                         throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_TANZERO"));
                     }
-                    tan=s.toString();
+                    tan=payload.toString();
                 }
             }
             if (tan.length()!=0) {

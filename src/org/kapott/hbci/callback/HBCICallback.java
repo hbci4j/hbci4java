@@ -339,7 +339,16 @@ public interface HBCICallback
      * hinterlegt wurde. Dieser Name wird verwendet, damit die SMS mit
      * der TAN an mehrere Mobiltelefone schicken kann. */
     public final static int NEED_PT_TANMEDIA=32;
-    
+
+    /**
+     * Ursache des Callback-Aufrufes: eine Photo-TAN für PIN/TAN-Verfahren benötigt. Dieser
+     * Callback tritt nur bei Verwendung von PIN/TAN-Passports mit dem photoTAN-Verfahren auf.
+     * Im Callback wird im StringBuffer der Wert aus dem HHDuc uebergeben. Das sind die Roh-Daten
+     * des Bildes inclusive Angaben zum Bildformat. HBCI4Java enthaelt eine Klasse "MatrixCode",
+     * mit dem diese Daten dann gelesen werden koennen.
+     **/
+    public final static int NEED_PT_PHOTOTAN=33;
+
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
     public final static int WRONG_PIN=40;
     

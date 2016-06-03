@@ -1,17 +1,11 @@
 /**********************************************************************
- * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/ChallengeInfoTest.java,v $
- * $Revision: 1.6 $
- * $Date: 2011/05/20 11:03:28 $
- * $Author: willuhn $
  *
- * Copyright (c) by willuhn - software & services
+ * Copyright (c) by Olaf Willuhn
  * All rights reserved
  *
  **********************************************************************/
 
 package hbci4java.secmech;
-
-import hbci4java.AbstractTest;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -21,15 +15,17 @@ import java.util.List;
 import java.util.Properties;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.kapott.hbci.exceptions.InitializingException;
 import org.kapott.hbci.manager.ChallengeInfo;
 import org.kapott.hbci.manager.ChallengeInfo.HhdVersion;
 import org.kapott.hbci.manager.ChallengeInfo.Job;
 import org.kapott.hbci.manager.ChallengeInfo.Param;
+import org.kapott.hbci.manager.HHDVersion;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
+
+import hbci4java.AbstractTest;
 
 /**
  * Tests fuer die ChallengeInfo-Klasse.
@@ -42,11 +38,11 @@ public class ChallengeInfoTest extends AbstractTest
    * @param version die HHD-Version.
    * @return die Challenge-Daten.
    */
-  private HhdVersion getHhdVersion(String code, String version)
+  private HhdVersion getHhdVersion(String code, HHDVersion version)
   {
     ChallengeInfo info = ChallengeInfo.getInstance();
     Job job = info.getData(code);
-    return job != null ? job.getVersion(version) : null;
+    return job != null ? job.getVersion(version.getChallengeVersion()) : null;
   }
   
   
@@ -57,8 +53,7 @@ public class ChallengeInfoTest extends AbstractTest
   @Test
   public void testInvalid()
   {
-    Assert.assertNull(getHhdVersion("UNDEF",ChallengeInfo.VERSION_HHD_1_4));
-    Assert.assertNull(getHhdVersion("HKAOM","hhd15"));
+    Assert.assertNull(getHhdVersion("UNDEF",HHDVersion.HHD_1_4));
   }
   
   /**
@@ -67,7 +62,7 @@ public class ChallengeInfoTest extends AbstractTest
   @Test
   public void testMissing()
   {
-    HhdVersion version = getHhdVersion("HKDTE",ChallengeInfo.VERSION_HHD_1_4);
+    HhdVersion version = getHhdVersion("HKDTE",HHDVersion.HHD_1_4);
     Assert.assertEquals(version.getParams().size(),0);
   }
   
@@ -81,24 +76,24 @@ public class ChallengeInfoTest extends AbstractTest
     String code        = null;
     
     code = "HKAOM";
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    version = getHhdVersion(code,HHDVersion.HHD_1_2);
     Assert.assertEquals(version.getKlass(),"20");
 
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    version = getHhdVersion(code,HHDVersion.HHD_1_3);
     Assert.assertEquals(version.getKlass(),"20");
   
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    version = getHhdVersion(code,HHDVersion.HHD_1_4);
     Assert.assertEquals(version.getKlass(),"10");
 
 
     code = "HKCCS";
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    version = getHhdVersion(code,HHDVersion.HHD_1_2);
     Assert.assertEquals(version.getKlass(),"22");
 
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    version = getHhdVersion(code,HHDVersion.HHD_1_3);
     Assert.assertEquals(version.getKlass(),"22");
   
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    version = getHhdVersion(code,HHDVersion.HHD_1_4);
     Assert.assertEquals(version.getKlass(),"09");
   }
 
@@ -113,7 +108,7 @@ public class ChallengeInfoTest extends AbstractTest
     String code        = "HKAOM";
     
     
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    version = getHhdVersion(code,HHDVersion.HHD_1_2);
     p = version.getParams().get(1);
     Assert.assertEquals(p.getPath(),"BTG.value");
     Assert.assertEquals(p.getType(),"Wrt");
@@ -122,7 +117,7 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertEquals(p.format("100.99"),"100,99");
     Assert.assertNull(p.format(null));
     
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    version = getHhdVersion(code,HHDVersion.HHD_1_3);
     p = version.getParams().get(2);
     Assert.assertEquals(p.getPath(),"BTG.value");
     Assert.assertEquals(p.getType(),"Wrt");
@@ -132,7 +127,7 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertNull(p.format(null));
     
 
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    version = getHhdVersion(code,HHDVersion.HHD_1_4);
     p = version.getParams().get(0);
     Assert.assertEquals(p.getPath(),"BTG.value");
     Assert.assertEquals(p.getType(),"Wrt");
@@ -153,7 +148,7 @@ public class ChallengeInfoTest extends AbstractTest
     String code        = "HKAOM";
     
     
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    version = getHhdVersion(code,HHDVersion.HHD_1_2);
     p = version.getParams().get(0);
     Assert.assertEquals(p.getPath(),"Other.number");
     Assert.assertEquals(p.getType(),"");
@@ -165,7 +160,7 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertEquals(p.format("+:'@"),"+:'@");
     Assert.assertNull(p.format(null));
     
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    version = getHhdVersion(code,HHDVersion.HHD_1_3);
     p = version.getParams().get(1);
     Assert.assertEquals(p.getPath(),"Other.number");
     Assert.assertEquals(p.getType(),"");
@@ -174,7 +169,7 @@ public class ChallengeInfoTest extends AbstractTest
     Assert.assertNull(p.format(null));
     
 
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    version = getHhdVersion(code,HHDVersion.HHD_1_4);
     p = version.getParams().get(3);
     Assert.assertEquals(p.getPath(),"Other.number");
     Assert.assertEquals(p.getType(),"");
@@ -190,7 +185,7 @@ public class ChallengeInfoTest extends AbstractTest
   @Test
   public void testDate() throws Exception
   {
-    HhdVersion version = getHhdVersion("HKTUE",ChallengeInfo.VERSION_HHD_1_4);
+    HhdVersion version = getHhdVersion("HKTUE",HHDVersion.HHD_1_4);
     Param p = version.getParams().get(3);
     Assert.assertEquals(p.getPath(),"date");
     Assert.assertEquals(p.getType(),"Date");
@@ -223,7 +218,7 @@ public class ChallengeInfoTest extends AbstractTest
     secmech.setProperty("needchallengevalue","N");
     
     // Darf nicht enthalten sein
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    version = getHhdVersion(code,HHDVersion.HHD_1_2);
     params = version.getParams();
     for (Param p:params)
     {
@@ -232,7 +227,7 @@ public class ChallengeInfoTest extends AbstractTest
     }
 
     // Darf nicht enthalten sein
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    version = getHhdVersion(code,HHDVersion.HHD_1_3);
     params = version.getParams();
     for (Param p:params)
     {
@@ -241,7 +236,7 @@ public class ChallengeInfoTest extends AbstractTest
     }
 
     // Hier ist er enthalten - auch wenn in den BPD etwas anderes steht
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    version = getHhdVersion(code,HHDVersion.HHD_1_4);
     params = version.getParams();
     for (Param p:params)
     {
@@ -266,7 +261,7 @@ public class ChallengeInfoTest extends AbstractTest
     secmech.setProperty("needchallengevalue","J");
     
     // Jetzt muss er enthalten sein
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_2);
+    version = getHhdVersion(code,HHDVersion.HHD_1_2);
     params = version.getParams();
     for (Param p:params)
     {
@@ -275,7 +270,7 @@ public class ChallengeInfoTest extends AbstractTest
     }
 
     // Jetzt muss er enthalten sein
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_3);
+    version = getHhdVersion(code,HHDVersion.HHD_1_3);
     params = version.getParams();
     for (Param p:params)
     {
@@ -284,7 +279,7 @@ public class ChallengeInfoTest extends AbstractTest
     }
 
     // Und hier bleibt er weiterhin enthalten
-    version = getHhdVersion(code,ChallengeInfo.VERSION_HHD_1_4);
+    version = getHhdVersion(code,HHDVersion.HHD_1_4);
     params = version.getParams();
     for (Param p:params)
     {
@@ -335,8 +330,8 @@ public class ChallengeInfoTest extends AbstractTest
       MSG msg = new MSG(name,gen,props);
       
       String generated = msg.toString(0);
-      String expected = "HNHBK:1:3+000000000137+300+H11051813102140+3'HKTAN:2:5+1+HKDAN+12345678::280:12345678+@5@12345+++N+++43+:201,:12345::Param 5'HNHBS:3:1+3'";
-                                                                                                                              // ^^^^^^^^^^^^^^^^^^^^
+      String expected = "HNHBK:1:3+000000000139+300+H11051813102140+3'HKTAN:2:5+1+HKDAN+::12345678::280:12345678+@5@12345+++N+++43+:201,:12345::Param 5'HNHBS:3:1+3'";
+                                                                                                                                // ^^^^^^^^^^^^^^^^^^^^
       // Das sind die relevanten Params. Die letzten duerfen weggelassen werden, aber nicht am Anfang.
       Assert.assertEquals(generated,expected);
     }
@@ -347,27 +342,3 @@ public class ChallengeInfoTest extends AbstractTest
     }
   }
 }
-
-
-
-/**********************************************************************
- * $Log: ChallengeInfoTest.java,v $
- * Revision 1.6  2011/05/20 11:03:28  willuhn
- * @N 18-hbci4java-challengeparam-no-an-syntax.patch
- *
- * Revision 1.5  2011-05-20 10:49:44  willuhn
- * @N Tests erweitert fuer neue SyntaxDE-basierte Formatierung der Werte
- *
- * Revision 1.4  2011-05-18 17:16:19  willuhn
- * @N Test fuer das Datumsformat
- *
- * Revision 1.3  2011-05-18 13:50:04  willuhn
- * @N Test fuer die korrekte Erzeugung des DEG
- *
- * Revision 1.2  2011-05-18 13:36:23  willuhn
- * @N Test fuer die korrekte Erzeugung des DEG
- *
- * Revision 1.1  2011-05-17 16:39:38  willuhn
- * @N Unit-Tests
- *
- **********************************************************************/

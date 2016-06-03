@@ -138,6 +138,7 @@ public class HBCICallbackIOStreams
                 case NEED_SOFTPIN:
                 case NEED_PT_PIN:
                 case NEED_PT_TAN:
+                case NEED_PT_PHOTOTAN:
                 case NEED_PROXY_PASS:
                     getOutStream().print(msg+": ");
                     getOutStream().flush();
