@@ -200,8 +200,8 @@ public abstract class AbstractPinTanPassport
         for (int i=0; i<l; i++) {
             HBCIRetVal ret=rets[i];
             if (ret.code.equals("3072")) {
-                String newCustomerId = null;
-                String newUserId = null;
+                String newCustomerId = "";
+                String newUserId = "";
                 int l2=ret.params.length;
                 if(l2>0) {
                     newUserId = ret.params[0];
