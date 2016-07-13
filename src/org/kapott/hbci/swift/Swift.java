@@ -61,18 +61,18 @@ public class Swift
                 
                 // tag found - find start of next tag
                 Matcher matcher=patternNLTag.matcher(st);
-                if (matcher.find(startpos)) {
+                if (matcher.find(startpos))
+                {
                     endpos=matcher.start();
-                } else {
-                    /* no next tag found - use end of stream without the
-                     * trailing \r\n- */
-                    // Es gibt Dateien, die nicht auf "-" enden sondern nur mit "\r\n".
-                    // hier wuerde sonst der letzte Cent des Schluss-Saldo ggf. abgeschnitten werden
-                    int cut = st.endsWith("-") ? 3 : 2;
-                    endpos=st.length()-cut;
+                    ret=st.substring(startpos, endpos);
+                }
+                else
+                {
+                    ret = st.substring(startpos);
+                    
+                    // Kein weiteres Tag gefunden. Alle "\n", "\r" und "-" am Ende abschneiden
+                    ret = ret.replaceAll("[\\r\\n-]{0,10}","");
                 } 
-                
-                ret=st.substring(startpos, endpos);
             }
 
             if ((counter--)==0 || startpos==-1) {

@@ -84,4 +84,40 @@ public class TestBrokenMT940
         String value = Swift.getTagValue(st,"62F",0);
         Assert.assertEquals("C150626EUR91,32",value);
     }
+
+    /**
+     * Noch ein Zeilenumbruch nach der letzten Zeile.
+     * @throws Exception
+     */
+    @Test
+    public void test005() throws Exception
+    {
+        String st = "\r\n:62F:C150626EUR91,32\r\n-\r\n";
+        String value = Swift.getTagValue(st,"62F",0);
+        Assert.assertEquals("C150626EUR91,32",value);
+    }
+
+    /**
+     * Kein "-", dafuer aber zwei Leerzeilen am Ende.
+     * @throws Exception
+     */
+    @Test
+    public void test006() throws Exception
+    {
+        String st = "\r\n:62F:C150626EUR91,32\r\n\r\n";
+        String value = Swift.getTagValue(st,"62F",0);
+        Assert.assertEquals("C150626EUR91,32",value);
+    }
+
+    /**
+     * Linux-Zeilenumbruch am Ende.
+     * @throws Exception
+     */
+    @Test
+    public void test007() throws Exception
+    {
+        String st = "\r\n:62F:C150626EUR91,32\n";
+        String value = Swift.getTagValue(st,"62F",0);
+        Assert.assertEquals("C150626EUR91,32",value);
+    }
 }
