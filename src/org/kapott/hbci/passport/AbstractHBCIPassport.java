@@ -1031,6 +1031,8 @@ public abstract class AbstractHBCIPassport
      */
     protected void safeReplace(File origFile, File tmpFile)
     {
+        HBCIUtils.log("saving passport file " + origFile, HBCIUtils.LOG_INFO);
+        
         if (origFile.exists()) // Nur loeschen, wenn es ueberhaupt existiert
         {
             HBCIUtils.log("deleting old passport file " + origFile, HBCIUtils.LOG_DEBUG);
@@ -1066,8 +1068,17 @@ public abstract class AbstractHBCIPassport
         // Das Rename versuchen wir jetzt auch wiederholt mehrfach
         retry = 0;
         HBCIUtils.log("renaming " + tmpFile.getName() + " to " + origFile.getName(), HBCIUtils.LOG_DEBUG);
-        while (!tmpFile.renameTo(origFile) && retry++ < 20)
+        while (!origFile.exists() && retry++ < 20)
         {
+            if (!tmpFile.renameTo(origFile))
+                HBCIUtils.log("rename method for " + tmpFile + " to " + origFile + " returned false", HBCIUtils.LOG_ERR);
+            
+            if (origFile.exists())
+            {
+                HBCIUtils.log("new passport file now exists: " + origFile, HBCIUtils.LOG_DEBUG);
+                break;
+            }
+            
             try
             {
                 HBCIUtils.log("wait a little bit, maybe another thread (antivirus scanner) holds a lock, file still not renamed", HBCIUtils.LOG_WARN);
@@ -1078,12 +1089,6 @@ public abstract class AbstractHBCIPassport
                 HBCIUtils.log("interrupted", HBCIUtils.LOG_WARN);
                 break;
             }
-            if (origFile.exists())
-            {
-                HBCIUtils.log("new passport file now exists: " + origFile, HBCIUtils.LOG_INFO);
-                break;
-            }
-            throw new HBCI_Exception("could not rename " + tmpFile.getName() + " to " + origFile.getName());
         }
         
         if (!origFile.exists())
