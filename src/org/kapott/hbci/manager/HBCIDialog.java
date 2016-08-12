@@ -499,11 +499,11 @@ public final class HBCIDialog
                 if (maxGVSegTotal>0 && total_counter>maxGVSegTotal) {
                     HBCIUtils.log(
                             "have to generate new message because current type of passport only allows "+maxGVSegTotal+" GV segs per message",
-                            HBCIUtils.LOG_INFO);
+                            HBCIUtils.LOG_DEBUG);
                 } else {
                     HBCIUtils.log(
                             "have to generate new message because of BPD restrictions for number of tasks per message; adding job to this new message",
-                            HBCIUtils.LOG_INFO);
+                            HBCIUtils.LOG_DEBUG);
                 }
                 newMsg();
                 gv_counter=1;

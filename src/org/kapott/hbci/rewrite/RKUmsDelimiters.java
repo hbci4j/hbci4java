@@ -81,7 +81,7 @@ public final class RKUmsDelimiters
                 } else {
                     HBCIUtils.log("absolutely no ending sequence found - "+
                         "maybe statement of account splitted at wrong position?",
-                        HBCIUtils.LOG_WARN);
+                        HBCIUtils.LOG_DEBUG);
                 }
             } else {
                 HBCIUtils.log("statement of account seems to be empty",
@@ -108,13 +108,13 @@ public final class RKUmsDelimiters
         }
 
         if (!temp.toString().equals(st)) {
-            HBCIUtils.log("this institute produces buggy account statements!",HBCIUtils.LOG_WARN);
+            HBCIUtils.log("this institute produces buggy account statements!",HBCIUtils.LOG_DEBUG);
             HBCIUtils.log("wrongCRLF:"+wrongCRLF
                     +" wrongDelimiterChars:"+wrongDelimiter
                     +" wrongEnd:"+wrongEndSequence
                     +" missingMinusBetweenCRLFs:"+missingMinusBetweenCRLFs
                     +" missingCRLFMinus:"+missingCRLFMinus,
-                    HBCIUtils.LOG_WARN);
+                    HBCIUtils.LOG_DEBUG);
         }
         return temp.toString();
     }
