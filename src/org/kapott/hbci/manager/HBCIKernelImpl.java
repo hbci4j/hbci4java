@@ -360,19 +360,27 @@ public final class HBCIKernelImpl implements HBCIKernel
                 HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_MSG_DECRYPT,null);
                 
                 // wenn ja, dann nachricht entschlüsseln
+                HBCIUtils.log("acquire crypt instance",HBCIUtils.LOG_DEBUG);
                 Crypt  crypt=CryptFactory.getInstance().createCrypt(getParentHandlerData(),msg);
                 String newmsgstring;
                 try {
+                    HBCIUtils.log("decrypting using " + crypt,HBCIUtils.LOG_DEBUG);
                     newmsgstring=crypt.decryptIt();
+                    HBCIUtils.log("decrypted",HBCIUtils.LOG_DEBUG);
                 } finally {
+                    HBCIUtils.log("free crypt",HBCIUtils.LOG_DEBUG);
                     CryptFactory.getInstance().unuseObject(crypt);
+                    HBCIUtils.log("crypt freed",HBCIUtils.LOG_DEBUG);
                 }
                 gen.set("_origSignedMsg",newmsgstring);
                 
                 // alle patches für die unverschlüsselte nachricht durchlaufen
+                HBCIUtils.log("rewriting message",HBCIUtils.LOG_DEBUG);
                 for (int i=0;i<rewriters.length;i++) {
+                    HBCIUtils.log("applying rewriter " + rewriters[i].getClass().getSimpleName(),HBCIUtils.LOG_DEBUG);
                     newmsgstring=rewriters[i].incomingClearText(newmsgstring,gen);
                 }
+                HBCIUtils.log("rewriting done",HBCIUtils.LOG_DEBUG);
                 
                 HBCIUtils.log("decrypted message after rewriting: "+newmsgstring,HBCIUtils.LOG_DEBUG2);
                 
