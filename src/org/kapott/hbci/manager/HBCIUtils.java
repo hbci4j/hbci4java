@@ -720,7 +720,7 @@ public final class HBCIUtils
                     configs.put(threadgroup,config);
                 }
                 if (getParam("kernel.rewriter")==null) {
-                    setParam("kernel.rewriter","InvalidSegment,WrongStatusSegOrder,WrongSequenceNumbers,MissingMsgRef,HBCIVersion,SigIdLeadingZero,InvalidSuppHBCIVersion,SecTypeTAN,KUmsDelimiters,KUmsEmptyBDateSets");
+                    setParam("kernel.rewriter","InvalidSegment,WrongStatusSegOrder,WrongSequenceNumbers,MissingMsgRef,HBCIVersion,SigIdLeadingZero,KUmsDelimiters,KUmsEmptyBDateSets");
                 }
                 
                 // initialize callback
