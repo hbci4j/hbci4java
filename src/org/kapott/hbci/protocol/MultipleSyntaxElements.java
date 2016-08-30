@@ -439,7 +439,9 @@ public abstract class MultipleSyntaxElements
                         if ((this instanceof MultipleDEGs) && this.minnum == 0 && this.maxnum > 1 && idx > 1)
                         {
                             int size = this.maxnum-idx;
-                            String rest = save.substring(0,size+1);
+                            if (size > save.length())
+                                size = save.length();
+                            String rest = save.substring(0,size);
                             if (containsOnly(rest,'+'))
                             {
                                 HBCIUtils.log("applying shortcut for optional MultipleDEGs, have no more content in according range",HBCIUtils.LOG_DEBUG);
