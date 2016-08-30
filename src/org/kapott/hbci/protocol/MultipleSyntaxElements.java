@@ -32,6 +32,7 @@ import org.kapott.hbci.exceptions.NoValueGivenException;
 import org.kapott.hbci.exceptions.ParseErrorException;
 import org.kapott.hbci.exceptions.PredelimErrorException;
 import org.kapott.hbci.exceptions.TooMuchElementsException;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.protocol.factory.DEFactory;
 import org.kapott.hbci.protocol.factory.DEGFactory;
 import org.kapott.hbci.protocol.factory.SEGFactory;
@@ -423,6 +424,32 @@ public abstract class MultipleSyntaxElements
                     // mindestanzahl bereits gefuellter elemente erreicht ist
                     
                     if (save.length()>1) {
+                        
+                        //////////////////////////////////////////////////////////////////////
+                        // Dirty-Hack fuer Sonderfall optionale MultipleDEGs. Also eine Liste vieler DEGs,
+                        // die alle optional sein koennen. bei den "AllowedGV" koennen das 999 sein.
+                        // Wir wuerden hier jedes einzeln parsen - nur um festzustellen, dass
+                        // nichts drin steht und wir ein AllowedGV-DEG ohne GV-Code erzeugen,
+                        // weil da eigentlich nur noch sowas steht: "++++++++++++++++++++ usw".
+                        // Das verlaengert das Parsen enorm. Wir kuerzen daher hier ab.
+                        // Wenn this ein MultiDEGs mit minnum = 0 und maxnum > 1 ist, dann checken
+                        // wir, ob auf dem Substring von "save(0,maxnum-idx)" nur noch "+"-Zeichen
+                        // kommen. Wenn das der Fall ist, koennen wir hier abbrechen
+                        // Siehe http://www.onlinebanking-forum.de/forum/topic.php?t=19879&page=last#last_post
+                        if ((this instanceof MultipleDEGs) && this.minnum == 0 && this.maxnum > 1 && idx > 1)
+                        {
+                            int size = this.maxnum-idx;
+                            String rest = save.substring(0,size+1);
+                            if (containsOnly(rest,'+'))
+                            {
+                                HBCIUtils.log("applying shortcut for optional MultipleDEGs, have no more content in according range",HBCIUtils.LOG_DEBUG);
+                                res.replace(0,res.length(),res.substring(size-1)); // Wir schneiden die "+++++..." alle weg
+                                ready = true;
+                                continue;
+                            }
+                        }
+                        //////////////////////////////////////////////////////////////////////
+                        
                         char secondChar=save.charAt(1);
 
                         if (secondChar=='+' || secondChar==':' || secondChar=='\'') {
@@ -536,6 +563,23 @@ public abstract class MultipleSyntaxElements
 
     public void getElementPaths(Properties p,int[] segref,int[] degref,int[] deref)
     {
+    }
+    
+    /**
+     * Prueft, ob der Text s nur aus dem Zeichen c besteht.
+     * @param s der Text.
+     * @param c das Zeichen.
+     * @return true, wenn der Text nur dieses Zeichen enthaelt.
+     */
+    private boolean containsOnly(String s, char c)
+    {
+        for (char c2:s.toCharArray())
+        {
+            if (c != c2)
+                return false;
+        }
+        
+        return true;
     }
     
     protected void destroy()
