@@ -1031,7 +1031,7 @@ public abstract class AbstractHBCIPassport
      */
     protected void safeReplace(File origFile, File tmpFile)
     {
-        HBCIUtils.log("saving passport file " + origFile, HBCIUtils.LOG_INFO);
+        HBCIUtils.log("saving passport file " + origFile, HBCIUtils.LOG_DEBUG);
         
         if (origFile.exists()) // Nur loeschen, wenn es ueberhaupt existiert
         {

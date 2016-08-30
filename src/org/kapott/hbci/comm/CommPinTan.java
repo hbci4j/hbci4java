@@ -83,10 +83,7 @@ public final class CommPinTan
             String host=fullpath.substring(0,slashIdx);
             String path=fullpath.substring(slashIdx);
             
-            HBCIUtils.log("creating a connection to https://"
-                    +host+":"+parentPassport.getPort()+path
-                    +" and checking the certificate",
-                    HBCIUtils.LOG_INFO);
+            HBCIUtils.log(HBCIUtilsInternal.getLocMsg("LOG_CONNECT",new Object[]{host,parentPassport.getPort(),path}),HBCIUtils.LOG_INFO);
             this.url=new URL("https",host,parentPassport.getPort().intValue(),path);
 
             // creating instances of modified socket factories etc.

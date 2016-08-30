@@ -205,7 +205,7 @@ public final class HBCIDialog
     
     private HBCIMsgStatus[] doJobs()
     {
-        HBCIUtils.log("processing jobs",HBCIUtils.LOG_INFO);
+        HBCIUtils.log(HBCIUtilsInternal.getLocMsg("LOG_PROCESSING_JOBS"),HBCIUtils.LOG_INFO);
         
         ArrayList<HBCIMsgStatus>        msgstatus_a=new ArrayList<HBCIMsgStatus>();
         HBCIPassportList msgPassports=new HBCIPassportList();
@@ -360,7 +360,7 @@ public final class HBCIDialog
         HBCIKernelImpl       kernel=(HBCIKernelImpl)handler.getKernel();
         
         try {
-            HBCIUtils.log("processing dialog end",HBCIUtils.LOG_INFO);
+            HBCIUtils.log(HBCIUtilsInternal.getLocMsg("LOG_DIALOG_END"),HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_END,null);
     
             kernel.rawNewMsg("DialogEnd"+anonSuffix);
