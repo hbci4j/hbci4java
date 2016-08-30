@@ -82,15 +82,11 @@
 
 		<copy todir="${classes}">
 			<fileset dir="${src}">
-				<include name="hbci-201.xml" />
-				<include name="hbci-210.xml" />
-				<include name="hbci-220.xml" />
-				<include name="hbci-plus.xml" />
-				<include name="hbci-300.xml" />
+				<include name="hbci-*.xml" />
 				<include name="pain.*.xsd" />
 				<include name="challengedata.xml" />
 				<include name="blz.properties" />
-				<include name="messages*.properties" />
+				<include name="*messages*.properties" />
 			</fileset>
 		</copy>
 

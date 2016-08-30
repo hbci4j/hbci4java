@@ -851,7 +851,7 @@ public final class HBCIUtils
         synchronized (HBCIUtilsInternal.locMsgs) {
             HBCIUtilsInternal.locMsgs.put(
                     threadgroup,
-                    ResourceBundle.getBundle("messages",locale));
+                    ResourceBundle.getBundle("hbci4java-messages",locale));
         }
     }
     
