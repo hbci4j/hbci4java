@@ -13,6 +13,7 @@ package org.kapott.hbci.tools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -90,14 +91,18 @@ public class UpdateBLZProperties
       // BLZ-Datei der Bundesbank einlesen, wenn vorhanden
       if (args.length == 4)
       {
-        f4 = new BufferedReader(new InputStreamReader(new FileInputStream(args[3]),ENCODING));
-        while ((line = f4.readLine()) != null)
+        File f = new File(args[3]);
+        if (f.exists() && f.isFile() && f.canRead())
         {
-          BICLine current = new BICLine(line);
-          if (current.blz == null || current.bic == null)
-            continue;
+          f4 = new BufferedReader(new InputStreamReader(new FileInputStream(f),ENCODING));
+          while ((line = f4.readLine()) != null)
+          {
+            BICLine current = new BICLine(line);
+            if (current.blz == null || current.bic == null)
+              continue;
           
-          bicLokup.put(current.blz,current);
+            bicLokup.put(current.blz,current);
+          }
         }
       }
       //
