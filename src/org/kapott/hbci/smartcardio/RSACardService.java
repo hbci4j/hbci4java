@@ -6,10 +6,8 @@ package org.kapott.hbci.smartcardio;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.smartcardio.ATR;
 import javax.smartcardio.Card;
 import javax.smartcardio.CommandAPDU;
 
@@ -36,27 +34,27 @@ public class RSACardService extends HBCICardService {
     public void init(Card card) {
         super.init(card);
         
-        ATR atr = card.getATR();
-        if (!Arrays.equals(atr.getBytes(), new byte[]{
-            (byte) 0x3b,
-            (byte) 0xb7,
-            (byte) 0x94,
-            (byte) 0x00,
-            (byte) 0x81,
-            (byte) 0x31,
-            (byte) 0xfe,
-            (byte) 0x65,
-            (byte) 0x53,
-            (byte) 0x50,
-            (byte) 0x4b,
-            (byte) 0x32,
-            (byte) 0x33,
-            (byte) 0x90,
-            (byte) 0x00,
-            (byte) 0xd1
-            })) {
-            throw new HBCI_Exception("card has wrong ATR");
-        }
+//        ATR atr = card.getATR();
+//        if (!Arrays.equals(atr.getBytes(), new byte[]{
+//            (byte) 0x3b,
+//            (byte) 0xb7,
+//            (byte) 0x94,
+//            (byte) 0x00,
+//            (byte) 0x81,
+//            (byte) 0x31,
+//            (byte) 0xfe,
+//            (byte) 0x65,
+//            (byte) 0x53,
+//            (byte) 0x50,
+//            (byte) 0x4b,
+//            (byte) 0x32,
+//            (byte) 0x33,
+//            (byte) 0x90,
+//            (byte) 0x00,
+//            (byte) 0xd1
+//            })) {
+//            throw new HBCI_Exception("card has wrong ATR");
+//        }
         
         selectFile(0x3F00);
         selectFile(0x2F02);
