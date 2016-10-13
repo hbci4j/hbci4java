@@ -58,6 +58,9 @@ public class SepaUtil
      */
     public static String format(XMLGregorianCalendar cal, String format)
     {
+        if (cal == null)
+            return null;
+        
         if (format == null)
             format = DATE_FORMAT;
         
@@ -73,7 +76,7 @@ public class SepaUtil
      */
     public static String format(BigDecimal value)
     {
-        return value.toString();
+        return value != null ? value.toString() : null;
     }
 
     /**
