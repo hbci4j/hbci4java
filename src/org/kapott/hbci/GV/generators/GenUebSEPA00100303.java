@@ -171,10 +171,13 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator
         cdtTrxTxInf.getCdtrAcct().getId().setIBAN(sepaParams.getProperty(SepaUtil.insertIndex("dst.iban", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Creditor Agent
-        cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA1());
-        cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA1());
-        cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index)));
-
+        String dstBic = sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index));
+        if (dstBic != null && dstBic.length() > 0) // BIC ist inzwischen optional
+        {
+            cdtTrxTxInf.setCdtrAgt(new BranchAndFinancialInstitutionIdentificationSEPA1());
+            cdtTrxTxInf.getCdtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSEPA1());
+            cdtTrxTxInf.getCdtrAgt().getFinInstnId().setBIC(dstBic);
+        }
 
         //Payment Information - Credit Transfer Transaction Information - Amount
         cdtTrxTxInf.setAmt(new AmountTypeSEPA());
