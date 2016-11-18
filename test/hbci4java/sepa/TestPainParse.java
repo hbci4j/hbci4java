@@ -7,8 +7,6 @@
 
 package hbci4java.sepa;
 
-import hbci4java.AbstractTest;
-
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +15,8 @@ import java.util.Map.Entry;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kapott.hbci.sepa.PainVersion;
+
+import hbci4java.AbstractTest;
 
 /**
  * Testet das Parsen von Pain XML-Dateien - ohne HBCI-Context.
@@ -36,6 +36,7 @@ public class TestPainParse extends AbstractTest
             put("sepa/test-pain-parse-00100202.xml",PainVersion.PAIN_001_002_02);
             put("sepa/test-pain-parse-00100203.xml",PainVersion.PAIN_001_002_03);
             put("sepa/test-pain-parse-00100303.xml",PainVersion.PAIN_001_003_03);
+            put("sepa/test-pain-parse-00100103.xml",PainVersion.PAIN_001_001_03);
         }};
         
         for (Entry<String,PainVersion> entry:files.entrySet())

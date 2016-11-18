@@ -35,24 +35,27 @@ public class PainVersion implements Comparable<PainVersion>
     
     private final static Pattern PATTERN = Pattern.compile("(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
 
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_02 = new PainVersion("urn:sepade:xsd:pain.001.001.02",                "pain.001.001.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_02 = new PainVersion("urn:swift:xsd:$pain.001.002.02",                "pain.001.002.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03","pain.001.002.03.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_003_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03","pain.001.003.03.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_02 = new PainVersion(1,"urn:sepade:xsd:pain.001.001.02",                "pain.001.001.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_02 = new PainVersion(2,"urn:swift:xsd:$pain.001.002.02",                "pain.001.002.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_03 = new PainVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.001.002.03","pain.001.002.03.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_003_03 = new PainVersion(4,"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03","pain.001.003.03.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_03 = new PainVersion(5,"urn:iso:std:iso:20022:tech:xsd:pain.001.001.03","pain.001.001.03.xsd");
     
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_002_02 = new PainVersion("urn:swift:xsd:$pain.002.002.02",                "pain.002.002.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_003_03 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.002.003.03","pain.002.003.03.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_002_02 = new PainVersion(1,"urn:swift:xsd:$pain.002.002.02",                "pain.002.002.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_003_03 = new PainVersion(2,"urn:iso:std:iso:20022:tech:xsd:pain.002.003.03","pain.002.003.03.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_001_03 = new PainVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03","pain.002.001.03.xsd");
     
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_001_01 = new PainVersion("urn:sepade:xsd:pain.008.001.01",                "pain.008.001.01.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_01 = new PainVersion("urn:swift:xsd:$pain.008.002.01",                "pain.008.002.01.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_02 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.002.02","pain.008.002.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_003_02 = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.003.02","pain.008.003.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_001_01 = new PainVersion(1,"urn:sepade:xsd:pain.008.001.01",                "pain.008.001.01.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_01 = new PainVersion(2,"urn:swift:xsd:$pain.008.002.01",                "pain.008.002.01.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_02 = new PainVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.008.002.02","pain.008.002.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_003_02 = new PainVersion(4,"urn:iso:std:iso:20022:tech:xsd:pain.008.003.02","pain.008.003.02.xsd");
+    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_001_02 = new PainVersion(5,"urn:iso:std:iso:20022:tech:xsd:pain.008.001.02","pain.008.001.02.xsd");
     
     private final static Map<Type,List<PainVersion>> knownVersion = new HashMap<Type,List<PainVersion>>()
     {{
-        put(Type.PAIN_001,Collections.unmodifiableList(Arrays.asList(PAIN_001_001_02,PAIN_001_002_02,PAIN_001_002_03,PAIN_001_003_03)));
-        put(Type.PAIN_002,Collections.unmodifiableList(Arrays.asList(PAIN_002_002_02,PAIN_002_003_03)));
-        put(Type.PAIN_008,Collections.unmodifiableList(Arrays.asList(PAIN_008_001_01,PAIN_008_002_01,PAIN_008_002_02,PAIN_008_003_02)));
+        put(Type.PAIN_001,Collections.unmodifiableList(Arrays.asList(PAIN_001_001_02,PAIN_001_002_02,PAIN_001_002_03,PAIN_001_003_03,PAIN_001_001_03)));
+        put(Type.PAIN_002,Collections.unmodifiableList(Arrays.asList(PAIN_002_002_02,PAIN_002_003_03,PAIN_002_001_03)));
+        put(Type.PAIN_008,Collections.unmodifiableList(Arrays.asList(PAIN_008_001_01,PAIN_008_002_01,PAIN_008_002_02,PAIN_008_003_02,PAIN_008_001_02)));
     }};
     
     /**
@@ -133,32 +136,77 @@ public class PainVersion implements Comparable<PainVersion>
     private Type type   = null;
     private int major   = 0;
     private int minor   = 0;
+    private int order   = 0;
     
     
     /**
-     * Erzeugt eine PAIN-Version aus dem URN bzw dem Dateinamen.
+     * Liefert die PAIN-Version aus dem URN.
      * @param urn URN.
      * In der Form "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" oder in
      * der alten Form "sepade.pain.001.001.02.xsd".
+     * @return die PAIN-Version.
      */
+    public static PainVersion byURN(String urn)
+    {
+        PainVersion test = new PainVersion(0,urn,null);
+        
+        if (urn == null || urn.length() == 0)
+            return test;
+        
+        for (List<PainVersion> types:knownVersion.values())
+        {
+            for (PainVersion v:types)
+            {
+                if (v.equals(test))
+                    return v;
+            }
+        }
+        
+        // keine passende Version gefunden. Dann erzeugen wir selbst eine
+        return test;
+    }
+    
+    /**
+     * ct.
+     * Erzeugt eine neue PAIN-Version.
+     * @deprecated Bitte stattdessen {@link PainVersion#byURN(String)} verwenden.
+     * @param urn der URN.
+     */
+    @Deprecated
     public PainVersion(String urn)
     {
-        this(urn,null);
+        this(0,urn,null);
+    }
+
+    
+    /**
+     * ct.
+     * Erzeugt eine neue PAIN-Version.
+     * @deprecated Bitte stattdessen {@link PainVersion#byURN(String)} verwenden.
+     * @param urn der URN.
+     * @param file Dateiname der Schema-Datei.
+     */
+    @Deprecated
+    public PainVersion(String urn, String file)
+    {
+        this(0,urn,file);
     }
     
     /**
      * Erzeugt eine PAIN-Version aus dem URN bzw dem Dateinamen.
+     * @param order die Reihenfolge bei der Sortierung.
      * @param urn URN.
      * In der Form "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" oder in
      * der alten Form "sepade.pain.001.001.02.xsd".
      * @param file Dateiname der Schema-Datei.
      */
-    public PainVersion(String urn, String file)
+    private PainVersion(int order, String urn, String file)
     {
         Matcher m = PATTERN.matcher(urn);
         if (!m.find() || m.groupCount() != 3)
             throw new IllegalArgumentException("invalid pain-version: " + urn);
         
+        this.order = order;
         this.urn   = urn;
         this.file  = file;
         this.type  = Type.getType(m.group(1));
@@ -338,7 +386,7 @@ public class PainVersion implements Comparable<PainVersion>
             if (uri == null)
                 return null;
             
-            return new PainVersion(uri);
+            return PainVersion.byURN(uri);
         }
         catch (IllegalArgumentException e)
         {
@@ -394,11 +442,30 @@ public class PainVersion implements Comparable<PainVersion>
         if (v.type != this.type)
             throw new IllegalArgumentException("pain-type incompatible: " + v.type + " != " + this.type);
         
-      int r = this.major - v.major;
-      if (r != 0)
+        // Es ist voellig krank!
+        // Die Pain-Versionen waren bisher sauber versioniert. Und jetzt ist ploetzlich
+        // eine augenscheinlich kleinere Versionsnummer die aktuellste. WTF?!
+        // Beispiel Ueberweisungen - in dieser Reihenfolge:
+        
+        // pain.001.001.02
+        // pain.001.002.02
+        // pain.001.002.03
+        // pain.001.003.03
+        // pain.001.001.03
+        
+        // Nach "001.003.03" kommt jetzt ploetzlich wieder "001.001.03"!
+        
+        // Daher habe ich jetzt ein extra Flag fuer die Sortierung eingefuehrt.
+        // Kriegt ja sonst keiner mehr auf die Reihe, was die aktuellste Version ist.
+        int r = this.order - v.order;
+        if (r != 0)
+          return r;
+        
+        r = this.major - v.major;
+        if (r != 0)
           return r;
       
-      return this.minor - v.minor;
+        return this.minor - v.minor;
     }
     
     /**

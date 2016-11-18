@@ -18,7 +18,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
-import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
 
@@ -242,7 +241,7 @@ public class TestPainGen
             ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             gen.generate(props, bos, true);
-            String xml = bos.toString(Comm.ENCODING);
+            String xml = bos.toString(ISEPAGenerator.ENCODING);
             Assert.assertTrue(xml.contains(umlaute));
         }
     }

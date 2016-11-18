@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.GenLastSEPA00800101;
 import org.kapott.hbci.GV.generators.GenUebSEPA00100303;
@@ -30,7 +29,7 @@ public class TestPainVersion
     @Test
     public void test001() throws Exception
     {
-        PainVersion v = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
+        PainVersion v = PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
         Assert.assertEquals(Type.PAIN_001,v.getType());
         Assert.assertEquals(3,v.getMajor());
         Assert.assertEquals(3,v.getMinor());
@@ -44,7 +43,7 @@ public class TestPainVersion
     @Test
     public void test002() throws Exception
     {
-        PainVersion v = new PainVersion("sepade.pain.008.001.01.xsd");
+        PainVersion v = PainVersion.byURN("sepade.pain.008.001.01.xsd");
         Assert.assertEquals(Type.PAIN_008,v.getType());
         Assert.assertEquals(1,v.getMajor());
         Assert.assertEquals(1,v.getMinor());
@@ -58,7 +57,7 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test003() throws Exception
     {
-        new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.005.003.03");
+        PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.005.003.03");
     }
 
     /**
@@ -68,7 +67,7 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test004() throws Exception
     {
-        new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001");
+        PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001");
     }
     
     /**
@@ -78,9 +77,9 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test005() throws Exception
     {
-        new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001");
+        PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001");
     }
-    
+
     /**
      * Testet das Ermitteln der hoechsten PAIN-Version.
      * @throws Exception
@@ -90,15 +89,41 @@ public class TestPainVersion
     {
         List<PainVersion> list = new ArrayList<PainVersion>()
         {{
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
         }};
         
         PainVersion highest = PainVersion.findGreatest(list);
         Assert.assertNotNull(highest);
-        Assert.assertEquals(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"),highest);
+        Assert.assertEquals(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"),highest);
+    }
+    
+    /**
+     * Testet das Ermitteln der hoechsten PAIN-Version auch dann, wenn diese neuen bizarren
+     * Versionen mit drin stehen, die augenscheinlich aelter sind.
+     * @throws Exception
+     */
+    @Test
+    public void test007() throws Exception
+    {
+        List<PainVersion> list = new ArrayList<PainVersion>()
+        {{
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
+
+            // Bizzar, aber ist so. Der Test prueft, dass 001.001.03 die aktuellste Version ist. Siehe die Hinweise in PainVersion#compareTo
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"));
+
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
+            
+        }};
+        
+        PainVersion highest = PainVersion.findGreatest(list);
+        Assert.assertNotNull(highest);
+        Assert.assertEquals(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"),highest);
     }
     
     /**
@@ -106,14 +131,14 @@ public class TestPainVersion
      * @throws Exception
      */
     @Test(expected=IllegalArgumentException.class)
-    public void test007() throws Exception
+    public void test008() throws Exception
     {
         List<PainVersion> list = new ArrayList<PainVersion>()
         {{
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.008.001.01"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
-            add(new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.008.001.01"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
+            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
         }};
         
         PainVersion.findGreatest(list);
@@ -125,9 +150,9 @@ public class TestPainVersion
      * @throws Exception
      */
     @Test
-    public void test008() throws Exception
+    public void test009() throws Exception
     {
-        PainVersion v = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
+        PainVersion v = PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
         Assert.assertTrue(v.isSupported("UebSEPA"));
     }
 
@@ -136,11 +161,29 @@ public class TestPainVersion
      * @throws Exception
      */
     @Test
-    public void test009() throws Exception
+    public void test010() throws Exception
     {
-        PainVersion v = new PainVersion("urn:iso:std:iso:20022:tech:xsd:pain.001.004.03");
+        PainVersion v = PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.004.03");
         Assert.assertFalse(v.isSupported("UebSEPA"));
     }
+
+    /**
+     * Testet, dass die PAIN-Version auch dann korrekt erkannt wird, wenn sie in der alten Form angegeben ist.
+     * Es gibt naemlich Banken, die in HISPAS das alte Bezeichner-Format senden (also etwa "sepade.pain.001.002.03.xsd"),
+     * anschliessend aber meckern, wenn man denen beim Einreichen eines Auftrages genau dieses Format
+     * uebergibt. Dort wollen die dann ploetzlich stattdessen den neuen URN haben
+     * (also "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03").
+     * Siehe http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=95160#95160
+     * @throws Exception
+     */
+    @Test
+    public void test011() throws Exception
+    {
+        PainVersion v = PainVersion.byURN("sepade.pain.001.002.03.xsd");
+        Assert.assertEquals(PainVersion.PAIN_001_002_03,v);
+        Assert.assertEquals("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03",v.getURN());
+    }
+
 }
 
 

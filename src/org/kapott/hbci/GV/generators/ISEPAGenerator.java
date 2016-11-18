@@ -12,6 +12,12 @@ import org.kapott.hbci.sepa.PainVersion;
  */
 public interface ISEPAGenerator
 {
+    /**
+     * Das verwendete Encoding. UTF-8.
+     * Siehe Siehe http://www.onlinebanking-forum.de/forum/topic.php?p=107420#real107420
+     */
+    public final static String ENCODING = "UTF-8";
+    
 	/**
 	 * Schreibt den Job als SEPA-XML in den Stream.
 	 * @param sepaParams die sepaParams aus dem SEPA-Geschaeftsvorfall.

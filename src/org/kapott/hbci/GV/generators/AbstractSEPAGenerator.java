@@ -43,7 +43,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         Marshaller marshaller = jaxbContext.createMarshaller();
         
         // Wir verwenden hier hart UTF-8. Siehe http://www.onlinebanking-forum.de/forum/topic.php?p=107420#real107420
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, ENCODING);
 
         // Siehe https://groups.google.com/d/msg/hbci4java/RYHCai_TzHM/72Bx51B9bXUJ
         if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))

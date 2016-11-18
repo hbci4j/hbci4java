@@ -105,7 +105,7 @@ public final class GVTermUebSEPAList extends AbstractSEPAGV
         entry.other=new Konto();
         
         String sepadescr = result.getProperty(header+".sepadescr");
-        PainVersion version = new PainVersion(sepadescr);
+        PainVersion version = PainVersion.byURN(sepadescr);
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();
         String pain = result.getProperty(header+".sepapain");
