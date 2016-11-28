@@ -373,11 +373,22 @@ public class HBCIPassportPinTan
                             // noch keine tan bekannt --> callback
                             
                             StringBuffer s=new StringBuffer();
-                            HBCIUtilsInternal.getCallback().callback(this,
-                                HBCICallback.NEED_PT_TAN,
-                                HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTTAN"),
-                                HBCICallback.TYPE_TEXT,
-                                s);
+                            try
+                            {
+                                HBCIUtilsInternal.getCallback().callback(this,
+                                                HBCICallback.NEED_PT_TAN,
+                                                HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTTAN"),
+                                                HBCICallback.TYPE_TEXT,
+                                                s);
+                            }
+                            catch (HBCI_Exception e)
+                            {
+                                throw e;
+                            }
+                            catch (Exception e)
+                            {
+                                throw new HBCI_Exception(e);
+                            }
                             if (s.length()==0) {
                                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_TANZERO"));
                             }
