@@ -1,23 +1,19 @@
 /**********************************************************************
- * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/secmech/FlickerTest.java,v $
- * $Revision: 1.6 $
- * $Date: 2011/06/24 16:53:23 $
- * $Author: willuhn $
  *
- * Copyright (c) by willuhn - software & services
- * All rights reserved
+ * Copyright (c) 2016 Olaf Willuhn
+ * GNU LGPLv2
  *
  **********************************************************************/
 
 package hbci4java.secmech;
 
-import hbci4java.AbstractTest;
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.kapott.hbci.manager.FlickerCode;
-import org.kapott.hbci.manager.FlickerRenderer;
 import org.kapott.hbci.manager.FlickerCode.HHDVersion;
+import org.kapott.hbci.manager.FlickerRenderer;
+
+import hbci4java.AbstractTest;
 
 /**
  * Testet die Flicker-Codes.
@@ -59,14 +55,17 @@ public class FlickerTest extends AbstractTest
     expected.startCode.encoding = null;
     expected.startCode.controlBytes.add(1);
     expected.de1.lde      = 10;
+    expected.de1.ldeLen   = 2;
     expected.de1.length   = 10;
     expected.de1.data     = "9876543210";
     expected.de1.encoding = null;
     expected.de2.lde      = 8;
+    expected.de2.ldeLen   = 2;
     expected.de2.length   = 8;
     expected.de2.data     = "12345678";
     expected.de2.encoding = null;
     expected.de3.lde      = 4;
+    expected.de3.ldeLen   = 2;
     expected.de3.length   = 4;
     expected.de3.data     = "1,00";
     expected.de3.encoding = null;
@@ -98,14 +97,17 @@ public class FlickerTest extends AbstractTest
     expected.startCode.encoding = null;
     expected.startCode.controlBytes.add(1);
     expected.de1.lde      = 10;
+    expected.de1.ldeLen   = 2;
     expected.de1.length   = 10;
     expected.de1.data     = "1234567890";
     expected.de1.encoding = null;
     expected.de2.lde      = 8;
+    expected.de2.ldeLen   = 2;
     expected.de2.length   = 8;
     expected.de2.data     = "12030000";
     expected.de2.encoding = null;
     expected.de3.lde      = 4;
+    expected.de3.ldeLen   = 2;
     expected.de3.length   = 4;
     expected.de3.data     = "0,20";
     expected.de3.encoding = null;
@@ -138,6 +140,7 @@ public class FlickerTest extends AbstractTest
     expected.startCode.encoding = null;
     expected.startCode.controlBytes.add(1);
     expected.de1.lde      = 8;
+    expected.de1.ldeLen   = 2;
     expected.de1.length   = 8;
     expected.de1.data     = "12345678";
     expected.de1.encoding = null;
@@ -177,10 +180,12 @@ public class FlickerTest extends AbstractTest
     expected.startCode.data     = "87151313";
     expected.startCode.encoding = null;
     expected.de1.lde      = 6;
+    expected.de1.ldeLen   = 2;
     expected.de1.length   = 6;
     expected.de1.data     = "389726";
     expected.de1.encoding = null;
     expected.de2.lde      = 4;
+    expected.de2.ldeLen   = 2;
     expected.de2.length   = 4;
     expected.de2.data     = "1,00";
     expected.de2.encoding = null;
@@ -211,6 +216,7 @@ public class FlickerTest extends AbstractTest
     expected.startCode.encoding = null;
     expected.startCode.controlBytes.add(1);
     expected.de1.lde      = 8;
+    expected.de1.ldeLen   = 2;
     expected.de1.length   = 8;
     expected.de1.data     = "123F5678";
     expected.de1.encoding = null;
@@ -261,9 +267,11 @@ public class FlickerTest extends AbstractTest
     expected.startCode.length   = 2;
     expected.startCode.data     = "77";
     expected.de1.lde      = 7;
+    expected.de1.ldeLen   = 2;
     expected.de1.length   = 7;
     expected.de1.data     = "1234567";
     expected.de2.lde      = 4;
+    expected.de2.ldeLen   = 2;
     expected.de2.length   = 4;
     expected.de2.data     = "1,00";
     
@@ -287,6 +295,45 @@ public class FlickerTest extends AbstractTest
     Assert.assertEquals(code.version,HHDVersion.HHD13);
     Assert.assertEquals(0,code.startCode.controlBytes.size());
   }
+
+  /**
+   * Flickercodes von der Sparda, die diese seit KW 47/2016 verwendet.
+   * Die enthalten nur noch zwei DEs - eins mit der IBAN und eins mit dem Betrag.
+   * @throws Exception
+   */
+  @Test
+  public void test9() throws Exception
+  {
+    // Code von einem User - anonymisiert
+    FlickerCode code = new FlickerCode("044880120932160022DE125001051706484898900041,00");
+    
+    FlickerCode expected = new FlickerCode();
+    expected.lc = 44;
+    expected.startCode.lde      = 136;
+    expected.startCode.length   = 8;
+    expected.startCode.data     = "20932160";
+    expected.startCode.encoding = null;
+    expected.startCode.controlBytes.add(1);
+    expected.de1.lde      = 22;
+    expected.de1.ldeLen   = 3;
+    expected.de1.length   = 22;
+    expected.de1.data     = "DE12500105170648489890";
+    expected.de1.encoding = null;
+    expected.de2.lde      = 4;
+    expected.de2.ldeLen   = 3;
+    expected.de2.length   = 4;
+    expected.de2.data     = "1,00";
+    expected.de2.encoding = null;
+    expected.de3.data     = null;
+
+    // Code muss dem erwarteten entsprechen
+    Assert.assertEquals(expected,code);
+    
+    // In Flicker-Format wandeln
+    String rendered = code.render();
+    Assert.assertEquals(rendered,"23840120932160564445313235303031303531373036343834383938393044312C303005");
+  }
+
 
 
   /**
@@ -344,27 +391,3 @@ public class FlickerTest extends AbstractTest
   }
   
 }
-
-
-
-/**********************************************************************
- * $Log: FlickerTest.java,v $
- * Revision 1.6  2011/06/24 16:53:23  willuhn
- * @N 30-hbci4java-chiptan-reset.patch
- *
- * Revision 1.5  2011-06-09 08:06:49  willuhn
- * @N 29-hbci4java-chiptan-opt-hhd13.patch
- *
- * Revision 1.4  2011-06-07 13:45:50  willuhn
- * @N 27-hbci4java-flickercode-luhnsum.patch
- *
- * Revision 1.3  2011-05-27 15:46:13  willuhn
- * @N 23-hbci4java-chiptan-opt2.patch - Kleinere Nacharbeiten
- *
- * Revision 1.2  2011-05-27 11:15:39  willuhn
- * *** empty log message ***
- *
- * Revision 1.1  2011-05-27 10:28:38  willuhn
- * @N 22-hbci4java-chiptan-opt.patch
- *
- **********************************************************************/
