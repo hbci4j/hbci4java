@@ -70,10 +70,10 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     	addConstraint("_sepadescriptor", "sepadescr", this.getPainVersion().getURN(), LogFilter.FILTER_NONE);
     	addConstraint("_sepapain",       "sepapain", null, LogFilter.FILTER_IDS);
     
-    	addConstraint("src.bic",         "sepa.src.bic",  null,   LogFilter.FILTER_MOST);
+    	addConstraint("src.bic",         "sepa.src.bic",   "",    LogFilter.FILTER_MOST);
     	addConstraint("src.iban",        "sepa.src.iban",  null,  LogFilter.FILTER_IDS);
     	addConstraint("src.name",        "sepa.src.name",  null,  LogFilter.FILTER_IDS);
-    	addConstraint("dst.bic",         "sepa.dst.bic",   null,  LogFilter.FILTER_MOST, true);
+    	addConstraint("dst.bic",         "sepa.dst.bic",   "",    LogFilter.FILTER_MOST, true);
     	addConstraint("dst.iban",        "sepa.dst.iban",  null,  LogFilter.FILTER_IDS,  true);
     	addConstraint("dst.name",        "sepa.dst.name",  null,  LogFilter.FILTER_IDS,  true);
     	addConstraint("btg.value",       "sepa.btg.value", null,  LogFilter.FILTER_NONE, true);
