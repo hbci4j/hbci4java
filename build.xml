@@ -82,15 +82,7 @@
 		</exec>
 	</target>
 
-	<target name="thirdparty">
-		<ant dir="thirdparty/cryptalgs4java" target="compile" inheritAll="false" inheritRefs="false" />
-
-		<copy todir="${classes}">
-			<fileset dir="thirdparty/cryptalgs4java/bin/classes" />
-		</copy>
-	</target>
-
-	<target name="compile" depends="thirdparty">
+	<target name="compile">
 		<mkdir dir="${classes}" />
 		<javac srcdir="${src}" source="1.5" target="1.5" destdir="${classes}" debug="on" encoding="ISO-8859-1" deprecation="on" includeAntRuntime="no" />
 
@@ -192,7 +184,6 @@
 	</target>
 
 	<target name="clean">
-		<ant dir="thirdparty/cryptalgs4java" target="clean" inheritAll="false" inheritRefs="false" />
 
 		<exec executable="${make}" os="Linux">
 			<arg line="-C ${chipcard} clean" />

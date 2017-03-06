@@ -5,7 +5,6 @@ repositories {
 }
 
 dependencies {
-    compile project(':thirdparty/cryptalgs4java')
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 

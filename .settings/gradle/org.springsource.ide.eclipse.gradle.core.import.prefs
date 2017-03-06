@@ -7,4 +7,3 @@ enableAfterTasks=true
 enableBeforeTasks=true
 enableDSLD=false
 enableDependendencyManagement=true
-projects=thirdparty/cryptalgs4java;
