@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <project name="hbci4java" default="jaxb">
-	<property name="make" value="/usr/bin/make" />
 <!--
+	<property name="make" value="/usr/bin/make" />
 	<property name="src" value="src/main/java" />
 	<property name="classes" value="target/classes" />
 	<property name="doc" value="doc" />
@@ -79,7 +79,7 @@
   //-->
 	<target name="sub_jaxb">
 		<exec executable="xjc" failonerror="true">
-			<arg line="-extension -d src/main/java -p org.kapott.hbci.sepa.jaxb.${param.package} -no-header -npa ${src}/${param.schema}" />
+			<arg line="-extension -d src/main/java -p org.kapott.hbci.sepa.jaxb.${param.package} -no-header -npa src/main/resources/${param.schema}" />
 		</exec>
 	</target>
 <!--
