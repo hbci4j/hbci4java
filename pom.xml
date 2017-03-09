@@ -7,7 +7,7 @@
 	<packaging>jar</packaging>
 	<name>hbci4java</name>
 	<description>HBCI4java</description>
-	<url>https://github.com/willuhn/hbci4java</url>
+	<url>https://github.com/hbci4j/hbci4java</url>
 	<licenses>
 		<license>
 			<name>GNU General Public License</name>
@@ -15,9 +15,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>scm:git:git@github.com:willuhn/hbci4java.git</url>
-		<connection>scm:git:git@github.com:willuhn/hbci4java.git</connection>
-		<developerConnection>scm:git:git@github.com:willuhn/hbci4java.git</developerConnection>
+		<url>scm:git:git@github.com:hbci4j/hbci4java.git</url>
+		<connection>scm:git:git@github.com:hbci4j/hbci4java.git</connection>
+		<developerConnection>scm:git:git@github.com:hbci4j/hbci4java.git</developerConnection>
 	</scm>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
