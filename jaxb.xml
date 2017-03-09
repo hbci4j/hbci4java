@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<project name="hbci4java" default="compile">
+<project name="hbci4java" default="jaxb">
 	<property name="make" value="/usr/bin/make" />
-
+<!--
 	<property name="src" value="src/main/java" />
 	<property name="classes" value="target/classes" />
 	<property name="doc" value="doc" />
@@ -12,7 +12,8 @@
 	<path id="cp">
 		<pathelement location="${classes}" />
 	</path>
-
+-->
+	
 	<target name="jaxb" description="generates the JAXB classes for the pain schema files">
 		<antcall target="sub_jaxb">
 			<param name="param.package" value="pain_001_001_02" />
@@ -78,10 +79,10 @@
   //-->
 	<target name="sub_jaxb">
 		<exec executable="xjc" failonerror="true">
-			<arg line="-extension -d ${src} -p org.kapott.hbci.sepa.jaxb.${param.package} -no-header -npa ${src}/${param.schema}" />
+			<arg line="-extension -d src/main/java -p org.kapott.hbci.sepa.jaxb.${param.package} -no-header -npa ${src}/${param.schema}" />
 		</exec>
 	</target>
-
+<!--
 	<target name="compile">
 		<mkdir dir="${classes}" />
 		<javac srcdir="${src}" source="1.5" target="1.5" destdir="${classes}" debug="on" encoding="ISO-8859-1" deprecation="on" includeAntRuntime="no" />
@@ -182,6 +183,7 @@
 			<fileset dir="${doc}/javadoc" />
 		</copy>
 	</target>
+	-->
 
 	<target name="clean">
 

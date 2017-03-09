@@ -30,19 +30,9 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.5.1</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
-        <executions>
-          <execution>
-            <id>default-testCompile</id>
-            <phase>none</phase>
-          </execution>
-          <execution>
-            <id>default-compile</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -59,23 +49,11 @@
         </dependencies>
         <executions>
           <execution>
-            <id>clean</id>
-            <phase>clean</phase>
-            <configuration>
-              <target>
-                <ant antfile="${basedir}/build.xml" target="clean" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>compile</id>
             <phase>compile</phase>
             <configuration>
               <target>
-                <ant antfile="${basedir}/build.xml" target="compile" />
+                <ant antfile="${basedir}/jaxb.xml" target="jaxb" />
               </target>
             </configuration>
             <goals>
