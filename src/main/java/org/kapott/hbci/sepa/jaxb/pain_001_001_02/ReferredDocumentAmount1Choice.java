@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ReferredDocumentAmount1Choice complex type.
+ * <p>Java-Klasse für ReferredDocumentAmount1Choice complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="ReferredDocumentAmount1Choice">
@@ -54,7 +54,7 @@ public class ReferredDocumentAmount1Choice {
     protected CurrencyAndAmount taxAmt;
 
     /**
-     * Gets the value of the duePyblAmt property.
+     * Ruft den Wert der duePyblAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -66,7 +66,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Sets the value of the duePyblAmt property.
+     * Legt den Wert der duePyblAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -78,7 +78,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Gets the value of the dscntApldAmt property.
+     * Ruft den Wert der dscntApldAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -90,7 +90,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Sets the value of the dscntApldAmt property.
+     * Legt den Wert der dscntApldAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -102,7 +102,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Gets the value of the rmtdAmt property.
+     * Ruft den Wert der rmtdAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -114,7 +114,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Sets the value of the rmtdAmt property.
+     * Legt den Wert der rmtdAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -126,7 +126,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Gets the value of the cdtNoteAmt property.
+     * Ruft den Wert der cdtNoteAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -138,7 +138,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Sets the value of the cdtNoteAmt property.
+     * Legt den Wert der cdtNoteAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -150,7 +150,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Gets the value of the taxAmt property.
+     * Ruft den Wert der taxAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -162,7 +162,7 @@ public class ReferredDocumentAmount1Choice {
     }
 
     /**
-     * Sets the value of the taxAmt property.
+     * Legt den Wert der taxAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AccountIdentificationSCT complex type.
+ * <p>Java-Klasse für AccountIdentificationSCT complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="AccountIdentificationSCT">
@@ -36,7 +36,7 @@ public class AccountIdentificationSCT {
     protected String iban;
 
     /**
-     * Gets the value of the iban property.
+     * Ruft den Wert der iban-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class AccountIdentificationSCT {
     }
 
     /**
-     * Sets the value of the iban property.
+     * Legt den Wert der iban-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

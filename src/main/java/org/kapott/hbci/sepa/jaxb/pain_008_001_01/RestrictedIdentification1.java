@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for RestrictedIdentification1 complex type.
+ * <p>Java-Klasse für RestrictedIdentification1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="RestrictedIdentification1">
@@ -36,7 +36,7 @@ public class RestrictedIdentification1 {
     protected String id;
 
     /**
-     * Gets the value of the id property.
+     * Ruft den Wert der id-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class RestrictedIdentification1 {
     }
 
     /**
-     * Sets the value of the id property.
+     * Legt den Wert der id-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

@@ -6,14 +6,15 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for StructuredRemittanceInformation6 complex type.
+ * <p>Java-Klasse für StructuredRemittanceInformation6 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="StructuredRemittanceInformation6">
@@ -50,6 +51,7 @@ public class StructuredRemittanceInformation6 {
     @XmlElement(name = "RfrdDocInf", namespace = "urn:sepade:xsd:pain.008.001.01")
     protected ReferredDocumentInformation1 rfrdDocInf;
     @XmlElement(name = "RfrdDocRltdDt", namespace = "urn:sepade:xsd:pain.008.001.01")
+    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar rfrdDocRltdDt;
     @XmlElement(name = "RfrdDocAmt", namespace = "urn:sepade:xsd:pain.008.001.01")
     protected List<ReferredDocumentAmount1Choice> rfrdDocAmt;
@@ -63,7 +65,7 @@ public class StructuredRemittanceInformation6 {
     protected String addtlRmtInf;
 
     /**
-     * Gets the value of the rfrdDocInf property.
+     * Ruft den Wert der rfrdDocInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -75,7 +77,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Sets the value of the rfrdDocInf property.
+     * Legt den Wert der rfrdDocInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -87,7 +89,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Gets the value of the rfrdDocRltdDt property.
+     * Ruft den Wert der rfrdDocRltdDt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -99,7 +101,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Sets the value of the rfrdDocRltdDt property.
+     * Legt den Wert der rfrdDocRltdDt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -140,7 +142,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Gets the value of the cdtrRefInf property.
+     * Ruft den Wert der cdtrRefInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -152,7 +154,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Sets the value of the cdtrRefInf property.
+     * Legt den Wert der cdtrRefInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -164,7 +166,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Gets the value of the invcr property.
+     * Ruft den Wert der invcr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -176,7 +178,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Sets the value of the invcr property.
+     * Legt den Wert der invcr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -188,7 +190,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Gets the value of the invcee property.
+     * Ruft den Wert der invcee-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -200,7 +202,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Sets the value of the invcee property.
+     * Legt den Wert der invcee-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -212,7 +214,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Gets the value of the addtlRmtInf property.
+     * Ruft den Wert der addtlRmtInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -224,7 +226,7 @@ public class StructuredRemittanceInformation6 {
     }
 
     /**
-     * Sets the value of the addtlRmtInf property.
+     * Legt den Wert der addtlRmtInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for GenericIdentificationSDD complex type.
+ * <p>Java-Klasse für GenericIdentificationSDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="GenericIdentificationSDD">
@@ -37,10 +38,11 @@ public class GenericIdentificationSDD {
     @XmlElement(name = "Id", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected String id;
     @XmlElement(name = "IdTp", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
+    @XmlSchemaType(name = "string")
     protected RestrictedSEPACode idTp;
 
     /**
-     * Gets the value of the id property.
+     * Ruft den Wert der id-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +54,7 @@ public class GenericIdentificationSDD {
     }
 
     /**
-     * Sets the value of the id property.
+     * Legt den Wert der id-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +66,7 @@ public class GenericIdentificationSDD {
     }
 
     /**
-     * Gets the value of the idTp property.
+     * Ruft den Wert der idTp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +78,7 @@ public class GenericIdentificationSDD {
     }
 
     /**
-     * Sets the value of the idTp property.
+     * Legt den Wert der idTp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

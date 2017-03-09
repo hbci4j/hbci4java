@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for TransactionGroupStatusCodeSEPA.
+ * <p>Java-Klasse für TransactionGroupStatusCodeSEPA.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * <p>
  * <pre>
  * &lt;simpleType name="TransactionGroupStatusCodeSEPA">

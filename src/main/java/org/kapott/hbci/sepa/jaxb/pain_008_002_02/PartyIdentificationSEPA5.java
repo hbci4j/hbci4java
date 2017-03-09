@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PartyIdentificationSEPA5 complex type.
+ * <p>Java-Klasse für PartyIdentificationSEPA5 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PartyIdentificationSEPA5">
@@ -40,7 +40,7 @@ public class PartyIdentificationSEPA5 {
     protected PostalAddressSEPA pstlAdr;
 
     /**
-     * Gets the value of the nm property.
+     * Ruft den Wert der nm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class PartyIdentificationSEPA5 {
     }
 
     /**
-     * Sets the value of the nm property.
+     * Legt den Wert der nm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class PartyIdentificationSEPA5 {
     }
 
     /**
-     * Gets the value of the pstlAdr property.
+     * Ruft den Wert der pstlAdr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class PartyIdentificationSEPA5 {
     }
 
     /**
-     * Sets the value of the pstlAdr property.
+     * Legt den Wert der pstlAdr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

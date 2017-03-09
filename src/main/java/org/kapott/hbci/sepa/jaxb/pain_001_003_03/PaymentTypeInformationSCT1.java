@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_001_003_03;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PaymentTypeInformationSCT1 complex type.
+ * <p>Java-Klasse für PaymentTypeInformationSCT1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentTypeInformationSCT1">
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PaymentTypeInformationSCT1 {
 
     @XmlElement(name = "InstrPrty", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03")
+    @XmlSchemaType(name = "string")
     protected Priority2Code instrPrty;
     @XmlElement(name = "SvcLvl", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.003.03", required = true)
     protected ServiceLevelSEPA svcLvl;
@@ -44,7 +46,7 @@ public class PaymentTypeInformationSCT1 {
     protected CategoryPurposeSEPA ctgyPurp;
 
     /**
-     * Gets the value of the instrPrty property.
+     * Ruft den Wert der instrPrty-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -56,7 +58,7 @@ public class PaymentTypeInformationSCT1 {
     }
 
     /**
-     * Sets the value of the instrPrty property.
+     * Legt den Wert der instrPrty-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -68,7 +70,7 @@ public class PaymentTypeInformationSCT1 {
     }
 
     /**
-     * Gets the value of the svcLvl property.
+     * Ruft den Wert der svcLvl-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -80,7 +82,7 @@ public class PaymentTypeInformationSCT1 {
     }
 
     /**
-     * Sets the value of the svcLvl property.
+     * Legt den Wert der svcLvl-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -92,7 +94,7 @@ public class PaymentTypeInformationSCT1 {
     }
 
     /**
-     * Gets the value of the ctgyPurp property.
+     * Ruft den Wert der ctgyPurp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -104,7 +106,7 @@ public class PaymentTypeInformationSCT1 {
     }
 
     /**
-     * Sets the value of the ctgyPurp property.
+     * Legt den Wert der ctgyPurp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PartySDD complex type.
+ * <p>Java-Klasse für PartySDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PartySDD">
@@ -36,7 +36,7 @@ public class PartySDD {
     protected PersonIdentificationSDD2 prvtId;
 
     /**
-     * Gets the value of the prvtId property.
+     * Ruft den Wert der prvtId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PartySDD {
     }
 
     /**
-     * Sets the value of the prvtId property.
+     * Legt den Wert der prvtId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

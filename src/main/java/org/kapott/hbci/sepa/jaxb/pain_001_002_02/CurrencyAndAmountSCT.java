@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for CurrencyAndAmountSCT complex type.
+ * <p>Java-Klasse für CurrencyAndAmountSCT complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="CurrencyAndAmountSCT">
@@ -38,7 +38,7 @@ public class CurrencyAndAmountSCT {
     protected CurrencyCodeSCT ccy;
 
     /**
-     * Gets the value of the value property.
+     * Ruft den Wert der value-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -50,7 +50,7 @@ public class CurrencyAndAmountSCT {
     }
 
     /**
-     * Sets the value of the value property.
+     * Legt den Wert der value-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -62,7 +62,7 @@ public class CurrencyAndAmountSCT {
     }
 
     /**
-     * Gets the value of the ccy property.
+     * Ruft den Wert der ccy-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -74,7 +74,7 @@ public class CurrencyAndAmountSCT {
     }
 
     /**
-     * Sets the value of the ccy property.
+     * Legt den Wert der ccy-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

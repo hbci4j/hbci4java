@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AccountIdentificationSEPAMandate complex type.
+ * <p>Java-Klasse für AccountIdentificationSEPAMandate complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="AccountIdentificationSEPAMandate">
@@ -42,7 +42,7 @@ public class AccountIdentificationSEPAMandate {
     protected GenericAccountIdentificationSEPA othr;
 
     /**
-     * Gets the value of the iban property.
+     * Ruft den Wert der iban-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class AccountIdentificationSEPAMandate {
     }
 
     /**
-     * Sets the value of the iban property.
+     * Legt den Wert der iban-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class AccountIdentificationSEPAMandate {
     }
 
     /**
-     * Gets the value of the othr property.
+     * Ruft den Wert der othr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class AccountIdentificationSEPAMandate {
     }
 
     /**
-     * Sets the value of the othr property.
+     * Legt den Wert der othr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

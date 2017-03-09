@@ -6,13 +6,14 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PaymentTransactionInformationSEPA complex type.
+ * <p>Java-Klasse für PaymentTransactionInformationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentTransactionInformationSEPA">
@@ -55,6 +56,7 @@ public class PaymentTransactionInformationSEPA {
     @XmlElement(name = "OrgnlEndToEndId", namespace = "urn:swift:xsd:$pain.002.002.02")
     protected String orgnlEndToEndId;
     @XmlElement(name = "TxSts", namespace = "urn:swift:xsd:$pain.002.002.02")
+    @XmlSchemaType(name = "string")
     protected TransactionIndividualStatus1CodeSEPA txSts;
     @XmlElement(name = "StsRsnInf", namespace = "urn:swift:xsd:$pain.002.002.02")
     protected List<StatusReasonInformationSEPA> stsRsnInf;
@@ -62,7 +64,7 @@ public class PaymentTransactionInformationSEPA {
     protected OriginalTransactionReferenceSEPA orgnlTxRef;
 
     /**
-     * Gets the value of the stsId property.
+     * Ruft den Wert der stsId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -74,7 +76,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Sets the value of the stsId property.
+     * Legt den Wert der stsId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -86,7 +88,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Gets the value of the orgnlPmtInfId property.
+     * Ruft den Wert der orgnlPmtInfId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -98,7 +100,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlPmtInfId property.
+     * Legt den Wert der orgnlPmtInfId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -110,7 +112,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Gets the value of the orgnlInstrId property.
+     * Ruft den Wert der orgnlInstrId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -122,7 +124,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlInstrId property.
+     * Legt den Wert der orgnlInstrId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -134,7 +136,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Gets the value of the orgnlEndToEndId property.
+     * Ruft den Wert der orgnlEndToEndId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -146,7 +148,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlEndToEndId property.
+     * Legt den Wert der orgnlEndToEndId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -158,7 +160,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Gets the value of the txSts property.
+     * Ruft den Wert der txSts-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -170,7 +172,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Sets the value of the txSts property.
+     * Legt den Wert der txSts-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -211,7 +213,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Gets the value of the orgnlTxRef property.
+     * Ruft den Wert der orgnlTxRef-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -223,7 +225,7 @@ public class PaymentTransactionInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlTxRef property.
+     * Legt den Wert der orgnlTxRef-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

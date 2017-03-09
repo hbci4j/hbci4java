@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PersonIdentificationSDD1 complex type.
+ * <p>Java-Klasse für PersonIdentificationSDD1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PersonIdentificationSDD1">
@@ -78,7 +78,7 @@ public class PersonIdentificationSDD1 {
     protected String issr;
 
     /**
-     * Gets the value of the drvrsLicNb property.
+     * Ruft den Wert der drvrsLicNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -90,7 +90,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the drvrsLicNb property.
+     * Legt den Wert der drvrsLicNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -102,7 +102,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the cstmrNb property.
+     * Ruft den Wert der cstmrNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -114,7 +114,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the cstmrNb property.
+     * Legt den Wert der cstmrNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -126,7 +126,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the sclSctyNb property.
+     * Ruft den Wert der sclSctyNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -138,7 +138,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the sclSctyNb property.
+     * Legt den Wert der sclSctyNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -150,7 +150,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the alnRegnNb property.
+     * Ruft den Wert der alnRegnNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -162,7 +162,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the alnRegnNb property.
+     * Legt den Wert der alnRegnNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -174,7 +174,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the psptNb property.
+     * Ruft den Wert der psptNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -186,7 +186,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the psptNb property.
+     * Legt den Wert der psptNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -198,7 +198,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the taxIdNb property.
+     * Ruft den Wert der taxIdNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -210,7 +210,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the taxIdNb property.
+     * Legt den Wert der taxIdNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -222,7 +222,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the idntyCardNb property.
+     * Ruft den Wert der idntyCardNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -234,7 +234,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the idntyCardNb property.
+     * Legt den Wert der idntyCardNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -246,7 +246,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the mplyrIdNb property.
+     * Ruft den Wert der mplyrIdNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -258,7 +258,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the mplyrIdNb property.
+     * Legt den Wert der mplyrIdNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -270,7 +270,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the dtAndPlcOfBirth property.
+     * Ruft den Wert der dtAndPlcOfBirth-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -282,7 +282,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the dtAndPlcOfBirth property.
+     * Legt den Wert der dtAndPlcOfBirth-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -294,7 +294,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the othrId property.
+     * Ruft den Wert der othrId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -306,7 +306,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the othrId property.
+     * Legt den Wert der othrId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -318,7 +318,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the issr property.
+     * Ruft den Wert der issr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -330,7 +330,7 @@ public class PersonIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the issr property.
+     * Legt den Wert der issr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

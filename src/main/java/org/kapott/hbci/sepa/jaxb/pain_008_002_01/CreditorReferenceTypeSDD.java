@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for CreditorReferenceTypeSDD complex type.
+ * <p>Java-Klasse für CreditorReferenceTypeSDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="CreditorReferenceTypeSDD">
@@ -35,12 +36,13 @@ import javax.xml.bind.annotation.XmlType;
 public class CreditorReferenceTypeSDD {
 
     @XmlElement(name = "Cd", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
+    @XmlSchemaType(name = "string")
     protected DocumentType3CodeSDD cd;
     @XmlElement(name = "Issr", namespace = "urn:swift:xsd:$pain.008.002.01")
     protected String issr;
 
     /**
-     * Gets the value of the cd property.
+     * Ruft den Wert der cd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +54,7 @@ public class CreditorReferenceTypeSDD {
     }
 
     /**
-     * Sets the value of the cd property.
+     * Legt den Wert der cd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +66,7 @@ public class CreditorReferenceTypeSDD {
     }
 
     /**
-     * Gets the value of the issr property.
+     * Ruft den Wert der issr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +78,7 @@ public class CreditorReferenceTypeSDD {
     }
 
     /**
-     * Sets the value of the issr property.
+     * Legt den Wert der issr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

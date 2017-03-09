@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for LocalInstrumentSEPACode.
+ * <p>Java-Klasse für LocalInstrumentSEPACode.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * <p>
  * <pre>
  * &lt;simpleType name="LocalInstrumentSEPACode">

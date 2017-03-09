@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PaymentIdentificationSEPA complex type.
+ * <p>Java-Klasse für PaymentIdentificationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentIdentificationSEPA">
@@ -40,7 +40,7 @@ public class PaymentIdentificationSEPA {
     protected String endToEndId;
 
     /**
-     * Gets the value of the instrId property.
+     * Ruft den Wert der instrId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class PaymentIdentificationSEPA {
     }
 
     /**
-     * Sets the value of the instrId property.
+     * Legt den Wert der instrId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class PaymentIdentificationSEPA {
     }
 
     /**
-     * Gets the value of the endToEndId property.
+     * Ruft den Wert der endToEndId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class PaymentIdentificationSEPA {
     }
 
     /**
-     * Sets the value of the endToEndId property.
+     * Legt den Wert der endToEndId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

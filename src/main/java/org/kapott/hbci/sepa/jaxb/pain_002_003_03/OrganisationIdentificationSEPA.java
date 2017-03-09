@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for OrganisationIdentificationSEPA complex type.
+ * <p>Java-Klasse für OrganisationIdentificationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="OrganisationIdentificationSEPA">
@@ -36,7 +36,7 @@ public class OrganisationIdentificationSEPA {
     protected String bicOrBEI;
 
     /**
-     * Gets the value of the bicOrBEI property.
+     * Ruft den Wert der bicOrBEI-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class OrganisationIdentificationSEPA {
     }
 
     /**
-     * Sets the value of the bicOrBEI property.
+     * Legt den Wert der bicOrBEI-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

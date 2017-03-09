@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PersonIdentification4 complex type.
+ * <p>Java-Klasse für PersonIdentification4 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PersonIdentification4">
@@ -36,7 +36,7 @@ public class PersonIdentification4 {
     protected RestrictedIdentification2 othrId;
 
     /**
-     * Gets the value of the othrId property.
+     * Ruft den Wert der othrId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PersonIdentification4 {
     }
 
     /**
-     * Sets the value of the othrId property.
+     * Legt den Wert der othrId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

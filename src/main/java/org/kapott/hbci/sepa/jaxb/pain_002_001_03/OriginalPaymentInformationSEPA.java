@@ -7,13 +7,14 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for OriginalPaymentInformationSEPA complex type.
+ * <p>Java-Klasse für OriginalPaymentInformationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="OriginalPaymentInformationSEPA">
@@ -52,6 +53,7 @@ public class OriginalPaymentInformationSEPA {
     @XmlElement(name = "OrgnlCtrlSum", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected BigDecimal orgnlCtrlSum;
     @XmlElement(name = "PmtInfSts", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
+    @XmlSchemaType(name = "string")
     protected TransactionGroupStatusCodeSEPA pmtInfSts;
     @XmlElement(name = "StsRsnInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected List<StatusReasonInformationSEPA> stsRsnInf;
@@ -59,7 +61,7 @@ public class OriginalPaymentInformationSEPA {
     protected List<PaymentTransactionInformationSEPA> txInfAndSts;
 
     /**
-     * Gets the value of the orgnlPmtInfId property.
+     * Ruft den Wert der orgnlPmtInfId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -71,7 +73,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlPmtInfId property.
+     * Legt den Wert der orgnlPmtInfId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +85,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Gets the value of the orgnlNbOfTxs property.
+     * Ruft den Wert der orgnlNbOfTxs-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -95,7 +97,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlNbOfTxs property.
+     * Legt den Wert der orgnlNbOfTxs-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -107,7 +109,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Gets the value of the orgnlCtrlSum property.
+     * Ruft den Wert der orgnlCtrlSum-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -119,7 +121,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Sets the value of the orgnlCtrlSum property.
+     * Legt den Wert der orgnlCtrlSum-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -131,7 +133,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Gets the value of the pmtInfSts property.
+     * Ruft den Wert der pmtInfSts-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -143,7 +145,7 @@ public class OriginalPaymentInformationSEPA {
     }
 
     /**
-     * Sets the value of the pmtInfSts property.
+     * Legt den Wert der pmtInfSts-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PartyIdentificationSDD1 complex type.
+ * <p>Java-Klasse für PartyIdentificationSDD1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PartyIdentificationSDD1">
@@ -40,7 +40,7 @@ public class PartyIdentificationSDD1 {
     protected PartySDDChoice id;
 
     /**
-     * Gets the value of the nm property.
+     * Ruft den Wert der nm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class PartyIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the nm property.
+     * Legt den Wert der nm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class PartyIdentificationSDD1 {
     }
 
     /**
-     * Gets the value of the id property.
+     * Ruft den Wert der id-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class PartyIdentificationSDD1 {
     }
 
     /**
-     * Sets the value of the id property.
+     * Legt den Wert der id-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

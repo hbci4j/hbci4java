@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AmountType3 complex type.
+ * <p>Java-Klasse für AmountType3 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="AmountType3">
@@ -36,7 +36,7 @@ public class AmountType3 {
     protected EuroMax9Amount instdAmt;
 
     /**
-     * Gets the value of the instdAmt property.
+     * Ruft den Wert der instdAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class AmountType3 {
     }
 
     /**
-     * Sets the value of the instdAmt property.
+     * Legt den Wert der instdAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

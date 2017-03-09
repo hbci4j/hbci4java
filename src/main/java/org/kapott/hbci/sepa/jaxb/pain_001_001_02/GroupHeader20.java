@@ -5,14 +5,15 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for GroupHeader20 complex type.
+ * <p>Java-Klasse für GroupHeader20 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="GroupHeader20">
@@ -47,18 +48,20 @@ public class GroupHeader20 {
     @XmlElement(name = "MsgId", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected String msgId;
     @XmlElement(name = "CreDtTm", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
+    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creDtTm;
     @XmlElement(name = "NbOfTxs", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected String nbOfTxs;
     @XmlElement(name = "CtrlSum", namespace = "urn:sepade:xsd:pain.001.001.02")
     protected BigDecimal ctrlSum;
     @XmlElement(name = "Grpg", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
+    @XmlSchemaType(name = "string")
     protected Grouping2Code grpg;
     @XmlElement(name = "InitgPty", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected PartyIdentification20 initgPty;
 
     /**
-     * Gets the value of the msgId property.
+     * Ruft den Wert der msgId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -70,7 +73,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Sets the value of the msgId property.
+     * Legt den Wert der msgId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -82,7 +85,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Gets the value of the creDtTm property.
+     * Ruft den Wert der creDtTm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -94,7 +97,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Sets the value of the creDtTm property.
+     * Legt den Wert der creDtTm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -106,7 +109,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Gets the value of the nbOfTxs property.
+     * Ruft den Wert der nbOfTxs-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -118,7 +121,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Sets the value of the nbOfTxs property.
+     * Legt den Wert der nbOfTxs-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -130,7 +133,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Gets the value of the ctrlSum property.
+     * Ruft den Wert der ctrlSum-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -142,7 +145,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Sets the value of the ctrlSum property.
+     * Legt den Wert der ctrlSum-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -154,7 +157,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Gets the value of the grpg property.
+     * Ruft den Wert der grpg-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -166,7 +169,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Sets the value of the grpg property.
+     * Legt den Wert der grpg-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -178,7 +181,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Gets the value of the initgPty property.
+     * Ruft den Wert der initgPty-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -190,7 +193,7 @@ public class GroupHeader20 {
     }
 
     /**
-     * Sets the value of the initgPty property.
+     * Legt den Wert der initgPty-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

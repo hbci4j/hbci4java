@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ServiceLevelSEPA complex type.
+ * <p>Java-Klasse für ServiceLevelSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="ServiceLevelSEPA">
@@ -33,10 +34,11 @@ import javax.xml.bind.annotation.XmlType;
 public class ServiceLevelSEPA {
 
     @XmlElement(name = "Cd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.002.02", required = true)
+    @XmlSchemaType(name = "string")
     protected ServiceLevelSEPACode cd;
 
     /**
-     * Gets the value of the cd property.
+     * Ruft den Wert der cd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +50,7 @@ public class ServiceLevelSEPA {
     }
 
     /**
-     * Sets the value of the cd property.
+     * Legt den Wert der cd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

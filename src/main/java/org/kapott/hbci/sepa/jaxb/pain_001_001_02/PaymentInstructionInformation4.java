@@ -6,14 +6,15 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for PaymentInstructionInformation4 complex type.
+ * <p>Java-Klasse für PaymentInstructionInformation4 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentInstructionInformation4">
@@ -54,10 +55,12 @@ public class PaymentInstructionInformation4 {
     @XmlElement(name = "PmtInfId", namespace = "urn:sepade:xsd:pain.001.001.02")
     protected String pmtInfId;
     @XmlElement(name = "PmtMtd", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
+    @XmlSchemaType(name = "string")
     protected PaymentMethod5Code pmtMtd;
     @XmlElement(name = "PmtTpInf", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected PaymentTypeInformation7 pmtTpInf;
     @XmlElement(name = "ReqdExctnDt", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
+    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar reqdExctnDt;
     @XmlElement(name = "Dbtr", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected PartyIdentification23 dbtr;
@@ -66,12 +69,13 @@ public class PaymentInstructionInformation4 {
     @XmlElement(name = "DbtrAgt", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected FinancialInstitution2 dbtrAgt;
     @XmlElement(name = "ChrgBr", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
+    @XmlSchemaType(name = "string")
     protected ChargeBearerType2Code chrgBr;
     @XmlElement(name = "CdtTrfTxInf", namespace = "urn:sepade:xsd:pain.001.001.02", required = true)
     protected List<CreditTransferTransactionInformation2> cdtTrfTxInf;
 
     /**
-     * Gets the value of the pmtInfId property.
+     * Ruft den Wert der pmtInfId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -83,7 +87,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the pmtInfId property.
+     * Legt den Wert der pmtInfId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -95,7 +99,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the pmtMtd property.
+     * Ruft den Wert der pmtMtd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -107,7 +111,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the pmtMtd property.
+     * Legt den Wert der pmtMtd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -119,7 +123,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the pmtTpInf property.
+     * Ruft den Wert der pmtTpInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -131,7 +135,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the pmtTpInf property.
+     * Legt den Wert der pmtTpInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -143,7 +147,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the reqdExctnDt property.
+     * Ruft den Wert der reqdExctnDt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -155,7 +159,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the reqdExctnDt property.
+     * Legt den Wert der reqdExctnDt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -167,7 +171,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the dbtr property.
+     * Ruft den Wert der dbtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -179,7 +183,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the dbtr property.
+     * Legt den Wert der dbtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -191,7 +195,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the dbtrAcct property.
+     * Ruft den Wert der dbtrAcct-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -203,7 +207,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the dbtrAcct property.
+     * Legt den Wert der dbtrAcct-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -215,7 +219,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the dbtrAgt property.
+     * Ruft den Wert der dbtrAgt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -227,7 +231,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the dbtrAgt property.
+     * Legt den Wert der dbtrAgt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -239,7 +243,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Gets the value of the chrgBr property.
+     * Ruft den Wert der chrgBr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -251,7 +255,7 @@ public class PaymentInstructionInformation4 {
     }
 
     /**
-     * Sets the value of the chrgBr property.
+     * Legt den Wert der chrgBr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

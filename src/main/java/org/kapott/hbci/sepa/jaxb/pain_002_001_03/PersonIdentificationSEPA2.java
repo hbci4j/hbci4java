@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PersonIdentificationSEPA2 complex type.
+ * <p>Java-Klasse für PersonIdentificationSEPA2 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PersonIdentificationSEPA2">
@@ -36,7 +36,7 @@ public class PersonIdentificationSEPA2 {
     protected RestrictedPersonIdentificationSEPA othr;
 
     /**
-     * Gets the value of the othr property.
+     * Ruft den Wert der othr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PersonIdentificationSEPA2 {
     }
 
     /**
-     * Sets the value of the othr property.
+     * Legt den Wert der othr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

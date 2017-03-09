@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_002_003_03;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for CreditorReferenceTypeCodeSEPA complex type.
+ * <p>Java-Klasse für CreditorReferenceTypeCodeSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="CreditorReferenceTypeCodeSEPA">
@@ -33,10 +34,11 @@ import javax.xml.bind.annotation.XmlType;
 public class CreditorReferenceTypeCodeSEPA {
 
     @XmlElement(name = "Cd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.003.03", required = true)
+    @XmlSchemaType(name = "string")
     protected DocumentType3CodeSEPA cd;
 
     /**
-     * Gets the value of the cd property.
+     * Ruft den Wert der cd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +50,7 @@ public class CreditorReferenceTypeCodeSEPA {
     }
 
     /**
-     * Sets the value of the cd property.
+     * Legt den Wert der cd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

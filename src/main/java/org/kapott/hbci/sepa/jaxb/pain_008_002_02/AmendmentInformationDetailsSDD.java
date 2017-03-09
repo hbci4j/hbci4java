@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AmendmentInformationDetailsSDD complex type.
+ * <p>Java-Klasse für AmendmentInformationDetailsSDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="AmendmentInformationDetailsSDD">
@@ -48,7 +48,7 @@ public class AmendmentInformationDetailsSDD {
     protected BranchAndFinancialInstitutionIdentificationSEPA2 orgnlDbtrAgt;
 
     /**
-     * Gets the value of the orgnlMndtId property.
+     * Ruft den Wert der orgnlMndtId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -60,7 +60,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Sets the value of the orgnlMndtId property.
+     * Legt den Wert der orgnlMndtId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -72,7 +72,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Gets the value of the orgnlCdtrSchmeId property.
+     * Ruft den Wert der orgnlCdtrSchmeId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -84,7 +84,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Sets the value of the orgnlCdtrSchmeId property.
+     * Legt den Wert der orgnlCdtrSchmeId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -96,7 +96,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Gets the value of the orgnlDbtrAcct property.
+     * Ruft den Wert der orgnlDbtrAcct-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -108,7 +108,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Sets the value of the orgnlDbtrAcct property.
+     * Legt den Wert der orgnlDbtrAcct-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -120,7 +120,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Gets the value of the orgnlDbtrAgt property.
+     * Ruft den Wert der orgnlDbtrAgt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -132,7 +132,7 @@ public class AmendmentInformationDetailsSDD {
     }
 
     /**
-     * Sets the value of the orgnlDbtrAgt property.
+     * Legt den Wert der orgnlDbtrAgt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

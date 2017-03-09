@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PartySEPA1 complex type.
+ * <p>Java-Klasse für PartySEPA1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PartySEPA1">
@@ -36,7 +36,7 @@ public class PartySEPA1 {
     protected OrganisationIdentificationSEPA orgId;
 
     /**
-     * Gets the value of the orgId property.
+     * Ruft den Wert der orgId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PartySEPA1 {
     }
 
     /**
-     * Sets the value of the orgId property.
+     * Legt den Wert der orgId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

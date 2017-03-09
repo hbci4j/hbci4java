@@ -5,14 +5,15 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for GroupHeaderSDD complex type.
+ * <p>Java-Klasse für GroupHeaderSDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="GroupHeaderSDD">
@@ -45,6 +46,7 @@ public class GroupHeaderSDD {
     @XmlElement(name = "MsgId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
     protected String msgId;
     @XmlElement(name = "CreDtTm", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
+    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creDtTm;
     @XmlElement(name = "NbOfTxs", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.003.02", required = true)
     protected String nbOfTxs;
@@ -54,7 +56,7 @@ public class GroupHeaderSDD {
     protected PartyIdentificationSEPA1 initgPty;
 
     /**
-     * Gets the value of the msgId property.
+     * Ruft den Wert der msgId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -66,7 +68,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the msgId property.
+     * Legt den Wert der msgId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -78,7 +80,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the creDtTm property.
+     * Ruft den Wert der creDtTm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -90,7 +92,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the creDtTm property.
+     * Legt den Wert der creDtTm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -102,7 +104,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the nbOfTxs property.
+     * Ruft den Wert der nbOfTxs-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -114,7 +116,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the nbOfTxs property.
+     * Legt den Wert der nbOfTxs-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -126,7 +128,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the ctrlSum property.
+     * Ruft den Wert der ctrlSum-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -138,7 +140,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the ctrlSum property.
+     * Legt den Wert der ctrlSum-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -150,7 +152,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the initgPty property.
+     * Ruft den Wert der initgPty-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -162,7 +164,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the initgPty property.
+     * Legt den Wert der initgPty-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

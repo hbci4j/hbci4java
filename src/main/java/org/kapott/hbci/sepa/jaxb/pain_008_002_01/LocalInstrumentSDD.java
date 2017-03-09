@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for LocalInstrumentSDD complex type.
+ * <p>Java-Klasse für LocalInstrumentSDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="LocalInstrumentSDD">
@@ -43,7 +43,7 @@ public class LocalInstrumentSDD {
     protected LocalInstrumentCodeSDD cd;
 
     /**
-     * Gets the value of the cd property.
+     * Ruft den Wert der cd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -55,7 +55,7 @@ public class LocalInstrumentSDD {
     }
 
     /**
-     * Sets the value of the cd property.
+     * Legt den Wert der cd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

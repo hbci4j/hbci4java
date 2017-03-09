@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for BranchAndFinancialInstitutionIdentificationSCT complex type.
+ * <p>Java-Klasse für BranchAndFinancialInstitutionIdentificationSCT complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="BranchAndFinancialInstitutionIdentificationSCT">
@@ -36,7 +36,7 @@ public class BranchAndFinancialInstitutionIdentificationSCT {
     protected FinancialInstitutionIdentificationSCT finInstnId;
 
     /**
-     * Gets the value of the finInstnId property.
+     * Ruft den Wert der finInstnId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class BranchAndFinancialInstitutionIdentificationSCT {
     }
 
     /**
-     * Sets the value of the finInstnId property.
+     * Legt den Wert der finInstnId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

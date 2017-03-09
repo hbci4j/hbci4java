@@ -4,14 +4,15 @@ package org.kapott.hbci.sepa.jaxb.pain_008_001_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for MandateRelatedInformation4 complex type.
+ * <p>Java-Klasse für MandateRelatedInformation4 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="MandateRelatedInformation4">
@@ -44,6 +45,7 @@ public class MandateRelatedInformation4 {
     @XmlElement(name = "MndtId", namespace = "urn:sepade:xsd:pain.008.001.01", required = true)
     protected String mndtId;
     @XmlElement(name = "DtOfSgntr", namespace = "urn:sepade:xsd:pain.008.001.01", required = true)
+    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dtOfSgntr;
     @XmlElement(name = "AmdmntInd", namespace = "urn:sepade:xsd:pain.008.001.01")
     protected Boolean amdmntInd;
@@ -53,7 +55,7 @@ public class MandateRelatedInformation4 {
     protected String elctrncSgntr;
 
     /**
-     * Gets the value of the mndtId property.
+     * Ruft den Wert der mndtId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -65,7 +67,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Sets the value of the mndtId property.
+     * Legt den Wert der mndtId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -77,7 +79,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Gets the value of the dtOfSgntr property.
+     * Ruft den Wert der dtOfSgntr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -89,7 +91,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Sets the value of the dtOfSgntr property.
+     * Legt den Wert der dtOfSgntr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -101,7 +103,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Gets the value of the amdmntInd property.
+     * Ruft den Wert der amdmntInd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -113,7 +115,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Sets the value of the amdmntInd property.
+     * Legt den Wert der amdmntInd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -125,7 +127,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Gets the value of the amdmntInfDtls property.
+     * Ruft den Wert der amdmntInfDtls-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -137,7 +139,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Sets the value of the amdmntInfDtls property.
+     * Legt den Wert der amdmntInfDtls-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -149,7 +151,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Gets the value of the elctrncSgntr property.
+     * Ruft den Wert der elctrncSgntr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -161,7 +163,7 @@ public class MandateRelatedInformation4 {
     }
 
     /**
-     * Sets the value of the elctrncSgntr property.
+     * Legt den Wert der elctrncSgntr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

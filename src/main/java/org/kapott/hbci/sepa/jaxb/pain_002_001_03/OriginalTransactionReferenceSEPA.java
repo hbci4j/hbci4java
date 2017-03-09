@@ -4,14 +4,15 @@ package org.kapott.hbci.sepa.jaxb.pain_002_001_03;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for OriginalTransactionReferenceSEPA complex type.
+ * <p>Java-Klasse für OriginalTransactionReferenceSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="OriginalTransactionReferenceSEPA">
@@ -68,14 +69,17 @@ public class OriginalTransactionReferenceSEPA {
     @XmlElement(name = "Amt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected AmountTypeSEPA amt;
     @XmlElement(name = "ReqdColltnDt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
+    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar reqdColltnDt;
     @XmlElement(name = "ReqdExctnDt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
+    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar reqdExctnDt;
     @XmlElement(name = "CdtrSchmeId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected PartyIdentificationSEPA3 cdtrSchmeId;
     @XmlElement(name = "PmtTpInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected PaymentTypeInformationSEPA pmtTpInf;
     @XmlElement(name = "PmtMtd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
+    @XmlSchemaType(name = "string")
     protected PaymentMethodSEPACode pmtMtd;
     @XmlElement(name = "MndtRltdInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected MandateRelatedInformationSEPA mndtRltdInf;
@@ -99,7 +103,7 @@ public class OriginalTransactionReferenceSEPA {
     protected PartyIdentificationSEPA1 ultmtCdtr;
 
     /**
-     * Gets the value of the amt property.
+     * Ruft den Wert der amt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -111,7 +115,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the amt property.
+     * Legt den Wert der amt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -123,7 +127,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the reqdColltnDt property.
+     * Ruft den Wert der reqdColltnDt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -135,7 +139,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the reqdColltnDt property.
+     * Legt den Wert der reqdColltnDt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -147,7 +151,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the reqdExctnDt property.
+     * Ruft den Wert der reqdExctnDt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -159,7 +163,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the reqdExctnDt property.
+     * Legt den Wert der reqdExctnDt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -171,7 +175,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the cdtrSchmeId property.
+     * Ruft den Wert der cdtrSchmeId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -183,7 +187,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the cdtrSchmeId property.
+     * Legt den Wert der cdtrSchmeId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -195,7 +199,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the pmtTpInf property.
+     * Ruft den Wert der pmtTpInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -207,7 +211,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the pmtTpInf property.
+     * Legt den Wert der pmtTpInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -219,7 +223,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the pmtMtd property.
+     * Ruft den Wert der pmtMtd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -231,7 +235,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the pmtMtd property.
+     * Legt den Wert der pmtMtd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -243,7 +247,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the mndtRltdInf property.
+     * Ruft den Wert der mndtRltdInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -255,7 +259,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the mndtRltdInf property.
+     * Legt den Wert der mndtRltdInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -267,7 +271,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the rmtInf property.
+     * Ruft den Wert der rmtInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -279,7 +283,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the rmtInf property.
+     * Legt den Wert der rmtInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -291,7 +295,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the ultmtDbtr property.
+     * Ruft den Wert der ultmtDbtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -303,7 +307,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the ultmtDbtr property.
+     * Legt den Wert der ultmtDbtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -315,7 +319,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the dbtr property.
+     * Ruft den Wert der dbtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -327,7 +331,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the dbtr property.
+     * Legt den Wert der dbtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -339,7 +343,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the dbtrAcct property.
+     * Ruft den Wert der dbtrAcct-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -351,7 +355,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the dbtrAcct property.
+     * Legt den Wert der dbtrAcct-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -363,7 +367,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the dbtrAgt property.
+     * Ruft den Wert der dbtrAgt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -375,7 +379,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the dbtrAgt property.
+     * Legt den Wert der dbtrAgt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -387,7 +391,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the cdtrAgt property.
+     * Ruft den Wert der cdtrAgt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -399,7 +403,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the cdtrAgt property.
+     * Legt den Wert der cdtrAgt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -411,7 +415,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the cdtr property.
+     * Ruft den Wert der cdtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -423,7 +427,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the cdtr property.
+     * Legt den Wert der cdtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -435,7 +439,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the cdtrAcct property.
+     * Ruft den Wert der cdtrAcct-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -447,7 +451,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the cdtrAcct property.
+     * Legt den Wert der cdtrAcct-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -459,7 +463,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Gets the value of the ultmtCdtr property.
+     * Ruft den Wert der ultmtCdtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -471,7 +475,7 @@ public class OriginalTransactionReferenceSEPA {
     }
 
     /**
-     * Sets the value of the ultmtCdtr property.
+     * Legt den Wert der ultmtCdtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

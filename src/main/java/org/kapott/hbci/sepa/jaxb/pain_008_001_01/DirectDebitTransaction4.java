@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for DirectDebitTransaction4 complex type.
+ * <p>Java-Klasse für DirectDebitTransaction4 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="DirectDebitTransaction4">
@@ -40,7 +40,7 @@ public class DirectDebitTransaction4 {
     protected PartyIdentification11 cdtrSchmeId;
 
     /**
-     * Gets the value of the mndtRltdInf property.
+     * Ruft den Wert der mndtRltdInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class DirectDebitTransaction4 {
     }
 
     /**
-     * Sets the value of the mndtRltdInf property.
+     * Legt den Wert der mndtRltdInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class DirectDebitTransaction4 {
     }
 
     /**
-     * Gets the value of the cdtrSchmeId property.
+     * Ruft den Wert der cdtrSchmeId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class DirectDebitTransaction4 {
     }
 
     /**
-     * Sets the value of the cdtrSchmeId property.
+     * Legt den Wert der cdtrSchmeId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

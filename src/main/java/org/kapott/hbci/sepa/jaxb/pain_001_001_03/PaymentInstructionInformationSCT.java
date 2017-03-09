@@ -7,14 +7,15 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for PaymentInstructionInformationSCT complex type.
+ * <p>Java-Klasse für PaymentInstructionInformationSCT complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentInstructionInformationSCT">
@@ -63,6 +64,7 @@ public class PaymentInstructionInformationSCT {
     @XmlElement(name = "PmtInfId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
     protected String pmtInfId;
     @XmlElement(name = "PmtMtd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
+    @XmlSchemaType(name = "string")
     protected PaymentMethodSCTCode pmtMtd;
     @XmlElement(name = "BtchBookg", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03")
     protected Boolean btchBookg;
@@ -73,6 +75,7 @@ public class PaymentInstructionInformationSCT {
     @XmlElement(name = "PmtTpInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03")
     protected PaymentTypeInformationSCT1 pmtTpInf;
     @XmlElement(name = "ReqdExctnDt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
+    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar reqdExctnDt;
     @XmlElement(name = "Dbtr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
     protected PartyIdentificationSEPA2 dbtr;
@@ -83,12 +86,13 @@ public class PaymentInstructionInformationSCT {
     @XmlElement(name = "UltmtDbtr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03")
     protected PartyIdentificationSEPA1 ultmtDbtr;
     @XmlElement(name = "ChrgBr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03")
+    @XmlSchemaType(name = "string")
     protected ChargeBearerTypeSEPACode chrgBr;
     @XmlElement(name = "CdtTrfTxInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
     protected List<CreditTransferTransactionInformationSCT> cdtTrfTxInf;
 
     /**
-     * Gets the value of the pmtInfId property.
+     * Ruft den Wert der pmtInfId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -100,7 +104,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the pmtInfId property.
+     * Legt den Wert der pmtInfId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -112,7 +116,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the pmtMtd property.
+     * Ruft den Wert der pmtMtd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -124,7 +128,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the pmtMtd property.
+     * Legt den Wert der pmtMtd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -136,7 +140,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the btchBookg property.
+     * Ruft den Wert der btchBookg-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -148,7 +152,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the btchBookg property.
+     * Legt den Wert der btchBookg-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -160,7 +164,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the nbOfTxs property.
+     * Ruft den Wert der nbOfTxs-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -172,7 +176,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the nbOfTxs property.
+     * Legt den Wert der nbOfTxs-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -184,7 +188,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the ctrlSum property.
+     * Ruft den Wert der ctrlSum-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -196,7 +200,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the ctrlSum property.
+     * Legt den Wert der ctrlSum-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -208,7 +212,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the pmtTpInf property.
+     * Ruft den Wert der pmtTpInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -220,7 +224,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the pmtTpInf property.
+     * Legt den Wert der pmtTpInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -232,7 +236,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the reqdExctnDt property.
+     * Ruft den Wert der reqdExctnDt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -244,7 +248,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the reqdExctnDt property.
+     * Legt den Wert der reqdExctnDt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -256,7 +260,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the dbtr property.
+     * Ruft den Wert der dbtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -268,7 +272,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the dbtr property.
+     * Legt den Wert der dbtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -280,7 +284,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the dbtrAcct property.
+     * Ruft den Wert der dbtrAcct-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -292,7 +296,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the dbtrAcct property.
+     * Legt den Wert der dbtrAcct-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -304,7 +308,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the dbtrAgt property.
+     * Ruft den Wert der dbtrAgt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -316,7 +320,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the dbtrAgt property.
+     * Legt den Wert der dbtrAgt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -328,7 +332,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the ultmtDbtr property.
+     * Ruft den Wert der ultmtDbtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -340,7 +344,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the ultmtDbtr property.
+     * Legt den Wert der ultmtDbtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -352,7 +356,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Gets the value of the chrgBr property.
+     * Ruft den Wert der chrgBr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -364,7 +368,7 @@ public class PaymentInstructionInformationSCT {
     }
 
     /**
-     * Sets the value of the chrgBr property.
+     * Legt den Wert der chrgBr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

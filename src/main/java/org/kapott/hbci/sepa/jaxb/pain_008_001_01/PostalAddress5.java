@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PostalAddress5 complex type.
+ * <p>Java-Klasse für PostalAddress5 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PostalAddress5">
@@ -71,7 +71,7 @@ public class PostalAddress5 {
     }
 
     /**
-     * Gets the value of the ctry property.
+     * Ruft den Wert der ctry-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -83,7 +83,7 @@ public class PostalAddress5 {
     }
 
     /**
-     * Sets the value of the ctry property.
+     * Legt den Wert der ctry-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

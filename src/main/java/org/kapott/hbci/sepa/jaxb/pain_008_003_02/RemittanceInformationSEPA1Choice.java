@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for RemittanceInformationSEPA1Choice complex type.
+ * <p>Java-Klasse für RemittanceInformationSEPA1Choice complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="RemittanceInformationSEPA1Choice">
@@ -42,7 +42,7 @@ public class RemittanceInformationSEPA1Choice {
     protected StructuredRemittanceInformationSEPA1 strd;
 
     /**
-     * Gets the value of the ustrd property.
+     * Ruft den Wert der ustrd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class RemittanceInformationSEPA1Choice {
     }
 
     /**
-     * Sets the value of the ustrd property.
+     * Legt den Wert der ustrd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class RemittanceInformationSEPA1Choice {
     }
 
     /**
-     * Gets the value of the strd property.
+     * Ruft den Wert der strd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class RemittanceInformationSEPA1Choice {
     }
 
     /**
-     * Sets the value of the strd property.
+     * Legt den Wert der strd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

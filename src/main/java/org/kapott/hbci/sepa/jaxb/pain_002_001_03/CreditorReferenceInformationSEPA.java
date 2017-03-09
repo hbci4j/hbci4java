@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for CreditorReferenceInformationSEPA complex type.
+ * <p>Java-Klasse für CreditorReferenceInformationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="CreditorReferenceInformationSEPA">
@@ -40,7 +40,7 @@ public class CreditorReferenceInformationSEPA {
     protected String ref;
 
     /**
-     * Gets the value of the tp property.
+     * Ruft den Wert der tp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class CreditorReferenceInformationSEPA {
     }
 
     /**
-     * Sets the value of the tp property.
+     * Legt den Wert der tp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class CreditorReferenceInformationSEPA {
     }
 
     /**
-     * Gets the value of the ref property.
+     * Ruft den Wert der ref-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class CreditorReferenceInformationSEPA {
     }
 
     /**
-     * Sets the value of the ref property.
+     * Legt den Wert der ref-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

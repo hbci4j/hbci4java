@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_002_002_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PaymentTypeInformationSEPA complex type.
+ * <p>Java-Klasse für PaymentTypeInformationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentTypeInformationSEPA">
@@ -41,18 +42,21 @@ import javax.xml.bind.annotation.XmlType;
 public class PaymentTypeInformationSEPA {
 
     @XmlElement(name = "InstrPrty", namespace = "urn:swift:xsd:$pain.002.002.02")
+    @XmlSchemaType(name = "string")
     protected Priority2Code instrPrty;
     @XmlElement(name = "SvcLvl", namespace = "urn:swift:xsd:$pain.002.002.02")
     protected ServiceLevelSEPA svcLvl;
     @XmlElement(name = "LclInstrm", namespace = "urn:swift:xsd:$pain.002.002.02")
     protected LocalInstrumentSEPA lclInstrm;
     @XmlElement(name = "SeqTp", namespace = "urn:swift:xsd:$pain.002.002.02")
+    @XmlSchemaType(name = "string")
     protected SequenceType1Code seqTp;
     @XmlElement(name = "CtgyPurp", namespace = "urn:swift:xsd:$pain.002.002.02")
+    @XmlSchemaType(name = "string")
     protected PaymentCategoryPurpose1Code ctgyPurp;
 
     /**
-     * Gets the value of the instrPrty property.
+     * Ruft den Wert der instrPrty-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -64,7 +68,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Sets the value of the instrPrty property.
+     * Legt den Wert der instrPrty-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -76,7 +80,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Gets the value of the svcLvl property.
+     * Ruft den Wert der svcLvl-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -88,7 +92,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Sets the value of the svcLvl property.
+     * Legt den Wert der svcLvl-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -100,7 +104,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Gets the value of the lclInstrm property.
+     * Ruft den Wert der lclInstrm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -112,7 +116,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Sets the value of the lclInstrm property.
+     * Legt den Wert der lclInstrm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -124,7 +128,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Gets the value of the seqTp property.
+     * Ruft den Wert der seqTp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -136,7 +140,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Sets the value of the seqTp property.
+     * Legt den Wert der seqTp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -148,7 +152,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Gets the value of the ctgyPurp property.
+     * Ruft den Wert der ctgyPurp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -160,7 +164,7 @@ public class PaymentTypeInformationSEPA {
     }
 
     /**
-     * Sets the value of the ctgyPurp property.
+     * Legt den Wert der ctgyPurp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

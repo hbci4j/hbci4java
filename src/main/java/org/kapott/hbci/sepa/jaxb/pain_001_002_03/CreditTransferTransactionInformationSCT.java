@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_001_002_03;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for CreditTransferTransactionInformationSCT complex type.
+ * <p>Java-Klasse für CreditTransferTransactionInformationSCT complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="CreditTransferTransactionInformationSCT">
@@ -59,6 +60,7 @@ public class CreditTransferTransactionInformationSCT {
     @XmlElement(name = "Amt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03", required = true)
     protected AmountTypeSEPA amt;
     @XmlElement(name = "ChrgBr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03")
+    @XmlSchemaType(name = "string")
     protected ChargeBearerTypeSEPACode chrgBr;
     @XmlElement(name = "UltmtDbtr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03")
     protected PartyIdentificationSEPA1 ultmtDbtr;
@@ -76,7 +78,7 @@ public class CreditTransferTransactionInformationSCT {
     protected RemittanceInformationSEPA1Choice rmtInf;
 
     /**
-     * Gets the value of the pmtId property.
+     * Ruft den Wert der pmtId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -88,7 +90,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the pmtId property.
+     * Legt den Wert der pmtId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -100,7 +102,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the pmtTpInf property.
+     * Ruft den Wert der pmtTpInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -112,7 +114,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the pmtTpInf property.
+     * Legt den Wert der pmtTpInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -124,7 +126,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the amt property.
+     * Ruft den Wert der amt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -136,7 +138,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the amt property.
+     * Legt den Wert der amt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -148,7 +150,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the chrgBr property.
+     * Ruft den Wert der chrgBr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -160,7 +162,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the chrgBr property.
+     * Legt den Wert der chrgBr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -172,7 +174,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the ultmtDbtr property.
+     * Ruft den Wert der ultmtDbtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -184,7 +186,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the ultmtDbtr property.
+     * Legt den Wert der ultmtDbtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -196,7 +198,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the cdtrAgt property.
+     * Ruft den Wert der cdtrAgt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -208,7 +210,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the cdtrAgt property.
+     * Legt den Wert der cdtrAgt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -220,7 +222,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the cdtr property.
+     * Ruft den Wert der cdtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -232,7 +234,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the cdtr property.
+     * Legt den Wert der cdtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -244,7 +246,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the cdtrAcct property.
+     * Ruft den Wert der cdtrAcct-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -256,7 +258,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the cdtrAcct property.
+     * Legt den Wert der cdtrAcct-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -268,7 +270,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the ultmtCdtr property.
+     * Ruft den Wert der ultmtCdtr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -280,7 +282,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the ultmtCdtr property.
+     * Legt den Wert der ultmtCdtr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -292,7 +294,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the purp property.
+     * Ruft den Wert der purp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -304,7 +306,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the purp property.
+     * Legt den Wert der purp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -316,7 +318,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Gets the value of the rmtInf property.
+     * Ruft den Wert der rmtInf-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -328,7 +330,7 @@ public class CreditTransferTransactionInformationSCT {
     }
 
     /**
-     * Sets the value of the rmtInf property.
+     * Legt den Wert der rmtInf-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

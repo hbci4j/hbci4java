@@ -6,13 +6,14 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PostalAddress1 complex type.
+ * <p>Java-Klasse für PostalAddress1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PostalAddress1">
@@ -49,6 +50,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PostalAddress1 {
 
     @XmlElement(name = "AdrTp", namespace = "urn:sepade:xsd:pain.001.001.02")
+    @XmlSchemaType(name = "string")
     protected AddressType2Code adrTp;
     @XmlElement(name = "AdrLine", namespace = "urn:sepade:xsd:pain.001.001.02")
     protected List<String> adrLine;
@@ -66,7 +68,7 @@ public class PostalAddress1 {
     protected String ctry;
 
     /**
-     * Gets the value of the adrTp property.
+     * Ruft den Wert der adrTp-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -78,7 +80,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the adrTp property.
+     * Legt den Wert der adrTp-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -119,7 +121,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Gets the value of the strtNm property.
+     * Ruft den Wert der strtNm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -131,7 +133,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the strtNm property.
+     * Legt den Wert der strtNm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -143,7 +145,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Gets the value of the bldgNb property.
+     * Ruft den Wert der bldgNb-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -155,7 +157,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the bldgNb property.
+     * Legt den Wert der bldgNb-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -167,7 +169,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Gets the value of the pstCd property.
+     * Ruft den Wert der pstCd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -179,7 +181,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the pstCd property.
+     * Legt den Wert der pstCd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -191,7 +193,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Gets the value of the twnNm property.
+     * Ruft den Wert der twnNm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -203,7 +205,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the twnNm property.
+     * Legt den Wert der twnNm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -215,7 +217,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Gets the value of the ctrySubDvsn property.
+     * Ruft den Wert der ctrySubDvsn-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -227,7 +229,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the ctrySubDvsn property.
+     * Legt den Wert der ctrySubDvsn-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -239,7 +241,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Gets the value of the ctry property.
+     * Ruft den Wert der ctry-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -251,7 +253,7 @@ public class PostalAddress1 {
     }
 
     /**
-     * Sets the value of the ctry property.
+     * Legt den Wert der ctry-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

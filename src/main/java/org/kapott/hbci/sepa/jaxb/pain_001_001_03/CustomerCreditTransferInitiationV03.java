@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for CustomerCreditTransferInitiationV03 complex type.
+ * <p>Java-Klasse für CustomerCreditTransferInitiationV03 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="CustomerCreditTransferInitiationV03">
@@ -42,7 +42,7 @@ public class CustomerCreditTransferInitiationV03 {
     protected List<PaymentInstructionInformationSCT> pmtInf;
 
     /**
-     * Gets the value of the grpHdr property.
+     * Ruft den Wert der grpHdr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class CustomerCreditTransferInitiationV03 {
     }
 
     /**
-     * Sets the value of the grpHdr property.
+     * Legt den Wert der grpHdr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

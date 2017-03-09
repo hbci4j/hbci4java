@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Document complex type.
+ * <p>Java-Klasse für Document complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="Document">
@@ -36,7 +36,7 @@ public class Document {
     protected CustomerPaymentStatusReportV03 cstmrPmtStsRpt;
 
     /**
-     * Gets the value of the cstmrPmtStsRpt property.
+     * Ruft den Wert der cstmrPmtStsRpt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class Document {
     }
 
     /**
-     * Sets the value of the cstmrPmtStsRpt property.
+     * Legt den Wert der cstmrPmtStsRpt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for FinancialInstitutionIdentificationSDD2 complex type.
+ * <p>Java-Klasse für FinancialInstitutionIdentificationSDD2 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="FinancialInstitutionIdentificationSDD2">
@@ -36,7 +36,7 @@ public class FinancialInstitutionIdentificationSDD2 {
     protected RestrictedIdentificationSDD prtryId;
 
     /**
-     * Gets the value of the prtryId property.
+     * Ruft den Wert der prtryId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class FinancialInstitutionIdentificationSDD2 {
     }
 
     /**
-     * Sets the value of the prtryId property.
+     * Legt den Wert der prtryId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

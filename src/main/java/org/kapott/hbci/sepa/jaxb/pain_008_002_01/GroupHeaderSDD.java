@@ -5,14 +5,15 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for GroupHeaderSDD complex type.
+ * <p>Java-Klasse für GroupHeaderSDD complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="GroupHeaderSDD">
@@ -49,6 +50,7 @@ public class GroupHeaderSDD {
     @XmlElement(name = "MsgId", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected String msgId;
     @XmlElement(name = "CreDtTm", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
+    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creDtTm;
     @XmlElement(name = "BtchBookg", namespace = "urn:swift:xsd:$pain.008.002.01")
     protected Boolean btchBookg;
@@ -57,12 +59,13 @@ public class GroupHeaderSDD {
     @XmlElement(name = "CtrlSum", namespace = "urn:swift:xsd:$pain.008.002.01")
     protected BigDecimal ctrlSum;
     @XmlElement(name = "Grpg", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
+    @XmlSchemaType(name = "string")
     protected Grouping1CodeSDD grpg;
     @XmlElement(name = "InitgPty", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected PartyIdentificationSDD1 initgPty;
 
     /**
-     * Gets the value of the msgId property.
+     * Ruft den Wert der msgId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -74,7 +77,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the msgId property.
+     * Legt den Wert der msgId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -86,7 +89,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the creDtTm property.
+     * Ruft den Wert der creDtTm-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -98,7 +101,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the creDtTm property.
+     * Legt den Wert der creDtTm-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -110,7 +113,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the btchBookg property.
+     * Ruft den Wert der btchBookg-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -122,7 +125,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the btchBookg property.
+     * Legt den Wert der btchBookg-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -134,7 +137,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the nbOfTxs property.
+     * Ruft den Wert der nbOfTxs-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -146,7 +149,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the nbOfTxs property.
+     * Legt den Wert der nbOfTxs-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -158,7 +161,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the ctrlSum property.
+     * Ruft den Wert der ctrlSum-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -170,7 +173,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the ctrlSum property.
+     * Legt den Wert der ctrlSum-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -182,7 +185,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the grpg property.
+     * Ruft den Wert der grpg-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -194,7 +197,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the grpg property.
+     * Legt den Wert der grpg-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -206,7 +209,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Gets the value of the initgPty property.
+     * Ruft den Wert der initgPty-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -218,7 +221,7 @@ public class GroupHeaderSDD {
     }
 
     /**
-     * Sets the value of the initgPty property.
+     * Legt den Wert der initgPty-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

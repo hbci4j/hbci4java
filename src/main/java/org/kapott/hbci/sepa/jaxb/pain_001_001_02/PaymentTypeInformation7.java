@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PaymentTypeInformation7 complex type.
+ * <p>Java-Klasse für PaymentTypeInformation7 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PaymentTypeInformation7">
@@ -36,7 +36,7 @@ public class PaymentTypeInformation7 {
     protected ServiceLevel4 svcLvl;
 
     /**
-     * Gets the value of the svcLvl property.
+     * Ruft den Wert der svcLvl-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PaymentTypeInformation7 {
     }
 
     /**
-     * Sets the value of the svcLvl property.
+     * Legt den Wert der svcLvl-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

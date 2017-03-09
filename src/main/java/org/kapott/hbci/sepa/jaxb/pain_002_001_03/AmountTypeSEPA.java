@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AmountTypeSEPA complex type.
+ * <p>Java-Klasse für AmountTypeSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="AmountTypeSEPA">
@@ -36,7 +36,7 @@ public class AmountTypeSEPA {
     protected ActiveOrHistoricCurrencyAndAmountSEPA instdAmt;
 
     /**
-     * Gets the value of the instdAmt property.
+     * Ruft den Wert der instdAmt-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class AmountTypeSEPA {
     }
 
     /**
-     * Sets the value of the instdAmt property.
+     * Legt den Wert der instdAmt-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

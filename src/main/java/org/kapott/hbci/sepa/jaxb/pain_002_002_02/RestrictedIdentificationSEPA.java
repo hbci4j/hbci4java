@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_002_002_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for RestrictedIdentificationSEPA complex type.
+ * <p>Java-Klasse für RestrictedIdentificationSEPA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="RestrictedIdentificationSEPA">
@@ -33,10 +34,11 @@ import javax.xml.bind.annotation.XmlType;
 public class RestrictedIdentificationSEPA {
 
     @XmlElement(name = "Id", namespace = "urn:swift:xsd:$pain.002.002.02", required = true)
+    @XmlSchemaType(name = "string")
     protected RestrictedSMNDACode id;
 
     /**
-     * Gets the value of the id property.
+     * Ruft den Wert der id-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +50,7 @@ public class RestrictedIdentificationSEPA {
     }
 
     /**
-     * Sets the value of the id property.
+     * Legt den Wert der id-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

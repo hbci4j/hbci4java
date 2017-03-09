@@ -4,13 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_001_001_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ReferredDocumentType1 complex type.
+ * <p>Java-Klasse für ReferredDocumentType1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="ReferredDocumentType1">
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ReferredDocumentType1 {
 
     @XmlElement(name = "Cd", namespace = "urn:sepade:xsd:pain.001.001.02")
+    @XmlSchemaType(name = "string")
     protected DocumentType2Code cd;
     @XmlElement(name = "Prtry", namespace = "urn:sepade:xsd:pain.001.001.02")
     protected String prtry;
@@ -46,7 +48,7 @@ public class ReferredDocumentType1 {
     protected String issr;
 
     /**
-     * Gets the value of the cd property.
+     * Ruft den Wert der cd-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -58,7 +60,7 @@ public class ReferredDocumentType1 {
     }
 
     /**
-     * Sets the value of the cd property.
+     * Legt den Wert der cd-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -70,7 +72,7 @@ public class ReferredDocumentType1 {
     }
 
     /**
-     * Gets the value of the prtry property.
+     * Ruft den Wert der prtry-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -82,7 +84,7 @@ public class ReferredDocumentType1 {
     }
 
     /**
-     * Sets the value of the prtry property.
+     * Legt den Wert der prtry-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
@@ -94,7 +96,7 @@ public class ReferredDocumentType1 {
     }
 
     /**
-     * Gets the value of the issr property.
+     * Ruft den Wert der issr-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -106,7 +108,7 @@ public class ReferredDocumentType1 {
     }
 
     /**
-     * Sets the value of the issr property.
+     * Legt den Wert der issr-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is

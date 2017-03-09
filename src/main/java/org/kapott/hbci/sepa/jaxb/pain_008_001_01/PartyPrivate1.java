@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PartyPrivate1 complex type.
+ * <p>Java-Klasse für PartyPrivate1 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
  * &lt;complexType name="PartyPrivate1">
@@ -36,7 +36,7 @@ public class PartyPrivate1 {
     protected PersonIdentification4 prvtId;
 
     /**
-     * Gets the value of the prvtId property.
+     * Ruft den Wert der prvtId-Eigenschaft ab.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PartyPrivate1 {
     }
 
     /**
-     * Sets the value of the prvtId property.
+     * Legt den Wert der prvtId-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
