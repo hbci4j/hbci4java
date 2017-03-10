@@ -3,30 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.hbci4j</groupId>
 	<artifactId>hbci4j-core</artifactId>
-	<version>3.0.5-SNAPSHOT</version>
+	<version>3.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	<description>HBCI4j - Home Banking Computer Interface for Java</description>
 	<url>https://github.com/hbci4j/hbci4java</url>
 	<prerequisites>
-		<maven>3.3.9</maven>
-	</prerequisites>
+	  <maven>3.3.9</maven>
+        </prerequisites>
 	<licenses>
 		<license>
 			<name>GNU General Public License</name>
 			<url>http://opensource.org/licenses/gpl-license.php</url>
 		</license>
 	</licenses>
-	<developers>
-		<developer>
-			<name>Olaf Willuhn</name>
-			<email>info@willuhn.de</email>
-		</developer>
-		<developer>
-			<name>Janning Vygen</name>
-			<email>vygen@kicktipp.de</email>
-		</developer>
-	</developers>
 	<scm>
 		<url>scm:git:git@github.com:hbci4j/hbci4java.git</url>
 		<connection>scm:git:git@github.com:hbci4j/hbci4java.git</connection>
@@ -315,7 +305,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>${maven-release-plugin.version}</version>
+				<version>${maven-release-plugin.version}</version>				
 				<configuration>
 					<!-- Ansonsten erhalten wir im Zusammenhang mit jspc Fehler -->
 					<useReleaseProfile>false</useReleaseProfile>
