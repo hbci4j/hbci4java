@@ -47,7 +47,7 @@ import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: auch rückmeldungen vom InfoPoint-Server entgegennehmen und auswerten
+// TODO: auch rÃ¼ckmeldungen vom InfoPoint-Server entgegennehmen und auswerten
 public class InfoPointConnector
 {
     private URL url;
@@ -149,7 +149,7 @@ public class InfoPointConnector
                 }
                 
                 // jetzt den gerade gefundenen delimiter merken 
-                // und posi erhöhen
+                // und posi erhÃ¶hen
                 if (delimpos<len) {
                     prevDelimiter=msg_st.charAt(delimpos);
                     posi=delimpos+1;

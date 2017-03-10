@@ -26,16 +26,16 @@ import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIUtils;
 
 // TODO: doku anpassen
-/** <p>Tool zum Verifizieren der Gültigkeit von BLZ/Kontonummer.
-    Alle Kontonummern in Deutschland enthalten eine Prüfziffer, anhand
-    welcher überprüft werden kann, ob die Kontonummer an sich gültig ist.
-    Mit diesem Tool kann für eine gegebene Bankleitzahl und Kontonummer
-    deren Gültigkeit überprüft werden.</p>
+/** <p>Tool zum Verifizieren der GÃ¼ltigkeit von BLZ/Kontonummer.
+    Alle Kontonummern in Deutschland enthalten eine PrÃ¼fziffer, anhand
+    welcher Ã¼berprÃ¼ft werden kann, ob die Kontonummer an sich gÃ¼ltig ist.
+    Mit diesem Tool kann fÃ¼r eine gegebene Bankleitzahl und Kontonummer
+    deren GÃ¼ltigkeit Ã¼berprÃ¼ft werden.</p>
     <p>In <em>HBCI4Java</em> sind noch nicht alle von den Banken verwendeten
-    Prüfzifferverfahren implementiert. Deshalb können bis jetzt nur
-    die Kontonummern von einigen bestimmten Banken überprüft werden. Anhand
-    der Ausgabe des Programmes ist ersichtlich, ob <em>HBCI4Java</em> tatsächlich
-    die Kontonummer überprüfen konnte und wenn ja, ob die Prüfung erfolgreich
+    PrÃ¼fzifferverfahren implementiert. Deshalb kÃ¶nnen bis jetzt nur
+    die Kontonummern von einigen bestimmten Banken Ã¼berprÃ¼ft werden. Anhand
+    der Ausgabe des Programmes ist ersichtlich, ob <em>HBCI4Java</em> tatsÃ¤chlich
+    die Kontonummer Ã¼berprÃ¼fen konnte und wenn ja, ob die PrÃ¼fung erfolgreich
     verlaufen ist oder nicht.</p>
     <p>Der Aufruf erfolgt mit 
     <code>java&nbsp;-cp&nbsp;...&nbsp;org.kapott.hbci.tools.CheckAccountCRC&nbsp;&lt;blz&gt;&nbsp;&lt;kontonummer&gt;</code> */  

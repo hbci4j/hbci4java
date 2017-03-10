@@ -32,13 +32,13 @@ import java.util.Set;
 
 import org.kapott.hbci.manager.HBCIUtils;
 
-/** Statusinformationen über alle ausgeführten Dialoge. Die Methode
-    {@link org.kapott.hbci.manager.HBCIHandler#execute()} gibt nach der Ausführung 
-    aller HBCI-Dialoge ein Objekt dieser Klasse zurück. Dieses Objekt enthält 
-    Informationen darüber, für welche Kunden-IDs tatsächlich HBCI-Dialoge geführt 
-    wurden. Für jeden geführten HBCI-Dialog existiert dann ein 
+/** Statusinformationen Ã¼ber alle ausgefÃ¼hrten Dialoge. Die Methode
+    {@link org.kapott.hbci.manager.HBCIHandler#execute()} gibt nach der AusfÃ¼hrung 
+    aller HBCI-Dialoge ein Objekt dieser Klasse zurÃ¼ck. Dieses Objekt enthÃ¤lt 
+    Informationen darÃ¼ber, fÃ¼r welche Kunden-IDs tatsÃ¤chlich HBCI-Dialoge gefÃ¼hrt 
+    wurden. FÃ¼r jeden gefÃ¼hrten HBCI-Dialog existiert dann ein 
     {@link HBCIDialogStatus}-Objekt, welches Informationen zu dem jeweiligen 
-    Dialog enthält. */
+    Dialog enthÃ¤lt. */
 public class HBCIExecStatus 
 {
     private Map<String,HBCIDialogStatus> statusData;
@@ -50,7 +50,7 @@ public class HBCIExecStatus
         exceptions=new Hashtable<String, ArrayList<Exception>>();
     }
     
-    /** Gibt die Menge aller Kunden-IDs zurück, für die ein HBCI-Dialog geführt wurde.
+    /** Gibt die Menge aller Kunden-IDs zurÃ¼ck, fÃ¼r die ein HBCI-Dialog gefÃ¼hrt wurde.
         @return Liste mit Kunden-IDs */
     public List<String> getCustomerIds()
     {
@@ -91,11 +91,11 @@ public class HBCIExecStatus
         HBCIUtils.log(e);
     }
     
-    /** Gibt eine Liste von Status-Informationen für jeden ausgeführten HBCI-Dialog
-        zurück. Diese Methode ist insofern von eingeschränkter Bedeutung, weil
-        es nicht möglich ist, einem {@link HBCIDialogStatus}-Objekt dieser Liste
-        die Kunden-ID zuzuordnen, unter der der jeweilige Dialog geführt wurde.
-        Dazu müssen die Methoden {@link #getCustomerIds()} und {@link #getDialogStatus(String)}
+    /** Gibt eine Liste von Status-Informationen fÃ¼r jeden ausgefÃ¼hrten HBCI-Dialog
+        zurÃ¼ck. Diese Methode ist insofern von eingeschrÃ¤nkter Bedeutung, weil
+        es nicht mÃ¶glich ist, einem {@link HBCIDialogStatus}-Objekt dieser Liste
+        die Kunden-ID zuzuordnen, unter der der jeweilige Dialog gefÃ¼hrt wurde.
+        Dazu mÃ¼ssen die Methoden {@link #getCustomerIds()} und {@link #getDialogStatus(String)}
         verwendet werden.
         @return Menge aller gespeicherten HBCI-Dialog-Status-Informationen 
         @deprecated sinnlos */
@@ -105,20 +105,20 @@ public class HBCIExecStatus
         return (values!=null)?(new ArrayList<HBCIDialogStatus>(values)):(new ArrayList<HBCIDialogStatus>());
     }
     
-    /** {@link HBCIDialogStatus} für den Dialog einer bestimmten Kunden-ID zurückgeben.
-        @param customerid die Kunden-ID, für deren Dialog das Status-Objekt zurückgegeben werden soll
-        @return Status-Objekt für den ausgewählten Dialog */
+    /** {@link HBCIDialogStatus} fÃ¼r den Dialog einer bestimmten Kunden-ID zurÃ¼ckgeben.
+        @param customerid die Kunden-ID, fÃ¼r deren Dialog das Status-Objekt zurÃ¼ckgegeben werden soll
+        @return Status-Objekt fÃ¼r den ausgewÃ¤hlten Dialog */
     public HBCIDialogStatus getDialogStatus(String customerid)
     {
         return statusData.get(customerid);
     }
     
-    /** Exceptions zurückgeben, die beim Ausführen eines bestimmten Dialoges aufgetreten sind.
-        Dabei werden nur die Exceptions zurückgegeben, die Fehler in der Verwaltung der
-        Kunden-IDs/Dialoge betreffen. Alle Exceptions, die während der eigentlichen
-        Dialogausführung evtl. aufgetreten sind, sind im entsprechenden
+    /** Exceptions zurÃ¼ckgeben, die beim AusfÃ¼hren eines bestimmten Dialoges aufgetreten sind.
+        Dabei werden nur die Exceptions zurÃ¼ckgegeben, die Fehler in der Verwaltung der
+        Kunden-IDs/Dialoge betreffen. Alle Exceptions, die wÃ¤hrend der eigentlichen
+        DialogausfÃ¼hrung evtl. aufgetreten sind, sind im entsprechenden
         {@link HBCIDialogStatus}-Objekt des jeweiligen Dialoges enthalten.
-        @param customerid die Kunden-ID, für deren HBCI-Dialog die evtl. aufgetretenen
+        @param customerid die Kunden-ID, fÃ¼r deren HBCI-Dialog die evtl. aufgetretenen
         Exceptions ermittelt werden sollen.
         @return Liste mit aufgetretenen Exceptions */
     public List<Exception> getExceptions(String customerid)
@@ -126,8 +126,8 @@ public class HBCIExecStatus
         return exceptions.get(customerid);
     }
     
-    /** Gibt einen String zurück, der alle Fehlermeldungen aller ausgeführten
-        Dialog enthält.
+    /** Gibt einen String zurÃ¼ck, der alle Fehlermeldungen aller ausgefÃ¼hrten
+        Dialog enthÃ¤lt.
         @return String mit allen aufgetretenen Fehlermeldungen */
     public String getErrorString()
     {
@@ -190,8 +190,8 @@ public class HBCIExecStatus
         return ret.toString().trim();
     }
     
-    /** Gibt einen String mit allen Status-Informationen über alle ausgeführten
-        Dialoge zurück.
+    /** Gibt einen String mit allen Status-Informationen Ã¼ber alle ausgefÃ¼hrten
+        Dialoge zurÃ¼ck.
         @return textuelle Darstellung aller gespeicherten Statusdaten */
     public String toString()
     {
@@ -224,9 +224,9 @@ public class HBCIExecStatus
         return ok;
     }
     
-    /** Gibt zurück, ob alle "geplanten" HBCI-Dialoge ordnungsgemäß ausgeführt wurden.
-        @return <code>false</code>, wenn wenigstens bei einer Dialog-Ausführung
-        für eine Kunden-ID ein Fehler aufgetreten ist; ansonsten <code>true</code>*/
+    /** Gibt zurÃ¼ck, ob alle "geplanten" HBCI-Dialoge ordnungsgemÃ¤ÃŸ ausgefÃ¼hrt wurden.
+        @return <code>false</code>, wenn wenigstens bei einer Dialog-AusfÃ¼hrung
+        fÃ¼r eine Kunden-ID ein Fehler aufgetreten ist; ansonsten <code>true</code>*/
     public boolean isOK()
     {
         boolean ok=true;

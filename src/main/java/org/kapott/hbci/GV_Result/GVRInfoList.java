@@ -28,13 +28,13 @@ import java.util.List;
 
 import org.kapott.hbci.manager.HBCIUtils;
 
-/** Rückgabedaten für die Abfrage verfügbarer Kreditinstitutsinformationen. Es
-    wird eine Liste mit allen verfügbaren Informationen gespeichert, wobei jeder
-    Eintrag Daten über genau eine KI-Info enthält. */
+/** RÃ¼ckgabedaten fÃ¼r die Abfrage verfÃ¼gbarer Kreditinstitutsinformationen. Es
+    wird eine Liste mit allen verfÃ¼gbaren Informationen gespeichert, wobei jeder
+    Eintrag Daten Ã¼ber genau eine KI-Info enthÃ¤lt. */
 public final class GVRInfoList
     extends HBCIJobResultImpl
 {
-    /** Daten über eine einzelne verfügbare Information */ 
+    /** Daten Ã¼ber eine einzelne verfÃ¼gbare Information */ 
     public static final class Info
     {
         /** Identifikationscode, mit der diese Information referenziert werden kann */
@@ -43,9 +43,9 @@ public final class GVRInfoList
         public String description;
         /** Art der Information.
             <ul>
-              <li>F für Freitextmeldung (siehe {@link org.kapott.hbci.GV_Result.GVRInfoOrder})</li>
+              <li>F fÃ¼r Freitextmeldung (siehe {@link org.kapott.hbci.GV_Result.GVRInfoOrder})</li>
               <li>S es handelt sich um ein Schriftdokument, welches bestellt werden kann</li>
-              <li>T für Themenüberschrift</li>
+              <li>T fÃ¼r ThemenÃ¼berschrift</li>
             </ul> */
         public String type; // TODO: das als int-konstante machen
         
@@ -53,7 +53,7 @@ public final class GVRInfoList
         /** Version dieser Information (optional) */
         public Date   date;
         /** Kommentare zu dieser Information. Dieses Array ist niemals <code>null</code>,
-            kann aber die Länge <code>0</code> haben. */
+            kann aber die LÃ¤nge <code>0</code> haben. */
         public String[] comment;
 
         public Info()
@@ -110,7 +110,7 @@ public final class GVRInfoList
         entries.add(entry);
     }
     
-    /** Gibt Daten über alle abfragbaren Kreditinstitutsinformationen zurück
+    /** Gibt Daten Ã¼ber alle abfragbaren Kreditinstitutsinformationen zurÃ¼ck
         @return Array, wobei jeder Eintrag eine solche Information beschreibt */
     public Info[] getEntries()
     {

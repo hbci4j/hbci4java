@@ -1,46 +1,46 @@
 <html><body>
-<p>Dieses Package enthält alle Klassen zur internen Repräsentation von
+<p>Dieses Package enthÃ¤lt alle Klassen zur internen ReprÃ¤sentation von
 (Highlevel-)Jobs. Die einzige Klasse, die als Schnittstelle zu HBCI-Jobs
-innerhalb einer Anwendung benötigt wird, ist die Klasse
+innerhalb einer Anwendung benÃ¶tigt wird, ist die Klasse
 <a href="HBCIJob.html"><code>HBCIJob</code></a>.</p>
 
-<p>Beim Festlegen von auszuführenden Jobs werden <em>Highlevel-Jobs</em>
+<p>Beim Festlegen von auszufÃ¼hrenden Jobs werden <em>Highlevel-Jobs</em>
 und <em>Lowlevel-Jobs</em> unterschieden. Diese Unterscheidung hat nichts
 mit der Art der Jobs an sich zu tun, sondern mit der Art und Weise, wie
-sie spezifiziert und parametrisiert werden können:</p>
+sie spezifiziert und parametrisiert werden kÃ¶nnen:</p>
 
-<p>Alle von <em>HBCI4Java</em> unterstützten Jobs liegen in einer internen
+<p>Alle von <em>HBCI4Java</em> unterstÃ¼tzten Jobs liegen in einer internen
 Beschreibungssprache vor (XML). Diese Sprache ist eng an die
-Beschreibung der Geschäftsvorfälle aus der HBCI-Spezifikation gekoppelt.
-In ihr ist jedem unterstützten Job ein <em><b>Lowlevel-Jobname</b></em> zugeordnet,
+Beschreibung der GeschÃ¤ftsvorfÃ¤lle aus der HBCI-Spezifikation gekoppelt.
+In ihr ist jedem unterstÃ¼tzten Job ein <em><b>Lowlevel-Jobname</b></em> zugeordnet,
 der den Job eindeutig identifiziert. Zu jedem Job gibt es eine bestimmte Anzahl
-von Parametern, die zur Ausführung dieses Jobs benötigt werden (z.B. Kontoverbindungen,
-Geldbeträge, usw.). Jeder dieser Parameter hat dabei einen <em><b>Lowlevel-Parameternamen</b></em>.
+von Parametern, die zur AusfÃ¼hrung dieses Jobs benÃ¶tigt werden (z.B. Kontoverbindungen,
+GeldbetrÃ¤ge, usw.). Jeder dieser Parameter hat dabei einen <em><b>Lowlevel-Parameternamen</b></em>.
 Dieser Lowlevel-Parametername stammt aus dem internen Beschreibungsformat des Jobs
-und ist teilweise sehr aufwändig zu schreiben (weil sehr lang) und schlecht zu merken
+und ist teilweise sehr aufwÃ¤ndig zu schreiben (weil sehr lang) und schlecht zu merken
 (weil softwareorientiert).</p>
 
-<p>Um die Arbeit mit häufig benutzten Jobs zu vereinfachen, wurden für die meisten
+<p>Um die Arbeit mit hÃ¤ufig benutzten Jobs zu vereinfachen, wurden fÃ¼r die meisten
 Jobs <em><b>Highlevel-Frontends</b></em> entwickelt. Dabei handelt es sich <em>HBCI4Java</em>-intern
-um separate Klassen, die jeweils für bestimmte Lowlevel-Jobs zuständig sind. Die meisten
-Jobs können und sollten also über ihre Highlevel-Schnittstelle erzeugt und parametrisiert
-werden. Dazu gibt es für jeden Job, der durch die Highlevel-Schnittstelle unterstützt wird,
-einen <em><b>Highlevel-Jobnamen</b></em>. Außerdem gibt es für die benötigten Job-Parameter entsprechende
-<em><b>Highlevel-Parameternamen</b></em>. Diese sind zum einen kürzer als die Lowlevel-Parameternamen,
-außerdem sind sie intuitiver und leichter zu merken.</p>
+um separate Klassen, die jeweils fÃ¼r bestimmte Lowlevel-Jobs zustÃ¤ndig sind. Die meisten
+Jobs kÃ¶nnen und sollten also Ã¼ber ihre Highlevel-Schnittstelle erzeugt und parametrisiert
+werden. Dazu gibt es fÃ¼r jeden Job, der durch die Highlevel-Schnittstelle unterstÃ¼tzt wird,
+einen <em><b>Highlevel-Jobnamen</b></em>. AuÃŸerdem gibt es fÃ¼r die benÃ¶tigten Job-Parameter entsprechende
+<em><b>Highlevel-Parameternamen</b></em>. Diese sind zum einen kÃ¼rzer als die Lowlevel-Parameternamen,
+auÃŸerdem sind sie intuitiver und leichter zu merken.</p>
 
 <p>Beim Erzeugen von Jobs sollte also immer dem Highlevel-Interface der Vorzug gegeben werden,
-sofern es für den jeweiligen Job eine solche Schnittstelle gibt. Die Jobs, für die eine 
-Highlevel-Schnittstelle existiert, sind unten aufgelistet. Prinzipiell kann natürlich jeder
-Job auch über die Lowlevel-Schnittstelle erzeugt und ausgewertet werden. Eine Liste aller
-Lowlevel-Jobs und deren Parameter erhält man mit den Tools 
+sofern es fÃ¼r den jeweiligen Job eine solche Schnittstelle gibt. Die Jobs, fÃ¼r die eine 
+Highlevel-Schnittstelle existiert, sind unten aufgelistet. Prinzipiell kann natÃ¼rlich jeder
+Job auch Ã¼ber die Lowlevel-Schnittstelle erzeugt und ausgewertet werden. Eine Liste aller
+Lowlevel-Jobs und deren Parameter erhÃ¤lt man mit den Tools 
 <a href="../tools/ShowLowlevelGVs.html">ShowLowlevelGVs</a> bzw. 
 <a href="../tools/ShowLowlevelGVRs.html">ShowLowlevelGVRs</a> oder zur Laufzeit durch die
 Verwendung der Methoden <code>getLowlevel*</code> der 
 <a href="../manager/HBCIHandler.html"><code>HBCIHandler</code></a>-Klasse. Da es zur
-Zeit nicht für alle Lowlevel-Jobs entsprechende Klassen für die Highlevel-Unterstützung
-gibt, sollten diese Methoden benutzt werden, um zu überprüfen, ob ein bestimmter
-Job <em>gar nicht</em> oder nur nicht per Highlevel-Interface unterstützt wird.</p>
+Zeit nicht fÃ¼r alle Lowlevel-Jobs entsprechende Klassen fÃ¼r die Highlevel-UnterstÃ¼tzung
+gibt, sollten diese Methoden benutzt werden, um zu Ã¼berprÃ¼fen, ob ein bestimmter
+Job <em>gar nicht</em> oder nur nicht per Highlevel-Interface unterstÃ¼tzt wird.</p>
 
 <p>Folgende Unterschiede existieren also zwischen High- und Lowlevel-Jobs:</p>
 
@@ -49,58 +49,58 @@ Job <em>gar nicht</em> oder nur nicht per Highlevel-Interface unterstützt wird.<
   <tr valign="top">
       <td><b>Erzeugen des Jobs</b></td>
       <td><code>HBCIHandler.newJob(HighlevelName)</code><br/>
-          Eine Liste gültiger HighlevelNamen befindet sich in dieser Beschreibung weiter unten</td>
+          Eine Liste gÃ¼ltiger HighlevelNamen befindet sich in dieser Beschreibung weiter unten</td>
       <td><code>HBCIHandler.newLowlevelJob(LowlevelName)</code><br/>
-          Eine Liste gültiger LowlevelNamen erhält man zur Laufzeit durch 
+          Eine Liste gÃ¼ltiger LowlevelNamen erhÃ¤lt man zur Laufzeit durch 
           <code>HBCIHandler.getSupportedLowlevelGVs()</code> bzw. offline mit dem Tool
           <code>ShowLowlevelGVs</code>.</td></tr>
   <tr valign="top">
       <td><b>Setzen von Parametern</b></td>
       <td><code>HBCIJob.setParam(HLparamName,...)</code><br/>
-          Gültige Werte für <code>HLparamName</code> finden sich in der Job-Beschreibung weiter unten.
-          Es können auch komplexe Parameter gesetzt werden (siehe zum Beispiel
+          GÃ¼ltige Werte fÃ¼r <code>HLparamName</code> finden sich in der Job-Beschreibung weiter unten.
+          Es kÃ¶nnen auch komplexe Parameter gesetzt werden (siehe zum Beispiel
           <a href="HBCIJob.html#setParam(java.lang.String, org.kapott.hbci.structures.Konto)"><code>HBCIJob.setParam(String,Konto)</code></a>).</td>
       <td><code>HBCIJob.setParam(LLparamName,value)</code><br/>
-          Eine Liste gültiger <code>LLparamName</code>n erhält man zur Laufzeit durch 
+          Eine Liste gÃ¼ltiger <code>LLparamName</code>n erhÃ¤lt man zur Laufzeit durch 
           <code>HBCIHandler.getLowlevelGVParameters()</code> bzw. offline mit dem Tool
           <code>ShowLowlevelGVs</code>.</td></tr>
   <tr valign="top">
       <td><b>Ergebnisdaten</b> (<code>HBCIJob.getJobResult()</code>)</td>
-      <td>Klasse des zurückgegeben Objektes abhängig vom Job (siehe Beschreibung unten).
-          Die Job-Rückgabedaten sind bereits anwendungsfreundlich aufbereitet</td>
-      <td>Klasse des zurückgegebenen Objektes ist <em>immer</em> <code>HBCIJobResult</code>. Darin
+      <td>Klasse des zurÃ¼ckgegeben Objektes abhÃ¤ngig vom Job (siehe Beschreibung unten).
+          Die Job-RÃ¼ckgabedaten sind bereits anwendungsfreundlich aufbereitet</td>
+      <td>Klasse des zurÃ¼ckgegebenen Objektes ist <em>immer</em> <code>HBCIJobResult</code>. Darin
           enthalten sind die "puren" Datenelement-Daten, wie sie aus der HBCI-Antwortnachricht
-          extrahiert wurden. Der Inhalt der einzelnen Datenelemte kann über bestimmte Namen
+          extrahiert wurden. Der Inhalt der einzelnen Datenelemte kann Ã¼ber bestimmte Namen
           ermittelt werden 
           (<a href="../manager/HBCIHandler.html#getLowlevelResultProperties(java.lang.String)"><code>HBCIHandler.getLowlevelResultProperties()</code></a> bzw.
           <a href="../tools/ShowLowlevelGVRs.html"><code>ShowLowlevelGVRs</code></a>).</td></tr>
 </table> 
 
-<h2>Beschreibung der unterstützten Highlevel-Jobs</h2>
+<h2>Beschreibung der unterstÃ¼tzten Highlevel-Jobs</h2>
 
 <p>
 <a href="#custommsg">Kundenmitteilung an die Bank</a><br/>
 <a href="#dauernew">Dauerauftrag einrichten</a><br/>
-<a href="#dauerlist">Liste bestehender Daueraufträge abholen</a><br/>
+<a href="#dauerlist">Liste bestehender DauerauftrÃ¤ge abholen</a><br/>
 <a href="#daueredit">Bestehenden Dauerauftrag bearbeiten</a><br/>
-<a href="#dauerdel">Bestehenden Dauerauftrag löschen</a><br/>
-<a href="#ueb">Einzelüberweisung</a><br/>
+<a href="#dauerdel">Bestehenden Dauerauftrag lÃ¶schen</a><br/>
+<a href="#ueb">EinzelÃ¼berweisung</a><br/>
 <a href="#umb">Umbuchung</a><br/>
-<a href="#uebbzu">Einzelüberweisung mit prüfziffergesichertem Verwendungszweck (BZÜ)</a><br/>
-<a href="#uebeil">Eilüberweisung</a><br/>
-<a href="#donation">Spendenüberweisung</a><br/>
-<a href="#uebforeign">Auslandsüberweisung</a><br/>
-<a href="#uebsepa">SEPA-Einzelüberweisung</a><br/>
-<a href="#termueb">Terminierte Einzelüberweisung</a><br/>
-<a href="#termueblist">Liste noch anstehender terminierten Überweisungen abholen</a><br/>
-<a href="#termuebedit">Noch anstehende terminierte Überweisung verändern</a><br/>
-<a href="#termuebdel">Noch anstehende terminierte Überweisung löschen</a><br/>
-<a href="#multiueb">Sammelüberweisung einreichen</a><br/>
+<a href="#uebbzu">EinzelÃ¼berweisung mit prÃ¼fziffergesichertem Verwendungszweck (BZÃœ)</a><br/>
+<a href="#uebeil">EilÃ¼berweisung</a><br/>
+<a href="#donation">SpendenÃ¼berweisung</a><br/>
+<a href="#uebforeign">AuslandsÃ¼berweisung</a><br/>
+<a href="#uebsepa">SEPA-EinzelÃ¼berweisung</a><br/>
+<a href="#termueb">Terminierte EinzelÃ¼berweisung</a><br/>
+<a href="#termueblist">Liste noch anstehender terminierten Ãœberweisungen abholen</a><br/>
+<a href="#termuebedit">Noch anstehende terminierte Ãœberweisung verÃ¤ndern</a><br/>
+<a href="#termuebdel">Noch anstehende terminierte Ãœberweisung lÃ¶schen</a><br/>
+<a href="#multiueb">SammelÃ¼berweisung einreichen</a><br/>
 <a href="#multilast">Sammellastschrift einreichen</a><br/>
 <a href="#last">Einzellastschrift einreichen</a><br/>
 <a href="#stornolast">Lastschriftwiderruf</a><br/>
-<a href="#kumsall">Kontoumsätze anzeigen</a><br/>
-<a href="#kumsnew">Neue Kontoumsätze anzeigen</a><br/>
+<a href="#kumsall">KontoumsÃ¤tze anzeigen</a><br/>
+<a href="#kumsnew">Neue KontoumsÃ¤tze anzeigen</a><br/>
 <a href="#saldoreq">Saldoabfrage eines Kontos</a><br/>
 <a href="#saldoreqall">Saldenabfrage <em>aller</em> Kundenkonten</a><br/>
 <a href="#saldoreqsepa">Saldenabfrage eines SEPA-Kontos</a><br/>
@@ -109,187 +109,187 @@ Job <em>gar nicht</em> oder nur nicht per Highlevel-Interface unterstützt wird.<
 <a href="#festlistall">Liste <em>aller</em> bestehender Festgeldanlagen abholen</a><br/>
 <a href="#accinfo">Kontostammdaten abholen</a><br/>
 <a href="#cardlist">Karten-Informationen abholen</a><br/>
-<a href="#infolist">Übersicht über Kreditinstitutsinformationen abholen</a><br/>
+<a href="#infolist">Ãœbersicht Ã¼ber Kreditinstitutsinformationen abholen</a><br/>
 <a href="#infoorder">Bestellen bzw. Abholen von Kreditinstitutsinformationen</a><br/>
-<a href="#status">Statusinformationen zu Geschäftsvorfällen abholen</a><br/>
-<a href="#tanlist">Abholen von Informationen über TAN-Listen</a><br/>
-<a href="#changepin">Ändern der PIN für HBCI-PIN/TAN</a><br />
+<a href="#status">Statusinformationen zu GeschÃ¤ftsvorfÃ¤llen abholen</a><br/>
+<a href="#tanlist">Abholen von Informationen Ã¼ber TAN-Listen</a><br/>
+<a href="#changepin">Ã„ndern der PIN fÃ¼r HBCI-PIN/TAN</a><br />
 </p>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="custommsg">Kundenmitteilung an die Bank</a></h3>
-<p>Mit diesem Geschäftsvorfall kann ein Bankkunde eine Nachricht an seine Bank versenden.
+<p>Mit diesem GeschÃ¤ftsvorfall kann ein Bankkunde eine Nachricht an seine Bank versenden.
 Der Inhalt dieser Nachricht hat <em>keinen</em> Auftragscharakter.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>CustomMsg</code></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td></tr>
-    <tr valign="top"><td></td><td><code>msg</code></td><td>String</td><td>obligatorisch</td><td>die zu übermittelnde Nachricht</td></tr>
+    <tr valign="top"><td></td><td><code>msg</code></td><td>String</td><td>obligatorisch</td><td>die zu Ã¼bermittelnde Nachricht</td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Kontoverbindung des Bankkunden</td></tr>
-    <tr valign="top"><td></td><td><code>curr</code></td><td>String</td><td>optional</td><td>Währung des Kundenkontos ("<code>EUR</code>")</td></tr>
+    <tr valign="top"><td></td><td><code>curr</code></td><td>String</td><td>optional</td><td>WÃ¤hrung des Kundenkontos ("<code>EUR</code>")</td></tr>
     <tr valign="top"><td></td><td><code>betreff</code></td><td>String</td><td>optional</td><td>Betreff der Nachricht</td></tr>
-    <tr valign="top"><td></td><td><code>recpt</code></td><td>String</td><td>optional</td><td>Empfänger der Nachricht (z.B. ein bestimmter Ansprechpartner)</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>recpt</code></td><td>String</td><td>optional</td><td>EmpfÃ¤nger der Nachricht (z.B. ein bestimmter Ansprechpartner)</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="dauernew">Dauerauftrag einrichten</a></h3>
-<p>Mit diesem Geschäftsvorfall kann ein neuer Dauerauftrag eingerichtet werden.</p>
+<p>Mit diesem GeschÃ¤ftsvorfall kann ein neuer Dauerauftrag eingerichtet werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>DauerNew</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>src</code></td><td>Konto</td><td>obligatorisch</td><td>das Konto, welches bei dem Dauerauftrag belastet wird (Kundenkonto)</td></tr>
     <tr valign="top"><td></td><td><code>dst</code></td><td>Konto</td><td>obligatorisch</td><td>das auf welches die Gutschrift erfolgt (fremdes Konto)</td></tr>
-    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der bei dem Dauerauftrag überwiesen wird.</td></tr>
-    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des Empfängers ("Begünstigter").</td></tr>
-    <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des Empfängers ("Begünstigter").</td></tr>
-    <tr valign="top"><td></td><td><code>firstdate</code></td><td>Date</td><td>obligatorisch</td><td>Datum der ersten Ausführung des Dauerauftrages.</td></tr>
-    <tr valign="top"><td></td><td><code>lastdate</code></td><td>Date</td><td>optional</td><td>Datum der letzten Ausführung des Dauerauftrages.</td></tr>
-    <tr valign="top"><td></td><td><code>timeunit</code></td><td>String</td><td>obligatorisch</td><td>Zeiteinheit für den Turnus-Wert. Entweder "<code>M</code>" für Monat oder "<code>W</code>" für Woche.</td></tr>
-    <tr valign="top"><td></td><td><code>turnus</code></td><td>int</td><td>obligatorisch</td><td>Dieser Wert gibt an, aller wieviel "<code>timeunit</code>"s der Dauerauftrag ausgeführt werden soll.</td></tr>
-    <tr valign="top"><td></td><td><code>execday</code></td><td>int</td><td>obligatorisch</td><td>Dieser Wert gibt bei <code>timeunit=M</code> den Tag des Monats (1-31) und bei <code>timeunit=W</code> den Wochentag (1-7) der Ausführung an. Gültige Werte sind den Job-Restriktionen zu entnehmen.</td></tr>
+    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der bei dem Dauerauftrag Ã¼berwiesen wird.</td></tr>
+    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des EmpfÃ¤ngers ("BegÃ¼nstigter").</td></tr>
+    <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des EmpfÃ¤ngers ("BegÃ¼nstigter").</td></tr>
+    <tr valign="top"><td></td><td><code>firstdate</code></td><td>Date</td><td>obligatorisch</td><td>Datum der ersten AusfÃ¼hrung des Dauerauftrages.</td></tr>
+    <tr valign="top"><td></td><td><code>lastdate</code></td><td>Date</td><td>optional</td><td>Datum der letzten AusfÃ¼hrung des Dauerauftrages.</td></tr>
+    <tr valign="top"><td></td><td><code>timeunit</code></td><td>String</td><td>obligatorisch</td><td>Zeiteinheit fÃ¼r den Turnus-Wert. Entweder "<code>M</code>" fÃ¼r Monat oder "<code>W</code>" fÃ¼r Woche.</td></tr>
+    <tr valign="top"><td></td><td><code>turnus</code></td><td>int</td><td>obligatorisch</td><td>Dieser Wert gibt an, aller wieviel "<code>timeunit</code>"s der Dauerauftrag ausgefÃ¼hrt werden soll.</td></tr>
+    <tr valign="top"><td></td><td><code>execday</code></td><td>int</td><td>obligatorisch</td><td>Dieser Wert gibt bei <code>timeunit=M</code> den Tag des Monats (1-31) und bei <code>timeunit=W</code> den Wochentag (1-7) der AusfÃ¼hrung an. GÃ¼ltige Werte sind den Job-Restriktionen zu entnehmen.</td></tr>
     <tr valign="top"><td></td><td><code>usage,<br/>usage_2,<br/>usage_3,...</code></td><td>String</td><td>optional</td><td>Verwendungszweckzeilen</td></tr>
-    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>Textschlüssel für Art der Überweisung (default="<code>52</code>").</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRDauerNew.html"><code>GVRDauerNew</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>TextschlÃ¼ssel fÃ¼r Art der Ãœberweisung (default="<code>52</code>").</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRDauerNew.html"><code>GVRDauerNew</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="dauerlist">Liste bestehender Daueraufträge abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Übersicht der bestehenden Daueraufträge abgeholt werden.</p>
+<h3><a name="dauerlist">Liste bestehender DauerauftrÃ¤ge abholen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Ãœbersicht der bestehenden DauerauftrÃ¤ge abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>DauerList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>das Kundenkonto, für welches der Dauerauftragsbestand abgeholt werden soll.
-                                                                                         Ist kein Konto angegeben, so wird das erste in den UPD aufgeführte Konto benutzt.</td></tr>
-    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>optional</td><td>Auftrags-Identifikationsnummer für einen bestimmten Auftrag, dessen Daten abgeholt werden sollen.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRDauerList.html"><code>GVRDauerList</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>das Kundenkonto, fÃ¼r welches der Dauerauftragsbestand abgeholt werden soll.
+                                                                                         Ist kein Konto angegeben, so wird das erste in den UPD aufgefÃ¼hrte Konto benutzt.</td></tr>
+    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>optional</td><td>Auftrags-Identifikationsnummer fÃ¼r einen bestimmten Auftrag, dessen Daten abgeholt werden sollen.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRDauerList.html"><code>GVRDauerList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="daueredit">Bestehenden Dauerauftrag bearbeiten</a></h3>
-<p>Mit diesem Geschäftsvorfall kann ein bestehender Dauerauftrag verändert werden. Dazu muss
-die <code>orderid</code> des zu ändernden Auftrages bekannt sein. Zur Ermittlung und
+<p>Mit diesem GeschÃ¤ftsvorfall kann ein bestehender Dauerauftrag verÃ¤ndert werden. Dazu muss
+die <code>orderid</code> des zu Ã¤ndernden Auftrages bekannt sein. Zur Ermittlung und
 Verwendung von Order-IDs siehe entsprechenden Abschnitt in der Beschreibung zur
-<a href="#termuebdel"><code>Löschung terminierter Überweisungen</code></a>. 
-Es müssen nur die Job-Parameter angegeben werden, die tatsächlich verändert werden
+<a href="#termuebdel"><code>LÃ¶schung terminierter Ãœberweisungen</code></a>. 
+Es mÃ¼ssen nur die Job-Parameter angegeben werden, die tatsÃ¤chlich verÃ¤ndert werden
 sollen, die Angabe aller anderen Job-Parameter ist optional.</p>
-<p>Aus den Job-Restriktionen kann ermittelt werden, welche Parameter überhaupt 
-geändert werden dürfen.</p>
+<p>Aus den Job-Restriktionen kann ermittelt werden, welche Parameter Ã¼berhaupt 
+geÃ¤ndert werden dÃ¼rfen.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>DauerEdit</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">sämtliche Parameter wie bei <a href="#dauernew"><code>DauerNew</code></a>, allerdings alle optional; außerdem:</td><td></td></tr>
-    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>obligatorisch</td><td>Auftrags-Identifikationsnummer für den zu bearbeitenden Auftrag</td></tr>
-    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>optional</td><td>Datum, ab wann der Auftrag geändert werden soll</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRDauerEdit.html"><code>GVRDauerEdit</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">sÃ¤mtliche Parameter wie bei <a href="#dauernew"><code>DauerNew</code></a>, allerdings alle optional; auÃŸerdem:</td><td></td></tr>
+    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>obligatorisch</td><td>Auftrags-Identifikationsnummer fÃ¼r den zu bearbeitenden Auftrag</td></tr>
+    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>optional</td><td>Datum, ab wann der Auftrag geÃ¤ndert werden soll</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRDauerEdit.html"><code>GVRDauerEdit</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="dauerdel">Bestehenden Dauerauftrag löschen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann ein bestehender Dauerauftrag gelöscht werden. 
-Für die Angabe, welcher Dauerauftrag gelöscht werden soll, gibt es prinzipiell
-zwei Möglichkeiten:
+<h3><a name="dauerdel">Bestehenden Dauerauftrag lÃ¶schen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann ein bestehender Dauerauftrag gelÃ¶scht werden. 
+FÃ¼r die Angabe, welcher Dauerauftrag gelÃ¶scht werden soll, gibt es prinzipiell
+zwei MÃ¶glichkeiten:
 <ol>
-  <li>Wenn die Bank keine Order-IDs (Auftrags-Identifikationsnummern) unterstützt, 
-      dann müssen für die Identifikation des "richtigen" Dauerauftrages alle
+  <li>Wenn die Bank keine Order-IDs (Auftrags-Identifikationsnummern) unterstÃ¼tzt, 
+      dann mÃ¼ssen fÃ¼r die Identifikation des "richtigen" Dauerauftrages alle
       Dauerauftrags-Parameter angegeben werden, die auch beim Einrichten des
       Dauerauftrages verwendet wurden (siehe <a href="#dauernew"><code>Dauerauftrag
       einrichten</code></a>).</li>
-  <li>Unterstützt die Bank Order-IDs, gibt es wiederum zwei Möglichkeiten:<ol>
+  <li>UnterstÃ¼tzt die Bank Order-IDs, gibt es wiederum zwei MÃ¶glichkeiten:<ol>
         <li>Es werden alle Parameter wie beim Erzeugen des Dauerauftrages und
-            zusätzlich die Order-ID angegeben.</li>
-        <li>Es genügt die Angabe der Order-ID. Dazu muss allerdings vor dem Erzeugen
-            des Jobs "<code>Dauerauftrag löschen</code>" die Liste der existierenden
-            Daueraufträge abgeholt werden (siehe <a href="#dauerlist"><code>Liste
-            bestehender Daueraufträge abholen</code></a>), damit <em>HBCI4Java</em>
+            zusÃ¤tzlich die Order-ID angegeben.</li>
+        <li>Es genÃ¼gt die Angabe der Order-ID. Dazu muss allerdings vor dem Erzeugen
+            des Jobs "<code>Dauerauftrag lÃ¶schen</code>" die Liste der existierenden
+            DauerauftrÃ¤ge abgeholt werden (siehe <a href="#dauerlist"><code>Liste
+            bestehender DauerauftrÃ¤ge abholen</code></a>), damit <em>HBCI4Java</em>
             die verwendete Order-ID kennt und die restlichen Auftrags-Parameter
-            "selbst ausfüllen" kann.</li>
+            "selbst ausfÃ¼llen" kann.</li>
       </ol></li>
       Siehe dazu auch den entsprechenden Abschnitt in der Beschreibung zur
-      <a href="#termuebdel"><code>Löschung terminierter Überweisungen</code></a>
+      <a href="#termuebdel"><code>LÃ¶schung terminierter Ãœberweisungen</code></a>
 </ol></p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>DauerDel</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">sämtliche Parameter wie bei <a href="#dauernew"><code>DauerNew</code></a>, allerdings alle optional; außerdem:</td><td></td></tr>
-    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>optional</td><td>Auftrags-Identifikationsnummer für den zu löschenden Auftrag</td></tr>
-    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>optional</td><td>Datum, wann der Auftrag gelöscht werden soll</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">sÃ¤mtliche Parameter wie bei <a href="#dauernew"><code>DauerNew</code></a>, allerdings alle optional; auÃŸerdem:</td><td></td></tr>
+    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>optional</td><td>Auftrags-Identifikationsnummer fÃ¼r den zu lÃ¶schenden Auftrag</td></tr>
+    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>optional</td><td>Datum, wann der Auftrag gelÃ¶scht werden soll</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="ueb">Einzelüberweisung</a></h3>
-<p>Mit diesem Geschäftsvorfall wird eine einzelne Überweisung in Auftrag gegeben.</p>
+<h3><a name="ueb">EinzelÃ¼berweisung</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall wird eine einzelne Ãœberweisung in Auftrag gegeben.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>Ueb</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>src</code></td><td>Konto</td><td>obligatorisch</td><td>Belastungskonto des Kunden</td></tr>
     <tr valign="top"><td></td><td><code>dst</code></td><td>Konto</td><td>obligatorisch</td><td>Konto, auf dem der Betrag gutgeschrieben werden soll</td></tr>
-    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der überwiesen werden soll.</td></tr>
-    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des Empfängers ("Begünstigter").</td></tr>
-    <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des Empfängers ("Begünstigter").</td></tr>
+    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der Ã¼berwiesen werden soll.</td></tr>
+    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des EmpfÃ¤ngers ("BegÃ¼nstigter").</td></tr>
+    <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des EmpfÃ¤ngers ("BegÃ¼nstigter").</td></tr>
     <tr valign="top"><td></td><td><code>usage,<br/>usage_2,<br/>usage_3,...</code></td><td>String</td><td>optional</td><td>Verwendungszweckzeilen</td></tr>
-    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>Textschlüssel für Transaktionsart (default="<code>51</code>").</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>TextschlÃ¼ssel fÃ¼r Transaktionsart (default="<code>51</code>").</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="umb">Umbuchung</a></h3>
-<p>Eine Umbuchung entspricht im wesentlichen einer Überweisung, wird aber von einigen
-Kreditinstituten intern anders ausgeführt. Voraussetzung für das Verwenden von Umbuchungen
-anstelle von "normalen" Überweisungen ist, dass das Empfängerkonto bei der gleichen
-Bank wie das Auftraggeberkonto geführt wird und ebenfalls dem Auftraggeber gehört.
-Mit diesem Geschäftsvorfall kann also eine Überweisung zwischen zwei eigenen Konten
-bei der gleichen Bank durchgeführt werden.</p>
+<p>Eine Umbuchung entspricht im wesentlichen einer Ãœberweisung, wird aber von einigen
+Kreditinstituten intern anders ausgefÃ¼hrt. Voraussetzung fÃ¼r das Verwenden von Umbuchungen
+anstelle von "normalen" Ãœberweisungen ist, dass das EmpfÃ¤ngerkonto bei der gleichen
+Bank wie das Auftraggeberkonto gefÃ¼hrt wird und ebenfalls dem Auftraggeber gehÃ¶rt.
+Mit diesem GeschÃ¤ftsvorfall kann also eine Ãœberweisung zwischen zwei eigenen Konten
+bei der gleichen Bank durchgefÃ¼hrt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>Umb</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb">Einzelüberweisung</a></td><td></td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb">EinzelÃ¼berweisung</a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="uebbzu">Einzelüberweisung mit prüfziffergesichertem Verwendungszweck (BZÜ)</a></h3>
-<p>Mit diesem Geschäftsvorfall wird eine einzelne Überweisung in Auftrag gegeben. Dabei enthält die
-erste Zeile des Verwendungszweckes einen 13-stelligen String, wovon 12 Ziffern tatsächlich
-Nutzdaten sind, die 13.Ziffer ist eine Prüfziffer über die restlichen 12. Beim Anlegen eines
-solchen Geschäftsvorfalles wird automatisch überprüft, ob die 13-stellige Ziffernfolge
+<h3><a name="uebbzu">EinzelÃ¼berweisung mit prÃ¼fziffergesichertem Verwendungszweck (BZÃœ)</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall wird eine einzelne Ãœberweisung in Auftrag gegeben. Dabei enthÃ¤lt die
+erste Zeile des Verwendungszweckes einen 13-stelligen String, wovon 12 Ziffern tatsÃ¤chlich
+Nutzdaten sind, die 13.Ziffer ist eine PrÃ¼fziffer Ã¼ber die restlichen 12. Beim Anlegen eines
+solchen GeschÃ¤ftsvorfalles wird automatisch Ã¼berprÃ¼ft, ob die 13-stellige Ziffernfolge
 konsistent ist.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>UebBZU</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb">Einzelüberweisung</a>, aber ohne die erste Verwendungszweckzeile (<code>usage</code>), dafür:</td><td></td></tr>
-    <tr valign="top"><td></td><td><code>bzudata</code></td><td>String</td><td>obligatorisch</td><td>13-stellige Zeichenkette (enthält Prüfziffer).</td></tr>
-    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>Textschlüssel für Transaktionsart (default="<code>67</code>").</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb">EinzelÃ¼berweisung</a>, aber ohne die erste Verwendungszweckzeile (<code>usage</code>), dafÃ¼r:</td><td></td></tr>
+    <tr valign="top"><td></td><td><code>bzudata</code></td><td>String</td><td>obligatorisch</td><td>13-stellige Zeichenkette (enthÃ¤lt PrÃ¼fziffer).</td></tr>
+    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>TextschlÃ¼ssel fÃ¼r Transaktionsart (default="<code>67</code>").</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="uebeil">Eilüberweisung</a></h3>
-<p>Eine Eilüberweisung funktioniert analog einer "normalen" Überweisung,
-wird aber u.U. schneller bearbeitet (die genauen bankfachlichen Hintergründe
+<h3><a name="uebeil">EilÃ¼berweisung</a></h3>
+<p>Eine EilÃ¼berweisung funktioniert analog einer "normalen" Ãœberweisung,
+wird aber u.U. schneller bearbeitet (die genauen bankfachlichen HintergrÃ¼nde
 sind hier nicht relevant).</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>UebEil</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb">Einzelüberweisung</a></td><td></td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb">EinzelÃ¼berweisung</a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="donation">Spendenüberweisung</a></h3>
-<p>Dabei handelt es sich im Prinzip um eine normale Einzelüberweisung. Einziger Unterschied
-ist ein bankintern anders gesetzter Textschlüssel für den Überweisungstyp. Wo dieser
-Textschlüssel konkret ausgewertet wird, weiß ich leider auch nicht.</p>
+<h3><a name="donation">SpendenÃ¼berweisung</a></h3>
+<p>Dabei handelt es sich im Prinzip um eine normale EinzelÃ¼berweisung. Einziger Unterschied
+ist ein bankintern anders gesetzter TextschlÃ¼ssel fÃ¼r den Ãœberweisungstyp. Wo dieser
+TextschlÃ¼ssel konkret ausgewertet wird, weiÃŸ ich leider auch nicht.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>Donation</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb"><code>Einzelüberweisung</code></a>, allerdings ohne die Verwendungszweckzeilen; statt dessen:</td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb"><code>EinzelÃ¼berweisung</code></a>, allerdings ohne die Verwendungszweckzeilen; statt dessen:</td><td></td></tr>
     <tr valign="top"><td></td><td><code>spenderid</code></td><td>String</td><td>obligatorisch</td><td>Name des Spenders oder Kunden-/Mitgliedsnummer</td></tr>
-    <tr valign="top"><td></td><td><code>plz_street</code></td><td>String</td><td>obligatorisch</td><td>PLZ und Straße des Spenders</td></tr>
+    <tr valign="top"><td></td><td><code>plz_street</code></td><td>String</td><td>obligatorisch</td><td>PLZ und StraÃŸe des Spenders</td></tr>
     <tr valign="top"><td></td><td><code>name_ort</code></td><td>String</td><td>obligatorisch</td><td>Name und Ort des Einzahlers</td></tr>
-    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>Textschlüssel für Transaktionsart (default="<code>69</code>").</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>key</code></td><td>String</td><td>optional</td><td>TextschlÃ¼ssel fÃ¼r Transaktionsart (default="<code>69</code>").</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="uebforeign">Auslandsüberweisung</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine einfache Auslandsüberweisung in Auftrag gegeben werden.
-Darunter fallen alle Überweisungen in die meisten europäischen Länder, bei denen der
-zu überweisende Geldbetrag die gesetzliche Meldepflicht (zur Zeit 12500 EUR) nicht übersteigt.</p>
+<h3><a name="uebforeign">AuslandsÃ¼berweisung</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine einfache AuslandsÃ¼berweisung in Auftrag gegeben werden.
+Darunter fallen alle Ãœberweisungen in die meisten europÃ¤ischen LÃ¤nder, bei denen der
+zu Ã¼berweisende Geldbetrag die gesetzliche Meldepflicht (zur Zeit 12500 EUR) nicht Ã¼bersteigt.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>UebForeign</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
@@ -297,128 +297,128 @@ zu überweisende Geldbetrag die gesetzliche Meldepflicht (zur Zeit 12500 EUR) nic
     <tr valign="top"><td></td><td><code>src.name</code></td><td>String</td><td>obligatorisch</td><td>Name des Auftraggebers</td></tr>
     <tr valign="top"><td></td><td><code>dst</code></td><td>Konto</td><td>optional</td><td>Konto, auf dem der Betrag gutgeschrieben werden soll. 
                                                                                           Es ist entweder dieser Parameter oder die IBAN anzugeben.</td></tr>
-    <tr valign="top"><td></td><td><code>dst.iban</code></td><td>String</td><td>optional</td><td>Alternativ zur Kontoverbindung des Empfängers kann die IBAN des Zielkontos angegeben werden. 
+    <tr valign="top"><td></td><td><code>dst.iban</code></td><td>String</td><td>optional</td><td>Alternativ zur Kontoverbindung des EmpfÃ¤ngers kann die IBAN des Zielkontos angegeben werden. 
                                                                                           Es muss genau einer der beiden Parameter angegeben werden.</td></tr>
-    <tr valign="top"><td></td><td><code>dst.name</code></td><td>String</td><td>obligatorisch</td><td>Name des Empfängers ("Begünstigter").</td></tr>
-    <tr valign="top"><td></td><td><code>dst.kiname</code></td><td>String</td><td>obligatorisch</td><td>Vollständiger Name der Zielbank.</td></tr>
-    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der überwiesen werden soll.</td></tr>
+    <tr valign="top"><td></td><td><code>dst.name</code></td><td>String</td><td>obligatorisch</td><td>Name des EmpfÃ¤ngers ("BegÃ¼nstigter").</td></tr>
+    <tr valign="top"><td></td><td><code>dst.kiname</code></td><td>String</td><td>obligatorisch</td><td>VollstÃ¤ndiger Name der Zielbank.</td></tr>
+    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der Ã¼berwiesen werden soll.</td></tr>
     <tr valign="top"><td></td><td><code>usage</code></td><td>String</td><td>optional</td><td>Verwendungszweck</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="uebsepa">SEPA-Einzelüberweisung</a></h3>
-<p>Dabei handelt es sich um eine Überweisung nach dem SEPA-Standard (ein Projekt, bei dem ein
-europaweit einheitlicher Zahlungsraum angestrebt wird). Solche Überweisungen können als Ziel
-sowohl in- als auch ausländische Konten haben. Die normale Kombination von Kontonummer/BLZ wird
+<h3><a name="uebsepa">SEPA-EinzelÃ¼berweisung</a></h3>
+<p>Dabei handelt es sich um eine Ãœberweisung nach dem SEPA-Standard (ein Projekt, bei dem ein
+europaweit einheitlicher Zahlungsraum angestrebt wird). Solche Ãœberweisungen kÃ¶nnen als Ziel
+sowohl in- als auch auslÃ¤ndische Konten haben. Die normale Kombination von Kontonummer/BLZ wird
 ersetzt durch die weltweit eindeutige IBAN (entspricht Konto-Identifikation) und BIC 
-(Bankkennung). Derzeit (2009) werden SEPA-Geschäftsvorfälle nicht von allen Banken unterstützt.</p>
+(Bankkennung). Derzeit (2009) werden SEPA-GeschÃ¤ftsvorfÃ¤lle nicht von allen Banken unterstÃ¼tzt.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>UebSEPA</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>src</code></td><td>Konto</td><td>obligatorisch</td><td>Belastungskonto des Kunden. Entscheidend sind gesetzte Werte 
-                                                                                               für <code>bic</code>, <code>iban</code> und <code>name</code></td></tr>
+                                                                                               fÃ¼r <code>bic</code>, <code>iban</code> und <code>name</code></td></tr>
     <tr valign="top"><td></td><td><code>dst</code></td><td>Konto</td><td>obligatorisch</td><td>Konto, auf dem der Betrag gutgeschrieben werden soll. Entscheidend sind auch hier gesetzte Werte 
-                                                                                               für <code>bic</code>, <code>iban</code> und <code>name</code></td></tr>
-    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der überwiesen werden soll. Die Währung muss immer <code>EUR</code> sein</td></tr>
+                                                                                               fÃ¼r <code>bic</code>, <code>iban</code> und <code>name</code></td></tr>
+    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der Ã¼berwiesen werden soll. Die WÃ¤hrung muss immer <code>EUR</code> sein</td></tr>
     <tr valign="top"><td></td><td><code>usage</code></td><td>String</td><td>optional</td><td>Verwendungszweck (max. 140 Zeichen)</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="termueb">Terminierte Einzelüberweisung</a></h3>
-<p>Dabei handelt es sich um eine Einzelüberweisung, bei der zusätzlich das Datum
-angegeben wird, zu dem diese Überweisung ausgeführt werden soll. Das Datum darf in der Regel
+<h3><a name="termueb">Terminierte EinzelÃ¼berweisung</a></h3>
+<p>Dabei handelt es sich um eine EinzelÃ¼berweisung, bei der zusÃ¤tzlich das Datum
+angegeben wird, zu dem diese Ãœberweisung ausgefÃ¼hrt werden soll. Das Datum darf in der Regel
 nicht zu nah in der Zukunft liegen (meist mind. 2 Tage) und muss ein Werktag sein. Die
-Mindestvorlaufzeit zur Einreichung einer terminierten Überweisung ist aus den Job-Restriktionen
+Mindestvorlaufzeit zur Einreichung einer terminierten Ãœberweisung ist aus den Job-Restriktionen
 zu erfahren.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>TermUeb</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb"><code>Einzelüberweisung</code></a>, zusätzlich:</td><td></td></tr>
-    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>obligatorisch</td><td>Datum der geplanten Ausführung der Überweisung</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTermUeb.html"><code>GVRTermUeb</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#ueb"><code>EinzelÃ¼berweisung</code></a>, zusÃ¤tzlich:</td><td></td></tr>
+    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>obligatorisch</td><td>Datum der geplanten AusfÃ¼hrung der Ãœberweisung</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTermUeb.html"><code>GVRTermUeb</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="termueblist">Liste noch anstehender terminierten Überweisungen abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Liste aller noch anstehenden terminierten Überweisungen
+<h3><a name="termueblist">Liste noch anstehender terminierten Ãœberweisungen abholen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Liste aller noch anstehenden terminierten Ãœberweisungen
 abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>TermUebList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Kundenkonto, für das die Liste abgeholt werden soll; ist kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
-    <tr valign="top"><td></td><td><code>startdate</code></td><td>Date</td><td>optional</td><td>nur Aufträge abholen, die an oder nach diesem Datum ausgeführt werden sollen</td></tr>
-    <tr valign="top"><td></td><td><code>enddate</code></td><td>Date</td><td>optional</td><td>nur Aufträge abholen, die an oder vor diesem Datum ausgeführt werden sollen</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTermUebList.html"><code>GVRTermUebList</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Kundenkonto, fÃ¼r das die Liste abgeholt werden soll; ist kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
+    <tr valign="top"><td></td><td><code>startdate</code></td><td>Date</td><td>optional</td><td>nur AuftrÃ¤ge abholen, die an oder nach diesem Datum ausgefÃ¼hrt werden sollen</td></tr>
+    <tr valign="top"><td></td><td><code>enddate</code></td><td>Date</td><td>optional</td><td>nur AuftrÃ¤ge abholen, die an oder vor diesem Datum ausgefÃ¼hrt werden sollen</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTermUebList.html"><code>GVRTermUebList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="termuebedit">Noch anstehende terminierte Überweisung verändern</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine noch nicht ausgeführte terminierte Überweisung verändert
-werden. Aus den Job-Restriktionen ist ersichtlich, ob das überhaupt möglich ist und wenn ja, welche
-Parameter verändert werden dürfen. Für diesen Geschäftsvorfall wird die Auftrags-Identifikationsnummer (<code>orderid</code>)
-des zu bearbeitenden Auftrages benötigt.
-Es müssen nur die Parameter angegeben werden, die tatsächlich geändert werden sollen.
-Alle anderen Job-Parameter müssen nicht mit angegeben werden (sie werden automatisch
+<h3><a name="termuebedit">Noch anstehende terminierte Ãœberweisung verÃ¤ndern</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine noch nicht ausgefÃ¼hrte terminierte Ãœberweisung verÃ¤ndert
+werden. Aus den Job-Restriktionen ist ersichtlich, ob das Ã¼berhaupt mÃ¶glich ist und wenn ja, welche
+Parameter verÃ¤ndert werden dÃ¼rfen. FÃ¼r diesen GeschÃ¤ftsvorfall wird die Auftrags-Identifikationsnummer (<code>orderid</code>)
+des zu bearbeitenden Auftrages benÃ¶tigt.
+Es mÃ¼ssen nur die Parameter angegeben werden, die tatsÃ¤chlich geÃ¤ndert werden sollen.
+Alle anderen Job-Parameter mÃ¼ssen nicht mit angegeben werden (sie werden automatisch
 anhand der Order-ID ermittelt). Zur Benutzung von Order-IDs siehe entsprechenden Abschnitt
-in der Beschreibung zu <a href="#termuebdel"><code>Löschen einer terminierten Überweisung</code>.</a></p>
+in der Beschreibung zu <a href="#termuebdel"><code>LÃ¶schen einer terminierten Ãœberweisung</code>.</a></p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>TermUebEdit</code></td><td></td></tr>
-  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#termueb"><code>Terminierte Überweisung</code></a>, jedoch alles optional; zusätzlich:</td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td colspan="4">wie bei <a href="#termueb"><code>Terminierte Ãœberweisung</code></a>, jedoch alles optional; zusÃ¤tzlich:</td><td></td></tr>
     <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>obligatorisch</td><td>Die Auftragsidentifikationsnummer des zu bearbeitenden Auftrages.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTermUebEdit.html"><code>GVRTermUebEdit</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTermUebEdit.html"><code>GVRTermUebEdit</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="termuebdel">Noch anstehende terminierte Überweisung löschen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine noch nicht ausgeführte terminierte Überweisung gelöscht
-werden. Für diesen Geschäftsvorfall wird nur die Order-ID eines terminierten Überweisungsauftrages
-benötigt.</p> 
-<p>Order-IDs werden bei den Geschäftsvorfällen <a href="#termueb"><code>Einrichten einer terminierten Überweisung</code></a>,
-<a href="#termuebedit"><code>Ändern einer terminierten Überweisung</code></a> sowie <a href="#termueblist"><code>Abrufen des Bestandes terminierter
-Überweisungen</code></a> zurückgegeben. Auch wenn die entsprechenden Order-IDs bereits offline bekannt sind
-(z.B. aus früheren HBCI-Dialogen), so muss erst ein Auftrag ausgeführt werden, der die Order-ID
-für den zu löschenden Auftrag tatsächlich zurückgibt (also in der Regel ein <code>Abrufen des Bestandes...</code>).
-Der Grund ist der, dass <em>HBCI4Java</em> zusätzlich benötigte Auftragsdaten intern
+<h3><a name="termuebdel">Noch anstehende terminierte Ãœberweisung lÃ¶schen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine noch nicht ausgefÃ¼hrte terminierte Ãœberweisung gelÃ¶scht
+werden. FÃ¼r diesen GeschÃ¤ftsvorfall wird nur die Order-ID eines terminierten Ãœberweisungsauftrages
+benÃ¶tigt.</p> 
+<p>Order-IDs werden bei den GeschÃ¤ftsvorfÃ¤llen <a href="#termueb"><code>Einrichten einer terminierten Ãœberweisung</code></a>,
+<a href="#termuebedit"><code>Ã„ndern einer terminierten Ãœberweisung</code></a> sowie <a href="#termueblist"><code>Abrufen des Bestandes terminierter
+Ãœberweisungen</code></a> zurÃ¼ckgegeben. Auch wenn die entsprechenden Order-IDs bereits offline bekannt sind
+(z.B. aus frÃ¼heren HBCI-Dialogen), so muss erst ein Auftrag ausgefÃ¼hrt werden, der die Order-ID
+fÃ¼r den zu lÃ¶schenden Auftrag tatsÃ¤chlich zurÃ¼ckgibt (also in der Regel ein <code>Abrufen des Bestandes...</code>).
+Der Grund ist der, dass <em>HBCI4Java</em> zusÃ¤tzlich benÃ¶tigte Auftragsdaten intern
 zwischenspeichert und gegebenenfalls benutzt. Diese Zwischenspeicherung ist aber an
 ein konkretes <code>HBCIPassport</code>-Objekt gebunden, weshalb die Verwendung von
-Order-IDs, welche nicht zur Laufzeit erzeugt wurden, zu einer Exception führt.</p>
+Order-IDs, welche nicht zur Laufzeit erzeugt wurden, zu einer Exception fÃ¼hrt.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>TermUebDel</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>obligatorisch</td><td>Die Auftragsidentifikationsnummer des zu löschenden Auftrages.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>orderid</code></td><td>String</td><td>obligatorisch</td><td>Die Auftragsidentifikationsnummer des zu lÃ¶schenden Auftrages.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="multiueb">Sammelüberweisung einreichen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann ein Sammelüberweisungsauftrag eingereicht werden.
-Die Daten müssen dabei bereits im DTAUS-Format vorliegen. Für die Erzeugung von DTAUS-Datensätzen
+<h3><a name="multiueb">SammelÃ¼berweisung einreichen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann ein SammelÃ¼berweisungsauftrag eingereicht werden.
+Die Daten mÃ¼ssen dabei bereits im DTAUS-Format vorliegen. FÃ¼r die Erzeugung von DTAUS-DatensÃ¤tzen
 kann die Klasse <a href="../swift/DTAUS.html">DTAUS</a> benutzt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>MultiUeb</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Kontoverbindung des Auftraggebers</td></tr>
-    <tr valign="top"><td></td><td><code>data</code></td><td>String</td><td>obligatorisch</td><td>DTAUS-Daten mit den Überweisungsinformationen</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>data</code></td><td>String</td><td>obligatorisch</td><td>DTAUS-Daten mit den Ãœberweisungsinformationen</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="multilast">Sammellastschrift einreichen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann ein Sammellastschriftauftrag eingereicht werden.
-Die Daten müssen dazu bereits im DTAUS-Format vorliegen. Für die Erzeugung von DTAUS-Datensätzen
+<p>Mit diesem GeschÃ¤ftsvorfall kann ein Sammellastschriftauftrag eingereicht werden.
+Die Daten mÃ¼ssen dazu bereits im DTAUS-Format vorliegen. FÃ¼r die Erzeugung von DTAUS-DatensÃ¤tzen
 kann die Klasse <a href="../swift/DTAUS.html">DTAUS</a> benutzt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>MultiLast</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Kontoverbindung des Auftraggebers</td></tr>
-    <tr valign="top"><td></td><td><code>data</code></td><td>String</td><td>obligatorisch</td><td>DTAUS-Daten mit den Überweisungsinformationen</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>data</code></td><td>String</td><td>obligatorisch</td><td>DTAUS-Daten mit den Ãœberweisungsinformationen</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="last">Einzellastschrift einreichen</a></h3>
-<p>Mit diesem Geschäftsvorfall wird ein einzelner Auftrag zum Lastschrifteinzug eingereicht.</p>
+<p>Mit diesem GeschÃ¤ftsvorfall wird ein einzelner Auftrag zum Lastschrifteinzug eingereicht.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>Last</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
@@ -427,223 +427,223 @@ kann die Klasse <a href="../swift/DTAUS.html">DTAUS</a> benutzt werden.</p>
     <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Geldbetrag, der eingezogen werden soll.</td></tr>
     <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des Zahlungspflichtigen</td></tr>
     <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des Zahlungspflichtigen.</td></tr>
-    <tr valign="top"><td></td><td><code>type</code></td><td>String</td><td>optional</td><td>Typ der Lastschrift. Defaultmäßig wird hier "05" verwendet, es ist auch der Code "04" zulässig.</td></tr>
+    <tr valign="top"><td></td><td><code>type</code></td><td>String</td><td>optional</td><td>Typ der Lastschrift. DefaultmÃ¤ÃŸig wird hier "05" verwendet, es ist auch der Code "04" zulÃ¤ssig.</td></tr>
     <tr valign="top"><td></td><td><code>usage,<br/>usage_2,<br/>usage_3,...</code></td><td>String</td><td>optional</td><td>Verwendungszweckzeilen</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="stornolast">Lastschriftwiderruf</a></h3>
-<p>Damit kann eine Lastschrift, mit der das eigene Konto belastet wurde, "zurückgegeben" werden.</p>
+<p>Damit kann eine Lastschrift, mit der das eigene Konto belastet wurde, "zurÃ¼ckgegeben" werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>StornoLast</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Konto des Bankkunden</td></tr>
-    <tr valign="top"><td></td><td><code>other</code></td><td>Konto</td><td>obligatorisch</td><td>Gegenkonto, dem die ursprüngliche Lastschrift gutgeschrieben wurde</td></tr>
-    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Betrag der ursprünglichen Lastschrift</td></tr>
-    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>obligatorisch</td><td>Datum des ursprünglichen Lastschriftauftrages</td></tr>
-    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des Auftraggebers der ursprünglichen Lastschrift</td></tr>
+    <tr valign="top"><td></td><td><code>other</code></td><td>Konto</td><td>obligatorisch</td><td>Gegenkonto, dem die ursprÃ¼ngliche Lastschrift gutgeschrieben wurde</td></tr>
+    <tr valign="top"><td></td><td><code>btg</code></td><td>Value</td><td>obligatorisch</td><td>Betrag der ursprÃ¼nglichen Lastschrift</td></tr>
+    <tr valign="top"><td></td><td><code>date</code></td><td>Date</td><td>obligatorisch</td><td>Datum des ursprÃ¼nglichen Lastschriftauftrages</td></tr>
+    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>obligatorisch</td><td>Name des Auftraggebers der ursprÃ¼nglichen Lastschrift</td></tr>
     <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des Auftraggebers.</td></tr>
-    <tr valign="top"><td></td><td><code>primanota</code></td><td>String</td><td>optional</td><td>Primanota-Nummer der ursprünglichen Lastschrift</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>primanota</code></td><td>String</td><td>optional</td><td>Primanota-Nummer der ursprÃ¼nglichen Lastschrift</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="kumsall">Kontoumsätze anzeigen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Übersicht über die Kontoumsatzdaten
+<h3><a name="kumsall">KontoumsÃ¤tze anzeigen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Ãœbersicht Ã¼ber die Kontoumsatzdaten
 eines Kontos abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>KUmsAll</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Das Konto, für das Umsatzinformationen abgeholt werden sollen. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Das Konto, fÃ¼r das Umsatzinformationen abgeholt werden sollen. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
     <tr valign="top"><td></td><td><code>startdate</code></td><td>Date</td><td>optional</td><td>Nur Umsatzdaten abholen, die an oder nach diesem Datum gebucht wurden</td></tr>
     <tr valign="top"><td></td><td><code>enddate</code></td><td>Date</td><td>optional</td><td>Nur Umsatzdaten abholen, die an oder vor diesem Datum gebucht wurden</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRKUms.html"><code>GVRKUms</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRKUms.html"><code>GVRKUms</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="kumsnew">Neue Kontoumsätze anzeigen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Übersicht über die Kontoumsatzdaten
-eines Kontos abgeholt werden. Dabei werden nur die Umsatzdaten zurückgegeben, die
-seit dem letzten Aufruf dieses Geschäftsvorfalles neu hinzugekommen sind.</p>
+<h3><a name="kumsnew">Neue KontoumsÃ¤tze anzeigen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Ãœbersicht Ã¼ber die Kontoumsatzdaten
+eines Kontos abgeholt werden. Dabei werden nur die Umsatzdaten zurÃ¼ckgegeben, die
+seit dem letzten Aufruf dieses GeschÃ¤ftsvorfalles neu hinzugekommen sind.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>KUmsNew</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Das Konto, für das Umsatzinformationen abgeholt werden sollen. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRKUms.html"><code>GVRKUms</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Das Konto, fÃ¼r das Umsatzinformationen abgeholt werden sollen. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRKUms.html"><code>GVRKUms</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="saldoreq">Saldoabfrage eines Kontos</a></h3>
-<p>Mit diesem Geschäftsvorfall wird der Saldo eines Kundenkontos abgefragt.</p>
+<p>Mit diesem GeschÃ¤ftsvorfall wird der Saldo eines Kundenkontos abgefragt.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>SaldoReq</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Das Konto, für das der Saldo ermittelt werden soll. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRSaldoReq.html"><code>GVRSaldoReq</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Das Konto, fÃ¼r das der Saldo ermittelt werden soll. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRSaldoReq.html"><code>GVRSaldoReq</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="saldoreqall">Saldenabfrage <em>aller</em> Kundenkonten</a></h3>
-<p>Mit diesem Geschäftsvorfall werden die Salden <em>aller</em> Kundenkonten abgefragt.</p>
+<p>Mit diesem GeschÃ¤ftsvorfall werden die Salden <em>aller</em> Kundenkonten abgefragt.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>SaldoReqAll</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Ein Kundenkonto. Wird hier kein Konto angegeben, so wird das erste Konto aus den UPD verwendet.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRSaldoReq.html"><code>GVRSaldoReq</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRSaldoReq.html"><code>GVRSaldoReq</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="saldoreqsepa">Saldoabfrage eines SEPA-Kontos</a></h3>
-<p>Mit diesem Geschäftsvorfall kann der Saldo eines SEPA-fähigen Kontos abgefragt werden.</p>
+<p>Mit diesem GeschÃ¤ftsvorfall kann der Saldo eines SEPA-fÃ¤higen Kontos abgefragt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>SaldoReqSEPA</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Das Konto, für das der Saldo ermittelt werden soll. Bei diesem Konto müssen mindestens BIC und IBAN gesetzt sein, abhängig von der Bank evtl. zusätzlich auch die Kontowährung.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRSaldoReq.html"><code>GVRSaldoReq</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Das Konto, fÃ¼r das der Saldo ermittelt werden soll. Bei diesem Konto mÃ¼ssen mindestens BIC und IBAN gesetzt sein, abhÃ¤ngig von der Bank evtl. zusÃ¤tzlich auch die KontowÃ¤hrung.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRSaldoReq.html"><code>GVRSaldoReq</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="festcondlist">Festgeldkonditionen abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall können die aktuell gültigen Konditionen für Festgeldanlagen
+<p>Mit diesem GeschÃ¤ftsvorfall kÃ¶nnen die aktuell gÃ¼ltigen Konditionen fÃ¼r Festgeldanlagen
 vom Kreditinstitut abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>FestCondList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>curr</code></td><td>String</td><td>obligatorisch</td><td>Die Währung, in der die Festgeldanlagen geführt werden sollen ("EUR").</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRFestCondList.html"><code>GVRFestCondList</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>curr</code></td><td>String</td><td>obligatorisch</td><td>Die WÃ¤hrung, in der die Festgeldanlagen gefÃ¼hrt werden sollen ("EUR").</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRFestCondList.html"><code>GVRFestCondList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="festlist">Liste bestehender Festgeldanlagen abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Übersicht über bestehende Festgeldanlagen zu einem
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Ãœbersicht Ã¼ber bestehende Festgeldanlagen zu einem
 bestimmten Anlagekonto abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>FestList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Festgeld-Anlagekonto, für dessen Festgeldanlagen Informationen abgeholt werden sollen.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRFestList.html"><code>GVRFestList</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Festgeld-Anlagekonto, fÃ¼r dessen Festgeldanlagen Informationen abgeholt werden sollen.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRFestList.html"><code>GVRFestList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="festlistall">Liste <em>aller</em> bestehender Festgeldanlagen abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Übersicht über <em>alle</em> bestehende Festgeldanlagen
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Ãœbersicht Ã¼ber <em>alle</em> bestehende Festgeldanlagen
 abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>FestListAll</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>optional</td><td>Kontoverbindung eines existierenden Anlagekontos oder eines "normalen" Kontos.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRFestList.html"><code>GVRFestList</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRFestList.html"><code>GVRFestList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="accinfo">Kontostammdaten abholen</a></h3>
-<p>Dieser Geschäftsvorfall ermöglicht das Abholen von Kontostammdaten. Er ist erst ab
-HBCI 2.2 spezifiziert, wird aber unter Umständen von einigen Banken bereits in früheren
+<p>Dieser GeschÃ¤ftsvorfall ermÃ¶glicht das Abholen von Kontostammdaten. Er ist erst ab
+HBCI 2.2 spezifiziert, wird aber unter UmstÃ¤nden von einigen Banken bereits in frÃ¼heren
 HBCI-Versionen angeboten.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>AccInfo</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Kontoverbindung, für die Stammdaten ermittelt werden sollen.</td></tr>
-    <tr valign="top"><td></td><td><code>all</code></td><td>J oder N</td><td>optional</td><td>J, wenn für alle verfügbaren Konten die Daten abgeholt werden sollen, sonst N (default)</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRAccInfo.html"><code>GVRAccInfo</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Kontoverbindung, fÃ¼r die Stammdaten ermittelt werden sollen.</td></tr>
+    <tr valign="top"><td></td><td><code>all</code></td><td>J oder N</td><td>optional</td><td>J, wenn fÃ¼r alle verfÃ¼gbaren Konten die Daten abgeholt werden sollen, sonst N (default)</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRAccInfo.html"><code>GVRAccInfo</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="cardlist">Karteninformationen abholen</a></h3>
-<p>Dieser Geschäftsvorfall ermöglicht es, Informationen zu den von der Bank
-ausgegebenen Karten abzuholen. Das wird u.U. benötigt, wenn eine Karte nach
-Verlust gesperrt werden soll, die dafür notwendigen Kartendaten aber nicht mehr
-bekannt sind. Dieser Geschäftsvorfall ist erst ab
-HBCI 2.2 spezifiziert, wird aber unter Umständen von einigen Banken bereits in früheren
+<p>Dieser GeschÃ¤ftsvorfall ermÃ¶glicht es, Informationen zu den von der Bank
+ausgegebenen Karten abzuholen. Das wird u.U. benÃ¶tigt, wenn eine Karte nach
+Verlust gesperrt werden soll, die dafÃ¼r notwendigen Kartendaten aber nicht mehr
+bekannt sind. Dieser GeschÃ¤ftsvorfall ist erst ab
+HBCI 2.2 spezifiziert, wird aber unter UmstÃ¤nden von einigen Banken bereits in frÃ¼heren
 HBCI-Versionen angeboten.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>CardList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Kontoverbindung des Karteninhabers</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRCardList.html"><code>GVRCardList</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRCardList.html"><code>GVRCardList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="infolist">Übersicht über Kreditinstitutsinformationen abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall kann eine Übersicht über die vom Kreditinstitut bereitgestellten
-Informationen abgeholt werden. Mit einem weiteren Geschäftsvorfall können dann die Informationen
+<h3><a name="infolist">Ãœbersicht Ã¼ber Kreditinstitutsinformationen abholen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kann eine Ãœbersicht Ã¼ber die vom Kreditinstitut bereitgestellten
+Informationen abgeholt werden. Mit einem weiteren GeschÃ¤ftsvorfall kÃ¶nnen dann die Informationen
 selbst bestellt bzw. abgeholt werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>InfoList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRInfoList.html"><code>GVRInfoList</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRInfoList.html"><code>GVRInfoList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
 <h3><a name="infoorder">Bestellen bzw. Abholen von Kreditinstitutsinformationen</a></h3>
-<p>Mit diesem Geschäftsvorfall können bestimmte Kreditinstitutsinformationen angefordert werden.
-Die dafür benötigten Codes für die jeweiligen Informationen können mit dem Geschäftsvorfall
+<p>Mit diesem GeschÃ¤ftsvorfall kÃ¶nnen bestimmte Kreditinstitutsinformationen angefordert werden.
+Die dafÃ¼r benÃ¶tigten Codes fÃ¼r die jeweiligen Informationen kÃ¶nnen mit dem GeschÃ¤ftsvorfall
 <a href="#infolist"><code>InfoList</code></a> ermittelt werden. Werden Freitextinformationen
-angefordert, so werden diese direkt in der Antwortnachricht übermittelt, ansonsten wird durch
-diesen Geschäftsvorfall eine Bestellung der Informationen ausgelöst, die dann anderweitig
+angefordert, so werden diese direkt in der Antwortnachricht Ã¼bermittelt, ansonsten wird durch
+diesen GeschÃ¤ftsvorfall eine Bestellung der Informationen ausgelÃ¶st, die dann anderweitig
 zugestellt werden (per Post).</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>InfoOrder</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>code,<br/>code_2,<br/>code_3,...</code></td><td>String</td><td>obligatorisch</td><td>Es muss mindestens einer der Informationscodes aus dem GV "<code>InfoList</code>" angegeben werden.</td></tr>
-    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>optional</td><td>Name des Kunden, wird für die schriftliche Zustellung benötigt (wie auch alle folgenden Parameter)</td></tr>
+    <tr valign="top"><td></td><td><code>name</code></td><td>String</td><td>optional</td><td>Name des Kunden, wird fÃ¼r die schriftliche Zustellung benÃ¶tigt (wie auch alle folgenden Parameter)</td></tr>
     <tr valign="top"><td></td><td><code>name2</code></td><td>String</td><td>optional</td><td>Fortsetzung Name des Kunden</td></tr>
     <tr valign="top"><td></td><td><code>street</code></td><td>String</td><td>optional</td><td>Strasse der Lieferanschrift</td></tr>
     <tr valign="top"><td></td><td><code>ort</code></td><td>String</td><td>optional</td><td>Ort der Lieferanschrift</td></tr>
     <tr valign="top"><td></td><td><code>plz</code></td><td>String</td><td>optional</td><td>PLZ der Lieferanschrift</td></tr>
-    <tr valign="top"><td></td><td><code>country</code></td><td>String</td><td>optional</td><td>Ländercode der Lieferanschrift ("DE")</td></tr>
-    <tr valign="top"><td></td><td><code>tel</code></td><td>String</td><td>optional</td><td>Telefonnumer für Rückfragen</td></tr>
+    <tr valign="top"><td></td><td><code>country</code></td><td>String</td><td>optional</td><td>LÃ¤ndercode der Lieferanschrift ("DE")</td></tr>
+    <tr valign="top"><td></td><td><code>tel</code></td><td>String</td><td>optional</td><td>Telefonnumer fÃ¼r RÃ¼ckfragen</td></tr>
     <tr valign="top"><td></td><td><code>fax</code></td><td>String</td><td>optional</td><td>Telefaxnummer des Kunden</td></tr>
     <tr valign="top"><td></td><td><code>email</code></td><td>String</td><td>optional</td><td>Email-Adresse des Kunden</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRInfoOrder.html"><code>GVRInfoOrder</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRInfoOrder.html"><code>GVRInfoOrder</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="status">Statusinformationen zu Geschäftsvorfällen abholen</a></h3>
-<p>Mit diesem Geschäftsvorfall können zu allen bisher via HBCI eingereichten Aufträgen
+<h3><a name="status">Statusinformationen zu GeschÃ¤ftsvorfÃ¤llen abholen</a></h3>
+<p>Mit diesem GeschÃ¤ftsvorfall kÃ¶nnen zu allen bisher via HBCI eingereichten AuftrÃ¤gen
 Statusinformationen abgeholt werden. Diese enthalten i.d.R. den Returncode, den das Einreichen
-des entsprechenden Auftrages erzeugt hat, bzw. eine Information über den gegenwärtigen
+des entsprechenden Auftrages erzeugt hat, bzw. eine Information Ã¼ber den gegenwÃ¤rtigen
 Status der Verarbeitung.</p>
-<p>Nach dem Ausführen eines beliebigen Geschäftsvorfalles gibt die Methode
-<a href="../GV_Result/HBCIJobResult.html#getJobId()"><code>HBCIJob.getJobResult().getJobId()</code></a> eine ID zurück,
+<p>Nach dem AusfÃ¼hren eines beliebigen GeschÃ¤ftsvorfalles gibt die Methode
+<a href="../GV_Result/HBCIJobResult.html#getJobId()"><code>HBCIJob.getJobResult().getJobId()</code></a> eine ID zurÃ¼ck,
 die diesen Job eindeutig kennzeichnet. Diese ID kann dann zur Identifikation der entsprechenden
 Status-Daten aus dem Status-Protokoll benutzt werden (siehe dazu die Dokumentation der Klasse
 <a href="../GV_Result/GVRStatus.html"><code>GVRStatus</code></a>).</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>Status</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-    <tr valign="top"><td></td><td><code>startdate</code></td><td>Date</td><td>optional</td><td>Nur Statusprotokolleinträge zurückgebenm die an oder nach diesem Datum erzeugt wurden</td></tr>
-    <tr valign="top"><td></td><td><code>enddate</code></td><td>Date</td><td>optional</td><td>Nur Statusprotokolleinträge zurückgebenm die an oder vor diesem Datum erzeugt wurden</td></tr>
-    <tr valign="top"><td></td><td><code>jobid</code></td><td>String</td><td>optional</td><td>alternativ zu den beiden <code>Date</code>-Parametern kann eine Job-Id angegeben werden, für die Statusinformationen benötigt werden. Es werden dann intern automatisch die richtigen Parameterwerte für <code>startdate</code> und <code>enddate</code> erzeugt und gesetzt.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRStatus.html"><code>GVRStatus</code></a></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>startdate</code></td><td>Date</td><td>optional</td><td>Nur StatusprotokolleintrÃ¤ge zurÃ¼ckgebenm die an oder nach diesem Datum erzeugt wurden</td></tr>
+    <tr valign="top"><td></td><td><code>enddate</code></td><td>Date</td><td>optional</td><td>Nur StatusprotokolleintrÃ¤ge zurÃ¼ckgebenm die an oder vor diesem Datum erzeugt wurden</td></tr>
+    <tr valign="top"><td></td><td><code>jobid</code></td><td>String</td><td>optional</td><td>alternativ zu den beiden <code>Date</code>-Parametern kann eine Job-Id angegeben werden, fÃ¼r die Statusinformationen benÃ¶tigt werden. Es werden dann intern automatisch die richtigen Parameterwerte fÃ¼r <code>startdate</code> und <code>enddate</code> erzeugt und gesetzt.</td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRStatus.html"><code>GVRStatus</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="tanlist">Abholen von Informationen über TAN-Listen</a></h3>
-<p>Dieser Geschäftsvorfall macht nur bei Verwendung von PIN/TAN-Passports Sinn. Damit können
-Informationen zu aktuellen TAN-Listen abgeholt werden. Mit diesem Geschäftsvorfall können
-<em>keine</em> neuen TAN-Listen bestellt werden, es ist auch nicht möglich, mit diesem
-Geschäftsvorfall die Menge der noch nicht verbrauchten TANs zu ermitteln.</p>
+<h3><a name="tanlist">Abholen von Informationen Ã¼ber TAN-Listen</a></h3>
+<p>Dieser GeschÃ¤ftsvorfall macht nur bei Verwendung von PIN/TAN-Passports Sinn. Damit kÃ¶nnen
+Informationen zu aktuellen TAN-Listen abgeholt werden. Mit diesem GeschÃ¤ftsvorfall kÃ¶nnen
+<em>keine</em> neuen TAN-Listen bestellt werden, es ist auch nicht mÃ¶glich, mit diesem
+GeschÃ¤ftsvorfall die Menge der noch nicht verbrauchten TANs zu ermitteln.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>TANList</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTANList.html"><code>GVRTANList</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRTANList.html"><code>GVRTANList</code></a></td><td></td></tr>
 </table>
 
 <hr size="1" noshade="noshade"/>
-<h3><a name="changepin">Ändern der PIN für HBCI-PIN/TAN</a></h3>
-<p>Dieser Geschäftsvorfall macht nur bei Verwendung von PIN/TAN-Passports Sinn. Damit
-kann die aktuelle PIN für HBCI-PIN/TAN auf einen neuen Wert geändert werden.<br />
-Aus Sicherheitsgründen wird die neue PIN nicht automatisch verwendet. Das heißt, sobald
+<h3><a name="changepin">Ã„ndern der PIN fÃ¼r HBCI-PIN/TAN</a></h3>
+<p>Dieser GeschÃ¤ftsvorfall macht nur bei Verwendung von PIN/TAN-Passports Sinn. Damit
+kann die aktuelle PIN fÃ¼r HBCI-PIN/TAN auf einen neuen Wert geÃ¤ndert werden.<br />
+Aus SicherheitsgrÃ¼nden wird die neue PIN nicht automatisch verwendet. Das heiÃŸt, sobald
 dieser GV erfolgreich bei der Bank eingereicht wurde und das OK empfangen wurde,
-muss für die nachfolgende Nachricht (Dialog-Ende) die neue PIN explizit eingegeben
+muss fÃ¼r die nachfolgende Nachricht (Dialog-Ende) die neue PIN explizit eingegeben
 werden.</p>
 <table cellpadding="3">
   <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>ChangePIN</code></td><td></td></tr>
   <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
     <tr valign="top"><td></td><td><code>newpin</code></td><td>String</td><td></td><td>Die neue PIN.</td></tr>
-  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
+  <tr valign="top"><td><em>RÃ¼ckgabedaten-Klasse</em></td><td><a href="../GV_Result/HBCIJobResult.html"><code>HBCIJobResult</code></a></td><td></td></tr>
 </table>
 
 </body></html>

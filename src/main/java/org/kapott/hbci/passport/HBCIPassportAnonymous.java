@@ -52,28 +52,28 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/** <p>Passport-Implementation für anonyme Zugänge. Bei dieser Passport-Variante
+/** <p>Passport-Implementation fÃ¼r anonyme ZugÃ¤nge. Bei dieser Passport-Variante
     handelt es sich nicht um einen "echten" HBCI-Zugang. Statt dessen handelt
     es sich hierbei um einen anonymen Zugang, wie er von einigen wenigen
     Banken angeboten wird. Bei einem anonymen Zugang werden die Nachrichten
     nicht kryptographisch gesichert (also keine Signaturen und keine
-    Verschlüsselung). Aus diesem Grund können mit diesem Zugang maximal
-    die Geschäftsvorfälle abgewickelt werden, die keine Signatur benötigten
+    VerschlÃ¼sselung). Aus diesem Grund kÃ¶nnen mit diesem Zugang maximal
+    die GeschÃ¤ftsvorfÃ¤lle abgewickelt werden, die keine Signatur benÃ¶tigten
     (z.B. Gastmeldung an Bank senden).</p>
     <p>Beim Einrichten eines solchen Passport-Objektes werden also keine
     Nutzer- bzw. Kunden-Kennungen abgefragt (diese sind automatisch auf die Kennungen
-    für den anonymen Zugang eingestellt). Außerdem findet keine Synchronisierung
-    der Schlüssel zwischen Bank und Kunde statt, da bei dieser Zugangsform
-    keine Schlüssel verwendet werden.</p>
+    fÃ¼r den anonymen Zugang eingestellt). AuÃŸerdem findet keine Synchronisierung
+    der SchlÃ¼ssel zwischen Bank und Kunde statt, da bei dieser Zugangsform
+    keine SchlÃ¼ssel verwendet werden.</p>
     <p>Eine HBCI-Anwendung kann ein Anonymous-Passport genauso verwenden wie
-    ein "normales" Passport. Alle Abweichungen, die bei der Durchführung
-    anonymer Dialoge zu beachten sind, werden völlig transparent von <em>HBCI4Java</em>
+    ein "normales" Passport. Alle Abweichungen, die bei der DurchfÃ¼hrung
+    anonymer Dialoge zu beachten sind, werden vÃ¶llig transparent von <em>HBCI4Java</em>
     umgesetzt.</p>
-    <p>Gegenwärtig können mit Anonymous-Passports noch keine anonymen Geschäftsvorfälle
-    ausgelöst werden. Diese Passport-Variante kann also nur für einen "leeren" 
+    <p>GegenwÃ¤rtig kÃ¶nnen mit Anonymous-Passports noch keine anonymen GeschÃ¤ftsvorfÃ¤lle
+    ausgelÃ¶st werden. Diese Passport-Variante kann also nur fÃ¼r einen "leeren" 
     HBCI-Dialog verwendet werden, der aus (anonymer) Dialog-Initialisierung und
-    (anonymem) Dialog-Ende besteht. Damit kann zumindest die Verfügbarkeit des
-    HBCI-Servers bzw. von anonymen Zugängen überprüft werden.</p>*/
+    (anonymem) Dialog-Ende besteht. Damit kann zumindest die VerfÃ¼gbarkeit des
+    HBCI-Servers bzw. von anonymen ZugÃ¤ngen Ã¼berprÃ¼ft werden.</p>*/
 public class HBCIPassportAnonymous 
     extends AbstractHBCIPassport
 {

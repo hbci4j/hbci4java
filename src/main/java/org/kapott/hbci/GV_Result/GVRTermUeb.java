@@ -23,9 +23,9 @@ package org.kapott.hbci.GV_Result;
 
 
 
-/** Rückgabedaten für das Einreichen einer terminierten Überweisung. Beim Einreichen
-    einer terminierten Überweisung gibt die Bank u.U. eine Auftrags-Identifikationsnummer
-    zurück, die benutzt werden kann, um den Auftrag später zu ändern oder zu löschen. */
+/** RÃ¼ckgabedaten fÃ¼r das Einreichen einer terminierten Ãœberweisung. Beim Einreichen
+    einer terminierten Ãœberweisung gibt die Bank u.U. eine Auftrags-Identifikationsnummer
+    zurÃ¼ck, die benutzt werden kann, um den Auftrag spÃ¤ter zu Ã¤ndern oder zu lÃ¶schen. */
 public class GVRTermUeb
     extends HBCIJobResultImpl
 {
@@ -36,8 +36,8 @@ public class GVRTermUeb
         this.orderid=orderid;
     }
 
-    /** Gibt die Auftrags-ID zurück, unter der der Auftrag bei der Bank geführt wird. 
-        @return die Auftrags-ID oder <code>null</code>, wenn die Bank keine Auftrags-IDs unterstützt */
+    /** Gibt die Auftrags-ID zurÃ¼ck, unter der der Auftrag bei der Bank gefÃ¼hrt wird. 
+        @return die Auftrags-ID oder <code>null</code>, wenn die Bank keine Auftrags-IDs unterstÃ¼tzt */
     public String getOrderId()
     {
         return orderid;

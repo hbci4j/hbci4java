@@ -2,23 +2,23 @@
 Allgemeines
 -----------
 
-Die Passport-Variante SIZRDHFile kann benutzt werden, um Schlüsseldateien,
+Die Passport-Variante SIZRDHFile kann benutzt werden, um SchlÃ¼sseldateien,
 die von anderer HBCI-Software erzeugt wurden, mit HBCI4Java zu benutzen.
-Dabei wird zur Zeit Software unterstützt, welche auf dem SIZ-HBCI-Kernel
+Dabei wird zur Zeit Software unterstÃ¼tzt, welche auf dem SIZ-HBCI-Kernel
 basiert. Bisher wurden erfolgreich Dateien von StarMoney und GENOlite
 eingelesen, es ist aber sehr wahrscheinlich, dass es noch mehr Software gibt,
-mit der es funktioniert. Wenn jemand Schlüsseldisketten anderer Software
-außer der o.g. erfolgreich benutzen kann, bitte eine kurze Mitteilung an mich.
+mit der es funktioniert. Wenn jemand SchlÃ¼sseldisketten anderer Software
+auÃŸer der o.g. erfolgreich benutzen kann, bitte eine kurze Mitteilung an mich.
 
 
 Installation
 ------------
 
-Für die Verwendung dieser Passport-Klasse muss von 
+FÃ¼r die Verwendung dieser Passport-Klasse muss von 
 http://hbci4java.kapott.org#download die SIZ-RDH-Bibliothek heruntergeladen
-und installiert werden. Die in diesem Paket enthaltene Bibliothek für die 
+und installiert werden. Die in diesem Paket enthaltene Bibliothek fÃ¼r die 
 jeweilige Plattform wird in ein beliebiges Verzeichnis kopiert.
-Der vollständige Dateiname (mit Pfadangabe) dieser Bibliothek muss
+Der vollstÃ¤ndige Dateiname (mit Pfadangabe) dieser Bibliothek muss
 vor der Initialisierung des SIZRDHFile-Passports im HBCI-Parameter
 client.passport.SIZRDHFile.libname angegeben werden.
 
@@ -26,59 +26,59 @@ client.passport.SIZRDHFile.libname angegeben werden.
 Verwendung
 ----------
 
-Möglichkeit 1)
-  SIZRDHFile-Passports sind dazu gedacht, Schlüsseldateien anderer HBCI-Software
+MÃ¶glichkeit 1)
+  SIZRDHFile-Passports sind dazu gedacht, SchlÃ¼sseldateien anderer HBCI-Software
   *parallel* zu dieser Software mit HBCI4Java zu benutzen. Das heisst, dass
-  HBCI4Java Daten aus der Schlüsseldatei liest und auch wieder hineinschreibt.
+  HBCI4Java Daten aus der SchlÃ¼sseldatei liest und auch wieder hineinschreibt.
   Dieser Vorgang ist relativ kritisch, weil einige Softwareprodukte neben
-  den mir bekannten Daten möglicherweise zusätzliche Informationen in der
-  Schlüsseldatei ablegen, die durch den HBCI4Java-Schreibvorgang überschrieben
-  oder ungültig gemacht werden könnten. Dieses Vorgehen hat aber den Vorteil,
-  dass ein und die selbe Schlüsseldatei sowohl mit HBCI4Java als auch
+  den mir bekannten Daten mÃ¶glicherweise zusÃ¤tzliche Informationen in der
+  SchlÃ¼sseldatei ablegen, die durch den HBCI4Java-Schreibvorgang Ã¼berschrieben
+  oder ungÃ¼ltig gemacht werden kÃ¶nnten. Dieses Vorgehen hat aber den Vorteil,
+  dass ein und die selbe SchlÃ¼sseldatei sowohl mit HBCI4Java als auch
   mit der anderen Software verwendet werden kann, ohne dass irgendwelche
-  manuellen Konvertierungen nötig wären.
+  manuellen Konvertierungen nÃ¶tig wÃ¤ren.
 
 
-Möglichkeit 2)
-  Soll jedoch eine existierende SIZ-RDH-Schlüsseldatei *nur noch* mit HBCI4Java
+MÃ¶glichkeit 2)
+  Soll jedoch eine existierende SIZ-RDH-SchlÃ¼sseldatei *nur noch* mit HBCI4Java
   benutzt werden, so ist eine Konvertierung dieser Datei in das RDHNew-Dateiformat
   zu empfehlen. Dazu kann entweder das Tool org.kapott.hbci.tools.ConvertSIZRDHPassport
-  (ist in HBCI4Java enthalten) oder der separat erhältliche HBCI4Java Passport Editor
-  verwendet werden. Die Konvertierung von RDHNew-Dateien in SIZ-RDH-Schlüsseldateien
+  (ist in HBCI4Java enthalten) oder der separat erhÃ¤ltliche HBCI4Java Passport Editor
+  verwendet werden. Die Konvertierung von RDHNew-Dateien in SIZ-RDH-SchlÃ¼sseldateien
   ist ebenfalls geplant.
 
 
 Aktueller Stand
 ---------------
 
-Im Moment können SIZ-Schlüsseldatei sowohl eingelesen als auch geschrieben
+Im Moment kÃ¶nnen SIZ-SchlÃ¼sseldatei sowohl eingelesen als auch geschrieben
 werden. Dabei gibt es aber einige Details zu beachten:
 
-  1) SIZ-Dateien können nicht initial erzeugt werden. Das heißt, es ist nicht möglich,
-     mit HBCI4Java eine SIZ-Schlüsseldatei *anzulegen*, wenn sie noch nicht existiert.
-     Es ist nur möglich, bereits existierende und initialisierte(!) Schlüsseldateien
+  1) SIZ-Dateien kÃ¶nnen nicht initial erzeugt werden. Das heiÃŸt, es ist nicht mÃ¶glich,
+     mit HBCI4Java eine SIZ-SchlÃ¼sseldatei *anzulegen*, wenn sie noch nicht existiert.
+     Es ist nur mÃ¶glich, bereits existierende und initialisierte(!) SchlÃ¼sseldateien
      zu verwenden.
      
-  2) Beim Zurückschreiben von SIZ-Schlüsseldateien werden noch nicht wirklich alle
-     in der Datei gespeicherten Daten mit den aktuellen Werten überschrieben. Solche
-     Daten sollten also mit HBCI4Java auch nicht verändert werden.
-     Konkret heißt das, dass bei Verwendung von SIZ-Schlüsseldateien keine Schlüssel-
-     änderungen oder -sperrungen durchgeführt werden können, außerdem darf weder
-     die Nutzerkennung, die Bankverbindung oder die Adresse des HBCI-Servers geändert
-     werden (das Ändern selbst funktioniert für ein konkretes Passport-Objekt, nur
-     werden die geänderten Daten nicht in die Schlüsseldatei zurückgeschrieben, so
-     dass beim nächsten Laden der Datei wieder die alten Daten da sind --- vor allem
-     bei Schlüsseln ist das natürlich fatal!)
+  2) Beim ZurÃ¼ckschreiben von SIZ-SchlÃ¼sseldateien werden noch nicht wirklich alle
+     in der Datei gespeicherten Daten mit den aktuellen Werten Ã¼berschrieben. Solche
+     Daten sollten also mit HBCI4Java auch nicht verÃ¤ndert werden.
+     Konkret heiÃŸt das, dass bei Verwendung von SIZ-SchlÃ¼sseldateien keine SchlÃ¼ssel-
+     Ã¤nderungen oder -sperrungen durchgefÃ¼hrt werden kÃ¶nnen, auÃŸerdem darf weder
+     die Nutzerkennung, die Bankverbindung oder die Adresse des HBCI-Servers geÃ¤ndert
+     werden (das Ã„ndern selbst funktioniert fÃ¼r ein konkretes Passport-Objekt, nur
+     werden die geÃ¤nderten Daten nicht in die SchlÃ¼sseldatei zurÃ¼ckgeschrieben, so
+     dass beim nÃ¤chsten Laden der Datei wieder die alten Daten da sind --- vor allem
+     bei SchlÃ¼sseln ist das natÃ¼rlich fatal!)
 
-Prinzipiell können in einer SIZ-RDH-Schlüsseldatei Informationen über mehrere 
-HBCI-Zugänge abgespeichert werden. Solche Schlüsseldateien mit mehreren Einträgen
-werden von HBCI4Java ebenfalls unterstützt. Beim Laden einer solchen Schlüsseldatei
-wird ein Callback erzeugt, der von alle enthaltenen Einträgen die Bankleitzahl und
-die Benutzerkennung "anzeigt" und als Rückgabewert die Auswahl eines dieser
-Einträge erwartet (siehe dazu HBCICallback.NEED_SIZENTRY_SELECT). Der so ausgewählte
-Eintrag wird dann für die Erzeugung des Passport-Objektes verwendet, alle
-anderen in der Datei vorhandenen Einträge werden ignoriert.
-Enthält die Datei tatsächlich nur einen einzigen Eintrag mit HBCI-Zugangsdaten,
+Prinzipiell kÃ¶nnen in einer SIZ-RDH-SchlÃ¼sseldatei Informationen Ã¼ber mehrere 
+HBCI-ZugÃ¤nge abgespeichert werden. Solche SchlÃ¼sseldateien mit mehreren EintrÃ¤gen
+werden von HBCI4Java ebenfalls unterstÃ¼tzt. Beim Laden einer solchen SchlÃ¼sseldatei
+wird ein Callback erzeugt, der von alle enthaltenen EintrÃ¤gen die Bankleitzahl und
+die Benutzerkennung "anzeigt" und als RÃ¼ckgabewert die Auswahl eines dieser
+EintrÃ¤ge erwartet (siehe dazu HBCICallback.NEED_SIZENTRY_SELECT). Der so ausgewÃ¤hlte
+Eintrag wird dann fÃ¼r die Erzeugung des Passport-Objektes verwendet, alle
+anderen in der Datei vorhandenen EintrÃ¤ge werden ignoriert.
+EnthÃ¤lt die Datei tatsÃ¤chlich nur einen einzigen Eintrag mit HBCI-Zugangsdaten,
 so wird dieser Eintrag automatisch (ohne die Erzeugung eines Callbacks) benutzt.   
 
 Viel Spass beim Testen und Bugreports schreiben...

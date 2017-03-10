@@ -35,27 +35,27 @@ import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 
 /** <p>Tool zum Initialisieren und Testen eines HBCI-Passports.  Dieses Tool dient
-    einerseits als Vorlage für die Benutzung von <em>HBCI4Java</em> in eigenen Anwendungen und
+    einerseits als Vorlage fÃ¼r die Benutzung von <em>HBCI4Java</em> in eigenen Anwendungen und
     gleichzeitig als Tool, um ein HBCI-Passport einzurichten und zu initialisieren.</p><p>
-    Für das Einrichten und Initialisieren eines HBCI-Passports gibt es keine
+    FÃ¼r das Einrichten und Initialisieren eines HBCI-Passports gibt es keine
     speziellen Funktionen, statt dessen wird ein Passport einfach so benutzt, als
-    ob es schon vorhanden wäre. Alle fehlenden Daten holt sich <em>HBCI4Java</em> selbstständig
-    entweder über den Callback-Mechanismus vom Anwender oder durch spezielle
+    ob es schon vorhanden wÃ¤re. Alle fehlenden Daten holt sich <em>HBCI4Java</em> selbststÃ¤ndig
+    entweder Ã¼ber den Callback-Mechanismus vom Anwender oder durch spezielle
     HBCI-Dialoge von der Bank.</p><p>
     Aus diesem Grund kann dieses Tool sowohl zum Testen eines schon existierenden Passports
     wie auch zum Einrichten eines neuen Passports verwendet werden, ohne etwas am
-    Programmcode zu ändern. In der gleichen Weise wie dieses Tool kann auch eine
-    komplexere Anwendung <em>HBCI4Java</em> benutzen, in diesem Tool fehlt nur das Hinzufügen
-    von Geschäftsvorfällen zum HBCI-Dialog.</p><p>
+    Programmcode zu Ã¤ndern. In der gleichen Weise wie dieses Tool kann auch eine
+    komplexere Anwendung <em>HBCI4Java</em> benutzen, in diesem Tool fehlt nur das HinzufÃ¼gen
+    von GeschÃ¤ftsvorfÃ¤llen zum HBCI-Dialog.</p><p>
     Beim Start des Programmes mit
     <code>java&nbsp;org.kapott.hbci.tools.InitAndTest</code>
-    werden verschiedene Parameter über die Standardeingabe abgefragt.
-    Konkret handelt es sich dabei um alle HBCI-Parameter, die für die Initialisierung
-    eines Passports und dessen Verwendung benötigt werden. Die HBCI-Parameter werden mit
-    den eingegeben Werten initialisiert. Anschließend wird ein Passport-Objekt erzeugt
-    und ein "leerer" HBCI-Dialog (d.h. einer, der keine Geschäftsvorfälle enthält) ausgeführt.</p><p>
-    Bei diesem Vorgang sorgt <em>HBCI4Java</em> selbst dafür, dass alle relevanten Daten vorhanden sind
-    bzw. initialisiert diese entspechend. Läuft das Programm fehlerfrei durch, so ist sichergestellt,
+    werden verschiedene Parameter Ã¼ber die Standardeingabe abgefragt.
+    Konkret handelt es sich dabei um alle HBCI-Parameter, die fÃ¼r die Initialisierung
+    eines Passports und dessen Verwendung benÃ¶tigt werden. Die HBCI-Parameter werden mit
+    den eingegeben Werten initialisiert. AnschlieÃŸend wird ein Passport-Objekt erzeugt
+    und ein "leerer" HBCI-Dialog (d.h. einer, der keine GeschÃ¤ftsvorfÃ¤lle enthÃ¤lt) ausgefÃ¼hrt.</p><p>
+    Bei diesem Vorgang sorgt <em>HBCI4Java</em> selbst dafÃ¼r, dass alle relevanten Daten vorhanden sind
+    bzw. initialisiert diese entspechend. LÃ¤uft das Programm fehlerfrei durch, so ist sichergestellt,
     dass das benutzte Passport (=Sicherheitsmedium) korrekt initialisiert und funktionsbereit
     ist.</p> */
 public final class InitAndTest

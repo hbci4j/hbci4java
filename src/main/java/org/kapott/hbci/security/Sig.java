@@ -109,7 +109,7 @@ public final class Sig
         initData(handlerdata,msg,passports);
     }
 
-    // sighead-segment mit werten aus den lokalen variablen füllen
+    // sighead-segment mit werten aus den lokalen variablen fÃ¼llen
     private void fillSigHead(SEG sighead)
     {
         String sigheadName = sighead.getPath();
@@ -187,7 +187,7 @@ public final class Sig
             SyntaxElement.DONT_ALLOW_OVERWRITE);
     }
 
-    // sigtail-segment mit werten aus den lokalen variablen füllen
+    // sigtail-segment mit werten aus den lokalen variablen fÃ¼llen
     private void fillSigTail(SEG sighead, SEG sigtail)
     {
         String sigtailName = sigtail.getPath();
@@ -198,8 +198,8 @@ public final class Sig
                                SyntaxElement.DONT_ALLOW_OVERWRITE);
     }
 
-    /* daten zusammensammeln, die signiert werden müssen; idx gibt dabei an,
-     * die wievielte signatur erzeugt werden soll - wird benötigt, um festzustellen,
+    /* daten zusammensammeln, die signiert werden mÃ¼ssen; idx gibt dabei an,
+     * die wievielte signatur erzeugt werden soll - wird benÃ¶tigt, um festzustellen,
      * welche sighead- und sigtail-segmente in die signatur eingehen */
     private String collectHashData(int idx)
     {
@@ -210,17 +210,17 @@ public final class Sig
         List<SyntaxElement> sigheads = ((MultipleSEGs)(msgelementslist.get(1))).getElements();
         List<SyntaxElement> sigtails = ((MultipleSEGs)(msgelementslist.get(msgelementslist.size() - 2))).getElements();
 
-        // alle benötigten sighead-segmente zusammensuchen
+        // alle benÃ¶tigten sighead-segmente zusammensuchen
         for (int i=numOfPassports-1-idx; i<(u_range.equals("1")?(numOfPassports-idx):numOfPassports);i++) {
             ret.append(((SEG)(sigheads.get(i))).toString(0));
         }
 
-        // alle nutzdaten hinzufügen
+        // alle nutzdaten hinzufÃ¼gen
         for (int i=2; i<msgelementslist.size()-2;i++) {
             ret.append(msgelementslist.get(i).toString(0));
         }
 
-        // bei schalen-modell-signaturen alle "inneren" sigtails mit hinzufügen
+        // bei schalen-modell-signaturen alle "inneren" sigtails mit hinzufÃ¼gen
         for (int i=0;i<(u_range.equals("1")?0:idx);i++) {
             ret.append(((SEG)(sigtails.get(i))).toString(0));
         }
@@ -341,8 +341,8 @@ public final class Sig
                             int pos=pintan.indexOf("|");
                             
                             if (pos!=-1) {
-                                // wenn überhaupt eine signatur existiert
-                                // (wird für server benötigt)
+                                // wenn Ã¼berhaupt eine signatur existiert
+                                // (wird fÃ¼r server benÃ¶tigt)
                                 String pin=pintan.substring(0,pos);
                                 msg.propagateValue(sigtail.getPath()+".UserSig.pin",pin,
                                         SyntaxElement.DONT_TRY_TO_CREATE,
@@ -419,7 +419,7 @@ public final class Sig
         u_sigmode = msg.getValueOfDE(sigheadName + ".SigAlg.mode");
         u_hashalg = msg.getValueOfDE(sigheadName + ".HashAlg.alg");
 
-        // Die Angabe der BLZ ist nicht unbedingt verpflichtend (für 280 aber schon...). Trotzdem gibt es wohl
+        // Die Angabe der BLZ ist nicht unbedingt verpflichtend (fÃ¼r 280 aber schon...). Trotzdem gibt es wohl
         // Banken die das nicht interessiert...
         try {
           u_keyblz = msg.getValueOfDE(sigheadName + ".KeyName.KIK.blz");
@@ -452,7 +452,7 @@ public final class Sig
         
         // TODO: dieser test ist erst mal deaktiviert. grund: beim pin/tan-zwei-
         // schritt-verfahren ist die passport.getSigFunction()==922 (z.B.). 
-        // wenn jedoch zeitgleich HITAN über eine bankensignatur abgesichert
+        // wenn jedoch zeitgleich HITAN Ã¼ber eine bankensignatur abgesichert
         // wird, steht in der antwort secfunc=1 (RDH) drin. 
         /*
         if (!u_secfunc.equals(mainPassport.getSigFunction())) {
@@ -462,7 +462,7 @@ public final class Sig
         }
         */
         
-        // TODO: hier auch die DEG SecProfile lesen und überprüfen
+        // TODO: hier auch die DEG SecProfile lesen und Ã¼berprÃ¼fen
         
         // TODO: diese checks werden vorerst abgeschaltet, damit die pin-tan sigs
         // ohne probleme funktionieren
@@ -532,11 +532,11 @@ public final class Sig
                     }
                 } else {
                     HBCIUtils.log("message has no signature",HBCIUtils.LOG_WARN);
-                    /* das ist nur für den fall, dass das institut prinzipiell nicht signiert
-                       (also für den client-code);
-                       die verify()-funktion für den server-code überprüft selbstständig, ob
-                       tatsächlich eine benötigte signatur vorhanden ist (verlässt sich also nicht
-                       auf dieses TRUE, was beim fehlen einer signatur zurückgegeben wird */
+                    /* das ist nur fÃ¼r den fall, dass das institut prinzipiell nicht signiert
+                       (also fÃ¼r den client-code);
+                       die verify()-funktion fÃ¼r den server-code Ã¼berprÃ¼ft selbststÃ¤ndig, ob
+                       tatsÃ¤chlich eine benÃ¶tigte signatur vorhanden ist (verlÃ¤sst sich also nicht
+                       auf dieses TRUE, was beim fehlen einer signatur zurÃ¼ckgegeben wird */
                     ret=true;
                 }
             } else {

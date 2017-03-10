@@ -33,29 +33,29 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 
-/** Hilfsklasse für das Erzeugen von INI-Briefen (für RDH-Zugänge). Diese Klasse
-    ermöglicht das Erzeugen von INI-Briefen. Dazu werden Methoden bereitgestellt,
-    mit deren Hilfe die für einen INI-Brief benötigten Daten ermittelt werden
-    können. Außerdem liefert die {@link #toString()}-Methode einen vorgefertigten
+/** Hilfsklasse fÃ¼r das Erzeugen von INI-Briefen (fÃ¼r RDH-ZugÃ¤nge). Diese Klasse
+    ermÃ¶glicht das Erzeugen von INI-Briefen. Dazu werden Methoden bereitgestellt,
+    mit deren Hilfe die fÃ¼r einen INI-Brief benÃ¶tigten Daten ermittelt werden
+    kÃ¶nnen. AuÃŸerdem liefert die {@link #toString()}-Methode einen vorgefertigten
     INI-Brief (kann als Vorlage benutzt werden). */
 public class INILetter
 {
-    /** INI-Brief für Institutsschlüssel (wird für Vergleich mit tatsächlichem
-        INI-Brief von der Bank benötigt) */
+    /** INI-Brief fÃ¼r InstitutsschlÃ¼ssel (wird fÃ¼r Vergleich mit tatsÃ¤chlichem
+        INI-Brief von der Bank benÃ¶tigt) */
     public static final int TYPE_INST=1;
-    /** INI-Brief für Nutzerschlüssel erzeugen (muss nach dem Erstellen neuer
-        Schlüssel an die Bank versandt werden) */
+    /** INI-Brief fÃ¼r NutzerschlÃ¼ssel erzeugen (muss nach dem Erstellen neuer
+        SchlÃ¼ssel an die Bank versandt werden) */
     public static final int TYPE_USER=2;
     
     private HBCIPassportInternal passport;
     private HBCIKey              hbcikey;
     
     /** Anlegen eines neuen INI-Brief-Objektes.
-        @param passport das Passport-Objekt (entspricht einem HBCI-Zugang), für
-               den ein INI-Brief benötigt wird
-        @param type gibt an, für welche Schlüssel aus dem <code>passport</code> 
-               der INI-Brief benötigt wird ({@link #TYPE_INST} für die Bankschlüssel,
-               {@link #TYPE_USER} für die Schlüssel des Nutzers) */
+        @param passport das Passport-Objekt (entspricht einem HBCI-Zugang), fÃ¼r
+               den ein INI-Brief benÃ¶tigt wird
+        @param type gibt an, fÃ¼r welche SchlÃ¼ssel aus dem <code>passport</code> 
+               der INI-Brief benÃ¶tigt wird ({@link #TYPE_INST} fÃ¼r die BankschlÃ¼ssel,
+               {@link #TYPE_USER} fÃ¼r die SchlÃ¼ssel des Nutzers) */
     public INILetter(HBCIPassport passport,int type)
     {
         this.passport=(HBCIPassportInternal)passport;
@@ -102,8 +102,8 @@ public class INILetter
         return ((RSAPublicKey)hbcikey.key).getPublicExponent();
     }
     
-    /** Gibt den Modulus des öffentlichen Schlüssels zurück. 
-        @return Modulus des öffentlichen Schlüssels */
+    /** Gibt den Modulus des Ã¶ffentlichen SchlÃ¼ssels zurÃ¼ck. 
+        @return Modulus des Ã¶ffentlichen SchlÃ¼ssels */
     public byte[] getKeyModulusDisplay()
     {
         int minsize;
@@ -115,8 +115,8 @@ public class INILetter
         return formatKeyData(getModulus(), minsize);
     }
 
-    /** Gibt den Exponenten des öffentlichen Schlüssels zurück. 
-        @return Exponent des öffentlichen Schlüssels */
+    /** Gibt den Exponenten des Ã¶ffentlichen SchlÃ¼ssels zurÃ¼ck. 
+        @return Exponent des Ã¶ffentlichen SchlÃ¼ssels */
     public byte[] getKeyExponentDisplay()
     {
         int minsize;
@@ -128,8 +128,8 @@ public class INILetter
         return formatKeyData(getExponent(), minsize);
     }
     
-    /** Gibt den Hashwert des öffentlichen Schlüssels zurück. 
-        @return Hashwert des öffentlichen Schlüssels */
+    /** Gibt den Hashwert des Ã¶ffentlichen SchlÃ¼ssels zurÃ¼ck. 
+        @return Hashwert des Ã¶ffentlichen SchlÃ¼ssels */
     public byte[] getKeyHashDisplay()
     {
         try {
@@ -146,7 +146,7 @@ public class INILetter
             
             // System.out.println("hashdata: "+HBCIUtils.data2hex(retArray));
             
-            // hash-verfahren hängt von rdh-profil ab
+            // hash-verfahren hÃ¤ngt von rdh-profil ab
             MessageDigest      dig;
             SignatureParamSpec hashSpec=((AbstractRDHPassport)(passport)).getSignatureParamSpec();
             String             provider=hashSpec.getProvider();
@@ -161,7 +161,7 @@ public class INILetter
         }
     }
     
-    /** Gibt einen "fertigen" INI-Brief zurück.
+    /** Gibt einen "fertigen" INI-Brief zurÃ¼ck.
         @return INI-Brief */
     public String toString()
     {
@@ -178,20 +178,20 @@ public class INILetter
         out.println();
         out.println("Uhrzeit:                     "+HBCIUtils.time2StringLocal(date));
         out.println();
-        out.println("Empfänger BLZ:               "+passport.getBLZ());
+        out.println("EmpfÃ¤nger BLZ:               "+passport.getBLZ());
         out.println();
         out.println("Benutzerkennung:             "+passport.getUserId());
         out.println();
-        out.println("Schlüsselnummer:             "+hbcikey.num);
+        out.println("SchlÃ¼sselnummer:             "+hbcikey.num);
         out.println();
-        out.println("Schlüsselversion:            "+hbcikey.version);
+        out.println("SchlÃ¼sselversion:            "+hbcikey.version);
         out.println();
         out.println("HBCI-Version:                "+passport.getHBCIVersion());
         out.println();
         out.println("Sicherheitsprofil:           "+passport.getProfileMethod()+" "+passport.getProfileVersion());
         out.println();
         out.println();
-        out.println("Öffentlicher Schlüssel für die elektronische Signatur");
+        out.println("Ã–ffentlicher SchlÃ¼ssel fÃ¼r die elektronische Signatur");
         out.println();
         out.println("  Exponent");
         out.println();
@@ -223,8 +223,8 @@ public class INILetter
         }
         
         out.println();
-        out.println("Ich bestätige hiermit den obigen öffentlichen Schlüssel");
-        out.println("für meine elektronische Signatur");
+        out.println("Ich bestÃ¤tige hiermit den obigen Ã¶ffentlichen SchlÃ¼ssel");
+        out.println("fÃ¼r meine elektronische Signatur");
         out.println();
         out.println();
         out.println();

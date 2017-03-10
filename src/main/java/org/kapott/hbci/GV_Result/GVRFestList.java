@@ -28,31 +28,31 @@ import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
 /** Ergebnisse der Abfrage bestehender Festgeldanlange. Die verschiedenen Festgeldanlagen
-    werden in einer Liste gespeichert. Für jede bestehende Festgeldanlage gibt es ein separates
-    Objekt mit Informationen über diese Anlage. */
+    werden in einer Liste gespeichert. FÃ¼r jede bestehende Festgeldanlage gibt es ein separates
+    Objekt mit Informationen Ã¼ber diese Anlage. */
 public final class GVRFestList
     extends HBCIJobResultImpl
 {
-    /** Informationen über eine einzelne. Festgeldanlage */
+    /** Informationen Ã¼ber eine einzelne. Festgeldanlage */
     public static final class Entry
     {
-        /** Informationen darüber, wie eine Festgeldanlage bei Ablauf der
-            Laufzeit zu verlängern ist */
+        /** Informationen darÃ¼ber, wie eine Festgeldanlage bei Ablauf der
+            Laufzeit zu verlÃ¤ngern ist */
         public static final class Prolong
         {
             /** Neue Laufzeit nach dem Ablaufdatum */
             public int     laufzeit;
             /** Neuer Betrag der Anlage */
             public Value   betrag;
-            /** Soll Festgeldanlage nach der zusätzlichen <code>laufzeit</code> erneut
-                verlängert werden? */
+            /** Soll Festgeldanlage nach der zusÃ¤tzlichen <code>laufzeit</code> erneut
+                verlÃ¤ngert werden? */
             public boolean verlaengern;
             
             public String toString()
             {
                 StringBuffer ret=new StringBuffer();
                 
-                ret.append("Verlängerung: ");
+                ret.append("VerlÃ¤ngerung: ");
                 ret.append("Laufzeit ");
                 ret.append(Integer.toString(laufzeit));
                 ret.append(" Betrag ");
@@ -64,26 +64,26 @@ public final class GVRFestList
             }
         }
         
-        /** Konto für die Festgeldanlage */
+        /** Konto fÃ¼r die Festgeldanlage */
         public Konto                anlagekonto;
-        /** Konto für Abbuchung der regelmäßigen Beträge. */
+        /** Konto fÃ¼r Abbuchung der regelmÃ¤ÃŸigen BetrÃ¤ge. */
         public Konto                belastungskonto;
         /** Konto, welchem der Anlagebetrag nach Ablauf der Festgeldanlage gutgeschrieben wird */
         public Konto                ausbuchungskonto;
-        /** Konto, welchem die Zinsen für die Festgeldanlage gutgeschrieben werden */
+        /** Konto, welchem die Zinsen fÃ¼r die Festgeldanlage gutgeschrieben werden */
         public Konto                zinskonto;
-        /** Identifikationsnummer dieser Festgeldanlage für weitere Bearbeitung (optional) */
+        /** Identifikationsnummer dieser Festgeldanlage fÃ¼r weitere Bearbeitung (optional) */
         public String               id;
         /** Angelegter Geldbetrag */
         public Value                anlagebetrag;
         /** Voraussichtlicher Zinsertrag dieser Anlage (optional) */
         public Value                zinsbetrag; 
-        /** Konditionen, die für diese Festgeldanlage ausgehandelt wurden */
+        /** Konditionen, die fÃ¼r diese Festgeldanlage ausgehandelt wurden */
         public GVRFestCondList.Cond konditionen;
-        /** Soll die Festgeldanlage nach Ablauf des Anlagezeitraumes verlängert werden? Wenn
-            ja, dann enthält das Feld <code>verlaengerung</code> entsprechende Informationen darüber */
+        /** Soll die Festgeldanlage nach Ablauf des Anlagezeitraumes verlÃ¤ngert werden? Wenn
+            ja, dann enthÃ¤lt das Feld <code>verlaengerung</code> entsprechende Informationen darÃ¼ber */
         public boolean              verlaengern;
-        /** Format, in welchem der Kontoauszug für diese Anlage zugestellt wird.
+        /** Format, in welchem der Kontoauszug fÃ¼r diese Anlage zugestellt wird.
             <ul>
               <li>0 = Wert nicht gesetzt</li>
               <li>1 = Zustellung per Post</li>
@@ -95,7 +95,7 @@ public final class GVRFestList
             <li>1=aktiv</li>
             <li>2=vorgemerkt</li></ul> */
         public int                  status;
-        /** Informationen, wie im Falle einer Verlängerung verlängert werden soll (optional) */
+        /** Informationen, wie im Falle einer VerlÃ¤ngerung verlÃ¤ngert werden soll (optional) */
         public Prolong              verlaengerung;
         
         public String toString()
@@ -111,7 +111,7 @@ public final class GVRFestList
             ret.append("Anlagebetrag: ").append(anlagebetrag.toString()).append(linesep);
             if (zinsbetrag!=null)
                 ret.append("Voraussichtlicher Zinsbetrag: ").append(zinsbetrag.toString()).append(linesep);
-            ret.append("Nach Ablauf verlängern: ").append(Boolean.toString(verlaengern)).append(linesep);
+            ret.append("Nach Ablauf verlÃ¤ngern: ").append(Boolean.toString(verlaengern)).append(linesep);
             ret.append(konditionen.toString()+linesep);
             if (verlaengern)
                 ret.append(linesep+verlaengerung.toString());
@@ -132,7 +132,7 @@ public final class GVRFestList
         entries.add(entry);
     }
     
-    /** Gibt Informationen über alle gefundenen Festgeldanlagen zurück
+    /** Gibt Informationen Ã¼ber alle gefundenen Festgeldanlagen zurÃ¼ck
         @return Array, wobei jeder Eintrag eine Festgeldanlage beschreibt */
     public Entry[] getEntries()
     {

@@ -25,17 +25,17 @@ import java.util.Date;
 
 import org.kapott.hbci.passport.HBCIPassport;
 
-/** <p>Callback-Klasse für native-Applikationen, die <em>HBCI4Java</em>
+/** <p>Callback-Klasse fÃ¼r native-Applikationen, die <em>HBCI4Java</em>
     durch Aufrufe des JNI benutzen. Diese Klasse wird in Java-Anwendungen
-    selbst nicht benötigt, sondern stellt nur eine Schnittstelle dar, um die
+    selbst nicht benÃ¶tigt, sondern stellt nur eine Schnittstelle dar, um die
     Callbacks via JNI zu realisieren.</p><p>
-    Diese Klasse überschreibt die drei Methoden <code>log</code>, <code>callback</code> 
+    Diese Klasse Ã¼berschreibt die drei Methoden <code>log</code>, <code>callback</code> 
     und <code>status</code>. In dieser Klasse werden die jeweiligen Methoden-Aufrufe
     nicht direkt behandelt, sondern es wird jeweils eine native Methode mit 
     der gleichen Signatur aufgerufen, nur dass sich der Methodenname durch ein
     vorangestelltes Prefix "<code>native</code>" unterscheidet.</p><p>
     Eine Anwendung muss vor dem Initialisieren des HBCI-Kernels diese nativen
-    Methoden via JNI registrieren. Folgender Programmcode kann als Vorlage für
+    Methoden via JNI registrieren. Folgender Programmcode kann als Vorlage fÃ¼r
     die Verwendung von <em>HBCI4Java</em>-Callbacks aus einer C++-Anwendung heraus dienen:
 <pre>
 #include "jni.h"

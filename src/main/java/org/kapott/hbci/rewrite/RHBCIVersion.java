@@ -26,14 +26,14 @@ import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
 /** <p>Korrektur fehlender HBCI-Versionsnummern. Einige HBCI-Server
-    übermitteln in Fehlernachrichten, die "globale" Fehler in der
+    Ã¼bermitteln in Fehlernachrichten, die "globale" Fehler in der
     Kundennachricht beschreiben, im Datenelement "HBCI-Version"
     des Nachrichtenkopfes den Wert "0". Da <em>HBCI4Java</em> an
     dieser Stelle immer den gleichen Wert wie in der gesendeten
     Nachricht erwartet, wird in diesem Fall der
     erwartete Wert eingetragen.</p>
-    <p>Die Überprüfung, ob die HBCI-Versionsnummern in gesendeter und
-    empfangender Nachricht übereinstimmen, kann mit dem Kernel-Parameter
+    <p>Die ÃœberprÃ¼fung, ob die HBCI-Versionsnummern in gesendeter und
+    empfangender Nachricht Ã¼bereinstimmen, kann mit dem Kernel-Parameter
     <code>client.errors.ignoreMsgCheckErrors</code> abgeschaltet
     werden (siehe dazu Beschreibung in 
     {@link org.kapott.hbci.manager.HBCIUtils})</p>*/

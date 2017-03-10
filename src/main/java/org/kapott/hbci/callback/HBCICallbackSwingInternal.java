@@ -27,7 +27,7 @@ import java.util.Hashtable;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-/** Callback für Anwendungen mit GUI; arbeitet mit <code>JInternalFrame</code>s
+/** Callback fÃ¼r Anwendungen mit GUI; arbeitet mit <code>JInternalFrame</code>s
     anstatt mit Top-Level-Windows. */
 public class HBCICallbackSwingInternal
     extends HBCICallbackSwing

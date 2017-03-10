@@ -93,9 +93,9 @@ public final class MultipleSEGs
         }
     }
     
-    // TODO: diese Methode gehört zu einem dirty hack (der aber gut funktioniert)
+    // TODO: diese Methode gehÃ¶rt zu einem dirty hack (der aber gut funktioniert)
     // Diese Methode wird von SyntaxElement.parse() verwendet, um bei den
-    // SFs "Params" und "GVRes" dafür zu sorgen, dass nach jedem gefunden Segment
+    // SFs "Params" und "GVRes" dafÃ¼r zu sorgen, dass nach jedem gefunden Segment
     // eine neue SF begonnen wird:
     //   Params.LastPar1
     //   Params_2.UebPar1

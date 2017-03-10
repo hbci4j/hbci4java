@@ -213,20 +213,20 @@ public final class HBCIDialog
         HBCIKernelImpl       kernel=(HBCIKernelImpl)getParentHandler().getKernel();
         HBCIPassportInternal mainPassport=(HBCIPassportInternal)getParentHandler().getPassport();
 
-        // durch die liste aller auszuführenden nachrichten durchloopen
+        // durch die liste aller auszufÃ¼hrenden nachrichten durchloopen
         int nof_messages=msgs.size();
         for (int j=0;j<nof_messages;j++) {
-            // tasks ist liste aller jobs, die in dieser nachricht ausgeführt werden sollen
+            // tasks ist liste aller jobs, die in dieser nachricht ausgefÃ¼hrt werden sollen
             ArrayList<HBCIJobImpl>     tasks= msgs.get(j);
             
-            // loop wird benutzt, um zu zählen, wie oft bereits "nachgehakt" wurde,
+            // loop wird benutzt, um zu zÃ¤hlen, wie oft bereits "nachgehakt" wurde,
             // falls ein bestimmter job nicht mit einem einzigen nachrichtenaustausch
-            // abgearbeitet werden konnte (z.b. abholen kontoauszüge)
+            // abgearbeitet werden konnte (z.b. abholen kontoauszÃ¼ge)
             int           loop=0;
             HBCIMsgStatus msgstatus=new HBCIMsgStatus();
             
             // diese schleife loopt solange, bis alle jobs der aktuellen nachricht
-            // tatsächlich abgearbeitet wurden (also inclusive "nachhaken")
+            // tatsÃ¤chlich abgearbeitet wurden (also inclusive "nachhaken")
             while (true) {
                 boolean addMsgStatus=true;
                 
@@ -240,11 +240,11 @@ public final class HBCIDialog
                     kernel.rawNewMsg("CustomMsg");
                     
                     // durch alle jobs loopen, die eigentlich in der aktuellen
-                    // nachricht abgearbeitet werden müssten
+                    // nachricht abgearbeitet werden mÃ¼ssten
                     for (Iterator<HBCIJobImpl> i=tasks.iterator();i.hasNext();) {
                         HBCIJobImpl task=i.next();
                         
-                        // wenn der Task entweder noch gar nicht ausgeführt wurde
+                        // wenn der Task entweder noch gar nicht ausgefÃ¼hrt wurde
                         // oder in der letzten Antwortnachricht ein entsprechendes
                         // Offset angegeben wurde
                         if (task.needsContinue(loop)) {
@@ -258,16 +258,16 @@ public final class HBCIDialog
                             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_SEND_TASK,task);
                             task.setIdx(taskNum);
                             
-                            // Daten für den Task festlegen
+                            // Daten fÃ¼r den Task festlegen
                             for (Enumeration e=p.keys();e.hasMoreElements();) {
                                 String key=(String)(e.nextElement());
                                 kernel.rawSet(header+"."+key,p.getProperty(key));
                             }
                             
-                            // additional passports für diesen task ermitteln
-                            // und zu den passports für die aktuelle nachricht
-                            // hinzufügen;
-                            // doppelgänger werden schon von 
+                            // additional passports fÃ¼r diesen task ermitteln
+                            // und zu den passports fÃ¼r die aktuelle nachricht
+                            // hinzufÃ¼gen;
+                            // doppelgÃ¤nger werden schon von 
                             // HBCIPassportList.addPassport() herausgefiltert
                             msgPassports.addAll(task.getSignaturePassports());
                             
@@ -275,7 +275,7 @@ public final class HBCIDialog
                         }
                     }
                     
-                    // wenn keine jobs für die aktuelle message existieren
+                    // wenn keine jobs fÃ¼r die aktuelle message existieren
                     if (taskNum==0) {
                         HBCIUtils.log(
                                 "loop "+(loop+1)+" aborted, because there are no more tasks to be executed",
@@ -289,7 +289,7 @@ public final class HBCIDialog
                     kernel.rawSet("MsgTail.msgnum", getMsgNum());
                     nextMsgNum();
                     
-                    // nachrichtenaustausch durchführen
+                    // nachrichtenaustausch durchfÃ¼hren
                     msgstatus=kernel.rawDoIt(msgPassports,HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.NEED_SIG,HBCIKernelImpl.NEED_CRYPT);
                     Properties result=msgstatus.getData();
                     
@@ -309,7 +309,7 @@ public final class HBCIDialog
                     }
                     
                     if (offset!=0) {           
-                        // für jeden Task die entsprechenden Rückgabedaten-Klassen füllen
+                        // fÃ¼r jeden Task die entsprechenden RÃ¼ckgabedaten-Klassen fÃ¼llen
                         // in fillOutStore wird auch "executed" fuer den jeweiligen Task auf true gesetzt.
                         for (Iterator<HBCIJobImpl> i=tasks.iterator();i.hasNext();) {
                             HBCIJobImpl task=i.next();
@@ -382,11 +382,11 @@ public final class HBCIDialog
         return ret;
     }
 
-    /** führt einen kompletten dialog mit allen zu diesem
+    /** fÃ¼hrt einen kompletten dialog mit allen zu diesem
         dialog gehoerenden nachrichten/tasks aus.
 
         bricht diese methode mit einer exception ab, so muessen alle
-        nachrichten bzw. tasks, die noch nicht ausgeführt wurden, 
+        nachrichten bzw. tasks, die noch nicht ausgefÃ¼hrt wurden, 
         von der aufrufenden methode neu erzeugt werden */
     public HBCIDialogStatus doIt()
     {
@@ -461,7 +461,7 @@ public final class HBCIDialog
 
     public void addTask(HBCIJobImpl job)
     {
-        // TODO: hier evtl. auch überprüfen, dass nur jobs mit den gleichen
+        // TODO: hier evtl. auch Ã¼berprÃ¼fen, dass nur jobs mit den gleichen
         // signatur-anforderungen (anzahl) in einer msg stehen
         
         try {
@@ -488,7 +488,7 @@ public final class HBCIDialog
             int maxGVA=passport.getMaxGVperMsg();
             // BPD: max. Anzahl von Job-Segmenten eines bestimmten Typs
             int maxGVSegJob=job.getMaxNumberPerMsg();        
-            // Passport: evtl. weitere Einschränkungen bzgl. der Max.-Anzahl 
+            // Passport: evtl. weitere EinschrÃ¤nkungen bzgl. der Max.-Anzahl 
             // von Auftragssegmenten pro Nachricht
             int maxGVSegTotal=passport.getMaxGVSegsPerMsg();  
             

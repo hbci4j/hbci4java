@@ -105,13 +105,13 @@ public class SepaUtil
     }
 
     /**
-     * Liefert die Summe der Beträge aller Transaktionen. Bei einer Einzeltransaktion wird der
-     * Betrag zurückgeliefert. Mehrfachtransaktionen müssen die gleiche Währung verwenden, da
-     * eine Summenbildung sonst nicht möglich ist.
+     * Liefert die Summe der BetrÃ¤ge aller Transaktionen. Bei einer Einzeltransaktion wird der
+     * Betrag zurÃ¼ckgeliefert. Mehrfachtransaktionen mÃ¼ssen die gleiche WÃ¤hrung verwenden, da
+     * eine Summenbildung sonst nicht mÃ¶glich ist.
      * 
      * @param sepaParams die Properties, mit denen gearbeitet werden soll
-     * @param max Maximaler Index, oder {@code null} für Einzeltransaktionen
-     * @return Summe aller Beträge
+     * @param max Maximaler Index, oder {@code null} fÃ¼r Einzeltransaktionen
+     * @return Summe aller BetrÃ¤ge
      */
     public static BigDecimal sumBtgValue(Properties sepaParams, Integer max)
     {
@@ -125,7 +125,7 @@ public class SepaUtil
         {
             sum = sum.add(new BigDecimal(sepaParams.getProperty(insertIndex("btg.value", index))));
 
-            // Sicherstellen, dass alle Transaktionen die gleiche Währung verwenden
+            // Sicherstellen, dass alle Transaktionen die gleiche WÃ¤hrung verwenden
             String indexCurr = sepaParams.getProperty(insertIndex("btg.curr", index));
             if (curr != null)
             {

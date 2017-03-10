@@ -36,11 +36,11 @@ import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.INILetter;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
-/** Callback-Klasse für Ein-/Ausgabe über IO-Streams. Dabei handelt es sich
+/** Callback-Klasse fÃ¼r Ein-/Ausgabe Ã¼ber IO-Streams. Dabei handelt es sich
  * eine Callback-Klasse, die Ausgaben auf einem PrintStream ausgibt und
- * Eingaben über einen BufferedReader liest. Die Klasse 
+ * Eingaben Ã¼ber einen BufferedReader liest. Die Klasse 
  * {@link org.kapott.hbci.callback.HBCICallbackConsole HBCICallbackConsole} 
- * ist eine abgeleitete Klasse, welche STDOUT und STDIN für die beiden
+ * ist eine abgeleitete Klasse, welche STDOUT und STDIN fÃ¼r die beiden
  * I/O-Streams verwendet. */
 public class HBCICallbackIOStreams 
     extends AbstractHBCICallback 
@@ -49,8 +49,8 @@ public class HBCICallbackIOStreams
     private BufferedReader inStream;
     
     /** Instanz mit vorgegebenem OUT- und INPUT-Stream erzeugen.
-     * @param outStream Stream, welcher für die Ausgabe verwendet wird.
-     * @param inStream Stream, der für das Einlesen von Antworten verwendet wird */
+     * @param outStream Stream, welcher fÃ¼r die Ausgabe verwendet wird.
+     * @param inStream Stream, der fÃ¼r das Einlesen von Antworten verwendet wird */
     public HBCICallbackIOStreams(PrintStream outStream, BufferedReader inStream)
     {
         this.outStream=outStream;
@@ -63,7 +63,7 @@ public class HBCICallbackIOStreams
         this.inStream=in;
     }
     
-    /** Gibt des INPUT-Stream zurück. */
+    /** Gibt des INPUT-Stream zurÃ¼ck. */
     protected BufferedReader getInStream() {
         return inStream;
     }
@@ -74,14 +74,14 @@ public class HBCICallbackIOStreams
         this.outStream=out;
     }
     
-    /** Gibt den verwendeten OUTPUT-Stream zurück. */
+    /** Gibt den verwendeten OUTPUT-Stream zurÃ¼ck. */
     protected PrintStream getOutStream() {
         return outStream;
     }
     
     /** Schreiben von Logging-Ausgaben in einen <code>PrintStream</code>. Diese Methode implementiert die Logging-Schnittstelle
     des {@link org.kapott.hbci.callback.HBCICallback}-Interfaces</a>. Die Log-Informationen,
-    die dieser Methode übergeben werden, werden formatiert auf dem jeweiligen <code>outStream</code> ausgegeben. In dem
+    die dieser Methode Ã¼bergeben werden, werden formatiert auf dem jeweiligen <code>outStream</code> ausgegeben. In dem
     ausgegebenen String sind in enthalten das Log-Level der Message, ein Zeitstempel im
     Format "<code>yyyy.MM.dd HH:mm:ss.SSS</code>", die Namen der ThreadGroup und des Threads, aus dem 
     heraus die Log-Message erzeugt wurde, der Klassenname der Klasse, welche die Log-Ausgabe
@@ -92,8 +92,8 @@ public class HBCICallbackIOStreams
         getOutStream().println(line);
     }
 
-    /** Diese Methode reagiert auf alle möglichen Callback-Ursachen. Bei Callbacks, die nur
-    Informationen an den Anwender übergeben sollen, werden diese auf dem <code>outStream</code> ausgegeben.
+    /** Diese Methode reagiert auf alle mÃ¶glichen Callback-Ursachen. Bei Callbacks, die nur
+    Informationen an den Anwender Ã¼bergeben sollen, werden diese auf dem <code>outStream</code> ausgegeben.
     Bei Callbacks, die Aktionen vom Anwender erwarten (Einlegen der Chipkarte), wird eine
     entsprechende Aufforderung ausgegeben. Bei Callbacks, die eine Eingabe vom
     Nutzer erwarten, wird die entsprechende Eingabeaufforderung ausgegeben und die
@@ -344,7 +344,7 @@ public class HBCICallbackIOStreams
     }
 
     /** Wird diese Methode von <em>HBCI4Java</em> aufgerufen, so wird der aktuelle
-    Bearbeitungsschritt (mit evtl. vorhandenen zusätzlichen Informationen)
+    Bearbeitungsschritt (mit evtl. vorhandenen zusÃ¤tzlichen Informationen)
     auf <code>outStream</code> ausgegeben. */
     public synchronized void status(HBCIPassport passport, int statusTag, Object[] o) {
         switch (statusTag) {

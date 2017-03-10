@@ -87,7 +87,7 @@ public abstract class AbstractPinTanPassport
         super.setBPD(p);
 
         if (p!=null && p.size()!=0) {
-            // hier die liste der verfügbaren sicherheitsverfahren aus den
+            // hier die liste der verfÃ¼gbaren sicherheitsverfahren aus den
             // bpd (HITANS) extrahieren
 
             twostepMechanisms.clear();
@@ -212,7 +212,7 @@ public abstract class AbstractPinTanPassport
                 }
                 if(l2>0) {
                     HBCIUtils.log("autosecfunc: found 3072 in response - change user id", HBCIUtils.LOG_DEBUG);
-                    // Aufrufer informieren, dass UserID und CustomerID geändert wurde
+                    // Aufrufer informieren, dass UserID und CustomerID geÃ¤ndert wurde
                     StringBuffer retData=new StringBuffer();
                     retData.append(newUserId+"|"+newCustomerId);
                     HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.TYPE_TEXT,retData);
@@ -234,7 +234,7 @@ public abstract class AbstractPinTanPassport
                 HBCIUtils.log("detected 'invalid PIN' error - clearing passport PIN", HBCIUtils.LOG_INFO);
                 clearPIN();
                 
-                // Aufrufer informieren, dass falsche PIN eingegeben wurde (um evtl. PIN aus Puffer zu löschen, etc.) 
+                // Aufrufer informieren, dass falsche PIN eingegeben wurde (um evtl. PIN aus Puffer zu lÃ¶schen, etc.) 
                 StringBuffer retData=new StringBuffer();
                 HBCIUtilsInternal.getCallback().callback(this,HBCICallback.WRONG_PIN,"*** invalid PIN entered",HBCICallback.TYPE_TEXT,retData);
             }
@@ -250,14 +250,14 @@ public abstract class AbstractPinTanPassport
         if (!anonDialog) {
             setPersistentData("_authed_dialog_executed", Boolean.TRUE);
 
-            // aktuelle secmech merken und neue auswählen (basierend auf evtl. gerade
+            // aktuelle secmech merken und neue auswÃ¤hlen (basierend auf evtl. gerade
             // neu empfangenen informationen (3920s))
             String oldTANMethod=currentTANMethod;
             String updatedTANMethod=getCurrentTANMethod(true);
 
             if (!oldTANMethod.equals(updatedTANMethod)) {
-                // wenn sich das ausgewählte secmech geändert hat, müssen wir
-                // einen dialog-restart fordern, weil während eines dialoges
+                // wenn sich das ausgewÃ¤hlte secmech geÃ¤ndert hat, mÃ¼ssen wir
+                // einen dialog-restart fordern, weil wÃ¤hrend eines dialoges
                 // das secmech nicht gewechselt werden darf
                 restart_needed=true;
                 HBCIUtils.log("autosecfunc: after this dialog-init we had to change selected pintan method from "+oldTANMethod+" to "+updatedTANMethod+", so a restart of this dialog is needed", HBCIUtils.LOG_INFO);
@@ -292,13 +292,13 @@ public abstract class AbstractPinTanPassport
             }
             
             if (ret) {
-                // prüfen, ob gewähltes sicherheitsverfahren unterstützt wird
+                // prÃ¼fen, ob gewÃ¤hltes sicherheitsverfahren unterstÃ¼tzt wird
                 // autosecmech: hier wird ein flag uebergeben, das anzeigt, dass getCurrentTANMethod()
                 // hier evtl. automatisch ermittelte secmechs neu verifzieren soll
                 String current=getCurrentTANMethod(true);
                 
                 if (current.equals(Sig.SECFUNC_SIG_PT_1STEP)) {
-                    // einschrittverfahren gewählt
+                    // einschrittverfahren gewÃ¤hlt
                     if (!isOneStepAllowed()) {
                         HBCIUtils.log("not supported: onestep method not allowed by BPD",HBCIUtils.LOG_ERR);
                         ret=false;
@@ -306,10 +306,10 @@ public abstract class AbstractPinTanPassport
                         HBCIUtils.log("supported: pintan-onestep",HBCIUtils.LOG_DEBUG);
                     }
                 } else {
-                    // irgendein zweischritt-verfahren gewählt
+                    // irgendein zweischritt-verfahren gewÃ¤hlt
                     Properties entry=twostepMechanisms.get(current);
                     if (entry==null) {
-                        // es gibt keinen info-eintrag für das gewählte verfahren
+                        // es gibt keinen info-eintrag fÃ¼r das gewÃ¤hlte verfahren
                         HBCIUtils.log("not supported: twostep-method "+current+" selected, but this is not supported",HBCIUtils.LOG_ERR);
                         ret=false;
                     } else {
@@ -327,7 +327,7 @@ public abstract class AbstractPinTanPassport
     private boolean isOneStepAllowed()
     {
         // default ist true, weil entweder *nur* das einschritt-verfahren unter-
-        // stützt wird oder keine BPD vorhanden sind, um das zu entscheiden
+        // stÃ¼tzt wird oder keine BPD vorhanden sind, um das zu entscheiden
         boolean    ret=true;
         
         Properties bpd=getBPD();
@@ -358,7 +358,7 @@ public abstract class AbstractPinTanPassport
     }
     
     /** Kann vor <code>new HBCIHandler()</code> aufgerufen werden, um zu
-     * erzwingen, dass die Liste der unterstützten PIN/TAN-Sicherheitsverfahren
+     * erzwingen, dass die Liste der unterstÃ¼tzten PIN/TAN-Sicherheitsverfahren
      * neu vom Server abgeholt wird und evtl. neu vom Nutzer abgefragt wird. */
     public void resetSecMechs()
     {
@@ -388,13 +388,13 @@ public abstract class AbstractPinTanPassport
             List<String[]> options=new ArrayList<String[]>();
             
             if (isOneStepAllowed()) {
-                // wenn einschrittverfahren unterstützt, dass zur liste hinzufügen
+                // wenn einschrittverfahren unterstÃ¼tzt, dass zur liste hinzufÃ¼gen
                 if (allowedTwostepMechanisms.size()==0 || allowedTwostepMechanisms.contains(Sig.SECFUNC_SIG_PT_1STEP)) {
                     options.add(new String[] {Sig.SECFUNC_SIG_PT_1STEP,"Einschritt-Verfahren"});
                 }
             }
             
-            // alle zweischritt-verfahren zur auswahlliste hinzufügen
+            // alle zweischritt-verfahren zur auswahlliste hinzufÃ¼gen
             String[] secfuncs= twostepMechanisms.keySet().toArray(new String[twostepMechanisms.size()]);
             Arrays.sort(secfuncs);
             int len=secfuncs.length;
@@ -407,7 +407,7 @@ public abstract class AbstractPinTanPassport
             }
             
             if (options.size()==1) {
-                // wenn nur ein verfahren unterstützt wird, das automatisch auswählen
+                // wenn nur ein verfahren unterstÃ¼tzt wird, das automatisch auswÃ¤hlen
                 String autoSelection=(options.get(0))[0];
                 
                 HBCIUtils.log("autosecfunc: there is only one pintan method ("+autoSelection+") supported - choosing this automatically",HBCIUtils.LOG_DEBUG);
@@ -424,7 +424,7 @@ public abstract class AbstractPinTanPassport
                 this.currentTANMethodWasAutoSelected=true;
                 
             } else if (options.size()>1) {
-                // es werden mehrere verfahren unterstützt
+                // es werden mehrere verfahren unterstÃ¼tzt
                 
                 if (currentTANMethod!=null) {
                     // es ist schon ein verfahren ausgewaehlt. falls dieses verfahren
@@ -456,16 +456,16 @@ public abstract class AbstractPinTanPassport
                     if (allowedTwostepMechanisms.size()==0 &&
                             getPersistentData("_authed_dialog_executed")==null) 
                     {
-                        // wir wählen einen secmech automatisch aus, wenn wir
+                        // wir wÃ¤hlen einen secmech automatisch aus, wenn wir
                         // die liste der erlaubten secmechs nicht haben
                         // (entweder weil wir sie noch nie abgefragt haben oder weil
                         // diese daten einfach nicht geliefert werden). im fall
-                        // "schon abgefragt, aber nicht geliefert" dürfen wir aber 
-                        // wiederum NICHT automatisch auswählen, so dass wir zusätzlich 
+                        // "schon abgefragt, aber nicht geliefert" dÃ¼rfen wir aber 
+                        // wiederum NICHT automatisch auswÃ¤hlen, so dass wir zusÃ¤tzlich 
                         // fragen, ob schon mal ein dialog gelaufen ist, bei dem 
-                        // diese daten hätten geliefert werden KÖNNEN (_authed_dialog_executed). 
-                        // nur wenn wir die liste der gültigen secmechs noch gar 
-                        // nicht haben KÖNNEN, wählen wir einen automatisch aus.
+                        // diese daten hÃ¤tten geliefert werden KÃ–NNEN (_authed_dialog_executed). 
+                        // nur wenn wir die liste der gÃ¼ltigen secmechs noch gar 
+                        // nicht haben KÃ–NNEN, wÃ¤hlen wir einen automatisch aus.
                         
                         String autoSelection=(options.get(0))[0];
                         HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, but we don't know which of them are allowed for the current user, so we automatically choose "+autoSelection,HBCIUtils.LOG_DEBUG);
@@ -484,7 +484,7 @@ public abstract class AbstractPinTanPassport
                         // danach gefragt (ein authed_dialog ist schon gelaufen, bei dem
                         // diese daten aber nicht geliefert wurden). 
                         // in jedem fall steht in "options" die liste der prinzipiell
-                        // verfügbaren secmechs drin, u.U. gekürzt auf die tatsächlich
+                        // verfÃ¼gbaren secmechs drin, u.U. gekÃ¼rzt auf die tatsÃ¤chlich
                         // erlaubten secmechs.
                         // wir fragen also via callback nach, welcher dieser secmechs
                         // denn nun verwendet werden soll
@@ -508,7 +508,7 @@ public abstract class AbstractPinTanPassport
                             HBCICallback.TYPE_TEXT,
                             retData);
                         
-                        // überprüfen, ob das gewählte verfahren einem aus der liste entspricht
+                        // Ã¼berprÃ¼fen, ob das gewÃ¤hlte verfahren einem aus der liste entspricht
                         String  selected=retData.toString();
                         boolean ok=false;
                         for (Iterator<String[]> i=options.iterator();i.hasNext();) {
@@ -568,7 +568,7 @@ public abstract class AbstractPinTanPassport
     
     public boolean needInstKeys()
     {
-        // TODO: das abhängig vom thema "bankensignatur für HKTAN" machen
+        // TODO: das abhÃ¤ngig vom thema "bankensignatur fÃ¼r HKTAN" machen
         return false;
     }
     
@@ -584,9 +584,9 @@ public abstract class AbstractPinTanPassport
 
     public boolean hasInstSigKey()
     {
-        // TODO: hier müsste es eigentlich zwei antworten geben: eine für
-        // das PIN/TAN-verfahren an sich (immer true) und eine für
-        // evtl. bankensignatur-schlüssel für HITAN
+        // TODO: hier mÃ¼sste es eigentlich zwei antworten geben: eine fÃ¼r
+        // das PIN/TAN-verfahren an sich (immer true) und eine fÃ¼r
+        // evtl. bankensignatur-schlÃ¼ssel fÃ¼r HITAN
         return true;
     }
     
@@ -607,9 +607,9 @@ public abstract class AbstractPinTanPassport
     
     public HBCIKey getInstSigKey()
     {
-        // TODO: hier müsste es eigentlich zwei antworten geben: eine für
-        // das PIN/TAN-verfahren an sich (immer null) und eine für
-        // evtl. bankensignatur-schlüssel für HITAN
+        // TODO: hier mÃ¼sste es eigentlich zwei antworten geben: eine fÃ¼r
+        // das PIN/TAN-verfahren an sich (immer null) und eine fÃ¼r
+        // evtl. bankensignatur-schlÃ¼ssel fÃ¼r HITAN
         return null;
     }
     
@@ -620,19 +620,19 @@ public abstract class AbstractPinTanPassport
     
     public String getInstSigKeyName()
     {
-        // TODO: evtl. zwei antworten: pin/tan und bankensignatur für HITAN
+        // TODO: evtl. zwei antworten: pin/tan und bankensignatur fÃ¼r HITAN
         return getUserId();
     }
 
     public String getInstSigKeyNum()
     {
-        // TODO: evtl. zwei antworten: pin/tan und bankensignatur für HITAN
+        // TODO: evtl. zwei antworten: pin/tan und bankensignatur fÃ¼r HITAN
         return "0";
     }
 
     public String getInstSigKeyVersion()
     {
-        // TODO: evtl. zwei antworten: pin/tan und bankensignatur für HITAN
+        // TODO: evtl. zwei antworten: pin/tan und bankensignatur fÃ¼r HITAN
         return "0";
     }
 
@@ -763,7 +763,7 @@ public abstract class AbstractPinTanPassport
 
     public void setInstEncKey(HBCIKey key)
     {
-        // TODO: implementieren für bankensignatur bei HITAN
+        // TODO: implementieren fÃ¼r bankensignatur bei HITAN
     }
 
     public void setMyPublicDigKey(HBCIKey key)
@@ -975,7 +975,7 @@ public abstract class AbstractPinTanPassport
     {
         if (!getCurrentTANMethod(false).equals(Sig.SECFUNC_SIG_PT_1STEP)) {
             // wenn es sich um das pintan-verfahren im zweischritt-modus handelt,
-            // müssen evtl. zusätzliche nachrichten bzw. segmente eingeführt werden
+            // mÃ¼ssen evtl. zusÃ¤tzliche nachrichten bzw. segmente eingefÃ¼hrt werden
             
             HBCIUtils.log("afterCustomDialogInitHook: patching message queues for twostep method",HBCIUtils.LOG_DEBUG);
             
@@ -987,7 +987,7 @@ public abstract class AbstractPinTanPassport
             List<ArrayList<HBCIJobImpl>> msgs=dialog.getMessages();
             List<ArrayList<HBCIJobImpl>> new_msgs=new ArrayList<ArrayList<HBCIJobImpl>>();
             
-            // durch alle ursprünglichen nachrichten laufen
+            // durch alle ursprÃ¼nglichen nachrichten laufen
             for (Iterator<ArrayList<HBCIJobImpl>> i=msgs.iterator();i.hasNext();) {
                 ArrayList<HBCIJobImpl> msg_tasks= i.next();
                 ArrayList<HBCIJobImpl> new_msg_tasks=new ArrayList<HBCIJobImpl>();
@@ -1029,11 +1029,11 @@ public abstract class AbstractPinTanPassport
                               // eigenen Platz in den Job-Parametern
                               hktan.setParam("ordersegcode",task.getHBCICode());
 
-                              // Zitat aus HITANS5: Diese Funktion ermöglicht das Sicherstellen einer gültigen Kontoverbindung
-                              // z. B. für die Abrechnung von SMS-Kosten bereits vor Erzeugen und Versenden einer
+                              // Zitat aus HITANS5: Diese Funktion ermÃ¶glicht das Sicherstellen einer gÃ¼ltigen Kontoverbindung
+                              // z. B. fÃ¼r die Abrechnung von SMS-Kosten bereits vor Erzeugen und Versenden einer
                               // (ggf. kostenpflichtigen!) TAN.
                               //  0: Auftraggeberkonto darf nicht angegeben werden
-                              //  2: Auftraggeberkonto muss angegeben werden, wenn im Geschäftsvorfall enthalten
+                              //  2: Auftraggeberkonto muss angegeben werden, wenn im GeschÃ¤ftsvorfall enthalten
                               String noa = secmechInfo.getProperty("needorderaccount","");
                               HBCIUtils.log("needorderaccount=" + noa,HBCIUtils.LOG_INFO);
                               if (noa.equals("2"))
@@ -1051,19 +1051,19 @@ public abstract class AbstractPinTanPassport
                               }
                             }
                             
-                            // TODO: das für mehrfachsignaturen
+                            // TODO: das fÃ¼r mehrfachsignaturen
                             // hktan.setParam("notlasttan","J");
                             
                             // orderhash ermitteln
                             try {
                                 // TODO: hier wird jetzt *immer* segnum=3 angenommen,
-                                // kann in Einzelfällen evtl. auch anders sein (?)
+                                // kann in EinzelfÃ¤llen evtl. auch anders sein (?)
                                 SEG seg=task.createJobSegment(3);
                                 seg.validate();
                                 String segdata=seg.toString(0);
                                 HBCIUtils.log("calculating hash for jobsegment: "+segdata,HBCIUtils.LOG_DEBUG2);
                                 
-                                // zu verwendenden Hash-Algorithmus von dem Wert "orderhashmode" aus den BPD abhängig machen
+                                // zu verwendenden Hash-Algorithmus von dem Wert "orderhashmode" aus den BPD abhÃ¤ngig machen
                                 String orderhashmode=getOrderHashMode();
                                 String alg=null;
                                 String provider=null;
@@ -1098,25 +1098,25 @@ public abstract class AbstractPinTanPassport
                             // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
                             applyTanMedia(hktan);
                             
-                            // hktan-job zur neuen msg hinzufügen
+                            // hktan-job zur neuen msg hinzufÃ¼gen
                             additional_msg_tasks.add(hktan);
                             
                             // diese neue msg vor der aktuellen in die msg-queue einstellen
                             new_msgs.add(additional_msg_tasks);
                             // und gleich wieder auf null setzen, damit diese msg nicht
-                            // später nochmal *nach* der aktuellen msg eingefügt wird
+                            // spÃ¤ter nochmal *nach* der aktuellen msg eingefÃ¼gt wird
                             additional_msg_tasks=null;
                             
-                            // den aktuellen task ganz normal zur aktuellen msg hinzufügen
+                            // den aktuellen task ganz normal zur aktuellen msg hinzufÃ¼gen
                             new_msg_tasks.add(task);
                         } else {
                             // prozessvariante 2
                             HBCIUtils.log("process #2: adding new task HKTAN(p=4) to current message",HBCIUtils.LOG_DEBUG);
                             
-                            // den aktuellen task ganz normal zur aktuellen msg hinzufügen
+                            // den aktuellen task ganz normal zur aktuellen msg hinzufÃ¼gen
                             new_msg_tasks.add(task);
                             
-                            // dazu noch einen hktan-job hinzufügen
+                            // dazu noch einen hktan-job hinzufÃ¼gen
                             GVTAN2Step hktan1 = (GVTAN2Step) handler.newJob("TAN2Step");
                             hktan1.setExternalId(task.getExternalId()); // externe ID durchreichen
 
@@ -1127,20 +1127,20 @@ public abstract class AbstractPinTanPassport
                             hktan1.setParam("process","4");
                             // TODO: evtl. listindex ermitteln
                             // hktan1.setParam("listidx","");
-                            // TODO: das für mehrfachsignaturen
+                            // TODO: das fÃ¼r mehrfachsignaturen
                             // hktan1.setParam("notlasttan","N");
 
                             // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
                             applyTanMedia(hktan1);
                             
-                            // den hktan-job zusätzlich zur aktuellen msg hinzufügen
+                            // den hktan-job zusÃ¤tzlich zur aktuellen msg hinzufÃ¼gen
                             new_msg_tasks.add(hktan1);
                             
-                            // eine neue msg für das einreichen der tan erzeugen
+                            // eine neue msg fÃ¼r das einreichen der tan erzeugen
                             HBCIUtils.log("creating new msg with HKTAN(p=2,orderref=DELAYED)",HBCIUtils.LOG_DEBUG);
                             additional_msg_tasks=new ArrayList<HBCIJobImpl>();
                             
-                            // HKTAN-job für das einreichen der TAN erzeugen
+                            // HKTAN-job fÃ¼r das einreichen der TAN erzeugen
                             GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
                             hktan2.setExternalId(task.getExternalId()); // externe ID durchreichen
 
@@ -1152,29 +1152,29 @@ public abstract class AbstractPinTanPassport
                             hktan2.setParam("notlasttan","N");
                             // TODO: evtl. listindex ermitteln
                             // hktan2.setParam("listidx","");
-                            // TODO: das für mehrfachsignaturen
+                            // TODO: das fÃ¼r mehrfachsignaturen
                             // hktan2.setParam("notlasttan","J");
                             
                             // willuhn 2011-05-09 TAN-Media gibts nur bei Prozess 1,3,4 - also nicht in hktan2
 
-                            // hktan-job zur neuen msg hinzufügen
+                            // hktan-job zur neuen msg hinzufÃ¼gen
                             additional_msg_tasks.add(hktan2);
                             
                             // in dem ersten HKTAN-job eine referenz auf den zweiten speichern,
-                            // damit der erste die auftragsreferenz später im zweiten speichern kann
+                            // damit der erste die auftragsreferenz spÃ¤ter im zweiten speichern kann
                             HBCIUtils.log("storing reference to this HKTAN in previous HKTAN segment",HBCIUtils.LOG_DEBUG);
                             hktan1.storeOtherTAN2StepTask(hktan2);
                             
                             // in dem zweiten HKTAN-job eine referenz auf den originalen job
-                            // speichern, damit die antwortdaten für den job, die als antwortdaten
-                            // für hktan2 ankommen, dem richtigen job zugeordnet werden können
+                            // speichern, damit die antwortdaten fÃ¼r den job, die als antwortdaten
+                            // fÃ¼r hktan2 ankommen, dem richtigen job zugeordnet werden kÃ¶nnen
                             HBCIUtils.log("storing reference to original job in new HKTAN segment",HBCIUtils.LOG_DEBUG);
                             hktan2.storeOriginalTask(task);
                             
-                            // die neue msg wird später (nach der aktuellen) zur msg-queue hinzugefügt
+                            // die neue msg wird spÃ¤ter (nach der aktuellen) zur msg-queue hinzugefÃ¼gt
                         }
                     } else {
-                        // kein tan-pflichtiger task, also einfach zur gepatchten msg-queue hinzufügen
+                        // kein tan-pflichtiger task, also einfach zur gepatchten msg-queue hinzufÃ¼gen
                         HBCIUtils.log("found task that does not require a TAN: "+segcode+" - adding it to current msg",HBCIUtils.LOG_DEBUG);
                         new_msg_tasks.add(task);
                     }
@@ -1185,8 +1185,8 @@ public abstract class AbstractPinTanPassport
                 
                 new_msgs.add(msg_tasks);
                 if (additional_msg_tasks!=null) {
-                    // wenn für prozessvariante 2 eine zusätzliche msg erzeugt
-                    // wurde, diese jetzt mit anhängen
+                    // wenn fÃ¼r prozessvariante 2 eine zusÃ¤tzliche msg erzeugt
+                    // wurde, diese jetzt mit anhÃ¤ngen
                     HBCIUtils.log("adding newly created message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
                     new_msgs.add(additional_msg_tasks);
                     additional_msg_tasks=null;
@@ -1210,10 +1210,10 @@ public abstract class AbstractPinTanPassport
       
       // Gibts erst ab hhd1.3, siehe
       // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf, Kapitel B.4.3.1.1.1
-      // Zitat: Ist in der BPD als Anzahl unterstützter aktiver TAN-Medien ein Wert > 1
-      //        angegeben und ist der BPD-Wert für Bezeichnung des TAN-Mediums erforderlich = 2,
+      // Zitat: Ist in der BPD als Anzahl unterstÃ¼tzter aktiver TAN-Medien ein Wert > 1
+      //        angegeben und ist der BPD-Wert fÃ¼r Bezeichnung des TAN-Mediums erforderlich = 2,
       //        so muss der Kunde z. B. im Falle des mobileTAN-Verfahrens
-      //        hier die Bezeichnung seines für diesen Auftrag zu verwendenden TAN-
+      //        hier die Bezeichnung seines fÃ¼r diesen Auftrag zu verwendenden TAN-
       //        Mediums angeben.
       // Ausserdem: "Nur bei TAN-Prozess=1, 3, 4". Das muess aber der Aufrufer pruefen. Ist mir
       // hier zu kompliziert

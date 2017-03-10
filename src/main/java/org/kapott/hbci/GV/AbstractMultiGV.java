@@ -62,20 +62,20 @@ public abstract class AbstractMultiGV
             	}
             	
             } else if (path.equals("sumValue")) {
-                // summe der betr‰ge
+                // summe der betr√§ge
                 long sum = 0;
                 ArrayList<Transaction> entries = dtaus.getEntries();
                 for (Iterator<Transaction> i = entries.iterator(); i.hasNext();) {
                     DTAUS.Transaction entry = i.next();
                     sum += entry.value.getLongValue();
                 }
-                // TODO: hier wird ziemlich unschˆn direkt auf
+                // TODO: hier wird ziemlich unsch√∂n direkt auf
                 // die SyntaxDE-Funktionen zugegriffen
                 String v = HBCIUtils.bigDecimal2String(new BigDecimal(sum).divide(new BigDecimal("100.0")));
                 ret = new SyntaxWrt(v, 1, 0).toString();
             	
             } else if (path.equals("sumCurr")) {
-            	// w‰hrung des sammlers
+            	// w√§hrung des sammlers
                 ret=dtaus.getCurr()==DTAUS.CURR_DM?"DEM":"EUR";
             
             } else if (path.equals("sumCount")) {

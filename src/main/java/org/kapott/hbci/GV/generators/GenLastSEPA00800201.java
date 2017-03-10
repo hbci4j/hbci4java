@@ -139,7 +139,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator
         }
         catch (IllegalArgumentException e)
         {
-            throw new HBCI_Exception("Lastschrift-Art " + type + " wird in der SEPA-Version 008.002.01 Ihrer Bank noch nicht unterstützt",e);
+            throw new HBCI_Exception("Lastschrift-Art " + type + " wird in der SEPA-Version 008.002.01 Ihrer Bank noch nicht unterstÃ¼tzt",e);
         }
         
         //Payment Information - Credit Transfer Transaction Information

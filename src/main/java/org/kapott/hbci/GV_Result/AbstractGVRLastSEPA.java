@@ -23,9 +23,9 @@ package org.kapott.hbci.GV_Result;
 
 
 
-/** Rückgabedaten für das Einreichen einer terminierten SEPA-Lastschrift. Beim Einreichen
+/** RÃ¼ckgabedaten fÃ¼r das Einreichen einer terminierten SEPA-Lastschrift. Beim Einreichen
     einer terminierten Lastschrift gibt die Bank u.U. eine Auftrags-Identifikationsnummer
-    zurück, die benutzt werden kann, um den Auftrag später zu ändern oder zu löschen. */
+    zurÃ¼ck, die benutzt werden kann, um den Auftrag spÃ¤ter zu Ã¤ndern oder zu lÃ¶schen. */
 public abstract class AbstractGVRLastSEPA
     extends HBCIJobResultImpl
 {
@@ -40,8 +40,8 @@ public abstract class AbstractGVRLastSEPA
         this.orderid=orderid;
     }
 
-    /** Gibt die Auftrags-ID zurück, unter der der Auftrag bei der Bank geführt wird. 
-        @return die Auftrags-ID oder <code>null</code>, wenn die Bank keine Auftrags-IDs unterstützt */
+    /** Gibt die Auftrags-ID zurÃ¼ck, unter der der Auftrag bei der Bank gefÃ¼hrt wird. 
+        @return die Auftrags-ID oder <code>null</code>, wenn die Bank keine Auftrags-IDs unterstÃ¼tzt */
     public String getOrderId()
     {
         return orderid;

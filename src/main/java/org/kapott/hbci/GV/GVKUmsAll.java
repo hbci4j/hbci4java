@@ -51,8 +51,8 @@ public class GVKUmsAll
         addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
         addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
         addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
-        //currency wird in neueren Versionen nicht mehr benötigt, constraint liefert unnötige Warnung
-        //im Prinzip müsste es möglich sein, die constraints versionsabhängig zu definieren
+        //currency wird in neueren Versionen nicht mehr benÃ¶tigt, constraint liefert unnÃ¶tige Warnung
+        //im Prinzip mÃ¼sste es mÃ¶glich sein, die constraints versionsabhÃ¤ngig zu definieren
         //addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
         addConstraint("startdate","startdate","", LogFilter.FILTER_NONE);
         addConstraint("enddate","enddate","", LogFilter.FILTER_NONE);

@@ -28,17 +28,17 @@ import java.util.Properties;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
-/** <p>Repräsentation eines HBCI-Statuscodes. Objekte dieser Klasse
+/** <p>ReprÃ¤sentation eines HBCI-Statuscodes. Objekte dieser Klasse
     stellen einen einzigen HBCI-Returncode dar, welcher aus einer
     Antwortnachricht von der Bank extrahiert wurde.
     </p><p>
-    Zu den hier bereitgestellten Informationen zählen neben den eigentlichen
+    Zu den hier bereitgestellten Informationen zÃ¤hlen neben den eigentlichen
     Status-Daten (Status-Code, Textmeldung) auch eine numerische Darstellung
-    <em>des</em> Teiles der ursprünglich gesendeten Nachricht, auf den sich
-    diese Statusmeldung bezieht. Sofern das möglich ist, wird diese numerische
-    Darstellung zusätzlich in den Lowlevel-Namen des betreffenden Nachrichtenteils
-    umgewandelt, so dass für den Anwender eine bessere Lokalisierung des
-    Problems möglich ist.</p> */
+    <em>des</em> Teiles der ursprÃ¼nglich gesendeten Nachricht, auf den sich
+    diese Statusmeldung bezieht. Sofern das mÃ¶glich ist, wird diese numerische
+    Darstellung zusÃ¤tzlich in den Lowlevel-Namen des betreffenden Nachrichtenteils
+    umgewandelt, so dass fÃ¼r den Anwender eine bessere Lokalisierung des
+    Problems mÃ¶glich ist.</p> */
 public final class HBCIRetVal
     implements Serializable
 {
@@ -51,21 +51,21 @@ public final class HBCIRetVal
         </ul> */
     public String   code;
     /** Segmentnummer in der gesendeten Nachricht, auf das sich dieser 
-        Rückgabewert bezieht. Falls es sich um einen globalen Rückgabewert
+        RÃ¼ckgabewert bezieht. Falls es sich um einen globalen RÃ¼ckgabewert
         handelt (d.h. einen, der sich auf die komplette Nachricht bezieht),
         so ist dieser Wert <code>null</code>*/
     public String   segref;
     /** Nummer des Datenelementes oder der Datenelementgruppe, auf das sich 
-        dieser Rückgabewert bezieht. Diese Information ist nicht in jedem
+        dieser RÃ¼ckgabewert bezieht. Diese Information ist nicht in jedem
         Fall vorhanden (z.B. wenn es sich um einen globalen Fehlercode handelt
-        oder wenn sich der Rückgabewert auf ein komplettes Segment bezieht).
+        oder wenn sich der RÃ¼ckgabewert auf ein komplettes Segment bezieht).
         In einem solchen Fall ist dieser Wert <code>null</code>.*/
     public String   deref;
     /** Beschreibender Text. Dieser Text wird vom HBCI-Server der Bank generiert. */
     public String   text;
     /** Optionale Parameter, die im Zusammenhang mit <code>text</code> zu interpretieren sind. */
     public String[] params;
-    /** Lowlevel-Name des Nachrichtenelementes, auf das sich dieser Rückgabewert bezieht.
+    /** Lowlevel-Name des Nachrichtenelementes, auf das sich dieser RÃ¼ckgabewert bezieht.
         Dieser Name kann nicht in jedem Fall bestimmt werden, der Wert dieses Feldes
         kann dann auch <code>null</code> sein. */
     public String   element;
@@ -122,7 +122,7 @@ public final class HBCIRetVal
             params=(a.toArray(params));
     }
 
-    /** Gibt diesen Rückgabewert in einer lesbaren Darstellung zurück.
+    /** Gibt diesen RÃ¼ckgabewert in einer lesbaren Darstellung zurÃ¼ck.
         @return einen String, der alle Informationen dieses Objektes kurz
                 zusammenfasst. */
     public String toString()
@@ -154,21 +154,21 @@ public final class HBCIRetVal
         return ret.toString().trim();
     }
     
-    /** Gibt zurück, ob dieser Rückgabewert eine Erfolgsmeldung vom 
+    /** Gibt zurÃ¼ck, ob dieser RÃ¼ckgabewert eine Erfolgsmeldung vom 
         HBCI-Server darstellt */
     public boolean isSuccess()
     {
         return (code!=null) && (code.charAt(0)=='0');
     }
     
-    /** Gibt zurück, ob dieser Rückgabewert eine Warnung vom 
+    /** Gibt zurÃ¼ck, ob dieser RÃ¼ckgabewert eine Warnung vom 
         HBCI-Server darstellt */
     public boolean isWarning()
     {
         return (code!=null) && (code.charAt(0)=='3');
     }
     
-    /** Gibt zurück, ob dieser Rückgabewert eine HBCI-Fehlermeldung darstellt */
+    /** Gibt zurÃ¼ck, ob dieser RÃ¼ckgabewert eine HBCI-Fehlermeldung darstellt */
     public boolean isError()
     {
         return (code!=null) && (code.charAt(0)=='9');

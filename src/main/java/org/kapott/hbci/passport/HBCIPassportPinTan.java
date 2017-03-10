@@ -48,26 +48,26 @@ import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.security.Sig;
 
-/** <p>Passport-Klasse für HBCI mit PIN/TAN. Dieses Sicherheitsverfahren wird erst
-    in FinTS 3.0 spezifiziert, von einigen Banken aber schon mit früheren HBCI-Versionen
+/** <p>Passport-Klasse fÃ¼r HBCI mit PIN/TAN. Dieses Sicherheitsverfahren wird erst
+    in FinTS 3.0 spezifiziert, von einigen Banken aber schon mit frÃ¼heren HBCI-Versionen
     angeboten.</p><p>
     Bei diesem Verfahren werden die Nachrichten auf HBCI-Ebene nicht mit kryptografischen
-    Verfahren signiert oder verschlüsselt. Als "Signatur" werden statt dessen TANs 
+    Verfahren signiert oder verschlÃ¼sselt. Als "Signatur" werden statt dessen TANs 
     zusammen mit einer PIN verwendet. Die PIN wird dabei in <em>jeder</em> HBCI-Nachricht als
-    Teil der "Signatur" eingefügt, doch nicht alle Nachrichten benötigen eine TAN.
-    Eine TAN wird nur bei der Übermittlung bestimmter Geschäftsvorfälle benötigt. Welche
-    GV das konkret sind, ermittelt <em>HBCI4Java</em> automatisch aus den BPD. Für jeden GV, der
-    eine TAN benötigt, wird diese via Callback abgefragt und in die Nachricht eingefügt.</p><p>
-    Die Verschlüsselung der Nachrichten bei der Übertragung erfolgt auf einer höheren
-    Transportschicht. Die Nachrichten werden nämlich nicht direkt via TCP/IP übertragen,
-    sondern in das HTTP-Protokoll eingebettet. Die Verschlüsselung der übertragenen Daten
+    Teil der "Signatur" eingefÃ¼gt, doch nicht alle Nachrichten benÃ¶tigen eine TAN.
+    Eine TAN wird nur bei der Ãœbermittlung bestimmter GeschÃ¤ftsvorfÃ¤lle benÃ¶tigt. Welche
+    GV das konkret sind, ermittelt <em>HBCI4Java</em> automatisch aus den BPD. FÃ¼r jeden GV, der
+    eine TAN benÃ¶tigt, wird diese via Callback abgefragt und in die Nachricht eingefÃ¼gt.</p><p>
+    Die VerschlÃ¼sselung der Nachrichten bei der Ãœbertragung erfolgt auf einer hÃ¶heren
+    Transportschicht. Die Nachrichten werden nÃ¤mlich nicht direkt via TCP/IP Ã¼bertragen,
+    sondern in das HTTP-Protokoll eingebettet. Die VerschlÃ¼sselung der Ã¼bertragenen Daten
     erfolgt dabei auf HTTP-Ebene (via SSL = HTTPS).</p><p>
-    Wie auch bei {@link org.kapott.hbci.passport.HBCIPassportRDH} wird eine "Schlüsseldatei"
-    verwendet. In dieser werden allerdings keine kryptografischen Schlüssel abgelegt, sondern
-    lediglich die Zugangsdaten für den HBCI-Server (Hostadresse, Nutzerkennung, usw.) sowie
-    einige zusätzliche Daten (BPD, UPD, zuletzt benutzte HBCI-Version). Diese Datei wird
-    vor dem Abspeichern verschlüsselt. Vor dem Erzeugen bzw. erstmaligen Einlesen wird via
-    Callback nach einem Passwort gefragt, aus welchem der Schlüssel für die Verschlüsselung
+    Wie auch bei {@link org.kapott.hbci.passport.HBCIPassportRDH} wird eine "SchlÃ¼sseldatei"
+    verwendet. In dieser werden allerdings keine kryptografischen SchlÃ¼ssel abgelegt, sondern
+    lediglich die Zugangsdaten fÃ¼r den HBCI-Server (Hostadresse, Nutzerkennung, usw.) sowie
+    einige zusÃ¤tzliche Daten (BPD, UPD, zuletzt benutzte HBCI-Version). Diese Datei wird
+    vor dem Abspeichern verschlÃ¼sselt. Vor dem Erzeugen bzw. erstmaligen Einlesen wird via
+    Callback nach einem Passwort gefragt, aus welchem der SchlÃ¼ssel fÃ¼r die VerschlÃ¼sselung
     der Datei berechnet wird</p>*/
 public class HBCIPassportPinTan
     extends AbstractPinTanPassport
@@ -110,8 +110,8 @@ public class HBCIPassportPinTan
     }
     
     /**
-     * Gibt den Dateinamen der Schlüsseldatei zurück.
-     * @return Dateiname der Schlüsseldatei
+     * Gibt den Dateinamen der SchlÃ¼sseldatei zurÃ¼ck.
+     * @return Dateiname der SchlÃ¼sseldatei
      */
     public String getFileName() 
     {
@@ -284,7 +284,7 @@ public class HBCIPassportPinTan
             o.writeObject(getCustomerId());
             o.writeObject(getFilterType());
             
-            // hier auch gewähltes zweischritt-verfahren abspeichern
+            // hier auch gewÃ¤hltes zweischritt-verfahren abspeichern
             List<String> l = getAllowedTwostepMechanisms();
             HBCIUtils.log("saving two step mechs: " + l, HBCIUtils.LOG_DEBUG);
             o.writeObject(l);
@@ -354,7 +354,7 @@ public class HBCIPassportPinTan
 
             if (pintanMethod.equals(Sig.SECFUNC_SIG_PT_1STEP)) {
                 // nur beim normalen einschritt-verfahren muss anhand der segment-
-                // codes ermittelt werden, ob eine tan benötigt wird
+                // codes ermittelt werden, ob eine tan benÃ¶tigt wird
                 HBCIUtils.log("onestep method - checking GVs to decide whether or not we need a TAN",HBCIUtils.LOG_DEBUG);
                 
                 // segment-codes durchlaufen
@@ -366,7 +366,7 @@ public class HBCIPassportPinTan
                     String info=getPinTanInfo(code);
                     
                     if (info.equals("J")) {
-                        // für dieses segment wird eine tan benötigt
+                        // fÃ¼r dieses segment wird eine tan benÃ¶tigt
                         HBCIUtils.log("the job with the code "+code+" needs a TAN",HBCIUtils.LOG_DEBUG);
                         
                         if (tan.length()==0) {
@@ -402,7 +402,7 @@ public class HBCIPassportPinTan
                         
                     } else if (info.length()==0) {
                         // TODO: ist das hier dann nicht ein A-Segment? In dem Fall
-                        // wäre diese Warnung überflüssig
+                        // wÃ¤re diese Warnung Ã¼berflÃ¼ssig
                         HBCIUtils.log("the job with the code "+code+" seems not to be allowed with PIN/TAN",HBCIUtils.LOG_WARN);
                     }
                 }
@@ -521,7 +521,7 @@ public class HBCIPassportPinTan
 
     public boolean verify(byte[] data,byte[] sig)
     {
-        // TODO: fuer bankensignaturen fuer HITAN muss dass hier geändert werden
+        // TODO: fuer bankensignaturen fuer HITAN muss dass hier geÃ¤ndert werden
         return true;
     }
 

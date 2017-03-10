@@ -1,19 +1,19 @@
 <html><body>
 <p>Rewriter-Module werden von <em>HBCI4Java</em> benutzt, um mit fehlerhaften
-HBCI-Servern arbeiten zu können. Mit fehlerhaften HBCI-Servern sind Server gemeint,
+HBCI-Servern arbeiten zu kÃ¶nnen. Mit fehlerhaften HBCI-Servern sind Server gemeint,
 die die HBCI-Spezifikation in bestimmten Punkten falsch oder gar nicht implementiert
 haben. Da der <em>HBCI4Java</em>-Kernel streng spezifikationskonform implementiert
-ist, würde es bei der Benutzung eines solchen Servers zu Fehlermeldungen und
+ist, wÃ¼rde es bei der Benutzung eines solchen Servers zu Fehlermeldungen und
 zum Abbruch des Programmes kommen.</p>
 
-<p>Einige möglicherweise auftretenden Fehler können Ihre Ursache auch tatsächlich
+<p>Einige mÃ¶glicherweise auftretenden Fehler kÃ¶nnen Ihre Ursache auch tatsÃ¤chlich
 in einem Angriff auf die HBCI-Kommunikation haben (z.B. eine versuchte man-in-the-middle-Attacke).
 Aus eben diesem Grund ist der eigentlichen HBCI-Kernel so implementiert, dass er
-sämtliche Unstimmigkeiten mit entsprechenden Fehlermeldungen quittiert.</p>
+sÃ¤mtliche Unstimmigkeiten mit entsprechenden Fehlermeldungen quittiert.</p>
 
 <p>Einige auftretende Probleme haben aber ihre Ursache in fehlerhaft implementierten
 HBCI-Servern. Sind solche permanent auftretenden Probleme bekannt, und ist keine
-Aktualisierung der Server-Software möglich bzw. zu erwarten, so kann für das 
+Aktualisierung der Server-Software mÃ¶glich bzw. zu erwarten, so kann fÃ¼r das 
 jeweilige Problem ein Rewriter-Modul geschrieben werden.</p>
 
 <p>Der Kernel von <em>HBCI4Java</em> arbeitet nur mit spezifikationskonformen
@@ -25,28 +25,28 @@ so kann die Nachricht vor dem eigentlichen Versenden durch ein entsprechendes
 Rewriter-Modul geleitet werden, welches diese Nachricht so anpasst, dass der 
 HBCI-Server damit arbeiten kann.</p>
 
-<p>Umgekehrt gilt das auch für eingehende Nachrichten: Diese sind in einigen Fällen
-nicht spezifikationskonform. <em>HBCI4Java</em> würde beim Analysieren einer solchen
+<p>Umgekehrt gilt das auch fÃ¼r eingehende Nachrichten: Diese sind in einigen FÃ¤llen
+nicht spezifikationskonform. <em>HBCI4Java</em> wÃ¼rde beim Analysieren einer solchen
 Nachricht mit einer Fehlermeldung abbrechen. Deshalb kann jede eingehende Nachricht
-ebenfalls durch entsprechende Rewriter-Module geleitet werden, die dafür zuständig
+ebenfalls durch entsprechende Rewriter-Module geleitet werden, die dafÃ¼r zustÃ¤ndig
 sind, die "fehlerhafte" Nachricht in eine spezifikationskonforme Nachricht umzuwandeln,
 so dass sie von <em>HBCI4Java</em> verarbeitet werden kann.</p>
 
-<p>Die Schnittstelle für die Implementierung von Rewriter-Modulen wird an dieser
+<p>Die Schnittstelle fÃ¼r die Implementierung von Rewriter-Modulen wird an dieser
 Stelle nicht als "offizielle" Schnittstelle dokumentiert, da sich hier wahrscheinlich
-noch einige Änderungen ergeben. Vielmehr werden in <em>HBCI4Java</em> bereits einige
+noch einige Ã„nderungen ergeben. Vielmehr werden in <em>HBCI4Java</em> bereits einige
 Rewriter-Module mitgeliefert. Tritt ein bestimmtes Problem mit einem HBCI-Server
-auf, und liegt die Ursache dieses Problems tatsächlich in einem Fehler des HBCI-Servers,
+auf, und liegt die Ursache dieses Problems tatsÃ¤chlich in einem Fehler des HBCI-Servers,
 so ist ein entsprechender Bugreport an den Autor zu schicken, so dass evtl. ein
 entsprechendes Rewriter-Modul erzeugt werden kann.</p>
 
-<p>Defaultmäßig sind alle hier aufgeführten Rewriter-Module aktiviert. Das hat i.d.R.
+<p>DefaultmÃ¤ÃŸig sind alle hier aufgefÃ¼hrten Rewriter-Module aktiviert. Das hat i.d.R.
 keine Konsequenzen, wenn alle verarbeiteten Nachrichten bereits HBCI-konform
-sind (die Rewriter-Module belassen die Nachrichten dann in ihrer ursprünglichen Form).
-Einziger Nachteil ist die zusätzliche Zeit, die die Analyse der Nachrichten in den
-einzelnen Rewriter-Modulen benötigt. Vorteil dieses Verhaltens ist jedoch, dass die
-Rewriter-Module nicht manuell aktiviert werden müssen (und somit auch nicht
-vergessen werden können). Durch manuelles Setzen des Kernel-Parameters
+sind (die Rewriter-Module belassen die Nachrichten dann in ihrer ursprÃ¼nglichen Form).
+Einziger Nachteil ist die zusÃ¤tzliche Zeit, die die Analyse der Nachrichten in den
+einzelnen Rewriter-Modulen benÃ¶tigt. Vorteil dieses Verhaltens ist jedoch, dass die
+Rewriter-Module nicht manuell aktiviert werden mÃ¼ssen (und somit auch nicht
+vergessen werden kÃ¶nnen). Durch manuelles Setzen des Kernel-Parameters
 <code>kernel.rewriter</code> kann die Liste der aktiven Rewriter-Module jedoch
 jederzeit manipuliert werden (siehe dazu auch Klassenbeschreibung der Klasse
 <a href="../manager/HBCIUtils.html"><code>HBCIUtils</code></a>).</p>

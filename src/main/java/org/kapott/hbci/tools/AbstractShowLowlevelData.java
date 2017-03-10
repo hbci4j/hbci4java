@@ -26,7 +26,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Basisklasse für die beiden <code>ShowLowlevelGV*</code>-Tools.
+/** Basisklasse fÃ¼r die beiden <code>ShowLowlevelGV*</code>-Tools.
     Diese Klasse wird nur intern verwendet. */
 public class AbstractShowLowlevelData
 {

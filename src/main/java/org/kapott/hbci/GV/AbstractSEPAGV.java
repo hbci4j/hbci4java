@@ -120,7 +120,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         }
         
         
-        // SEPAInfo laden und darüber iterieren
+        // SEPAInfo laden und darÃ¼ber iterieren
         Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
         String value = props.getProperty("cannationalacc");
         HBCIUtils.log("cannationalacc=" + value,HBCIUtils.LOG_INFO);
@@ -128,9 +128,9 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
     
     /**
-     * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
+     * Diese Methode schaut in den BPD nach den unterstÃ¼tzen pain Versionen
      * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
-     * unterstützen pain Versionen. Der größte gemeinsamme Nenner wird
+     * unterstÃ¼tzen pain Versionen. Der grÃ¶ÃŸte gemeinsamme Nenner wird
      * zurueckgeliefert.
      * @param handler
      * @param gvName der Geschaeftsvorfall fuer den in den BPD nach dem PAIN-Versionen
@@ -167,9 +167,9 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
     
     /**
-     * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
+     * Diese Methode schaut in den BPD nach den unterstÃ¼tzen pain Versionen
      * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java
-     * unterstützen pain Versionen. Der größte gemeinsamme Nenner wird
+     * unterstÃ¼tzen pain Versionen. Der grÃ¶ÃŸte gemeinsamme Nenner wird
      * zurueckgeliefert.
      * @param handler
      * @param gvName der Geschaeftsvorfall fuer den in den BPD nach dem PAIN-Versionen
@@ -188,7 +188,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
 
         List<PainVersion> found = new ArrayList<PainVersion>();
     
-        // GV-Restrictions laden und darüber iterieren
+        // GV-Restrictions laden und darÃ¼ber iterieren
         Properties props = handler.getLowlevelJobRestrictions(gvName);
         Enumeration e = props.propertyNames();
         while (e.hasMoreElements())
@@ -281,7 +281,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
     
     /**
-     * Gibt die SEPA Message ID als String zurück. Existiert noch keine wird sie
+     * Gibt die SEPA Message ID als String zurÃ¼ck. Existiert noch keine wird sie
      * aus Datum und User ID erstellt.
      * 
      * @return SEPA Message ID
@@ -332,7 +332,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
 
     /**
-     * Erstellt die XML für diesen Job und schreibt diese in den _sepapain
+     * Erstellt die XML fÃ¼r diesen Job und schreibt diese in den _sepapain
      * Parameter des Jobs
      */
     protected void createSEPAFromParams()
@@ -359,7 +359,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     	    throw new HBCI_Exception("*** the _sepapain segment for this job can not be created",e);
     	}
     
-    	// Prüfen ob die XML erfolgreich generiert wurde
+    	// PrÃ¼fen ob die XML erfolgreich generiert wurde
     	if (o.size() == 0)
     	    throw new HBCI_Exception("*** the _sepapain segment for this job can not be created");
     
@@ -393,7 +393,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
 
 
     /**
-     * Bei SEPA Geschäftsvorfällen müssen wir verifyConstraints überschreiben um
+     * Bei SEPA GeschÃ¤ftsvorfÃ¤llen mÃ¼ssen wir verifyConstraints Ã¼berschreiben um
      * die SEPA XML zu generieren
      */
     public void verifyConstraints()
@@ -424,8 +424,8 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     }
     
     /**
-     * Referenzierter pain-Jobname. Bei vielen Geschäftsvorfällen
-     * (z.B. Daueraufträgen) wird die pain der Einzeltransaktion verwendet.
+     * Referenzierter pain-Jobname. Bei vielen GeschÃ¤ftsvorfÃ¤llen
+     * (z.B. DauerauftrÃ¤gen) wird die pain der Einzeltransaktion verwendet.
      * @return Value
      */
     public String getPainJobName() {

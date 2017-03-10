@@ -64,7 +64,7 @@ public final class SyntaxCheck
         String msgName=getArg(args,2,"Name der Nachricht");
         String checkSeq_st=getArg(args,3,"Sequenznummern validieren (0/1)");
         boolean checkSeq=checkSeq_st.equals("1");
-        String checkValids_st=getArg(args,4,"Auf gültige Werte testen (0/1)");
+        String checkValids_st=getArg(args,4,"Auf gÃ¼ltige Werte testen (0/1)");
         boolean checkValids=checkValids_st.equals("1");
         
         Properties props=new Properties();

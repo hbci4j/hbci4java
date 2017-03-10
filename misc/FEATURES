@@ -1,39 +1,39 @@
 
 --- was kann ich alles mit HBCI4Java machen?
 
-* Unterstützung der Version HBCI-2.01 bis HBCI-2.2 sowie FinTS-3.0
+* UnterstÃ¼tzung der Version HBCI-2.01 bis HBCI-2.2 sowie FinTS-3.0
 
-* Unterstützung von dateibasiertem RDH-Verfahren, PIN/TAN-Verfahren (seit 
+* UnterstÃ¼tzung von dateibasiertem RDH-Verfahren, PIN/TAN-Verfahren (seit 
   FinTS-3.0 auch das Zweischritt-Verfahren) und chipkartenbasierten DDV-
-  Verfahren, dabei Unterstützung von Kartentypen 0 und 1, Chipkartenleser 
-  Klassen 1-3 (benötigt CTAPI-Treiber) sowie Biometrieeinheit (nur Reiner-SCT)
+  Verfahren, dabei UnterstÃ¼tzung von Kartentypen 0 und 1, Chipkartenleser 
+  Klassen 1-3 (benÃ¶tigt CTAPI-Treiber) sowie Biometrieeinheit (nur Reiner-SCT)
 
-* Unterstützung von SIZ-RDH-Schlüsseldateien und RDH-2-Schlüsseldateien
+* UnterstÃ¼tzung von SIZ-RDH-SchlÃ¼sseldateien und RDH-2-SchlÃ¼sseldateien
   (StarMoney, GENOlite, VR-Networld, ProfiCash, ...)
   
-* Unterstützung der folgenden HBCI-Geschäftsvorfälle:
-  - Einzelüberweisungen
+* UnterstÃ¼tzung der folgenden HBCI-GeschÃ¤ftsvorfÃ¤lle:
+  - EinzelÃ¼berweisungen
     . normale (Ueb)
     . Umbuchung (Umb)
-    . Spendenüberweisungen (Donation)
-    . BZÜ-Überweisungen (UebBZU)
-  - Auslandsüberweisungen
-  - Sammelüberweisungen (MultiUeb),
+    . SpendenÃ¼berweisungen (Donation)
+    . BZÃœ-Ãœberweisungen (UebBZU)
+  - AuslandsÃ¼berweisungen
+  - SammelÃ¼berweisungen (MultiUeb),
     Sammellastschriften (MultiLast)
     (jeweils HBCI4Java-eigener DTAUS-Generator vorhanden)
-  - Verwalten von terminierten Überweisungen
+  - Verwalten von terminierten Ãœberweisungen
     . einreichen (TermUeb), auflisten (TermUebList), 
-      bearbeiten (TermUebEdit) und löschen (TermUebDel)
-  - Verwalten von Daueraufträgen
+      bearbeiten (TermUebEdit) und lÃ¶schen (TermUebDel)
+  - Verwalten von DauerauftrÃ¤gen
     . einreichen (DauerNew), auflisten (DauerList), 
-      bearbeiten (DauerEdit) und löschen (DauerDel)
+      bearbeiten (DauerEdit) und lÃ¶schen (DauerDel)
   - Einreichen von Lastschriften (Last)
   - Widerrufen von Lastschriften (StornoLast)
   - Verwalten von Festgeldanlagen
     . zur Zeit nur Abfrage von Konditionen (FestCondList) und Auflisten von
       bestehenden Festgeldanlagen (FestList[All])
   - Abfrage von Kontoinformationen
-    . Saldenabfragen (auch für SEPA-fähige Konten) (SaldoReq[All|SEPA])
+    . Saldenabfragen (auch fÃ¼r SEPA-fÃ¤hige Konten) (SaldoReq[All|SEPA])
     . Abholen von Umsatzinformationen (Kontoauszug) (KUms[All|New])
     . Abholen von Kontostammdaten (AccInfo)
     . Abholen von Informationen zu ausgegebenen Karten (Cardlist)
@@ -44,20 +44,20 @@
     (TANList)
   - Abholen von Wertpapierdepot-Informationen (WPDepotList)
   
-  - es werden u.U. einige weitere Geschäftsvorfälle unterstützt, für die 
-    zur Zeit noch keine Highlevel-Unterstützung implementiert ist, 
+  - es werden u.U. einige weitere GeschÃ¤ftsvorfÃ¤lle unterstÃ¼tzt, fÃ¼r die 
+    zur Zeit noch keine Highlevel-UnterstÃ¼tzung implementiert ist, 
     aber als Lowlevel-GVs lassen sich diese benutzen
 
-* Erzeugen von Aufträgen:
-  - Lowlevel-Interface: *schnelles* Implementieren neuer GVs möglich,
-    starke Kontrolle über alle GV-Parameter und Ergebnisdaten
+* Erzeugen von AuftrÃ¤gen:
+  - Lowlevel-Interface: *schnelles* Implementieren neuer GVs mÃ¶glich,
+    starke Kontrolle Ã¼ber alle GV-Parameter und Ergebnisdaten
   - Highlevel-Interface: anwendungsorientierte Schnittstelle zum
-    Erzeugen von Aufträgen und zum Auswerten von Ergebnisdaten
+    Erzeugen von AuftrÃ¤gen und zum Auswerten von Ergebnisdaten
 
 * einfacher Zugriff auf Job-bezogene Statusinformationen einer
   HBCI-Antwortnachricht
 
-* einfache Identifizierung von erzeugten Aufträgen und überprüfen
+* einfache Identifizierung von erzeugten AuftrÃ¤gen und Ã¼berprÃ¼fen
   deren Status' im Statusprotokoll
 
 * Zuordnung von Bankleitzahlen zu Kreditinstituts-Bezeichnungen
@@ -65,95 +65,95 @@
 * diverse Tools zum Auslesen/Bearbeiten der DDV-Chipkarte, zum Erzeugen
   eines INI-Briefes, zum Bearbeiten der Passports (Sicherheitsmedien), usw.
   
-* Batch-Tool für automatisierte Abarbeitung von HBCI-Jobs, die in einer
-  Textdatei definiert werden können
+* Batch-Tool fÃ¼r automatisierte Abarbeitung von HBCI-Jobs, die in einer
+  Textdatei definiert werden kÃ¶nnen
 
-* Schlüsselverwaltung:
-  - Sperren von Nutzerschlüsseln
-  - Neugenerieren von Nutzerschlüsseln
-  - Setzen von Nutzerschlüsseln auf vorgegebene Werte 
+* SchlÃ¼sselverwaltung:
+  - Sperren von NutzerschlÃ¼sseln
+  - Neugenerieren von NutzerschlÃ¼sseln
+  - Setzen von NutzerschlÃ¼sseln auf vorgegebene Werte 
 
-* dynamisches Ändern von Kernel-Parametern zur Laufzeit
+* dynamisches Ã„ndern von Kernel-Parametern zur Laufzeit
 
-* verfolgen der HBCI-Kernel-Aktivitäten durch Callbacks möglich 
+* verfolgen der HBCI-Kernel-AktivitÃ¤ten durch Callbacks mÃ¶glich 
 
 * dynamische Anpassungen an HBCI-Server mit "Fehlern" in der 
   Implementation des HBCI-Standards
 
-* Callback-Mechanismus für die Kommunikation zwischen HBCI-Kernel
-  und Anwendung, um unabhängig von der Laufzeitumgebung (Applikation,
+* Callback-Mechanismus fÃ¼r die Kommunikation zwischen HBCI-Kernel
+  und Anwendung, um unabhÃ¤ngig von der Laufzeitumgebung (Applikation,
   Servlet, Applet, mit oder ohne GUI usw.) zu sein
   
-* Möglichkeit, bestimmte von HBCI4Java erkannte Fehler im HBCI-Dialog
-  zu ignorieren (für die Entwicklungsphase von Anwendungen)
+* MÃ¶glichkeit, bestimmte von HBCI4Java erkannte Fehler im HBCI-Dialog
+  zu ignorieren (fÃ¼r die Entwicklungsphase von Anwendungen)
   
-* Demo-Applet bzw. Java WebStart Anwendung verfügbar
+* Demo-Applet bzw. Java WebStart Anwendung verfÃ¼gbar
 
-* Einsatz in multithreaded Anwendungen möglich
+* Einsatz in multithreaded Anwendungen mÃ¶glich
 
---- was macht HBCI4Java für mich?
+--- was macht HBCI4Java fÃ¼r mich?
 
 * automatische Auswertung der BPD:
-  - automatisches Benutzen der jeweils höchsten unterstützten
-    Version eines Geschäftsvorfalls
-  - automatisches Erzeugen zusätzlicher Nachrichten, wenn max.
-    Anzahl von GVs pro Nachricht überschritten wird
-  - automatisches Überprüfen, ob bestimmte Einschränkungen bzgl.
+  - automatisches Benutzen der jeweils hÃ¶chsten unterstÃ¼tzten
+    Version eines GeschÃ¤ftsvorfalls
+  - automatisches Erzeugen zusÃ¤tzlicher Nachrichten, wenn max.
+    Anzahl von GVs pro Nachricht Ã¼berschritten wird
+  - automatisches ÃœberprÃ¼fen, ob bestimmte EinschrÃ¤nkungen bzgl.
     eines zu erzeugenden Auftrages eingehalten wurden
-  - automatisches Erkennen, ob ein bestimmter Geschäftsvorfall
-    von der Bank überhaupt angeboten wird
-  - bei PIN/TAN-Verfahren: automatische Erkennung von Geschäftsvorfällen,
-    die eine TAN benötigen
+  - automatisches Erkennen, ob ein bestimmter GeschÃ¤ftsvorfall
+    von der Bank Ã¼berhaupt angeboten wird
+  - bei PIN/TAN-Verfahren: automatische Erkennung von GeschÃ¤ftsvorfÃ¤llen,
+    die eine TAN benÃ¶tigen
 
-* automatisches Überprüfen der verwendeten Kontonummern anhand
-  der für die jeweilige Bank zu verwendenden Prüfzifferverfahren 
+* automatisches ÃœberprÃ¼fen der verwendeten Kontonummern anhand
+  der fÃ¼r die jeweilige Bank zu verwendenden PrÃ¼fzifferverfahren 
 
 * automatisches Aktualisieren der BPD und UPD beim Wechsel der 
-  für die Dialoge benutzten HBCI-Version
+  fÃ¼r die Dialoge benutzten HBCI-Version
 
 * automatisches Konvertieren und Parsen von Datums- und Zeitangaben
   in bzw. von Locale-spezifischen Formaten
 
-* für jedes Sicherheitsmedium wird optional automatisch die damit zuletzt 
+* fÃ¼r jedes Sicherheitsmedium wird optional automatisch die damit zuletzt 
   benutzte HBCI-Version verwendet  
 
-* passwortgeschützte Sicherheitsmedien
+* passwortgeschÃ¼tzte Sicherheitsmedien
 
-* Speichern von (geänderten) Zugangsdaten auf der Chipkarte 
-  (für DDV-Passports) möglich (wird teilweise für Initialisierung
-  der Benutzerkennung benötigt)
+* Speichern von (geÃ¤nderten) Zugangsdaten auf der Chipkarte 
+  (fÃ¼r DDV-Passports) mÃ¶glich (wird teilweise fÃ¼r Initialisierung
+  der Benutzerkennung benÃ¶tigt)
 
 * sauberes Fehlerbehandlungs- und Status-System
 
 * Erzeugen noch nicht existierender bzw. Initialisieren nicht 
   initialisierter Sicherheitsmedien (=Passports) zur Laufzeit und 
-  ohne zusätzlichen Programmcode innerhalb der HBCI-Anwendung
+  ohne zusÃ¤tzlichen Programmcode innerhalb der HBCI-Anwendung
   (Beispiel siehe org.kapott.hbci.tools.AnalyzeReportOfTransactions)
 
-* automatisches Erzeugen zusätzlicher HBCI-Nachrichten, wenn
-  in einer Antwortnachricht nicht alle verfügbaren Antwortdaten
+* automatisches Erzeugen zusÃ¤tzlicher HBCI-Nachrichten, wenn
+  in einer Antwortnachricht nicht alle verfÃ¼gbaren Antwortdaten
   enthalten sind --> Abholen der restlichen Daten
 
-* völlig automatisches Aktualisieren von BPD, UPD und Institutsschlüsseln
+* vÃ¶llig automatisches Aktualisieren von BPD, UPD und InstitutsschlÃ¼sseln
 
 --- Details der Implementation von HBCI4Java
 
-* lauffähig auf allen Plattformen mit Java Runtime Environment 1.4+,
-  für Chipkartensupport wird zusätzlich Unterstützung von dynamischen
-  Bibliotheken benötigt.
+* lauffÃ¤hig auf allen Plattformen mit Java Runtime Environment 1.4+,
+  fÃ¼r Chipkartensupport wird zusÃ¤tzlich UnterstÃ¼tzung von dynamischen
+  Bibliotheken benÃ¶tigt.
 
 * austauschbare integrierte HBCI-Spezifikation (XML-Format),
-  damit leicht Anpassung an neue Versionen bzw. Debugging möglich
+  damit leicht Anpassung an neue Versionen bzw. Debugging mÃ¶glich
   
-* I18N-Support für Deutsch und Englisch (noch nicht für alle Texte)
+* I18N-Support fÃ¼r Deutsch und Englisch (noch nicht fÃ¼r alle Texte)
 
-* modulares System für folgende Komponenten, ermöglicht einfaches
-  Hinzufügen weiterer Module:
+* modulares System fÃ¼r folgende Komponenten, ermÃ¶glicht einfaches
+  HinzufÃ¼gen weiterer Module:
   - Kommunikationspfade (Standard-HBCI, PIN/TAN (HTTPS))
   - Kommunikationsfilter (Base64)
-  - Datentypen für Datenelemente
-  - Highlevel-Support für Geschäftsvorfälle
+  - Datentypen fÃ¼r Datenelemente
+  - Highlevel-Support fÃ¼r GeschÃ¤ftsvorfÃ¤lle
   - intern verwendete HBCI-Spezifikation
   - Sicherheitsmedien (=Passports: RDH mit Datei, DDV mit Chipkarte,
     PIN/TAN mit Datei)
-  - Module für Anpassung an "fehlerhafte" HBCI-Server
+  - Module fÃ¼r Anpassung an "fehlerhafte" HBCI-Server

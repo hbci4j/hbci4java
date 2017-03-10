@@ -347,8 +347,8 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
                             "no keys found in passport - so we use the highest available profile",
                             HBCIUtils.LOG_DEBUG);
 
-                        // es gibt noch gar keine schl¸ssel - also nehmen wir die
-                        // hˆchste unterst¸tzte profil-nummer
+                        // es gibt noch gar keine schl√ºssel - also nehmen wir die
+                        // h√∂chste unterst√ºtzte profil-nummer
 
                         String[][] methods = getSuppSecMethods();
                         int        maxVersion = 0;
@@ -359,7 +359,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
                             if (method.equals("RDH") && 
                                     (version == 1 || version == 2 || version == 10)) {
                                 // es werden nur RDH-1, RDH-2 und RDH-10 betrachtet, weil
-                                // alle anderen rdh-profile nicht f¸r software-lˆsungen
+                                // alle anderen rdh-profile nicht f√ºr software-l√∂sungen
                                 // zugelassen sind
                                 if (version > maxVersion) {
                                     maxVersion = version;
@@ -538,7 +538,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(msgkey,DESedeKeySpec.class));
             byte[] plainKey=spec.getKey(); // plainKey ist der DESede-Key
 
-            // abh‰ngig von der L‰nge des inst-enc-keys
+            // abh√§ngig von der L√§nge des inst-enc-keys
             int    cryptDataSize=getCryptDataSize(getInstEncKey().key);
             byte[] plainText=new byte[cryptDataSize];
             Arrays.fill(plainText,(byte)(0));

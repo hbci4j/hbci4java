@@ -5,7 +5,7 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 public class SwiftLegacy {
 
     public static String getTagValue(final String st, final String tag, final String[] suffixes, int counter) {
-        // TODO: hier noch die parser-Änderungen einbauen, die schon bei
+        // TODO: hier noch die parser-Ã„nderungen einbauen, die schon bei
         // getTagValue() drin sind ("\r\n:" anstatt ":" suchen)
         String ret = null;
 

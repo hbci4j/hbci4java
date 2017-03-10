@@ -32,23 +32,23 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 
-/** <p>Tool zum Erzeugen eines INI-Briefes. Diese Klasse enthält kein Programmier-API,
+/** <p>Tool zum Erzeugen eines INI-Briefes. Diese Klasse enthÃ¤lt kein Programmier-API,
     sondern ist direkt mit 
     <code>java&nbsp;org.kapott.hbci.tools.INILetter&nbsp;[passporttype&nbsp;[passport-file&nbsp;[textfile]]]</code>
-    ausführbar.<p/>
+    ausfÃ¼hrbar.<p/>
     Mit diesem Tool kann zu einem bereits existierenden RDH-Passport ein
     INI-Brief erzeugt werden. Das Passport muss dabei schon initialisiert
-    sein, und es müssen bereits Schlüssel erzeugt worden sein. Dieses Tool
-    wird also i.d.R. dann benötigt, wenn ein Passport erstmalig erzeugt wird
-    und die Programmausführung mit der Meldung <em>"Es muss ein INI-Brief erzeugt
+    sein, und es mÃ¼ssen bereits SchlÃ¼ssel erzeugt worden sein. Dieses Tool
+    wird also i.d.R. dann benÃ¶tigt, wenn ein Passport erstmalig erzeugt wird
+    und die ProgrammausfÃ¼hrung mit der Meldung <em>"Es muss ein INI-Brief erzeugt
     werden..."</em> abbricht.</p><p>
     Das erste Kommandozeilenargument <code>passporttype</code> gibt an, ob es sich um ein <code>RDH</code>-,
     ein <code>RDHNew</code>-, ein <code>SIZRDHFile</code>- oder ein <code>RDHXFile</code>-Passport-Format handelt. 
     <code>RDH</code>-Passports sollten nicht mehr verwendet werden (siehe dazu auch Datei 
-    <code>README.RDHNew</code>). Für <code>SIZRDHFile</code>-Passports wird eine separate
-    Bibliothek benötigt (siehe {@link org.kapott.hbci.passport.HBCIPassportSIZRDHFile}).</p>
+    <code>README.RDHNew</code>). FÃ¼r <code>SIZRDHFile</code>-Passports wird eine separate
+    Bibliothek benÃ¶tigt (siehe {@link org.kapott.hbci.passport.HBCIPassportSIZRDHFile}).</p>
     <p>Das zweite Kommandozeilenargument <code>passport-file</code> ist dabei die
-    Schlüsseldatei, in der die Passport-Daten gespeichert sind (entspricht
+    SchlÃ¼sseldatei, in der die Passport-Daten gespeichert sind (entspricht
     also dem Inhalt von <code>client.passport.*.filename</code>).</p><p>
     Das Argument <code>textfile</code> gibt den Dateinamen einer Datei an,
     in die der INI-Brief geschrieben werden soll. Der INI-Brief wird als
@@ -83,7 +83,7 @@ public final class INILetter
     {
         String rdhtype=getArg(args,0,"Passport-Typ (RDH, RDHNew, SIZRDHFile oder RDHXFile)");
         String pfilename=getArg(args,1,"Dateiname der Passport-Datei");
-        String ifilename=getArg(args,2,"Dateiname für INI-Brief (noch nicht existierende Text-Datei)");
+        String ifilename=getArg(args,2,"Dateiname fÃ¼r INI-Brief (noch nicht existierende Text-Datei)");
         
         String header="client.passport."+rdhtype;
         

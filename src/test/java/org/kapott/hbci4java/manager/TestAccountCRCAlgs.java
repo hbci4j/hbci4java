@@ -14,7 +14,7 @@ public class TestAccountCRCAlgs {
         Assert.assertTrue(AccountCRCAlgs.checkCreditorId("DE09ZZZ00000000001"));
     }
 
-    //Test, das alle anderen Prüfziffern bei "DE98ZZZ09999999999" falsch sind
+    //Test, das alle anderen PrÃ¼fziffern bei "DE98ZZZ09999999999" falsch sind
     @Test
     public void test002() {
         String prefix="DE";

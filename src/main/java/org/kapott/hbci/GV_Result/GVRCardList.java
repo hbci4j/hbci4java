@@ -30,14 +30,14 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.structures.Value;
 
 /** Klasse mit den Ergebissen der Abfrage von Informationen zu 
-    ausgegebenen Karten. Für jede Karte, für die Informationen
-    verfügbar sind, wird eine separates Informationsobjekt
+    ausgegebenen Karten. FÃ¼r jede Karte, fÃ¼r die Informationen
+    verfÃ¼gbar sind, wird eine separates Informationsobjekt
     {@link org.kapott.hbci.GV_Result.GVRCardList.CardInfo}
     erzeugt. */
 public class GVRCardList 
     extends HBCIJobResultImpl
 {
-    /** Informationen über genau eine Karte */
+    /** Informationen Ã¼ber genau eine Karte */
     public static class CardInfo
     {
         /** Kartenart aus den BPD */
@@ -48,9 +48,9 @@ public class GVRCardList
         public String cardordernumber;
         /** Name des Karteninhabers (optional) */
         public String owner;
-        /** Karte gültig von (optional) */
+        /** Karte gÃ¼ltig von (optional) */
         public Date   validFrom;
-        /** Karte gültig bis (optional) */
+        /** Karte gÃ¼ltig bis (optional) */
         public Date   validUntil;
         /** Kartenlimit (optional) */
         public Value  limit;
@@ -66,7 +66,7 @@ public class GVRCardList
             ret.append(" (typ ").append(cardtype);
             ret.append(", Folgenummer ").append(cardordernumber).append("): ");
             ret.append(owner).append(linesep);
-            ret.append("Gültig von ").append((validFrom!=null?HBCIUtils.date2StringLocal(validFrom):"unknown"));
+            ret.append("GÃ¼ltig von ").append((validFrom!=null?HBCIUtils.date2StringLocal(validFrom):"unknown"));
             ret.append(" bis ").append((validUntil!=null?HBCIUtils.date2StringLocal(validUntil):"unknown")).append(linesep);
             
             if (limit!=null)
@@ -90,9 +90,9 @@ public class GVRCardList
         entries.add(info);
     }
     
-    /** Gibt eine Liste aller empfangenen Karteninformations-Einträge zurück.
+    /** Gibt eine Liste aller empfangenen Karteninformations-EintrÃ¤ge zurÃ¼ck.
         @return Array mit Karteninformationsdaten. Das Array selbst ist niemals
-        <code>null</code>, kann aber die Länge <code>0</code> haben */
+        <code>null</code>, kann aber die LÃ¤nge <code>0</code> haben */
     public CardInfo[] getEntries()
     {
         return entries.toArray(new CardInfo[entries.size()]);

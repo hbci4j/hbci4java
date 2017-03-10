@@ -1,31 +1,31 @@
 
-Im Snapshot 2.4.7pre-20040108 wurde eine Änderung an den PIN/TAN-
+Im Snapshot 2.4.7pre-20040108 wurde eine Ã„nderung an den PIN/TAN-
 Passports vorgenommen. Bei der Verwendung dieses Sicherheitsverfahrens
-wird über das HTTPS-Protokoll kommuniziert. Die dabei ausgetauschten
-Daten können entweder BASE64-kodiert oder unverändert in den HTTP-Stream
+wird Ã¼ber das HTTPS-Protokoll kommuniziert. Die dabei ausgetauschten
+Daten kÃ¶nnen entweder BASE64-kodiert oder unverÃ¤ndert in den HTTP-Stream
 eingebettet werden. 
 
 Bei der erstmaligen Initialisierung von PIN/TAN-Passports gibt es deshalb
 jetzt einen neuen Callback, der diese Information vom Anwender erfragt
-(gültige Werte sind "None" und "Base64"). I.d.R. wird der Base64-Filter
+(gÃ¼ltige Werte sind "None" und "Base64"). I.d.R. wird der Base64-Filter
 verwendet, wenn aber die Komm. mit der Bank gar nicht erst zustande kommt,
 sollte hier statt dessen "None" verwendet werden.
 
-Alle PIN/TAN-Passport-Dateien, die mit einer älteren HBCI4Java-Version
+Alle PIN/TAN-Passport-Dateien, die mit einer Ã¤lteren HBCI4Java-Version
 angelegt wurden, lassen sich ab sofort nicht mehr einlesen. Die alte
-PIN/TAN-Passport-Datei kann ohne Bedenken gelöscht werden (da hier keine
-nicht wiederbeschaffbaren Informationen drin stehen). Bei der nächsten
+PIN/TAN-Passport-Datei kann ohne Bedenken gelÃ¶scht werden (da hier keine
+nicht wiederbeschaffbaren Informationen drin stehen). Bei der nÃ¤chsten
 Verwendung des entsprechenden Dateinamens als PIN/TAN-Passport-Filename
-wird diese Datei neu angelegt, diesmal *mit* den Informationen über den
+wird diese Datei neu angelegt, diesmal *mit* den Informationen Ã¼ber den
 zu verwendenden Kommunikationsfilter.
 
 Ab dem Snapshot 0.8pre-20040108 des HBCI4Java Passport Editors
-kann der Kommunikationsfilter auch nachträglich geändert werden. Hier
+kann der Kommunikationsfilter auch nachtrÃ¤glich geÃ¤ndert werden. Hier
 gilt allerdings ebenfalls, dass die alten Dateien nicht zu verwenden
 sind. Der Editor kann also nur bei neu erzeugten PIN/TAN-Passport-Dateien
 den darin gespeicherten Komm.-filter bearbeiten. 
 
-Grüße
+GrÃ¼ÃŸe
 
 -Stefan-
 hbci4java@kapott.org

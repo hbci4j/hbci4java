@@ -66,26 +66,26 @@ public abstract class HBCIJobImpl
 	}
 
 	private String segVersion;        /* Segment-Version */
-    private Properties llParams;       /* Eingabeparameter für diesen GV (Saldo.KTV.number) */
+    private Properties llParams;       /* Eingabeparameter fÃ¼r diesen GV (Saldo.KTV.number) */
     private HBCIPassportList passports;
-    protected HBCIJobResultImpl jobResult;         /* Objekt mit Rückgabedaten für diesen GV */
+    protected HBCIJobResultImpl jobResult;         /* Objekt mit RÃ¼ckgabedaten fÃ¼r diesen GV */
     private HBCIHandler parentHandler;
     private int idx;                  /* idx gibt an, der wievielte task innerhalb der aktuellen message
                                          dieser GV ist */
     private boolean executed;
-    private int contentCounter;       /* Zähler, wie viele Rückgabedaten bereits in outStore eingetragen wurden 
+    private int contentCounter;       /* ZÃ¤hler, wie viele RÃ¼ckgabedaten bereits in outStore eingetragen wurden 
                                            (entspricht der anzahl der antwort-segmente!)*/
     private Hashtable<String, String[][]> constraints;    /* Festlegungen, welche Parameter eine Anwendung setzen muss, wie diese im
                                          HBCI-Kernel umgesetzt werden und welche default-Werte vorgesehen sind; 
-                                         die Hashtable hat als Schlüssel einen String, der angibt, wie ein Wert aus einer
-                                         Anwendung heraus zu setzen ist. Der dazugehörige Value ist ein Array. Jedes Element
+                                         die Hashtable hat als SchlÃ¼ssel einen String, der angibt, wie ein Wert aus einer
+                                         Anwendung heraus zu setzen ist. Der dazugehÃ¶rige Value ist ein Array. Jedes Element
                                          dieses Arrays ist ein String[2], wobei das erste Element angibt, wie der Pfadname heisst,
                                          unter dem der anwendungs-definierte Wert abzulegen ist, das zweite Element gibt den
-                                         default-Wert an, falls für diesen Namen *kein* Wert angebeben wurde. Ist der default-
+                                         default-Wert an, falls fÃ¼r diesen Namen *kein* Wert angebeben wurde. Ist der default-
                                          Wert="", so kann das Syntaxelement weggelassen werden. Ist der default-Wert=null,
                                          so *muss* die Anwendung einen Wert spezifizieren */
-    private Hashtable<String, Integer> logFilterLevels; /* hier wird für jeden hl-param-name gespeichert, ob der dazugehörige wert
-                                          über den logfilter-Mechanimus geschützt werden soll */
+    private Hashtable<String, Integer> logFilterLevels; /* hier wird fÃ¼r jeden hl-param-name gespeichert, ob der dazugehÃ¶rige wert
+                                          Ã¼ber den logfilter-Mechanimus geschÃ¼tzt werden soll */
     
     private String externalId;
     
@@ -120,7 +120,7 @@ public abstract class HBCIJobImpl
         llParams.setProperty(this.name,"requested");
     }
     
-    /* gibt den segmentcode für diesen job zurück */
+    /* gibt den segmentcode fÃ¼r diesen job zurÃ¼ck */
     public String getHBCICode()
     {
         StringBuffer ret=null;
@@ -161,7 +161,7 @@ public abstract class HBCIJobImpl
     }
     
     /* gibt zu einem gegebenen jobnamen des namen dieses jobs in der syntax-spez.
-     * zurück (also mit angehängter versionsnummer)
+     * zurÃ¼ck (also mit angehÃ¤ngter versionsnummer)
      */
     private void findSpecNameForGV(String jobnameLL,HBCIHandler handler)
     {
@@ -209,7 +209,7 @@ public abstract class HBCIJobImpl
                       HBCIUtils.log("skipping segment version " + version + " for task " + jobnameLL + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_INFO);
                       continue;
                     }
-                    // merken der größten jemals aufgetretenen versionsnummer
+                    // merken der grÃ¶ÃŸten jemals aufgetretenen versionsnummer
                     if (version!=0) {
                         HBCIUtils.log("task "+jobnameLL+" is supported with segment version "+st,HBCIUtils.LOG_DEBUG2);
                         if (version>maxVersion) {
@@ -416,7 +416,7 @@ public abstract class HBCIJobImpl
         value[0]=getName()+"."+destinationName;
         value[1]=defValue;
 
-        // alle schon gespeicherten "ziel-lowlevelparameternamen" für den gewünschten
+        // alle schon gespeicherten "ziel-lowlevelparameternamen" fÃ¼r den gewÃ¼nschten
         // frontend-namen suchen
         String[][] values=(constraints.get(frontendName));
 
@@ -447,13 +447,13 @@ public abstract class HBCIJobImpl
         
         // durch alle gespeicherten constraints durchlaufen
         for (Iterator<String> i=constraints.keySet().iterator();i.hasNext();) {
-            // den frontendnamen für das constraint ermitteln
+            // den frontendnamen fÃ¼r das constraint ermitteln
             String     frontendName=(i.next());
             
             // dazu alle ziel-lowlevelparameter mit default-wert extrahieren
             String[][] values=(constraints.get(frontendName));
 
-            // durch alle ziel-lowlevel-parameternamen durchlaufen, die gesetzt werden müssen
+            // durch alle ziel-lowlevel-parameternamen durchlaufen, die gesetzt werden mÃ¼ssen
             for (int j=0;j<values.length;j++) {
             	//Array mit Pfadname und default Wert 
                 String[] value=values[j];
@@ -547,15 +547,15 @@ public abstract class HBCIJobImpl
         return passports.getMainPassport().getJobRestrictions(name);
     }
     
-    /** Setzen eines komplexen Job-Parameters (Kontodaten). Einige Jobs benötigten Kontodaten
-        als Parameter. Diese müssten auf "normalem" Wege durch drei Aufrufe von 
-        {@link #setParam(String,String)} erzeugt werden (je einer für
-        die Länderkennung, die Bankleitzahl und die Kontonummer). Durch Verwendung dieser
-        Methode wird dieser Weg abgekürzt. Es wird ein Kontoobjekt übergeben, für welches
+    /** Setzen eines komplexen Job-Parameters (Kontodaten). Einige Jobs benÃ¶tigten Kontodaten
+        als Parameter. Diese mÃ¼ssten auf "normalem" Wege durch drei Aufrufe von 
+        {@link #setParam(String,String)} erzeugt werden (je einer fÃ¼r
+        die LÃ¤nderkennung, die Bankleitzahl und die Kontonummer). Durch Verwendung dieser
+        Methode wird dieser Weg abgekÃ¼rzt. Es wird ein Kontoobjekt Ã¼bergeben, fÃ¼r welches
         die entsprechenden drei <code>setParam(String,String)</code>-Aufrufe automatisch
         erzeugt werden.
-        @param paramname die Basis der Parameter für die Kontodaten (für "<code>my.country</code>",
-        "<code>my.blz</code>", "<code>my.number</code>" wäre das also "<code>my</code>")
+        @param paramname die Basis der Parameter fÃ¼r die Kontodaten (fÃ¼r "<code>my.country</code>",
+        "<code>my.blz</code>", "<code>my.number</code>" wÃ¤re das also "<code>my</code>")
         @param acc ein Konto-Objekt, aus welchem die zu setzenden Parameterdaten entnommen werden */
     public void setParam(String paramname,Konto acc)
     {
@@ -593,15 +593,15 @@ public abstract class HBCIJobImpl
         
     }
 
-    /** Setzen eines komplexen Job-Parameters (Geldbetrag). Einige Jobs benötigten Geldbeträge
-        als Parameter. Diese müssten auf "normalem" Wege durch zwei Aufrufe von 
-        {@link #setParam(String,String)} erzeugt werden (je einer für
-        den Wert und die Währung). Durch Verwendung dieser
-        Methode wird dieser Weg abgekürzt. Es wird ein Value-Objekt übergeben, für welches
+    /** Setzen eines komplexen Job-Parameters (Geldbetrag). Einige Jobs benÃ¶tigten GeldbetrÃ¤ge
+        als Parameter. Diese mÃ¼ssten auf "normalem" Wege durch zwei Aufrufe von 
+        {@link #setParam(String,String)} erzeugt werden (je einer fÃ¼r
+        den Wert und die WÃ¤hrung). Durch Verwendung dieser
+        Methode wird dieser Weg abgekÃ¼rzt. Es wird ein Value-Objekt Ã¼bergeben, fÃ¼r welches
         die entsprechenden zwei <code>setParam(String,String)</code>-Aufrufe automatisch
         erzeugt werden.
-        @param paramname die Basis der Parameter für die Geldbetragsdaten (für "<code>btg.value</code>" und
-        "<code>btg.curr</code>" wäre das also "<code>btg</code>")
+        @param paramname die Basis der Parameter fÃ¼r die Geldbetragsdaten (fÃ¼r "<code>btg.value</code>" und
+        "<code>btg.curr</code>" wÃ¤re das also "<code>btg</code>")
         @param v ein Value-Objekt, aus welchem die zu setzenden Parameterdaten entnommen werden */
     public void setParam(String paramname, Value v)
     {
@@ -619,11 +619,11 @@ public abstract class HBCIJobImpl
     }
 
     /** Setzen eines Job-Parameters, bei dem ein Datums als Wert erwartet wird. Diese Methode
-        dient als Wrapper für {@link #setParam(String,String)}, um das Datum in einen korrekt
-        formatierten String umzuwandeln. Das "richtige" Datumsformat ist dabei abhängig vom
+        dient als Wrapper fÃ¼r {@link #setParam(String,String)}, um das Datum in einen korrekt
+        formatierten String umzuwandeln. Das "richtige" Datumsformat ist dabei abhÃ¤ngig vom
         aktuellen Locale.
         @param paramName Name des zu setzenden Job-Parameters
-        @param date Datum, welches als Wert für den Job-Parameter benutzt werden soll */
+        @param date Datum, welches als Wert fÃ¼r den Job-Parameter benutzt werden soll */
     public void setParam(String paramName, Date date)
     {
         setParam(paramName, null, date);
@@ -635,7 +635,7 @@ public abstract class HBCIJobImpl
     }
 
     /** Setzen eines Job-Parameters, bei dem ein Integer-Wert Da als Wert erwartet wird. Diese Methode
-        dient nur als Wrapper für {@link #setParam(String,String)}.
+        dient nur als Wrapper fÃ¼r {@link #setParam(String,String)}.
         @param paramName Name des zu setzenden Job-Parameters
         @param i Integer-Wert, der als Wert gesetzt werden soll */     
     public void setParam(String paramName,int i)
@@ -648,16 +648,16 @@ public abstract class HBCIJobImpl
     	return constraints.get(hlParamName)!=null;
     }
 
-    /** <p>Setzen eines Job-Parameters. Für alle Highlevel-Jobs ist in der Package-Beschreibung zum
+    /** <p>Setzen eines Job-Parameters. FÃ¼r alle Highlevel-Jobs ist in der Package-Beschreibung zum
         Package {@link org.kapott.hbci.GV} eine Auflistung aller Jobs und deren Parameter zu finden.
-        Für alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
+        FÃ¼r alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
         {@link org.kapott.hbci.tools.ShowLowlevelGVs} oder zur Laufzeit durch Aufruf
         der Methode {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobParameterNames(String)} 
         ermittelt werden.</p>
-        <p>Bei Verwendung dieser oder einer der anderen <code>setParam()</code>-Methoden werden zusätzlich
+        <p>Bei Verwendung dieser oder einer der anderen <code>setParam()</code>-Methoden werden zusÃ¤tzlich
         einige der Job-Restriktionen (siehe {@link #getJobRestrictions()}) analysiert. Beim Verletzen einer
-        der überprüften Einschränkungen wird eine Exception mit einer entsprechenden Meldung erzeugt.
-        Diese Überprüfung findet allerdings nur bei Highlevel-Jobs statt.</p>
+        der Ã¼berprÃ¼ften EinschrÃ¤nkungen wird eine Exception mit einer entsprechenden Meldung erzeugt.
+        Diese ÃœberprÃ¼fung findet allerdings nur bei Highlevel-Jobs statt.</p>
         @param paramName der Name des zu setzenden Parameters.
         @param value Wert, auf den der Parameter gesetzt werden soll */
     @Override
@@ -666,24 +666,24 @@ public abstract class HBCIJobImpl
         setParam(paramName,null,value);
     }
 
-    /** <p>Setzen eines Job-Parameters. Für alle Highlevel-Jobs ist in der Package-Beschreibung zum
+    /** <p>Setzen eines Job-Parameters. FÃ¼r alle Highlevel-Jobs ist in der Package-Beschreibung zum
         Package {@link org.kapott.hbci.GV} eine Auflistung aller Jobs und deren Parameter zu finden.
-        Für alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
+        FÃ¼r alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
         {@link org.kapott.hbci.tools.ShowLowlevelGVs} oder zur Laufzeit durch Aufruf
         der Methode {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobParameterNames(String)} 
         ermittelt werden.</p>
-        <p>Bei Verwendung dieser oder einer der anderen <code>setParam()</code>-Methoden werden zusätzlich
+        <p>Bei Verwendung dieser oder einer der anderen <code>setParam()</code>-Methoden werden zusÃ¤tzlich
         einige der Job-Restriktionen (siehe {@link #getJobRestrictions()}) analysiert. Beim Verletzen einer
-        der überprüften Einschränkungen wird eine Exception mit einer entsprechenden Meldung erzeugt.
-        Diese Überprüfung findet allerdings nur bei Highlevel-Jobs statt.</p>
+        der Ã¼berprÃ¼ften EinschrÃ¤nkungen wird eine Exception mit einer entsprechenden Meldung erzeugt.
+        Diese ÃœberprÃ¼fung findet allerdings nur bei Highlevel-Jobs statt.</p>
         @param paramName der Name des zu setzenden Parameters.
-        @param index Der index oder <code>null</code>, wenn kein Index gewünscht ist
+        @param index Der index oder <code>null</code>, wenn kein Index gewÃ¼nscht ist
         @param value Wert, auf den der Parameter gesetzt werden soll */
     @Override
     public void setParam(String paramName,Integer index,String value)
     {
     	// wenn der Parameter einen LogFilter-Level gesetzt hat, dann den
-    	// betreffenden Wert zum Logfilter hinzufügen
+    	// betreffenden Wert zum Logfilter hinzufÃ¼gen
     	Integer logFilterLevel=logFilterLevels.get(paramName);
     	if (logFilterLevel!=null && logFilterLevel.intValue()!=0) {
     		LogFilter.getInstance().addSecretData(value,"X",logFilterLevel.intValue());
@@ -761,9 +761,9 @@ public abstract class HBCIJobImpl
         return this.segVersion;
     }
 
-    /* stellt fest, ob für diesen Task ein neues Auftragssegment generiert werden muss.
-       Das ist in zwei Fällen der Fall: der Task wurde noch nie ausgeführt; oder der Task
-       wurde bereits ausgeführt, hat aber eine "offset"-Meldung zurückgegeben */
+    /* stellt fest, ob fÃ¼r diesen Task ein neues Auftragssegment generiert werden muss.
+       Das ist in zwei FÃ¤llen der Fall: der Task wurde noch nie ausgefÃ¼hrt; oder der Task
+       wurde bereits ausgefÃ¼hrt, hat aber eine "offset"-Meldung zurÃ¼ckgegeben */
     public boolean needsContinue(int loop)
     {
         boolean needs=false;
@@ -786,8 +786,8 @@ public abstract class HBCIJobImpl
         return needs;
     }
 
-    /* gibt (sofern vorhanden) den offset-Wert des letzten HBCI-Rückgabecodes
-       zurück */
+    /* gibt (sofern vorhanden) den offset-Wert des letzten HBCI-RÃ¼ckgabecodes
+       zurÃ¼ck */
     private String getContinueOffset(int loop)
     {
         String ret=null;
@@ -805,9 +805,9 @@ public abstract class HBCIJobImpl
         return ret;
     }
 
-    /* füllt das Objekt mit den Rückgabedaten. Dazu wird zuerst eine Liste aller
-       Segmente erstellt, die Rückgabedaten für diesen Task enthalten. Anschließend
-       werden die HBCI-Rückgabewerte (RetSegs) im outStore gespeichert. Danach werden
+    /* fÃ¼llt das Objekt mit den RÃ¼ckgabedaten. Dazu wird zuerst eine Liste aller
+       Segmente erstellt, die RÃ¼ckgabedaten fÃ¼r diesen Task enthalten. AnschlieÃŸend
+       werden die HBCI-RÃ¼ckgabewerte (RetSegs) im outStore gespeichert. Danach werden
        die GV-spezifischen Daten im outStore abgelegt */
     public void fillJobResult(HBCIMsgStatus status,int offset)
     {
@@ -818,8 +818,8 @@ public abstract class HBCIJobImpl
             // nachsehen, welche antwortsegmente ueberhaupt
             // zu diesem task gehoeren
             
-            // res-num --> segmentheader (wird für sortierung der 
-            // antwort-segmente benötigt)
+            // res-num --> segmentheader (wird fÃ¼r sortierung der 
+            // antwort-segmente benÃ¶tigt)
             Hashtable<Integer,String> keyHeaders=new Hashtable<Integer, String>();
             for (Enumeration i=result.keys();i.hasMoreElements();) {
                 String key=(String)(i.nextElement());
@@ -868,8 +868,8 @@ public abstract class HBCIJobImpl
         }
     }
     
-    /* wenn wenigstens ein HBCI-Rückgabewert für den aktuellen GV gefunden wurde,
-       so werden im outStore zusätzlich die entsprechenden Dialog-Parameter
+    /* wenn wenigstens ein HBCI-RÃ¼ckgabewert fÃ¼r den aktuellen GV gefunden wurde,
+       so werden im outStore zusÃ¤tzlich die entsprechenden Dialog-Parameter
        gespeichert (Property @c basic.*) */
     private void saveBasicValues(Properties result,int ref)
     {
@@ -892,7 +892,7 @@ public abstract class HBCIJobImpl
     }
 
     /*
-     * speichert die HBCI-Rückgabewerte für diesen GV im outStore ab. Dazu
+     * speichert die HBCI-RÃ¼ckgabewerte fÃ¼r diesen GV im outStore ab. Dazu
      * werden alle RetSegs durchgesehen; diejenigen, die den aktuellen GV
      * betreffen, werden im @c data Property unter dem namen @c ret_i.*
      * gespeichert. @i entspricht dabei dem @c retValCounter.
@@ -910,17 +910,17 @@ public abstract class HBCIJobImpl
             }
         }
         
-        /* bei Jobs, die mehrere Nachrichten benötigt haben, bewirkt das, dass nur
-         * der globStatus der *letzten* ausgeführten Nachricht gespeichert wird.
+        /* bei Jobs, die mehrere Nachrichten benÃ¶tigt haben, bewirkt das, dass nur
+         * der globStatus der *letzten* ausgefÃ¼hrten Nachricht gespeichert wird.
          * Das ist aber auch ok, weil nach einem Fehler keine weiteren Nachrichten
-         * ausgeführt werden, so dass im Fehlerfall der fehlerhafte globStatus zur
-         * Verfügung steht. Im OK-Fall werden höchstens die OK-Meldungen der vorherigen
-         * Nachrichten überschrieben. */
+         * ausgefÃ¼hrt werden, so dass im Fehlerfall der fehlerhafte globStatus zur
+         * VerfÃ¼gung steht. Im OK-Fall werden hÃ¶chstens die OK-Meldungen der vorherigen
+         * Nachrichten Ã¼berschrieben. */
         jobResult.globStatus=status.globStatus;
     }
 
-    /* diese Methode wird i.d.R. durch abgeleitete GV-Klassen überschrieben, um die
-       Rückgabedaten in einem passenden Format abzuspeichern. Diese default-Implementation
+    /* diese Methode wird i.d.R. durch abgeleitete GV-Klassen Ã¼berschrieben, um die
+       RÃ¼ckgabedaten in einem passenden Format abzuspeichern. Diese default-Implementation
        tut nichts */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
@@ -1079,7 +1079,7 @@ public abstract class HBCIJobImpl
     }
     
     // die default-implementierung holt einfach aus den job-parametern
-    // den genannten wert. eine bestimmte GV-klasse kann das überschreiben,
+    // den genannten wert. eine bestimmte GV-klasse kann das Ã¼berschreiben,
     // um "besondere Werte" (z.B. sumValues) irgendwie anders zu errechnen
     public String getChallengeParam(String path) 
     {

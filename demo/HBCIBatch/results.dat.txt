@@ -1,10 +1,10 @@
 
-# Das vierte Argument beim Aufruf von HBCIBatch gibt den Dateinamen für eine
-# Datei an, in welche die Ergebnisse der erfolgreich ausgeführten Jobs 
-# geschrieben werden. Für Jobs, bei deren Ausführung es zu Fehlern kam, werden
+# Das vierte Argument beim Aufruf von HBCIBatch gibt den Dateinamen fÃ¼r eine
+# Datei an, in welche die Ergebnisse der erfolgreich ausgefÃ¼hrten Jobs 
+# geschrieben werden. FÃ¼r Jobs, bei deren AusfÃ¼hrung es zu Fehlern kam, werden
 # Ausgaben in eine separate Datei geschrieben - siehe unten. 
 # 
-# Für jeden ausgeführten Job werden Ausgaben in folgendem Format erzeugt:
+# FÃ¼r jeden ausgefÃ¼hrten Job werden Ausgaben in folgendem Format erzeugt:
 #
 #   jobid:JOBID
 #   job status:
@@ -15,22 +15,22 @@
 # Die Ausgaben mehrerer Jobs werden durch Leerzeilen voneinander getrennt.
 #
 # Die erste Zeile zeigt an, zu welchem Job aus der Job-Definitions-Datei die
-# folgenden Daten gehören. Die hier angegebene JOBID entspricht dabei der JOBID
+# folgenden Daten gehÃ¶ren. Die hier angegebene JOBID entspricht dabei der JOBID
 # aus der Job-Definitions-Datei.
 #
-# STATUSMELDUNGEN enthält HBCI-Statusmeldungen, die diesen Job betreffen.
-# Es handelt sich dabei um den Rückgabewert von 
+# STATUSMELDUNGEN enthÃ¤lt HBCI-Statusmeldungen, die diesen Job betreffen.
+# Es handelt sich dabei um den RÃ¼ckgabewert von 
 # job.getJobResult().getJobStatus().toString()
 #
-# Die ERGEBNISDATEN bestehen aus den Daten, die bei der Ausführung des GVs
-# zurückgegeben werden. Je nach gewählten Rückgabedatenformat ("toString" vs.
+# Die ERGEBNISDATEN bestehen aus den Daten, die bei der AusfÃ¼hrung des GVs
+# zurÃ¼ckgegeben werden. Je nach gewÃ¤hlten RÃ¼ckgabedatenformat ("toString" vs.
 # "props" in der Job-Definitions-Datei) werden die Daten hier in 
 # unterschiedlichen Formaten abgelegt.
 #
 #
-# Für GVs, bei deren Ausführung Fehler aufgetreten sind, wird eine separate
+# FÃ¼r GVs, bei deren AusfÃ¼hrung Fehler aufgetreten sind, wird eine separate
 # Ausgabedatei erzeugt. Deren Dateiname entspricht dem Dateinamen der 
-# Ausgabedatei, erweitert um das Suffix ".err". Darin werden für jeden GV
+# Ausgabedatei, erweitert um das Suffix ".err". Darin werden fÃ¼r jeden GV
 # mit Fehlern folgende Ausgaben erzeugt:
 #
 #   jobid:JOBID
@@ -41,8 +41,8 @@
 #
 # Die JOBID entspricht dabei wieder der JOBID aus der Job-Definitions-Datei.
 #
-# GLOBAL STATUS enthält die "globalen Status-Meldungen" - also HBCI-Status-
+# GLOBAL STATUS enthÃ¤lt die "globalen Status-Meldungen" - also HBCI-Status-
 # Meldungen, die den Nachrichtenaustausch als ganzes betreffen.
 #
-# JOB STATUS enthält die HBCI-Status-Meldungen, die konkret den auszuführenden
+# JOB STATUS enthÃ¤lt die HBCI-Status-Meldungen, die konkret den auszufÃ¼hrenden
 # GV betreffen.

@@ -24,7 +24,7 @@ package org.kapott.hbci.GV_Result;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 /** Ergebnis einer Dauerauftragseinreichung. Falls die Bank die Vergabe von
-    Auftrags-Identifikationsnummern unterstützt, wird die ID für den neuen
+    Auftrags-Identifikationsnummern unterstÃ¼tzt, wird die ID fÃ¼r den neuen
     Dauerauftrag hier bereitgestellt. */
 public class GVRDauerNew
     extends HBCIJobResultImpl
@@ -36,10 +36,10 @@ public class GVRDauerNew
         this.orderid=orderid;
     }
 
-    /** Gibt die Auftragsnummer zurück, unter der der eingereichte Dauerauftrag
+    /** Gibt die Auftragsnummer zurÃ¼ck, unter der der eingereichte Dauerauftrag
         bei der Bank registriert ist 
         @return die Auftragsidentifikationsnummer oder <code>null</code>, wenn die
-                Bank das nicht unterstützt. */
+                Bank das nicht unterstÃ¼tzt. */
     public String getOrderId()
     {
         return orderid;

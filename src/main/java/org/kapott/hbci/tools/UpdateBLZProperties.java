@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -38,7 +39,7 @@ public class UpdateBLZProperties
    *   1. Pfad/Dateiname zu "fints_institute.csv".
    *   2. Pfad/Dateiname zu "blz.properties".
    *   3. Pfad/Dateiname zur neuen "blz.properties".
-   *   4. optional: Pfad/Dateiname zur BLZ-Datei der Bundesbank. Falls angegeben, werden die eventuell vorhandene BIC-Updates übernommen
+   *   4. optional: Pfad/Dateiname zur BLZ-Datei der Bundesbank. Falls angegeben, werden die eventuell vorhandene BIC-Updates Ã¼bernommen
    * @throws Exception 
    */
   public static void main(String[] args) throws Exception

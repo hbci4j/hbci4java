@@ -31,29 +31,29 @@ import org.kapott.hbci.protocol.MultipleSyntaxElements;
 import org.kapott.hbci.protocol.SyntaxElement;
 import org.kapott.hbci.protocol.factory.MSGFactory;
 
-/** <p>Rewriter-Modul für falsche Informationen über TAN-Verfahren. Einige Banken
- * mit HBCI+ (HBCI-PIN/TAN) -Unterstützung stellen fälschlicherweise in die BPD 
- * die Information ein, dass das Sicherheitsverfahren "TAN" unterstützt wird.
- * "TAN" ist aber kein gültiger Code für Sicherheitsmechanismen, so dass dieses
+/** <p>Rewriter-Modul fÃ¼r falsche Informationen Ã¼ber TAN-Verfahren. Einige Banken
+ * mit HBCI+ (HBCI-PIN/TAN) -UnterstÃ¼tzung stellen fÃ¤lschlicherweise in die BPD 
+ * die Information ein, dass das Sicherheitsverfahren "TAN" unterstÃ¼tzt wird.
+ * "TAN" ist aber kein gÃ¼ltiger Code fÃ¼r Sicherheitsmechanismen, so dass dieses
  * Rewriter-Modul die "TAN"-Information aus den BPD entfernt.</p>
  * <p>Ist dieses Modul aktiv, so muss auch das Modul "<code>Olly</code>" aktiv
- * sein, weil einige hier vorgenommene Änderungen wiederum fehlerhafte Nachrichten
+ * sein, weil einige hier vorgenommene Ã„nderungen wiederum fehlerhafte Nachrichten
  * erzeugen, die aber durch "<code>Olly</code>" wieder korrigiert werden.</p> */
 public class RSecTypeTAN 
     extends Rewrite 
 {
     // TODO: den rewriter umschreiben, so dass er nur string-operationen
     // benutzt, weil nicht sichergestellt werden kann, dass die eingehende
-    // nachricht hier tatsächlich schon geparst werden kann
+    // nachricht hier tatsÃ¤chlich schon geparst werden kann
     public String incomingClearText(String st,MsgGen gen) 
     {
-        // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
+        // empfangene Nachricht parsen, dabei die validvalues-ÃœberprÃ¼fung weglassen
         String myMsgName=(String)getData("msgName")+"Res";
         MSG    msg=MSGFactory.getInstance().createMSG(myMsgName,st,st.length(),
                 gen,
                 MSG.CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
         
-        // in einer Schleife durch alle SuppSecMethods-Datensätze laufen
+        // in einer Schleife durch alle SuppSecMethods-DatensÃ¤tze laufen
         for (int i=0;;i++) {
             String        elemBaseName=HBCIUtilsInternal.withCounter(myMsgName+".BPD.SecMethod.SuppSecMethods",i);
             SyntaxElement elem=msg.getElement(elemBaseName+".method");
@@ -64,7 +64,7 @@ public class RSecTypeTAN
             
             // Methodenbezeichner extrahieren
             String method=elem.toString();
-            if (method.equals("TAN")) { // "TAN" ist ungültiger Bezeichner
+            if (method.equals("TAN")) { // "TAN" ist ungÃ¼ltiger Bezeichner
                 HBCIUtils.log("there is an invalid sec type (TAN) in this BPD - removing it",HBCIUtils.LOG_WARN);
 
                 // Elternelement finden (Segment "SecMethods")
@@ -73,11 +73,11 @@ public class RSecTypeTAN
                 int           number=0;
                 
                 // durch alle Elemente dieses Segmentes laufen, bis die Multiple-DEG
-                // mit den unterstützten SecMethods gefunden wurde
+                // mit den unterstÃ¼tzten SecMethods gefunden wurde
                 for (Iterator<MultipleSyntaxElements> it=parent.getChildContainers().iterator();it.hasNext();) {
                     MultipleSyntaxElements childContainer= it.next();
                     if (childContainer.getPath().equals(parentPath+".SuppSecMethods")) {
-                        // die Anzahl der eingestellten unterstützten SecMethods herausholen
+                        // die Anzahl der eingestellten unterstÃ¼tzten SecMethods herausholen
                         number=childContainer.getElements().size();
                         break;
                     }
@@ -89,17 +89,17 @@ public class RSecTypeTAN
                 /* wenn mehr als eine SecMethod im Segment stand, dann braucht nur
                  * das eine der multiplen DEGs entfernt werden. Wenn aber nur die eine
                  * fehlerhafte Info enthalten war, dann muss das gesamte Segment
-                 * entfernt werden, weil ein SecMethods-Segment ohne tatsächliche Daten
-                 * über unterstützte SecMethods ungültig ist. */
+                 * entfernt werden, weil ein SecMethods-Segment ohne tatsÃ¤chliche Daten
+                 * Ã¼ber unterstÃ¼tzte SecMethods ungÃ¼ltig ist. */
                 
-                if (number>1) { // nur das eine fehlerhafte TAN:1 löschen
+                if (number>1) { // nur das eine fehlerhafte TAN:1 lÃ¶schen
                     startpos=elem.getPosInMsg();
                     endpos=startpos
                         +1
                         +elem.toString(0).length()
                         +1
                         +msg.getElement(elemBaseName+".version").toString(0).length();
-                } else { // komplettes segment "SecMethod" löschen
+                } else { // komplettes segment "SecMethod" lÃ¶schen
                     startpos=parent.getPosInMsg()+1;
                     endpos=startpos+parent.toString(0).length();
                     /* der Fehler, der hier gemacht wird (nachfolgende Segment-

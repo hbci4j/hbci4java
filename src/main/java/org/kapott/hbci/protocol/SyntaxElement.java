@@ -57,11 +57,11 @@ public abstract class SyntaxElement
     private MultipleSyntaxElements parent;
     
     // Wird von einigen Rewriter-Modules beim Parsen verwendet, um im Antwort-String
-    // an der richtigen Stelle Daten auszuschneiden oder einzufügen.
+    // an der richtigen Stelle Daten auszuschneiden oder einzufÃ¼gen.
     // TODO: Problem dabei ist nur: sobald auch nur *ein* Rewriter die Antwort-
-    // Message verändert, stimmen von allen anderen SyntaxElementen die
-    // Werte für posInMsg nicht mehr (es sei denn, es wird nach dem 
-    // Verändern ein neues MSG-Objekt erzeugt).
+    // Message verÃ¤ndert, stimmen von allen anderen SyntaxElementen die
+    // Werte fÃ¼r posInMsg nicht mehr (es sei denn, es wird nach dem 
+    // VerÃ¤ndern ein neues MSG-Objekt erzeugt).
     private int posInMsg;
     
     private Document syntax;
@@ -86,7 +86,7 @@ public abstract class SyntaxElement
     benutzt */
     protected abstract MultipleSyntaxElements createNewChildContainer(Node ref, Document syntax);
     
-    // TODO: aus konsistenz-gründen auch in MultipleSyntaxElements create und
+    // TODO: aus konsistenz-grÃ¼nden auch in MultipleSyntaxElements create und
     // createAndAdd trennen
     /** beim parsen: haengt an die 'childElements' ein neues Element an. der
      xml-knoten 'ref' gibt an, um welches element es sich dabei handelt; aus
@@ -133,16 +133,16 @@ public abstract class SyntaxElement
         generieren, muessen u.U. fuer bestimmte syntaxelemente diesen "requested"-wert
         setzen. 
 
-        needsRequestTag kann komplett weg, oder? -- nein. Für GV-Segmente
-        gilt das schon. Die Überprüfung des requested-Werted findet aber
+        needsRequestTag kann komplett weg, oder? -- nein. FÃ¼r GV-Segmente
+        gilt das schon. Die ÃœberprÃ¼fung des requested-Werted findet aber
         in der *allgemeinen* SyntaxElement-Klasse statt, wo auch andere
         Segmente (z.b. MsgHead) erzeugt werden. Wenn als "allgemeiner"
-        Check der Check "if SEG.isRequested" eingeführt werden würde, dann
-        würde der nur bei tatsächlich gewünschten GV-Segmenten true ergeben.
-        Bei MsgHead-Segmenten z.B. würde er false ergeben (weil diese
+        Check der Check "if SEG.isRequested" eingefÃ¼hrt werden wÃ¼rde, dann
+        wÃ¼rde der nur bei tatsÃ¤chlich gewÃ¼nschten GV-Segmenten true ergeben.
+        Bei MsgHead-Segmenten z.B. wÃ¼rde er false ergeben (weil diese
         Segmente niemals auf "requested" gesetzt werden). Deshalb darf diese
-        "requested"-Überprüfung nur bei den Syntaxelementen stattfinden,
-        bei denen das explizit gewünscht ist (needsRequestTag). */
+        "requested"-ÃœberprÃ¼fung nur bei den Syntaxelementen stattfinden,
+        bei denen das explizit gewÃ¼nscht ist (needsRequestTag). */
     private boolean needsRequestTag;
     private boolean haveRequestTag;
     
@@ -187,8 +187,8 @@ public abstract class SyntaxElement
                         MultipleSyntaxElements child=createAndAppendNewChildContainer(ref, syntax);
                         if (child!=null) {
                             child.setParent(this);
-                            // TODO: überprüfen, ob noch an anderen Stellen Container
-                            // erzeugt werden - diese müssten dann auch die richtige
+                            // TODO: Ã¼berprÃ¼fen, ob noch an anderen Stellen Container
+                            // erzeugt werden - diese mÃ¼ssten dann auch die richtige
                             // syntaxIdx bekommen
                             child.setSyntaxIdx(syntaxIdx);
                             
@@ -201,16 +201,16 @@ public abstract class SyntaxElement
 
                 /* durchlaufen aller "value"-knoten und setzen der
                  werte der entsprechenden de */
-                // TODO: effizienter: das nicht hier machen, sondern später,
+                // TODO: effizienter: das nicht hier machen, sondern spÃ¤ter,
                 // Wenn wir das *hier* machen, dann werden ja DOCH wieder
                 // alle "minnum=0"-Segmente
-                // erzeugt, weil für jedes Segment code und version gesetzt
-                // werden müssten. Am besten das immer in dem Moment machen,
+                // erzeugt, weil fÃ¼r jedes Segment code und version gesetzt
+                // werden mÃ¼ssten. Am besten das immer in dem Moment machen,
                 // wo ein entsprechendes SyntaxDE erzeugt wird.
                 // --> nein, das geht hier. Grund: die optimierte Message-Engine
-                // wird nur für Segmentfolgen angewendet. Und in Segmentfolgen-
+                // wird nur fÃ¼r Segmentfolgen angewendet. Und in Segmentfolgen-
                 // Definitionen sind keine values oder valids angegeben, so dass
-                // dieser Code hier gar keine Relevanz für Segmentfolgen hat
+                // dieser Code hier gar keine Relevanz fÃ¼r Segmentfolgen hat
                 NodeList valueNodes = ((Element)def).getElementsByTagName("value");
                 int      len=valueNodes.getLength();
                 String   dottedPath = this.path+".";
@@ -225,7 +225,7 @@ public abstract class SyntaxElement
                 }
 
                 /* durchlaufen aller "valids"-knoten und speichern der valid-values */
-                // TODO: das hier ebenfalls später machen, siehe "values"
+                // TODO: das hier ebenfalls spÃ¤ter machen, siehe "values"
                 NodeList validNodes=((Element)def).getElementsByTagName("valids");
                 len = validNodes.getLength();
                 dottedPath = getPath()+".";
@@ -332,7 +332,7 @@ public abstract class SyntaxElement
         this.syntax=syntax;
         this.def=null;
         /* position des aktuellen datenelementes berechnet sich aus der
-         * gesamtlänge des ursprünglichen msg-strings minus der länge des
+         * gesamtlÃ¤nge des ursprÃ¼nglichen msg-strings minus der lÃ¤nge des
          * reststrings, der jetzt zu parsen ist, und der mit dem aktuellen
          * datenelement beginnt */
         this.posInMsg=fullResLen-res.length(); 
@@ -401,7 +401,7 @@ public abstract class SyntaxElement
                 			// dazu wird beim hinzufuegen von segmenten zur sf ueberprueft, ob diese evtl. bereits
                 			// segmente enthaelt (hasValidChilds()). falls das der fall ist, so wird
                 			// kein neues segment hinzugefuegt
-                			// analoges gilt für die SF "GVRes" - hier muss dafür gesorgt werden, dass jede
+                			// analoges gilt fÃ¼r die SF "GVRes" - hier muss dafÃ¼r gesorgt werden, dass jede
                 			// antwort in ein eigenes GVRes kommt, damit die zuordnung reihenfolge-erkennung
                 			// der empfangenen GVRes-segmente funktioniert (in HBCIJobImpl.fillJobResult())
                 			if ((this instanceof SF) && 
@@ -502,7 +502,7 @@ public abstract class SyntaxElement
                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_INVVALUE",new Object[] {destPath,value}));
             ret=true;
         } else {
-            // damit überspringen wir gleich elemente, bei denen es mit 
+            // damit Ã¼berspringen wir gleich elemente, bei denen es mit 
             // sicherheit nicht funktionieren kann
             if (destPath.startsWith(getPath())) {                
                 for (Iterator<MultipleSyntaxElements> i = childContainers.listIterator(); i.hasNext(); ) {
@@ -514,7 +514,7 @@ public abstract class SyntaxElement
                 }
                 
                 if (!ret && tryToCreate) {
-                    // der Wert konnte nicht gesetzt werden -> möglicherweise
+                    // der Wert konnte nicht gesetzt werden -> mÃ¶glicherweise
                     // existiert ja nur der entsprechende child-container noch
                     // nicht
                     HBCIUtils.log(getPath()+": could not set value for "+destPath, HBCIUtils.LOG_INTERN);
@@ -534,13 +534,13 @@ public abstract class SyntaxElement
                     }
                     HBCIUtils.log("  subType is "+subType, HBCIUtils.LOG_INTERN);
                     
-                    // hier überprüfen, ob es wirklich noch keinen child-container
+                    // hier Ã¼berprÃ¼fen, ob es wirklich noch keinen child-container
                     // mit diesem Namen gibt. Wenn z.B. der pfad msg.gv.ueb.kik.blz
                     // gesucht wird und msg.gv schon existiert, wird diese methode
-                    // hier in msg.gv ausgeführt. wenn sie fehlschlägt (z.b. weil
-                    // tatsächlich kein .ueb.kik.blz angelegt werden kann), wird false
-                    // ("can not propagate") zurückgegeben. im übergeordneten modul
-                    // (msg) soll dann nicht versucht werden, das nächste sub-element
+                    // hier in msg.gv ausgefÃ¼hrt. wenn sie fehlschlÃ¤gt (z.b. weil
+                    // tatsÃ¤chlich kein .ueb.kik.blz angelegt werden kann), wird false
+                    // ("can not propagate") zurÃ¼ckgegeben. im Ã¼bergeordneten modul
+                    // (msg) soll dann nicht versucht werden, das nÃ¤chste sub-element
                     // (gv) anzulegen - dieser test merkt, dass es "gv" schon gibt 
                     boolean found=false;
                     for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
@@ -590,8 +590,8 @@ public abstract class SyntaxElement
                                 MultipleSyntaxElements c= i.next();
                                 if (c.getSyntaxIdx()>newChildIdx) {
                                     // der gerade betrachtete child-container hat einen idx
-                                    // größer als den des einzufügenden elementes, also wird
-                                    // sich diese position gemerkt und das element hier eingefügt
+                                    // grÃ¶ÃŸer als den des einzufÃ¼genden elementes, also wird
+                                    // sich diese position gemerkt und das element hier eingefÃ¼gt
                                     break;
                                 }
                                 newPosi++;

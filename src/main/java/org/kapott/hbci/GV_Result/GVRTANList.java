@@ -28,8 +28,8 @@ import java.util.List;
 
 import org.kapott.hbci.manager.HBCIUtils;
 
-/** Diese Klasse enthält Informationen über aktuelle TAN-Listen des Kunden. Dabei wird
-    für jede TAN-Liste ein separates Objekt erzeugt. Innerhalb einer TAN-Listen-Informationen
+/** Diese Klasse enthÃ¤lt Informationen Ã¼ber aktuelle TAN-Listen des Kunden. Dabei wird
+    fÃ¼r jede TAN-Liste ein separates Objekt erzeugt. Innerhalb einer TAN-Listen-Informationen
     gibt es zu jeder verbrauchten TAN genauere Daten. */
 public class GVRTANList 
     extends HBCIJobResultImpl
@@ -37,56 +37,56 @@ public class GVRTANList
     /** Daten zu genau einer TAN */
     public static class TANInfo
     {
-        /** Feld zum "Übersetzen" der Verwendungs-Codes ({@link #usagecode}) in einen Klartext. */
+        /** Feld zum "Ãœbersetzen" der Verwendungs-Codes ({@link #usagecode}) in einen Klartext. */
         public static final String[] usageCodes={
                                                 "TAN ist frei",
                                                 "(not used)",
-                                                "PIN-Änderung",
+                                                "PIN-Ã„nderung",
                                                 "Kontosperre aufheben",
                                                 "Aktivieren neuer TAN-Liste",
                                                 "Entwertete TAN (maschinell)",
                                                 "Mitteilung mit TAN",
-                                                "Überweisung",
+                                                "Ãœberweisung",
                                                 "Wertpapierorder",
                                                 "Dauerauftrag",
-                                                "Entwertet wegen Zeitüberschreitung im Zweischritt-Verfahren",
-                                                "Entwertet wegen Zeitüberschreitung im Zweischritt-Verfahren (Mehrfach-Signaturen)",
+                                                "Entwertet wegen ZeitÃ¼berschreitung im Zweischritt-Verfahren",
+                                                "Entwertet wegen ZeitÃ¼berschreitung im Zweischritt-Verfahren (Mehrfach-Signaturen)",
                                                 "Entwertet (falsche Antwort auf Challenge?)",
                                                 "", "", "", "", "", "", "",
                                                 "Lastschriften",
-                                                "Euro-Überweisung",
-                                                "Auslandsüberweisung",
-                                                "Terminüberweisung",
+                                                "Euro-Ãœberweisung",
+                                                "AuslandsÃ¼berweisung",
+                                                "TerminÃ¼berweisung",
                                                 "Umbuchung"
                                                 };
         
-        /** Code, wofür die TAN verwendet wurde, siehe auch {@link #usageCodes}). Gültige Codes sind:
+        /** Code, wofÃ¼r die TAN verwendet wurde, siehe auch {@link #usageCodes}). GÃ¼ltige Codes sind:
             <ul>
               <li>0 - TAN wurde noch nicht verbraucht</li>
-              <li>1 - Stornierung einer Überweisung</li>
-              <li>2 - PIN-Änderung</li>
+              <li>1 - Stornierung einer Ãœberweisung</li>
+              <li>2 - PIN-Ã„nderung</li>
               <li>3 - Aufheben der Kontosperre</li>
               <li>4 - Aktivieren einer neuen TAN-Liste</li>
               <li>5 - TAN wurde maschinell entwertet</li>
               <li>6 - Mitteilungsversand</li>
-              <li>7 - Überweisung/Lastschrift</li>
+              <li>7 - Ãœberweisung/Lastschrift</li>
               <li>8 - Wertpapierverwaltung</li>
               <li>9 - Dauerauftragsverwaltung</li>
               <li>... (siehe Sourcecode)</li>
             </ul> */
         public int    usagecode;
         
-        /** Erläuterung für TAN-Verwendung. Wenn {@link #usagecode}==<code>99</code>
-         * ist, dann enthält dieser String optional einen erläuternden Text, wofür
+        /** ErlÃ¤uterung fÃ¼r TAN-Verwendung. Wenn {@link #usagecode}==<code>99</code>
+         * ist, dann enthÃ¤lt dieser String optional einen erlÃ¤uternden Text, wofÃ¼r
          * die TAN verbraucht wurde. */
         public String usagetxt;
         
-        /** Die TAN selbst. Ist nur dann gesetzt, wenn die TAN tatsächlich bereits verbraucht
+        /** Die TAN selbst. Ist nur dann gesetzt, wenn die TAN tatsÃ¤chlich bereits verbraucht
             wurde, sonst ist dieses Feld <code>null</code>*/
         public String tan;
         
         /** Zeitpunkt, wann die TAN verbraucht wurde. Diese Variable ist nur dann ungleich
-            <code>null</code>, wenn die TAN tatsächlich bereits verbraucht wurde */
+            <code>null</code>, wenn die TAN tatsÃ¤chlich bereits verbraucht wurde */
         public Date   timestamp;
         
         public String toString()
@@ -100,7 +100,7 @@ public class GVRTANList
     /** Informationen zu genau einer TAN-Liste. */
     public static class TANList
     {
-        /** Typ der TAN-Liste. Gültige Codes sind:
+        /** Typ der TAN-Liste. GÃ¼ltige Codes sind:
             <ul>
               <li>A - aktive Liste</li>
               <li>N - Noch nicht freigeschaltete Liste</li>
@@ -126,7 +126,7 @@ public class GVRTANList
             taninfos=new ArrayList<TANInfo>();
         }
     
-        /** Gibt ein Feld mit Daten zu den einzelnen TANs dieser Liste zurück. 
+        /** Gibt ein Feld mit Daten zu den einzelnen TANs dieser Liste zurÃ¼ck. 
             @return Array mit TAN-Informationen */
         public TANInfo[] getTANInfos()
         {
@@ -165,7 +165,7 @@ public class GVRTANList
         tanlists.add(list);
     }
     
-    /** Gibt ein Array mit Informationen über jede verfügbare TAN-Liste zurück.
+    /** Gibt ein Array mit Informationen Ã¼ber jede verfÃ¼gbare TAN-Liste zurÃ¼ck.
         @return Array mit TAN-Listen-Informationen */
     public TANList[] getTANLists()
     {

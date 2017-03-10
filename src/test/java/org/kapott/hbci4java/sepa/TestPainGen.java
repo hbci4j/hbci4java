@@ -222,7 +222,7 @@ public class TestPainGen
     @Test
     public void test006() throws Exception
     {
-        String umlaute = "¸ˆ‰‹÷ƒ";
+        String umlaute = "√º√∂√§√ú√ñ√Ñ";
         Properties props = new Properties();
         props.setProperty("src.bic",    "ABCDEFAA123");
         props.setProperty("src.iban",   "DE1234567890");

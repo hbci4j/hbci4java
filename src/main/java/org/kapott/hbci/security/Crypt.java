@@ -297,7 +297,7 @@ public final class Crypt
                         }
                         
                         // TODO: sysid checken (kann eigentlich auch entfallen, weil
-                        // das jeweils auf höherer ebene geschehen sollte!)
+                        // das jeweils auf hÃ¶herer ebene geschehen sollte!)
                     } else {
                         String cid=crypthead.getValueOfDE(msgName+".CryptHead.SecIdnDetails.cid");
                         if (!cid.equals(passport.getCID())) {
@@ -318,7 +318,7 @@ public final class Crypt
                             throw new HBCI_Exception(errmsg);
                     }
                     
-                    // TODO: hier auch die DEG SecProfile lesen und überprüfen
+                    // TODO: hier auch die DEG SecProfile lesen und Ã¼berprÃ¼fen
 
                     byte[] plainMsg=passport.decrypt(cryptedkey,cryptedstring);
                     int padLength=plainMsg[plainMsg.length-1];

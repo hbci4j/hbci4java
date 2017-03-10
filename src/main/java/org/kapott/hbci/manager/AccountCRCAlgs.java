@@ -176,9 +176,9 @@ public class AccountCRCAlgs
 
     public static boolean alg_17(int[] blz, int[] number) 
     {
-        /* Die Spez. sagt hier, dass die Quersumme nur für die Stellen 2, 4 und
+        /* Die Spez. sagt hier, dass die Quersumme nur fÃ¼r die Stellen 2, 4 und
          * 6 gebildet werden soll. Da die anderen Stellen (1,3,5) jedoch den
-         * Faktor 1 haben, KÖNNEN diese Produkte niemals zweistellig werden, so
+         * Faktor 1 haben, KÃ–NNEN diese Produkte niemals zweistellig werden, so
          * dass wir einfach IMMER die Quersumme bilden */
         int sum = addProducts(number,1,6,new int[] {1,2,1,2,1,2}, true);
         sum--;
@@ -222,7 +222,7 @@ public class AccountCRCAlgs
     public static boolean alg_22(int[] blz, int[] number) 
     {
         /* Spez: Von den jeweiligen Produkten bleiben die Zehnerstellen [bei der
-         * Addition] unberücksichtigt. --> Es ist egal, ob wir die 10er mit
+         * Addition] unberÃ¼cksichtigt. --> Es ist egal, ob wir die 10er mit
          * addieren oder nicht - da danach eh wieder ein Modulo 10 gemacht wird,
          * fallen die am Ende raus */
         int sum=addProducts(number,0,8,new int[] {3,1,3,1,3,1,3,1,3}, false);
@@ -662,12 +662,12 @@ public class AccountCRCAlgs
     {
         int first=number[0]*10 + number[1];
 
-        // 00 am anfang ist ungültig
+        // 00 am anfang ist ungÃ¼ltig
         if (first==0) {
             return false;
         }
         
-        // beginnend mit 777777 oder 888888 ist gültig
+        // beginnend mit 777777 oder 888888 ist gÃ¼ltig
         int x=number[0];
         if (x==7 || x==8) {
             boolean ok=true;
@@ -1626,7 +1626,7 @@ public class AccountCRCAlgs
     
     public static boolean checkCreditorId(String creditorId)
     {
-        //DE: Immer Länge 18
+        //DE: Immer LÃ¤nge 18
         if ("DE".equals(creditorId.substring(0,2).toUpperCase()) && creditorId.length()!=18)
             return false;
                 

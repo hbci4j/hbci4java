@@ -50,7 +50,7 @@ public final class SF
         return ret;
     }
 
-    // die optimierte Variante dieser Methode sorgt dafür, dass SegmentFolgen-Container
+    // die optimierte Variante dieser Methode sorgt dafÃ¼r, dass SegmentFolgen-Container
     // nicht erzeugt werden, wenn die Segmentfolge selbst optional ist. Das ist praktisch
     // nur bei den SFs GV, GVRes und GVParams der Fall (und funktioniert auch nur bei
     // diesen).
@@ -116,9 +116,9 @@ public final class SF
     }
     
     // Diese Methode wird von einem dirty hack beim Parsen verwendet. Sie extrahiert
-    // den Segment-Code des nächsten zu parsenden Segments aus dem Antwort-String.
-    // Stimmt dieser Segment-Code nicht mit dem nächsten eigentlich zu parsenden
-    // <SEG type="..." minnum="0"> überein, wird gar nicht erst *versucht*, das
+    // den Segment-Code des nÃ¤chsten zu parsenden Segments aus dem Antwort-String.
+    // Stimmt dieser Segment-Code nicht mit dem nÃ¤chsten eigentlich zu parsenden
+    // <SEG type="..." minnum="0"> Ã¼berein, wird gar nicht erst *versucht*, das
     // dieses <SEG> anzuwenden
     private String[] extractSegId(StringBuffer sb)
     {
@@ -144,7 +144,7 @@ public final class SF
         return ret;
     }
     
-    // siehe extractSegCode(). Diese Methode holt sich den SegCode des nächsten
+    // siehe extractSegCode(). Diese Methode holt sich den SegCode des nÃ¤chsten
     // mit <SEG ...> referenzierten Segments aus der Syntax-Spez. Der gefundene
     // SegCode wird in HBCIUtils.params gecacht, so dass diese Suche nur einmal
     // erfolgen muss.
@@ -204,14 +204,14 @@ public final class SF
 
         if ((segref.getNodeName()).equals("SEG")) {
             // TODO: this is a hack to speed up parsing of segments
-            // (params, customres); das funktioniert so, dass zunächst aus dem zu parsenden
-            // string der nächste seghead.code extrahiert wird (string-operationen); außerdem
+            // (params, customres); das funktioniert so, dass zunÃ¤chst aus dem zu parsenden
+            // string der nÃ¤chste seghead.code extrahiert wird (string-operationen); auÃŸerdem
             // wird ermittelt, wie der seghead.code *des* segmentes ist (segref), als welches das
-            // nächste response-token *eigentlich* geparst werden soll. stimmen die beiden codes
-            // nicht überein, so kann das nächste response-token mit sicherheit nicht als
+            // nÃ¤chste response-token *eigentlich* geparst werden soll. stimmen die beiden codes
+            // nicht Ã¼berein, so kann das nÃ¤chste response-token mit sicherheit nicht als
             // segref-segment geparst werden, und es wird erst gar nicht versucht.
             // die zuordnung "segref"-->"seghead.code" wird nicht jedesmal neu durch nachsehen
-            // in der syntax-spez aufgelöst, sondern es ist ein entsprechender cache
+            // in der syntax-spez aufgelÃ¶st, sondern es ist ein entsprechender cache
             // implementiert (hashtable:segname-->seghead.code).
             
             String[] nextSegId=extractSegId(res);
@@ -222,8 +222,8 @@ public final class SF
             		|| segRefId[1].equals("")) 
             {
             	// das Segment wird nur geparst, wenn entweder segcode und segversion
-            	// mit dem aus der syntax-spez übereinstimmen oder wenn in der syntax-
-            	// spez. keine konkreten werte dafür gefunden wurden
+            	// mit dem aus der syntax-spez Ã¼bereinstimmen oder wenn in der syntax-
+            	// spez. keine konkreten werte dafÃ¼r gefunden wurden
                 
                 /* this is a very ugly hack for the ugly parser code: in certain
                  * cases it may happen that hbci4java takes a HIUPA segment as

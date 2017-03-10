@@ -120,8 +120,8 @@ public final class SEG
         return idx;
     }
 
-    // Wird in Crypt.isCrypted() benötigt, um anhand des SegCodes des zweiten
-    // Segments festzustellen, ob die Nachricht verschlüsselt ist oder nicht.
+    // Wird in Crypt.isCrypted() benÃ¶tigt, um anhand des SegCodes des zweiten
+    // Segments festzustellen, ob die Nachricht verschlÃ¼sselt ist oder nicht.
     // analoges in Sig.hasSig()
     public String getCode(MsgGen gen)
     {

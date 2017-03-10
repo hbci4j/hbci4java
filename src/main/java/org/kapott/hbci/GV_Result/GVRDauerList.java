@@ -32,7 +32,7 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
-/** Ergebnisse der Abfrage von bestehenden Daueraufträgen. In diesem Objekt
+/** Ergebnisse der Abfrage von bestehenden DauerauftrÃ¤gen. In diesem Objekt
     wird eine Liste von Dauerauftragsdaten gespeichert. Jedes dieser Dauerauftragsdaten-Objekte
     beschreibt dabei einen bestehenden Dauerauftrag. */ 
 public final class GVRDauerList
@@ -43,61 +43,61 @@ public final class GVRDauerList
     {
         /** Belastungskonto (Kundenkonto) */
         public Konto    my;
-        /** Empfängerkonto */
+        /** EmpfÃ¤ngerkonto */
         public Konto    other;
-        /** Zu überweisender Betrag */
+        /** Zu Ã¼berweisender Betrag */
         public Value    value;
-        /** Transaktionsschlüssel (bankintern) */
+        /** TransaktionsschlÃ¼ssel (bankintern) */
         public String   key;
-        /** Zusätzlicher Transaktionsschlüssel (bankintern, optional) */
+        /** ZusÃ¤tzlicher TransaktionsschlÃ¼ssel (bankintern, optional) */
         public String   addkey;
         /** Verwendungszweckzeilen. Dieses Array ist niemals <code>null</code>,
-            kann aber die Länge <code>0</code> haben. */
+            kann aber die LÃ¤nge <code>0</code> haben. */
         public String[] usage;
-        /** Datum der nächsten Ausführung (optional) */
+        /** Datum der nÃ¤chsten AusfÃ¼hrung (optional) */
         public Date     nextdate;
         /** Eindeutige Auftragsnummer, um diesen Dauerauftrag zu identifizieren (optional) */
         public String   orderid;
 
-        /** Datum der ersten Ausführung */
+        /** Datum der ersten AusfÃ¼hrung */
         public Date     firstdate;
         /** Zeiteinheit der Wiederholung.
             <ul>
               <li>M - monatlich</li>
-              <li>W - wöchentlich</li>
+              <li>W - wÃ¶chentlich</li>
             </ul> */
         public String   timeunit;
         /** Wiederholen aller wieviel Zeiteinheiten */
         public int      turnus;
-        /** Tag der Ausführun innerhalb der Zeineinheit
+        /** Tag der AusfÃ¼hrun innerhalb der Zeineinheit
             <ul>
-              <li>bei Zeiteinheit=W: 1-7 für Wochentag</li>
-              <li>bei Zeiteinheit=M: 1-31 für Tag des Monats</li>
+              <li>bei Zeiteinheit=W: 1-7 fÃ¼r Wochentag</li>
+              <li>bei Zeiteinheit=M: 1-31 fÃ¼r Tag des Monats</li>
             </ul> */
         public int      execday;
-        /** Datum, wann der Dauerauftrag zum letzten Mal ausgeführt werden soll (optional) */
+        /** Datum, wann der Dauerauftrag zum letzten Mal ausgefÃ¼hrt werden soll (optional) */
         public Date     lastdate;
 
         /** Sind Daten zu einer geplanten Aussetzung vorhanden? */
         public boolean aus_available;
-        /** Aussetzung jährlich wiederholen? (Nur gültig, wenn <code>aus_available</code> <code>true</code> ist) */
+        /** Aussetzung jÃ¤hrlich wiederholen? (Nur gÃ¼ltig, wenn <code>aus_available</code> <code>true</code> ist) */
         public boolean  aus_annual;
-        /** Tag der ersten Aussetzung (Nur gültig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
+        /** Tag der ersten Aussetzung (Nur gÃ¼ltig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
         public Date     aus_start;
-        /** Tag der letzten Aussetzung (Nur gültig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
+        /** Tag der letzten Aussetzung (Nur gÃ¼ltig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
         public Date     aus_end;
-        /** Anzahl der Aussetzungen (Nur gültig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
+        /** Anzahl der Aussetzungen (Nur gÃ¼ltig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
         public String   aus_breakcount;
-        /** Geänderter Betrag während Aussetzung (Nur gültig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
+        /** GeÃ¤nderter Betrag wÃ¤hrend Aussetzung (Nur gÃ¼ltig, wenn <code>aus_available</code> <code>true</code> ist) (optional) */
         public Value    aus_newvalue;
         
-        /** Auftrag kann geändert werden (optional) */
+        /** Auftrag kann geÃ¤ndert werden (optional) */
         public boolean can_change;
         
         /** Auftrag kann ausgesetzt werden (optional) */
         public boolean can_skip;
         
-        /** Auftrag kann gelöscht werden (optional) */
+        /** Auftrag kann gelÃ¶scht werden (optional) */
         public boolean can_delete;
         
         /**
@@ -163,7 +163,7 @@ public final class GVRDauerList
         entries.add(entry);
     }
     
-    /** Gibt ein Array mit Daten zu allen gefundenen Dauerauftragsdaten zurück
+    /** Gibt ein Array mit Daten zu allen gefundenen Dauerauftragsdaten zurÃ¼ck
         @return Array mit Dauerauftrags-Informationen */
     public Dauer[] getEntries()
     {

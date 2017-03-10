@@ -4,7 +4,7 @@ import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 
 /**
- * Standard-Implementierung, die das Passport über {@link AbstractHBCIPassport#getInstance(String, Object)}
+ * Standard-Implementierung, die das Passport Ã¼ber {@link AbstractHBCIPassport#getInstance(String, Object)}
  * erzeugt.
  *
  * @author Hendrik Schnepel

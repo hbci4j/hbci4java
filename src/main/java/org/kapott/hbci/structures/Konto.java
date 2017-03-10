@@ -27,16 +27,16 @@ import java.util.List;
 import org.kapott.hbci.manager.HBCIUtils;
 
 /** Kontoverbindung.
-    Diese Klasse repräsentiert eine einzelne Kontoverbindung 
+    Diese Klasse reprÃ¤sentiert eine einzelne Kontoverbindung 
     eines Kunden bei einer Bank. */
 public class Konto
     implements Serializable
 {
-    /** Länderkennzeichen des Kontos.
-        Normalerweise ist hier der Wert <code>DE</code> für
+    /** LÃ¤nderkennzeichen des Kontos.
+        Normalerweise ist hier der Wert <code>DE</code> fÃ¼r
         Deutschland einzustellen. */
     public String country;
-    /** Bankleitzahl der kontoführenden Bank */
+    /** Bankleitzahl der kontofÃ¼hrenden Bank */
     public String blz;
     /** Kontonummer des Kontos */
     public String number;
@@ -44,23 +44,23 @@ public class Konto
     public String subnumber;
     /** Kontoart (Girokonto, Sparkonto, Festgeldkonto, Kreditkartenkonto, etc.)
         laut Segmentversion 5,6 von HIUPD.
-        Wird bspw. bei DeuBa-Konten benötigt da dort verschiedene Konten genau die gleiche
+        Wird bspw. bei DeuBa-Konten benÃ¶tigt da dort verschiedene Konten genau die gleiche
         Kontonummer haben bzw. sich nur in der Kontoart unterscheiden */
     public String acctype;
-    /** Name (Typ) des Kontos. Dieses Feld ist nur für
-    Konten verfügbar, auf die der Anwender via HBCI Zugriff
-    hat. Für alle anderen Konten ist dieser Wert <code>null</code> */
+    /** Name (Typ) des Kontos. Dieses Feld ist nur fÃ¼r
+    Konten verfÃ¼gbar, auf die der Anwender via HBCI Zugriff
+    hat. FÃ¼r alle anderen Konten ist dieser Wert <code>null</code> */
     public String type;
-    /** Währung des Kontos. Hier ist in der Regel <code>EUR</code>
-        für EURO gespeichert. */
+    /** WÃ¤hrung des Kontos. Hier ist in der Regel <code>EUR</code>
+        fÃ¼r EURO gespeichert. */
     public String curr;
     /** Kreditinstitusseitiger Kundenname. Dieser Wert gibt an, unter
         welcher Kunden-ID ein Bankkunde Zugriff auf dieses Konto hat.
-        Dieser Wert ist nur für Konten verfügbar, auf die der Anwender
-        Zugriff via HBCI hat, für alle anderen Konten ist dieser
-        Wert <code>null</code>. Falls eine Bank Informationen über alle
+        Dieser Wert ist nur fÃ¼r Konten verfÃ¼gbar, auf die der Anwender
+        Zugriff via HBCI hat, fÃ¼r alle anderen Konten ist dieser
+        Wert <code>null</code>. Falls eine Bank Informationen Ã¼ber alle
         Konten bereitstellt, auf die ein Nutzer via HBCI Zugriff hat, so
-        kann dieses Feld beim Hinzufügen von Aufträgen via
+        kann dieses Feld beim HinzufÃ¼gen von AuftrÃ¤gen via
         {@link org.kapott.hbci.GV.HBCIJob#addToQueue(String)} 
         ausgewertet werden. */
     public String customerid;
@@ -68,7 +68,7 @@ public class Konto
         Inhabername eingestellt, wie er von der Bank bereitgestellt wird.
         Bei fremden Konten (z.B. bei den Konten, die als Gegenkonten auf
         einem Kontoauszug erscheinen) wird hier der Name eingestellt,
-        wie er in den Auftragsdaten von der Bank geführt wird. */
+        wie er in den Auftragsdaten von der Bank gefÃ¼hrt wird. */
     public String name;
     /** Name des Kontoinhabers (Fortsetzung) (optional). */
     public String name2;
@@ -81,26 +81,26 @@ public class Konto
     /** IBAN des Kontos */
     public String iban;
     
-    /** Anlegen eines neuen Konto-Objektes. Die Währung wird auf <code>EUR</code> voreingestellt */
+    /** Anlegen eines neuen Konto-Objektes. Die WÃ¤hrung wird auf <code>EUR</code> voreingestellt */
     public Konto()
     {
         this.curr="EUR";
     }
     
-    /** Anlegen eines neuen Konto-Objektes. Die Währung wird auf <code>EUR</code> 
-        voreingestellt. Es werden BLZ und Kontonummer angegeben. Die Länderkennung
+    /** Anlegen eines neuen Konto-Objektes. Die WÃ¤hrung wird auf <code>EUR</code> 
+        voreingestellt. Es werden BLZ und Kontonummer angegeben. Die LÃ¤nderkennung
         wird auf <code>DE</code> voreingestellt.
-        @param blz Bankleitzahl der kontoführenden Bank
+        @param blz Bankleitzahl der kontofÃ¼hrenden Bank
         @param number Kontonummer des Kontos */
     public Konto(String blz,String number)
     {
         this("DE",blz,number);
     }
     
-    /** Anlegen eines neuen Konto-Objektes. Die Währung wird auf <code>EUR</code>
-        voreingestellt. Es werden BLZ, Länderkennung und Kontonummer angegeben.
-        @param country die Länderkennung des kontoführenden Institutes (normalerweise <code>DE</code>)
-        @param blz Bankleitzahl der kontoführenden Bank
+    /** Anlegen eines neuen Konto-Objektes. Die WÃ¤hrung wird auf <code>EUR</code>
+        voreingestellt. Es werden BLZ, LÃ¤nderkennung und Kontonummer angegeben.
+        @param country die LÃ¤nderkennung des kontofÃ¼hrenden Institutes (normalerweise <code>DE</code>)
+        @param blz Bankleitzahl der kontofÃ¼hrenden Bank
         @param number Kontonummer des Kontos */
     public Konto(String country,String blz,String number)
     {
@@ -159,15 +159,15 @@ public class Konto
         return ret.toString();
     }
     
-    /** Überprüfen der Kontonummer anhand des Prüfzifferverfahrens, welche für
+    /** ÃœberprÃ¼fen der Kontonummer anhand des PrÃ¼fzifferverfahrens, welche fÃ¼r
         die Bank mit der Bankleitzahl <code>blz</code> gilt. Der Aufruf dieser
         Methode setzt voraus, dass in diesem Kontoobjekt bereits <code>blz</code>
         und <code>number</code> gesetzt sind. Diese Werte werden der Methode
         {@link org.kapott.hbci.manager.HBCIUtils#checkAccountCRC(String,String)}
-        zur Überprüfung übergeben.
-        @return es wird nur dann <code>false</code> zurückgegeben, wenn das Prüfzifferverfahren
-        für die jeweilige Bank implementiert ist und die Prüfung der Kontonummer einen
-        Fehler ergibt. In jedem anderen Fall wird <code>true</code> zurückgegeben */  
+        zur ÃœberprÃ¼fung Ã¼bergeben.
+        @return es wird nur dann <code>false</code> zurÃ¼ckgegeben, wenn das PrÃ¼fzifferverfahren
+        fÃ¼r die jeweilige Bank implementiert ist und die PrÃ¼fung der Kontonummer einen
+        Fehler ergibt. In jedem anderen Fall wird <code>true</code> zurÃ¼ckgegeben */  
     public boolean checkCRC()
     {
         return HBCIUtils.checkAccountCRC(blz,number);
@@ -207,8 +207,8 @@ public class Konto
         return ret;
     }
     
-    /** Gibt <code>true</code> zurück, wenn sich dieses Konto für SEPA-GVs 
-     * verwenden lässt */
+    /** Gibt <code>true</code> zurÃ¼ck, wenn sich dieses Konto fÃ¼r SEPA-GVs 
+     * verwenden lÃ¤sst */
     public boolean isSEPAAccount()
     {
     	return (bic!=null && iban!=null && bic.length()!=0 && iban.length()!=0);

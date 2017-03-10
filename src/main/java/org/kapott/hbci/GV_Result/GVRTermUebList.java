@@ -31,36 +31,36 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
-/** Ergebnisse der Abfrage noch anstehender terminierter Überweisungen. Jeder
-    noch anstehende terminierte Überweisungsauftrag wird in einem separaten Objekt gespeichert. */
+/** Ergebnisse der Abfrage noch anstehender terminierter Ãœberweisungen. Jeder
+    noch anstehende terminierte Ãœberweisungsauftrag wird in einem separaten Objekt gespeichert. */
 public final class GVRTermUebList 
     extends HBCIJobResultImpl
 {
-    /** Informationen zu einem einzelnen terminierten Überweisungsauftrag */
+    /** Informationen zu einem einzelnen terminierten Ãœberweisungsauftrag */
     public static class Entry
     {
         /** Belastungskonto (Kundenkonto) */
         public Konto    my;
-        /** Empfängerkonto */
+        /** EmpfÃ¤ngerkonto */
         public Konto    other;
-        /** Zu überweisender Betrag */
+        /** Zu Ã¼berweisender Betrag */
         public Value    value;
-        /** Typ der Überweisung (bankintern) */
+        /** Typ der Ãœberweisung (bankintern) */
         public String   key;
-        /** weitere Informationen zum Typ der Überweisung (bankintern, optional) */
+        /** weitere Informationen zum Typ der Ãœberweisung (bankintern, optional) */
         public String   addkey;
         /** Verwendungszweckzeilen. Dieses Array ist niemals <code>null</code>,
-            kann aber die Länge <code>0</code> haben. */
+            kann aber die LÃ¤nge <code>0</code> haben. */
         public String[] usage;
-        /** Datum der geplanten Ausführung */
+        /** Datum der geplanten AusfÃ¼hrung */
         public Date     date;
         /** Auftrags-Identifikationsnummer (optional) */
         public String   orderid;
         
-        /** Auftrag kann geändert werden (optional) */
+        /** Auftrag kann geÃ¤ndert werden (optional) */
         public boolean can_change;
         
-        /** Auftrag kann gelöscht werden (optional) */
+        /** Auftrag kann gelÃ¶scht werden (optional) */
         public boolean can_delete;
         
         public Entry()
@@ -123,8 +123,8 @@ public final class GVRTermUebList
         list.add(e);
     }
     
-    /** Gibt ein Array mit gefundenen noch anstehenden Terminüberweisungen zurück
-        @return Array, wobei jedes Element Daten über eine einzelne Terminüberweisung enthält */
+    /** Gibt ein Array mit gefundenen noch anstehenden TerminÃ¼berweisungen zurÃ¼ck
+        @return Array, wobei jedes Element Daten Ã¼ber eine einzelne TerminÃ¼berweisung enthÃ¤lt */
     public Entry[] getEntries()
     {
         return list.toArray(new Entry[list.size()]);

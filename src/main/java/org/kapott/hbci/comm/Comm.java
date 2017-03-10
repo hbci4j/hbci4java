@@ -96,12 +96,12 @@ public abstract class Comm
             }
             Rewrite[] rewriters= al.toArray(new Rewrite[al.size()]);
     
-            // alle rewriter für verschlüsselte nachricht durchlaufen
+            // alle rewriter fÃ¼r verschlÃ¼sselte nachricht durchlaufen
             for (int i=0;i<rewriters.length;i++) {
                 st=rewriters[i].incomingCrypted(st,gen);
             }
             
-            // versuche, nachricht als verschlüsselte nachricht zu parsen
+            // versuche, nachricht als verschlÃ¼sselte nachricht zu parsen
             HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_PARSE,"CryptedRes");
             try {
                 HBCIUtils.log("trying to parse message as crypted message",HBCIUtils.LOG_DEBUG);
@@ -110,13 +110,13 @@ public abstract class Comm
                 // wenn das schiefgeht...
                 HBCIUtils.log("message seems not to be encrypted; tring to parse it as "+msgName+"Res message",HBCIUtils.LOG_DEBUG);
 
-                // alle rewriter durchlaufen, um nachricht evtl. als unverschlüsselte msg zu parsen
+                // alle rewriter durchlaufen, um nachricht evtl. als unverschlÃ¼sselte msg zu parsen
                 gen.set("_origSignedMsg",st);
                 for (int i=0;i<rewriters.length;i++) {
                     st=rewriters[i].incomingClearText(st,gen);
                 }
                 
-                // versuch, nachricht als unverschlüsselte msg zu parsen
+                // versuch, nachricht als unverschlÃ¼sselte msg zu parsen
                 HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_PARSE,msgName+"Res");
                 retmsg = MSGFactory.getInstance().createMSG(msgName+"Res",st,st.length(),gen);
             }

@@ -34,36 +34,36 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** <p>Dieses Tool dient zum Anzeigen der Struktur von HBCI-Job-Ergebnisdaten im
-    Rohformat. Diese Struktur wird benötigt, wenn Job-Ergebnisdaten nicht über
+    Rohformat. Diese Struktur wird benÃ¶tigt, wenn Job-Ergebnisdaten nicht Ã¼ber
     die Methoden und Felder der entsprechenden Highlevel-Klassen ausgewertet
     werden sollen (Klassen <code>org.kapott.hbci.GV_Result.GVR*</code>), sondern
     wenn die Daten benutzt werden, die durch
     {@link org.kapott.hbci.GV_Result.HBCIJobResult#getResultData()}
-    zurückgegeben werden.</p>
-    <p>In diesem Property-Objekt werden die Job-Ergebnisdaten nämlich nach der <em>HBCI4Java</em>-internen
-    Struktur benannt. Um nun die Bezeichnungen für die einzelnen Datenelemente zu erfahren, 
+    zurÃ¼ckgegeben werden.</p>
+    <p>In diesem Property-Objekt werden die Job-Ergebnisdaten nÃ¤mlich nach der <em>HBCI4Java</em>-internen
+    Struktur benannt. Um nun die Bezeichnungen fÃ¼r die einzelnen Datenelemente zu erfahren, 
     kann dieses Tool benutzt werden.</p>
     <p>Der Aufruf erfolgt durch
     <pre>java org.kapott.hbci.tools.ShowLowlevelGVRs [hbciversion]</pre>Ist keine
-    <code>hbciversion</code> angegeben, so wird diese über STDIN erfragt.</p>
-    <p>Das Tool gibt eine baumartige Struktur aus, welche die Lowlevelnamen der Geschäftsvorfälle
-    (plus dem zusätzlichen Suffix "<code>Res</code>") sowie die Bezeichnungen für die
-    dazugehörigen Datenfelder enthält. Eine Erklärung der Ausgaben im Detail ist in der Dokumentation
+    <code>hbciversion</code> angegeben, so wird diese Ã¼ber STDIN erfragt.</p>
+    <p>Das Tool gibt eine baumartige Struktur aus, welche die Lowlevelnamen der GeschÃ¤ftsvorfÃ¤lle
+    (plus dem zusÃ¤tzlichen Suffix "<code>Res</code>") sowie die Bezeichnungen fÃ¼r die
+    dazugehÃ¶rigen Datenfelder enthÃ¤lt. Eine ErklÃ¤rung der Ausgaben im Detail ist in der Dokumentation
     zum Tool {@link ShowLowlevelGVs} enthalten.</p>
     <p>Innerhalb einer Anwendung kann mit der Methode
     {@link org.kapott.hbci.manager.HBCIHandler#getSupportedLowlevelJobs()}
-    eine Liste aller unterstützten Lowlevel-Jobs in Erfahrung gebracht werden. Zusätzlich gibt diese
-    Methode zu jedem Jobnamen die Versionsnummer zurück, welche für diesen Job von <em>HBCI4Java</em> benutzt
-    werden wird (das hängt von der aktuellen HBCI-Version und dem benutzten Passport ab, kann von
-    außen also nicht direkt beeinflusst werden). In der Ausgabe dieses Tool kann nun nach einem
-    bestimmten Lowlevelnamen eines Jobs und der von <em>HBCI4Java</em> dafür verwendeten Versionsnummer gesucht werden.
-    Ist der entsprechende Eintrag gefunden, so hat man eine Übersicht über alle möglichen
+    eine Liste aller unterstÃ¼tzten Lowlevel-Jobs in Erfahrung gebracht werden. ZusÃ¤tzlich gibt diese
+    Methode zu jedem Jobnamen die Versionsnummer zurÃ¼ck, welche fÃ¼r diesen Job von <em>HBCI4Java</em> benutzt
+    werden wird (das hÃ¤ngt von der aktuellen HBCI-Version und dem benutzten Passport ab, kann von
+    auÃŸen also nicht direkt beeinflusst werden). In der Ausgabe dieses Tool kann nun nach einem
+    bestimmten Lowlevelnamen eines Jobs und der von <em>HBCI4Java</em> dafÃ¼r verwendeten Versionsnummer gesucht werden.
+    Ist der entsprechende Eintrag gefunden, so hat man eine Ãœbersicht Ã¼ber alle mÃ¶glichen
     Job-Ergebnisdaten und wie oft die jeweiligen Datenelemente in einem Antwortsegment auftreten
-    können. Die gleiche Übersicht erhält man übrigens, wenn man innerhalb der Anwendung die Methode
+    kÃ¶nnen. Die gleiche Ãœbersicht erhÃ¤lt man Ã¼brigens, wenn man innerhalb der Anwendung die Methode
     {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobResultNames(String)}
-    aufruft, allerdings fehlen in der Ausgabe dieser Methode die Informationen über die möglichen
-    Häufigkeiten der einzelnen Datenelemente, dafür wird hier automatisch die richtige Versionsnummer
-    des Jobs ausgewählt.</p>*/
+    aufruft, allerdings fehlen in der Ausgabe dieser Methode die Informationen Ã¼ber die mÃ¶glichen
+    HÃ¤ufigkeiten der einzelnen Datenelemente, dafÃ¼r wird hier automatisch die richtige Versionsnummer
+    des Jobs ausgewÃ¤hlt.</p>*/
 public class ShowLowlevelGVRs
     extends AbstractShowLowlevelData
 {

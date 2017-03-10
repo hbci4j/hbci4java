@@ -59,14 +59,14 @@ public final class HBCIInstitute
         this.kernel=kernel;
         if (forceAsParent || this.kernel.getParentHandlerData()==null) {
             // Dieser Fall tritt im HBCI4Java-PE ein, wenn ein HBCIInstitute()
-            // erzeugt wird, ohne dass es einen HBCIHandler() gäbe
+            // erzeugt wird, ohne dass es einen HBCIHandler() gÃ¤be
             this.kernel.setParentHandlerData(this);
         }
         
         this.passport=passport;
         if (forceAsParent || this.passport.getParentHandlerData()==null) {
             // Dieser Fall tritt im HBCI4Java-PE ein, wenn ein HBCIInstitute()
-            // erzeugt wird, ohne dass es einen HBCIHandler() gäbe
+            // erzeugt wird, ohne dass es einen HBCIHandler() gÃ¤be
             this.passport.setParentHandlerData(this);
         }
     }
@@ -342,7 +342,7 @@ public final class HBCIInstitute
                     throw he;
                 }
                 HBCIUtils.log(e,HBCIUtils.LOG_INFO);
-                // Viele Kreditinstitute unterstützen den anonymen Login nicht. Dass sollte nicht als Fehler den Anwender beunruhigen
+                // Viele Kreditinstitute unterstÃ¼tzen den anonymen Login nicht. Dass sollte nicht als Fehler den Anwender beunruhigen
                 HBCIUtils.log("FAILED! - maybe this institute does not support anonymous logins",HBCIUtils.LOG_INFO);
                 HBCIUtils.log("we will nevertheless go on",HBCIUtils.LOG_INFO);
             } finally {
@@ -374,9 +374,9 @@ public final class HBCIInstitute
     {
         // bei RDH institut-keys abholen (wenn nicht vorhanden)
         if (passport.needInstKeys() && !passport.hasInstEncKey()) {
-            // TODO: hasInstEncKey(): bei Bankensignatur für HKTAN gibt es
-            // hier kollisionen, weil hasInstEncKey() für PINTAN eigentlich
-            // *immer* true zurückgibt
+            // TODO: hasInstEncKey(): bei Bankensignatur fÃ¼r HKTAN gibt es
+            // hier kollisionen, weil hasInstEncKey() fÃ¼r PINTAN eigentlich
+            // *immer* true zurÃ¼ckgibt
             
             try {
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_GET_KEYS,null);
