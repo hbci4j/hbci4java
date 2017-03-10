@@ -35,7 +35,7 @@ public final class Value
     /** Numerischer Wert des Betrages mal 100*/
     private long   value;
     
-    /** Währung. Für EURO ist hier <code>EUR</code> zu benutzen. */
+    /** WÃ¤hrung. FÃ¼r EURO ist hier <code>EUR</code> zu benutzen. */
     private String curr;
     
     /** Anlegen eines neuen Objektes zur Aufnahme eines Geldbetrages. Vorbelegung
@@ -45,7 +45,7 @@ public final class Value
         this(0,"EUR");
     }
     
-    /** Anlegen eines Geldbetrag-Objektes. Die Währung wird mit <code>EUR</code> vorbelegt.
+    /** Anlegen eines Geldbetrag-Objektes. Die WÃ¤hrung wird mit <code>EUR</code> vorbelegt.
         @param value der Geldbetrag (1.23)
         @deprecated */
     @Deprecated
@@ -54,21 +54,21 @@ public final class Value
         this(Math.round(100.0*value),"EUR");
     }
     
-    /** Anlegen eines Geldbetrag-Objektes. Die Währung wird mit <code>EUR</code> vorbelegt.
+    /** Anlegen eines Geldbetrag-Objektes. Die WÃ¤hrung wird mit <code>EUR</code> vorbelegt.
         @param value der Geldbetrag mal 100 (123) */
     public Value(long value)
     {
         this(value,"EUR");
     }
 
-    /** Anlegen eines Geldbetrag-Objektes. Die Währung wird mit <code>EUR</code> vorbelegt.
+    /** Anlegen eines Geldbetrag-Objektes. Die WÃ¤hrung wird mit <code>EUR</code> vorbelegt.
         @param value der Geldbetrag als String ("1.23") */
     public Value(String value)
     {
         this(value,"EUR");
     }
 
-    /** Anlegen eines Geldbetrag-Objektes. Die Währung wird mit <code>EUR</code> vorbelegt.
+    /** Anlegen eines Geldbetrag-Objektes. Die WÃ¤hrung wird mit <code>EUR</code> vorbelegt.
     @param value der Geldbetrag als String ("1.23") */
     public Value(BigDecimal value)
     {
@@ -77,7 +77,7 @@ public final class Value
 
     /** Anlegen eines Geldbetrag-Objektes.
         @param value der Geldbetrag als String ("1.23")
-        @param curr die Währung des Geldbetrages */
+        @param curr die WÃ¤hrung des Geldbetrages */
     public Value(String value,String curr)
     {
         this(new BigDecimal(value.replace(" ","")),curr);
@@ -85,7 +85,7 @@ public final class Value
 
     /** Anlegen eines Geldbetrag-Objektes.
         @param value der Geldbetrag (1.23)
-        @param curr die Währung des Geldbetrages 
+        @param curr die WÃ¤hrung des Geldbetrages 
         @deprecated */
     @Deprecated
     public Value(double value,String curr)
@@ -95,7 +95,7 @@ public final class Value
     
     /** Anlegen eines Geldbetrag-Objektes.
         @param value der Geldbetrag mal 100 (123)
-        @param curr die Währung des Geldbetrages */
+        @param curr die WÃ¤hrung des Geldbetrages */
     public Value(long value,String curr)
     {
         this.value=value;
@@ -104,7 +104,7 @@ public final class Value
 
     /** Anlegen eines Geldbetrag-Objektes.
     @param value der Geldbetrag (1.23).
-    @param curr die Währung des Geldbetrages */
+    @param curr die WÃ¤hrung des Geldbetrages */
     public Value(BigDecimal value,String curr)
     {
         this.value=value.multiply(ONE_HUNDRED).longValueExact();
@@ -119,7 +119,7 @@ public final class Value
         this(v.value,v.curr);
     }
 
-    /** Umwandeln in einen String. Die Rückgabe erfolgt im Format 
+    /** Umwandeln in einen String. Die RÃ¼ckgabe erfolgt im Format 
         <pre>&lt;value> " " &lt;curr></pre>
         @return Stringdarstellung des Geldbetrages */
     @Override
@@ -128,13 +128,13 @@ public final class Value
         return HBCIUtils.bigDecimal2String(new BigDecimal(value).divide(ONE_HUNDRED))+" "+curr;
     }
     
-    /** Gibt den Betrag mal 100 als Ganzzahl zurück */
+    /** Gibt den Betrag mal 100 als Ganzzahl zurÃ¼ck */
     public long getLongValue()
     {
         return value;
     }
     
-    /** Gibt den Betrag als Fließkommazahl zurück */
+    /** Gibt den Betrag als FlieÃŸkommazahl zurÃ¼ck */
     @Deprecated
     public double getDoubleValue()
     {
@@ -147,7 +147,7 @@ public final class Value
         return result;
     }
     
-    /** Gibt die Währung zurück */
+    /** Gibt die WÃ¤hrung zurÃ¼ck */
     public String getCurr()
     {
         return curr;
@@ -171,7 +171,7 @@ public final class Value
     
     /**
      * Setzt den Betrag neu. Der hier angegebene Wert entspricht dem Betrag mal 100. Wenn der
-     * Wert Centbruchteile enthält, welche wegfallen würden, wird eine Exception geworfen.
+     * Wert Centbruchteile enthÃ¤lt, welche wegfallen wÃ¼rden, wird eine Exception geworfen.
      * 
      * @param value Der Betrag mal 100
      */
@@ -180,8 +180,8 @@ public final class Value
         this.value = value.multiply(ONE_HUNDRED).longValueExact();
     }
     
-    /** Setzt die Währung neu.
-     * @param curr die Währung */
+    /** Setzt die WÃ¤hrung neu.
+     * @param curr die WÃ¤hrung */
     public void setCurr(String curr) 
     {
         this.curr=curr;

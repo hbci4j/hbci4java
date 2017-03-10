@@ -5,7 +5,7 @@ import java.util.Date;
 import org.kapott.hbci.passport.HBCIPassport;
 
 /**
- * Implementierung, die für alle Aufrufe eine {@link UnsupportedOperationException} wirft.
+ * Implementierung, die fÃ¼r alle Aufrufe eine {@link UnsupportedOperationException} wirft.
  *
  * <p>Diese Klasse vereinfacht die Initialisierung der <em>HBCI4Java</em>-Umgebung in Multithread-
  * Anwendungen, die im Haupt-Thread keine echte Interaktion mit <em>HBCI4Java</em> erwarten bzw.

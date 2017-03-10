@@ -26,7 +26,7 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 /* a representation of the datatype "dig", which
     consists of a string of digits (including zeroes) */
-// Speicherung des mit Nullen aufgefüllten Strings
+// Speicherung des mit Nullen aufgefÃ¼llten Strings
 public final class SyntaxDig
     extends SyntaxDE
 {

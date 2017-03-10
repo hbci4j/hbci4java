@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Wurden mit dem Job "Bestellen von Kreditinstitutsinformationen" auch Freitextinformationen
-    angefordert, so werden diese nicht per Post zugestellt. Statt dessen können diese
+    angefordert, so werden diese nicht per Post zugestellt. Statt dessen kÃ¶nnen diese
     Informationen mit Hilfe dieser Klasse direkt ausgewertet werden. Es wird eine Liste aller
     empfangenen Freitextmeldungen gespeichert. */
 public final class GVRInfoOrder
@@ -57,7 +57,7 @@ public final class GVRInfoOrder
         infos.add(info);
     }
     
-    /** Gibt alle Freitextmeldungen zurück, die bei der Abfrage von Kreditinstitutsinformationen
+    /** Gibt alle Freitextmeldungen zurÃ¼ck, die bei der Abfrage von Kreditinstitutsinformationen
         gefunden wurden
         @return Array mit Meldungen */
     public Info[] getEntries()

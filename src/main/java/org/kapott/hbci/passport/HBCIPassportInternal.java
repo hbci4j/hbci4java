@@ -30,10 +30,10 @@ import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.IHandlerData;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
-/** Interface, welches alle Passport-Varianten implementieren müssen.
+/** Interface, welches alle Passport-Varianten implementieren mÃ¼ssen.
     Diese Schnittstelle wird nur intern verwendet. Sie beschreibt alle
-    Methoden, die ein Passport zur Verfügung stellen muss, um von
-    <em>HBCI4Java</em> benutzt werden zu können. Dieses Interface ist
+    Methoden, die ein Passport zur VerfÃ¼gung stellen muss, um von
+    <em>HBCI4Java</em> benutzt werden zu kÃ¶nnen. Dieses Interface ist
     nicht zur Anwendung hin sichtbar (deshalb auch "<code>Internal</code>").*/
 public interface HBCIPassportInternal
     extends HBCIPassport
@@ -119,13 +119,13 @@ public interface HBCIPassportInternal
     
     /* Diese Methode wird nach jeder Dialog-Initialisierung aufgerufen. Ein
      * Passport-Objekt kann den Status der Response mit Hilfe von msgStatus
-     * auswerten. Durch Zurückgeben von "true" wird angezeigt, dass eine
+     * auswerten. Durch ZurÃ¼ckgeben von "true" wird angezeigt, dass eine
      * erneute Dialog-Initialisierung stattfinden sollte (z.B. weil sich grund-
-     * legende Zugangsdaten geändert haben, secMechs neu festgelegt wurden o.ä.) */
+     * legende Zugangsdaten geÃ¤ndert haben, secMechs neu festgelegt wurden o.Ã¤.) */
     public boolean postInitResponseHook(HBCIMsgStatus msgStatus, boolean anonDialog);
     
     /* Diese Methode wird aufgerufen, bevor ein "normaler" Dialog (also mit GVs)
-     * geführt wird. */
+     * gefÃ¼hrt wird. */
     public void beforeCustomDialogHook(HBCIDialog dialog);
     
     /* Diese Methode wird aufgerufen, nachdem bei einem normalen Dialog die
@@ -134,16 +134,16 @@ public interface HBCIPassportInternal
      * Verwendung des Zweischritt-Verfahrens die Message-Liste zu patchen */
     public void afterCustomDialogInitHook(HBCIDialog dialog);
     
-    /* Gibt zurück, wieviele GV-Segmente in einer Nachricht enthalten sein dürfen.
+    /* Gibt zurÃ¼ck, wieviele GV-Segmente in einer Nachricht enthalten sein dÃ¼rfen.
      * Normalerweise wird das schon durch die BPD bzw. die Job-Params festgelegt,
-     * deswegen geben die meisten Passport-Implementierungen hier 0 zurück (also
-     * keine weiteren Einschränkungen neben den BPD-Daten). Im Fall von PIN/TAN 
-     * muss jedoch dafür gesorgt werden, dass tatsächlich nur ein einziges 
+     * deswegen geben die meisten Passport-Implementierungen hier 0 zurÃ¼ck (also
+     * keine weiteren EinschrÃ¤nkungen neben den BPD-Daten). Im Fall von PIN/TAN 
+     * muss jedoch dafÃ¼r gesorgt werden, dass tatsÃ¤chlich nur ein einziges 
      * Auftragssegment in einer HBCI-Nachricht steht (weil sonst das "Signieren" 
      * mit einer TAN schwierig wird). Deswegen gibt die PIN/TAN-Implementierung 
-     * dieser Methode 1 zurück.
+     * dieser Methode 1 zurÃ¼ck.
      * In HBCIDialog.addTask() wird diese Methode aufgerufen, um festzustellen,
-     * ob für den hinzuzufügenden Task eine neue Nachricht erzeugt werden muss
+     * ob fÃ¼r den hinzuzufÃ¼genden Task eine neue Nachricht erzeugt werden muss
      * oder nicht.
      */
     public int getMaxGVSegsPerMsg();

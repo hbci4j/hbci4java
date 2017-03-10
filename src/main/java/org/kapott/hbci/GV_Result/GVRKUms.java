@@ -41,16 +41,16 @@ import org.kapott.hbci.swift.Swift;
 /** <p>Ergebnisse der Abfrage von Kontoumsatzinformationen.
     Ein Objekt dieser Klasse entspricht einen Kontoauszug.
     Ein Kontoauszug ist in einzelne Buchungstage unterteilt.
-    Für jeden einzelnen Buchungstag wiederum gibt es eine Anzahl von Umsatzzeilen
+    FÃ¼r jeden einzelnen Buchungstag wiederum gibt es eine Anzahl von Umsatzzeilen
     (das entspricht je einem Eintrag auf dem "normalen" Kontoauszug auf Papier).
-    Jede einzelne Umsatzzeile wiederum enthält die einzelnen Informationen zu genau
+    Jede einzelne Umsatzzeile wiederum enthÃ¤lt die einzelnen Informationen zu genau
     einer Transaktion. </p>
-    <p>Es können auch alle Umsatzzeilen in einer einzigen Liste abgefragt werden (also nicht
+    <p>Es kÃ¶nnen auch alle Umsatzzeilen in einer einzigen Liste abgefragt werden (also nicht
     in Buchungstage unterteilt .</p>*/
 public class GVRKUms
     extends HBCIJobResultImpl
 {
-    /** Eine "Zeile" des Kontoauszuges (enthält Daten einer Transaktion) */
+    /** Eine "Zeile" des Kontoauszuges (enthÃ¤lt Daten einer Transaktion) */
     public static class UmsLine
         implements Serializable
     {
@@ -69,25 +69,25 @@ public class GVRKUms
         public String customerref;
         /** Kreditinstituts-Referenz */
         public String instref;
-        /** Ursprünglicher Betrag (bei ausländischen Buchungen; optional) */
+        /** UrsprÃ¼nglicher Betrag (bei auslÃ¤ndischen Buchungen; optional) */
         public Value  orig_value;
-        /** Betrag für Gebühren des Geldverkehrs (optional) */
+        /** Betrag fÃ¼r GebÃ¼hren des Geldverkehrs (optional) */
         public Value  charge_value;
 
         /** Art der Buchung (bankinterner Code). Nur wenn hier ein Wert ungleich
          * <code>999</code> drinsteht, enthalten die Attribute <code>text</code>,
          * <code>primanota</code>, <code>usage</code>, <code>other</code> und
          * <code>addkey</code> sinnvolle Werte. Andernfalls sind all diese
-         * Informationen möglicherweise im Feld <code>additional</code> enthalten,
+         * Informationen mÃ¶glicherweise im Feld <code>additional</code> enthalten,
          * allerdings in einem nicht definierten Format (siehe auch
          * <code>additional</code>). */
         public String   gvcode;
 
         /** <p>Zusatzinformationen im Rohformat. Wenn Zusatzinformationen zu dieser
-            Transaktion in einem unbekannten Format vorliegen, dann enthält dieser
+            Transaktion in einem unbekannten Format vorliegen, dann enthÃ¤lt dieser
             String diese Daten (u.U. ist dieser String leer, aber nicht <code>null</code>).
         Das ist genau dann der Fall, wenn der Wert von  <code>gvcode</code> gleich <code>999</code> ist.</p>
-            <p>Wenn die Zusatzinformationen aber ausgewertet werden können (und <code>gvcode!=999</code>),
+            <p>Wenn die Zusatzinformationen aber ausgewertet werden kÃ¶nnen (und <code>gvcode!=999</code>),
         so ist dieser String <code>null</code>, und die Felder <code>text</code>, <code>primanota</code>,
             <code>usage</code>, <code>other</code> und <code>addkey</code>
             enthalten die entsprechenden Werte (siehe auch <code>gvcode</code>)</p> */
@@ -164,19 +164,19 @@ public class GVRKUms
         }
     }
 
-    /** Enthält alle Transaktionen eines einzelnen Buchungstages. Dazu gehören
+    /** EnthÃ¤lt alle Transaktionen eines einzelnen Buchungstages. Dazu gehÃ¶ren
         das Datum des jeweiligen Tages, der Anfangs- und Endsaldo sowie die
-        Menge aller dazugehörigen Umsatzeilen */
+        Menge aller dazugehÃ¶rigen Umsatzeilen */
     public static class BTag
         implements Serializable
     {
         /** <p>Konto, auf das sich die Umsatzdaten beziehen (Kundenkonto). Einige
-            Kreditinstitute geben fehlerhafte Kontoauszüge zurück, was zur Folge
+            Kreditinstitute geben fehlerhafte KontoauszÃ¼ge zurÃ¼ck, was zur Folge
             haben kann, dass dieses Feld nicht richtig belegt ist. Tritt ein solcher
             Fall ein, so kann es vorkommen, dass von dem <code>Konto</code>-Objekt
-            nur das Feld <code>number</code> gefüllt ist, und zwar mit den
+            nur das Feld <code>number</code> gefÃ¼llt ist, und zwar mit den
             Informationen, die das Kreditinstitut zur Identifizierung dieses Kontos
-            zurückgibt.</p>
+            zurÃ¼ckgibt.</p>
             <p>Normalerweise bestehen diese Informationen aus BLZ und
             Kontonummer, die dann auch korrekt in das <code>Konto</code>-Objekt
             eingetragen werden. Liegen diese Informationen aber gar nicht oder in
@@ -231,14 +231,14 @@ public class GVRKUms
 
     private boolean parsed;
 
-    /** Dieses Feld enthält einen String, der den nicht-auswertbaren Teil der Kontoauszüge
-     * enthält. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
+    /** Dieses Feld enthÃ¤lt einen String, der den nicht-auswertbaren Teil der KontoauszÃ¼ge
+     * enthÃ¤lt. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
      * bzw. einen leeren String enthalten. Wenn das nicht der Fall ist, dann konnten die
-     * empfangenen Kontoauszüge nicht richtig geparst werden, und dieser String enthält den
+     * empfangenen KontoauszÃ¼ge nicht richtig geparst werden, und dieser String enthÃ¤lt den
      * "Schwanz" der Kontoauszugsdaten, bei dem das Parsing-Problem aufgetreten ist. */
     public StringBuffer restMT940;
 
-    /** Wie restMT940, allerdings für die Daten der *vorgemerkten* Umsätze. */
+    /** Wie restMT940, allerdings fÃ¼r die Daten der *vorgemerkten* UmsÃ¤tze. */
     public StringBuffer restMT942;
 
 
@@ -266,7 +266,7 @@ public class GVRKUms
         this.bufferMT942.append(data);
     }
 
-    /** Gibt die Umsatzinformationen gruppiert nach Buchungstagen zurück.
+    /** Gibt die Umsatzinformationen gruppiert nach Buchungstagen zurÃ¼ck.
         @return Liste mit Informationen zu einzelnen Buchungstagen ({@link GVRKUms.BTag}) */
     public List<BTag> getDataPerDay()
     {
@@ -274,7 +274,7 @@ public class GVRKUms
         return tageMT940;
     }
 
-    /** Gibt alle Transaktionsdatensätze in einer "flachen" Struktur zurück.
+    /** Gibt alle TransaktionsdatensÃ¤tze in einer "flachen" Struktur zurÃ¼ck.
         D.h. nicht in einzelne Buchungstage unterteilt, sondern in einer Liste
         analog zu einem "normalen" Kontoauszug.
         @return Liste mit Transaktionsdaten ({@link GVRKUms.UmsLine}) */
@@ -291,8 +291,8 @@ public class GVRKUms
         return result;
     }
 
-    /** Gibt eine Liste aller vorgemerkten Umsätze zurück
-     * @return Liste von {@link GVRKUms.UmsLine}-Objekten der vorgemerkten Umsätze */
+    /** Gibt eine Liste aller vorgemerkten UmsÃ¤tze zurÃ¼ck
+     * @return Liste von {@link GVRKUms.UmsLine}-Objekten der vorgemerkten UmsÃ¤tze */
     public List<UmsLine> getFlatDataUnbooked()
     {
         verifyMT94xParsing("getFlatDataUnbooked()");
@@ -430,7 +430,7 @@ public class GVRKUms
                 }
                 if (st_start!=null) {
                     // Tag 60 (Anfangssaldo) gibt es in MT942 nicht,
-                    // darum wird btag.start nur in MT940 gefüllt
+                    // darum wird btag.start nur in MT940 gefÃ¼llt
 
                     btag.start=new Saldo();
                     btag.starttype=starttype;
@@ -444,7 +444,7 @@ public class GVRKUms
                     }
 
                     // hier aus dem CD-Indikator und dem absoluten Saldo-Betrag
-                    // einen String für den Saldo-Betrag zusamennbauen
+                    // einen String fÃ¼r den Saldo-Betrag zusamennbauen
                     btag.start.value=new Value(
                         (cd.equals("D")?"-":"")+st_start.substring(10).replace(',','.'),
                         st_start.substring(7,10));
@@ -452,9 +452,9 @@ public class GVRKUms
 
                 // looping to get all "umsaetze"
 
-                // TODO: beim MT942 (btag.start==null) müsste als Initialwert
+                // TODO: beim MT942 (btag.start==null) mÃ¼sste als Initialwert
                 // fuer den Saldo hier eigentlich der Abschluss-Saldo aus den
-                // gebuchten Umsätzen verwendet werden (den habe ich an dieser
+                // gebuchten UmsÃ¤tzen verwendet werden (den habe ich an dieser
                 // Stelle aber nicht so ohne weiteres)
                 long saldo = (btag.start!=null)?btag.start.value.getLongValue():0;
                 int  ums_counter=0;
@@ -536,7 +536,7 @@ public class GVRKUms
                     // an? Bei einer "normalen" Buchung ist das D(ebit). Bei
                     // einer Storno-Buchung ist der Betrag allerdings negativ,
                     // wenn eine ehemalige Gutschrift (Credit) storniert wird,
-                    // in dem Fall wäre als "C" der Indikator für den negativen
+                    // in dem Fall wÃ¤re als "C" der Indikator fÃ¼r den negativen
                     // Buchungsbetrag
                     String negValueIndikator=line.isStorno?"C":"D";
                     line.value.setValue(
@@ -695,7 +695,7 @@ public class GVRKUms
                 }
                 if (st_end!=null) {
                     // Tag 62 (Schlusssaldo) gibt es in MT942 nicht,
-                    // darum wird btag.end nur in MT940 gefüllt
+                    // darum wird btag.end nur in MT940 gefÃ¼llt
 
                     btag.end=new Saldo();
                     btag.endtype=endtype;

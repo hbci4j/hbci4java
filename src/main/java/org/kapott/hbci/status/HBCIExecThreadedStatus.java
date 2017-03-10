@@ -23,20 +23,20 @@ package org.kapott.hbci.status;
 
 import java.util.Hashtable;
 
-/** <p>Wird für Status-Informationen bei Verwendung des threaded-callback-Mechanismus'
- * benötigt. Für den threaded-callback-Mechanismus werden die Methoden
+/** <p>Wird fÃ¼r Status-Informationen bei Verwendung des threaded-callback-Mechanismus'
+ * benÃ¶tigt. FÃ¼r den threaded-callback-Mechanismus werden die Methoden
  * {@link org.kapott.hbci.manager.HBCIHandler#executeThreaded()} und
  * {@link org.kapott.hbci.manager.HBCIHandler#continueThreaded(String)} 
  * verwendet, die jeweils ein Objekt von <code>HBCIExecThreadedStatus</code>
- * zurückgeben.</p>
- * <p>Objekte dieser Klasse geben zunächst Auskunft darüber, warum
+ * zurÃ¼ckgeben.</p>
+ * <p>Objekte dieser Klasse geben zunÃ¤chst Auskunft darÃ¼ber, warum
  * <code>executeThreaded()</code> bzw. <code>continueThreaded()</code>
- * terminiert sind. Ursache kann zum einen sein, dass Callback-Daten benötigt
- * werden - in diesem Fall enthält das <code>HBCIExecThreadedStatus</code>-Objekt
+ * terminiert sind. Ursache kann zum einen sein, dass Callback-Daten benÃ¶tigt
+ * werden - in diesem Fall enthÃ¤lt das <code>HBCIExecThreadedStatus</code>-Objekt
  * die Informationen zum aufgetretenen Callback. Andernfalls zeigt das
  * <code>HBCIExecThreadedStatus</code>-Objekt an, dass der HBCI-Dialog beendet
  * ist - in diesem Fall sind die HBCI-Dialog-Status-Informationen als
- * {@link HBCIExecStatus}-Objekt enthalten (analog zum Rückgabewert von
+ * {@link HBCIExecStatus}-Objekt enthalten (analog zum RÃ¼ckgabewert von
  * {@link org.kapott.hbci.manager.HBCIHandler#execute()}.</p> */ 
 public class HBCIExecThreadedStatus 
 {
@@ -52,20 +52,20 @@ public class HBCIExecThreadedStatus
     
     /** Callback-Daten auslesen. Wenn {@link #isCallback()} <code>true</code>
      * ist, bedeutet das, dass ein Callback aufgetreten ist, der behandelt
-     * werden muss. Die zurückgegebene <code>Hashtable</code> enthält folgende
+     * werden muss. Die zurÃ¼ckgegebene <code>Hashtable</code> enthÃ¤lt folgende
      * Werte:
      * <ul>
      * <li>"<code>method</code>": ist im Moment immer "<code>callback</code>"</li>
-     * <li>"<code>passport</code>": enthält das Passport-Objekt, dessen HBCI-Dialog
-     * Callback-Daten benötigt.</li>
-     * <li>"<code>reason</code>": enthält den Callback-Reason als 
+     * <li>"<code>passport</code>": enthÃ¤lt das Passport-Objekt, dessen HBCI-Dialog
+     * Callback-Daten benÃ¶tigt.</li>
+     * <li>"<code>reason</code>": enthÃ¤lt den Callback-Reason als 
      * <code>Integer</code>-Objekt.</li>
-     * <li>"<code>msg</code>": enthält die Callback-Message.</li>
-     * <li>"<code>dataType</code>": enthält den erwarteten Datentyp der Antwort
+     * <li>"<code>msg</code>": enthÃ¤lt die Callback-Message.</li>
+     * <li>"<code>dataType</code>": enthÃ¤lt den erwarteten Datentyp der Antwort
      * als <code>Integer</code>-Objekt.</li>
-     * <li>"<code>retData</code>": enthält das <code>retData</code>-Objekt
+     * <li>"<code>retData</code>": enthÃ¤lt das <code>retData</code>-Objekt
      * (<code>StringBuffer</code>), in welches die Callback-Daten hineingeschrieben
-     * werden müssen.</li>
+     * werden mÃ¼ssen.</li>
      * </ul> */
     public Hashtable<String,Object> getCallbackData()
     {
@@ -79,7 +79,7 @@ public class HBCIExecThreadedStatus
     }
     
     /** Auslesen des HBCI-Dialog-Status. Falls die Methode {@link #isFinished()}
-     * <code>true</code> zurückgibt, bedeutet das, dass der HBCI-Dialog beendet
+     * <code>true</code> zurÃ¼ckgibt, bedeutet das, dass der HBCI-Dialog beendet
      * ist. In diesem Fall kann mit <code>getExecStatus</code> das 
      * {@link HBCIExecStatus}-Objekt ausgelesen werden, welches den eigentlichen
      * Status des HBCI-Dialoges anzeigt (analog zu 
@@ -95,14 +95,14 @@ public class HBCIExecThreadedStatus
         return execStatus!=null;
     }
     
-    /** Zeigt an, ob Callback-Daten benötigt werden (<code>true</code>), oder
+    /** Zeigt an, ob Callback-Daten benÃ¶tigt werden (<code>true</code>), oder
      * ob der HBCI-Dialog beendet ist (<code>false</code>). */
     public boolean isCallback()
     {
         return callbackData!=null;
     }
     
-    /** Gibt einen String mit allen gespeicherten Informationen zurück. */
+    /** Gibt einen String mit allen gespeicherten Informationen zurÃ¼ck. */
     public String toString()
     {
         StringBuffer ret=new StringBuffer();

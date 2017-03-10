@@ -61,14 +61,14 @@ public class LogFilter
 	public synchronized void addSecretData(String secret, String replacement, int level)
 	{
 	    if (secret!=null && secret.length()!=0) {
-	        // liste der secrets im gewählten level holen bzw. erzeugen
+	        // liste der secrets im gewÃ¤hlten level holen bzw. erzeugen
 	        List<String[]> secretData= secretDataByLevel.get(new Integer(level));
 	        if (secretData==null) {
 	            secretData=new ArrayList<String[]>();
 	            secretDataByLevel.put(new Integer(level),secretData);
 	        }
 
-	        // duplikats-check für "secret"
+	        // duplikats-check fÃ¼r "secret"
 	        boolean found=false;
 	        for (Iterator<String[]> i=secretData.iterator();i.hasNext();) {
 	            String[] entry= i.next();
@@ -82,8 +82,8 @@ public class LogFilter
 	            // secret noch nicht in filterliste
 
 	            if (replacement==null || replacement.length()<2) {
-	                // wenn der replacement-string kein vollständiger String ist,
-	                // diesen mit einem Filler auf die länge des secrets bringen 
+	                // wenn der replacement-string kein vollstÃ¤ndiger String ist,
+	                // diesen mit einem Filler auf die lÃ¤nge des secrets bringen 
 	                char filler;
 
 	                if (replacement!=null && replacement.length()==1) {

@@ -40,12 +40,12 @@ import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 
-/** <p><em><b>Veraltete</b></em> Passport-Klasse für RDH-Zugänge mit Sicherheitsmedium "Datei". 
+/** <p><em><b>Veraltete</b></em> Passport-Klasse fÃ¼r RDH-ZugÃ¤nge mit Sicherheitsmedium "Datei". 
     Diese Klasse sollte nicht mehr benutzt werden, sondern statt dessen die Klasse
     {@link org.kapott.hbci.passport.HBCIPassportRDHNew}.
-    RDH-Passport-Datei können mit dem Tool 
+    RDH-Passport-Datei kÃ¶nnen mit dem Tool 
     {@link org.kapott.hbci.tools.ConvertRDHPassport} oder
-    mit Hilfe des separat verfügbaren <em>HBCI4Java Passport Editors</em> 
+    mit Hilfe des separat verfÃ¼gbaren <em>HBCI4Java Passport Editors</em> 
     in RDHNew-Passport-Dateien umgewandelt werden. Siehe dazu auch die Daten 
     <code>README.RDHNew</code></p>
     <p>Das API dieser Klasse ist identisch zu dem der Klasse

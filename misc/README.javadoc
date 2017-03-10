@@ -6,20 +6,20 @@ in der API-Dokumentation gibt.
 
 Wenn also in der API-Dokumentation ein Link auf eine nicht existierende
 Dokumentation auftaucht, dann bedeutet das nicht, dass das verlinkte
-Objekt "bloss nicht dokumentiert" ist, sondern dass es auch tatsächlich
+Objekt "bloss nicht dokumentiert" ist, sondern dass es auch tatsÃ¤chlich
 von "normalen" Anwendungen nicht benutzt werden sollte. Durch einen
 Blick auf den Quelltext der entsprechenden Klasse ist es zwar
-prinzipiell möglich, evtl. vorhandene öffentliche (=public) Schnittstellen
+prinzipiell mÃ¶glich, evtl. vorhandene Ã¶ffentliche (=public) Schnittstellen
 in Erfahrung zu bringen. Sollten diese aber nicht sauber in der
 "offiziellen" API-Dokumentation erscheinen, so kann es durchaus
-passieren, dass sich diese Schnittstellen ohne Vorankündigung
-bzw. ohne Erwähnung in ChangeLogs von einer Version zur nächsten
-ändern. 
+passieren, dass sich diese Schnittstellen ohne VorankÃ¼ndigung
+bzw. ohne ErwÃ¤hnung in ChangeLogs von einer Version zur nÃ¤chsten
+Ã¤ndern. 
 
 Also besser Finger weg von undokumentierten Schnittstellen, besser
-einen Hinweis an mich senden, wenn ein bestimmtes Feature benötigt
+einen Hinweis an mich senden, wenn ein bestimmtes Feature benÃ¶tigt
 wird, welches nicht in der offiziellen Dokumentation auftaucht ;-)
 
-Grüße
+GrÃ¼ÃŸe
 -Stefan-
 hbci4java@kapott.org

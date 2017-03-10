@@ -4,33 +4,33 @@ HBCI4Java in Anwendungen, die auf einem Application-Server laufen
 
 Noch einige Anmerkungen zur Verwendung von HBCI4Java in Anwendungen, die auf einem
 Application-Server laufen. Wenn von allen auf einem Application-Server
-deployten Anwendungen nur eine einzige Anwendung tatsächlich HBCI4Java benutzt,
-gibt es keine speziellen Dinge zu berücksichtigen: die HBCI4Java-Bibliothek
-(hbci4java.jar) kann entweder global für alle Web-Anwendungen oder lokal nur
-für die eine betroffene Web-Anwendung deployt werden. Die Anwendung selbst
+deployten Anwendungen nur eine einzige Anwendung tatsÃ¤chlich HBCI4Java benutzt,
+gibt es keine speziellen Dinge zu berÃ¼cksichtigen: die HBCI4Java-Bibliothek
+(hbci4java.jar) kann entweder global fÃ¼r alle Web-Anwendungen oder lokal nur
+fÃ¼r die eine betroffene Web-Anwendung deployt werden. Die Anwendung selbst
 muss einmal HBCIUtils.init() aufrufen, um alle Datenstrukturen zu initialisieren.
-Da für jede neue Anfrage an die Web-Anwendung zwar ein neuer Thread, aber keine
+Da fÃ¼r jede neue Anfrage an die Web-Anwendung zwar ein neuer Thread, aber keine
 neue ThreadGroup erzeugt wird, muss hier auch nichts weiter beachtet werden.
-Wenn man selbst neue Threads erzeugen will, die HBCI-Funktionen ausführen, so
-muss für jeden selbst erzeugten HBCI-Thread auch eine neue ThreadGroup erzeugt
+Wenn man selbst neue Threads erzeugen will, die HBCI-Funktionen ausfÃ¼hren, so
+muss fÃ¼r jeden selbst erzeugten HBCI-Thread auch eine neue ThreadGroup erzeugt
 und mit HBCIUtils.initThread() initialisiert werden.
 
 Falls auf einem Application-Server mehrere Anwendungen HBCI4Java benutzen, sind
 einige Dinge zu beachten. Die HBCI4Java-Bibliothek (hbci4java.jar) muss so
 deployt werden, dass *alle* Web-Anwendungen darauf Zugriff haben (z.B. nach
 <CATALINA_HOME>/common/lib), und darf *nicht* mit in das Verzeichnis WEB-INF/lib
-der Web-Anwendung kopiert werden. Warum das so ist, weiß ich leider auch nicht,
+der Web-Anwendung kopiert werden. Warum das so ist, weiÃŸ ich leider auch nicht,
 bei mir gibt es jedenfalls immer sehr seltsame ClassLoader-Probleme, wenn ich
 das nicht beachte. 
 
 Jede installierte Web-Anwendung wird in der selben JVM und auch innerhalb der 
 selben ThreadGroup erzeugt und gestartet. Da eine Web-Anwendung i.d.R. nicht 
-wissen kann, ob noch andere Web-Anwendungen HBCI4Java benutzen, könnte es zu 
-Problemen bei der Verwaltung der ThreadGroup-abhängigen Daten kommen. Wenn also 
+wissen kann, ob noch andere Web-Anwendungen HBCI4Java benutzen, kÃ¶nnte es zu 
+Problemen bei der Verwaltung der ThreadGroup-abhÃ¤ngigen Daten kommen. Wenn also 
 zwei Web-Anwendungen ihre HBCI-Threads als "Haupt-Threads" der Anwendung laufen 
 lassen, laufen beide HBCI-Threads innerhalb der selben ThreadGroup und 
 beeinflussen damit gegenseitig ihre Daten. Es ist deshalb *immer* zu empfehlen, 
-in HBCI4Java-fähigen Anwendungen, die auf einem Application-Server installiert 
-werden sollen, für die HBCI-Funktionen explizit eine separate ThreadGroup zu 
-erzeugen und den Thread, der die HBCI-Funktionen ausführen soll, in dieser 
+in HBCI4Java-fÃ¤higen Anwendungen, die auf einem Application-Server installiert 
+werden sollen, fÃ¼r die HBCI-Funktionen explizit eine separate ThreadGroup zu 
+erzeugen und den Thread, der die HBCI-Funktionen ausfÃ¼hren soll, in dieser 
 ThreadGroup anzulegen.

@@ -1,37 +1,37 @@
 <html><body>
 <p>
-Passports repräsentieren die HBCI-Sicherheitsmedien, mit denen Zugangsdaten
+Passports reprÃ¤sentieren die HBCI-Sicherheitsmedien, mit denen Zugangsdaten
 eines Bankkunden verwaltet werden. 
 Das Konzept von Passports ist ein wesentlicher Bestandteil von <em>HBCI4Java</em>.
-Ein Passport kann mit einem persönlichen "HBCI-Ausweis" verglichen werden 
-und entspricht damit der "Schlüsseldatei" bzw. dem "Sicherheitsmedium", wie es
+Ein Passport kann mit einem persÃ¶nlichen "HBCI-Ausweis" verglichen werden 
+und entspricht damit der "SchlÃ¼sseldatei" bzw. dem "Sicherheitsmedium", wie es
 aus anderer HBCI-Software bekannt ist.
 </p><p>
-Ein HBCI-Sicherheitsmedium, wie es von den Banken bereitgestellt wird, enthält
-alle Daten, die für die HBCI-Kommunikation nötig sind. Dazu gehören neben
+Ein HBCI-Sicherheitsmedium, wie es von den Banken bereitgestellt wird, enthÃ¤lt
+alle Daten, die fÃ¼r die HBCI-Kommunikation nÃ¶tig sind. Dazu gehÃ¶ren neben
 technischen Zugangsdaten (Adresse des HBCI-Servers, Benutzerkennung zur Anmeldung
-beim HBCI-Server) auch die Schlüssel für Signierung und Verschlüsselung der
-zu übertragenden Daten.
+beim HBCI-Server) auch die SchlÃ¼ssel fÃ¼r Signierung und VerschlÃ¼sselung der
+zu Ã¼bertragenden Daten.
 </p><p>
-Je nach verwendetem Sicherheitsverfahren gibt es verschiedene Möglichkeiten,
+Je nach verwendetem Sicherheitsverfahren gibt es verschiedene MÃ¶glichkeiten,
 diese Daten abzuspeichern (z.B. auf einer Chipkarte oder in einer Datei) und
 zu verwenden (verschiedene kryptografische Algorithmen je nach verwendetem
-Verfahren). Die grundlegenden Funktionen, für die ein Sicherheitsmedium benötigt
+Verfahren). Die grundlegenden Funktionen, fÃ¼r die ein Sicherheitsmedium benÃ¶tigt
 wird, sind jedoch bei jedem Verfahren gleich (Bereitstellung der Nutzerdaten,
-Bereitstellen von Funktionen für die Signierung und Verschlüsselung der
-zu übertragenden Daten usw.).
+Bereitstellen von Funktionen fÃ¼r die Signierung und VerschlÃ¼sselung der
+zu Ã¼bertragenden Daten usw.).
 </p><p>
 Ein <code>HBCIPassport</code> stellt die Schnittstelle zu einem beliebigen
 Sicherheitsmedium dar. Aus diesem Grund ist ein <code>HBCIPassport</code>-Objekt
 immer an genau einen HBCI-Zugang unter Verwendung eines einzigen bestimmten
 Sicherheitsverfahrens gebunden.
 </p><p>
-Innerhalb einer HBCI-Anwendung muss also für jeden zu benutzenden HBCI-Zugang ein
+Innerhalb einer HBCI-Anwendung muss also fÃ¼r jeden zu benutzenden HBCI-Zugang ein
 solches <code>HBCIPassport</code>-Objekt angelegt werden. Das geschieht durch
 Aufruf der Methode <a href="AbstractHBCIPassport.html#getInstance()"><code>AbstractHBCIPassport.getInstance()</code></a>.
-Diese Methode gibt ein Passport-Objekt zurück, welches zur Initialisierung eines
+Diese Methode gibt ein Passport-Objekt zurÃ¼ck, welches zur Initialisierung eines
 <a href="../manager/HBCIHandler.html">HBCI-Handlers</a> benutzt wird. Mit dem
-so erstellen HBCIHandler können letztendlich HBCI-Funktionen ausgeführt werden,
+so erstellen HBCIHandler kÃ¶nnen letztendlich HBCI-Funktionen ausgefÃ¼hrt werden,
 die dabei automatisch immer an den jeweiligen HBCI-Zugang gebunden sind. 
 </p>
 </body></html>

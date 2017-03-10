@@ -9,10 +9,10 @@ Der "normale" Callback-Mechanismus funktioniert wiefolgt:
 hbci.execute()
   ... (HBCI-Dialoge werden begonnen)
   callback.callback(passport,reason,msg,datatype,retData)
-    ... (Antwortdaten für Callback in retData einstellen)
+    ... (Antwortdaten fÃ¼r Callback in retData einstellen)
   ... (HBCI-Dialoge werden fortgesetzt)
   callback.callback(passport,reason,msg,datatype,retData)
-    ... (Antwortdaten für Callback in retData einstellen)
+    ... (Antwortdaten fÃ¼r Callback in retData einstellen)
   ... (HBCI-Dialoge werden fortgesetzt)
   usw.
 
@@ -21,115 +21,115 @@ Job-Result auswerten
 
 
 Die Methode hbci.execute() terminiert also erst, wenn alle HBCI-Dialoge
-ausgeführt wurden. Tritt während der Ausführung von hbci.execute() ein Callback
-auf, führt das zu einem asynchronen Aufruf der Methode callback() des 
+ausgefÃ¼hrt wurden. Tritt wÃ¤hrend der AusfÃ¼hrung von hbci.execute() ein Callback
+auf, fÃ¼hrt das zu einem asynchronen Aufruf der Methode callback() des 
 registrierten Callback-Objektes. "Asynchron" deshalb, weil aus Sicht der 
-Anwendung ja immer noch hbci.execute() läuft und die Methode callback()
+Anwendung ja immer noch hbci.execute() lÃ¤uft und die Methode callback()
 der via HBCIUtils.init() registrierten Callback-Klasse nicht von der Anwendung
 selbst, sondern vom HBCI-Kernel aufgerufen wird. 
 
-Sobald die callback()-Methode terminiert und die benötigten Daten zurückgegeben
-hat, läuft hbci.execute() weiter. Das ganze geschieht aus Sicht des Aufrufers 
-von hbci.execute() völlig transparent, so dass der Aufrufer von hbci.execute() 
-keine Möglichkeit hat, bei bestimmten Callbacks beispielsweise die Methode
-hbci.execute() terminieren zu lassen, bestimmte Aktionen auszuführen und den
-HBCI-Dialog später an der Stelle der "Unterbrechung" fortzusetzen.
+Sobald die callback()-Methode terminiert und die benÃ¶tigten Daten zurÃ¼ckgegeben
+hat, lÃ¤uft hbci.execute() weiter. Das ganze geschieht aus Sicht des Aufrufers 
+von hbci.execute() vÃ¶llig transparent, so dass der Aufrufer von hbci.execute() 
+keine MÃ¶glichkeit hat, bei bestimmten Callbacks beispielsweise die Methode
+hbci.execute() terminieren zu lassen, bestimmte Aktionen auszufÃ¼hren und den
+HBCI-Dialog spÃ¤ter an der Stelle der "Unterbrechung" fortzusetzen.
 
-In einigen Anwendungsfällen kann diese Asynchronität unerwünscht sein, z.B. 
+In einigen AnwendungsfÃ¤llen kann diese AsynchronitÃ¤t unerwÃ¼nscht sein, z.B. 
 dann, wenn Informationen aus dem aktuellen Kontext zwar an der Stelle bekannt 
 sind, wo hbci.execute() aufgerufen wurde, nicht aber in der callback()-Methode. 
 
-Außerdem ist dieses asynchrone Verhalten nicht sehr praktisch, wenn es notwendig
+AuÃŸerdem ist dieses asynchrone Verhalten nicht sehr praktisch, wenn es notwendig
 ist, dass bei einem auftretenden Callback der HBCI-Dialog "gehalten" wird, die
 Methode hbci.execute() aber vorerst beendet wird, so dass die Anwendung wieder
-die Kontrolle über den "Programmfluss" erhält. 
+die Kontrolle Ã¼ber den "Programmfluss" erhÃ¤lt. 
 
-Eine entsprechende Lösung wurde in verschiedenen Projekten bereits mit Hilfe
+Eine entsprechende LÃ¶sung wurde in verschiedenen Projekten bereits mit Hilfe
 von mehreren Threads auf Anwendungsseite geschaffen. Die richtige Verwaltung
 der Threads, deren Synchronisation und die korrekte Fehler-Behandlung innerhalb 
-einer Anwendung ist allerdings sehr fehleranfällig. Die notwendige Verwaltung
-und Synchronisation der Threads führt vor allem dazu, dass die Anwendung selbst
-sehr schnell unübersichtlich wird.
+einer Anwendung ist allerdings sehr fehleranfÃ¤llig. Die notwendige Verwaltung
+und Synchronisation der Threads fÃ¼hrt vor allem dazu, dass die Anwendung selbst
+sehr schnell unÃ¼bersichtlich wird.
 
 Aus diesem Grund wurde ein entsprechender Mechanismus direkt in HBCI4Java
-integriert. Dieser neue Mechanismus ("threaded callbacks") ermöglicht es,
+integriert. Dieser neue Mechanismus ("threaded callbacks") ermÃ¶glicht es,
 dass hbci.execute() beim Auftreten von bestimmten Callbacks terminiert, der
-dazugehörige HBCI-Dialog aber erhalten bleibt. Nach der (synchronen) Behandlung
+dazugehÃ¶rige HBCI-Dialog aber erhalten bleibt. Nach der (synchronen) Behandlung
 des "Callbacks" (der durch die Terminierung von hbci.execute() angezeigt wird)
 kann die Anwendung den HBCI-Dialog wieder aufnehmen.
 
 
 Das ganze soll am Beispiel eines Servlets demonstriert werden. Das
 Servlet soll Requests von einem Client entgegennehmen. Ein solcher Request 
-enthält beispielsweise Daten für einen Überweisungsauftrag, welcher durch das 
-Servlet via HBCI-PIN/TAN an die Bank übermittelt werden soll. Während der 
-Ausführung des HBCI-Dialoges verlangt der HBCI-Server eine TAN vom Anwender.
+enthÃ¤lt beispielsweise Daten fÃ¼r einen Ãœberweisungsauftrag, welcher durch das 
+Servlet via HBCI-PIN/TAN an die Bank Ã¼bermittelt werden soll. WÃ¤hrend der 
+AusfÃ¼hrung des HBCI-Dialoges verlangt der HBCI-Server eine TAN vom Anwender.
 Da das iTAN-Verfahren eingesetzt wird, kann die TAN nicht initial zusammen
-mit den Daten für die Überweisung übermittelt werden, sondern der Client muss
-tatsächlich während des HBCI-Dialoges die richtige TAN zu einer Challenge 
+mit den Daten fÃ¼r die Ãœberweisung Ã¼bermittelt werden, sondern der Client muss
+tatsÃ¤chlich wÃ¤hrend des HBCI-Dialoges die richtige TAN zu einer Challenge 
 liefern. Diese Challenge wird erst im Laufe des HBCI-Dialoges vom Server an
 den Client gesandt.
 
 
 Aus Sicht des Clients sieht der Ablauf also wiefolgt aus: Der Client sendet
-zunächst die Daten für den Überweisungsauftrag und wartet auf eine Antwort
-vom Servlet. Diese Antwort kann nun eine Status-Information über den Erfolg /
-Nicht-Erfolg des Überweisungsauftrages sein, oder aber die Frage nach
-zusätzlichen Daten (in diesem Fall die Frage nach einer TAN).
+zunÃ¤chst die Daten fÃ¼r den Ãœberweisungsauftrag und wartet auf eine Antwort
+vom Servlet. Diese Antwort kann nun eine Status-Information Ã¼ber den Erfolg /
+Nicht-Erfolg des Ãœberweisungsauftrages sein, oder aber die Frage nach
+zusÃ¤tzlichen Daten (in diesem Fall die Frage nach einer TAN).
 
-Falls keine TAN benötigt wird (z.B. weil das Servlet gar nicht HBCI-PIN/TAN,
-sondern das RDH-Verfahren verwendet), erhält der Client als Response also die
+Falls keine TAN benÃ¶tigt wird (z.B. weil das Servlet gar nicht HBCI-PIN/TAN,
+sondern das RDH-Verfahren verwendet), erhÃ¤lt der Client als Response also die
 Job-Status-Informationen. Falls aber z.B. das iTAN-Verfahren verwendet wird
-und der HBCI-Server eine TAN für den Überweisungsauftrag anfordert, wird die
+und der HBCI-Server eine TAN fÃ¼r den Ãœberweisungsauftrag anfordert, wird die
 Response noch nicht aus den Job-Status-Informationen bestehen, sondern die
 Frage nach einer konkreten TAN (via Challenge vom Server). 
 
-Im nächsten Schritt sendet der Client also die TAN in einem neuen Request
-an das Servlet. Das Servlet verwendet diese TAN, um den Überweisungsauftrag
+Im nÃ¤chsten Schritt sendet der Client also die TAN in einem neuen Request
+an das Servlet. Das Servlet verwendet diese TAN, um den Ãœberweisungsauftrag
 zu autorisieren. Als Response erwartet der Client nun wieder entweder die
-Status-Informationen über den Erfolg / Nicht-Erfolg des Auftrages oder die
-Nachfrage nach weiteren benötigten Daten.
+Status-Informationen Ã¼ber den Erfolg / Nicht-Erfolg des Auftrages oder die
+Nachfrage nach weiteren benÃ¶tigten Daten.
 
-In diesem Fall wird die nächste Response vom Servlet also aus den Job-Status-
+In diesem Fall wird die nÃ¤chste Response vom Servlet also aus den Job-Status-
 Informationen bestehen.
 
 
 Aus Sicht des Servlets (welches HBCI4Java verwendet), sieht das ganze dann so
-aus: Zunächst erhält das Servlet einen Request vom Client, welcher Daten für
-einen auszuführenden Überweisungsauftrag enthält. Das Servlet starten einen
-entsprechenden HBCI-Dialog und versucht, den Überweisungsauftrag bei der Bank
-einzureichen. Während der Ausführung des HBCI-Dialoges (via hbci.execute())
-tritt nun ein Callback auf, der anzeigt, dass vom HBCI-Kernel eine TAN benötigt
-wird, mit der der Überweisungsauftrag autorisiert wird. Diese TAN kennt das
+aus: ZunÃ¤chst erhÃ¤lt das Servlet einen Request vom Client, welcher Daten fÃ¼r
+einen auszufÃ¼hrenden Ãœberweisungsauftrag enthÃ¤lt. Das Servlet starten einen
+entsprechenden HBCI-Dialog und versucht, den Ãœberweisungsauftrag bei der Bank
+einzureichen. WÃ¤hrend der AusfÃ¼hrung des HBCI-Dialoges (via hbci.execute())
+tritt nun ein Callback auf, der anzeigt, dass vom HBCI-Kernel eine TAN benÃ¶tigt
+wird, mit der der Ãœberweisungsauftrag autorisiert wird. Diese TAN kennt das
 Servlet aber noch nicht. Das Servlet muss also das laufende hbci.execute()
 terminieren und als Response nicht die Job-Status-Informationen an den Client
-senden, sondern die Challenge für die Frage nach einer TAN. 
+senden, sondern die Challenge fÃ¼r die Frage nach einer TAN. 
 
-Der darauffolgende neue Request vom Client, der nur die TAN enthält, muss das
+Der darauffolgende neue Request vom Client, der nur die TAN enthÃ¤lt, muss das
 Servlet das "unterbrochene" hbci.execute() wieder aufnehmen, indem die gerade
-übermittelte TAN als Antwort auf den ursprünglichen Callback an den HBCI-
-Kernel übergeben wird, damit dieser die Ausführung des HBCI-Dialoges fortsetzen
+Ã¼bermittelte TAN als Antwort auf den ursprÃ¼nglichen Callback an den HBCI-
+Kernel Ã¼bergeben wird, damit dieser die AusfÃ¼hrung des HBCI-Dialoges fortsetzen
 kann.
 
-Sobald der HBCI-Dialog dann tatsächlich beendet ist, muss das Servlet die Job-
-Status-Informationen als Antwort auf diesen zweiten Request zurückgeben.
+Sobald der HBCI-Dialog dann tatsÃ¤chlich beendet ist, muss das Servlet die Job-
+Status-Informationen als Antwort auf diesen zweiten Request zurÃ¼ckgeben.
 
 
-Wie man sieht, wäre es mit dem derzeitigen asynchronen Callback-Mechanimus
-relativ aufwändig, dieses Szenario umzusetzen (vor allem, wenn man eine gene-
-rische Umsetzung realisieren will, die auch nicht-TAN-pflichtige GVs berück-
-sichtigt oder gar die Möglichkeit, dass während eines HBCI-Dialoges mehrere TANs
-benötigt werden).
+Wie man sieht, wÃ¤re es mit dem derzeitigen asynchronen Callback-Mechanimus
+relativ aufwÃ¤ndig, dieses Szenario umzusetzen (vor allem, wenn man eine gene-
+rische Umsetzung realisieren will, die auch nicht-TAN-pflichtige GVs berÃ¼ck-
+sichtigt oder gar die MÃ¶glichkeit, dass wÃ¤hrend eines HBCI-Dialoges mehrere TANs
+benÃ¶tigt werden).
 
 
-Unter Verwendung des neuen threaded-callback-Mechanismus' würde eine 
+Unter Verwendung des neuen threaded-callback-Mechanismus' wÃ¼rde eine 
 entsprechende Servlet-Umsetzung in etwa so aussehen (nur Pseudo-Code, ohne
 Fehlerbehandlung):
 
 
 ------------------------------------------------------------------------------
   
-  // erster Request (Daten für den Überweisungsauftrag) kommt herein
+  // erster Request (Daten fÃ¼r den Ãœberweisungsauftrag) kommt herein
   
   // HBCI-Engine initialisieren, dabei das "normale" Callback-Objekt in einem
   // HBCICallbackThreaded-Objekt kapseln
@@ -142,19 +142,19 @@ Fehlerbehandlung):
   status=hbci.executeThreaded()
   
   // die Methode hbci.executeThreaded() terminiert, sobald entweder alle HBCI-
-  // Dialoge ausgeführt wurden oder sobald ein Callback auftritt, der synchron
+  // Dialoge ausgefÃ¼hrt wurden oder sobald ein Callback auftritt, der synchron
   // behandelt werden soll (z.B. die Frage nach einer TAN)
   
   if (status.isCallback()) {
-      // die Ausführung des HBCI-Dialoges ist noch nicht beendet, sondern
+      // die AusfÃ¼hrung des HBCI-Dialoges ist noch nicht beendet, sondern
       // es muss ein synchroner Callback beantwortet werden.
       
-      // Objekt "hbci" unter einer zufälligen ID merken
+      // Objekt "hbci" unter einer zufÃ¤lligen ID merken
       id = random();
       globalHBCITable.put(id, hbci);
       
       // RESPONSE an den Client mit den Callback-Infos (z.B. "brauche eine TAN")
-      //  und der zufälligen ID generieren
+      //  und der zufÃ¤lligen ID generieren
       response = "id="+id + "TANChallenge="+status.getChallengeForTan();
   } else {
       // status.isFinished()==true
@@ -168,15 +168,15 @@ Fehlerbehandlung):
   
 ------------------------------------------------------------------------------
   
-  // nächster REQUEST vom Client kommt herein
+  // nÃ¤chster REQUEST vom Client kommt herein
   // wenn es sich um die Antwort auf ein Callback handelt, muss darin die
-  //   ID und die Antwort für den Callback drin stehen
+  //   ID und die Antwort fÃ¼r den Callback drin stehen
   
   // hbci-Objekt mit Hilfe der ID restaurieren
   id = request.exttract("id");
   hbci = globalHBCITable.get(id);
   
-  // übermittelte TAN an den kernel übergeben und dialog fortsetzen
+  // Ã¼bermittelte TAN an den kernel Ã¼bergeben und dialog fortsetzen
   tan = request.extract("tan")
   status=hbci.continueThreaded(tan)
 
@@ -187,52 +187,52 @@ Fehlerbehandlung):
 
 
 Anstelle von hbci.execute() verwendet die Anwendung nun hbci.executeThreaded().
-Außerdem muss das "normale" Callback-Objekt für die Behandlung von Callbacks
+AuÃŸerdem muss das "normale" Callback-Objekt fÃ¼r die Behandlung von Callbacks
 in einem HBCICallbackThreaded()-Objekt gekapselt werden.
 
-Damit der neue Mechanismus überhaupt aktiv wird, muss das "normale" Callback-
-Objekt die Methode "useThreadedCallback()" überschreiben und für die Callbacks,
-die jetzt synchron behandelt werden sollen, "true" zurückgeben.
+Damit der neue Mechanismus Ã¼berhaupt aktiv wird, muss das "normale" Callback-
+Objekt die Methode "useThreadedCallback()" Ã¼berschreiben und fÃ¼r die Callbacks,
+die jetzt synchron behandelt werden sollen, "true" zurÃ¼ckgeben.
 
-Tritt nun während der Ausführung von hbci.executeThreaded() ein Callback auf, 
-für den useThreadedCallback() "true" zurückgibt, terminiert 
+Tritt nun wÃ¤hrend der AusfÃ¼hrung von hbci.executeThreaded() ein Callback auf, 
+fÃ¼r den useThreadedCallback() "true" zurÃ¼ckgibt, terminiert 
 hbci.executeThreaded() (im Gegensatz zum "normalen" Callback-Mechanismus, bei 
-dem hbci.execute() weiterläuft und der Callback nur im Callback-Objekt 
-aufläuft).
+dem hbci.execute() weiterlÃ¤uft und der Callback nur im Callback-Objekt 
+auflÃ¤uft).
 
-Der Rückgabewert von hbci.executeThreaded() zeigt an, ob die Methode terminiert
-ist, weil die komplette Ausführung der HBCI-Dialoge abgeschlossen ist, oder weil
+Der RÃ¼ckgabewert von hbci.executeThreaded() zeigt an, ob die Methode terminiert
+ist, weil die komplette AusfÃ¼hrung der HBCI-Dialoge abgeschlossen ist, oder weil
 es sich um einen Callback handelt, der laut useThreadedCallback() synchron 
 behandelt werden soll.
 
 
 Falls es sich um einen Callback handelte, kann die HBCI-Anwendung den HBCI-
-Dialog fortsetzen, indem sie die benötigten Callback-Daten mit der Methode
-hbci.continueThreaded() an den HBCI-Kernel übergibt. Das dabei verwendete
-Objekt "hbci" muss das selbe(!) sein wie das, mit dem ursprünglich 
-hbci.executeThreaded() ausgeführt wurde (evtl. muss das "hbci"-Objekt also
+Dialog fortsetzen, indem sie die benÃ¶tigten Callback-Daten mit der Methode
+hbci.continueThreaded() an den HBCI-Kernel Ã¼bergibt. Das dabei verwendete
+Objekt "hbci" muss das selbe(!) sein wie das, mit dem ursprÃ¼nglich 
+hbci.executeThreaded() ausgefÃ¼hrt wurde (evtl. muss das "hbci"-Objekt also
 in einer Session gesichert werden). Mit hbci.continueThreaded() wird der HBCI-
 Dialog, der durch den synchronen Callback unterbrochen wurde, fortgesetzt.
-Der Rückgabewert von hbci.continueThreaded() zeigt nun wiederum an, ob die
-HBCI-Dialoge nun tatsächlich beendet sind oder ob ein weiterer Callback statt-
+Der RÃ¼ckgabewert von hbci.continueThreaded() zeigt nun wiederum an, ob die
+HBCI-Dialoge nun tatsÃ¤chlich beendet sind oder ob ein weiterer Callback statt-
 gefunden hat, der synchron behandelt werden muss.
 
 
-Theoretisch könnte man diesen Mechanismus generell aktivieren, so dass weder
+Theoretisch kÃ¶nnte man diesen Mechanismus generell aktivieren, so dass weder
 die Kapselung des normalen Callback-Objekts in HBCICallbackThreaded() noch die
-Verwendung von hbci.executeThreaded() notwendig wäre, so dass einzig und allein
-die Methode callback.useThreadedCallback() darüber entscheiden würde, ob ein
+Verwendung von hbci.executeThreaded() notwendig wÃ¤re, so dass einzig und allein
+die Methode callback.useThreadedCallback() darÃ¼ber entscheiden wÃ¼rde, ob ein
 Callback synchron oder asynchron behandelt werden soll. Da aber der threaded-
 callback-Mechanimus im Gegensatz zum "normalen" Callback-Mechanismus mit
-mehreren Threads arbeitet, müssten dann in jedem Fall mehrere Threads für
+mehreren Threads arbeitet, mÃ¼ssten dann in jedem Fall mehrere Threads fÃ¼r
 die Abarbeitung von HBCI-Dialogen erzeugt und synchronisiert werden. Aus
-Performance- und Kompatibilitätsgründen wurde deshalb darauf verzichtet, diesen
+Performance- und KompatibilitÃ¤tsgrÃ¼nden wurde deshalb darauf verzichtet, diesen
 Mechanismus generell zu aktivieren. Statt dessen funktioniert dieser Mechanismus
-nur dann, wenn tatsächlich HBCICallbackThreaded() und hbci.executeThreaded()
+nur dann, wenn tatsÃ¤chlich HBCICallbackThreaded() und hbci.executeThreaded()
 verwendet werden. In diesem Fall funktionieren die "normalen" Callbacks
-natürlich auch weiterhin - eine absolut generische Applikation würde also immer
+natÃ¼rlich auch weiterhin - eine absolut generische Applikation wÃ¼rde also immer
 hbci.executeThreaded() verwenden. Eine Applikation, bei der der threaded-
-callback-Mechanismus niemals benötigt wird, würde weiterhin das normale
+callback-Mechanismus niemals benÃ¶tigt wird, wÃ¼rde weiterhin das normale
 hbci.execute() verwenden.
 
 
@@ -240,51 +240,51 @@ hbci.execute() verwenden.
 (interne Funktionsweise:)
 Innerhalb von HBCI4Java wird bei hbci.executeThreaded() ein neuer Thread
 erzeugt, innerhalb dessen die eigentlichen HBCI-Dialoge via hbci.execute() 
-geführt werden. Der main-Thread selbst versetzt sich zunächst in einen wait-
+gefÃ¼hrt werden. Der main-Thread selbst versetzt sich zunÃ¤chst in einen wait-
 Zustand, bis er vom HBCI-Thread aufgrund irgendeines Ereignisses wieder auf-
 geweckt wird. Aus Sicht der Anwendung ist die Methode hbci.executeThreaded()
 also blockiert, weil sie gerade auf eine Nachricht vom HBCI-Thread wartet,
-welcher hbci.execute() ausführt.
+welcher hbci.execute() ausfÃ¼hrt.
 
-Tritt während der Ausführung von hbci.execute() im HBCI-Thread ein Callback auf,
-schlägt dieser Callback zunächst bei einer Instanz von HBCICallbackThreaded auf
+Tritt wÃ¤hrend der AusfÃ¼hrung von hbci.execute() im HBCI-Thread ein Callback auf,
+schlÃ¤gt dieser Callback zunÃ¤chst bei einer Instanz von HBCICallbackThreaded auf
 (wg. des modifizierten HBCIUtils.init()). 
 
-Dort wird geprüft, ob dieser Callback synchron oder asynchron behandelt 
+Dort wird geprÃ¼ft, ob dieser Callback synchron oder asynchron behandelt 
 werden soll (anhand der Methode useThreadedCallback() des "normalen" Callback-
 Objektes). Soll der Callback "normal" behandelt werden, wird wie gewohnt die 
 callback()-Methode des "normalen" Callback-Objektes aufgerufen (asynchrone
 Callback-Behandlung, weil sich der main-Thread immer noch im wait()-Zustand
 befindet). An dieser Stelle kann es evtl. zu Problemen mit existierenden
 Anwendungen kommen, weil der Aufruf von callback() in einem anderen Thread
-(nämlich dem von hbci.executeThreaded() erzeugten HBCI-Thread) erfolgt als der
-ursprüngliche Aufruf von hbci.executeThreaded(). Falls eine Anwendung also
-Thread-lokale Variablen verwendet, müssten für diesen Fall entsprechende
+(nÃ¤mlich dem von hbci.executeThreaded() erzeugten HBCI-Thread) erfolgt als der
+ursprÃ¼ngliche Aufruf von hbci.executeThreaded(). Falls eine Anwendung also
+Thread-lokale Variablen verwendet, mÃ¼ssten fÃ¼r diesen Fall entsprechende
 Anpassungen vorgenommen werden.
 
-Soll der Callback allerdings synchron behandelt werden, so übergibt der HBCI-
+Soll der Callback allerdings synchron behandelt werden, so Ã¼bergibt der HBCI-
 Thread die Callback-Informationen (die Argumente der callback()-Methode) an
-den main-Thread und sorgt dafür, dass der main-Thread wieder "aufwacht".
+den main-Thread und sorgt dafÃ¼r, dass der main-Thread wieder "aufwacht".
 Der HBCI-Thread selbst versetzt sich in einen wait-Zustand und wartet darauf, 
 dass die Callback-Antwortdaten vom main-Thread bereitgestellt werden (das ganze
 passiert also in der callback()-Methode des HBCICallbackThreaded-Objektes).
 
-Innerhalb des main-Thread wird nun also hbci.executeThreaded() beendet (während
-der HBCI-Thread mit hbci.execute() noch läuft bzw. sich gerade in einem wait-
-Zustand befindet). Anhand der Rückgabedaten von hbci.executeThreaded() muss
+Innerhalb des main-Thread wird nun also hbci.executeThreaded() beendet (wÃ¤hrend
+der HBCI-Thread mit hbci.execute() noch lÃ¤uft bzw. sich gerade in einem wait-
+Zustand befindet). Anhand der RÃ¼ckgabedaten von hbci.executeThreaded() muss
 die HBCI-Anwendung nun entsprechend reagieren.
 
 Setzt die HBCI-Anwendung den HBCI-Dialog mit hbci.continueThreaded() fort, 
-übergibt der main-Thread (von dem aus hbci.continueThreaded() aufgerufen
+Ã¼bergibt der main-Thread (von dem aus hbci.continueThreaded() aufgerufen
 wurde) die Callback-Antwort-Daten an den HBCI-Thread, weckt ihn wieder auf und 
 versetzt sich selbst wieder in einen wait-Zustand. Somit kann der HBCI-Thread 
-nun die Callback-Antwort an den HBCI-Kernel übergeben (der HBCI-Thread befindet
+nun die Callback-Antwort an den HBCI-Kernel Ã¼bergeben (der HBCI-Thread befindet
 sich ja gerade in der callback()-Methode von HBCICallbackThreaded und wartet auf
-die Daten, die im retData-Objekt an den Kernel zurückgegeben werden sollen).
+die Daten, die im retData-Objekt an den Kernel zurÃ¼ckgegeben werden sollen).
 
-Sobald der HBCI-Thread tatsächlich beendet ist (oder wieder ein synchroner 
+Sobald der HBCI-Thread tatsÃ¤chlich beendet ist (oder wieder ein synchroner 
 Callback auftritt), wird wieder der main-Thread aktiviert. Anhand der 
-Rückgabedaten, die der main-Thread vom HBCI-Thread erhält und an die Anwendung
-zurückliefert, kann die Anwendung entscheiden, ob ein weiteres 
-hbci.continueThreaded() notwendig ist oder ob der HBCI-Dialog regulär beendet 
+RÃ¼ckgabedaten, die der main-Thread vom HBCI-Thread erhÃ¤lt und an die Anwendung
+zurÃ¼ckliefert, kann die Anwendung entscheiden, ob ein weiteres 
+hbci.continueThreaded() notwendig ist oder ob der HBCI-Dialog regulÃ¤r beendet 
 ist.

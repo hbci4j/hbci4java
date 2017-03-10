@@ -50,25 +50,25 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 
-/** <p>Passport-Klasse für Sicherheitsverfahren DDV mit Medium Chipkarte. Bei dieser
+/** <p>Passport-Klasse fÃ¼r Sicherheitsverfahren DDV mit Medium Chipkarte. Bei dieser
     Variante gibt die Bank eine Chipkarte aus, auf der die Zugangsdaten des
-    Nutzers für den HBCI-Zugang gespeichert sind. Außerdem befinden sich auf
-    der Karte die (symmetrischen) Schlüssel für die Erzeugung der Signaturen
-    und für die Verschlüsselung der Nachrichten.</p><p>
-    Diese Klasse unterstützt DDV-Chipkarten vom Typ 0 und 1. Auf einer DDV-Chipkarte
-    können prinzipiell bis zu fünf HBCI-Zugangsdatensätze (für unterschiedliche
-    Banken) gespeichert werden. Diese Klasse ermöglicht die Benutzung eines
-    beliebigen dieser Datensätze. Das hat aber in der Praxis kaum Relevanz,
-    weil dann alle HBCI-Zugänge die gleichen kryptografischen Schlüssel benutzen
-    müssten (es gibt nur ein Schlüsselpaar pro Chipkarte). Für Chipkarten, die
-    von Betreibern für HBCI-Testzugängen ausgegeben werden, ist diese Option
-    jedoch nützlich, da hier häufig tatsächlich mehrere Zugänge existieren und
-    diese Zugangsdaten auf einer einzigen Chipkarte gespeichert werden können.</p><p>
-    Prinzipiell benötigt diese Passport-Variante also keine zusätzliche Schlüsseldatei, da
-    alle <em>benötigten</em> HBCI-Daten auf der Chipkarte gespeichert sind. Dennoch verwendet
-    diese Klasse eine zusätzliche Datei. In dieser werden u.a. die zuletzt empfangenen BPD
-    und UPD sowie die zuletzt benutzte HBCI-Version gespeichert, um beim nächsten
-    Benutzen dieses HBCI-Zuganges diese Daten nicht erneut abfragen zu müssen. Diese zusätzliche
+    Nutzers fÃ¼r den HBCI-Zugang gespeichert sind. AuÃŸerdem befinden sich auf
+    der Karte die (symmetrischen) SchlÃ¼ssel fÃ¼r die Erzeugung der Signaturen
+    und fÃ¼r die VerschlÃ¼sselung der Nachrichten.</p><p>
+    Diese Klasse unterstÃ¼tzt DDV-Chipkarten vom Typ 0 und 1. Auf einer DDV-Chipkarte
+    kÃ¶nnen prinzipiell bis zu fÃ¼nf HBCI-ZugangsdatensÃ¤tze (fÃ¼r unterschiedliche
+    Banken) gespeichert werden. Diese Klasse ermÃ¶glicht die Benutzung eines
+    beliebigen dieser DatensÃ¤tze. Das hat aber in der Praxis kaum Relevanz,
+    weil dann alle HBCI-ZugÃ¤nge die gleichen kryptografischen SchlÃ¼ssel benutzen
+    mÃ¼ssten (es gibt nur ein SchlÃ¼sselpaar pro Chipkarte). FÃ¼r Chipkarten, die
+    von Betreibern fÃ¼r HBCI-TestzugÃ¤ngen ausgegeben werden, ist diese Option
+    jedoch nÃ¼tzlich, da hier hÃ¤ufig tatsÃ¤chlich mehrere ZugÃ¤nge existieren und
+    diese Zugangsdaten auf einer einzigen Chipkarte gespeichert werden kÃ¶nnen.</p><p>
+    Prinzipiell benÃ¶tigt diese Passport-Variante also keine zusÃ¤tzliche SchlÃ¼sseldatei, da
+    alle <em>benÃ¶tigten</em> HBCI-Daten auf der Chipkarte gespeichert sind. Dennoch verwendet
+    diese Klasse eine zusÃ¤tzliche Datei. In dieser werden u.a. die zuletzt empfangenen BPD
+    und UPD sowie die zuletzt benutzte HBCI-Version gespeichert, um beim nÃ¤chsten
+    Benutzen dieses HBCI-Zuganges diese Daten nicht erneut abfragen zu mÃ¼ssen. Diese zusÃ¤tzliche
     Datei wird automatisch angelegt, der Dateiname setzt sich aus einem definierbaren
     Prefix (Pfad) und der Seriennummer der Chipkarte zusammen.</p>*/
 public class HBCIPassportDDV
@@ -276,7 +276,7 @@ public class HBCIPassportDDV
         this.ctnumber=ctnumber;
     }
 
-    /** Gibt zurück, welcher logische Port für die Kommunikation mit der Chipkarte benutzt
+    /** Gibt zurÃ¼ck, welcher logische Port fÃ¼r die Kommunikation mit der Chipkarte benutzt
         wird. Dieser Wert wird vom CTAPI-Treiber des jeweils verwendeten Chipkartenterminals
         interpretiert. 
         @return Schnittstellennummer, an der der Chipkartenleser angeschlossen ist*/ 
@@ -285,7 +285,7 @@ public class HBCIPassportDDV
         return comport;
     }
 
-    /** Gibt die logische Nummer zurück, unter der der Chipkartenleser zu verwenden
+    /** Gibt die logische Nummer zurÃ¼ck, unter der der Chipkartenleser zu verwenden
         ist. Wird nur ein Chipkartenleser verwendet, so kann dieser Wert immer 0 sein.
         Bei gleichzeitiger Verwendung mehrerer Chipkartenleser sollten die einzelnen
         Leser hier unterschiedliche Werte zugewiesen bekommen. Dieser Wert wird vom
@@ -296,11 +296,11 @@ public class HBCIPassportDDV
         return ctnumber;
     }
 
-    /** Gibt zurück, ob zur PIN-Eingabe am Chipkartenterminal das Biometric-Interface
-        verwendet werden soll. Diese Funktion steht zur Zeit nur für Reiner-SCT-
-        Chipkartenterminals zur Verfügung.
+    /** Gibt zurÃ¼ck, ob zur PIN-Eingabe am Chipkartenterminal das Biometric-Interface
+        verwendet werden soll. Diese Funktion steht zur Zeit nur fÃ¼r Reiner-SCT-
+        Chipkartenterminals zur VerfÃ¼gung.
         @return <code>1</code>, wenn die Biometrie-Einheit des Chipkartenterminals
-        für die PIN-Eingabe benutzt werden soll; <code>0</code>, wenn die Biometrie-Einheit
+        fÃ¼r die PIN-Eingabe benutzt werden soll; <code>0</code>, wenn die Biometrie-Einheit
         nicht benutzt werden soll, oder <code>-1</code>, wenn die Verwendung
         der Biometrie-Einheit automatisch erkannt werden soll.*/
     public int getUseBio()
@@ -313,16 +313,16 @@ public class HBCIPassportDDV
         this.useBio=useBio;
     }
 
-    /** Gibt zurück, ob die PIN-Eingabe für die Chipkarte über das Keypad des Chipkartenterminals
-        oder über die PC-Tastatur erfolgen soll. Dieser Wert wird benutzt, um die
-        PIN-Eingabe sowohl bei Klasse-2-Lesern mit eigener Tastatur wir auch für
-        Klasse-1-Leser ohne separate Tastatur zu ermöglichen.
-        @return PIN-Eingabe über welche Tastatur
+    /** Gibt zurÃ¼ck, ob die PIN-Eingabe fÃ¼r die Chipkarte Ã¼ber das Keypad des Chipkartenterminals
+        oder Ã¼ber die PC-Tastatur erfolgen soll. Dieser Wert wird benutzt, um die
+        PIN-Eingabe sowohl bei Klasse-2-Lesern mit eigener Tastatur wir auch fÃ¼r
+        Klasse-1-Leser ohne separate Tastatur zu ermÃ¶glichen.
+        @return PIN-Eingabe Ã¼ber welche Tastatur
         <ul>
-          <li>=0 PIN-Eingabe zwingend über Terminal-Keypad</li>
-          <li>=1 PIN-Eingabe zwingend über PC-Tastatur</li>
+          <li>=0 PIN-Eingabe zwingend Ã¼ber Terminal-Keypad</li>
+          <li>=1 PIN-Eingabe zwingend Ã¼ber PC-Tastatur</li>
           <li>=-1 automatische Erkennung, ob bevorzugtes Chipkarten-Terminal-Keypad
-              verfügbar ist</li>
+              verfÃ¼gbar ist</li>
         </ul>*/
     public int getUseSoftPin()
     {
@@ -350,9 +350,9 @@ public class HBCIPassportDDV
         this.entryIdx=idx;
     }
     
-    /** Gibt die Indexnummer des Datensatzes zurück, dessen Inhalt als HBCI-Account-Informationen
-        benutzt werden sollen. Auf einer Chipkarte können bis zu fünf Zugangsdatensätze
-        gespeichert sein, dieser Wert enthält die Nummer des benutzten Eintrages
+    /** Gibt die Indexnummer des Datensatzes zurÃ¼ck, dessen Inhalt als HBCI-Account-Informationen
+        benutzt werden sollen. Auf einer Chipkarte kÃ¶nnen bis zu fÃ¼nf ZugangsdatensÃ¤tze
+        gespeichert sein, dieser Wert enthÃ¤lt die Nummer des benutzten Eintrages
         (von 1-5). Normalerweise wird der Eintrag Nummer 1 (welcher auch meist der
         einzige Eintrag ist) verwendet.
         @return Indexnummer des verwendeten Account-Datensatzes */
@@ -366,8 +366,8 @@ public class HBCIPassportDDV
         this.cardid=cardid;
     }
 
-    /** Gibt eine 16-stellige Identifikationsnummer für die verwendete Chipkarte
-        zurück
+    /** Gibt eine 16-stellige Identifikationsnummer fÃ¼r die verwendete Chipkarte
+        zurÃ¼ck
         @return Chipkarten-Identifikationsnummer */
     public String getCardId()
     {
@@ -750,7 +750,7 @@ public class HBCIPassportDDV
         closeCT();
     }
 
-    /** Gibt den Dateinamen der verwendeten CTAPI-Treiberbibliothek zurück.
+    /** Gibt den Dateinamen der verwendeten CTAPI-Treiberbibliothek zurÃ¼ck.
         @return Dateiname der CTAPI-Bibliothek */
     public String getLibName()
     {

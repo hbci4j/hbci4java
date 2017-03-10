@@ -33,16 +33,16 @@ public class RInvalidSuppHBCIVersion
 {
     // TODO: den rewriter umschreiben, so dass er nur string-operationen
     // benutzt, weil nicht sichergestellt werden kann, dass die eingehende
-    // nachricht hier tatsächlich schon geparst werden kann
+    // nachricht hier tatsÃ¤chlich schon geparst werden kann
     public String incomingClearText(String st,MsgGen gen) 
     {
-        // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
+        // empfangene Nachricht parsen, dabei die validvalues-ÃœberprÃ¼fung weglassen
         String myMsgName=(String)getData("msgName")+"Res";
         MSG    msg=MSGFactory.getInstance().createMSG(myMsgName,st,st.length(),
                 gen,
                 MSG.DONT_CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
         
-        // in einer Schleife durch alle SuppVersions-Datensätze laufen
+        // in einer Schleife durch alle SuppVersions-DatensÃ¤tze laufen
         for (int i=0;;i++) {
             String        elemName=HBCIUtilsInternal.withCounter(myMsgName+".BPD.BPA.SuppVersions.version",i);
             SyntaxElement elem=msg.getElement(elemName);
@@ -53,11 +53,11 @@ public class RInvalidSuppHBCIVersion
             
             // Versionsnummer extrahieren
             String version=elem.toString();
-            if (version.equals("2")) { // "2" ist ungültige Versionsnummer
+            if (version.equals("2")) { // "2" ist ungÃ¼ltige Versionsnummer
                 HBCIUtils.log("there is an invalid hbci version number ('2') in this BPD - replacing it with '210'",HBCIUtils.LOG_WARN);
 
                 // versionsnummer "2" im string durch "210" ersetzen
-                int startpos=elem.getPosInMsg()+1;  // +1 wegen überspringen des pre-delimiters
+                int startpos=elem.getPosInMsg()+1;  // +1 wegen Ã¼berspringen des pre-delimiters
                 st=new StringBuffer(st).replace(startpos,startpos+1,"210").toString();
                 HBCIUtils.log("new message after replacing: "+st,HBCIUtils.LOG_DEBUG);
                 break;

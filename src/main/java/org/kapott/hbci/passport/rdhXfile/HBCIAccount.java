@@ -188,15 +188,15 @@ public class HBCIAccount
                 os.write(expand(getHost(),50).getBytes());
                 os.write(int2ba((int)getSigId()));
                 
-                // TODO: wenn nutzerschlüssel vorhanden, aber noch nicht 
-                // übermittelt sind: +0x01
+                // TODO: wenn nutzerschlÃ¼ssel vorhanden, aber noch nicht 
+                // Ã¼bermittelt sind: +0x01
                 // TODO: das kann in HBCI4Java eigentlich nicht passieren, weil
-                // Nutzerschlüssel immer erst dann im Passport gespeichert werden,
-                // wenn sie erfolgreich an die Bank übermittelt werden konnten. Umgekehrt
+                // NutzerschlÃ¼ssel immer erst dann im Passport gespeichert werden,
+                // wenn sie erfolgreich an die Bank Ã¼bermittelt werden konnten. Umgekehrt
                 // kann es aber passieren, dass mit HBCI4Java eine RDH-2-Datei gelesen
                 // wird, bei der dieses Flag gesetzt ist. Wenn das der Fall ist,
-                // müssten eigentlich die gespeicherten Nutzerschlüssel erst mal
-                // übertragen werden (oder wir ignorieren die Nutzerschlüssel einfach
+                // mÃ¼ssten eigentlich die gespeicherten NutzerschlÃ¼ssel erst mal
+                // Ã¼bertragen werden (oder wir ignorieren die NutzerschlÃ¼ssel einfach
                 // und erzeugen neue - in jedem Fall ein BUG).
                 os.write(new byte[] {(byte)(this.keystatus&0xFF)});
                 
@@ -432,7 +432,7 @@ public class HBCIAccount
         public void setPrivateKey(Key key)
         {
             if (key instanceof RSAPrivateCrtKey2) {
-                // gesetzter key wurde ursprünglich auch aus einem SIZ-file gelesen
+                // gesetzter key wurde ursprÃ¼nglich auch aus einem SIZ-file gelesen
                 
                 RSAPrivateCrtKey2 privkey=(RSAPrivateCrtKey2)key;
                 this.p=trimba(privkey.getP().toByteArray());
@@ -442,8 +442,8 @@ public class HBCIAccount
                 this.Ap=trimba(privkey.getAp().toByteArray());
                 this.Aq=trimba(privkey.getAq().toByteArray());
             } else {
-                // key wurde mit Java erzeugt, es müssen noch ein paar Parameter,
-                // die fürs SIZ-file benötigt werden, errechnet werden
+                // key wurde mit Java erzeugt, es mÃ¼ssen noch ein paar Parameter,
+                // die fÃ¼rs SIZ-file benÃ¶tigt werden, errechnet werden
                 
                 RSAPrivateCrtKey privkey=(RSAPrivateCrtKey)key;
                 this.p=trimba(privkey.getPrimeP().toByteArray());
@@ -701,7 +701,7 @@ public class HBCIAccount
         
         if (keys==null || keys.length==0 || keys[0]==null) {
             // wenn keine keys vorhanden sind, dann das flag setzen, welches
-            // markiert, dass noch nutzerschlüssel übertragen werden müssen
+            // markiert, dass noch nutzerschlÃ¼ssel Ã¼bertragen werden mÃ¼ssen
             setKeyStatus((byte)((getKeyStatus()|0x01)&0xFF));
         } else {
             setKeyStatus((byte)(getKeyStatus()&0xFE));

@@ -2,102 +2,102 @@
 Verwendung von HBCI4Java in mehreren Threads
 --------------------------------------------
 
-Ab HBCI4Java 2.4.6 wurden einige interne Codeteile so geändert,
+Ab HBCI4Java 2.4.6 wurden einige interne Codeteile so geÃ¤ndert,
 dass die Verwendung von HBCI4Java in mehreren Programm-Threads
-besser (bzw. für einige Anwendungsfälle überhaupt erst) möglich ist.  
+besser (bzw. fÃ¼r einige AnwendungsfÃ¤lle Ã¼berhaupt erst) mÃ¶glich ist.  
 Dazu einige Anmerkungen:
 
-Die folgenden Gedankengänge führten zum derzeitigen Design der
+Die folgenden GedankengÃ¤nge fÃ¼hrten zum derzeitigen Design der
 MultiThread-Schnittstellen in HBCI4Java. Falls jemand prinzipielle
 Denkfehler entdeckt, die zu einem schlecht nutzbaren
-MultiThread-Design führen, bzw. falls es Verbesserungsvorschläge/Wünsche
+MultiThread-Design fÃ¼hren, bzw. falls es VerbesserungsvorschlÃ¤ge/WÃ¼nsche
 gibt, dann bitte einen entsprechenden Hinweis an mich senden.
 
-Eine HBCI-Anwendung konnte natürlich auch bisher schon aus mehreren
-Threads bestehen, solange immer nur *ein* Thread tatsächlich 
-Funktionen von HBCI4Java benutzt hat. Neu ist die Möglichkeit,
+Eine HBCI-Anwendung konnte natÃ¼rlich auch bisher schon aus mehreren
+Threads bestehen, solange immer nur *ein* Thread tatsÃ¤chlich 
+Funktionen von HBCI4Java benutzt hat. Neu ist die MÃ¶glichkeit,
 in mehreren Threads gleichzeitig alle HBCI4Java-Funktionen zu benutzen
-(also z.B. um Kontoauszüge mehrerer HBCI-Zugänge gleichzeitig
+(also z.B. um KontoauszÃ¼ge mehrerer HBCI-ZugÃ¤nge gleichzeitig
 abzufragen). Mit dem Terminus "mehrere Threads" seien also mehrere
-Threads gemeint, welche tatsächlich HBCI4Java-Funktionen ausführen.
+Threads gemeint, welche tatsÃ¤chlich HBCI4Java-Funktionen ausfÃ¼hren.
 
-Die HBCI4Java-Schnittstellen, die eine Anwendung tatsächlich benutzt,
-lassen sich folgendermaßen unterteilen:
+Die HBCI4Java-Schnittstellen, die eine Anwendung tatsÃ¤chlich benutzt,
+lassen sich folgendermaÃŸen unterteilen:
 
   * die HBCI-Kernel-Parameter, die mit HBCIUtils.{set,get}Param()
-    gesetzt bzw. abgefragt werden können
+    gesetzt bzw. abgefragt werden kÃ¶nnen
   * HBCIPassport-Objekte
   * HBCIHandler-Objekte
   * HBCIJob-Objekte
   
 Da ein HBCIPassport schon prinzipbedingt nicht gleichzeitig in 
-mehreren Threads verwendet werden kann (für einen HBCI-Zugang
-kann zu jedem Zeitpunkt nur genau *ein* HBCI-Dialog aktiv sein), ist für 
+mehreren Threads verwendet werden kann (fÃ¼r einen HBCI-Zugang
+kann zu jedem Zeitpunkt nur genau *ein* HBCI-Dialog aktiv sein), ist fÃ¼r 
 die Arbeit mit Passports (Abfrage von passport-internen Daten, 
 Initialisieren von Passports usw.) keine separate Thread-Absicherung 
 implementiert worden.
 
-Analoges gilt für HBCIHandler, weil ein HBCIHandler-Objekt immer an
+Analoges gilt fÃ¼r HBCIHandler, weil ein HBCIHandler-Objekt immer an
 genau ein Passport-Objekt gekoppelt ist und somit auch nicht gleichzeitig
 in mehreren Threads verwendet werden kann.
 
 HBCIJob-Objekte werden durch Methoden des HBCIHandlers erzeugt und sind
 (durch interne Datenstrukturen) ebenfalls an den jeweiligen HBCIHandler
-(bzw. an das dazugehörige Passport) gebunden. Deshalb kann ein HBCIJob-
+(bzw. an das dazugehÃ¶rige Passport) gebunden. Deshalb kann ein HBCIJob-
 Objekt auch nur mit dem HBCIHandler-Objekt benutzt werden, mit dem es 
 erzeugt wurde. Somit ist auch hier die gleichzeitige Verwendung eines 
-HBCIJob-Objektes in mehreren Threads nicht möglich bzw. sinnvoll.
+HBCIJob-Objektes in mehreren Threads nicht mÃ¶glich bzw. sinnvoll.
 
-Die einzige(?) nach außen sichtbare Schnittstelle, die sich bisher nicht sauber
-in mehreren Thread verwenden ließ, sind die Methoden zum Setzen und Auslesen
+Die einzige(?) nach auÃŸen sichtbare Schnittstelle, die sich bisher nicht sauber
+in mehreren Thread verwenden lieÃŸ, sind die Methoden zum Setzen und Auslesen
 von HBCI-Kernel-Parametern (HBCIUtils.setParam() bzw. .getParam()). Die
 Kernel-Parameter wurden bis jetzt in einer (aus Sicht von HBCI4Java) globalen
-Datenstruktur verwaltet. Das wird natürlich problematisch, wenn HBCI4Java
+Datenstruktur verwaltet. Das wird natÃ¼rlich problematisch, wenn HBCI4Java
 in mehreren Threads verwendet wird und in jedem Thread eine andere 
-Belegung der HBCI-Kernel-Parameter benötigt wird (z.B. beim Anlegen eines
+Belegung der HBCI-Kernel-Parameter benÃ¶tigt wird (z.B. beim Anlegen eines
 Passport-Objektes, Setzen von unterschiedlichen Log-Levels pro Thread usw.).
 
-Um kompatibel zur bisherigen Funktionalität zu bleiben (Single-Thread-Anwendungen
-bzw. Anwendungen mit nur einem Thread, der tatsächlich HBCI4Java-Funktionen
-aufruft) und um gleichzeitig eine bessere MultiThread-Unterstützung zu realisieren,
+Um kompatibel zur bisherigen FunktionalitÃ¤t zu bleiben (Single-Thread-Anwendungen
+bzw. Anwendungen mit nur einem Thread, der tatsÃ¤chlich HBCI4Java-Funktionen
+aufruft) und um gleichzeitig eine bessere MultiThread-UnterstÃ¼tzung zu realisieren,
 wurde folgendes umgesetzt:
 
 Eine Anwendung, welche in mehreren Threads gleichzeitig HBCI4Java-Funktionen 
-benutzen will, muss jeden dieser HBCI4Java-fähigen Threads in eine separate
+benutzen will, muss jeden dieser HBCI4Java-fÃ¤higen Threads in eine separate
 ThreadGroup(!) einbetten. Der HBCI4Java-Kernel verwaltet alle relevanten 
-Datenstrukturen so, dass es für jede ThreadGroup einen separaten Satz dieser 
-Daten gibt (und nicht für jeden Thread!). Die Zuordnung der "richtigen" Daten
+Datenstrukturen so, dass es fÃ¼r jede ThreadGroup einen separaten Satz dieser 
+Daten gibt (und nicht fÃ¼r jeden Thread!). Die Zuordnung der "richtigen" Daten
 zum aktuellen Thread wird von HBCI4Java automatisch vorgenommen, als
-Kriterium für die Auswahl der richtigen "Datenmenge" wird die ThreadGroup
+Kriterium fÃ¼r die Auswahl der richtigen "Datenmenge" wird die ThreadGroup
 des aktuellen Threads benutzt (Thread.currentThread().getThreadGroup()). 
 
 "Alte" Anwendungen, die schon immer aus mehreren Threads bestanden,
-wobei jedoch immer nur einer tatsächlich HBCI4Java-Funktionen aufgerufen hat,
+wobei jedoch immer nur einer tatsÃ¤chlich HBCI4Java-Funktionen aufgerufen hat,
 haben i.d.R. alle Threads in der gleichen ThreadGroup eingebettet. Das hat
 zur Folge, dass HBCI4Java in diesem Fall auch nur genau *einen* Satz Daten
 (Kernel-Parameter und einige interne Datenstrukturen) verwaltet, was exakt
-dem Verhalten des "alten" HBCI4Java (ohne explizite MultiThread-Unterstützung)
+dem Verhalten des "alten" HBCI4Java (ohne explizite MultiThread-UnterstÃ¼tzung)
 entspricht.
 
-"Neue" Anwendungen, die tatsächlich mehrere HBCI4Java-Aktionen parallel ausführen
-wollen, müssen dafür jeweils separate ThreadGroups anlegen. Im ersten Thread,
-der in einer neuen ThreadGroup gestartet wird, muss HBCI4Java über die Existenz
+"Neue" Anwendungen, die tatsÃ¤chlich mehrere HBCI4Java-Aktionen parallel ausfÃ¼hren
+wollen, mÃ¼ssen dafÃ¼r jeweils separate ThreadGroups anlegen. Im ersten Thread,
+der in einer neuen ThreadGroup gestartet wird, muss HBCI4Java Ã¼ber die Existenz
 dieser ThreadGroup informiert werden. Dazu muss die Methode HBCIUtils.initThread()
 aufgerufen werden. 
 
-In einer solchen ThreadGroup können beliebig viele Threads enthalten sein, wobei
+In einer solchen ThreadGroup kÃ¶nnen beliebig viele Threads enthalten sein, wobei
 aber zu jedem Zeitpunkt nur *einer* HBCI4Java-Funktionen benutzen darf. Das ist z.B.
 dann sinnvoll, wenn es sich um eine Java-Swing-Anwendung handelt, bei der ein
-Thread für die eigentliche Durchführung der HBCI-Aktionen und ein anderer für
-die Aktualisierung des GUI zuständig ist.
+Thread fÃ¼r die eigentliche DurchfÃ¼hrung der HBCI-Aktionen und ein anderer fÃ¼r
+die Aktualisierung des GUI zustÃ¤ndig ist.
 
 Zur Zeit werden nur die HBCI-Kernel-Parameter sowie einige interne Datenstrukturen
-ThreadGroup-weise getrennt. Neu ist, dass jetzt auch die Callback-Objekt für
-jede ThreadGroup separat festgelegt werden können (aber nicht müssen).
-Die Frage ist, ob es evtl. mehr Daten gibt, für die eine solche Trennung 
-sinnvoll wäre. 
+ThreadGroup-weise getrennt. Neu ist, dass jetzt auch die Callback-Objekt fÃ¼r
+jede ThreadGroup separat festgelegt werden kÃ¶nnen (aber nicht mÃ¼ssen).
+Die Frage ist, ob es evtl. mehr Daten gibt, fÃ¼r die eine solche Trennung 
+sinnvoll wÃ¤re. 
 
-Für jegliche Anmerkungen/Fragen/Wünsche stehe ich wie immer zur Verfügung
+FÃ¼r jegliche Anmerkungen/Fragen/WÃ¼nsche stehe ich wie immer zur VerfÃ¼gung
 
 -Stefan-
 hbci4java@kapott.org

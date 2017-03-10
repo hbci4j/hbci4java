@@ -29,26 +29,26 @@ import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Saldo;
 import org.kapott.hbci.structures.Value;
 
-/** Ergebnisse einer Saldenabfrage. Hier ist für jedes abgefragte Konto
+/** Ergebnisse einer Saldenabfrage. Hier ist fÃ¼r jedes abgefragte Konto
     genau ein entsprechendes Saldo-Objekt eingetragen. */
 public final class GVRSaldoReq
     extends HBCIJobResultImpl
 {
-    /** Saldo-Informationen für ein Konto */
+    /** Saldo-Informationen fÃ¼r ein Konto */
     public static final class Info
         implements Serializable
     {
-        /** Saldo für welches Konto */
+        /** Saldo fÃ¼r welches Konto */
         public Konto konto;
         /** Gebuchter Saldo */
         public Saldo ready;
-        /** Saldo noch nicht verbuchter Umsätze (optional)*/
+        /** Saldo noch nicht verbuchter UmsÃ¤tze (optional)*/
         public Saldo unready;
         /** Kreditlinie (optional) */
         public Value kredit;
-        /** Aktuell verfügbarer Betrag (optional) */
+        /** Aktuell verfÃ¼gbarer Betrag (optional) */
         public Value available;
-        /** Bereits verfügter Betrag (optional) */
+        /** Bereits verfÃ¼gter Betrag (optional) */
         public Value used;
 
         public String toString()
@@ -64,7 +64,7 @@ public final class GVRSaldoReq
             if (kredit!=null)
                 ret.append("  Kredit: ").append(kredit.toString()).append(linesep);
             if (available!=null)
-                ret.append("  Verfügbar: ").append(available.toString()).append(linesep);
+                ret.append("  VerfÃ¼gbar: ").append(available.toString()).append(linesep);
             if (used!=null)
                 ret.append("  Benutzt: ").append(used.toString());
 
@@ -84,8 +84,8 @@ public final class GVRSaldoReq
         saldi.add(info);
     }
     
-    /** Gibt alle verfügbaren Saldo-Informationen in einem Feld zurück.
-        Dabei existiert für jedes abgefragte Konto ein Eintrag in diesem Feld.
+    /** Gibt alle verfÃ¼gbaren Saldo-Informationen in einem Feld zurÃ¼ck.
+        Dabei existiert fÃ¼r jedes abgefragte Konto ein Eintrag in diesem Feld.
         @return Array mit Saldeninformationen */
     public Info[] getEntries()
     {

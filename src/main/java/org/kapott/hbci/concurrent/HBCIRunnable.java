@@ -9,19 +9,19 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.HBCIPassport;
 
 /**
- * Basis-Klasse für Implementierungen von {@link Runnable}, die typische Aufgaben mit einem {@link HBCIPassport}
- * ausführen sollen.
+ * Basis-Klasse fÃ¼r Implementierungen von {@link Runnable}, die typische Aufgaben mit einem {@link HBCIPassport}
+ * ausfÃ¼hren sollen.
  *
- * <p>Implementierungen müssen die Methode {@link #execute()} ergänzen.</p>
+ * <p>Implementierungen mÃ¼ssen die Methode {@link #execute()} ergÃ¤nzen.</p>
  *
- * <p>Bei Ausführung einer solchen {@link Runnable} passiert folgendes:</p>
+ * <p>Bei AusfÃ¼hrung einer solchen {@link Runnable} passiert folgendes:</p>
  *
  * <ol>
  * <li>{@link HBCIUtils.initThread(properties, callback)} wird mit den Parametern aus dem Constructor aufgerufen.</li>
- * <li>Das Passport wird von der {@link HBCIPassportFactory} abgefragt und darüber wird der {@link HBCIHandler} erzeugt.</li>
+ * <li>Das Passport wird von der {@link HBCIPassportFactory} abgefragt und darÃ¼ber wird der {@link HBCIHandler} erzeugt.</li>
  * <li>{@link #execute()} wird aufgerufen.</li>
- *     {@link HBCIPassport} und {@link HBCIHandler} sind über die Variablen <code>passport</code> bzw. <code>handler</code> verfügbar.</li>
- * <li>Abschließend werden Handler und Passport geschlossen, sowie {@link HBCIUtils#doneThread()} aufgerufen.</li>
+ *     {@link HBCIPassport} und {@link HBCIHandler} sind Ã¼ber die Variablen <code>passport</code> bzw. <code>handler</code> verfÃ¼gbar.</li>
+ * <li>AbschlieÃŸend werden Handler und Passport geschlossen, sowie {@link HBCIUtils#doneThread()} aufgerufen.</li>
  * </ol>
  *
  * @author Hendrik Schnepel

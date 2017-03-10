@@ -23,9 +23,9 @@ package org.kapott.hbci.GV_Result;
 
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
-/** Ergebnis einer Dauerauftragsänderung. Ein geänderter Dauerauftrag kann
-    u.U. eine andere Auftrags-Identifikationsnummer erhalten als der ursprüngliche
-    Auftrag. Die neue und optional die alte Auftrags-ID können mit dieser Klasse
+/** Ergebnis einer DauerauftragsÃ¤nderung. Ein geÃ¤nderter Dauerauftrag kann
+    u.U. eine andere Auftrags-Identifikationsnummer erhalten als der ursprÃ¼ngliche
+    Auftrag. Die neue und optional die alte Auftrags-ID kÃ¶nnen mit dieser Klasse
     ermittelt werden. */
 public class GVRDauerEdit
     extends HBCIJobResultImpl
@@ -43,15 +43,15 @@ public class GVRDauerEdit
         this.orderidold=orderidold;
     }
 
-    /** Gibt die Auftrags-Identifikationsnummer des geänderten Auftrages zurück.
+    /** Gibt die Auftrags-Identifikationsnummer des geÃ¤nderten Auftrages zurÃ¼ck.
         @return neue Auftrags-ID */
     public String getOrderId()
     {
         return orderid;
     }
     
-    /** Gibt die Auftrags-Identifikationsnummer des ursprünglichen
-        Dauerauftrages zurück.
+    /** Gibt die Auftrags-Identifikationsnummer des ursprÃ¼nglichen
+        Dauerauftrages zurÃ¼ck.
         @return alte Auftrags-ID oder <code>null</code>, wenn diese nicht
                 von der Bank bereitgestellt wird */
     public String getOrderIdOld()

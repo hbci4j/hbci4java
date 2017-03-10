@@ -11,7 +11,7 @@ import org.kapott.hbci.sepa.PainVersion;
 public class SEPAParserFactory
 {
     /**
-     * Gibt den passenden SEPA Parser für die angegebene PAIN-Version.
+     * Gibt den passenden SEPA Parser fÃ¼r die angegebene PAIN-Version.
      * @param version die PAIN-Version.
      * @return ISEPAParser
      */

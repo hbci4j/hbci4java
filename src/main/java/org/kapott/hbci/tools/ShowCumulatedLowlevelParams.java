@@ -36,11 +36,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Dieses Tool ist nur für interne Verwendung bei der Entwicklung von HBCI4Java
- * gedacht. Damit lässt sich prüfen, ob die Highlevel-Klassen für die einzelnen
- * GVs tatsächlich alle möglichen Lowlevel-Parameter eines bestimmten GV
- * kennen und mit richtigen Werten füllen (jeweils abhängig von den bankseitig
- * unterstützten GV-Versionen) */
+/** Dieses Tool ist nur fÃ¼r interne Verwendung bei der Entwicklung von HBCI4Java
+ * gedacht. Damit lÃ¤sst sich prÃ¼fen, ob die Highlevel-Klassen fÃ¼r die einzelnen
+ * GVs tatsÃ¤chlich alle mÃ¶glichen Lowlevel-Parameter eines bestimmten GV
+ * kennen und mit richtigen Werten fÃ¼llen (jeweils abhÃ¤ngig von den bankseitig
+ * unterstÃ¼tzten GV-Versionen) */
 public class ShowCumulatedLowlevelParams 
 {
     private static void extractParams(Document doc, Element node, String path, List<String> params)

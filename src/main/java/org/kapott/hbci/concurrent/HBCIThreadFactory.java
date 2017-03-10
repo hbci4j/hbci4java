@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Implementierung einer {@link ThreadFactory}, die für jeden Thread eine eigene Thread-Gruppe erzeugt.
+ * Implementierung einer {@link ThreadFactory}, die fÃ¼r jeden Thread eine eigene Thread-Gruppe erzeugt.
  * Jede Gruppe ist mit {@link ThreadGroup#setDaemon(true)} konfiguriert, so dass mit Ende des einzelnen
  * Threads auch automatisch die Gruppe geschlossen wird.
  *

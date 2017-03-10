@@ -54,7 +54,7 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     {
         super(handler, lowlevelName, result);
 
-    	// My bzw. src ist das Konto des Ausführenden. Dst ist das Konto des
+    	// My bzw. src ist das Konto des AusfÃ¼hrenden. Dst ist das Konto des
     	// Belasteten.
     	addConstraint("src.bic",         "My.bic", null, LogFilter.FILTER_MOST);
     	addConstraint("src.iban",        "My.iban", null, LogFilter.FILTER_IDS);

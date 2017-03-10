@@ -2,20 +2,20 @@
 Wichtige Informationen zu neuem Passport-Format "RDHNew"
 --------------------------------------------------------
 
-Leider hat das Dateiformat für RDH-Passports einige Schwachpunkte, so dass
+Leider hat das Dateiformat fÃ¼r RDH-Passports einige Schwachpunkte, so dass
 es u.U. passiert, dass ein RDH-Passport-File nur mit einer bestimmten
 JRE-Version oder nur auf einer einzigen Plattform zu benutzen ist und
-nicht auf andere Java-Versionen oder Plattformen übertragen werden kann.
-Das äußerte sich bisher vor allem darin, dass teilweise Schlüssel des
+nicht auf andere Java-Versionen oder Plattformen Ã¼bertragen werden kann.
+Das Ã¤uÃŸerte sich bisher vor allem darin, dass teilweise SchlÃ¼ssel des
 Nutzers nicht mehr erkannt wurden, sobald ein RDH-Passport-File in einer
-anderen Laufzeitumgebung verwendet wurde als der, unter der die Schlüssel
+anderen Laufzeitumgebung verwendet wurde als der, unter der die SchlÃ¼ssel
 erstellt wurden.
 
-Um diesen Mangel zu beheben, wurde ein neuer Passport-Typ - "RDHNew" - eingeführt.
-Aus Sicht einer HBCI-Anwendung wird diese Passport-Variante völlig analog zu
+Um diesen Mangel zu beheben, wurde ein neuer Passport-Typ - "RDHNew" - eingefÃ¼hrt.
+Aus Sicht einer HBCI-Anwendung wird diese Passport-Variante vÃ¶llig analog zu
 den bisherigen RDH-Passports gehandhabt, nur dass sie einen anderen Namen
-hat. Intern hat sich nur das Datenformat für die Speicherung der Daten
-geändert.
+hat. Intern hat sich nur das Datenformat fÃ¼r die Speicherung der Daten
+geÃ¤ndert.
 
 Beim Instanziieren eines RDHNew-Passports muss also 
   AbstractHBCIPassport.getInstance("RDHNew")
@@ -23,7 +23,7 @@ aufgerufen werden bzw. der HBCI-Parameter
   client.passport.default=RDHNew
 gesetzt werden.
 
-Außerdem heißen die Parameter zur Konfiguration eines RDHNew-Passports jetzt
+AuÃŸerdem heiÃŸen die Parameter zur Konfiguration eines RDHNew-Passports jetzt
   client.passport.RDHNew.filename   und
   client.passport.RDHNew.init
 
@@ -32,7 +32,7 @@ Die Bedeutung der Parameter ist analog zu der Bedeutung bei RDH-Passports.
 
 
 Ab sofort sollte nur noch die neue RDHNew-Variante benutzt werden, die alten
-RDH-Passports werden zwar noch unterstützt, allerdings gibt es
+RDH-Passports werden zwar noch unterstÃ¼tzt, allerdings gibt es
 damit wie gesagt u.U. Probleme. 
 
 Um eine bestehende RDH-Passport-Datei in eine RDHNew-Passport-Datei zu konvertieren,
@@ -41,23 +41,23 @@ kann das Tool "ConvertRDHPassport" benutzt werden. Es wird mit
 aufgerufen.
 
 Beim Start wird nach dem Dateinamen des existierenden RDH-Passports gefragt, und
-nach dem Passwort zu dessen Entschlüsselung. Anschließend wird der Dateiname für
-das neue RDHNew-Passport sowie ein Passwort für die Verschlüsselung erfragt. Wichtig
+nach dem Passwort zu dessen EntschlÃ¼sselung. AnschlieÃŸend wird der Dateiname fÃ¼r
+das neue RDHNew-Passport sowie ein Passwort fÃ¼r die VerschlÃ¼sselung erfragt. Wichtig
 ist, dass die beiden Dateinamen *unterschiedlich* sind, sonst sind die 
-persönlichen Schlüssel weg!
+persÃ¶nlichen SchlÃ¼ssel weg!
 
-Das Tool überträgt alle Daten aus der RDH-Passport-Datei in eine RDHNew-Passport-Datei.
+Das Tool Ã¼bertrÃ¤gt alle Daten aus der RDH-Passport-Datei in eine RDHNew-Passport-Datei.
 Diese kann jetzt benutzt werden, indem als Passport-Variante der Typ "RDHNew" 
 und der Dateiname mit "client.passport.RDHNew.filename" gesetzt wird (siehe oben).
 
 
 Die Konvertierung zwischen RDH- und RDHNew-Passports (in beiden Richtungen!)
-kann auch mit dem separat verfügbaren HBCI4Java Passport Editor durchgeführt
+kann auch mit dem separat verfÃ¼gbaren HBCI4Java Passport Editor durchgefÃ¼hrt
 werden.
 
 
-Früher oder später wird es auch für DDV- und PinTan-Passports diese Umstellung
-geben, allerdings ist das Problem hier nicht so kritisch. Falls es tatsächlich
+FrÃ¼her oder spÃ¤ter wird es auch fÃ¼r DDV- und PinTan-Passports diese Umstellung
+geben, allerdings ist das Problem hier nicht so kritisch. Falls es tatsÃ¤chlich
 Probleme beim Benutzen eines solchen Passports auf einem anderen System als dem
-"Erstellungs"-System geben sollte, so kann die Datei einfach gelöscht werden.
-Sie wird beim nächsten Mal automatisch wieder erzeugt.
+"Erstellungs"-System geben sollte, so kann die Datei einfach gelÃ¶scht werden.
+Sie wird beim nÃ¤chsten Mal automatisch wieder erzeugt.

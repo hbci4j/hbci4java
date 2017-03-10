@@ -29,10 +29,10 @@ import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.SyntaxElement;
 
-/** Rewriter-Modul für Kontoauszüge der 1822direkt-Bank (und vielleicht andere). Die
-    Kontoauszüge können nicht geparst werden, weil das verwendete SWIFT-Format von
+/** Rewriter-Modul fÃ¼r KontoauszÃ¼ge der 1822direkt-Bank (und vielleicht andere). Die
+    KontoauszÃ¼ge kÃ¶nnen nicht geparst werden, weil das verwendete SWIFT-Format von
     dem in der HBCI-Spezifikation vorgeschriebenen Format abweicht. Dieses Modul
-    korrigiert die Fehler in den Kontoauszugsdaten, so dass Kontoauszüge mit
+    korrigiert die Fehler in den Kontoauszugsdaten, so dass KontoauszÃ¼ge mit
     <em>HBCI4Java</em> wieder zu parsen sind. */
 public final class RKUmsDelimiters
     extends Rewrite

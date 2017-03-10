@@ -33,60 +33,60 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** <p>Dieses Tool dient zum Anzeigen der Struktur von HBCI-Job-Parametern für das
-    Erzeugen von Lowlevel-Jobs. Diese Struktur wird benötigt, wenn Jobs über das
+/** <p>Dieses Tool dient zum Anzeigen der Struktur von HBCI-Job-Parametern fÃ¼r das
+    Erzeugen von Lowlevel-Jobs. Diese Struktur wird benÃ¶tigt, wenn Jobs Ã¼ber das
     Lowlevel-Interface zum Erzeugen und Parametrisieren von Jobs erzeugt werden. Eine
-    Erklärung des Unterschieds zwischen High- und Lowlevel-Schnittstelle befindet sich
+    ErklÃ¤rung des Unterschieds zwischen High- und Lowlevel-Schnittstelle befindet sich
     in der Dokumentation des Packages <code>org.kapott.hbci.GV</code>. </p>
     <p>Der Aufruf erfolgt durch
     <pre>java org.kapott.hbci.tools.ShowLowlevelGVs [hbciversion]</pre>Ist keine
-    <code>hbciversion</code> angegeben, so wird diese über STDIN erfragt.</p>
-    <p>Das Tool gibt eine baumartige Struktur aus, welche die Lowlevelnamen der Geschäftsvorfälle
-    sowie die Bezeichnungen für die dazugehörigen Lowlevel-Parameter enthält. Die Struktur
-    für einen Datensatz beginnt immer mit einer Zeile <pre>jobname:JOBNAME version:VERSION</pre>
+    <code>hbciversion</code> angegeben, so wird diese Ã¼ber STDIN erfragt.</p>
+    <p>Das Tool gibt eine baumartige Struktur aus, welche die Lowlevelnamen der GeschÃ¤ftsvorfÃ¤lle
+    sowie die Bezeichnungen fÃ¼r die dazugehÃ¶rigen Lowlevel-Parameter enthÃ¤lt. Die Struktur
+    fÃ¼r einen Datensatz beginnt immer mit einer Zeile <pre>jobname:JOBNAME version:VERSION</pre>
     Dabei ist VERSION die Versionsnummer des Lowlevel-Jobs JOBNAME, auf die sich die folgende
-    Strukturbeschreibung bezieht. Die Strukturbeschreibung für einen Job endet bei der nächsten
+    Strukturbeschreibung bezieht. Die Strukturbeschreibung fÃ¼r einen Job endet bei der nÃ¤chsten
     Zeile mit diesem Format bzw. am Ende der Ausgabe.</p>
-    <p>In den eigentlichen Beschreibungszeilen können Zeilen im Format <pre>GROUP:GROUPNAME {MIN,MAX}</pre>
-    folgen. Damit wird beschrieben, dass jetzt eine Gruppe von zusammengehörigen Jobparametern folgt.
-    Eine solche Gruppe muss mindestens MIN und darf höchstens MAX mal als Lowlevel-Parameter auftreten.
+    <p>In den eigentlichen Beschreibungszeilen kÃ¶nnen Zeilen im Format <pre>GROUP:GROUPNAME {MIN,MAX}</pre>
+    folgen. Damit wird beschrieben, dass jetzt eine Gruppe von zusammengehÃ¶rigen Jobparametern folgt.
+    Eine solche Gruppe muss mindestens MIN und darf hÃ¶chstens MAX mal als Lowlevel-Parameter auftreten.
     Alle Zeilen, die nicht mit <code>GROUP:</code> beginnen, haben das Format
     <pre>LOWLEVELNAME:DATENTYP {MIN,MAX}</pre>
     LOWLEVELNAME ist dabei der Lowlevelname eines Parameters, wie er beim Setzen von Parametern mit
     {@link org.kapott.hbci.GV.HBCIJob#setParam(String,String)} benutzt werden kann.
-    DATENFORMAT ist dabei eine Kurzbezeichnung für den Datentyp, den dieser Parameter annehmen kann.
-    MIN und MAX geben an, wie oft dieser Parameter (in seiner Gruppe) mindestens bzw. höchstens
+    DATENFORMAT ist dabei eine Kurzbezeichnung fÃ¼r den Datentyp, den dieser Parameter annehmen kann.
+    MIN und MAX geben an, wie oft dieser Parameter (in seiner Gruppe) mindestens bzw. hÃ¶chstens
     auftauchen darf.</p>
     <p>Folgende Datentypen gibt es zur Zeit:</p>
     <ul>
       <li><code>AN</code> - alphanumerische Daten (Strings)</li>
-      <li><code>Bin</code> - binäre Daten (meist in einem Fremdformat) </li>
+      <li><code>Bin</code> - binÃ¤re Daten (meist in einem Fremdformat) </li>
       <li><code>Code</code> - wie <code>AN</code></li>
-      <li><code>Ctr</code> - Länderkennzeichen (meist "DE")</li>
-      <li><code>Cur</code> - Währungskennzeichen (meist "EUR")</li>
+      <li><code>Ctr</code> - LÃ¤nderkennzeichen (meist "DE")</li>
+      <li><code>Cur</code> - WÃ¤hrungskennzeichen (meist "EUR")</li>
       <li><code>DTAUS</code> - Daten im DTAUS-Format (alphanumerische Daten im DTAUS-Zeichensatz)</li>
       <li><code>Date</code> - Datumsangaben (in einem Locale-typischen Format)</li>
-      <li><code>Dig</code> - nur Ziffern (führende Nullen erlaubt) </li>
+      <li><code>Dig</code> - nur Ziffern (fÃ¼hrende Nullen erlaubt) </li>
       <li><code>ID</code> - wie <code>AN</code></li>
-      <li><code>JN</code> - nur "J" oder "N" (für JA bzw. NEIN) - entspricht also Boolean</li>
-      <li><code>Num</code> - ganzzahliger numerischer Wert ohne führende Nullen</li>
+      <li><code>JN</code> - nur "J" oder "N" (fÃ¼r JA bzw. NEIN) - entspricht also Boolean</li>
+      <li><code>Num</code> - ganzzahliger numerischer Wert ohne fÃ¼hrende Nullen</li>
       <li><code>Time</code> - Zeitangabe in einem Locale-typischen Format</li>
       <li><code>Wrt</code> - Angaben von Double-Werten im Format ab.cd (keine Exp.-Schreibweise!)</li>
     </ul>
     <p>Innerhalb einer Anwendung kann mit der Methode
     {@link org.kapott.hbci.manager.HBCIHandler#getSupportedLowlevelJobs()}
-    eine Liste aller unterstützten Lowlevel-Jobs in Erfahrung gebracht werden. Zusätzlich gibt diese
-    Methode zu jedem Jobnamen die Versionsnummer zurück, welche für diesen Job von <em>HBCI4Java</em> benutzt
-    werden wird (das hängt von der aktuellen HBCI-Version und dem benutzten Passport ab, kann von
-    außen also nicht direkt beeinflusst werden). In der Ausgabe dieses Tool kann nun nach einem
-    bestimmten Lowlevelnamen eines Jobs und der von <em>HBCI4Java</em> dafür verwendeten Versionsnummer gesucht werden.
-    Ist der entsprechende Eintrag gefunden, so hat man eine Übersicht über alle möglichen
-    Lowlevel-Jobparameter und wie oft diese auftreten müssen bzw. dürfen. 
-    Die gleiche Übersicht erhält man übrigens, wenn man innerhalb der Anwendung die Methode
+    eine Liste aller unterstÃ¼tzten Lowlevel-Jobs in Erfahrung gebracht werden. ZusÃ¤tzlich gibt diese
+    Methode zu jedem Jobnamen die Versionsnummer zurÃ¼ck, welche fÃ¼r diesen Job von <em>HBCI4Java</em> benutzt
+    werden wird (das hÃ¤ngt von der aktuellen HBCI-Version und dem benutzten Passport ab, kann von
+    auÃŸen also nicht direkt beeinflusst werden). In der Ausgabe dieses Tool kann nun nach einem
+    bestimmten Lowlevelnamen eines Jobs und der von <em>HBCI4Java</em> dafÃ¼r verwendeten Versionsnummer gesucht werden.
+    Ist der entsprechende Eintrag gefunden, so hat man eine Ãœbersicht Ã¼ber alle mÃ¶glichen
+    Lowlevel-Jobparameter und wie oft diese auftreten mÃ¼ssen bzw. dÃ¼rfen. 
+    Die gleiche Ãœbersicht erhÃ¤lt man Ã¼brigens, wenn man innerhalb der Anwendung die Methode
     {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobParameterNames(String)}
-    aufruft, allerdings fehlen in der Ausgabe dieser Methode die Informationen über die möglichen
-    Häufigkeiten der einzelnen Parameter, dafür wird hier automatisch die richtige Versionsnummer
-    des Jobs ausgewählt.</p>*/
+    aufruft, allerdings fehlen in der Ausgabe dieser Methode die Informationen Ã¼ber die mÃ¶glichen
+    HÃ¤ufigkeiten der einzelnen Parameter, dafÃ¼r wird hier automatisch die richtige Versionsnummer
+    des Jobs ausgewÃ¤hlt.</p>*/
 public class ShowLowlevelGVs
     extends AbstractShowLowlevelData
 {

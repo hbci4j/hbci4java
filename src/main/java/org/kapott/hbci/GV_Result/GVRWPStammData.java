@@ -36,7 +36,7 @@ public class GVRWPStammData
 {
     public final static class Entry
     {
-        /** Einheit: Stück */
+        /** Einheit: StÃ¼ck */
         public static final int EINHEIT_STCK=1;
         /** Einheit: Prozent */
         public static final int EINHEIT_PRCT=2;
@@ -60,7 +60,7 @@ public class GVRWPStammData
         public static final int ORDER_ONLYSELL=2;
         /** Orderart: kann sowohl ge- als auch verkauft werden */
         public static final int ORDER_BOTH=3;
-        /** Orderart: kann nur über XETRA gehandelt werden */
+        /** Orderart: kann nur Ã¼ber XETRA gehandelt werden */
         public static final int ORDER_ONLYXETRA=4;
 
         /** Wertpapierreferenz. */
@@ -70,9 +70,9 @@ public class GVRWPStammData
         /** Wertpapierbezeichnung (langer Name) (optional) */
         String longname;
         /** Bezeichnung der Wertpapiergattung, unter der das Papier
-            beim Kreditinstitut geführt wird (optional) */
+            beim Kreditinstitut gefÃ¼hrt wird (optional) */
         String gattung;
-        /** Region der Gültigkeit des Wertpapiers (optional):
+        /** Region der GÃ¼ltigkeit des Wertpapiers (optional):
             <ul>
               <li>{@link #REGION_BOTH}</li>
               <li>{@link #REGION_ONLYHOME}</li>
@@ -80,13 +80,13 @@ public class GVRWPStammData
               <li>-1 wenn nicht gesetzt</li>
             </ul> */
         int region;
-        /** Börsencode der Heimatbörse (optional) */
+        /** BÃ¶rsencode der HeimatbÃ¶rse (optional) */
         String homemarket;
-        /** Depotwährung (ISO-Währungscode) (optional) */
+        /** DepotwÃ¤hrung (ISO-WÃ¤hrungscode) (optional) */
         String depotcurr;
         /** Nominalzinssatz (optional) */
         double zinssatz;
-        /** Einheit der Effektennotiz (optional). Mögliche Werte sind
+        /** Einheit der Effektennotiz (optional). MÃ¶gliche Werte sind
             <ul>
               <li>{@link #EINHEIT_STCK}</li>
               <li>{@link #EINHEIT_PRCT}</li>
@@ -95,7 +95,7 @@ public class GVRWPStammData
               <li>{@link #EINHEIT_ELSE}</li>
             </ul> */
         int effekteinheit;
-        /** Mögliche Orderarten (0 wenn nicht belegt) (optional).
+        /** MÃ¶gliche Orderarten (0 wenn nicht belegt) (optional).
             <ul>
               <li>{@link #ORDER_ONLYBUY}</li>
               <li>{@link #ORDER_ONLYSELL}</li>

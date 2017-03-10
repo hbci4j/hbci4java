@@ -27,10 +27,10 @@ import java.util.List;
 
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
-/** <p>Status-Informationen für einen kompletten HBCI-Dialog. Objekte
+/** <p>Status-Informationen fÃ¼r einen kompletten HBCI-Dialog. Objekte
     dieser Klasse werden von {@link HBCIExecStatus}-Objekten verwaltet. 
     In einem <code>HBCIDialogStatus</code> werden alle Status-Informationen
-    gespeichert, die während der Ausführung eines HBCI-Dialoges anfallen.
+    gespeichert, die wÃ¤hrend der AusfÃ¼hrung eines HBCI-Dialoges anfallen.
     </p><p>
     Die direkte Auswertung der Felder dieser Klasse ist i.d.R. nicht zu empfehlen.
     Statt dessen sollten die bereitgestellten Methoden benutzt werden, um alle
@@ -39,18 +39,18 @@ public final class HBCIDialogStatus
 {
     /** <p>Status-Informationen zu den einzelnen Nachrichten zwischen
         Dialog-Initialisierung und Dialog-Abschluss ("Nutzdaten"). Ein Element
-        dieses Arrays enthält dabei die Status-Informationen über
+        dieses Arrays enthÃ¤lt dabei die Status-Informationen Ã¼ber
         genau einen HBCI-Nachrichtenaustausch.
         </p><p>
         Die direkte Auswertung dieses Feldes ist aus folgendem Grund
-        in den meisten Fällen nicht zu empfehlen: Sollen mehrere Geschäftsvorfälle
-        innerhalb eines einzigen HBCI-Dialoges ausgeführt werden, so weiß
+        in den meisten FÃ¤llen nicht zu empfehlen: Sollen mehrere GeschÃ¤ftsvorfÃ¤lle
+        innerhalb eines einzigen HBCI-Dialoges ausgefÃ¼hrt werden, so weiÃŸ
         die HBCI-Anwendung i.d.R. nicht, in welcher Nachricht sich ein bestimmter
-        GV befindet bzw. wie viele Nachrichten überhaupt erzeugt werden,
-        weil der HBCI-Kernel beim Hinzufügen von Geschäftsvorfällen u.U.
-        selbstständig die Erzeugung einer zusätzlichen Nachricht auslöst. Es
-        ist deshalb nicht ohne weiteres möglich, die zu einem bestimmten
-        Geschäftsvorfall passende Nachrichtennummer zu ermitteln, um damit
+        GV befindet bzw. wie viele Nachrichten Ã¼berhaupt erzeugt werden,
+        weil der HBCI-Kernel beim HinzufÃ¼gen von GeschÃ¤ftsvorfÃ¤llen u.U.
+        selbststÃ¤ndig die Erzeugung einer zusÃ¤tzlichen Nachricht auslÃ¶st. Es
+        ist deshalb nicht ohne weiteres mÃ¶glich, die zu einem bestimmten
+        GeschÃ¤ftsvorfall passende Nachrichtennummer zu ermitteln, um damit
         das entsprechende Element aus diesem Array zu extrahieren. </p> */
     public HBCIMsgStatus[] msgStatus;
     /** Statusinformationen zur Dialog-Initialisierungs-Nachricht. In diesem
@@ -87,33 +87,33 @@ public final class HBCIDialogStatus
         this.endStatus=status;
     }
     
-    /** <p>Gibt zurück, ob der Dialog als ganzes erfolgreich abgelaufen ist.
+    /** <p>Gibt zurÃ¼ck, ob der Dialog als ganzes erfolgreich abgelaufen ist.
         Ein Dialog gilt dann als erfolgreich abgelaufen, wenn die Dialog-Initialisierung,
-        alle Nachrichten mit Geschäftsvorfällen sowie der Dialog-Abschluss ohne
+        alle Nachrichten mit GeschÃ¤ftsvorfÃ¤llen sowie der Dialog-Abschluss ohne
         Fehlermeldungen abgelaufen sind.
         </p><p>
         Sobald auch nur eine dieser Nachrichten einen Fehler erzeugt hat, gibt diese
-        Methode <code>false</code> zurück. Es handelt sich also um einen sehr
-        "strengen" Test. Falls diese Methode <code>true</code> zurückgibt,
-        so könnte eine Überprüfung der einzelnen Geschäftsvorfälle auf eventuell
-        aufgetretene Fehler entfallen (siehe jedoch unten). Beim Rückgabewert 
-        <code>false</code> müssen alle ausgeführten Geschäftsvorfälle überprüft 
-        werden, ob einer (oder mehrere) davon den (oder die) Fehler ausgelöst haben.</p>
-        <p><b>Achtung:</b> Wenn diese Methode <code>true</code> zurückgibt, heißt
-        das nicht zwangsläufig, dass auch alle geplanten <code>HBCIJobs</code>
-        tatsächlich erfolgreich durchgeführt wurden. Diese Methode zeigt nur an,
-        dass die <code>HBCIJobs</code>, die auch tatsächlich in einer der 
-        Auftragsnachrichten enthalten gewesen sind, erfolgreich durchgeführt wurden.
-        Trat beim Hinzufügen eines <code>HBCIJobs</code> zu einer Azuftragsnachricht
+        Methode <code>false</code> zurÃ¼ck. Es handelt sich also um einen sehr
+        "strengen" Test. Falls diese Methode <code>true</code> zurÃ¼ckgibt,
+        so kÃ¶nnte eine ÃœberprÃ¼fung der einzelnen GeschÃ¤ftsvorfÃ¤lle auf eventuell
+        aufgetretene Fehler entfallen (siehe jedoch unten). Beim RÃ¼ckgabewert 
+        <code>false</code> mÃ¼ssen alle ausgefÃ¼hrten GeschÃ¤ftsvorfÃ¤lle Ã¼berprÃ¼ft 
+        werden, ob einer (oder mehrere) davon den (oder die) Fehler ausgelÃ¶st haben.</p>
+        <p><b>Achtung:</b> Wenn diese Methode <code>true</code> zurÃ¼ckgibt, heiÃŸt
+        das nicht zwangslÃ¤ufig, dass auch alle geplanten <code>HBCIJobs</code>
+        tatsÃ¤chlich erfolgreich durchgefÃ¼hrt wurden. Diese Methode zeigt nur an,
+        dass die <code>HBCIJobs</code>, die auch tatsÃ¤chlich in einer der 
+        Auftragsnachrichten enthalten gewesen sind, erfolgreich durchgefÃ¼hrt wurden.
+        Trat beim HinzufÃ¼gen eines <code>HBCIJobs</code> zu einer Azuftragsnachricht
         ein Fehler auf, so dass dieser <code>HBCIJob</code> gar nicht erst 
         versandt wurde, so zeigt diese Methode u.U. trotzdem <code>true</code>,
-        obwohl gar nicht alle geplanten Aufträge ausgeführt wurden (eben weil diese
-        Methode nur anzeigt, ob bei der eigentlichen <em>Ausführung</em> von Aufträgen
+        obwohl gar nicht alle geplanten AuftrÃ¤ge ausgefÃ¼hrt wurden (eben weil diese
+        Methode nur anzeigt, ob bei der eigentlichen <em>AusfÃ¼hrung</em> von AuftrÃ¤gen
         Fehler aufgetreten sind oder nicht).</p>
-        <p>Um also sicher zu gehen, dass alle gewünschten Aufträge auch wirklich 
-        erfolgreich ausgeführt wurden, sollte von jedem ursprünglich erzeugten 
+        <p>Um also sicher zu gehen, dass alle gewÃ¼nschten AuftrÃ¤ge auch wirklich 
+        erfolgreich ausgefÃ¼hrt wurden, sollte von jedem ursprÃ¼nglich erzeugten 
         <code>HBCIJob</code> der Status mit {@link org.kapott.hbci.GV.HBCIJob#getJobResult()} und
-        {@link org.kapott.hbci.GV_Result.HBCIJobResult#isOK()} geprüft werden.</p>
+        {@link org.kapott.hbci.GV_Result.HBCIJobResult#isOK()} geprÃ¼ft werden.</p>
         @return <code>true</code>, wenn keine Nachricht des Dialoges einen Fehler
                 erzeugt hat; <code>false</code>, wenn wenigstens ein Nachrichtenaustausch
                 nicht fehlerfrei abgelaufen ist.*/
@@ -132,8 +132,8 @@ public final class HBCIDialogStatus
         return ret;
     }
     
-    /** Zeigt an, ob während der Dialogausführung Exceptions ausgetreten sind 
-        @return <code>true</code>, wenn während der Dialogausführung Exceptions
+    /** Zeigt an, ob wÃ¤hrend der DialogausfÃ¼hrung Exceptions ausgetreten sind 
+        @return <code>true</code>, wenn wÃ¤hrend der DialogausfÃ¼hrung Exceptions
                  aufgetreten sind, sonst <code>false</code> 
         @deprecated wird nicht benutzt */
     public boolean hasExceptions()
@@ -157,12 +157,12 @@ public final class HBCIDialogStatus
         return ret;
     }
     
-    /** Gibt alle während der Dialogausführung aufgetretenen Exceptions zurück.
-        Die hier erzeugte Menge von Exceptions schließt alle Exceptions ein, die
-        während der Dialog-Initialisierung, der Ausführung der einzelnen 
-        Auftragsnachrichten bzw. während der Ausführung der Dialog-Ende-Nachricht
+    /** Gibt alle wÃ¤hrend der DialogausfÃ¼hrung aufgetretenen Exceptions zurÃ¼ck.
+        Die hier erzeugte Menge von Exceptions schlieÃŸt alle Exceptions ein, die
+        wÃ¤hrend der Dialog-Initialisierung, der AusfÃ¼hrung der einzelnen 
+        Auftragsnachrichten bzw. wÃ¤hrend der AusfÃ¼hrung der Dialog-Ende-Nachricht
         aufgetreten sind 
-        @return Array mit Exceptions, die während der Dialogausführung aufgetreten
+        @return Array mit Exceptions, die wÃ¤hrend der DialogausfÃ¼hrung aufgetreten
                  sind
         @deprecated wird nicht benutzt */
     public Exception[] getExceptions()
@@ -186,12 +186,12 @@ public final class HBCIDialogStatus
         return ret.toArray(new Exception[ret.size()]);
     }
     
-    /** Gibt für einen Dialog alle Fehlermeldungen zurück. Für jede Nachricht
+    /** Gibt fÃ¼r einen Dialog alle Fehlermeldungen zurÃ¼ck. FÃ¼r jede Nachricht
         des kompletten HBCI-Dialoges (Dialog-Initialisierung, Nutzdaten,
         Dialog-Abschluss) werden die jeweils aufgetretenen Fehlermeldungen
-        gesammelt und zu dem Rückgabewert dieser Methode hinzugefügt. Trat bei
-        einer Nachricht kein Fehler auf, so wird auch nichts zum Rückgabewert
-        dieser Methode hinzugefügt.
+        gesammelt und zu dem RÃ¼ckgabewert dieser Methode hinzugefÃ¼gt. Trat bei
+        einer Nachricht kein Fehler auf, so wird auch nichts zum RÃ¼ckgabewert
+        dieser Methode hinzugefÃ¼gt.
         @return einen String, der alle im Dialog aufgetretenen Fehler beschreibt */
     public String getErrorString()
     {
@@ -237,9 +237,9 @@ public final class HBCIDialogStatus
     /** Wandelt alle Statusinformationen zu einem Dialog in einen
         einzigen String um. Zu jeder einzelnen Nachricht des Dialoges
         werden alle Status-Informationen (aufgetretene Exceptions, Fehlermeldungen,
-        Warnungen, Erfolgsmeldungen) gesammelt und aneinander gehängt.
-        @return einen String, der die kompletten Status-Informationen für einen 
-                Dialog enthält */
+        Warnungen, Erfolgsmeldungen) gesammelt und aneinander gehÃ¤ngt.
+        @return einen String, der die kompletten Status-Informationen fÃ¼r einen 
+                Dialog enthÃ¤lt */
     public String toString()
     {
         StringBuffer ret=new StringBuffer();

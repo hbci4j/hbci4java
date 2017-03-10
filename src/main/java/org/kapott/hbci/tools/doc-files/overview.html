@@ -1,35 +1,35 @@
 <html><body>
 <h1>Allgemeines</h1>
 <p>
-<em>HBCI4Java</em> ist ein Java-Paket, welches HBCI-Funktionalit‰t
-f¸r Java-Anwendungen bereitstellt. 
+<em>HBCI4Java</em> ist ein Java-Paket, welches HBCI-Funktionalit√§t
+f√ºr Java-Anwendungen bereitstellt. 
 </p>
 
 <p>
 Diese Dokumentation ist bewusst Deutsch gehalten, da es HBCI meines Wissens
-nur in Deutschland gibt und somit die Wahrscheinlichkeit, dass ausl‰ndische
+nur in Deutschland gibt und somit die Wahrscheinlichkeit, dass ausl√§ndische
 (bzw. nicht deutsch-sprechende) Entwickler dieses Java-Paket einsetzen wollen,
-als eher gering einzusch‰tzen ist. Falls dennoch Bedarf an einer
+als eher gering einzusch√§tzen ist. Falls dennoch Bedarf an einer
 anderssprachigen Dokumentation besteht -- es ist nicht verboten,
-diesen Text zu ¸bersetzen ;-)
+diesen Text zu √ºbersetzen ;-)
 </p>
 
 <p>
-Die wichtigsten Klassen f¸r die Integration in eigene Anwendungen sind
+Die wichtigsten Klassen f√ºr die Integration in eigene Anwendungen sind
 <a href="org/kapott/hbci/passport/HBCIPassport.html"><code>HBCIPassport</code></a>
 sowie <a href="org/kapott/hbci/manager/HBCIHandler.html"><code>HBCIHandler</code></a>.
 <br/>
 Das Interface <code>HBCIPassport</code> stellt die Schnittstelle zu den
-HBCI-Sicherheitsmedien dar. <em>HBCI4Java</em> unterst¸tzt verschiedene
-Sicherheitsmedien und -verfahren, welche jedoch <em>alle</em> ¸ber dieses
+HBCI-Sicherheitsmedien dar. <em>HBCI4Java</em> unterst√ºtzt verschiedene
+Sicherheitsmedien und -verfahren, welche jedoch <em>alle</em> √ºber dieses
 Interface angesprochen werden. 
 <br/>
-‹ber Instanzen der Klasse <code>HBCIHandler</code> kann die Anwendung
+√úber Instanzen der Klasse <code>HBCIHandler</code> kann die Anwendung
 die bereitgestellten HBCI-Funktionen nutzen.
 </p>
 
 <p>
-Auﬂerdem benˆtigt eine Anwendung Methoden der Klasse
+Au√üerdem ben√∂tigt eine Anwendung Methoden der Klasse
 <a href="org/kapott/hbci/manager/HBCIUtils.html"><code>HBCIUtils</code></a>
 sowie <a href="org/kapott/hbci/callback/HBCICallback.html"><code>HBCICallback</code></a>-Instanzen.
 </p>
@@ -38,19 +38,19 @@ sowie <a href="org/kapott/hbci/callback/HBCICallback.html"><code>HBCICallback</c
 Eine kleine Vorlage zur Benutzung von <em>HBCI4Java</em> stellt das Tool
 <a href="org/kapott/hbci/tools/InitAndTest.html"><code>InitAndTest</code></a> dar.
 Der Sourcecode zu diesem Tool ist im src-Paket enthalten. Darin werden die grundlegendsten
-Funktionen von <em>HBCI4Java</em> demonstriert. Auﬂerdem kann das Tool
+Funktionen von <em>HBCI4Java</em> demonstriert. Au√üerdem kann das Tool
 <a href="org/kapott/hbci/tools/AnalyzeReportOfTransactions.html"><code>AnalyzeReportOfTransactions</code></a>
-als Vorlage f¸r ein Tool benutzt werden, mit welchem regelm‰ﬂig Kontoausz¸ge
-abgeholt und ausgewertet werden kˆnnen.
+als Vorlage f√ºr ein Tool benutzt werden, mit welchem regelm√§√üig Kontoausz√ºge
+abgeholt und ausgewertet werden k√∂nnen.
 </p> 
 
 <p>
 Noch eine Anmerkung zu dieser Dokumentation: zur Erzeugung wurde <code>javadoc</code>
 verwendet, allerdings mit einem modifizierten Doclet. Dieses modifizierte Doclet
-hat die Aufgabe, Klassen, Felder und Methoden, die nicht von auﬂen (also von einer
+hat die Aufgabe, Klassen, Felder und Methoden, die nicht von au√üen (also von einer
 Anwendung aus) benutzt werden sollen, aus der Dokumentation zu entfernen. <em>Bei
-Erzeugung dieser Dokumentation mit dem Standard-Doclet werden diese <b>zus‰tzlichen
-Elemente</b> wieder sichtbar. Diese sind zum groﬂen Teil nicht ordentlich dokumentiert
+Erzeugung dieser Dokumentation mit dem Standard-Doclet werden diese <b>zus√§tzlichen
+Elemente</b> wieder sichtbar. Diese sind zum gro√üen Teil nicht ordentlich dokumentiert
 und <b>sollten auch nicht benutzt werden</b></em>! Bei Benutzung von nichtdokumentierten
 Klassen oder Methoden kann es zu schwer nachvollziehbaren Fehlern kommen.     
 </p>

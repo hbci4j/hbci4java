@@ -112,11 +112,11 @@ public abstract class MultipleSyntaxElements
 
         try {
             // anlegen mindestens eines syntaxelementes
-            // warum? würde es nicht auch reichen, NUR den container anzulegen,
+            // warum? wÃ¼rde es nicht auch reichen, NUR den container anzulegen,
             // wenn minnum=0 ist? -- nein, es gibt zu viele "optionale" Elemente,
             // die in Wirklichkeit gar nicht optional sind, aber mit der Option
             // DONT_TRY_TO_CREATE erzeugt werden, so dass sie also nicht angelegt
-            // werden würden und somit fehlerhafte Nachrichten die Folge wären.
+            // werden wÃ¼rden und somit fehlerhafte Nachrichten die Folge wÃ¤ren.
             SyntaxElement child=createAndAppendNewElement(ref, path, 0, syntax);
             if (child!=null)
                 child.setParent(this);

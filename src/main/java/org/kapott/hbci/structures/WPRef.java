@@ -21,19 +21,19 @@
 
 package org.kapott.hbci.structures;
 
-/** Wertpapierreferenz (eine mˆgliche Identifikation f¸r ein Wertpapier */
+/** Wertpapierreferenz (eine m√∂gliche Identifikation f√ºr ein Wertpapier */
 public class WPRef
 {
-    /** Code repr‰sentiert ein ISIN */
+    /** Code repr√§sentiert ein ISIN */
     public static final int TYPE_ISIN=1;
-    /** Code repr‰sentier eine WKN */
+    /** Code repr√§sentier eine WKN */
     public static final int TYPE_WKN=2;
-    /** Code repr‰sentiert eine kreditinstitutsinterne Bezeichnung */
+    /** Code repr√§sentiert eine kreditinstitutsinterne Bezeichnung */
     public static final int TYPE_KIINTERN=3;
-    /** Code repr‰sentiert einen Indexnamen */
+    /** Code repr√§sentiert einen Indexnamen */
     public static final int TYPE_IDXNAME=4;
     
-    /** Typ der Bezeichnung. Mˆgliche Werte sind
+    /** Typ der Bezeichnung. M√∂gliche Werte sind
         <ul>
           <li>{@link #TYPE_ISIN}</li>
           <li>{@link #TYPE_WKN}</li>
@@ -41,7 +41,7 @@ public class WPRef
           <li>{@link #TYPE_IDXNAME}</li>
         </ul>*/
     public int type;
-    /** Bezeichnung des Wertpapiert, Interpretation abh‰ngig vom
+    /** Bezeichnung des Wertpapiert, Interpretation abh√§ngig vom
         Wert von {@link #type} */
     public String code;
     
@@ -51,7 +51,7 @@ public class WPRef
 
     /** Erstellen eines neuen Wertpapierreferenz-Objektes.
         @param type Typ der Referenz
-        @param code Wertpapierbezeichnung abh‰ngig von <code>type</code>*/
+        @param code Wertpapierbezeichnung abh√§ngig von <code>type</code>*/
     public WPRef(int type,String code)
     {
         this.type=type;

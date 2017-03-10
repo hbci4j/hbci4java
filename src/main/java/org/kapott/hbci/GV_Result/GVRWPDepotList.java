@@ -32,11 +32,11 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.structures.BigDecimalValue;
 import org.kapott.hbci.structures.Konto;
 
-/** Ergebnisdaten für die Abfrage einer Depotaufstellung.
-    Diese Klasse enthält für jedes Depot ein separates
-    Datenobjekt. Innerhalb eines Depots werden für jede
+/** Ergebnisdaten fÃ¼r die Abfrage einer Depotaufstellung.
+    Diese Klasse enthÃ¤lt fÃ¼r jedes Depot ein separates
+    Datenobjekt. Innerhalb eines Depots werden fÃ¼r jede
     in diesem Depot vorhandene Wertpapiergattung separate
-    Datenobjekte gehalten. Für jede Wertpapiergattung wiederum
+    Datenobjekte gehalten. FÃ¼r jede Wertpapiergattung wiederum
     gibt es u.U. mehrere Objekte, die Saldeninformationen
     enthalten. */
 public final class GVRWPDepotList 
@@ -48,10 +48,10 @@ public final class GVRWPDepotList
         public static final int SALDO_TYPE_STCK=1;
         public static final int SALDO_TYPE_WERT=2;
 
-        /** Enhält Informationen zu einer Wertpapiergattung */
+        /** EnhÃ¤lt Informationen zu einer Wertpapiergattung */
         public static final class Gattung
         {
-            /** Untersaldoinformationen, das heißt Informationen über die Zusammensetzung
+            /** Untersaldoinformationen, das heiÃŸt Informationen Ã¼ber die Zusammensetzung
                 des Saldos einer Wertpapiergattung. */
             public static final class SubSaldo
             {
@@ -63,15 +63,15 @@ public final class GVRWPDepotList
                       <li>{@link org.kapott.hbci.GV_Result.GVRWPDepotList.Entry.Gattung#PRICE_TYPE_VALUE} - Saldo ist ein Geldbetrag</li>
                     </ul> */
                 public int     saldo_type;
-                /** Gibt an, ob das Papier für einen Verkauf zur Verfügung steht.
+                /** Gibt an, ob das Papier fÃ¼r einen Verkauf zur VerfÃ¼gung steht.
                     <code>true</code> gibt an, dass das Papier gesperrt ist und somit
-                    nicht zur Verfügung steht, bei <code>false</code> kann es verkauft werden */
+                    nicht zur VerfÃ¼gung steht, bei <code>false</code> kann es verkauft werden */
                 public boolean locked;
-                /** Saldobetrag. Das Währungsfeld <code>curr</code> ist hier zur Zeit
+                /** Saldobetrag. Das WÃ¤hrungsfeld <code>curr</code> ist hier zur Zeit
                     immer der leere String. */
                 public BigDecimalValue   saldo;
-                /** Lagerland der Depotstelle (optional). Der Ländercode ist
-                    der ISO-3166-Ländercode (z.B. DE für Deutschland) */
+                /** Lagerland der Depotstelle (optional). Der LÃ¤ndercode ist
+                    der ISO-3166-LÃ¤ndercode (z.B. DE fÃ¼r Deutschland) */
                 public String  country;
                 /** Art der Verwahrung (optional).
                     <ul>
@@ -144,33 +144,33 @@ public final class GVRWPDepotList
             public int        pricetype;
             /** Hinweise zum Preis {@link #price} (optional).
                 <ul>
-                  <li>{@link #PRICE_QUALIF_MRKT} - Marktpreis (z.B. aktueller Börsenkurs)</li>
+                  <li>{@link #PRICE_QUALIF_MRKT} - Marktpreis (z.B. aktueller BÃ¶rsenkurs)</li>
                   <li>{@link #PRICE_QUALIF_HINT} - Hinweispreis (rechnerischer bzw. ermittelter Preis)</li>
                </ul>*/
             public int        pricequalifier;
-            /** Preis pro Einheit (optional). Die Währung ist bei
+            /** Preis pro Einheit (optional). Die WÃ¤hrung ist bei
                 {@link #pricetype}={@link #PRICE_TYPE_PRCT} auf "%" gesetzt. */
             public BigDecimalValue      price;
             /** Herkunft von Preis/Kurs (optional).
                 <ul>
-                  <li>{@link #SOURCE_LOC} - lokale Börse</li>
+                  <li>{@link #SOURCE_LOC} - lokale BÃ¶rse</li>
                   <li>{@link #SOURCE_THEOR} - theoretischer Wert</li>
-                  <li>{@link #SOURCE_SELLER} - Verkäufer als Quelle</li>
+                  <li>{@link #SOURCE_SELLER} - VerkÃ¤ufer als Quelle</li>
                 </ul> */
             public int        source;
             /** Bemerkungen zur Herkunft von Preis/Kurs {@link #source} (optional).
-                Bei {@link #source}={@link #SOURCE_LOC} kann der Name der Börse
+                Bei {@link #source}={@link #SOURCE_LOC} kann der Name der BÃ¶rse
                 als MIC angegeben werden */
             public String     source_comment;
             /** Zeitpunkt, wann {@link #price} notiert wurde (optional). */
             public Date       timestamp_price;
             /** Typ des Gesamtsaldos.
                 <ul>
-                  <li>{@link org.kapott.hbci.GV_Result.GVRWPDepotList.Entry#SALDO_TYPE_STCK} - Saldo ist eine Stückzahl</li> 
+                  <li>{@link org.kapott.hbci.GV_Result.GVRWPDepotList.Entry#SALDO_TYPE_STCK} - Saldo ist eine StÃ¼ckzahl</li> 
                   <li>{@link org.kapott.hbci.GV_Result.GVRWPDepotList.Entry#SALDO_TYPE_WERT} - Saldo ist ein Betrag</li>
                 </ul>*/ 
             public int        saldo_type;
-            /** Gesamtsaldo dieser Gattung. Das Währungsfeld ist in jedem
+            /** Gesamtsaldo dieser Gattung. Das WÃ¤hrungsfeld ist in jedem
                 Fall ein leerer String! (TODO). */
             public BigDecimalValue      saldo;
             private ArrayList<SubSaldo> saldi;
@@ -178,25 +178,25 @@ public final class GVRWPDepotList
             public int        days;
             /** Kurswert zum Gesamtsaldo {@link #saldo} (optional) */
             public BigDecimalValue      depotwert;
-            /** Betrag der   Stückzinsen (optional) */
+            /** Betrag der   StÃ¼ckzinsen (optional) */
             public BigDecimalValue      stueckzinsbetrag;
             // TODO: dafuer muessen depotwert2 und stueckzinsbetrag2 eingefuehrt werden
             public String     xchg_cur1;
             public String     xchg_cur2;
             public double     xchg_kurs;
-            /** Depotwährung (optional) */
+            /** DepotwÃ¤hrung (optional) */
             public String     curr;
-            /** Wertpapierart gemäß WM GD 195 (optional) */
+            /** Wertpapierart gemÃ¤ÃŸ WM GD 195 (optional) */
             public String     wptype;
-            /** Branchenschlüssel gemäß WM GD 200 (optional) */
+            /** BranchenschlÃ¼ssel gemÃ¤ÃŸ WM GD 200 (optional) */
             public String     branche;
             /** Land des Emittenten (Country-Code wie in Kontodaten) (optional) */
             public String     countryEmittent;
             /** Kaufdatum (optional) */
             public Date       kauf;
-            /** Fälligkeitsdatum (optional) */
+            /** FÃ¤lligkeitsdatum (optional) */
             public Date       faellig;
-            /** Einstandspreis/-kurs (optional). Die Währung ist "%", 
+            /** Einstandspreis/-kurs (optional). Die WÃ¤hrung ist "%", 
                 wenn es sich um eine Prozentabgabe handelt */
             public BigDecimalValue      einstandspreis;
             /** Zinssatz als Prozentangabe bei verzinslichen Papieren (optional) */
@@ -221,9 +221,9 @@ public final class GVRWPDepotList
                 saldi.add(subsaldo);
             }
             
-            /** Gibt alle Unter-Saldoinformationen in einem Array zurück.
-                Der Rückgabewert ist niemals <code>null</code>, das Array kann aber
-                die Länge <code>0</code> haben.
+            /** Gibt alle Unter-Saldoinformationen in einem Array zurÃ¼ck.
+                Der RÃ¼ckgabewert ist niemals <code>null</code>, das Array kann aber
+                die LÃ¤nge <code>0</code> haben.
                 @return Array mit Untersaldoinformationen */
             public SubSaldo[] getEntries()
             {
@@ -322,10 +322,10 @@ public final class GVRWPDepotList
             gattungen.add(gattung);
         }
         
-        /** Gibt ein Array mit Informationen über alle Wertpapiergattungen
-            zurück, die in diesem Depot gehalten werden. Der Rückgabewert ist
-            niemals <code>null</code>, die Größe des Arrays kann aber 0 sein.
-            @return Array mit Informationen über Wertpapiergattungen */
+        /** Gibt ein Array mit Informationen Ã¼ber alle Wertpapiergattungen
+            zurÃ¼ck, die in diesem Depot gehalten werden. Der RÃ¼ckgabewert ist
+            niemals <code>null</code>, die GrÃ¶ÃŸe des Arrays kann aber 0 sein.
+            @return Array mit Informationen Ã¼ber Wertpapiergattungen */
         public Gattung[] getEntries()
         {
             return gattungen.toArray(new Gattung[gattungen.size()]);
@@ -350,10 +350,10 @@ public final class GVRWPDepotList
     }
     
     private List<Entry> entries;
-    /** Dieses Feld enthält einen String, der den nicht-auswertbaren Teil der gelieferten Informationen
-        enthält. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
+    /** Dieses Feld enthÃ¤lt einen String, der den nicht-auswertbaren Teil der gelieferten Informationen
+        enthÃ¤lt. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
         bzw. einen leeren String enthalten. Wenn das nicht der Fall ist, dann konnten die 
-        empfangenen Daten nicht richtig geparst werden, und dieser String enthält den
+        empfangenen Daten nicht richtig geparst werden, und dieser String enthÃ¤lt den
         "Schwanz" der Daten, bei dem das Parsing-Problem aufgetreten ist.*/
     public String rest;
     
@@ -367,8 +367,8 @@ public final class GVRWPDepotList
         entries.add(entry);
     }
     
-    /** Gibt ein Array mit Depotdaten zurück, wobei jeder Eintrag
-        Informationen zu genau einem Depot enthält.
+    /** Gibt ein Array mit Depotdaten zurÃ¼ck, wobei jeder Eintrag
+        Informationen zu genau einem Depot enthÃ¤lt.
         @return Array mit Depotinformationen */
     public Entry[] getEntries()
     {

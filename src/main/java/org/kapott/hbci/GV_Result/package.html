@@ -2,31 +2,31 @@
 <p>In diesem Package sind Klassen enthalten, die die Ergebnisse
 von HBCI-Jobs aufnehmen und auswerten.</p>
 
-<p> Nach Ausführung eines HBCIDialoges erhält man mit dem Aufruf
+<p> Nach AusfÃ¼hrung eines HBCIDialoges erhÃ¤lt man mit dem Aufruf
 <a href="../GV/HBCIJob.html#getJobResult()"><code>HBCIJob.getJobResult()</code></a>
 eine Instanz einer dieser Klassen. Diese kann dann zur Auswertung der
-Rückgabedaten des Jobs genutzt werden.</p>
+RÃ¼ckgabedaten des Jobs genutzt werden.</p>
 
 <p>Die Basisklasse <a href="HBCIJobResult.html"><code>HBCIJobResult</code></a>
-enthält Methoden zur Auswertung der Statusinformationen. Außerdem werden hier
+enthÃ¤lt Methoden zur Auswertung der Statusinformationen. AuÃŸerdem werden hier
 die Daten aus der Antwortnachricht im "Klartext" gespeichert. Alle anderen
-Klassen (mit dem Prefix "<code>GVR</code>") sind für die Speicherung
-der Rückgabedaten bestimmter Jobs in anwendungsorientierten Datenstrukturen
-zuständig. So muss
+Klassen (mit dem Prefix "<code>GVR</code>") sind fÃ¼r die Speicherung
+der RÃ¼ckgabedaten bestimmter Jobs in anwendungsorientierten Datenstrukturen
+zustÃ¤ndig. So muss
 beispielsweise eine Kontoverbindung nicht mehr selbst aus den einzelnen Bestandteilen
-Ländercode, BLZ (plus Name des Kreditinstitutes) und Kontonummer zusammengebastelt
+LÃ¤ndercode, BLZ (plus Name des Kreditinstitutes) und Kontonummer zusammengebastelt
 werden, sondern diese Daten werden direkt in einem <code>Konto</code>-Objekt
 gekapselt.</p>
 
-<p>Diese Aufbereitung der Job-Rückgabedaten wird durch die <code>HBCIJob</code>-Klasse
-(bzw. eine ihrer Subklassen) durchgeführt und ist somit abhängig vom ausgeführten
+<p>Diese Aufbereitung der Job-RÃ¼ckgabedaten wird durch die <code>HBCIJob</code>-Klasse
+(bzw. eine ihrer Subklassen) durchgefÃ¼hrt und ist somit abhÃ¤ngig vom ausgefÃ¼hrten
 Job. Die Datenaufbereitung  wird nur bei Verwendung des Highlevel-Interfaces
-zur Job-Erstellung ausgeführt. Lowlevel-Jobs geben ihre Daten immer in einer
-Instanz der Klasse <code>HBCIJobResult</code> zurück. Eine Beschreibung von
-High- und Lowlevel-Schnittstellen für die Joberstellung befindet sich im Package
+zur Job-Erstellung ausgefÃ¼hrt. Lowlevel-Jobs geben ihre Daten immer in einer
+Instanz der Klasse <code>HBCIJobResult</code> zurÃ¼ck. Eine Beschreibung von
+High- und Lowlevel-Schnittstellen fÃ¼r die Joberstellung befindet sich im Package
 <a href="../GV/package-summary.html"><code>org.kapott.hbci.GV</code></a>.</p>
 
-<p>Eine Beschreibung, welche Klasse die Rückgabedaten für welchen Job enthält,
+<p>Eine Beschreibung, welche Klasse die RÃ¼ckgabedaten fÃ¼r welchen Job enthÃ¤lt,
 befindet sich in der Dokumentation zum Package 
 <a href="../GV/package-summary.html"><code>org.kapott.hbci.GV</code></a>.</p>  
 </body></html>

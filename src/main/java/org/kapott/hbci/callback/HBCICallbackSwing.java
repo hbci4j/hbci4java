@@ -57,13 +57,13 @@ import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.INILetter;
 
-/** Default-Implementation einer Callback-Klasse für Anwendungen mit GUI.
-    Diese Klasse überschreibt die <code>callback()</code>-Methode. Benötigte Nutzereingaben 
-    werden hier nicht mehr über STDIN abgefragt, sondern es wird ein neues Top-Level-Window
+/** Default-Implementation einer Callback-Klasse fÃ¼r Anwendungen mit GUI.
+    Diese Klasse Ã¼berschreibt die <code>callback()</code>-Methode. BenÃ¶tigte Nutzereingaben 
+    werden hier nicht mehr Ã¼ber STDIN abgefragt, sondern es wird ein neues Top-Level-Window
     erzeugt, welches die entsprechende Meldung sowie ein Feld zur Eingabe
-    der Antwort enthält. Kernel-Meldungen und erwartete Nutzeraktionen werden ebenfalls
+    der Antwort enthÃ¤lt. Kernel-Meldungen und erwartete Nutzeraktionen werden ebenfalls
     durch ein neues Top-Level-Window realisiert. Die Methoden <code>log()</code> und
-    <code>status()</code> werden nicht überschrieben, so dass diese weiterhin das Verhalten
+    <code>status()</code> werden nicht Ã¼berschrieben, so dass diese weiterhin das Verhalten
     der {@link org.kapott.hbci.callback.HBCICallbackConsole}-Klasse zeigen. */
 public class HBCICallbackSwing
     extends HBCICallbackConsole

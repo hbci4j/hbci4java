@@ -28,14 +28,14 @@ import org.kapott.hbci.manager.HBCIUtils;
 
 /** Darstellung eines Saldos. Anders als bei der Darstellung als
     einfacher Wert wird hier der <em>absolute</em> Betrag des Wertes
-    gespeichert. Es gibt ein separates Kennzeichen für die
+    gespeichert. Es gibt ein separates Kennzeichen fÃ¼r die
     Unterscheidung zwischen Soll und Haben. */
 public final class Saldo
     implements Serializable
 {
     /** Betrag des Saldos. */
     public Value  value;
-    /** Zeitpunkt der Gültigkeit dieses Saldos. */
+    /** Zeitpunkt der GÃ¼ltigkeit dieses Saldos. */
     public Date   timestamp;
 
     /** Anlegen eines neuen Saldo-Objektes */

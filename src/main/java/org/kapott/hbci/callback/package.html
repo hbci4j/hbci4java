@@ -1,23 +1,23 @@
 <html><body>
 <p>
-<em>HBCI4Java</em> kommuniziert mit der Anwendung bzw. dem Anwender über Callbacks.
+<em>HBCI4Java</em> kommuniziert mit der Anwendung bzw. dem Anwender Ã¼ber Callbacks.
 </p>
 
 <p>
 Eine Beschreibung der Callback-Schnittstelle befindet sich in der Interface-Beschreibung
-zu <a href="HBCICallback.html"><code>HBCICallback</code></a>. Hier soll kurz erläutert
+zu <a href="HBCICallback.html"><code>HBCICallback</code></a>. Hier soll kurz erlÃ¤utert
 werden, wie ein generischer Callback-Handler implementiert werden kann. Unter einem
 generischen Callback-Handler stelle man sich ein <code>HBCICallback</code>-Objekt vor,
-welches auf alle möglichen auftretenden Callbacks sinnvoll reagiert, ohne jeden
+welches auf alle mÃ¶glichen auftretenden Callbacks sinnvoll reagiert, ohne jeden
 einzelnen Callback-Grund separat zu behandeln. Das hat zum einen den Vorteil, dass
 bei dieser Methode auch Callbacks behandelt werden, die zum Zeitpunkt der Entwicklung
-des Callback-Handlers noch gar nicht bekannt waren. Außerdem spart diese Methode
-am Anfang der Entwicklung einer HBCI-Anwendung Zeit. Zu einem späteren Zeitpunkt kann
+des Callback-Handlers noch gar nicht bekannt waren. AuÃŸerdem spart diese Methode
+am Anfang der Entwicklung einer HBCI-Anwendung Zeit. Zu einem spÃ¤teren Zeitpunkt kann
 die Behandlung bestimmter Callback-Typen immer noch verfeinert werden.   
 </p>
 
 <p>
-Für den Anfang reicht es natürlich auch aus, eine der schon mitgelieferten
+FÃ¼r den Anfang reicht es natÃ¼rlich auch aus, eine der schon mitgelieferten
 HBCICallback-Klassen zu benutzen (<code>HBCICallbackConsole</code> oder
 <code>HBCICallbackSwing</code>).
 </p>
@@ -30,10 +30,10 @@ dieser Stelle ausgeklammert werden.
 <p>
 Die Methode <code>status()</code> des Callback-Interfaces dient dazu, der Anwendung
 mitzuteilen, in welchem Abarbeitungsschritt eines HBCI-Dialoges sich <em>HBCI4Java</em>
-gerade befindet. Dazu wird der Methode ein entsprechendes Tag (ein Integer-Wert) übergeben,
+gerade befindet. Dazu wird der Methode ein entsprechendes Tag (ein Integer-Wert) Ã¼bergeben,
 der den aktuellen Abarbeitungsschritt identifiziert. Das Interface <code>HBCICallback</code>
-definiert <code>STATUS_*</code>-Konstanten für diese Integer-Werte. Normalerweise würde
-Code für die Auswertung dieser Tags in etwa so aussehen:   
+definiert <code>STATUS_*</code>-Konstanten fÃ¼r diese Integer-Werte. Normalerweise wÃ¼rde
+Code fÃ¼r die Auswertung dieser Tags in etwa so aussehen:   
 </p>
 
 <pre>
@@ -44,7 +44,7 @@ Code für die Auswertung dieser Tags in etwa so aussehen:
               printStatusInfo("fuehre dialog-initialisierung aus");
               break;
           case STATUS_DIALOG_INIT_DONE:
-              printStatusInfo("dialog-init durchgeführt, dialogid ist "+o[0].toString());
+              printStatusInfo("dialog-init durchgefÃ¼hrt, dialogid ist "+o[0].toString());
               break;
           // usw. usf.
       }
@@ -52,9 +52,9 @@ Code für die Auswertung dieser Tags in etwa so aussehen:
 </pre>
 
 <p>
-Das ist natürlich für eine Vielzahl von <code>STATUS_*</code>-Konstanten sehr aufwändig.
-Leider gibt es dafür im Moment auch keinen sinnvollen Workaround. Die pragmatischste Lösung
-wäre folgender Code:
+Das ist natÃ¼rlich fÃ¼r eine Vielzahl von <code>STATUS_*</code>-Konstanten sehr aufwÃ¤ndig.
+Leider gibt es dafÃ¼r im Moment auch keinen sinnvollen Workaround. Die pragmatischste LÃ¶sung
+wÃ¤re folgender Code:
 </p>
 
 <pre>
@@ -91,52 +91,52 @@ wäre folgender Code:
 </pre>
 
 <p>
-Damit würden zumindest der Name der entsprechenden Konstante sowie einige Informationen zu den
-zusätzlichen Daten extrahiert werden, und zwar ohne dass es nötig wäre, tatsächlich alle
-möglichen <code>STATUS_*</code>-Konstanten zu kennen.
+Damit wÃ¼rden zumindest der Name der entsprechenden Konstante sowie einige Informationen zu den
+zusÃ¤tzlichen Daten extrahiert werden, und zwar ohne dass es nÃ¶tig wÃ¤re, tatsÃ¤chlich alle
+mÃ¶glichen <code>STATUS_*</code>-Konstanten zu kennen.
 </p>
 
 <p>
-Sinnvoller ist die Entwicklung eines generischen Handlers allerdings für die <code>callback()</code>-Methode.
+Sinnvoller ist die Entwicklung eines generischen Handlers allerdings fÃ¼r die <code>callback()</code>-Methode.
 Diese Methode wird immer dann von <em>HBCI4Java</em> aufgerufen, wenn irgendeine Interaktion
-mit dem Anwender nötig ist. Dabei gibt es folgende "Unterfälle": 
+mit dem Anwender nÃ¶tig ist. Dabei gibt es folgende "UnterfÃ¤lle": 
 </p>
 
 <ul>
   <li>es wird eine Aktion vom Anwender erwartet, wobei das Ende der Aktion von <em>HBCI4Java</em>
-      selbst erkannt wird, also keine zusätzliche Eingabe oder Bestätigung vom Anwender benötigt
-      (z.B. das Einlegen der Chipkarte in das Lesegerät)</li>
+      selbst erkannt wird, also keine zusÃ¤tzliche Eingabe oder BestÃ¤tigung vom Anwender benÃ¶tigt
+      (z.B. das Einlegen der Chipkarte in das LesegerÃ¤t)</li>
   <li>es wird eine Text-Eingabe vom Anwender erwartet</li>
   <li>es wird eine Entscheidung vom Anwender verlangt (ja/nein, weiter/abbrechen usw.)</li>
   <li>es muss eine Information angezeigt werden</li>
 </ul>
 
 <p>
-Alle diese Fälle werden durch die Methode <code>callback()</code> abgedeckt und lassen sich anhand
-der jeweils übergebenen Parameter unterscheiden. Der Parameter <code>reason</code> gibt dabei die
-Ursache des Callbacks an. Das ist genau der Parameter, für den es sehr viele mögliche Belegungen
+Alle diese FÃ¤lle werden durch die Methode <code>callback()</code> abgedeckt und lassen sich anhand
+der jeweils Ã¼bergebenen Parameter unterscheiden. Der Parameter <code>reason</code> gibt dabei die
+Ursache des Callbacks an. Das ist genau der Parameter, fÃ¼r den es sehr viele mÃ¶gliche Belegungen
 gibt. In der Regel wird in einem Callback-Handler dieser Parameter als erstes ausgewertet
 -- je nach Wert ist eine entsprechende Reaktion vorgesehen. Es wird also i.d.R. ein
-ähnlicher <code>switch-case</code>-Block wie in einer <code>status()</code>-Methode
+Ã¤hnlicher <code>switch-case</code>-Block wie in einer <code>status()</code>-Methode
 implementiert werden. 
-In einem generischen Callback-Handler soll dieser Parameter möglichst nicht ausgewertet
-werden müssen, weil hier ständig neue Werte hinzukommen können. Deshalb muss die richtige
-Reaktion auf einen Callback von den Werten der anderen Parameter abhängig gemacht werden.  
+In einem generischen Callback-Handler soll dieser Parameter mÃ¶glichst nicht ausgewertet
+werden mÃ¼ssen, weil hier stÃ¤ndig neue Werte hinzukommen kÃ¶nnen. Deshalb muss die richtige
+Reaktion auf einen Callback von den Werten der anderen Parameter abhÃ¤ngig gemacht werden.  
 </p>
 
 <p>
-Der Parameter <code>msg</code> enthält einen String, der die Ursache des Callbacks und die
+Der Parameter <code>msg</code> enthÃ¤lt einen String, der die Ursache des Callbacks und die
 erwartete Reaktion/Aktion im Klartext beschreibt. Dieser Text kann also in jedem Fall anzeigt
-werden. Der Parameter <code>datatype</code> enthält den erwarteten Datentyp der Nutzereingabe.
-Ist der Wert dieses Parameters ungleich <code>TYPE_NONE</code>, so wird tatsächlich eine Nutzereingabe
+werden. Der Parameter <code>datatype</code> enthÃ¤lt den erwarteten Datentyp der Nutzereingabe.
+Ist der Wert dieses Parameters ungleich <code>TYPE_NONE</code>, so wird tatsÃ¤chlich eine Nutzereingabe
 erwartet. In diesem Fall ist also ein entsprechendes Eingabefeld vorzusehen. <em>HBCI4Java</em> gibt
 dazu im Object <code>retData</code> bereits eine default-Eingabe vor. Diese ist in den meisten
-Fällen leer. Es ist auf jeden Fall zu empfehlen, diesen vorgeschlagenen default-Wert trotzdem
-anzuzeigen, da er in einigen Fällen tatsächlich benutzt wird (Das ist konkret beim Callback
+FÃ¤llen leer. Es ist auf jeden Fall zu empfehlen, diesen vorgeschlagenen default-Wert trotzdem
+anzuzeigen, da er in einigen FÃ¤llen tatsÃ¤chlich benutzt wird (Das ist konkret beim Callback
 <code>HAVE_CRC_ERROR</code> der Fall, wo die evtl. zu korrigierenden Kontoverbindungsdaten im
-<code>retData</code>-Objekt übergeben werden). Die Nutzereingabe ist 
+<code>retData</code>-Objekt Ã¼bergeben werden). Die Nutzereingabe ist 
 dann wieder in den StringBuffer <code>retData</code> einzustellen (im gleichen
-Datenformat wie der evtl. vorher darin enthaltene default-Wert). Nähere Informationen dazu ist in der
+Datenformat wie der evtl. vorher darin enthaltene default-Wert). NÃ¤here Informationen dazu ist in der
 Beschreibung der einzelnen <code>TYPE_*</code>-Konstanten zu finden. 
 </p>
 
@@ -144,11 +144,11 @@ Beschreibung der einzelnen <code>TYPE_*</code>-Konstanten zu finden.
 Ist <code>datatype</code> allerdings gleich <code>TYPE_NONE</code>, so bedeutet das, dass keine
 Eingabe vom Anwender erwartet wird. In diesem Fall soll also entweder eine Information angezeigt
 werden (die Info selbst steht im Parameter <code>msg</code>), oder es wird eine Aktion vom
-Anwender erwartet, die er nicht explizit bestätigen muss. Die Unterscheidung zwischen beiden
-Fällen kann anhand des Parameters <code>retData</code> erfolgen: ist dieser Parameter gleich
+Anwender erwartet, die er nicht explizit bestÃ¤tigen muss. Die Unterscheidung zwischen beiden
+FÃ¤llen kann anhand des Parameters <code>retData</code> erfolgen: ist dieser Parameter gleich
 <code>null</code>, so handelt es sich um die Aufforderung zu einer Aktion, ist der Parameter
 ungleich <code>null</code>, so soll eine Information angezeigt werden, die der Anwender
-erst bestätigen muss. 
+erst bestÃ¤tigen muss. 
 </p>
 
 <p>
@@ -164,15 +164,15 @@ Eine generische Callback-Methode kann also wiefolgt aussehen:
                 switch (datatype) {
                     case TYPE_TEXT:
                     case TYPE_SECRET: // dafuer muss nur die Eingabe durch Sternchen ("*") versteckt werden
-                        // Eingabe in Rückgabeobjekt schreiben
+                        // Eingabe in RÃ¼ckgabeobjekt schreiben
                         output("current value: "+retData.toString());
                         retData.replace(0,retData.length(),readUserInput());
                         break;
                     
                     case TYPE_BOOLEAN:
                         String input=readUserInput();
-                        // Eingabe von "yes" für den einen Fall (TRUE),
-                        // jeder andere Text führt zu dem anderen Fall (FALSE)
+                        // Eingabe von "yes" fÃ¼r den einen Fall (TRUE),
+                        // jeder andere Text fÃ¼hrt zu dem anderen Fall (FALSE)
                         // siehe dazu Beschreibung von TYPE_BOOLEAN
                         if (input.equals("yes"))
                             retData.replace(0,retData.length(),"");
@@ -182,7 +182,7 @@ Eine generische Callback-Methode kann also wiefolgt aussehen:
                 }
             } else {
                 if (retData!=null) {
-                    // auf bestätigung warten
+                    // auf bestÃ¤tigung warten
                     waitForConfirmation();
                 }
             }
@@ -193,8 +193,8 @@ Eine generische Callback-Methode kann also wiefolgt aussehen:
 </pre>
 
 <p>
-Auf diese Art und Weise können alle existierenden und zukünftigen Callbacks mit einer einzigen
-generischen Methode behandelt werden. Der Nachteil ist natürlich, dass es an entsprechendem
-Komfort fehlt, den man bei bestimmten konkreten Callbacks anbieten könnte.
+Auf diese Art und Weise kÃ¶nnen alle existierenden und zukÃ¼nftigen Callbacks mit einer einzigen
+generischen Methode behandelt werden. Der Nachteil ist natÃ¼rlich, dass es an entsprechendem
+Komfort fehlt, den man bei bestimmten konkreten Callbacks anbieten kÃ¶nnte.
 </p>
 </body></html>

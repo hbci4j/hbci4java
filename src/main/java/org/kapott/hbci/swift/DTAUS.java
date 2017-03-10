@@ -38,70 +38,70 @@ import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
-/** <p>Hilfsklasse zum Erzeugen von DTAUS-Datensätzen für die Verwendung in
-    Sammelüberweisungen und Sammellastschriften. Diese Klasse kann verwendet
-    werden, um den DTAUS-Datenstrom zu erzeugen, der für Sammellastschriften
-    und -überweisungen als Job-Parameter angegeben werden muss.</p>
+/** <p>Hilfsklasse zum Erzeugen von DTAUS-DatensÃ¤tzen fÃ¼r die Verwendung in
+    SammelÃ¼berweisungen und Sammellastschriften. Diese Klasse kann verwendet
+    werden, um den DTAUS-Datenstrom zu erzeugen, der fÃ¼r Sammellastschriften
+    und -Ã¼berweisungen als Job-Parameter angegeben werden muss.</p>
     <p>In einem DTAUS-Objekt werden ein oder mehrere Transaktionen gespeichert. 
-    Dabei müssen alle Transaktionen entweder Lastschriften oder Überweisungen sein. 
-    Außerdem wird für alle Transaktionen das gleiche "Auftraggeberkonto" 
-    angenommen (bei Überweisungen also das Belastungskonto, bei Lastschriften 
+    Dabei mÃ¼ssen alle Transaktionen entweder Lastschriften oder Ãœberweisungen sein. 
+    AuÃŸerdem wird fÃ¼r alle Transaktionen das gleiche "Auftraggeberkonto" 
+    angenommen (bei Ãœberweisungen also das Belastungskonto, bei Lastschriften 
     das Konto, auf das der Betrag gutgeschrieben wird).</p>
-    <p>In der Regel wird zunächst ein <code>DTAUS</code>-Objekt erzeugt. Dazu
+    <p>In der Regel wird zunÃ¤chst ein <code>DTAUS</code>-Objekt erzeugt. Dazu
     wird der Konstruktor {@link #DTAUS(Konto,int)}
     verwendet, womit gleichzeit das zu verwendende Auftraggeberkonto und der
-    Typ des Sammelauftrages (<code>TYPE_CREDIT</code> für Sammelüberweisungen,
-    <code>TYPE_DEBIT</code> für Sammellastschriften) festgelegt wird.
-    Anschließend können beliebig viele {@link DTAUS.Transaction}-Objekte
+    Typ des Sammelauftrages (<code>TYPE_CREDIT</code> fÃ¼r SammelÃ¼berweisungen,
+    <code>TYPE_DEBIT</code> fÃ¼r Sammellastschriften) festgelegt wird.
+    AnschlieÃŸend kÃ¶nnen beliebig viele {@link DTAUS.Transaction}-Objekte
     erzeugt werden, welche jeweils eine Transaktion darstellen. Jedes so erzeugte
     Objekt kann mit {@link #addEntry(DTAUS.Transaction)}
-    zum Sammelauftrag hinzugefügt werden. Die Methode {@link #toString()} 
-    liefert schließlich den so erzeugten Sammelauftrag im DTAUS-Format.</p> */
-// TODO: API ändern (Setter/Getter), damit wir sauber die LogFilter für
-// kritische Daten setzen können
+    zum Sammelauftrag hinzugefÃ¼gt werden. Die Methode {@link #toString()} 
+    liefert schlieÃŸlich den so erzeugten Sammelauftrag im DTAUS-Format.</p> */
+// TODO: API Ã¤ndern (Setter/Getter), damit wir sauber die LogFilter fÃ¼r
+// kritische Daten setzen kÃ¶nnen
 public class DTAUS 
 {
     /** Daten einer einzelnen Transaktion, die in einen Sammelauftrag
-        übernommen werden soll. Vor dem Hinzufügen dieser Transaktion zum
-        Sammelauftrag müssen alle Felder dieses Transaktions-Objektes mit den
-        jeweiligen Auftragsdaten gefüllt werden. */
+        Ã¼bernommen werden soll. Vor dem HinzufÃ¼gen dieser Transaktion zum
+        Sammelauftrag mÃ¼ssen alle Felder dieses Transaktions-Objektes mit den
+        jeweiligen Auftragsdaten gefÃ¼llt werden. */
     public class Transaction
     {
-        /** <p>Konto des Zahlungsempfängers bzw. des Zahlungspflichtigen. Soll
-            dieser Einzelauftrag in eine Sammelüberweisung eingestellt werden,
-            so muss in diesem Feld die Kontoverbindung des Zahlungsempfängers
+        /** <p>Konto des ZahlungsempfÃ¤ngers bzw. des Zahlungspflichtigen. Soll
+            dieser Einzelauftrag in eine SammelÃ¼berweisung eingestellt werden,
+            so muss in diesem Feld die Kontoverbindung des ZahlungsempfÃ¤ngers
             eingestellt werden. Bei Sammellastschriften ist hier die 
             Kontoverbindung des Zahlungspflichtigen einzustellen.</p>
-            <p>Von dem verwendeten {@link Konto}-Objekt müssen mindestens die
+            <p>Von dem verwendeten {@link Konto}-Objekt mÃ¼ssen mindestens die
             Felder <code>blz</code>, <code>number</code> und <code>name</code>
             richtig belegt sein.</p> */
         public Konto otherAccount;
         
-        /** interne Kunden-ID. Wie die verwendet wird weiß ich leider nicht
-            genau, kann im Prinzip leer gelassen werden (ansonsten Maximallänge
+        /** interne Kunden-ID. Wie die verwendet wird weiÃŸ ich leider nicht
+            genau, kann im Prinzip leer gelassen werden (ansonsten MaximallÃ¤nge
             11 Zeichen). */
         public String internalCustomerId;
         
-        /** Textschlüssel für den Auftrag. Bei Sammelüberweisungen ist dieses
+        /** TextschlÃ¼ssel fÃ¼r den Auftrag. Bei SammelÃ¼berweisungen ist dieses
             Feld mit '51' vorbelegt, bei Sammellastschriften mit '05'. Dieser
-            Wert kann überschrieben werden, gültige Werte finden sich in den 
+            Wert kann Ã¼berschrieben werden, gÃ¼ltige Werte finden sich in den 
             Job-Restrictions 
             (siehe {@link org.kapott.hbci.GV.HBCIJob#getJobRestrictions()}). */
         public String key;
         
-        /** Zusätzlicher Textschlüssel (wird i.d.R. bankintern verwendet).
+        /** ZusÃ¤tzlicher TextschlÃ¼ssel (wird i.d.R. bankintern verwendet).
             Dieser Wert muss aus drei Ziffern bestehen und ist mit '000'
             vorbelegt. Das manuelle Setzen dieses Wertes ist in den meisten
-            Fällen nicht nötig (außer für Leute, die wissen was sie tun ;-) ). */
+            FÃ¤llen nicht nÃ¶tig (auÃŸer fÃ¼r Leute, die wissen was sie tun ;-) ). */
         public String addkey;
         
-        /** Geldbetrag, der bei diesem Einzelauftrag überwiesen (Sammelüberweisungen)
+        /** Geldbetrag, der bei diesem Einzelauftrag Ã¼berwiesen (SammelÃ¼berweisungen)
             bzw. eingezogen (Sammellastschriften) werden soll */
         public Value value;
         
         private ArrayList<String> usage;
         
-        /** Erzeugen eine neuen Objektes für die Aufnahme von Daten für eine
+        /** Erzeugen eine neuen Objektes fÃ¼r die Aufnahme von Daten fÃ¼r eine
             Transaktion */
         public Transaction()
         {
@@ -110,14 +110,14 @@ public class DTAUS
             usage=new ArrayList<String>();
         }
         
-        /** Hinzufügen einer Verwendungszweckzeile zu diesem Auftrag. */
+        /** HinzufÃ¼gen einer Verwendungszweckzeile zu diesem Auftrag. */
         public void addUsage(String st)
         {
         	LogFilter.getInstance().addSecretData(st,"X",LogFilter.FILTER_MOST);
             usage.add(st);
         }
         
-        /** Gibt eine Liste der Verwendungszweckzeilen (String) zurück. */
+        /** Gibt eine Liste der Verwendungszweckzeilen (String) zurÃ¼ck. */
         public List<String> getUsage()
         {
             return usage;
@@ -178,7 +178,7 @@ public class DTAUS
                 int numOfExt=0;
 
                 // erweiterungsteile
-                // TODO: name2 für myAccount und otherAccount vorerst weggelassen
+                // TODO: name2 fÃ¼r myAccount und otherAccount vorerst weggelassen
 
                 for (int i=1;i<usage.size();i++) {
                     st=SyntaxDTAUS.check(usage.get(i));
@@ -211,7 +211,7 @@ public class DTAUS
         }
     }
     
-    /** Typ des Sammelauftrages: Sammelüberweisung */
+    /** Typ des Sammelauftrages: SammelÃ¼berweisung */
     public static final int TYPE_CREDIT=1;
     /** Typ des Sammelauftrages: Sammellastschrift */
     public static final int TYPE_DEBIT=2;
@@ -242,21 +242,21 @@ public class DTAUS
         this(myAccount,type,null);
     }
     
-    /** Erzeugen eines neuen Objektes für die Aufnahme von
-     Sammelaufträgen. <code>myAccount</code> ist dabei das "eigene" Konto, 
-     welches bei Sammelüberweisungen als Belastungskonto und bei 
+    /** Erzeugen eines neuen Objektes fÃ¼r die Aufnahme von
+     SammelauftrÃ¤gen. <code>myAccount</code> ist dabei das "eigene" Konto, 
+     welches bei SammelÃ¼berweisungen als Belastungskonto und bei 
      Sammellastschriften als Gutschriftkonto verwendet wird. Von dem
-     {@link Konto}-Objekt müssen mindestens die Felder <code>blz</code>,
+     {@link Konto}-Objekt mÃ¼ssen mindestens die Felder <code>blz</code>,
      <code>number</code>, <code>curr</code> und <code>name</code> richtig
      gesetzt sein.  <br/>
      <code>execdate</code> gibt das Datum an, wann dieser Sammelauftrag 
-     ausgeführt werden soll. ACHTUNG: <code>execdate</code> wird zur Zeit noch
+     ausgefÃ¼hrt werden soll. ACHTUNG: <code>execdate</code> wird zur Zeit noch
      nicht ausgewertet! 
-     @param myAccount Gegenkonto für die enthaltenen Aufträge 
-     @param type <ul><li><code>TYPE_CREDIT</code> für Sammelüberweisungen,</li>
-     <li><code>TYPE_DEBIT</code> für Sammellastschriften</li></ul>
-     @param execdate Ausführungsdatum für diesen Sammelauftrag; <code>null</code>,
-     wenn kein Ausführungsdatum gesetzt werden soll (sofortige Ausführung) */
+     @param myAccount Gegenkonto fÃ¼r die enthaltenen AuftrÃ¤ge 
+     @param type <ul><li><code>TYPE_CREDIT</code> fÃ¼r SammelÃ¼berweisungen,</li>
+     <li><code>TYPE_DEBIT</code> fÃ¼r Sammellastschriften</li></ul>
+     @param execdate AusfÃ¼hrungsdatum fÃ¼r diesen Sammelauftrag; <code>null</code>,
+     wenn kein AusfÃ¼hrungsdatum gesetzt werden soll (sofortige AusfÃ¼hrung) */
     public DTAUS(Konto myAccount,int type,Date execdate)
     {
     	LogFilter.getInstance().addSecretData(myAccount.blz,"X",LogFilter.FILTER_MOST);
@@ -287,11 +287,11 @@ public class DTAUS
         parseDTAUS(dtaus);
     }
     
-    /** Hinzufügen eines einzelnen Auftrages zu diesem Sammelauftrag. Das
-        {@link DTAUS.Transaction}-Objekt, welches hier als Argument benötigt wird,
+    /** HinzufÃ¼gen eines einzelnen Auftrages zu diesem Sammelauftrag. Das
+        {@link DTAUS.Transaction}-Objekt, welches hier als Argument benÃ¶tigt wird,
         muss mit '<code>dtaus.new&nbsp;Transaction()</code>' erzeugt werden 
         ('<code>dtaus</code>' ist dabei das aktuelle <code>DTAUS</code>-Objekt).
-        @param entry Hinzuzufügender Einzelauftrag */ 
+        @param entry HinzuzufÃ¼gender Einzelauftrag */ 
     public void addEntry(Transaction entry)
     {
         entries.add(entry);
@@ -333,17 +333,17 @@ public class DTAUS
         this.referenceId = referenceId;
     }
     
-    /** Gibt den Wert von Feld Nr 10 ("Referenznummer des Einreichers") zurück */
+    /** Gibt den Wert von Feld Nr 10 ("Referenznummer des Einreichers") zurÃ¼ck */
     public String getReferenceId()
     {
         return (this.referenceId!=null)?this.referenceId:"";
     }
 
-    /** Rückgabe des Sammelauftrages im DTAUS-Format. Der Rückgabewert dieser
-        Methode kann direkt als Parameterwert für den Parameter '<code>data</code>'
-        bei Sammelaufträgen verwendet werden (für eine Parameterbeschreibung
+    /** RÃ¼ckgabe des Sammelauftrages im DTAUS-Format. Der RÃ¼ckgabewert dieser
+        Methode kann direkt als Parameterwert fÃ¼r den Parameter '<code>data</code>'
+        bei SammelauftrÃ¤gen verwendet werden (fÃ¼r eine Parameterbeschreibung
         siehe Paketbeschreibung des Paketes <code>org.kapott.hbci.GV</code>).
-        @return DTAUS-Datenstrom für diesen Sammelauftrag */
+        @return DTAUS-Datenstrom fÃ¼r diesen Sammelauftrag */
     public String toString()
     {
         StringBuffer ret=new StringBuffer();
@@ -477,7 +477,7 @@ public class DTAUS
         // satz C beginn
         int posi=128;
         
-        // schleife für einzelne aufträge (c-sets)
+        // schleife fÃ¼r einzelne auftrÃ¤ge (c-sets)
         while (true) {
             Transaction entry=new Transaction();
             
@@ -490,7 +490,7 @@ public class DTAUS
             posi+=4;
             HBCIUtils.log("SetCLen = "+setCLen+" data bytes (--> "+((setCLen-187)/29.0)+" extensions)", HBCIUtils.LOG_DEBUG);
             
-            // "C" überspringen
+            // "C" Ã¼berspringen
             posi++;
             
             // skip myBLZ
@@ -537,8 +537,8 @@ public class DTAUS
             entry.addUsage(dtaus.substring(posi,posi+27).trim());
             posi+=27;
             
-            // skip währung
-            // TODO: hier konsistenz überprüfen
+            // skip wÃ¤hrung
+            // TODO: hier konsistenz Ã¼berprÃ¼fen
             posi++;
             
             // skip reserve

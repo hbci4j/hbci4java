@@ -20,7 +20,7 @@ public class SEPAGeneratorFactory
     private final static Logger LOG = Logger.getLogger(SEPAGeneratorFactory.class.getName());
     
 	/**
-	 * Gibt den passenden SEPA Generator für die angegebene PAIN-Version.
+	 * Gibt den passenden SEPA Generator fÃ¼r die angegebene PAIN-Version.
 	 * @param job der zu erzeugende Job.
 	 * @param version die PAIN-Version.
 	 * @return ISEPAGenerator
@@ -30,12 +30,12 @@ public class SEPAGeneratorFactory
 	 */
 	public static ISEPAGenerator get(HBCIJob job, PainVersion version) throws ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
-        String jobname = ((AbstractSEPAGV)job).getPainJobName(); // referenzierter pain-Geschäftsvorfall
+        String jobname = ((AbstractSEPAGV)job).getPainJobName(); // referenzierter pain-GeschÃ¤ftsvorfall
         return get(jobname,version);
 	}
 	
     /**
-     * Gibt den passenden SEPA Generator für die angegebene PAIN-Version.
+     * Gibt den passenden SEPA Generator fÃ¼r die angegebene PAIN-Version.
      * @param jobname der Job-Name. Z.Bsp. "UebSEPA".
      * @param version die PAIN-Version.
      * @return ISEPAGenerator

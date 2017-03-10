@@ -3,10 +3,10 @@ Im Verzeichnis
 
   demo/HBCIBatch
   
-befinden sich Beispiel-Dateien für die Verwendung 
+befinden sich Beispiel-Dateien fÃ¼r die Verwendung 
 von org.kapott.hbci.tools.HBCIBatch.
 
-Ausgangspunkt ist das Shell-Script "runjobs.sh" für den Aufruf von HBCIBatch.
+Ausgangspunkt ist das Shell-Script "runjobs.sh" fÃ¼r den Aufruf von HBCIBatch.
 
 Alle Dateien enthalten jeweils Kommentare, die die korrekte Verwendung dieser
 Dateien beschreiben.

@@ -31,21 +31,21 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.status.HBCIRetVal;
 
 /** <p>Ergebnisse einer Statusprotokoll-Abfrage.
-    Ein Statusprotokoll enthält zu allen eingereichten Aufträgen
-    den Bearbeitungsstatus. Die einzelnen Aufträge werden durch
+    Ein Statusprotokoll enthÃ¤lt zu allen eingereichten AuftrÃ¤gen
+    den Bearbeitungsstatus. Die einzelnen AuftrÃ¤ge werden durch
     die HBCI-Daten identifiziert, mit denen sie eingereicht wurden
     (Dialog-ID, Nachrichtennummer, Segmentnummer). Um diese Daten
-    nicht manuell verwalten zu müssen, werden sie in der sogenannten
+    nicht manuell verwalten zu mÃ¼ssen, werden sie in der sogenannten
     Job-ID (siehe {@link org.kapott.hbci.GV_Result.HBCIJobResultImpl#getJobId()})
     zusammengefasst. </p>
-    <p>In dieser Klasse werden die Antwortdaten für eine Statusprotokollabfrage
+    <p>In dieser Klasse werden die Antwortdaten fÃ¼r eine Statusprotokollabfrage
     gespeichert. Dabei handelt es sich in der Regel um mehr als einen
-    Protokolleintrag. Es kann der Protokolleintrag für eine gegebene Job-ID
+    Protokolleintrag. Es kann der Protokolleintrag fÃ¼r eine gegebene Job-ID
     extrahiert werden.</p> */
 public final class GVRStatus
     extends HBCIJobResultImpl
 {
-    /** Daten für einen einzelnen Eintrag im Statusprotokoll. Ein Eintrag enthält
+    /** Daten fÃ¼r einen einzelnen Eintrag im Statusprotokoll. Ein Eintrag enthÃ¤lt
         Informationen zu genau einem eingereichten Auftrag */
     public static class Entry
     {
@@ -58,7 +58,7 @@ public final class GVRStatus
         /** Status (ein HBCI-Returncode) des Auftrages */
         public HBCIRetVal retval;
         
-        /** Gibt die Job-ID des Jobs zurück, zu dem dieser Statusprotokolleintrag gehört. 
+        /** Gibt die Job-ID des Jobs zurÃ¼ck, zu dem dieser Statusprotokolleintrag gehÃ¶rt. 
             @return Job-ID */
         public String getJobId()
         {
@@ -107,18 +107,18 @@ public final class GVRStatus
         return ret.toString().trim();
     }
     
-    /** Gibt alle Einträge des Statusprotokolls in einem Array zurück.
-        @return Array mit Statusprotokolleinträgen */
+    /** Gibt alle EintrÃ¤ge des Statusprotokolls in einem Array zurÃ¼ck.
+        @return Array mit StatusprotokolleintrÃ¤gen */
     public Entry[] getStatusData()
     {
         return entries.toArray(new Entry[entries.size()]);
     }
     
-    /** Gibt den Protokoll-Eintrag zu einem bestimmten Job zurück.
-        Liefert <code>null</code>, wenn der Eintrag für die angegebene Job-ID
+    /** Gibt den Protokoll-Eintrag zu einem bestimmten Job zurÃ¼ck.
+        Liefert <code>null</code>, wenn der Eintrag fÃ¼r die angegebene Job-ID
         nicht im Statusprotokoll vorhanden ist. 
-        @param jobId die Job-ID, für die Informationen zurückgegeben werden sollen
-        @return Eintrag im Statusprotokoll, der zu dem entsprechenden Auftrag gehört;
+        @param jobId die Job-ID, fÃ¼r die Informationen zurÃ¼ckgegeben werden sollen
+        @return Eintrag im Statusprotokoll, der zu dem entsprechenden Auftrag gehÃ¶rt;
                 <code>null</code>, wenn kein solcher Auftrag gefunden wurde */
     public Entry getJobEntry(String jobId)
     {

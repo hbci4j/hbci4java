@@ -2,53 +2,53 @@
 Einleitung
 ----------
 
-HBCI4Java ist ein Java-Paket, welches es ermöglicht, aus 
-Java-Anwendungen heraus HBCI-Funktionalität zu verwenden. Die 
+HBCI4Java ist ein Java-Paket, welches es ermÃ¶glicht, aus 
+Java-Anwendungen heraus HBCI-FunktionalitÃ¤t zu verwenden. Die 
 meisten existierenden HBCI-Bibliotheken haben einige gravierende 
 Probleme/Nachteile, die mit dieser Implementation behoben werden 
 sollen. Die besonderen Eigenschaften von HBCI4Java sind im folgenden
-aufgeführt, eine bessere Übersicht befindet sich in der Datei FEATURES.
+aufgefÃ¼hrt, eine bessere Ãœbersicht befindet sich in der Datei FEATURES.
 
-* API ist sehr anwendungsbezogen. Das heißt, zur Benutzung von 
+* API ist sehr anwendungsbezogen. Das heiÃŸt, zur Benutzung von 
   HBCI4Java sind im Prinzip keine Kenntnisse im HBCI-Bereich 
-  nötig. Das API konzentriert sich auf die Beschreibung und 
-  Auswertung der Geschäftsvorfälle, die auszuführen sind. Die 
+  nÃ¶tig. Das API konzentriert sich auf die Beschreibung und 
+  Auswertung der GeschÃ¤ftsvorfÃ¤lle, die auszufÃ¼hren sind. Die 
   HBCI-spezifischen Details der Kommunikation mit einem 
-  HBCI-Server werden dabei vollständig vom HBCI-Kernel übernommen.
+  HBCI-Server werden dabei vollstÃ¤ndig vom HBCI-Kernel Ã¼bernommen.
 
-* API ist unabhängig von der benutzten HBCI-Version. Je nachdem, 
+* API ist unabhÃ¤ngig von der benutzten HBCI-Version. Je nachdem, 
   mit welcher HBCI-Version die Anwendung mit einem Kreditinstitut 
-  kommunizieren will, müssen verschiedene Besonderheiten der 
-  jeweiligen HBCI-Version berücksichtigt werden. Diese 
-  Besonderheiten werden von HBCI4Java völlig gekapselt, so dass 
+  kommunizieren will, mÃ¼ssen verschiedene Besonderheiten der 
+  jeweiligen HBCI-Version berÃ¼cksichtigt werden. Diese 
+  Besonderheiten werden von HBCI4Java vÃ¶llig gekapselt, so dass 
   der Anwendungsentwickler hier keine Unterscheidungen bzgl. der 
-  verwendeten Version machen muss (außer evtl. der Tatsache, dass 
-  einige Geschäftsvorfälle erst in neueren HBCI-Versionen existieren).
+  verwendeten Version machen muss (auÃŸer evtl. der Tatsache, dass 
+  einige GeschÃ¤ftsvorfÃ¤lle erst in neueren HBCI-Versionen existieren).
 
-* HBCI4Java ist fast vollständig in reinem Java implementiert. 
-  Daraus folgt, dass es tatsächlich auf allen Java-fähigen 
-  Plattformen zum Einsatz kommen kann. Nur ein kleiner Teil für 
+* HBCI4Java ist fast vollstÃ¤ndig in reinem Java implementiert. 
+  Daraus folgt, dass es tatsÃ¤chlich auf allen Java-fÃ¤higen 
+  Plattformen zum Einsatz kommen kann. Nur ein kleiner Teil fÃ¼r 
   die Ansteuerung des Chipkartenlesers ist in C++ implementiert. 
   Hierbei handelt es sich jedoch um sehr wenig und gut 
-  portierbaren Code, so dass die Plattformunabhängigkeit immer 
+  portierbaren Code, so dass die PlattformunabhÃ¤ngigkeit immer 
   noch als gegeben angesehen werden kann.
 
   Viele existierende HBCI-Implementationen werden ebenfalls als
   "Java-Version" beworben, dabei handelt es sich allerdings oft um 
-  in C/C++ geschriebene dynamische Bibliotheken für Windows 
-  (DLL), über die einfach ein Java-Wrapper gesetzt wird, so dass 
+  in C/C++ geschriebene dynamische Bibliotheken fÃ¼r Windows 
+  (DLL), Ã¼ber die einfach ein Java-Wrapper gesetzt wird, so dass 
   diese Implementationen trotz "Java-API" nur unter Windows laufen.
 
 * Durch die starke Trennung der einzelnen Kernkomponenten 
   voneinander (Sicherheitsmechanismen, Kommunikationspfade, 
   Nachrichtensynthese und -analyse, Abstraktion der 
-  Geschäftsvorfälle usw.) ist eine Anpassung des HBCI-Kernels 
-  sehr leicht möglich. 
+  GeschÃ¤ftsvorfÃ¤lle usw.) ist eine Anpassung des HBCI-Kernels 
+  sehr leicht mÃ¶glich. 
 
 * HBCI4Java stellt nicht nur eine Client-Bibliothek dar, sondern 
-  bietet auch die Möglichkeit, einen HBCI-Server aufzusetzen. 
-  Dazu wird ein Framework für den Server-Betrieb bereitgestellt. 
-  Ein real zu implementierender Server müsste "nur" noch 
+  bietet auch die MÃ¶glichkeit, einen HBCI-Server aufzusetzen. 
+  Dazu wird ein Framework fÃ¼r den Server-Betrieb bereitgestellt. 
+  Ein real zu implementierender Server mÃ¼sste "nur" noch 
   entsprechende Backend-Systeme bereitstellen und an 
   entsprechende Callback-Methoden des HBCI-Server-Kernels 
   andocken. 
@@ -60,7 +60,7 @@ aufgeführt, eine bessere Übersicht befindet sich in der Datei FEATURES.
 Installation von HBCI4Java
 --------------------------
 
-HBCI4Java benötigt mindestens Java Runtime Environment 1.4.2.
+HBCI4Java benÃ¶tigt mindestens Java Runtime Environment 1.4.2.
 
 Das Java-Archiv hbci4java.jar muss in den CLASSPATH aufgenommen 
 werden. Das kann entweder durch Installation im Verzeichnis 
@@ -68,8 +68,8 @@ werden. Das kann entweder durch Installation im Verzeichnis
 entsprechende Umgebungsvariable oder die Kommandozeile (Argument 
 -classpath) aufgenommen wird.
 
-Für die Verwendung eines Chipkartenterminals wird eine 
-zusätzliche Bibliothek benötigt. Für einige Plattformen werden
+FÃ¼r die Verwendung eines Chipkartenterminals wird eine 
+zusÃ¤tzliche Bibliothek benÃ¶tigt. FÃ¼r einige Plattformen werden
 die fertig kompilierten Bibliotheken bereits mitgeliefert,
 auf allen anderen Plattformen muss die Bibliohek selbst kompiliert
 werden (Quelltexte im src-Paket; Verzeichnis "chipcard/src").
@@ -77,16 +77,16 @@ werden (Quelltexte im src-Paket; Verzeichnis "chipcard/src").
 Diese Bibliothek muss in einem Verzeichnis gespeichert werden, 
 auf das HBCI4Java zur Laufzeit Zugriff hat.
 
-Außerdem wird für die Verwendung eines Chipkartenterminals eine 
-entsprechende CTAPI-Bibliothek benötigt. Diese wird i.d.R. vom 
+AuÃŸerdem wird fÃ¼r die Verwendung eines Chipkartenterminals eine 
+entsprechende CTAPI-Bibliothek benÃ¶tigt. Diese wird i.d.R. vom 
 Hersteller des Chipkartenterminal mitgeliefert. Der Name der 
 jeweiligen Bibliothek (unter Linux und Solaris eine .so-Datei, 
 unter Windows eine .DLL) muss bekannt sein, und die Bibliothek 
 muss sich ebenfalls in einem Verzeichnis befinden, welches von 
 HBCI4Java zur Laufzeit gelesen werden kann.
 
-Im folgenden werden für einige Hersteller die mir bekannten 
-CTAPI-Bibliotheksnamen unter den verschiedenen Betriebssystemen aufgeführt:
+Im folgenden werden fÃ¼r einige Hersteller die mir bekannten 
+CTAPI-Bibliotheksnamen unter den verschiedenen Betriebssystemen aufgefÃ¼hrt:
 
 +-------------+---------------------------------+-----------+--------------+
 |             |             Linux               | Solaris   |    Windows   |
@@ -100,38 +100,38 @@ CTAPI-Bibliotheksnamen unter den verschiedenen Betriebssystemen aufgeführt:
 +-------------+---------------------------------+-----------+--------------+
 
 
-Für die Verwendung von SIZ-RDH-Schlüsseldateien mit HBCI4Java muss eine 
-zusätzliche Laufzeitbibliothek installiert werden, die separat erhältlich 
+FÃ¼r die Verwendung von SIZ-RDH-SchlÃ¼sseldateien mit HBCI4Java muss eine 
+zusÃ¤tzliche Laufzeitbibliothek installiert werden, die separat erhÃ¤ltlich 
 ist. Siehe dazu die Datei README.SIZRDHFile.
 
 
 Update auf neuere HBCI4Java-Version
 -----------------------------------
 
-Nach der Installation einer neuen HBCI4Java-Version können sämtliche
+Nach der Installation einer neuen HBCI4Java-Version kÃ¶nnen sÃ¤mtliche
 alten Passport-Dateien weiterverwendet werden. 
 
 Zu beachten ist nur folgendes:
 
   * Auf keinen Fall vergessen, auch die neuen DDV-Bibliotheken aus dem
-    HBCI4Java-Archiv zu installieren (auch wenn die Dateigröße die gleiche
+    HBCI4Java-Archiv zu installieren (auch wenn die DateigrÃ¶ÃŸe die gleiche
     ist, sind die alten und neuen Dateien manchmal doch nicht identisch).
     
-    Stürzt eine HBCI-Anwendung beim Zugriff auf den Chipkartenleser hart
+    StÃ¼rzt eine HBCI-Anwendung beim Zugriff auf den Chipkartenleser hart
     ab (mit Fehlermeldungen aus dem JNI), so ist das ein typisches Anzeichen
-    für die Verwendung einer falschen DDV-Bibliothek.
+    fÃ¼r die Verwendung einer falschen DDV-Bibliothek.
     
-  * Um evtl. neu hinzugekommene bzw. besser unterstützte Geschäftsvorfälle
-    nutzen zu können, sollten alle benutzten Passport-Medien einmal mit
+  * Um evtl. neu hinzugekommene bzw. besser unterstÃ¼tzte GeschÃ¤ftsvorfÃ¤lle
+    nutzen zu kÃ¶nnen, sollten alle benutzten Passport-Medien einmal mit
     dem Tool org.kapott.hbci.tools.InitAndTest reinitialisiert werden
-    (dabei gehen keine Schlüssel o.ä. verloren, es werden hauptsächlich die
+    (dabei gehen keine SchlÃ¼ssel o.Ã¤. verloren, es werden hauptsÃ¤chlich die
     BPD neu abgeholt).
     
     Statt dessen kann eine HBCI-Anwendung das erneute Auswerten der unter-
-    stützten Geschäftsvorfälle auch erzwingen, indem die Methode
+    stÃ¼tzten GeschÃ¤ftsvorfÃ¤lle auch erzwingen, indem die Methode
     passport.clearBPD() _vor_ dem Initialiseren eines HBCIHandlers mit diesem
     Passport aufgerufen wird (Beim Initialisieren des HBCIHandlers werden
-    die BPD mit den Geschäftsvorfalldaten dann automatisch aktualisiert).
+    die BPD mit den GeschÃ¤ftsvorfalldaten dann automatisch aktualisiert).
     Also:
         ...
         HBCIPassport passport=AbstractHBCIPassport.getInstance();
@@ -143,7 +143,7 @@ Zu beachten ist nur folgendes:
 Tools
 -----
 
-Im Paket org.kapott.hbci.tools befindn sich einige Kommandozeilentools für
+Im Paket org.kapott.hbci.tools befindn sich einige Kommandozeilentools fÃ¼r
 die Arbeit mit und die Demonstration der Verwendung von HBCI4Java. Eine
 kleine Beschreibung der einzelnen Tools befindet sich in der API-Dokumentation.
 

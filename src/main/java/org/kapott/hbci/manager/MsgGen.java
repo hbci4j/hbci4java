@@ -40,20 +40,20 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /* Message-Generator-Klasse. Diese Klasse verwaltet die Syntax-Spezifikation
- * für die zu verwendende HBCI-Version. Hiermit wird das Erzeugen von
+ * fÃ¼r die zu verwendende HBCI-Version. Hiermit wird das Erzeugen von
  * HBCI-Nachrichten gekapselt.
- * Dazu wird eine Hashtable verwaltet, die die Daten enthält, die in die
- * jeweilige Nachricht aufgenommen werden sollen. Die Hashtable enthält als
+ * Dazu wird eine Hashtable verwaltet, die die Daten enthÃ¤lt, die in die
+ * jeweilige Nachricht aufgenommen werden sollen. Die Hashtable enthÃ¤lt als
  * Key den "Pfad" zum Datenelement (DialogInit.MsgHead.hbciversion), als
  * Value den einzustellenden Wert im Klartext.
  * Das Erzeugen einer Nachricht geschieht in drei Schritten:
- *   1) MsgGen.reset() -- vollständiges Leeren der Daten-Hashtable
- *   2) MsgGen.set(key,value) -- speichern eines Datums für die Nachricht
+ *   1) MsgGen.reset() -- vollstÃ¤ndiges Leeren der Daten-Hashtable
+ *   2) MsgGen.set(key,value) -- speichern eines Datums fÃ¼r die Nachricht
  *      in der Hashtable
  *   3) MsgGen.generate(msgName) -- erzeugen der Nachricht mit dem Namen
  *      <msgName>. Dabei werden auch nur die Daten aus der Hashtable
  *      verwendet, dir mit "<msgName>." beginnen (so dass in der Datenhashtable
- *      auch zusätzliche Daten gespeichert werden können, solange sie nicht
+ *      auch zusÃ¤tzliche Daten gespeichert werden kÃ¶nnen, solange sie nicht
  *      mit "<msgName>." beginnen).*/
 public final class MsgGen
 {
@@ -174,8 +174,8 @@ public final class MsgGen
         return result;
     }
     
-    /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-parameter
-     * zurück */
+    /* gibt fÃ¼r einen hbci-gv ("saldo3") die liste aller ll-job-parameter
+     * zurÃ¼ck */
     public List<String> getGVParameterNames(String specname)
     {
         int  versionPos=specname.length()-1;
@@ -190,8 +190,8 @@ public final class MsgGen
             specname.substring(versionPos+1));
     }
     
-    /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-parameter
-     * zurück */
+    /* gibt fÃ¼r einen hbci-gv ("saldo3") die liste aller ll-job-parameter
+     * zurÃ¼ck */
     public List<String> getGVParameterNames(String gvname,String version)
     {
         ArrayList<String> ret=new ArrayList<String>();
@@ -216,8 +216,8 @@ public final class MsgGen
         return ret;
     }
 
-    /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-result-parameter
-     * zurück */
+    /* gibt fÃ¼r einen hbci-gv ("saldo3") die liste aller ll-job-result-parameter
+     * zurÃ¼ck */
     public List<String> getGVResultNames(String specname)
     {
         int  versionPos=specname.length()-1;
@@ -232,8 +232,8 @@ public final class MsgGen
             specname.substring(versionPos+1));
     }
     
-    /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-result-parameter
-     * zurück */
+    /* gibt fÃ¼r einen hbci-gv ("saldo3") die liste aller ll-job-result-parameter
+     * zurÃ¼ck */
     public List<String> getGVResultNames(String gvname,String version)
     {
         ArrayList<String> ret=new ArrayList<String>();
@@ -260,8 +260,8 @@ public final class MsgGen
         return ret;
     }
 
-    /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-restriction-
-     * parameter zurück */
+    /* gibt fÃ¼r einen hbci-gv ("saldo3") die liste aller ll-job-restriction-
+     * parameter zurÃ¼ck */
     public List<String> getGVRestrictionNames(String specname)
     {
         int  versionPos=specname.length()-1;
@@ -276,8 +276,8 @@ public final class MsgGen
             specname.substring(versionPos+1));
     }
     
-    /* gibt für einen hbci-gv ("saldo3") die liste aller ll-job-restriction-
-     * parameter zurück */
+    /* gibt fÃ¼r einen hbci-gv ("saldo3") die liste aller ll-job-restriction-
+     * parameter zurÃ¼ck */
     public List<String> getGVRestrictionNames(String gvname,String version)
     {
         ArrayList<String> ret=new ArrayList<String>();
@@ -297,7 +297,7 @@ public final class MsgGen
                 if (contentref.getNodeType()==Node.ELEMENT_NODE) {
                     String type=((Element)contentref).getAttribute("type");
                     if (type.startsWith("Par")) {
-                        // wenn ein DEG type="ParTermUeb" gefunden ist, können
+                        // wenn ein DEG type="ParTermUeb" gefunden ist, kÃ¶nnen
                         // alle umgebenenden schleifenvariablen wiederverwendet
                         // werden, weil es nur *ein* solches element geben kann
                         // und die umgebende schleife demzufolge abgebrochen werden
@@ -309,7 +309,7 @@ public final class MsgGen
                         len=gvcontent.getLength();
                         
                         // darin alle elemente durchlaufen und deren namen
-                        // zur ergebnisliste hinzufügen
+                        // zur ergebnisliste hinzufÃ¼gen
                         for (i=0;i<len;i++) {
                             contentref=gvcontent.item(i);
 

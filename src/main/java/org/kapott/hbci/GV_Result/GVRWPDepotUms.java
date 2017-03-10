@@ -29,11 +29,11 @@ import org.kapott.hbci.structures.BigDecimalValue;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.TypedValue;
 
-/** Ergebnisdaten für die Abfrage von Depotumsätzen
-    Diese Klasse enthält für jedes Depot ein separates
-    Datenobjekt. Innerhalb eines Depots werden für jede
+/** Ergebnisdaten fÃ¼r die Abfrage von DepotumsÃ¤tzen
+    Diese Klasse enthÃ¤lt fÃ¼r jedes Depot ein separates
+    Datenobjekt. Innerhalb eines Depots werden fÃ¼r jede
     in diesem Depot vorhandene Wertpapiergattung separate
-    Datenobjekte gehalten. Für jede Wertpapiergattung wiederum
+    Datenobjekte gehalten. FÃ¼r jede Wertpapiergattung wiederum
     gibt es u.U. mehrere Objekte, die Umsatzinformationen
     enthalten. */
 public final class GVRWPDepotUms
@@ -46,7 +46,7 @@ extends HBCIJobResultImpl
         public  Date      timestamp;
         /** Depotkonto, auf das sich der Eintrag bezieht. */
         public  Konto     depot;
-        /** Liste der Wertpapiere mit Umsätzen */
+        /** Liste der Wertpapiere mit UmsÃ¤tzen */
         public final List<FinancialInstrument> instruments = new ArrayList<FinancialInstrument>();
         
         public static class FinancialInstrument {
@@ -67,7 +67,7 @@ extends HBCIJobResultImpl
             /** Preisdatum */
             public Date preisdatum;
             
-            /** Liste der Transaktionen/Umsätze **/
+            /** Liste der Transaktionen/UmsÃ¤tze **/
             public final List<Transaction> transactions = new ArrayList<Transaction>();
             
             public static class Transaction {
@@ -100,7 +100,7 @@ extends HBCIJobResultImpl
                 public BigDecimalValue betrag;
                 /** Betrag der Stueckzinsen **/
                 public BigDecimalValue stueckzinsen;
-                /** Anzahl der aufgelaufenen Tage für Stückzinsen */
+                /** Anzahl der aufgelaufenen Tage fÃ¼r StÃ¼ckzinsen */
                 public int stueckzins_tage;
                 
                 /** Art der Transaktion (siehe Konstanten INDICATOR*) */
@@ -232,10 +232,10 @@ extends HBCIJobResultImpl
     }
 
     private List<Entry> entries;
-    /** Dieses Feld enthält einen String, der den nicht-auswertbaren Teil der gelieferten Informationen
-        enthält. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
+    /** Dieses Feld enthÃ¤lt einen String, der den nicht-auswertbaren Teil der gelieferten Informationen
+        enthÃ¤lt. Es dient nur zu Debugging-Zwecken und sollte eigentlich immer <code>null</code>
         bzw. einen leeren String enthalten. Wenn das nicht der Fall ist, dann konnten die 
-        empfangenen Daten nicht richtig geparst werden, und dieser String enthält den
+        empfangenen Daten nicht richtig geparst werden, und dieser String enthÃ¤lt den
         "Schwanz" der Daten, bei dem das Parsing-Problem aufgetreten ist.*/
     public String rest;
 
@@ -249,8 +249,8 @@ extends HBCIJobResultImpl
         entries.add(ums);
     }
 
-    /** Gibt ein Array mit Depotdaten zurück, wobei jeder Eintrag
-        Informationen zu genau einem Depot enthält.
+    /** Gibt ein Array mit Depotdaten zurÃ¼ck, wobei jeder Eintrag
+        Informationen zu genau einem Depot enthÃ¤lt.
         @return Array mit Depotinformationen */
     public Entry[] getEntries()
     {

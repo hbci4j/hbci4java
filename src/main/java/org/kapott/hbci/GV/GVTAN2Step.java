@@ -120,8 +120,8 @@ public class GVTAN2Step
         HBCIUtils.log("found HKTAN response with segcode "+segcode,HBCIUtils.LOG_DEBUG);
         
         if (origTask!=null && new StringBuffer(origTask.getHBCICode()).replace(1,2,"I").toString().equals(segcode)) {
-            // das ist für PV#2, wenn nach dem nachträglichen versenden der TAN das
-            // antwortsegment des jobs aus der vorherigen Nachricht zurückommt
+            // das ist fÃ¼r PV#2, wenn nach dem nachtrÃ¤glichen versenden der TAN das
+            // antwortsegment des jobs aus der vorherigen Nachricht zurÃ¼ckommt
             HBCIUtils.log("this is a response segment for the original task - storing results in the original job",HBCIUtils.LOG_DEBUG);
             origTask.extractResults(msgstatus,header,idx);
         } else {
@@ -130,19 +130,19 @@ public class GVTAN2Step
             String challenge=result.getProperty(header+".challenge");
             if (challenge!=null) {
                 HBCIUtils.log("found challenge '"+challenge+"' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
-                // das ist für PV#1 (die antwort auf das einreichen des auftrags-hashs) oder 
-                // für PV#2 (die antwort auf das einreichen des auftrages)
-                // in jedem fall muss mit der nächsten nachricht die TAN übertragen werden
+                // das ist fÃ¼r PV#1 (die antwort auf das einreichen des auftrags-hashs) oder 
+                // fÃ¼r PV#2 (die antwort auf das einreichen des auftrages)
+                // in jedem fall muss mit der nÃ¤chsten nachricht die TAN Ã¼bertragen werden
                 getMainPassport().setPersistentData("pintan_challenge",challenge);
 
                 // External-ID des originalen Jobs durchreichen
                 getMainPassport().setPersistentData("externalid",this.getExternalId());
 
-                // TODO: es muss hier evtl. noch überprüft werden, ob
-                // der zurückgegebene auftragshashwert mit dem ursprünglich versandten
-                // übereinstimmt
-                // für pv#1 gilt: hitan_orderhash == sent_orderhash (from previous hktan)
-                // für pv#2 gilt: hitan_orderhash == orderhash(gv from previous GV segment)
+                // TODO: es muss hier evtl. noch Ã¼berprÃ¼ft werden, ob
+                // der zurÃ¼ckgegebene auftragshashwert mit dem ursprÃ¼nglich versandten
+                // Ã¼bereinstimmt
+                // fÃ¼r pv#1 gilt: hitan_orderhash == sent_orderhash (from previous hktan)
+                // fÃ¼r pv#2 gilt: hitan_orderhash == orderhash(gv from previous GV segment)
                 
                 // TODO: hier noch die optionale DEG ChallengeValidity bereitstellen
             }
@@ -157,13 +157,13 @@ public class GVTAN2Step
             
             String orderref=result.getProperty(header+".orderref");
             if (orderref!=null) {
-                // orderref ist nur für PV#2 relevant
+                // orderref ist nur fÃ¼r PV#2 relevant
                 HBCIUtils.log("found orderref '"+orderref+"' in HITAN",HBCIUtils.LOG_DEBUG);
                 if (otherTAN2StepTask!=null) {
                     // hier sind wir ganz sicher in PV#2. das hier ist die antwort auf das
                     // erste HKTAN (welches mit dem eigentlichen auftrag verschickt wird)
                     // die orderref muss im zweiten HKTAN-job gespeichert werden, weil in
-                    // dieser zweiten nachricht dann die TAN mit übertragen werden muss
+                    // dieser zweiten nachricht dann die TAN mit Ã¼bertragen werden muss
                     HBCIUtils.log("storing it in following HKTAN task",HBCIUtils.LOG_DEBUG);
                     otherTAN2StepTask.setParam("orderref",orderref);
                 } else {

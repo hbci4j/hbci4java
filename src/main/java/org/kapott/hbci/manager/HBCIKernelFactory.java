@@ -23,13 +23,13 @@ package org.kapott.hbci.manager;
 
 import org.kapott.hbci.passport.HBCIPassport;
 
-/** Factory-Klasse für das Erzeugen von HBCI-Kernel-Objekten */
+/** Factory-Klasse fÃ¼r das Erzeugen von HBCI-Kernel-Objekten */
 public class HBCIKernelFactory
 {
     /** Neues HBCI-Kernel-Objekt erzeugen.
      * @param hbciversion 
      * {@link HBCIHandler#HBCIHandler(String,HBCIPassport) HBCI-Versionsnummer},
-     * für die ein Kernel-Objekt erzeugt werden soll */
+     * fÃ¼r die ein Kernel-Objekt erzeugt werden soll */
     public static HBCIKernel getKernel(IHandlerData parentHandlerData,String hbciversion) 
     {
         return new HBCIKernelImpl(parentHandlerData,hbciversion);

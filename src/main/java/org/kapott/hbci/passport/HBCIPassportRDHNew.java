@@ -60,39 +60,39 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/** <p>Passport-Klasse für RDH-Zugänge mit Sicherheitsmedium "Datei". Bei dieser Variante
-    werden sowohl die HBCI-Zugangsdaten wie auch die kryptografischen Schlüssel für
-    die Signierung/Verschlüsselung der HBCI-Nachrichten in einer Datei gespeichert.
+/** <p>Passport-Klasse fÃ¼r RDH-ZugÃ¤nge mit Sicherheitsmedium "Datei". Bei dieser Variante
+    werden sowohl die HBCI-Zugangsdaten wie auch die kryptografischen SchlÃ¼ssel fÃ¼r
+    die Signierung/VerschlÃ¼sselung der HBCI-Nachrichten in einer Datei gespeichert.
     Der Dateiname kann dabei beliebig vorgegeben werden. Da diese Datei vertrauliche
-    Informationen enthält, wird der Inhalt verschlüsselt abgespeichert.
+    Informationen enthÃ¤lt, wird der Inhalt verschlÃ¼sselt abgespeichert.
     Vor dem Erzeugen bzw. Einlesen wird via Callback-Mechanismus nach einem Passwort
-    gefragt, aus dem der Schlüssel zur Verschlüsselung/Entschlüsselung der Schlüsseldatei
+    gefragt, aus dem der SchlÃ¼ssel zur VerschlÃ¼sselung/EntschlÃ¼sselung der SchlÃ¼sseldatei
     berechnet wird.</p><p>
     Wie auch bei {@link org.kapott.hbci.passport.HBCIPassportDDV} werden in
-    der Schlüsseldatei zusätzliche Informationen gespeichert. Dazu gehören u.a. die BPD
+    der SchlÃ¼sseldatei zusÃ¤tzliche Informationen gespeichert. Dazu gehÃ¶ren u.a. die BPD
     und die UPD sowie die HBCI-Version, die zuletzt mit diesem Passport benutzt wurde.
-    Im Gegensatz zu den "Hilfsdateien" bei DDV-Passports darf die Schlüsseldatei bei
-    RDH-Passports aber niemals manuell gelöscht werden, da dabei auch die kryptografischen
-    Schlüssel des Kunden verlorengehen. Diese können nicht wieder hergestellt werden, so
-    dass in einem solchen Fall ein manuelles Zurücksetzes des HBCI-Zuganges bei der Bank
+    Im Gegensatz zu den "Hilfsdateien" bei DDV-Passports darf die SchlÃ¼sseldatei bei
+    RDH-Passports aber niemals manuell gelÃ¶scht werden, da dabei auch die kryptografischen
+    SchlÃ¼ssel des Kunden verlorengehen. Diese kÃ¶nnen nicht wieder hergestellt werden, so
+    dass in einem solchen Fall ein manuelles ZurÃ¼cksetzes des HBCI-Zuganges bei der Bank
     erfolgen muss!</p>
-    <p>Die Schlüsseldateien, die <em>HBCI4Java</em> mit dieser Klasse erzeugt und verwaltet, sind
-    <b>nicht kompatibel</b> zu den Schlüsseldateien anderer HBCI-Software (z.B. VR-NetWorld
-    o.ä.). Es ist also nicht möglich, durch Auswahl des Sicherheitsverfahrens "RDH" oder "RDHNew" und
-    Angabe einer schon existierenden Schlüsseldatei, die mit einer anderen HBCI-Software
-    erstellt wurde, diese Schlüsseldatei unter <em>HBCI4Java</em> zu benutzen! Es ist jedoch im
-    Prinzip möglich, mit der "anderen" Software die Kundenschlüssel sperren zu lassen und
-    anschließend mit <em>HBCI4Java</em> eine völlig neue Schlüsseldatei zu erzeugen. Das hat aber zwei
-    Nachteile: Zum einen muss nach dem Neuerzeugen der Schlüsseldatei auch ein neuer
-    INI-Brief erzeugt und an die Bank gesandt werden, um die neuen Schlüssel freischalten
-    zu lassen. Außerdem lässt sich natürlich die <em>HBCI4Java</em>-Schlüsseldatei nicht mehr
-    in der "anderen" HBCI-Software benutzen. Ein Parallel-Betrieb verschiedener HBCI-Softwarelösungen,
+    <p>Die SchlÃ¼sseldateien, die <em>HBCI4Java</em> mit dieser Klasse erzeugt und verwaltet, sind
+    <b>nicht kompatibel</b> zu den SchlÃ¼sseldateien anderer HBCI-Software (z.B. VR-NetWorld
+    o.Ã¤.). Es ist also nicht mÃ¶glich, durch Auswahl des Sicherheitsverfahrens "RDH" oder "RDHNew" und
+    Angabe einer schon existierenden SchlÃ¼sseldatei, die mit einer anderen HBCI-Software
+    erstellt wurde, diese SchlÃ¼sseldatei unter <em>HBCI4Java</em> zu benutzen! Es ist jedoch im
+    Prinzip mÃ¶glich, mit der "anderen" Software die KundenschlÃ¼ssel sperren zu lassen und
+    anschlieÃŸend mit <em>HBCI4Java</em> eine vÃ¶llig neue SchlÃ¼sseldatei zu erzeugen. Das hat aber zwei
+    Nachteile: Zum einen muss nach dem Neuerzeugen der SchlÃ¼sseldatei auch ein neuer
+    INI-Brief erzeugt und an die Bank gesandt werden, um die neuen SchlÃ¼ssel freischalten
+    zu lassen. AuÃŸerdem lÃ¤sst sich natÃ¼rlich die <em>HBCI4Java</em>-SchlÃ¼sseldatei nicht mehr
+    in der "anderen" HBCI-Software benutzen. Ein Parallel-Betrieb verschiedener HBCI-SoftwarelÃ¶sungen,
     die alle auf dem RDH-Verfahren mit Sicherheitsmedium "Datei" (oder Diskette) basieren,
-    ist meines Wissens nicht möglich.</p>
-    <p>Ein weiterer Ausweg aus diesem Problem wäre, eine technische Beschreibung des
-    Formates der Schlüsseldateien der "anderen" HBCI-Software zu besorgen und diese
+    ist meines Wissens nicht mÃ¶glich.</p>
+    <p>Ein weiterer Ausweg aus diesem Problem wÃ¤re, eine technische Beschreibung des
+    Formates der SchlÃ¼sseldateien der "anderen" HBCI-Software zu besorgen und diese
     dem <a href="mailto:hbci4java@kapott.org">Autor</a> zukommen zu lassen, damit eine Passport-Variante
-    implementiert werden kann, die mit Schlüsseldateien dieser "anderen" Software arbeiten kann.</p>
+    implementiert werden kann, die mit SchlÃ¼sseldateien dieser "anderen" Software arbeiten kann.</p>
     @see org.kapott.hbci.tools.INILetter INILetter */
 public class HBCIPassportRDHNew 
     extends AbstractRDHSWFileBasedPassport
@@ -517,15 +517,15 @@ public class HBCIPassportRDHNew
 
             // das kann entweder daran liegen, dass es sich um ein "altes"
             // rdhnew-file handelte (in diesem fall ist die nummer "1"),
-            // oder weil noch gar keine schlüssel im file gespeichert sind
+            // oder weil noch gar keine schlÃ¼ssel im file gespeichert sind
             // und damit auch kein profil feststeht - in diesem fall verwenden
-            // wir die höchste profil-nummer aus den BPD
+            // wir die hÃ¶chste profil-nummer aus den BPD
 
             if (hasMySigKey()) {
                 HBCIUtils.log("found user sig key in passport file, but no profile version, "+
                         "so I guess it is an old RDHnew file, which always stored RDH-1 keys",
                         HBCIUtils.LOG_DEBUG);
-                // es gibt Schlüssel, aber keine profilVersion, also haben wir
+                // es gibt SchlÃ¼ssel, aber keine profilVersion, also haben wir
                 // gerade ein altes file gelesen, in dem diese Info noch nicht
                 // drinstand
                 ret="1";
@@ -533,8 +533,8 @@ public class HBCIPassportRDHNew
                 HBCIUtils.log("no user keys found in passport - so we use the highest available profile",
                         HBCIUtils.LOG_DEBUG);
 
-                // es gibt noch gar keine schlüssel - also nehmen wir die
-                // höchste unterstützte profil-nummer
+                // es gibt noch gar keine schlÃ¼ssel - also nehmen wir die
+                // hÃ¶chste unterstÃ¼tzte profil-nummer
 
                 String[][] methods=getSuppSecMethods();
                 int        maxVersion=0;
@@ -546,7 +546,7 @@ public class HBCIPassportRDHNew
                             (version==1 || version==2 || version==10)) 
                     {
                         // es werden nur RDH-1, RDH-2 und RDH-10 betrachtet, weil
-                        // alle anderen rdh-profile nicht für software-lösungen
+                        // alle anderen rdh-profile nicht fÃ¼r software-lÃ¶sungen
                         // zugelassen sind
                         if (version>maxVersion) {
                             maxVersion=version;

@@ -27,11 +27,11 @@ import java.util.List;
 
 import org.kapott.hbci.manager.HBCIUtils;
 
-/** <p>Menge zusammengehöriger Status-Informationen. In Objekten dieser
+/** <p>Menge zusammengehÃ¶riger Status-Informationen. In Objekten dieser
     Klasse kann eine Menge von HBCI-Statuscodes sowie eine Menge von
     Exceptions gespeichert werden. Der Sinn dieser Klasse ist die
     Zusammenfassung von mehreren Status-Informationen, die logisch
-    zusammengehören (z.B. alle Status-Informationen, die ein bestimmtes
+    zusammengehÃ¶ren (z.B. alle Status-Informationen, die ein bestimmtes
     Nachrichtensegment betreffen).
     </p><p>
     Objekte dieser Klasse werden beispielsweise in 
@@ -40,12 +40,12 @@ import org.kapott.hbci.manager.HBCIUtils;
     zu sammeln. </p>*/
 public final class HBCIStatus
 {
-    /** Statuscode für "alle Statusinformationen besagen OK" */
+    /** Statuscode fÃ¼r "alle Statusinformationen besagen OK" */
     public static final int STATUS_OK=0;
-    /** Statuscode für "Gesamtstatus kann nicht ermittelt werden". (z.B. weil
+    /** Statuscode fÃ¼r "Gesamtstatus kann nicht ermittelt werden". (z.B. weil
         gar keine Informationen in diesem Objekt enthalten sind) */
     public static final int STATUS_UNKNOWN=1;
-    /** Statuscode für "es ist mindestens ein Fehlercode enthalten" */
+    /** Statuscode fÃ¼r "es ist mindestens ein Fehlercode enthalten" */
     public static final int STATUS_ERR=2;
     
     private List<HBCIRetVal> retVals;
@@ -73,7 +73,7 @@ public final class HBCIStatus
         }
     }
 
-    /** Gibt zurück, ob in diesem Status-Objekt Exceptions gespeichert sind
+    /** Gibt zurÃ¼ck, ob in diesem Status-Objekt Exceptions gespeichert sind
         @return <code>true</code>, falls Exceptions gespeichert sind,
                 sonst <code>false</code>*/
     public boolean hasExceptions()
@@ -96,7 +96,7 @@ public final class HBCIStatus
         return ret;
     }
     
-    /** Gibt zurück, ob in den Rückgabedaten in diesem Objekt Fehlermeldungen
+    /** Gibt zurÃ¼ck, ob in den RÃ¼ckgabedaten in diesem Objekt Fehlermeldungen
         enthalten sind
         @return <code>true</code>, falls Fehlermeldungen vorhanden sind,
                 sonst <code>false</code>*/
@@ -105,7 +105,7 @@ public final class HBCIStatus
         return hasX('9');
     }
     
-    /** Gibt zurück, ob in den Rückgabedaten in diesem Objekt Warnungen
+    /** Gibt zurÃ¼ck, ob in den RÃ¼ckgabedaten in diesem Objekt Warnungen
         enthalten sind
         @return <code>true</code>, falls Warnungen vorhanden sind,
                 sonst <code>false</code>*/
@@ -114,7 +114,7 @@ public final class HBCIStatus
         return hasX('3');
     }
     
-    /** Gibt zurück, ob in den Rückgabedaten in diesem Objekt Erfolgsmeldungen
+    /** Gibt zurÃ¼ck, ob in den RÃ¼ckgabedaten in diesem Objekt Erfolgsmeldungen
         enthalten sind
         @return <code>true</code>, falls Erfolgsmeldungen vorhanden sind,
                 sonst <code>false</code>*/
@@ -143,57 +143,57 @@ public final class HBCIStatus
         return ret;
     }
     
-    /** Gibt die in diesem Status-Objekt gespeicherten Exceptions zurück
-        @return Array mit Exceptions, die während der HBCI-Kommunikation
+    /** Gibt die in diesem Status-Objekt gespeicherten Exceptions zurÃ¼ck
+        @return Array mit Exceptions, die wÃ¤hrend der HBCI-Kommunikation
         aufgetreten sind. */
     public Exception[] getExceptions()
     {
         return exceptions.toArray(new Exception[exceptions.size()]);
     }
     
-    /** Gibt alle in diesem Status-Objekt gespeicherten Rückgabewerte zurück
-     @return Array mit <code>HBCIRetVal</code>s, die während der HBCI-Kommunikation
+    /** Gibt alle in diesem Status-Objekt gespeicherten RÃ¼ckgabewerte zurÃ¼ck
+     @return Array mit <code>HBCIRetVal</code>s, die wÃ¤hrend der HBCI-Kommunikation
      aufgetreten sind. */
     public HBCIRetVal[] getRetVals()
     {
         return retVals.toArray(new HBCIRetVal[retVals.size()]);
     }
     
-    /** Gibt die in diesem Objekt gespeicherten Fehlermeldungen zurück
+    /** Gibt die in diesem Objekt gespeicherten Fehlermeldungen zurÃ¼ck
         @return Array mit HBCI-Returncodes, die allesamt Fehlermeldungen beschreiben */
     public HBCIRetVal[] getErrors()
     {
         return getX('9');
     }
 
-    /** Gibt die in diesem Objekt gespeicherten Warnungen zurück
+    /** Gibt die in diesem Objekt gespeicherten Warnungen zurÃ¼ck
         @return Array mit HBCI-Returncodes, die allesamt Warnmeldungen beschreiben */
     public HBCIRetVal[] getWarnings()
     {
         return getX('3');
     }
 
-    /** Gibt die in diesem Objekt gespeicherten Erfolgsmeldungen zurück
+    /** Gibt die in diesem Objekt gespeicherten Erfolgsmeldungen zurÃ¼ck
         @return Array mit HBCI-Returncodes, die allesamt Erfolgsmeldungen beschreiben */
     public HBCIRetVal[] getSuccess()
     {
         return getX('0');
     }
 
-    /** Gibt einen Code zurück, der den zusammengefassten Status aller in diesem
-        Objekt gespeicherten Rückgabewerte beschreibt. Dafür gibt es folgende
-        Möglichkeiten:
+    /** Gibt einen Code zurÃ¼ck, der den zusammengefassten Status aller in diesem
+        Objekt gespeicherten RÃ¼ckgabewerte beschreibt. DafÃ¼r gibt es folgende
+        MÃ¶glichkeiten:
         <ul>
-          <li><code>STATUS_OK</code> wird zurückgegeben, wenn es keine Fehlermeldungen
+          <li><code>STATUS_OK</code> wird zurÃ¼ckgegeben, wenn es keine Fehlermeldungen
               oder Exceptions gegeben hat und mindestens eine Erfolgsmeldung oder
               Warnung enthalten ist</li>
-         <li><code>STATUS_ERR</code> wird zurückgegeben, wenn wenigstens eine
+         <li><code>STATUS_ERR</code> wird zurÃ¼ckgegeben, wenn wenigstens eine
              Exception aufgetreten ist oder wenigstens eine Fehlermeldung enthalten
              ist.</li>
-         <li><code>STATUS_UNKNOWN</code> wird zurückgegeben, wenn keine der beiden
+         <li><code>STATUS_UNKNOWN</code> wird zurÃ¼ckgegeben, wenn keine der beiden
              o.g. Bedingungen zutrifft.</li>
         </ul> 
-        @return einen Code, der den zusammengefassten Status aller Rückgabewerte
+        @return einen Code, der den zusammengefassten Status aller RÃ¼ckgabewerte
                 beschreibt. */
     public int getStatusCode()
     {
@@ -215,7 +215,7 @@ public final class HBCIStatus
         return code;
     }
     
-    /** Gibt <code>true</code> zurück, wenn keine Fehlermeldungen bzw. Exceptions
+    /** Gibt <code>true</code> zurÃ¼ck, wenn keine Fehlermeldungen bzw. Exceptions
      * aufgetreten sind und wenigstens eine Successmeldung oder Warnung enthalten
      * ist */
     public boolean isOK() 
@@ -223,8 +223,8 @@ public final class HBCIStatus
         return getStatusCode()==STATUS_OK;
     }
     
-    /** Gibt einen String zurück, der alle Fehlermeldungen der hier enthaltenen
-        Rückgabewerte im Klartext enthält. Für evtl. enthaltene Exception wird
+    /** Gibt einen String zurÃ¼ck, der alle Fehlermeldungen der hier enthaltenen
+        RÃ¼ckgabewerte im Klartext enthÃ¤lt. FÃ¼r evtl. enthaltene Exception wird
         die entsprechende Beschreibung in Kurz (siehe
         {@link org.kapott.hbci.manager.HBCIUtils#exception2StringShort(Exception)})
         benutzt.
@@ -253,7 +253,7 @@ public final class HBCIStatus
     }
     
     /** Gibt die Status-Informationen aller enthaltenen Exceptions und
-        HBCI-Rückgabewerte als ein String zurück.
+        HBCI-RÃ¼ckgabewerte als ein String zurÃ¼ck.
         @return String mit allen gespeicherten Status-Informationen */
     public String toString()
     {

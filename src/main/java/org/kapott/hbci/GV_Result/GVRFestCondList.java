@@ -30,13 +30,13 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.structures.Value;
 
-/** Rückgabedaten für die Abfrage von Festgeld-Konditionen. Es wird eine Liste
-    mit empfangenen Konditionen bereitgestellt. Für jeden Datensatz 
+/** RÃ¼ckgabedaten fÃ¼r die Abfrage von Festgeld-Konditionen. Es wird eine Liste
+    mit empfangenen Konditionen bereitgestellt. FÃ¼r jeden Datensatz 
     wird ein separates Objekt mit den entsprechenden Informationen bereitgestellt. */
 public final class GVRFestCondList
     extends HBCIJobResultImpl
 {
-    /** Informationen über eine mögliche Kondition für Festgeldanlagen */
+    /** Informationen Ã¼ber eine mÃ¶gliche Kondition fÃ¼r Festgeldanlagen */
     public static final class Cond
     {
         /** Zinsmethode - Berechnung mit Monat je 30 und Jahr je 360 Tage */   
@@ -56,17 +56,17 @@ public final class GVRFestCondList
         public Date   anlagedatum;
         /** Ende der Laufzeit der Anlage */
         public Date   ablaufdatum;
-        /** Zinssatz für die Anlage mal 1000 */
+        /** Zinssatz fÃ¼r die Anlage mal 1000 */
         public long   zinssatz;
         /** Zinsmethode zur Berechnung des Zinsbetrages */
         public int    zinsmethode;
         /** Mindestanlagebetrag */
         public Value  minbetrag;
-        /** Höchstanlagebetrag (optional) */
+        /** HÃ¶chstanlagebetrag (optional) */
         public Value  maxbetrag;
-        /** Identifikations-String für diese Kondition (optional) */
+        /** Identifikations-String fÃ¼r diese Kondition (optional) */
         public String id;
-        /** Beschreibender Name für diese Kondition (optional) */
+        /** Beschreibender Name fÃ¼r diese Kondition (optional) */
         public String name;
         /** Versionsnummer dieser Kondition (optional) */
         public String version;
@@ -128,7 +128,7 @@ public final class GVRFestCondList
         entries.add(entry);
     }
     
-    /** Gibt alle gefundenen Festgeldkonditionen als Array zurück
+    /** Gibt alle gefundenen Festgeldkonditionen als Array zurÃ¼ck
         @return Array mit Festgeldkonditionen */
     public Cond[] getEntries()
     {

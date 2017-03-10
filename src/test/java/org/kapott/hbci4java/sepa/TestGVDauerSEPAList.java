@@ -61,7 +61,7 @@ public class TestGVDauerSEPAList extends AbstractTest {
         int source_acc_idx = Integer.parseInt(params.getProperty("source_account_idx"));
         job.setParam("src",passport.getAccounts()[source_acc_idx]);
         
-        System.out.println("---------Für Job zur Queue");
+        System.out.println("---------FÃ¼r Job zur Queue");
         job.addToQueue();
 
         

@@ -33,11 +33,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-/** Dieses Tool ist nur für die interne Verwendung für die Entwicklung von
+/** Dieses Tool ist nur fÃ¼r die interne Verwendung fÃ¼r die Entwicklung von
  * HBCI4Java gedacht.
  * Die XML-Dateien mit den HBCI-Syntax-Beschreibungen werden zum Teil automatisch
- * erzeugt. Mit diesem Tool können die dafür benötigten Templates auf Konsistenz
- * geprüft werden. */
+ * erzeugt. Mit diesem Tool kÃ¶nnen die dafÃ¼r benÃ¶tigten Templates auf Konsistenz
+ * geprÃ¼ft werden. */
 public class ValidateXMLGVTemplate 
 {
     private static void validateRefs(Element sfelem, List<String> deflist)

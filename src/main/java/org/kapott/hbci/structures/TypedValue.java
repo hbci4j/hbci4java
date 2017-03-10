@@ -29,7 +29,7 @@ public class TypedValue extends BigDecimalValue {
         String sType;
         switch (type) {
         case TYPE_STCK:
-            sType = "Stück";
+            sType = "StÃ¼ck";
             break;
         case TYPE_PROZENT:
             sType = "%";

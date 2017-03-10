@@ -52,14 +52,14 @@ public final class HBCIUser
         this.kernel=kernel;
         if (forceAsParent || this.kernel.getParentHandlerData()==null) {
             // Dieser Fall tritt im HBCI4Java-PE ein, wenn ein HBCIInstitute()
-            // erzeugt wird, ohne dass es einen HBCIHandler() gäbe
+            // erzeugt wird, ohne dass es einen HBCIHandler() gÃ¤be
             this.kernel.setParentHandlerData(this);
         }
         
         this.passport=passport;
         if (forceAsParent || this.passport.getParentHandlerData()==null) {
             // Dieser Fall tritt im HBCI4Java-PE ein, wenn ein HBCIInstitute()
-            // erzeugt wird, ohne dass es einen HBCIHandler() gäbe
+            // erzeugt wird, ohne dass es einen HBCIHandler() gÃ¤be
             this.passport.setParentHandlerData(this);
         }
 
@@ -91,7 +91,7 @@ public final class HBCIUser
         }
     }
 
-    // TODO: dig keys unterstützen
+    // TODO: dig keys unterstÃ¼tzen
     private void sendAndActivateNewUserKeys(HBCIKey[] sigKey,HBCIKey[] encKey)
     {
         try {
@@ -260,7 +260,7 @@ public final class HBCIUser
                 passport.saveChanges();
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_DIALOG_INIT_DONE,new Object[] {ret,result.getProperty("MsgHead.dialogid")});
 
-                // neue Schlüssel senden
+                // neue SchlÃ¼ssel senden
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_SEND_KEYS,null);
                 kernel.rawNewMsg("ChangeKeys");
                 kernel.rawSet("MsgHead.dialogid",result.getProperty("MsgHead.dialogid"));
@@ -310,9 +310,9 @@ public final class HBCIUser
                     // gesichert werden, damit spaeter ueberprueft werden
                     // kann, welcher der beiden denn nun beim server
                     // gespeichert ist. das ist dann kritisch, wenn eine
-                    // eingereichte schlüsseländerung vom server nicht
-                    // ausgeführt wird: dann tritt hier eine exception auf,
-                    // aber es sind noch die alten schlüssel aktiv
+                    // eingereichte schlÃ¼sselÃ¤nderung vom server nicht
+                    // ausgefÃ¼hrt wird: dann tritt hier eine exception auf,
+                    // aber es sind noch die alten schlÃ¼ssel aktiv
                     if (!ret.hasExceptions()) {
                         HBCIUtils.log("deleting locally generated user keys",HBCIUtils.LOG_WARN);
                         passport.setMyPublicEncKey(oldEncKeys[0]);
@@ -345,7 +345,7 @@ public final class HBCIUser
     
     private void triggerNewKeysEvent()
     {
-        // TODO: hier überprüfen, ob tatsächlich ein INI-brief benötigt wird
+        // TODO: hier Ã¼berprÃ¼fen, ob tatsÃ¤chlich ein INI-brief benÃ¶tigt wird
         HBCIUtilsInternal.getCallback().callback(passport,
                                          HBCICallback.HAVE_NEW_MY_KEYS,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_USER_KEYS"),

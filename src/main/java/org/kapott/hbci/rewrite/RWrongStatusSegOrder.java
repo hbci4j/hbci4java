@@ -29,7 +29,7 @@ import java.util.Properties;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.MsgGen;
 
-// dieser Rewriter muss *VOR* "WrongSequenceNumbers" ausgeführt werden,
+// dieser Rewriter muss *VOR* "WrongSequenceNumbers" ausgefÃ¼hrt werden,
 // weil hierbei u.U. die Segment-Sequenz-Nummern durcheinandergebracht werden
 public class RWrongStatusSegOrder 
     extends Rewrite
@@ -88,7 +88,7 @@ public class RWrongStatusSegOrder
             String     segmentCode=segmentInfo.getProperty("code");
             
             if (segmentCode.equals("HNHBK") || segmentCode.equals("HNSHK")) {
-                // HNHBK und HNSHK gehören in den header-bereich
+                // HNHBK und HNSHK gehÃ¶ren in den header-bereich
                 headerList.add(segmentInfo);
                 
                 if (!inHeader) {
@@ -161,7 +161,7 @@ public class RWrongStatusSegOrder
             
             HBCIUtils.log("RWrongStatusSegOrder: new message after reordering: "+new_msg,HBCIUtils.LOG_DEBUG2);
         } else {
-            // kein fehler aufgetreten, also originale nachricht unverändert zurückgeben
+            // kein fehler aufgetreten, also originale nachricht unverÃ¤ndert zurÃ¼ckgeben
             new_msg.append(st);
         }
         
@@ -185,7 +185,7 @@ public class RWrongStatusSegOrder
             // muss einfach der Rewriter "WrongSequenceNumbers" nach diesem
             // Rewriter angeordnet werden
             
-            // segmentdaten hinten anhängen
+            // segmentdaten hinten anhÃ¤ngen
             data.append(segmentData.toString());
             
             counter++;

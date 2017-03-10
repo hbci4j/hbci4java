@@ -57,7 +57,7 @@ public class RDHXFile
     {
         this(passphrase);
         
-        // alle felder extrahieren und zu filecontent-content hinzufügen
+        // alle felder extrahieren und zu filecontent-content hinzufÃ¼gen
         int posi=0;
         int len=data.length;
         while (posi<len) {

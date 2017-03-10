@@ -29,20 +29,20 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 
-/** <p>Passport-Klasse für die Verwendung von SIZ-RDH-Schlüsseldateien mit <em>HBCI4Java</em>. 
-    SIZ-RDH-Schlüsseldateien sind Schlüsseldateien für RDH-Zugänge, die von
+/** <p>Passport-Klasse fÃ¼r die Verwendung von SIZ-RDH-SchlÃ¼sseldateien mit <em>HBCI4Java</em>. 
+    SIZ-RDH-SchlÃ¼sseldateien sind SchlÃ¼sseldateien fÃ¼r RDH-ZugÃ¤nge, die von
     anderer HBCI-Software erzeugt und verwendet werden (z.B. von <em>StarMoney</em>). Soll eine solche
-    Schlüsseldatei sowohl mit der anderen Software als auch mit <em>HBCI4Java</em>
-    verwendet werden, so kann das mit dieser Passport-Variante geschehen. Soll die Schlüsseldatei
-    nur noch mit <em>HBCI4Java</em> benutzt werden, so ist eine Konvertierung der Schlüsseldatei
+    SchlÃ¼sseldatei sowohl mit der anderen Software als auch mit <em>HBCI4Java</em>
+    verwendet werden, so kann das mit dieser Passport-Variante geschehen. Soll die SchlÃ¼sseldatei
+    nur noch mit <em>HBCI4Java</em> benutzt werden, so ist eine Konvertierung der SchlÃ¼sseldatei
     in ein anderes Passport-Format (vorzugsweise <code>RDHNew</code>) zu empfehlen. Dazu kann der
     <em>HBCI4Java Passport Editor</em> oder das Tool
     {@link org.kapott.hbci.tools.ConvertSIZRDHPassport} verwendet werden.</p>
     <p><b>Achtung: In der reinen GPL-Version von <em>HBCI4Java</em> ist diese Klasse nicht
-    funktionstüchtig.</b> Der Grund dafür ist, dass <code>SIZRDHFile</code> eine zusätzliche
-    Bibliothek zur Laufzeit benötigt. Diese Bibliothek steht nur als Binary-Version unter
-    <a href="http://hbci4java.kapott.org#download">http://hbci4java.kapott.org</a> zur Verfügung.
-    Erst nach Installation dieser Bibliothek können SIZRDHFile-Passports benutzt werden.</p>
+    funktionstÃ¼chtig.</b> Der Grund dafÃ¼r ist, dass <code>SIZRDHFile</code> eine zusÃ¤tzliche
+    Bibliothek zur Laufzeit benÃ¶tigt. Diese Bibliothek steht nur als Binary-Version unter
+    <a href="http://hbci4java.kapott.org#download">http://hbci4java.kapott.org</a> zur VerfÃ¼gung.
+    Erst nach Installation dieser Bibliothek kÃ¶nnen SIZRDHFile-Passports benutzt werden.</p>
     <p><b>Siehe auch die Datei <code>README.SIZRDHFile</code>.</b></p> */    
 public class HBCIPassportSIZRDHFile
     extends AbstractRDHSWFileBasedPassport

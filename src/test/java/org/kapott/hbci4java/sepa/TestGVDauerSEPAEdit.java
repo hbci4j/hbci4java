@@ -78,7 +78,7 @@ public class TestGVDauerSEPAEdit extends AbstractTest {
         job.setParam("execday", "1");
         job.setParam("orderid", params.getProperty("orderid"));
         
-        System.out.println("---------Für Job zur Queue");
+        System.out.println("---------FÃ¼r Job zur Queue");
         job.addToQueue();
 
         

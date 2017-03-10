@@ -29,14 +29,14 @@ import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 /* @internal
-    @brief SyntaxBin enthält Binärdaten.
+    @brief SyntaxBin enthÃ¤lt BinÃ¤rdaten.
 
     Beim Initialisieren gibt das erste
-    Zeichen des übergebenen Strings den Typ der nachfolgenden Daten an:
-      - N bedeutet, der nachfolgende String ist eine Integer-Zahl, die binär
+    Zeichen des Ã¼bergebenen Strings den Typ der nachfolgenden Daten an:
+      - N bedeutet, der nachfolgende String ist eine Integer-Zahl, die binÃ¤r
         dargestellt werden soll 
-      - B bedeutet, der nachfolgende String ist bereits ein Binärstring 
-        und soll ohne Änderungen übernommen werden
+      - B bedeutet, der nachfolgende String ist bereits ein BinÃ¤rstring 
+        und soll ohne Ã„nderungen Ã¼bernommen werden
 
     @author $Author: willuhn $
 */
@@ -65,7 +65,7 @@ public class SyntaxBin
 
     /** @internal @brief erzeugt den HBCI-Datentyp BIN 
 
-        Es wird der erzeugte String zurückgegeben. Dazu wird das erste Zeichen
+        Es wird der erzeugte String zurÃ¼ckgegeben. Dazu wird das erste Zeichen
         des uebergebenen Strings ausgewertet. Ist dieses "N", so wird der
         uebergebene String als Integer-Wert interpretiert und in seine
         binaere Byte-Darstellung konvertiert. Bei "B" als erstem Zeichen wird

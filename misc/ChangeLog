@@ -1,99 +1,99 @@
 
-- Änderungen zwischen 2.5.11 und 2.5.12 (20091017)
+- Ã„nderungen zwischen 2.5.11 und 2.5.12 (20091017)
     * RDH-Passports:
         - Passport-Variante "RDH2File" kann auch RDH-10-Dateien
 	  lesen und schreiben
 
-    * Geschäftsvorfälle
-        - Support für "elektronischer Kontoauszug" (ungetestet und
+    * GeschÃ¤ftsvorfÃ¤lle
+        - Support fÃ¼r "elektronischer Kontoauszug" (ungetestet und
 	  nicht wirklich einsetzbar, da die entsprechende "Quittung"
 	  noch nicht implementiert ist)
-	- SEPA-Überweisungen (bitte testen!)
-	- GV "Depot-Auflistung" vorläufig entfernt
+	- SEPA-Ãœberweisungen (bitte testen!)
+	- GV "Depot-Auflistung" vorlÃ¤ufig entfernt
 
     * Verschiedenes:
-        - Bugfix beim Erkennen der von einer Bank unterstützten
+        - Bugfix beim Erkennen der von einer Bank unterstÃ¼tzten
 	  Sicherheitsprofile (typische Fehlermeldung: "angeforderter
-	  Sicherheitsmechanismus wird von der Bank nicht unterstützt")
+	  Sicherheitsmechanismus wird von der Bank nicht unterstÃ¼tzt")
 	- aktuelle Bankenliste integriert
-	- Weitere Algorithmen zur Überprüfung von Kontonummern
+	- Weitere Algorithmen zur ÃœberprÃ¼fung von Kontonummern
 	  integriert (Code written by Alexander Nittka)
-	- Logging von SSL-Kommunikation möglich (bei HBCI-PIN/TAN)
+	- Logging von SSL-Kommunikation mÃ¶glich (bei HBCI-PIN/TAN)
 	- Sporadisch auftretende Fehler bei der APO-Bank behoben
 	  (bitte testen!)
 
 
-- Änderungen zwischen 2.5.10 und 2.5.11 (20090731)
+- Ã„nderungen zwischen 2.5.10 und 2.5.11 (20090731)
     * RDH-Passports:
-        - Unterstützung von RDH-10
+        - UnterstÃ¼tzung von RDH-10
 
-    * Geschäftsvorfälle
-        - Beim Abholen der Kontoauszüge können auch die
-	  "vorgemerkten Umsätze" abgefragt werden
+    * GeschÃ¤ftsvorfÃ¤lle
+        - Beim Abholen der KontoauszÃ¼ge kÃ¶nnen auch die
+	  "vorgemerkten UmsÃ¤tze" abgefragt werden
 
     * Verschiedenes
         - aktualisierte Liste der Bankleitzahlen
-        - diverse Anpassungen an den Prüfsummenalgorithmen
-	  für Kontonummern
-	- Prüfsummenalgorithmus auch für IBANs
+        - diverse Anpassungen an den PrÃ¼fsummenalgorithmen
+	  fÃ¼r Kontonummern
+	- PrÃ¼fsummenalgorithmus auch fÃ¼r IBANs
 	- diverse kleinere Bug-Fixes
 
 
-- Änderungen zwischen 2.5.9 und 2.5.10 (20081129)
+- Ã„nderungen zwischen 2.5.9 und 2.5.10 (20081129)
     * RDH-Passports:
-        - Unterstützt eine Bank sowohl RDH-10 als auch RDH-2, wird
+        - UnterstÃ¼tzt eine Bank sowohl RDH-10 als auch RDH-2, wird
 	  vorzugsweise das RDH-2-Profil verwendet, da noch nicht alle
-	  Algorithmen, die für RDH-10 benötigt werden, implementiert
-	  sind. Bei einigen Banken, die tatsächlich beide Verfahren
-	  unterstützten, ließen sich bisher keine RDH-Schlüssel einreichen,
+	  Algorithmen, die fÃ¼r RDH-10 benÃ¶tigt werden, implementiert
+	  sind. Bei einigen Banken, die tatsÃ¤chlich beide Verfahren
+	  unterstÃ¼tzten, lieÃŸen sich bisher keine RDH-SchlÃ¼ssel einreichen,
 	  weil HBCI4Java automatisch das noch nicht sauber implementierte
-	  RDH-10-Profil ausgewählt hatte.
+	  RDH-10-Profil ausgewÃ¤hlt hatte.
 
     * DDV-Chipkarte:
-        - Es sind jetzt vorkompilierte Linux-Libraries sowohl für
+        - Es sind jetzt vorkompilierte Linux-Libraries sowohl fÃ¼r
 	  32- als auch 64-bit-Systeme in den Archiven enthalten
 
     * PIN/TAN:
-        - Beim Hinzufügen mehrerer TAN-pflichtiger Aufträge zu
-	  einem HBCI-Dialog funktionierte die Aufteilung der Aufträge
+        - Beim HinzufÃ¼gen mehrerer TAN-pflichtiger AuftrÃ¤ge zu
+	  einem HBCI-Dialog funktionierte die Aufteilung der AuftrÃ¤ge
 	  auf mehrere Nachrichten nicht, so dass teilweise mehrere
-	  TAN-pflichtige Aufträge in einer Nachricht gesendet wurden,
+	  TAN-pflichtige AuftrÃ¤ge in einer Nachricht gesendet wurden,
 	  was zu Problemen mit der Zuordnung der entsprechenden TANs
-	  führt. Dieses Problem wurde behoben.
+	  fÃ¼hrt. Dieses Problem wurde behoben.
 
     * Verschiedenes:
         - Behebung eines Fehlers, der u.U. das Abholen von Saldo-
-	  Informationen unmöglich machte
+	  Informationen unmÃ¶glich machte
 	- Kernel-Parameter client.errors.ignoreDialogEndErrors 
 	  konsistent implementiert.
 	- Fehler in Message-Engine behoben, der auftritt, wenn Nachrichten
 	  geparst werden sollten, bei denen leere, optionale DEs am Ende
 	  einer DEG oder eines Segments nicht weggelassen wurden
-	- neue Bankenliste (gültig ab 8.12.2008) integriert.
+	- neue Bankenliste (gÃ¼ltig ab 8.12.2008) integriert.
 
 
-- Änderungen zwischen 2.5.8 und 2.5.9 (20081027)
+- Ã„nderungen zwischen 2.5.8 und 2.5.9 (20081027)
     * API (!!)
         - HBCIUtils.init(ClassLoader cl, String configfile, HBCICallback cb)
           und HBCIUtils.initThread(cl, configfile, cb) 
           als deprecated markiert. Neu sind entsprechende Methoden, die
           direkt ein Properties-Objekt verarbeiten. Damit soll erreicht 
-          werden, dass die Übergabe von Initial-Werten für die Kernel-
-          Parameter (z.B. für log.loglevel.default, kernel.locale.*)
+          werden, dass die Ãœbergabe von Initial-Werten fÃ¼r die Kernel-
+          Parameter (z.B. fÃ¼r log.loglevel.default, kernel.locale.*)
           einfacher wird.
-          Für die Kompatibilität mit altem Code steht 
-          HBCIUtils.loadPropertiesFile(cl, configfile) zur Verfügung
+          FÃ¼r die KompatibilitÃ¤t mit altem Code steht 
+          HBCIUtils.loadPropertiesFile(cl, configfile) zur VerfÃ¼gung
           (Beispiele: o.k.h.tools.AnalyzeReportOfTransactions)
           
         - Neue Kernel-Parameter "kernel.locale.*" sowie HBCIUtils.initLocale(),
-          um die vom HBCI4Java-Kernel verwendete Locale unabhängig vom Rest
-          der Anwendung ändern zu können (für jede ThreadGroup getrennt
+          um die vom HBCI4Java-Kernel verwendete Locale unabhÃ¤ngig vom Rest
+          der Anwendung Ã¤ndern zu kÃ¶nnen (fÃ¼r jede ThreadGroup getrennt
           steuerbar).
           
         - Das Verhalten der alten Methoden HBCIUtils.date2String() und 
           HBCIUtils.string2Date() wird durch die neuen Methoden 
           HBCIUtils.date2StringLocal() bzw. HBCIUtils.string2DateLocal() 
-          realisiert (also Erzeugung bzw. Parsen Locale-abhängiger(!) 
+          realisiert (also Erzeugung bzw. Parsen Locale-abhÃ¤ngiger(!) 
           String-Formate). Dabei wird die Locale verwendet, welche im 
           HBCI4Java-Kernel konfiguriert ist (siehe oben).
           
@@ -101,18 +101,18 @@
           
           Die API-Methoden zum **Setzen von Job-Parametern via String** (z.B.
             umsaetze.setParam("startdate", "...")
-          erwarten nun NICHT mehr wie früher Locale-abhängige Datumsformate,
+          erwarten nun NICHT mehr wie frÃ¼her Locale-abhÃ¤ngige Datumsformate,
           sondern erwarten IMMER ISO-Datumsangaben der Form "YYYY-MM-DD".
           Die Methode mit der Signatur (String,Date) (also 
             umsaetze.setParam("startdate", dateObject)
-          funktioniert natürlich nach wie vor unverändert.
+          funktioniert natÃ¼rlich nach wie vor unverÃ¤ndert.
           
-          Gleiches gilt für Datumsangaben, die von HBCI4Java-Methoden
-          **als String zurückgegeben** werden, z.B. in
+          Gleiches gilt fÃ¼r Datumsangaben, die von HBCI4Java-Methoden
+          **als String zurÃ¼ckgegeben** werden, z.B. in
             saldoreq.getJobResult().getResultData().getProperty("date")
-          Der hier zurückgegebene String ist nun immer - unabhängig vom
+          Der hier zurÃ¼ckgegebene String ist nun immer - unabhÃ¤ngig vom
           aktuellen Locale - im ISO-Format "YYYY-MM-DD".
-          Natürlich gilt auch hier weiterhin, dass 
+          NatÃ¼rlich gilt auch hier weiterhin, dass 
             saldoreq.getJobResult().getEntries()[0].ready.timestamp
           ein normales Date-Objekt ist...
           
@@ -120,14 +120,14 @@
           HBCIUtils.string2DateISO() helfen beim Erzeugen resp. Parsen
           dieser Datumsformate.
           
-          Die früheren Methoden HBCIUtils.date2String() bzw. string2Date()
+          Die frÃ¼heren Methoden HBCIUtils.date2String() bzw. string2Date()
           delegieren ihre Arbeit momentan einfach an die jeweiligen
-          ...Local()-Methoden, um das frühere Verhalten zu simulieren.
+          ...Local()-Methoden, um das frÃ¼here Verhalten zu simulieren.
           
-          Da diese Methoden im neuen API nun aber NICHT mehr dafür eingesetzt
-          werden können, Job-Parameter in Stringform zu erzeugen
-          (date2String() liefert einen Locale-abhängigen String, 
-          während job.setParam("startdate", "...") jedoch einen ISO-String
+          Da diese Methoden im neuen API nun aber NICHT mehr dafÃ¼r eingesetzt
+          werden kÃ¶nnen, Job-Parameter in Stringform zu erzeugen
+          (date2String() liefert einen Locale-abhÃ¤ngigen String, 
+          wÃ¤hrend job.setParam("startdate", "...") jedoch einen ISO-String
           erwartet), sind diese Methoden im API als deprecated markiert
           und erzeugen bei ihrer Verwendung ein Log-Ausgabe mit ERROR-Level.
           
@@ -135,313 +135,313 @@
           statt dessen sollte explizit entweder die ...Local() oder die
           ...ISO()-Variante aufgerufen werden.
           
-        - Analoges gilt auch für die Uhrzeitformate und den damit zusammen-
-          hängenden HBCIUtils-Funktionen time2String(), string2Time() usw.
+        - Analoges gilt auch fÃ¼r die Uhrzeitformate und den damit zusammen-
+          hÃ¤ngenden HBCIUtils-Funktionen time2String(), string2Time() usw.
           (ISO-Zeitformat is "HH:MM:SS").
 
     * Passports:
-        - Passport-Implementierung für DDV-Passports via OCF entfernt. Diese
-	  Passport-Variante wurde ersatzlos gestrichen. Gründe sind zum einen
-	  das fehlende Feedback (hat das überhaupt jemand benutzt? ;-) sowie
+        - Passport-Implementierung fÃ¼r DDV-Passports via OCF entfernt. Diese
+	  Passport-Variante wurde ersatzlos gestrichen. GrÃ¼nde sind zum einen
+	  das fehlende Feedback (hat das Ã¼berhaupt jemand benutzt? ;-) sowie
 	  die Tatsache, dass das OCF nicht mehr gepflegt wird.
 
-	- Ebenfalls entfernt wurde die Unterstützung für OpenHBCI-Passports.
+	- Ebenfalls entfernt wurde die UnterstÃ¼tzung fÃ¼r OpenHBCI-Passports.
 	  Die aktuelle HBCI-Implementierung von Martin Preuss - AqBanking -
 	  verwendet schon seit langem ein anderes Dateiformat (welches noch
-	  nicht von HBCI4Java unterstützt wird). 
+	  nicht von HBCI4Java unterstÃ¼tzt wird). 
 
 	- Fehler bei DDV-Passports gefixt: Bankleitzahlen, die die
 	  Ziffernfolge "20" enthalten, haben teilweise Probleme beim Auslesen
-	  oder Zurückschreiben von Chipkartendaten verursacht.
+	  oder ZurÃ¼ckschreiben von Chipkartendaten verursacht.
 
-	- In PIN/TAN-Passport-Files wird das gewählte Zweischrittverfahren
+	- In PIN/TAN-Passport-Files wird das gewÃ¤hlte Zweischrittverfahren
 	  mit abgespeichert und beim Laden wieder ausgelesen, so dass ein
 	  erneutes "Auto-Detect" nicht mehr notwendig ist.
 
-    * Geschäftsvorfälle:
-        - Ändern der PIN für HBCI-PIN/TAN mit "ChangePIN"
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - Ã„ndern der PIN fÃ¼r HBCI-PIN/TAN mit "ChangePIN"
 
     * Verschiedenes:
-        - Basis-Code für die Verwendung des HBCI4Java-InfoPoint-Servers
-	  hinzugefügt. Siehe README.InfoPoint
+        - Basis-Code fÃ¼r die Verwendung des HBCI4Java-InfoPoint-Servers
+	  hinzugefÃ¼gt. Siehe README.InfoPoint
 
         - Bei PIN/TAN-Passports wird die Liste der erlaubten PIN/TAN-Verfahren
-	  und das aktuell ausgewählte Verfahren mit in der Passport-Datei
-	  gespeichert. Damit entfällt die Notwendigkeit, das zu verwendende 
-	  Verfahren jedes Mal neu auto-detecten zu müssen (bzw. einen 
-	  entsprechenden Callback beantworten zu müssen).
+	  und das aktuell ausgewÃ¤hlte Verfahren mit in der Passport-Datei
+	  gespeichert. Damit entfÃ¤llt die Notwendigkeit, das zu verwendende 
+	  Verfahren jedes Mal neu auto-detecten zu mÃ¼ssen (bzw. einen 
+	  entsprechenden Callback beantworten zu mÃ¼ssen).
 
 	- Bugfix: mit aktuellen Versionen von Java 1.6 konnte HBCI-PIN/TAN 
-	  wegen einer Änderung in der SSL-Implementierung nicht mehr verwendet 
+	  wegen einer Ã„nderung in der SSL-Implementierung nicht mehr verwendet 
 	  werden ("unconnected sockets not implemented"). Code in HBCI4Java
-	  wurde entsprechend angepasst (Code läuft nach wie vor ab Java 1.4).
+	  wurde entsprechend angepasst (Code lÃ¤uft nach wie vor ab Java 1.4).
 
 	- Liste der Bankleitzahlen aktualisiert
 
-	- LogFilter wird nun auch auf sämtliche Exception-Messages angewendet
-	  (gilt nur für Exceptions, die von HBCI_Exception abgeleitet sind)
+	- LogFilter wird nun auch auf sÃ¤mtliche Exception-Messages angewendet
+	  (gilt nur fÃ¼r Exceptions, die von HBCI_Exception abgeleitet sind)
 
 	- Viele kleinere Bugfixes, vor allem im Bereich PIN/TAN und
 	  Zweischrittverfahren (iTAN, SmartTAN, MobileTAN, ...)
 
 
-- Änderungen zwischen 2.5.7 und 2.5.8 (20080530)
-    * Geschäftsvorfälle:
-        - GV "Vormerkposten abfragen" ist als Lowlevel-GV verfügbar
-	- Parser für Kontoauszüge arbeitet weniger speicherintensiv
+- Ã„nderungen zwischen 2.5.7 und 2.5.8 (20080530)
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - GV "Vormerkposten abfragen" ist als Lowlevel-GV verfÃ¼gbar
+	- Parser fÃ¼r KontoauszÃ¼ge arbeitet weniger speicherintensiv
 
     * Sicherheitsmedien:
-        - für den DDV-Chipkarten-Code Makefiles für Mac-OS hinzugefügt
+        - fÃ¼r den DDV-Chipkarten-Code Makefiles fÃ¼r Mac-OS hinzugefÃ¼gt
 
     * Dialog-Engine:
-        - besseres Handling der Liste der unterstützten / erlaubten
+        - besseres Handling der Liste der unterstÃ¼tzten / erlaubten
 	  PIN/TAN-Zweischrittverfahren
 
 
-- Änderungen zwischen 2.5.6 und 2.5.7 (20080228)
-    * Geschäftsvorfälle:
-        - Konto-Objekte unterstützen nun auch BIC und IBAN
-        - Saldenabfrage für SEPA-Konten (proof-of-concept)
+- Ã„nderungen zwischen 2.5.6 und 2.5.7 (20080228)
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - Konto-Objekte unterstÃ¼tzen nun auch BIC und IBAN
+        - Saldenabfrage fÃ¼r SEPA-Konten (proof-of-concept)
     * Sicherheitsmedien:
-        - RDH-2-Dateien können initial erzeugt werden (es ist also nicht mehr
+        - RDH-2-Dateien kÃ¶nnen initial erzeugt werden (es ist also nicht mehr
           notwendig, eine bereits existierende und initialisierte RDH-2-Datei
           aus einer anderen Software zu verwenden)
-        - für die HTTPS-Verbindung bei PIN/TAN können auch Proxies verwendet
+        - fÃ¼r die HTTPS-Verbindung bei PIN/TAN kÃ¶nnen auch Proxies verwendet
           werden, die Authentifikation verlangen
     * Message-Engine:
         - Cache-Fehler behoben (Bug #70): wenn innerhalb einer Anwendung mehrere
           verschiedene Konten oder Bankverbindungen benutzt wurde, konnten
-          syntaktisch korrekte HBCI-Nachrichten von "späteren Verbindungen" 
+          syntaktisch korrekte HBCI-Nachrichten von "spÃ¤teren Verbindungen" 
           teilweise nicht geparst werden (d.h. die ERSTE Verbindung hat immer
           funktioniert, die zweite, dritte, ... evtl. nicht mehr).
     * Verschiedenes:
-        - Automatische Erkennung von SEPA-fähigen Konten bei der 
+        - Automatische Erkennung von SEPA-fÃ¤higen Konten bei der 
           Initialisierung von HBCIHandler-Objekten
-        - Erkennung von unterstützten PIN/TAN-Verfahren verbessert
+        - Erkennung von unterstÃ¼tzten PIN/TAN-Verfahren verbessert
         - weitere kleinere Bugfixes, Code-Verbesserungen, interne Design-
-          Änderungen etc.
+          Ã„nderungen etc.
 
-- Änderungen zwischen 2.5.5 und 2.5.6 (20071221)
+- Ã„nderungen zwischen 2.5.5 und 2.5.6 (20071221)
     * Binary Archiv ist wieder kompatibel zu java-1.4
-    * LogFilter-Mechanismus vollständig integriert
+    * LogFilter-Mechanismus vollstÃ¤ndig integriert
       (siehe neuen Kernel-Parameter log.filter)
 
 
-- Änderungen zwischen 2.5.0rc-9 und 2.5.5 (20071221)
+- Ã„nderungen zwischen 2.5.0rc-9 und 2.5.5 (20071221)
     * API
         - HBCIHandler.addJob() deprecated, neu: HBCIJob.addToQueue()
-	- eine Menge interner Design- und API-Änderungen, die aber
+	- eine Menge interner Design- und API-Ã„nderungen, die aber
 	  keinen weiteren Einfluss auf das "offizielle" API haben sollten.
 
     * Sicherheitsmechanismen / HBCI-Versionen
-        - FinTS-3-Syntax wird unterstützt
-	- RDH-2-Sicherheitsprofil (neu seit FinTS-3) wird unterstützt
+        - FinTS-3-Syntax wird unterstÃ¼tzt
+	- RDH-2-Sicherheitsprofil (neu seit FinTS-3) wird unterstÃ¼tzt
 	- Probleme mit Version 2 des Zweischrittverfahrens behoben
 	  (Stichwort: Sm@rtTAN Plus der Volksbanken) 
 
     * Passports
-        - RDH-2-Schlüsseldisketten werden unterstützt
+        - RDH-2-SchlÃ¼sseldisketten werden unterstÃ¼tzt
 
-    * Geschäftsvorfälle:
-        - neu: StornoLast (Lastschrift zurückgeben)
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - neu: StornoLast (Lastschrift zurÃ¼ckgeben)
 
     * Message-Engine
-        - optimierte Version, dürfte weniger Speicher verbrauchen
+        - optimierte Version, dÃ¼rfte weniger Speicher verbrauchen
 	  und auch etwas schneller arbeiten
 
     * Sonstiges
-        - Logging-Methoden unterstützen Log-Filter, um sensible Daten
-          automatisch auszuschwärzen (im Moment nur als proof-of-concept
- 	  implementiert, erst die nächste Version enthält Logik, die alle 
- 	  sensiblen Daten automatisch ausschwärzt).
+        - Logging-Methoden unterstÃ¼tzen Log-Filter, um sensible Daten
+          automatisch auszuschwÃ¤rzen (im Moment nur als proof-of-concept
+ 	  implementiert, erst die nÃ¤chste Version enthÃ¤lt Logik, die alle 
+ 	  sensiblen Daten automatisch ausschwÃ¤rzt).
 	- viele viele kleinere Bugfixes, Update dringend empfohlen!
 
-- Änderungen zwischen 2.5.0rc-8 und 2.5.0rc-9 (20060614)
-    * Geschäftsvorfälle:
-        - Parser für Kontoauszüge (MT940) modifiziert. Der Parser sollte jetzt
+- Ã„nderungen zwischen 2.5.0rc-8 und 2.5.0rc-9 (20060614)
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - Parser fÃ¼r KontoauszÃ¼ge (MT940) modifiziert. Der Parser sollte jetzt
           besser mit (falsch) gesplitteten Auszugsdaten und auch mit bestimmten,
-          selten auftretenden Sonderfällen in den Nutzdaten zurecht kommen.
+          selten auftretenden SonderfÃ¤llen in den Nutzdaten zurecht kommen.
           
     * Tools:
-        - Bugfix in HBCIBatch (fehlender Callback-Handler für iTAN-Daten).
+        - Bugfix in HBCIBatch (fehlender Callback-Handler fÃ¼r iTAN-Daten).
         - Unter demo/HBCIBatch gibt stehen einige kommentierte Beispiel-Dateien
-          für die korrekte Verwendung von HBCIBatch zur Verfügung.
+          fÃ¼r die korrekte Verwendung von HBCIBatch zur VerfÃ¼gung.
           
 
-- Änderungen zwischen 2.5.0rc-7 und 2.5.0rc-8 (20060608)
+- Ã„nderungen zwischen 2.5.0rc-7 und 2.5.0rc-8 (20060608)
     * iTAN-Verfahren
         - Protokollfehler behoben
         
     * Sonstiges
-        - weitere Prüfzifferverfahren implementiert (57,69,95)
+        - weitere PrÃ¼fzifferverfahren implementiert (57,69,95)
     
 
-- Änderungen zwischen 2.5.0rc-6 und 2.5.0rc-7 (20060501)
+- Ã„nderungen zwischen 2.5.0rc-6 und 2.5.0rc-7 (20060501)
     * Dialog-Engine:
         - Neue Variante von hbci.execute() - siehe dazu
           README.ThreadedCallbacks
           
     * Comm-Engine:
-        - HTTPS-Verbindungen für HBCI-PIN/TAN können nun auch 
-          über einen Proxy hergestellt werden
+        - HTTPS-Verbindungen fÃ¼r HBCI-PIN/TAN kÃ¶nnen nun auch 
+          Ã¼ber einen Proxy hergestellt werden
           
     * DDV-Chipkarte:
         - Bug gefixt, der bei BLZen auftrat, wenn diese die Ziffern-
           Kombination "20" enthalten
         
     * Rewriter:
-        - Modul für Korrektur von falsch sortierten Segmenten
+        - Modul fÃ¼r Korrektur von falsch sortierten Segmenten
           (HIRMS nach HISAL)
           
     * Demo-Applet:
         - Demo-Applet via Applet-Parameter konfigurierbar
           
 
-- Änderungen zwischen 2.5.0rc-4 und 2.5.0rc-6 (20060129)
+- Ã„nderungen zwischen 2.5.0rc-4 und 2.5.0rc-6 (20060129)
     * Message-Engine:
         - robusterer Code beim Empfang von fehlerhaften Nachrichten
         
     * Sicherheitsverfahren
-        - PIN/TAN-Zweischrittverfahren auch für HBCI+
-          (HBCI-2.2 mit PIN/TAN-Erweiterung) verfügbar
+        - PIN/TAN-Zweischrittverfahren auch fÃ¼r HBCI+
+          (HBCI-2.2 mit PIN/TAN-Erweiterung) verfÃ¼gbar
         
     * Passports (DDV):
-        - Bugfix für DDVOCF: das Zurückschreiben von Daten auf die
+        - Bugfix fÃ¼r DDVOCF: das ZurÃ¼ckschreiben von Daten auf die
           Chipkarte funktionierte wegen einer falschen APDU nicht
-        - Bugfix in SIZRDH-Bibliothek: beim Zurückschreiben von 
-          Schlüsseldateien werden diese jetzt nicht mehr "zerstört"
+        - Bugfix in SIZRDH-Bibliothek: beim ZurÃ¼ckschreiben von 
+          SchlÃ¼sseldateien werden diese jetzt nicht mehr "zerstÃ¶rt"
         - SIZRDH-Bibliothek: einige Memory-Leaks gefixt
           
-    * Geschäftsvorfälle:
-        - Unterstützung für Unterkontomerkmal (ab HBCI-2.2)
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - UnterstÃ¼tzung fÃ¼r Unterkontomerkmal (ab HBCI-2.2)
     
     * Sonstiges:
         - neue Bankleitzahlenliste 
 
 
-- Änderungen zwischen 2.5.0rc-3 und 2.5.0rc-4 (20060103)
+- Ã„nderungen zwischen 2.5.0rc-3 und 2.5.0rc-4 (20060103)
     * API (!!)
-        - Bei den Klassen Value und Saldo werden Beträge nicht mehr als
-          double-Werte, sondern als long-Werte gespeichert. Außerdem wurde
+        - Bei den Klassen Value und Saldo werden BetrÃ¤ge nicht mehr als
+          double-Werte, sondern als long-Werte gespeichert. AuÃŸerdem wurde
           in der Klasse Saldo die Variable "cd" entfernt, die bisher 
           angegeben hat, ob es sich um einen positiven oder negativen 
           Saldo handelt. Statt dessen ist der Saldo-Wert jetzt selbst
           vorzeichenbehaftet.
           
-        - Bei den Kontoauszügen (GVRKUms.UmsLine) ist ebenfalls das "cd"-
+        - Bei den KontoauszÃ¼gen (GVRKUms.UmsLine) ist ebenfalls das "cd"-
           Attribut weggefallen, welches angezeigt hat, ob es sich um eine
           Soll- oder Haben-Buchung handelt. Statt dessen ist der Buchungs-
           betrag (value) jetzt selbst vorzeichenbehaftet.
           
-        Damit einher gehen leider entsprechende Änderungen des API.
-        Bitte diesbezüglich JavaDoc beachten!
+        Damit einher gehen leider entsprechende Ã„nderungen des API.
+        Bitte diesbezÃ¼glich JavaDoc beachten!
           
     * Passports:
-        - DDV-Chipkarten können jetzt zusätzliche über OCF (OpenCard
+        - DDV-Chipkarten kÃ¶nnen jetzt zusÃ¤tzliche Ã¼ber OCF (OpenCard
           Framework) angesprochen werden. Siehe dazu auch README.OCF.
           
     * Rewriter:
         - einige Rewriter-Module wurden neu strukturiert und umbenannt.
           
 
-- Änderungen zwischen 2.5.0rc-1 und 2.5.0rc-3 (20051212)
+- Ã„nderungen zwischen 2.5.0rc-1 und 2.5.0rc-3 (20051212)
     * Security:
-        - Unterstützung für Auftragshashwert beim Zweischrittverfahren 
+        - UnterstÃ¼tzung fÃ¼r Auftragshashwert beim Zweischrittverfahren 
           (FinTS-PIN/TAN) - Prozessvariante 1
         
-    * Geschäftsvorfälle:
+    * GeschÃ¤ftsvorfÃ¤lle:
         - Umsatzabfrage: verschiedene kleinere Bugfixes, die vor allem 
-          dazu führen, dass auch nicht spez.-konforme Kontoauszugsdaten
+          dazu fÃ¼hren, dass auch nicht spez.-konforme Kontoauszugsdaten
           interpretiert werden (Erweiterung eines existierenden Rewriter-
-          Moduls sowie Hinzufügen eines neuen Rewriter-Moduls)
+          Moduls sowie HinzufÃ¼gen eines neuen Rewriter-Moduls)
           
     * Sonstiges:
         - DTAUS-Klasse wandelt float-Werte jetzt richtig in ganzzahlige
-          Cent-Beträge um
+          Cent-BetrÃ¤ge um
 
 
-- Änderungen zwischen 2.5.0pre-20050525 und 2.5.0rc-1 (20051024)
+- Ã„nderungen zwischen 2.5.0pre-20050525 und 2.5.0rc-1 (20051024)
     * Allgemeines:
-        - Unterstützung für FinTS-3.0 (inklusive Zweischritt-Verfahren) 
-          hinzugefügt
+        - UnterstÃ¼tzung fÃ¼r FinTS-3.0 (inklusive Zweischritt-Verfahren) 
+          hinzugefÃ¼gt
           
     * Dialog-Engine:
-        - neue Methode zum "Verifizieren und Verbrennen" einer TAN eingeführt
-        - für einige "broken" HBCI-Server können Fehler, die nach dem Versenden
+        - neue Methode zum "Verifizieren und Verbrennen" einer TAN eingefÃ¼hrt
+        - fÃ¼r einige "broken" HBCI-Server kÃ¶nnen Fehler, die nach dem Versenden
           einer Dialog-Ende-Nachricht auftreten, ignoriert werden
-        - Rewriter-Module für fehlerhafte führende Nullen in der Signatur-ID
-          und für falsche Informationen über unterstützte HBCI-Versionen
-          hinzugefügt
+        - Rewriter-Module fÃ¼r fehlerhafte fÃ¼hrende Nullen in der Signatur-ID
+          und fÃ¼r falsche Informationen Ã¼ber unterstÃ¼tzte HBCI-Versionen
+          hinzugefÃ¼gt
           
     * Message-Engine:
-        - kleinere Code-Optimierungen für bessere Performance - Message-Engine
-          ist aber immer noch ein designtechnisches Unglück
+        - kleinere Code-Optimierungen fÃ¼r bessere Performance - Message-Engine
+          ist aber immer noch ein designtechnisches UnglÃ¼ck
 
 
-- Änderungen zwischen 2.5.0pre-20040810 und 2.5.0pre-20050525
+- Ã„nderungen zwischen 2.5.0pre-20040810 und 2.5.0pre-20050525
     * Kryptographie:
-        - Padding beim Verschlüsseln erfolgt jetzt (spez.-gerecht?) in der Form
-          "00 00 00 04" anstatt "04 04 04 04" (Dank an Andreas Selle für den
+        - Padding beim VerschlÃ¼sseln erfolgt jetzt (spez.-gerecht?) in der Form
+          "00 00 00 04" anstatt "04 04 04 04" (Dank an Andreas Selle fÃ¼r den
           entsprechenden Hinweis)
         - digitale Signaturen der HBCI-Antwortnachricht werden jetzt *richtig*
-          überprüft (aufgrund eines Bugs konnte der Server bisher nahezu belie-
+          Ã¼berprÃ¼ft (aufgrund eines Bugs konnte der Server bisher nahezu belie-
           bige Signaturen senden, die allesamt akzeptiert wurden)
           
     * Dialog-Engine:
         - Bug bei der Auswertung von "max. Anzahl unterschiedlicher GVs pro
           Nachricht" gefixt - automatisches Erzeugen einer neuen HBCI-Nachricht
-          bei Überschreitung dieses Maximalwertes funktioniert jetzt sauber
+          bei Ãœberschreitung dieses Maximalwertes funktioniert jetzt sauber
           
     * Chipkarten-Support: 
-        - Verwendung alternativer Kommandos für bessere 
-          Kompatibilät mit verschiedenen Geräten verwendet
+        - Verwendung alternativer Kommandos fÃ¼r bessere 
+          KompatibilÃ¤t mit verschiedenen GerÃ¤ten verwendet
           
-    * Geschäftsvorfälle:
-        - beim Löschen von Daueraufträgen kann jetzt entweder die Order-ID oder
-          der komplette Parametersatz für die Identifikation des zu löschenden
+    * GeschÃ¤ftsvorfÃ¤lle:
+        - beim LÃ¶schen von DauerauftrÃ¤gen kann jetzt entweder die Order-ID oder
+          der komplette Parametersatz fÃ¼r die Identifikation des zu lÃ¶schenden
           Dauerauftrages angegeben werden
-        - Parsen von Kontoauszügen ist jetzt roboster - auch Kontoauszüge, die
+        - Parsen von KontoauszÃ¼gen ist jetzt roboster - auch KontoauszÃ¼ge, die
           an der "falschen" (i.e. nicht spez.-gerechten) Stelle gesplittet und
           auf mehrere Nachrichten aufgeteilt sind, werden jetzt richtig wieder
           zusammengesetzt
-        - Problem beim Abholen von Kontoauszügen behoben: wenn das Buchungsdatum
+        - Problem beim Abholen von KontoauszÃ¼gen behoben: wenn das Buchungsdatum
           und das Wertstellungsdatum in verschiedenen Jahren liegen, wird das
           Buchungsdatum jetzt *korrekt* gebildet.
           
     * Batch-Tool: 
         - manuelles Erzwingen einer neuen HBCI-Nachricht 
-          (=HBCIHandler.newMsg()) möglich
-        - Angeben von zu verwendender HBCI-Version möglich
+          (=HBCIHandler.newMsg()) mÃ¶glich
+        - Angeben von zu verwendender HBCI-Version mÃ¶glich
         - HBCI-Batch-Tool kann jetzt auch mit noch nicht existierenden Passport-
-          Files benutzt werden - Angabe eines Passworts für die Verschlüsselung
-          beim Speichern von Passport-Files möglich
-        - Eingabewerte für Job-Parameter können entweder im Batch-File oder in
-          einem externen File definiert werden (sinnvoll für DTAUS-Daten für
-          Sammellastschrift und -überweisung)
-        - verschiedene Ausgabeformate für Job-Ergebnisse möglich
+          Files benutzt werden - Angabe eines Passworts fÃ¼r die VerschlÃ¼sselung
+          beim Speichern von Passport-Files mÃ¶glich
+        - Eingabewerte fÃ¼r Job-Parameter kÃ¶nnen entweder im Batch-File oder in
+          einem externen File definiert werden (sinnvoll fÃ¼r DTAUS-Daten fÃ¼r
+          Sammellastschrift und -Ã¼berweisung)
+        - verschiedene Ausgabeformate fÃ¼r Job-Ergebnisse mÃ¶glich
         
     * Sonstiges:
-        - BASE64-Routine geändert, um Daten mit Sonderzeichen (insbesondere
+        - BASE64-Routine geÃ¤ndert, um Daten mit Sonderzeichen (insbesondere
           Umlaute) wieder sauber zu dekodieren
-        - kleinere Anpassungen am PIN/TAN-Code für schnelleren Verbindungs-
+        - kleinere Anpassungen am PIN/TAN-Code fÃ¼r schnelleren Verbindungs-
           aufbau (HTTPS)
-        - neuen Prüfsummenalgorithmus für das Validieren von Kontonummern
-          hinzugefügt (Dank an Gerd Balzuweit)
+        - neuen PrÃ¼fsummenalgorithmus fÃ¼r das Validieren von Kontonummern
+          hinzugefÃ¼gt (Dank an Gerd Balzuweit)
         - beim erstmaligen Erzeugen von Passport-Files wird die HBCI-Server-
           Adresse (bzw. die PIN/TAN-URL) jetzt automatisch auf Basis der
           BLZ vorgeschlagen
 
 
-- Änderungen zwischen 2.4.6 und 2.5.0pre-20040810
-    * API-Änderungen (!)
-        - Rückgabetyp von HBCIHandler.execute() neu: HBCIExecStatus
-          (früher: HBCIDialogStatus; HBCIExecStatus vereint mehrere 
+- Ã„nderungen zwischen 2.4.6 und 2.5.0pre-20040810
+    * API-Ã„nderungen (!)
+        - RÃ¼ckgabetyp von HBCIHandler.execute() neu: HBCIExecStatus
+          (frÃ¼her: HBCIDialogStatus; HBCIExecStatus vereint mehrere 
           HBCIDialogStatus-Objekte, da ein HBCIHandler.execute() jetzt u.U.
-          mehrere HBCI-Dialoge ausführt)
-        - zwei neue Callbacks (NEED_CONNECTION/CLOSE_CONNECTION) eingeführt,
+          mehrere HBCI-Dialoge ausfÃ¼hrt)
+        - zwei neue Callbacks (NEED_CONNECTION/CLOSE_CONNECTION) eingefÃ¼hrt,
           die das zeitnahe Aktivieren bzw. Herunterfahren der Internetverbindung
-          ermöglichen
-        - API für Job-Info-Methoden geändert 
+          ermÃ¶glichen
+        - API fÃ¼r Job-Info-Methoden geÃ¤ndert 
             . neu: HBCIHandler.getKernel()
             . neu: HBCIKernel.getLowlevelJobParameterNames()
             . neu: HBCIKernel.getLowlevelJobResultNames()
@@ -451,289 +451,289 @@
             . HBCIHandler.getLowlevelGVParameters() --> HBCIHandler.getLowlevelJobParameterNames()
             . HBCIHandler.getLowlevelResultProperties() --> HBCIHandler.getLowlevelJobResultNames()
             . neu: HBCIHandler.getLowlevelJobRestrictions()
-        - neuen Loglevel (LOG_DEBUG2) eingeführt
+        - neuen Loglevel (LOG_DEBUG2) eingefÃ¼hrt
         
     * Passports
-        - Zertifikatsüberprüfung bei PIN/TAN-Passports kann deaktiviert werden
-        - Portadresse für HBCI-PIN/TAN via SSL (default 443) editierbar
-        - für PIN/TAN-Passports kann der zu verwendende Kommunikationsfilter
+        - ZertifikatsÃ¼berprÃ¼fung bei PIN/TAN-Passports kann deaktiviert werden
+        - Portadresse fÃ¼r HBCI-PIN/TAN via SSL (default 443) editierbar
+        - fÃ¼r PIN/TAN-Passports kann der zu verwendende Kommunikationsfilter
           beim erstmaligen Initialiseren des Passports mit angegeben werden
         - PIN/TAN-Passport-Variante an "lame" HBCI-Server angepasst (andere 
-          Werte als die in der Spez. *vorgeschlagenen* default-Werte führen u.U.
+          Werte als die in der Spez. *vorgeschlagenen* default-Werte fÃ¼hren u.U.
           zu Fehlern)
-        - Bug bei der Erkennung der von HBCI+-Unterstützung gefixt
+        - Bug bei der Erkennung der von HBCI+-UnterstÃ¼tzung gefixt
         - Bug in SIZRDH-File-Library gefixt (wenn Fehler auftritt,
           abbrechen, anstatt noch einige Schritte weiterzumachen)
         
-    * Geschäftsvorfälle
-        - Support für schweizer DTAUS-Format implementiert
-        - Bug in Kontoauszügen (falsches Buchungsdatum) gefixt
+    * GeschÃ¤ftsvorfÃ¤lle
+        - Support fÃ¼r schweizer DTAUS-Format implementiert
+        - Bug in KontoauszÃ¼gen (falsches Buchungsdatum) gefixt
           
     * Dialog-Engine
-        - wenn Aufträge für mehrere verschiedene Kunden-IDs erzeugt werden,
-          werden auch automatisch mehrere Dialoge generiert und ausgeführt
-          (deshalb neuer Rückgabetyp von HBCIHandler.execute(); siehe dazu auch
+        - wenn AuftrÃ¤ge fÃ¼r mehrere verschiedene Kunden-IDs erzeugt werden,
+          werden auch automatisch mehrere Dialoge generiert und ausgefÃ¼hrt
+          (deshalb neuer RÃ¼ckgabetyp von HBCIHandler.execute(); siehe dazu auch
           HBCIHandler.addJob())
-        - Antwortdaten von GVs, bei denen mehrere Antwortsegmente zurückgemeldet
-          werden, werden jetzt in der Reihenfolge zurückgegeben, in der sie
-          tatsächlich empfangen wurden (wichtig für z.B. "Statusprotokoll")
+        - Antwortdaten von GVs, bei denen mehrere Antwortsegmente zurÃ¼ckgemeldet
+          werden, werden jetzt in der Reihenfolge zurÃ¼ckgegeben, in der sie
+          tatsÃ¤chlich empfangen wurden (wichtig fÃ¼r z.B. "Statusprotokoll")
         - Mehrfachsignaturen implementiert (noch ungetestet, da keine Test-
-          möglichkeit gefunden)
+          mÃ¶glichkeit gefunden)
         - kleinere Bugfixes in DialogManager (leere Dialoge werden nicht mehr
-          ausgeführt)
-        - Rewriter-Modul für fehlerhafte Kontoauszüge der RVB Erlangen
-          hinzugefügt
-        - Rewriter-Modul für fehlerhafte BPD-Daten der Consors-Bank hinzugefügt
-        - Workaround für fehlerhafte Kontoauszüge der DresdnerBank implementiert
+          ausgefÃ¼hrt)
+        - Rewriter-Modul fÃ¼r fehlerhafte KontoauszÃ¼ge der RVB Erlangen
+          hinzugefÃ¼gt
+        - Rewriter-Modul fÃ¼r fehlerhafte BPD-Daten der Consors-Bank hinzugefÃ¼gt
+        - Workaround fÃ¼r fehlerhafte KontoauszÃ¼ge der DresdnerBank implementiert
         - Bug in Message-Engine gefixt, der bewirkte, dass unter bestimmten
-          (seltenen) Umständen fehlerhafte HBCI-Nachrichten erzeugt wurden
+          (seltenen) UmstÃ¤nden fehlerhafte HBCI-Nachrichten erzeugt wurden
           
     * Sonstiges
-        - HBCI-Batch-Tool zum automatischen Ausführen von HBCI-Jobs hinzugefügt
-        - Object-Pooling-Mechanismus für schnellere Objekt-Erzeugung in der
+        - HBCI-Batch-Tool zum automatischen AusfÃ¼hren von HBCI-Jobs hinzugefÃ¼gt
+        - Object-Pooling-Mechanismus fÃ¼r schnellere Objekt-Erzeugung in der
           Message-Engine implementiert 
         - einige Bugs im Multi-Threading-Code gefixt
         - Bugfixes in CRC-Algorithmen (Dank an Volker Weber)
-        - Verzeichnis der Bankleitzahlen aktualisiert und Support für BIC
+        - Verzeichnis der Bankleitzahlen aktualisiert und Support fÃ¼r BIC
           integriert
         - einige Probleme mit Locales gefixt - Datums- und Zeitangaben werden
-          jetzt immer der Locale-typischen Form zurückgegeben und erwartet,
-          Wertangaben immer in der Fließkommadarstellung 1.23 (mit . als 
+          jetzt immer der Locale-typischen Form zurÃ¼ckgegeben und erwartet,
+          Wertangaben immer in der FlieÃŸkommadarstellung 1.23 (mit . als 
           Dezimaltrennzeichen)
     
 
-- Änderungen zwischen 2.4.5 und 2.4.6
+- Ã„nderungen zwischen 2.4.5 und 2.4.6
     * Einsatz von HBCI4Java in MultiThread-Anwendungen verbessert
       (siehe auch Datei README.MultiThread)
       
     * Verhalten in den Methoden HBCIUtils.init() bzw. HBCIUtils.initThread()
-      für das Laden eines Property-Files geändert
+      fÃ¼r das Laden eines Property-Files geÃ¤ndert
       
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
-        - Auslandsüberweisung (in EU-Länder bis 12500 EUR ohne Meldepflicht)
-        - Sammellastschriften/-Überweisungen
-    * verbesserte Überprüfungen beim Erzeugen von Aufträgen (es werden jetzt
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
+        - AuslandsÃ¼berweisung (in EU-LÃ¤nder bis 12500 EUR ohne Meldepflicht)
+        - Sammellastschriften/-Ãœberweisungen
+    * verbesserte ÃœberprÃ¼fungen beim Erzeugen von AuftrÃ¤gen (es werden jetzt
       viel mehr Fehler schon vor dem eigentlichen HBCI-Dialog erkannt)
       
-    * Ändern des Passwortes für Passport-Dateien möglich (via API und mit dem 
+    * Ã„ndern des Passwortes fÃ¼r Passport-Dateien mÃ¶glich (via API und mit dem 
       HBCI4Java Passport Editor)
-    * Verbesserter Support für SIZ-RDH-Schlüsseldateien (StarMoney, GENOlite)
-    * Passport-Implementation für anonyme Zugänge hinzugefügt
-    * Passport-Implementation für OpenHBCI-Schlüsseldateien hinzugefügt
-    * Methoden für das Speichern zusätzlicher Daten in Passports in offizielles API
+    * Verbesserter Support fÃ¼r SIZ-RDH-SchlÃ¼sseldateien (StarMoney, GENOlite)
+    * Passport-Implementation fÃ¼r anonyme ZugÃ¤nge hinzugefÃ¼gt
+    * Passport-Implementation fÃ¼r OpenHBCI-SchlÃ¼sseldateien hinzugefÃ¼gt
+    * Methoden fÃ¼r das Speichern zusÃ¤tzlicher Daten in Passports in offizielles API
       aufgenommen (siehe HBCIPassport.{set|get}ClientData())
 
-    * Callbacks für das Abfragen von Passwörtern geändert (NEED_PASSPHRASE gibt es nicht
-      mehr, dafür jetzt NEED_PASSPHRASE_LOAD und NEED_PASSPHRASE_SAVE)
+    * Callbacks fÃ¼r das Abfragen von PasswÃ¶rtern geÃ¤ndert (NEED_PASSPHRASE gibt es nicht
+      mehr, dafÃ¼r jetzt NEED_PASSPHRASE_LOAD und NEED_PASSPHRASE_SAVE)
       --> siehe API-Dokumentation!
-    * Bug in default-Callback-Handler für nicht-signierende HBCI-Server gefixt
-    * Mini-Änderungen am Kernel-Design, so dass jetzt *alle* Status-Callbacks (auch
+    * Bug in default-Callback-Handler fÃ¼r nicht-signierende HBCI-Server gefixt
+    * Mini-Ã„nderungen am Kernel-Design, so dass jetzt *alle* Status-Callbacks (auch
       STATUS_MSG_SEND,STATIS_MSG_REC,STATUS_MSG_PARSE) ein nicht-null Passport-Objekt
       als Parameter erhalten
       
-    * DTAUS-Generator für Sammellastschriften und -überweisungen hinzugefügt
-    * Hilfsklasse für die Erzeugung von INI-Briefen bzw. für das Abfragen von
-      Schlüsselinformationen hinzugefügt (org.kapott.hbci.passport.INILetter)
+    * DTAUS-Generator fÃ¼r Sammellastschriften und -Ã¼berweisungen hinzugefÃ¼gt
+    * Hilfsklasse fÃ¼r die Erzeugung von INI-Briefen bzw. fÃ¼r das Abfragen von
+      SchlÃ¼sselinformationen hinzugefÃ¼gt (org.kapott.hbci.passport.INILetter)
     
     * bei Verwendung von RSA-Chipkarten Ausgabe einer deutlicheren Fehlermeldung
-    * MessageGenerator- und MessageParser-Engine aufgeräumt
+    * MessageGenerator- und MessageParser-Engine aufgerÃ¤umt
     * intern verwendete HBCI-Spez. etwas "strenger" gemacht
 
     * Einige Fehler in der API-Dokumentation beseitigt (einige Klassen
       erschienen in den Package-Tree-Listings, die gar nicht dokumentiert
       sind und es auch nicht sein sollen)
-    * Demo-Applet für die Demonstration der Anwendung von HBCI4Java hingefügt
+    * Demo-Applet fÃ¼r die Demonstration der Anwendung von HBCI4Java hingefÃ¼gt
 
     * kleinere Bugfixes an Dialog-Engine, Message-Generator und -Parser sowie
-      an den Abläufen für die Schlüsselverwaltung
+      an den AblÃ¤ufen fÃ¼r die SchlÃ¼sselverwaltung
 
 
-- Änderungen zwischen 2.4.4 und 2.4.5
-    * neue Version der SIZRDH-Bibliothek verfügbar:
-        - Bug mit falschen Schlüsselnummern/-versionen behoben
-          (machte sich bei allen SIZ-Schlüsseldateien bemerkbar, bei
-          denen die Schlüssel bereits mindestens ein mal geändert wurden)
-        - Username für SIZ-Datei wird nicht mehr via Callback abgefragt
+- Ã„nderungen zwischen 2.4.4 und 2.4.5
+    * neue Version der SIZRDH-Bibliothek verfÃ¼gbar:
+        - Bug mit falschen SchlÃ¼sselnummern/-versionen behoben
+          (machte sich bei allen SIZ-SchlÃ¼sseldateien bemerkbar, bei
+          denen die SchlÃ¼ssel bereits mindestens ein mal geÃ¤ndert wurden)
+        - Username fÃ¼r SIZ-Datei wird nicht mehr via Callback abgefragt
           (sondern aus Datei selbst entnommen)
         - MAC-Verifizierung des Dateiinhaltes (Resultat in den Log-Ausgaben) 
-        - Debuggingmöglichkeiten bei Problemen verbessert
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
+        - DebuggingmÃ¶glichkeiten bei Problemen verbessert
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
         - Umbuchung (neu)
         - Sammellastschriften (neu)
-        - Sammelüberweisungen (edit)
+        - SammelÃ¼berweisungen (edit)
         - Abholen von Karteninformationen (neu)
         - Abholen von Kontoinformationen (neu)
     * Synchronisierung von Signatur-ID/System-ID kann jetzt manuell
       erzwungen werden
-    * Prüfzifferalgorithmen für Kontonummern diverser Banken hinzugefügt
+    * PrÃ¼fzifferalgorithmen fÃ¼r Kontonummern diverser Banken hinzugefÃ¼gt
     * zweistufiges Speichern von Passport-Files modifiziert (auf manchen
       System funktionierte der alte Code nicht)
     * Dialogende-Nachrichten-Responses von anonymen Dialogen sind teilweise
       signiert -- wird jetzt erkannt und erlaubt
-    * Rewriter-Modul für fehlende HBCI-Versionsnummer in  
-      Antwortnachrichten hinzugefügt
+    * Rewriter-Modul fÃ¼r fehlende HBCI-Versionsnummer in  
+      Antwortnachrichten hinzugefÃ¼gt
     * Buxfixes in der API-Dokumentation
 
 
-- Änderungen zwischen 2.4.3 und 2.4.4
-    * Unterstützung für SIZ-RDH-Schlüsseldateien hinzugefügt
+- Ã„nderungen zwischen 2.4.3 und 2.4.4
+    * UnterstÃ¼tzung fÃ¼r SIZ-RDH-SchlÃ¼sseldateien hinzugefÃ¼gt
       (siehe Datei README.SIZRDHFile)
     * Probleme mit einigen Banken gefixed, die Signaturen und
-      Nachrichtenschlüssel *immer* in der Länge 96 Bytes erwarten
+      NachrichtenschlÃ¼ssel *immer* in der LÃ¤nge 96 Bytes erwarten
 
 
-- Änderungen zwischen 2.4.2 und 2.4.3
-    * Unterstützung für die Überpruefung von Kontonummern mittels
-      Prüfzifferverfahren integriert (wird automatisch bei der
+- Ã„nderungen zwischen 2.4.2 und 2.4.3
+    * UnterstÃ¼tzung fÃ¼r die Ãœberpruefung von Kontonummern mittels
+      PrÃ¼fzifferverfahren integriert (wird automatisch bei der
       Erzeugung von Highlevel-Jobs verwendet und kann auch manuell
       benutzt werden)
-    * isSupported()-Methode für Highlevel-Jobs eingeführt (zum
-      Überpruefen der Verfügbarkeit eines Highlevel-Jobs *vor* dem
+    * isSupported()-Methode fÃ¼r Highlevel-Jobs eingefÃ¼hrt (zum
+      Ãœberpruefen der VerfÃ¼gbarkeit eines Highlevel-Jobs *vor* dem
       Erzeugen eines HBCIJob-Objektes)
-    * Verbesserung des status()-Callbacks zum Tracen der Kernel-Aktivität;
-      Boolean-Datentyp fuer Callback-Rückgabedaten eingeführt;
+    * Verbesserung des status()-Callbacks zum Tracen der Kernel-AktivitÃ¤t;
+      Boolean-Datentyp fuer Callback-RÃ¼ckgabedaten eingefÃ¼hrt;
       default-Wert fuer erwartete Nutzereingabe in Callbacks implementiert
-    * Rewriter-Module hinzugefügt, um Probleme mit der 
-      Baden-Württembergischen Bank zu beheben (Dank an Olly!)
+    * Rewriter-Module hinzugefÃ¼gt, um Probleme mit der 
+      Baden-WÃ¼rttembergischen Bank zu beheben (Dank an Olly!)
     * Rewriter-Module dokumentiert und per default aktiviert
     * HBCI-Kernel-Parameter zum optionalen Ignorieren bestimmter Fehler integriert
     * laufenden Saldo zu den Daten einer Transaktion (GVRKUms.UmsLine) bei 
-      Kontoauszügen hinzugefügt
+      KontoauszÃ¼gen hinzugefÃ¼gt
     * Liste der Bankleitzahlen aktualisiert
-    * zweistufiges Speichern von Passport-Files (=Schlüsseldateien) implementiert,
-      um bei Programmabstürzen Verluste zu vermeiden
-    * Schlüsselverwaltung mit HBCI 2.01 funktioniert jetzt wieder
-    * unnötige Schlüsselabfragen in diversen Dialogen zur Schlüsselverwaltung
+    * zweistufiges Speichern von Passport-Files (=SchlÃ¼sseldateien) implementiert,
+      um bei ProgrammabstÃ¼rzen Verluste zu vermeiden
+    * SchlÃ¼sselverwaltung mit HBCI 2.01 funktioniert jetzt wieder
+    * unnÃ¶tige SchlÃ¼sselabfragen in diversen Dialogen zur SchlÃ¼sselverwaltung
       entfernt (einige Banken hatten Probleme damit)
     * mehr Textausgaben internationalisiert (DE/EN) (da ist immer noch viel zu tun!)   
     * Erweiterung der API-Dokumentation
     * viele kleinere Bugfixes
 
 
-- Änderungen zwischen 2.4.1 und 2.4.2
+- Ã„nderungen zwischen 2.4.1 und 2.4.2
     * native DDV-Bibliotheken aktualisiert !!!
     * Status-Callback erhaelt bei Status STATUS_SEND_TASK und
       STATUS_SEND_TASK_DONE jetzt zusaetzlich die entsprechenden
       HBCIJob-Objekte
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
-        - terminierte Überweisungen löschen, Daueraufträge
-          löschen (es wird jetzt nur noch die Order-ID und
-          nicht mehr alle Auftragsdaten benötigt)
-        - terminierte Überweisungen bearbeiten, Daueraufträge bearbeiten
-          (es müssen nur noch die zu ändernden Daten zwingend 
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
+        - terminierte Ãœberweisungen lÃ¶schen, DauerauftrÃ¤ge
+          lÃ¶schen (es wird jetzt nur noch die Order-ID und
+          nicht mehr alle Auftragsdaten benÃ¶tigt)
+        - terminierte Ãœberweisungen bearbeiten, DauerauftrÃ¤ge bearbeiten
+          (es mÃ¼ssen nur noch die zu Ã¤ndernden Daten zwingend 
           angegeben werden, die restlichen Daten werden automatisch
           eingesetzt)
-        - Daueraufträge bearbeiten (Check, ob Ändern eines Feldes
+        - DauerauftrÃ¤ge bearbeiten (Check, ob Ã„ndern eines Feldes
           jeweils erlaubt ist)
         - Depotbestand abholen (WPDepotList)
-        - einige Wertpapiergeschäftsvorfälle zu internen 
-          HBCI-Syntax-Beschreibungen hinzugefügt (sind jetzt als Lowlevel-Jobs
-          in *allen* HBCI-Versionen verfügbar)
+        - einige WertpapiergeschÃ¤ftsvorfÃ¤lle zu internen 
+          HBCI-Syntax-Beschreibungen hinzugefÃ¼gt (sind jetzt als Lowlevel-Jobs
+          in *allen* HBCI-Versionen verfÃ¼gbar)
     * Konto-Struktur verwaltet name1 und name2 jetzt getrennt
       (nicht mehr "name1 / name2" als ein String)
     * automatische Erkennung der Reiner-SCT-Biometrie-Einheit implementiert
-    * DDV-Bibliothek für den Einsatz unter Solaris hinzugefügt
+    * DDV-Bibliothek fÃ¼r den Einsatz unter Solaris hinzugefÃ¼gt
     * Log-Ausgaben im Level INFO (3) sind weniger aufdringlich ;-)
     * Bug beim Ignorieren von unbekannten FinTS-3.0-
-      Geschäftsvorfallparametern gefixt
-    * build.xml für Verwendung (vor allem unter Linux) einfacher
-      (kein separates Script zum Compilieren des C-Codes mehr nötig)
+      GeschÃ¤ftsvorfallparametern gefixt
+    * build.xml fÃ¼r Verwendung (vor allem unter Linux) einfacher
+      (kein separates Script zum Compilieren des C-Codes mehr nÃ¶tig)
     * kleinere Bugfixes im C-Code
 
 
-- Änderungen zwischen 2.4.0 und 2.4.1
-    * neues Dateiformat für RDH-Passports und damit neuen RDH-Passport-Typ
-      (=RDHNew) eingeführt. SIEHE DAZU DATEI README.RDHNew
-    * Laden des Property-Files mit den default-Einstellungen für Kernel-Parameter
+- Ã„nderungen zwischen 2.4.0 und 2.4.1
+    * neues Dateiformat fÃ¼r RDH-Passports und damit neuen RDH-Passport-Typ
+      (=RDHNew) eingefÃ¼hrt. SIEHE DAZU DATEI README.RDHNew
+    * Laden des Property-Files mit den default-Einstellungen fÃ¼r Kernel-Parameter
       beim Initialisieren von HBCI4Java vereinfacht
-    * Demo-Programm zum Analysieren von Kontoauszügen hinzugefügt
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
+    * Demo-Programm zum Analysieren von KontoauszÃ¼gen hinzugefÃ¼gt
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
         - Wertpapierinformationen abholen
         - Kursinformationen zu Wertpapieren abholen
         - Wertpapier-Referenznummern ermitteln
         - Stammdaten zu Wertpapieren abholen
         - Depotbestand abholen (WPDepotList)
-        - Depotumsätze abholen
+        - DepotumsÃ¤tze abholen
 
 
-- Änderungen zwischen 2.3 und 2.4.0
-    * das API für die Arbeit mit Jobs und für die Auswertung
-      der Job-Ergebnisse hat sich signifikant verändert!
+- Ã„nderungen zwischen 2.3 und 2.4.0
+    * das API fÃ¼r die Arbeit mit Jobs und fÃ¼r die Auswertung
+      der Job-Ergebnisse hat sich signifikant verÃ¤ndert!
     * beim Erzeugen von Jobs werden automatisch einige der Restriktionen
-      aus den BPD überprüft
+      aus den BPD Ã¼berprÃ¼ft
     * Schnittstelle zur Arbeit mit "Lowlevel"-Jobs (Jobs ohne komfortable
       Wrapper-Klassen) sauberer gemacht und dokumentiert(!)
-    * Callback-Klassen liegen in einem separaten Package, API für Callback-
-      Routinen geändert!
-    * Dokumentation fast vollständig überarbeitet; alle Informationen sind jetzt
-      in der Javadoc-API-Dokumentation enthalten; Geschäftsvorfälle dokumentiert
-    * beim Initialisieren eines Passports werden sämtliche fehlenden Zugangsdaten
+    * Callback-Klassen liegen in einem separaten Package, API fÃ¼r Callback-
+      Routinen geÃ¤ndert!
+    * Dokumentation fast vollstÃ¤ndig Ã¼berarbeitet; alle Informationen sind jetzt
+      in der Javadoc-API-Dokumentation enthalten; GeschÃ¤ftsvorfÃ¤lle dokumentiert
+    * beim Initialisieren eines Passports werden sÃ¤mtliche fehlenden Zugangsdaten
       via Callback erfragt (und bei DDV-Passports auch sofort auf die Chipkarte
       geschrieben - separates Initialisieren von Benutzerkennungen auf der Chipkarte
-      nicht mehr nötig)
-    * Chipkartensupport für DDV-Zugänge überarbeitet:
+      nicht mehr nÃ¶tig)
+    * Chipkartensupport fÃ¼r DDV-ZugÃ¤nge Ã¼berarbeitet:
         - Dynamisch ladbare Bibliotheken (HBCI4Java-Bibliothek und CTAPI-Treiber-
-          Bibliothek) müssen jetzt durch einen vollständigen Dateinamen spezifiziert werden
-        - C++-Code für Chipkartensupport völlig überarbeitet
-        - einige Kommandozeilentools für die Arbeit mit DDV-Chipkarten hinzugefügt
-          (nur für Debugging-Zwecke)
-        - neues Loglevel (LOG_CHIPCARD=5) für Logging der Kommunikation mit Chipkartenleser
-          eingeführt
+          Bibliothek) mÃ¼ssen jetzt durch einen vollstÃ¤ndigen Dateinamen spezifiziert werden
+        - C++-Code fÃ¼r Chipkartensupport vÃ¶llig Ã¼berarbeitet
+        - einige Kommandozeilentools fÃ¼r die Arbeit mit DDV-Chipkarten hinzugefÃ¼gt
+          (nur fÃ¼r Debugging-Zwecke)
+        - neues Loglevel (LOG_CHIPCARD=5) fÃ¼r Logging der Kommunikation mit Chipkartenleser
+          eingefÃ¼hrt
         - Automatisches Erkennen und Benutzen der separaten Chipkartenterminal-Tastatur
-          über HBCI-Parameter einstellbar
-        - Unterstützung für *beliebigen* auf einer DDV-Chipkarte gespeicherten
-          HBCI-Account eingeführt (nicht nur des ersten; wird aber selten benötigt)
-    * mehrere Versuche bei falscher Passworteingabe für Passport-File möglich
-    * Default-Swing-Callbacks überarbeitet: in allen Eingabedialogen ist der OK-Button
+          Ã¼ber HBCI-Parameter einstellbar
+        - UnterstÃ¼tzung fÃ¼r *beliebigen* auf einer DDV-Chipkarte gespeicherten
+          HBCI-Account eingefÃ¼hrt (nicht nur des ersten; wird aber selten benÃ¶tigt)
+    * mehrere Versuche bei falscher Passworteingabe fÃ¼r Passport-File mÃ¶glich
+    * Default-Swing-Callbacks Ã¼berarbeitet: in allen Eingabedialogen ist der OK-Button
       jetzt der Default-Button (reagiert also auf <ENTER> im Eingabefeld)
-    * diverse Kommandozeilentools hinzugefügt
-    * einige unnötige HBCI-Dialoge beim Wechseln der HBCI-Version für ein
+    * diverse Kommandozeilentools hinzugefÃ¼gt
+    * einige unnÃ¶tige HBCI-Dialoge beim Wechseln der HBCI-Version fÃ¼r ein
       Passport eliminiert
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
-        - Kontoauszüge abholen (bugfixes)
-        - Einreichen von Daueraufträgen (bugfix)
-        - Überweisungen, Spendenüberweisungen, BZÜ-gesicherte Überweisungen,
-          terminierte Überweisungen
-        - Abholen von Informationen über TAN-Listen (nur für PIN/TAN-Passports)
-    * Bug im Swift-Parser für Kontoauszüge behoben
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
+        - KontoauszÃ¼ge abholen (bugfixes)
+        - Einreichen von DauerauftrÃ¤gen (bugfix)
+        - Ãœberweisungen, SpendenÃ¼berweisungen, BZÃœ-gesicherte Ãœberweisungen,
+          terminierte Ãœberweisungen
+        - Abholen von Informationen Ã¼ber TAN-Listen (nur fÃ¼r PIN/TAN-Passports)
+    * Bug im Swift-Parser fÃ¼r KontoauszÃ¼ge behoben
     * einige Bugs im Fehlerbehandlungsmechanismus behoben
-    * eine Menge (|Menge|>>20) kleinerer Bugs gefixt und viel Code aufgeräumt
+    * eine Menge (|Menge|>>20) kleinerer Bugs gefixt und viel Code aufgerÃ¤umt
 
 
-- Änderungen zwischen 2.2 und 2.3
+- Ã„nderungen zwischen 2.2 und 2.3
     * Bug beim Erkennen der max. Anzahl GVs pro Nachricht behoben
-    * DDV-Bibliothek für Solaris hinzugefügt
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
-        - Bearbeiten von terminierten Überweisungen
-        - Löschen von terminierten Überweisunge
+    * DDV-Bibliothek fÃ¼r Solaris hinzugefÃ¼gt
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
+        - Bearbeiten von terminierten Ãœberweisungen
+        - LÃ¶schen von terminierten Ãœberweisunge
     * interne Code-Cleanups
 
 
-- Änderungen zwischen 2.1 und 2.2
-    * Verwendung der System-ID beim Sperren/Neugenerieren von RSA-Schlüsseln
+- Ã„nderungen zwischen 2.1 und 2.2
+    * Verwendung der System-ID beim Sperren/Neugenerieren von RSA-SchlÃ¼sseln
       berichtigt
-    * High-Level-Methoden zum Neugenerieren sowie zum Ändern von RSA-Schlüsseln
-      freigegeben; Ändern von Nutzerschlüsseln geht jetzt
-    * Verhalten bei Fehlern während der Übertragung der Nutzerschlüssel an
+    * High-Level-Methoden zum Neugenerieren sowie zum Ã„ndern von RSA-SchlÃ¼sseln
+      freigegeben; Ã„ndern von NutzerschlÃ¼sseln geht jetzt
+    * Verhalten bei Fehlern wÃ¤hrend der Ãœbertragung der NutzerschlÃ¼ssel an
       die Bank verbessert (RSA)
-    * Probleme einiger HBCI-Server bei der Entgegennahme neuer Nutzerschlüssel
+    * Probleme einiger HBCI-Server bei der Entgegennahme neuer NutzerschlÃ¼ssel
       behoben (danke Achim!)
-    * deutsche Umlaute (Zeichensatz ISO-8859-1) jetzt bei Überweisungen etc.
-      verwendbar (die meisten Banken unterstützen das aber nicht richtig)
-    * Fehler bei default-Werten für Geschäftsvorfall-Daten behoben
-    * Tool zur Erzeugung von INI-Briefen verfügbar
-    * Unterstützung von Banken, die ihre Nachrichten nicht signieren (igitt!)
+    * deutsche Umlaute (Zeichensatz ISO-8859-1) jetzt bei Ãœberweisungen etc.
+      verwendbar (die meisten Banken unterstÃ¼tzen das aber nicht richtig)
+    * Fehler bei default-Werten fÃ¼r GeschÃ¤ftsvorfall-Daten behoben
+    * Tool zur Erzeugung von INI-Briefen verfÃ¼gbar
+    * UnterstÃ¼tzung von Banken, die ihre Nachrichten nicht signieren (igitt!)
     * Fehler behoben, der bei Nutzerkennung<>Kunden-ID auftrat
-    * beim Setzen von GV-Parametern können auch komplexe Objekte als Parameter
+    * beim Setzen von GV-Parametern kÃ¶nnen auch komplexe Objekte als Parameter
       benutzt werden
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
         - Wertpapierinformationen abholen
         - Kursinformationen zu Wertpapieren abholen
         - Wertpapier-Referenznummern ermitteln
         - Stammdaten zu Wertpapieren abholen
         - Depotbestand abholen (WPDepotList)
-        - Depotumsätze abholen
-        - Kontoauszüge abholen (Kontoauszüge mit speziellen Daten im Verwendungs-
+        - DepotumsÃ¤tze abholen
+        - KontoauszÃ¼ge abholen (KontoauszÃ¼ge mit speziellen Daten im Verwendungs-
           zweck wurden nicht richtig geparst)
     * Fehler im Message-Parser behoben, aufgrund dessen sehr spezielle Nachrichten
       nicht richtig analysiert wurden
@@ -742,30 +742,30 @@
     * Refactoring
 
 
-- Änderungen zwischen 2.0 und 2.1
-    * Datums- und Zeitangaben lokalisiert: *Eingaben* an den Kernel müssen in der 
+- Ã„nderungen zwischen 2.0 und 2.1
+    * Datums- und Zeitangaben lokalisiert: *Eingaben* an den Kernel mÃ¼ssen in der 
       locale-typischen Form (dd.MM.yyyy oder mm/dd/yyyy usw.) erfolgen;
       *Ausgaben* vom Kernel erfolgen ebenfalls automatisch in der locale-typischen Form
     * beim Erzeugen eines HBCI-Handler-Objektes kann jetzt optional
       automatisch die zuletzt benutzte HBCI-Version eines Passports benutzt werden
-    * die default-Implementationen der Callback-Klassen können jetzt selbstständig
-      die beiden Callbacks "neue Institutsschlüssel empfangen" und "neue Nutzerschlüssel
+    * die default-Implementationen der Callback-Klassen kÃ¶nnen jetzt selbststÃ¤ndig
+      die beiden Callbacks "neue InstitutsschlÃ¼ssel empfangen" und "neue NutzerschlÃ¼ssel
       erzeugt" behandeln
     * Swing-Callback lokalisiert
-    * Schlüsselsperrung für RSA-Schlüssel wieder freigeschaltet
+    * SchlÃ¼sselsperrung fÃ¼r RSA-SchlÃ¼ssel wieder freigeschaltet
     * Liste aller deutschen Bankleitzahlen integriert
-    * beim Hinzufügen von Jobs mit HBCIHandler.addJob() wird überprüft, ob diese noch
+    * beim HinzufÃ¼gen von Jobs mit HBCIHandler.addJob() wird Ã¼berprÃ¼ft, ob diese noch
       in die aktuelle Nachricht passen; wenn nicht, wird automatisch eine neue
-      Nachricht begonnen (HBCIHandler.newMsg() könnte somit entfallen)
-    * Geschäftsvorfälle hinzugefügt bzw. modifiziert:
-        - Daueraufträge bearbeiten (DauerEdit)
-        - Löschen von Daueraufträgen (DauerDel)
+      Nachricht begonnen (HBCIHandler.newMsg() kÃ¶nnte somit entfallen)
+    * GeschÃ¤ftsvorfÃ¤lle hinzugefÃ¼gt bzw. modifiziert:
+        - DauerauftrÃ¤ge bearbeiten (DauerEdit)
+        - LÃ¶schen von DauerauftrÃ¤gen (DauerDel)
         - Kundennachricht senden (CustomMsg)
-        - Übersicht der Festgeldanlagen abholen (FestList)
-        - Übersicht der Festgeldkonditionen abholen (FestCondList)
-        - Übersicht der verfügbaren Kreditinstitutsinformationen abholen (InfoList)
+        - Ãœbersicht der Festgeldanlagen abholen (FestList)
+        - Ãœbersicht der Festgeldkonditionen abholen (FestCondList)
+        - Ãœbersicht der verfÃ¼gbaren Kreditinstitutsinformationen abholen (InfoList)
         - Kreditinstitutsinformationen anfordern (InfoOrder)
-        - Übersicht der noch anstehenden terminierten Überweisungen abholen (TermUebList) 
+        - Ãœbersicht der noch anstehenden terminierten Ãœberweisungen abholen (TermUebList) 
     * API-Dokumentation erweitert
     * kleinere Bugfixes
     * Refactoring in den Passport-Klassen

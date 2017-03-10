@@ -29,7 +29,7 @@ import org.kapott.hbci.manager.LogFilter;
     durch den HBCI-Kernel erzeugt werden. Beim Auftreten einer
     solchen Exception sollten die Messages der gesamten(!)
     Exception-Kette angezeigt werden, um die Fehlerursache
-    bestmöglich bestimmen zu können.
+    bestmÃ¶glich bestimmen zu kÃ¶nnen.
     <pre>
 try {
     // hier HBCI-Zeugs machen
@@ -73,7 +73,7 @@ public class HBCI_Exception
     
     /** Erzeugen einer neuen HBCI_Exception mit bestimmter
         Message 
-        @param s Message, die bei <code>getMessage()</code> zurückgegeben werden soll*/
+        @param s Message, die bei <code>getMessage()</code> zurÃ¼ckgegeben werden soll*/
     public HBCI_Exception(String s)
     {
         super(applyLogFilter(s));
@@ -83,16 +83,16 @@ public class HBCI_Exception
         Die Message, die in dieser Exception gespeichert wird, ist
         auf jeden Fall leer 
         @param e "Ursache" dieser Exception, die in der Exception-Kette als
-               <code>getCause()</code> zurückgegeben werden soll */
+               <code>getCause()</code> zurÃ¼ckgegeben werden soll */
     public HBCI_Exception(Throwable e)
     {
         super(null,e);
     }
     
     /** Erzeugen einer neuen HBCI_Exception mit gegebener Message und Cause 
-        @param st Message, die bei <code>getMessage()</code> zurückgegeben werden soll 
+        @param st Message, die bei <code>getMessage()</code> zurÃ¼ckgegeben werden soll 
         @param e "Ursache" dieser Exception, die in der Exception-Kette als
-               <code>getCause()</code> zurückgegeben werden soll */
+               <code>getCause()</code> zurÃ¼ckgegeben werden soll */
     public HBCI_Exception(String st,Throwable e)
     {
         super(applyLogFilter(st),e);

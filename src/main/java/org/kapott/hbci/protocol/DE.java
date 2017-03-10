@@ -65,14 +65,14 @@ public final class DE
         // wenn dieses de gemeint ist
         if (destPath.equals(getPath())) {
             if (this.value!=null) { // es gibt schon einen Wert
-                if (!allowOverwrite) { // überschreiben ist nicht erlaubt
+                if (!allowOverwrite) { // Ã¼berschreiben ist nicht erlaubt
                     // fehler
                     if (!HBCIUtilsInternal.ignoreError(null,"client.errors.allowOverwrites",
                             "*** trying to overwrite "+getPath()+"="+value.toString()+" with "+valueString))
                         throw new OverwriteException(getPath(),value.toString(),valueString);
                 }
                 
-                // ansonsten den alten Wert löschen
+                // ansonsten den alten Wert lÃ¶schen
                 SyntaxDEFactory.getInstance().unuseObject(value,getType());
             }
 

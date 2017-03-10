@@ -36,10 +36,10 @@ import org.kapott.hbci.passport.rdhXfile.RDHXFile;
 import org.kapott.hbci.passport.rdhXfile.TLV;
 
 /**<p>
- * Passport-Klasse für die Verwendung von RDH-2- und RDH-10-Schlüsseldateien mit
- * <em>HBCI4Java</em>. RDH-2/10-Schlüsseldateien sind Schlüsseldateien für
- * RDH-Zugänge, die von anderer HBCI-Software erzeugt und verwendet werden (z.B.
- * von <em>VR-NetWorld</em>). Soll eine solche Schlüsseldatei sowohl mit der
+ * Passport-Klasse fÃ¼r die Verwendung von RDH-2- und RDH-10-SchlÃ¼sseldateien mit
+ * <em>HBCI4Java</em>. RDH-2/10-SchlÃ¼sseldateien sind SchlÃ¼sseldateien fÃ¼r
+ * RDH-ZugÃ¤nge, die von anderer HBCI-Software erzeugt und verwendet werden (z.B.
+ * von <em>VR-NetWorld</em>). Soll eine solche SchlÃ¼sseldatei sowohl mit der
  * anderen Software als auch mit <em>HBCI4Java</em> verwendet werden, so kann
  * das mit dieser Passport-Variante geschehen.</p> */    
 public class HBCIPassportRDHXFile
@@ -95,7 +95,7 @@ public class HBCIPassportRDHXFile
                             HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                             HBCICallback.TYPE_SECRET,
                             retData);
-                    // TODO: passwort-bedingungen nach spez. prüfen
+                    // TODO: passwort-bedingungen nach spez. prÃ¼fen
                     LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                     setPassphrase(retData.toString().getBytes());
                 }
@@ -120,7 +120,7 @@ public class HBCIPassportRDHXFile
                 
                 TLV[] hbciAccounts=filecontent.getFields(HBCIAccount.class);
                 if (hbciAccounts.length>1) {
-                    // wenn mehrere bankverbindungen existieren, callback für auswahl der "richtigen"
+                    // wenn mehrere bankverbindungen existieren, callback fÃ¼r auswahl der "richtigen"
                     StringBuffer possibilities=new StringBuffer();
                     for (int i=0;i<hbciAccounts.length;i++) {
                         HBCIAccount hbciAccount=(HBCIAccount)hbciAccounts[i];
@@ -191,7 +191,7 @@ public class HBCIPassportRDHXFile
                         HBCICallback.NEED_PASSPHRASE_SAVE,
                         HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                         HBCICallback.TYPE_SECRET, retData);
-                // TODO: passwort-bedingungen nach spez. prüfen
+                // TODO: passwort-bedingungen nach spez. prÃ¼fen
                 LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                 setPassphrase(retData.toString().getBytes());
             }
@@ -282,8 +282,8 @@ public class HBCIPassportRDHXFile
                             "no keys found in passport - so we use the highest available profile",
                             HBCIUtils.LOG_DEBUG);
 
-                        // es gibt noch gar keine schlüssel - also nehmen wir die
-                        // höchste unterstützte profil-nummer
+                        // es gibt noch gar keine schlÃ¼ssel - also nehmen wir die
+                        // hÃ¶chste unterstÃ¼tzte profil-nummer
 
                         String[][] methods=getSuppSecMethods();
                         int        maxVersion=0;
@@ -295,7 +295,7 @@ public class HBCIPassportRDHXFile
                                     (version==1 || version==2 || version==10)) 
                             {
                                 // es werden nur RDH-1, RDH-2 und RDH-10 betrachtet, weil
-                                // alle anderen rdh-profile nicht für software-lösungen
+                                // alle anderen rdh-profile nicht fÃ¼r software-lÃ¶sungen
                                 // zugelassen sind
                                 if (version>maxVersion) {
                                     maxVersion=version;

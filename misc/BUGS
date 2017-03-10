@@ -1,46 +1,46 @@
 
 * Dialogabbruchnachrichten (seit HBCI 2.2) werden nicht erkannt, sondern als
-  fehlerhafte Nachrichten (da nicht verschlüsselt/signiert) behandelt
+  fehlerhafte Nachrichten (da nicht verschlÃ¼sselt/signiert) behandelt
   
-* die Informationen über zu verwendende Kommunikations-Filter aus den BPD 
+* die Informationen Ã¼ber zu verwendende Kommunikations-Filter aus den BPD 
   werden *nicht* von HBCI4Java ausgewertet, da diese von vielen Banken 
-  fehlerhaft belegt werden. Für "normale" HBCI-Verbindungen (TCP/IP über Port 
-  3000) wird von HBCI4Java immer *kein* Filter verwendet, für HBCI-PIN/TAN ist
+  fehlerhaft belegt werden. FÃ¼r "normale" HBCI-Verbindungen (TCP/IP Ã¼ber Port 
+  3000) wird von HBCI4Java immer *kein* Filter verwendet, fÃ¼r HBCI-PIN/TAN ist
   das einstellbar
   
 * Bei der Erzeugung von Jobs werden die UPD noch nicht ausgewertet, um die 
-  Gültigkeit der erzeugten Jobs zu überprüfen.
+  GÃ¼ltigkeit der erzeugten Jobs zu Ã¼berprÃ¼fen.
   
-* RSA-Chipkarten werden noch nicht unterstützt
+* RSA-Chipkarten werden noch nicht unterstÃ¼tzt
 
-* Die "Schlüsseldateien" für die Passport-Varianten Anonymous,DDV,PinTan und 
+* Die "SchlÃ¼sseldateien" fÃ¼r die Passport-Varianten Anonymous,DDV,PinTan und 
   RDH sind u.U. nicht zwischen verschiedenen Betriebssystemen bzw. 
-  verschiedenen Java-Versionen portierbar. Für die Varianten Anonymous,DDV und
-  PinTan ist das unkritisch, da diese Schlüsseldateien keine Informationen 
-  enthalten, die nicht anderweitig reproduziert werden könnten (die Dateien 
-  können also notfalls einfach gelöscht werden). Für die RDH-Variante trifft 
+  verschiedenen Java-Versionen portierbar. FÃ¼r die Varianten Anonymous,DDV und
+  PinTan ist das unkritisch, da diese SchlÃ¼sseldateien keine Informationen 
+  enthalten, die nicht anderweitig reproduziert werden kÃ¶nnten (die Dateien 
+  kÃ¶nnen also notfalls einfach gelÃ¶scht werden). FÃ¼r die RDH-Variante trifft 
   das nicht zu, diese sollte deshalb auch nicht mehr verwendet werden, sondern
-  statt dessen RDHNew (dieses Dateiformat ist systemunabhängig).
+  statt dessen RDHNew (dieses Dateiformat ist systemunabhÃ¤ngig).
 
 * Die SIZ-RDH-Bibliothek ist nicht thread-safe, es sollte also sichergestellt
   werden, dass zu jedem Zeitpunkt nur ein einziger Thread eine SIZ-RDH-
   Passport-Datei einliest.
   
-* In der SIZ-Schlüsseldatei muss ein bereits vollständig 
-  initialisierter Eintrag stehen (also mit Nutzerdaten, Nutzerschlüsseln, 
-  Bankdaten und Bankschlüsseln) - nur die System-ID muss noch nicht 
-  initialisiert (synchronisiert) sein. Beim Einlesen von Schlüsseldateien,
-  in denen für einen Eintrag nicht alle Daten vorhanden sind, kann es zu
-  Problemen kommen. Auch das initiale *Erzeugen* von SIZ-Schlüsseldateien
-  wird noch nicht unterstützt.
+* In der SIZ-SchlÃ¼sseldatei muss ein bereits vollstÃ¤ndig 
+  initialisierter Eintrag stehen (also mit Nutzerdaten, NutzerschlÃ¼sseln, 
+  Bankdaten und BankschlÃ¼sseln) - nur die System-ID muss noch nicht 
+  initialisiert (synchronisiert) sein. Beim Einlesen von SchlÃ¼sseldateien,
+  in denen fÃ¼r einen Eintrag nicht alle Daten vorhanden sind, kann es zu
+  Problemen kommen. Auch das initiale *Erzeugen* von SIZ-SchlÃ¼sseldateien
+  wird noch nicht unterstÃ¼tzt.
   
-* Beim Lesen von SIZ-Schlüsseldateien kann es zu Problemen kommen, wenn das
-  Passwort für diese Dateien Umlaute enthält.
+* Beim Lesen von SIZ-SchlÃ¼sseldateien kann es zu Problemen kommen, wenn das
+  Passwort fÃ¼r diese Dateien Umlaute enthÃ¤lt.
   
-* Bei der Verwendung von SIZ-Schlüsseldateien sollten auf keinen Fall
-  Schlüsseländerungen via HBCI4Java durchgeführt werden. HBCI4Java lässt 
-  nämlich beim Schreiben solcher Dateien die Schlüsseldaten in der Datei
-  unverändert -- geänderte Schlüssel würden also verloren gehen!
+* Bei der Verwendung von SIZ-SchlÃ¼sseldateien sollten auf keinen Fall
+  SchlÃ¼sselÃ¤nderungen via HBCI4Java durchgefÃ¼hrt werden. HBCI4Java lÃ¤sst 
+  nÃ¤mlich beim Schreiben solcher Dateien die SchlÃ¼sseldaten in der Datei
+  unverÃ¤ndert -- geÃ¤nderte SchlÃ¼ssel wÃ¼rden also verloren gehen!
 
 * es sind noch nicht alle Texte internationalisiert
 
@@ -50,16 +50,16 @@
   welcher wohl von den meisten HBCI-Servern so umgesetzt sein duerfte.
 
 * Beim Zweischritt-PIN/TAN-Verfahren wird die Verwendung mehrerer TAN-Listen
-  noch nicht unterstützt
+  noch nicht unterstÃ¼tzt
   
 * Beim Zweischritt-PIN/TAN-Verfahren werden noch keine Mehrfachsignaturen 
-  unterstützt. Auch das zeitversetzte Senden des ersten und des zweiten 
-  Schrittes dürften noch nicht funktionieren.
+  unterstÃ¼tzt. Auch das zeitversetzte Senden des ersten und des zweiten 
+  Schrittes dÃ¼rften noch nicht funktionieren.
   
-* Für das Zweischritt-PIN/TAN-Verfahren werden die optionalen Bankensignaturen
-  für HITAN-Segmente noch nicht unterstützt
+* FÃ¼r das Zweischritt-PIN/TAN-Verfahren werden die optionalen Bankensignaturen
+  fÃ¼r HITAN-Segmente noch nicht unterstÃ¼tzt
   
-* Für FinTS-3.0 werden die Verfahren RDH-3 bis RDH-5 noch nicht unterstützt.
-  Auch Zertifikate werden im Moment noch nicht unterstützt.
+* FÃ¼r FinTS-3.0 werden die Verfahren RDH-3 bis RDH-5 noch nicht unterstÃ¼tzt.
+  Auch Zertifikate werden im Moment noch nicht unterstÃ¼tzt.
 
-* Für FinTS-3.0 wird noch keine Nachrichten-Kompression unterstützt.
+* FÃ¼r FinTS-3.0 wird noch keine Nachrichten-Kompression unterstÃ¼tzt.

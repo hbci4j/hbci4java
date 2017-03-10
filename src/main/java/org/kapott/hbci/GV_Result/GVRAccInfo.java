@@ -32,7 +32,7 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
-/** Klasse für die Ergebnisdaten einer Kontostammdaten-Abfrage */
+/** Klasse fÃ¼r die Ergebnisdaten einer Kontostammdaten-Abfrage */
 public class GVRAccInfo 
     extends HBCIJobResultImpl
 {
@@ -123,36 +123,36 @@ public class GVRAccInfo
             <code>-1</code>, wenn diese Information nicht von der Bank 
             bereitgestellt wird*/
         public int     type;
-        /** Eröffnungsdatum (optional) */
+        /** ErÃ¶ffnungsdatum (optional) */
         public Date    created;
         /** 1000*Sollzins (optional) */
         public long  sollzins;
         /** 1000*Habenzins (optional) */
         public long habenzins;
-        /** 1000*Überziehungszins (optional) */
+        /** 1000*Ãœberziehungszins (optional) */
         public long ueberzins;
         /** Kreditlinie (optional) */
         public Value   kredit;
-        /** Referenzkonto (zB für Kreditkartenkonten) (optional) */
+        /** Referenzkonto (zB fÃ¼r Kreditkartenkonten) (optional) */
         public Konto   refAccount;
-        /** Versandart für Kontoauszüge. Folgende Werte sind definiert:
+        /** Versandart fÃ¼r KontoauszÃ¼ge. Folgende Werte sind definiert:
             <ul>
               <li><code>DELIVER_TYPE_NONE</code> - kein Auszug</li>
               <li><code>DELIVER_TYPE_POST</code> - Postzustellung</li>
               <li><code>DELIVER_TYPE_KAD</code> - Kontoauszugsdrucker</li>
-              <li><code>DELIVER_TYPE_OFFICE</code> - Abholung in Geschäftsstelle</li>
-              <li><code>DELIVER_TYPE_EDV</code> - elektronische Übermittlung</li>
+              <li><code>DELIVER_TYPE_OFFICE</code> - Abholung in GeschÃ¤ftsstelle</li>
+              <li><code>DELIVER_TYPE_EDV</code> - elektronische Ãœbermittlung</li>
             </ul>*/
         public int     versandart;
-        /** Turnus für Kontoauszugszustellung (nur bei Postzustellung) (optional).
+        /** Turnus fÃ¼r Kontoauszugszustellung (nur bei Postzustellung) (optional).
          * Folgende Werte sind definiert:
          * <ul>
-         *   <li><code>TURNUS_DAILY</code> - täglicher Kontoauszug</li>
-         *   <li><code>TURNUS_WEEKLY</code> - wöchentlicher Kontoauszug</li>
+         *   <li><code>TURNUS_DAILY</code> - tÃ¤glicher Kontoauszug</li>
+         *   <li><code>TURNUS_WEEKLY</code> - wÃ¶chentlicher Kontoauszug</li>
          *   <li><code>TURNUS_MONTHLY</code> - monatlicher Kontoauszug</li>
-         *   <li><code>TURNUS_QUARTER</code> - vierteljährlicher Kontoauszug</li>
-         *   <li><code>TURNUS_HALF</code> - halbjährlicher Kontoauszug</li>
-         *   <li><code>TURNUS_ANNUAL</code> - jährlicher Kontoauszug</li>
+         *   <li><code>TURNUS_QUARTER</code> - vierteljÃ¤hrlicher Kontoauszug</li>
+         *   <li><code>TURNUS_HALF</code> - halbjÃ¤hrlicher Kontoauszug</li>
+         *   <li><code>TURNUS_ANNUAL</code> - jÃ¤hrlicher Kontoauszug</li>
          * </ul> */
         public int     turnus;
         /** Weitere Informationen (optional) */
@@ -173,10 +173,10 @@ public class GVRAccInfo
             ret.append(" (art: ").append(type).append(")").append(linesep);
             
             if (created!=null)
-                ret.append("Eröffnungsdatum: ").append(HBCIUtils.date2StringLocal(created)).append(linesep);
+                ret.append("ErÃ¶ffnungsdatum: ").append(HBCIUtils.date2StringLocal(created)).append(linesep);
             ret.append("Sollzins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(sollzins).divide(ONE_THOUSAND)));
             ret.append(" Habenzins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(habenzins).divide(ONE_THOUSAND)));
-            ret.append(" Überziehungszins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(ueberzins).divide(ONE_THOUSAND)));
+            ret.append(" Ãœberziehungszins:").append(HBCIUtilsInternal.bigDecimal2String(new BigDecimal(ueberzins).divide(ONE_THOUSAND)));
             ret.append(" Kredit: ").append(kredit).append(linesep);
             
             if (refAccount!=null)
@@ -210,7 +210,7 @@ public class GVRAccInfo
 
     /** Holen aller empfangenen Kontostammdaten.
         @return Array mit einzelnen Konto-Informationen. Das Array ist niemals
-        <code>null</code>, kann aber die Länge <code>0</code> haben */
+        <code>null</code>, kann aber die LÃ¤nge <code>0</code> haben */
     public AccInfo[] getEntries()
     {
         return entries.toArray(new AccInfo[entries.size()]);

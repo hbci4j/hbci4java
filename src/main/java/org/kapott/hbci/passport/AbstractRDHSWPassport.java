@@ -316,7 +316,7 @@ public abstract class AbstractRDHSWPassport
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(msgkey,DESedeKeySpec.class));
             byte[] plainKey=spec.getKey(); // plainKey ist der DESede-Key
 
-            // abh‰ngig von der L‰nge des inst-enc-keys
+            // abh√§ngig von der L√§nge des inst-enc-keys
             int    cryptDataSize=getCryptDataSize(getInstEncKey().key);
             byte[] plainText=new byte[cryptDataSize];
             Arrays.fill(plainText,(byte)(0));
@@ -457,7 +457,7 @@ public abstract class AbstractRDHSWPassport
             // TODO: auch dig key neu generieren?
             for (int i=0;i<2;i++) {
                 KeyPairGenerator keygen=KeyPairGenerator.getInstance("RSA");
-                // die schl¸ssell‰nge ist vom sicherheitsprofil abh‰ngig 
+                // die schl√ºssell√§nge ist vom sicherheitsprofil abh√§ngig 
                 keygen.initialize(keySize);
                 KeyPair pair=keygen.generateKeyPair();
 

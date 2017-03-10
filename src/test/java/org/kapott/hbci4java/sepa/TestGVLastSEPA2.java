@@ -62,7 +62,7 @@ public class TestGVLastSEPA2 extends AbstractTestGV {
         job.setParam("mandateid", params.getProperty("mandateid"));
         job.setParam("manddateofsig", params.getProperty("date_of_sig"));
         
-        System.out.println("---------Für Job zur Queue");
+        System.out.println("---------FÃ¼r Job zur Queue");
         job.addToQueue();
 
         

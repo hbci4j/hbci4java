@@ -26,14 +26,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Properties;
 
-/** <p>ClassLoader, der für das Laden eines Property-Files aus dem Filesystem benutzt
-    werden kann. Dieser ClassLoader kann überall da benutzt werden, wenn eine
-    Ressource über einen ClassLoader geladen wird, und wenn die Ressource ein
-    File im aktuellen Filesystem ist. Es ist zur Zeit nicht möglich, relative
-    Pfadangaben zu benutzen. Das heißt, dass der Pfad zu einer Ressource (Datei)
-    immer als vollständiger Pfad von der Wurzel des Dateisystems an spezifiziert
+/** <p>ClassLoader, der fÃ¼r das Laden eines Property-Files aus dem Filesystem benutzt
+    werden kann. Dieser ClassLoader kann Ã¼berall da benutzt werden, wenn eine
+    Ressource Ã¼ber einen ClassLoader geladen wird, und wenn die Ressource ein
+    File im aktuellen Filesystem ist. Es ist zur Zeit nicht mÃ¶glich, relative
+    Pfadangaben zu benutzen. Das heiÃŸt, dass der Pfad zu einer Ressource (Datei)
+    immer als vollstÃ¤ndiger Pfad von der Wurzel des Dateisystems an spezifiziert
     werden muss.</p>
-    <p>Es gibt im Moment nur eine konkrete Anwendung für diese Klasse (siehe dazu
+    <p>Es gibt im Moment nur eine konkrete Anwendung fÃ¼r diese Klasse (siehe dazu
     Initialisierung des HBCI-Kernels mit
     {@link org.kapott.hbci.manager.HBCIUtils#init(Properties,org.kapott.hbci.callback.HBCICallback)}).</p>*/
 public class FileSystemClassLoader 

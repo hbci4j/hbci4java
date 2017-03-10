@@ -45,45 +45,45 @@ public abstract class HBCICardService
   static
   {
     // Siehe http://de.wikipedia.org/wiki/Application_Protocol_Data_Unit
-    statusCodes.put("6281","Die zurückgegebenen Daten können fehlerhaft sein");
+    statusCodes.put("6281","Die zurÃ¼ckgegebenen Daten kÃ¶nnen fehlerhaft sein");
     statusCodes.put("6282","Da das Dateiende vorher erreicht wurde, konnten nur weniger als Le Bytes gelesen werden");
-    statusCodes.put("6283","Die ausgewählte Datei ist gesperrt");
+    statusCodes.put("6283","Die ausgewÃ¤hlte Datei ist gesperrt");
     statusCodes.put("6284","Die File Control Information (FCI) ist nicht ISO 7816-4 konform");
     
     statusCodes.put("6381","File filled up by the last write");
     
     statusCodes.put("6581","Speicherfehler");
     
-    statusCodes.put("6700","Länge (Lc oder Le) falsch");
+    statusCodes.put("6700","LÃ¤nge (Lc oder Le) falsch");
 
-    statusCodes.put("6800","Funktionen im Class Byte werden nicht unterstützt");
-    statusCodes.put("6881","Logische Kanäle werden nicht unterstützt");
-    statusCodes.put("6882","Secure Messaging wird nicht unterstützt");
+    statusCodes.put("6800","Funktionen im Class Byte werden nicht unterstÃ¼tzt");
+    statusCodes.put("6881","Logische KanÃ¤le werden nicht unterstÃ¼tzt");
+    statusCodes.put("6882","Secure Messaging wird nicht unterstÃ¼tzt");
     
     statusCodes.put("6900","Kommando nicht erlaubt");
     statusCodes.put("6981","Kommando inkompatibel zur Dateistruktur");
-    statusCodes.put("6982","Sicherheitszustand nicht erfüllt");
+    statusCodes.put("6982","Sicherheitszustand nicht erfÃ¼llt");
     statusCodes.put("6983","Authentisierungsmethode ist gesperrt");
     statusCodes.put("6984","Referenzierte Daten sind gesperrt");
-    statusCodes.put("6985","Nutzungsbedingungen sind nicht erfüllt");
+    statusCodes.put("6985","Nutzungsbedingungen sind nicht erfÃ¼llt");
     statusCodes.put("6986","Kommando nicht erlaubt (kein EF selektiert)");
     statusCodes.put("6987","Erwartete Secure Messaging Objekte nicht gefunden");
     statusCodes.put("6988","Secure Messaging Datenobjekte sind inkorrekt");
     
     statusCodes.put("6A00","Falsche Parameter P1/P2");
     statusCodes.put("6A80","Falsche Daten");
-    statusCodes.put("6A81","Funktion wird nicht unterstützt");
+    statusCodes.put("6A81","Funktion wird nicht unterstÃ¼tzt");
     statusCodes.put("6A82","Datei wurde nicht gefunden");
     statusCodes.put("6A83","Record der Datei nicht gefunden");
-    statusCodes.put("6A84","Nicht genügend Speicherplatz in der Datei");
+    statusCodes.put("6A84","Nicht genÃ¼gend Speicherplatz in der Datei");
     statusCodes.put("6A85","Lc nicht konsistent mit der TLV Struktur");
     statusCodes.put("6A86","Inkorrekte Parameter P1/P2");
     statusCodes.put("6A87","Lc inkonsistent mit P1/P2");
     statusCodes.put("6A88","Referenzierte Daten nicht gefunden");
 
     statusCodes.put("6B00","Parameter P1/P2 falsch");
-    statusCodes.put("6D00","Das Kommando (INS) wird nicht unterstützt");
-    statusCodes.put("6E00","Die Kommandoklasse (CLA) wird nicht unterstützt");
+    statusCodes.put("6D00","Das Kommando (INS) wird nicht unterstÃ¼tzt");
+    statusCodes.put("6E00","Die Kommandoklasse (CLA) wird nicht unterstÃ¼tzt");
     statusCodes.put("6F00","Kommando wurde mit unbekanntem Fehler abgebrochen");
   }
   

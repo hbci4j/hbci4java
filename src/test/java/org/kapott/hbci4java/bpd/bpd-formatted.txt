@@ -1,6 +1,6 @@
 HNHBK:1:3+000000006469+220+00471H2J1921a72WpL5YDu61el13D+1+00471H2J1921a72WpL5YDu61el13D:1'
 HIRMG:2:2+9050::Nachricht teilweise fehlerhaft.'
-HIRMS:3:2:3+3050::BPD nicht mehr aktuell. Aktuelle Version folgt.+9010::Verarbeitung nicht möglich'
+HIRMS:3:2:3+3050::BPD nicht mehr aktuell. Aktuelle Version folgt.+9010::Verarbeitung nicht mÃ¶glich'
 HIBPA:4:2:3+19+280:86050200+SPARKASSE MULDENTAL+1+1+220+0'
 HIKOM:5:3:3+280:86050200+1+2:62.181.134.126+3:hbci.finanzit.com/cgi/hbcipt.cgi'
 HISHV:6:2:3+N+DDV:1'
