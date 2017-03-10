@@ -18,8 +18,8 @@
 		<url>scm:git:git@github.com:hbci4j/hbci4java.git</url>
 		<connection>scm:git:git@github.com:hbci4j/hbci4java.git</connection>
 		<developerConnection>scm:git:git@github.com:hbci4j/hbci4java.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
@@ -286,7 +286,7 @@
 				<configuration>
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-				<!--	<autoReleaseAfterClose>true</autoReleaseAfterClose> -->
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
 		</plugins>
