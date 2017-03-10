@@ -4,7 +4,7 @@
 <dependency>
    <groupId>com.github.hbci4j</groupId>
    <artifactId>hbci4j</artifactId>
-   <version>3.0.0</version>
+   <version>3.0.7</version>
 </dependency>
 ```
 
