@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<project name="hbci4java" default="compile">
+	<property name="make" value="/usr/bin/make" />
+	<property name="chipcard" value="chipcard" />
+
+	<property name="classes" value="target/classes" />
+	<property name="dist" value="dist" />
+
+	<target name="compile">
+		<javah class="org.kapott.hbci.passport.HBCIPassportDDV" outputFile="${chipcard}/src/include/frontend.h" classpath="${classes}" />
+		<exec executable="${make}" os="Linux">
+			<arg line="-C ${chipcard}" />
+		</exec>
+	</target>
+
+	<target name="dist">
+		<mkdir dir="${dist}/lib" />
+		<copy todir="${dist}/lib">
+			<fileset dir="${chipcard}/lib">
+				<exclude name=".dummy" />
+			</fileset>
+		</copy>
+		<chmod perm="0755">
+			<fileset dir="${dist}/lib">
+				<include name="lib*.so" />
+			</fileset>
+		</chmod>
+	</target>
+
+	<target name="clean">
+		<exec executable="${make}" os="Linux">
+			<arg line="-C ${chipcard} clean" />
+		</exec>
+		<delete file="${chipcard}/src/include/frontend.h" />
+	</target>
+</project>
