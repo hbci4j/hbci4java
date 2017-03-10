@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.hbci4j</groupId>
 	<artifactId>hbci4j-core</artifactId>
-	<version>3.0.3-SNAPSHOT</version>
+	<version>3.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	<description>HBCI4j - Home Banking Computer Interface for Java</description>
@@ -30,6 +30,7 @@
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<jaxb.packageName>org.kapott</jaxb.packageName>
@@ -269,6 +270,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>				
 				<configuration>
 					<!-- Ansonsten erhalten wir im Zusammenhang mit jspc Fehler -->
 					<useReleaseProfile>false</useReleaseProfile>
