@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.hbci4j</groupId>
-	<artifactId>hbci4j-core</artifactId>
+	<groupId>org.kapott</groupId>
+	<artifactId>hbci4java</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>${artifactId}</name>
-	<description>hbci4j - Home Banking Computer Interface for Java</description>
+	<name>hbci4java</name>
+	<description>HBCI4java</description>
 	<url>https://github.com/hbci4j/hbci4java</url>
 	<licenses>
 		<license>
