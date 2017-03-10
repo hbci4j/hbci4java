@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_008_001_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PaymentTypeInformation8 complex type.
+ * <p>Java class for PaymentTypeInformation8 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PaymentTypeInformation8">
@@ -38,11 +37,10 @@ public class PaymentTypeInformation8 {
     @XmlElement(name = "SvcLvl", namespace = "urn:sepade:xsd:pain.008.001.01", required = true)
     protected ServiceLevel4 svcLvl;
     @XmlElement(name = "SeqTp", namespace = "urn:sepade:xsd:pain.008.001.01", required = true)
-    @XmlSchemaType(name = "string")
     protected SequenceType1Code seqTp;
 
     /**
-     * Ruft den Wert der svcLvl-Eigenschaft ab.
+     * Gets the value of the svcLvl property.
      * 
      * @return
      *     possible object is
@@ -54,7 +52,7 @@ public class PaymentTypeInformation8 {
     }
 
     /**
-     * Legt den Wert der svcLvl-Eigenschaft fest.
+     * Sets the value of the svcLvl property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +64,7 @@ public class PaymentTypeInformation8 {
     }
 
     /**
-     * Ruft den Wert der seqTp-Eigenschaft ab.
+     * Gets the value of the seqTp property.
      * 
      * @return
      *     possible object is
@@ -78,7 +76,7 @@ public class PaymentTypeInformation8 {
     }
 
     /**
-     * Legt den Wert der seqTp-Eigenschaft fest.
+     * Sets the value of the seqTp property.
      * 
      * @param value
      *     allowed object is

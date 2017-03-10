@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PartyIdentification12 complex type.
+ * <p>Java class for PartyIdentification12 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PartyIdentification12">
@@ -36,7 +36,7 @@ public class PartyIdentification12 {
     protected String nm;
 
     /**
-     * Ruft den Wert der nm-Eigenschaft ab.
+     * Gets the value of the nm property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class PartyIdentification12 {
     }
 
     /**
-     * Legt den Wert der nm-Eigenschaft fest.
+     * Sets the value of the nm property.
      * 
      * @param value
      *     allowed object is

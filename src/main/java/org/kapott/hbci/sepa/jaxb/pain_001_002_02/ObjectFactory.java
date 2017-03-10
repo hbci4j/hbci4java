@@ -42,59 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CashAccountSCT1 }
+     * Create an instance of {@link RemittanceInformationSCTChoice }
      * 
      */
-    public CashAccountSCT1 createCashAccountSCT1() {
-        return new CashAccountSCT1();
-    }
-
-    /**
-     * Create an instance of {@link AmountTypeSCT }
-     * 
-     */
-    public AmountTypeSCT createAmountTypeSCT() {
-        return new AmountTypeSCT();
-    }
-
-    /**
-     * Create an instance of {@link CreditorReferenceInformationSCT }
-     * 
-     */
-    public CreditorReferenceInformationSCT createCreditorReferenceInformationSCT() {
-        return new CreditorReferenceInformationSCT();
-    }
-
-    /**
-     * Create an instance of {@link StructuredRemittanceInformationSCT }
-     * 
-     */
-    public StructuredRemittanceInformationSCT createStructuredRemittanceInformationSCT() {
-        return new StructuredRemittanceInformationSCT();
-    }
-
-    /**
-     * Create an instance of {@link CurrencyAndAmountSCT }
-     * 
-     */
-    public CurrencyAndAmountSCT createCurrencyAndAmountSCT() {
-        return new CurrencyAndAmountSCT();
-    }
-
-    /**
-     * Create an instance of {@link CashAccountSCT2 }
-     * 
-     */
-    public CashAccountSCT2 createCashAccountSCT2() {
-        return new CashAccountSCT2();
-    }
-
-    /**
-     * Create an instance of {@link PaymentIdentification1 }
-     * 
-     */
-    public PaymentIdentification1 createPaymentIdentification1() {
-        return new PaymentIdentification1();
+    public RemittanceInformationSCTChoice createRemittanceInformationSCTChoice() {
+        return new RemittanceInformationSCTChoice();
     }
 
     /**
@@ -106,51 +58,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link OrganisationIdentificationSCTChoice }
+     * Create an instance of {@link GroupHeaderSCT }
      * 
      */
-    public OrganisationIdentificationSCTChoice createOrganisationIdentificationSCTChoice() {
-        return new OrganisationIdentificationSCTChoice();
+    public GroupHeaderSCT createGroupHeaderSCT() {
+        return new GroupHeaderSCT();
     }
 
     /**
-     * Create an instance of {@link RemittanceInformationSCTChoice }
+     * Create an instance of {@link PersonIdentification3 }
      * 
      */
-    public RemittanceInformationSCTChoice createRemittanceInformationSCTChoice() {
-        return new RemittanceInformationSCTChoice();
+    public PersonIdentification3 createPersonIdentification3() {
+        return new PersonIdentification3();
     }
 
     /**
-     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSCT }
+     * Create an instance of {@link CurrencyAndAmountSCT }
      * 
      */
-    public BranchAndFinancialInstitutionIdentificationSCT createBranchAndFinancialInstitutionIdentificationSCT() {
-        return new BranchAndFinancialInstitutionIdentificationSCT();
+    public CurrencyAndAmountSCT createCurrencyAndAmountSCT() {
+        return new CurrencyAndAmountSCT();
     }
 
     /**
-     * Create an instance of {@link DateAndPlaceOfBirth }
+     * Create an instance of {@link CreditorReferenceInformationSCT }
      * 
      */
-    public DateAndPlaceOfBirth createDateAndPlaceOfBirth() {
-        return new DateAndPlaceOfBirth();
-    }
-
-    /**
-     * Create an instance of {@link PartyIdentificationSCT2 }
-     * 
-     */
-    public PartyIdentificationSCT2 createPartyIdentificationSCT2() {
-        return new PartyIdentificationSCT2();
-    }
-
-    /**
-     * Create an instance of {@link PartyIdentificationSCT1 }
-     * 
-     */
-    public PartyIdentificationSCT1 createPartyIdentificationSCT1() {
-        return new PartyIdentificationSCT1();
+    public CreditorReferenceInformationSCT createCreditorReferenceInformationSCT() {
+        return new CreditorReferenceInformationSCT();
     }
 
     /**
@@ -170,27 +106,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GenericIdentification4 }
+     * Create an instance of {@link CashAccountSCT1 }
      * 
      */
-    public GenericIdentification4 createGenericIdentification4() {
-        return new GenericIdentification4();
-    }
-
-    /**
-     * Create an instance of {@link GenericIdentification3 }
-     * 
-     */
-    public GenericIdentification3 createGenericIdentification3() {
-        return new GenericIdentification3();
-    }
-
-    /**
-     * Create an instance of {@link FinancialInstitutionIdentificationSCT }
-     * 
-     */
-    public FinancialInstitutionIdentificationSCT createFinancialInstitutionIdentificationSCT() {
-        return new FinancialInstitutionIdentificationSCT();
+    public CashAccountSCT1 createCashAccountSCT1() {
+        return new CashAccountSCT1();
     }
 
     /**
@@ -202,11 +122,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreditTransferTransactionInformationSCT }
+     * Create an instance of {@link OrganisationIdentificationSCTChoice }
      * 
      */
-    public CreditTransferTransactionInformationSCT createCreditTransferTransactionInformationSCT() {
-        return new CreditTransferTransactionInformationSCT();
+    public OrganisationIdentificationSCTChoice createOrganisationIdentificationSCTChoice() {
+        return new OrganisationIdentificationSCTChoice();
+    }
+
+    /**
+     * Create an instance of {@link CashAccountSCT2 }
+     * 
+     */
+    public CashAccountSCT2 createCashAccountSCT2() {
+        return new CashAccountSCT2();
+    }
+
+    /**
+     * Create an instance of {@link FinancialInstitutionIdentificationSCT }
+     * 
+     */
+    public FinancialInstitutionIdentificationSCT createFinancialInstitutionIdentificationSCT() {
+        return new FinancialInstitutionIdentificationSCT();
+    }
+
+    /**
+     * Create an instance of {@link PaymentIdentification1 }
+     * 
+     */
+    public PaymentIdentification1 createPaymentIdentification1() {
+        return new PaymentIdentification1();
     }
 
     /**
@@ -215,6 +159,14 @@ public class ObjectFactory {
      */
     public PurposeSCT createPurposeSCT() {
         return new PurposeSCT();
+    }
+
+    /**
+     * Create an instance of {@link BranchAndFinancialInstitutionIdentificationSCT }
+     * 
+     */
+    public BranchAndFinancialInstitutionIdentificationSCT createBranchAndFinancialInstitutionIdentificationSCT() {
+        return new BranchAndFinancialInstitutionIdentificationSCT();
     }
 
     /**
@@ -234,14 +186,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PersonIdentification3 }
-     * 
-     */
-    public PersonIdentification3 createPersonIdentification3() {
-        return new PersonIdentification3();
-    }
-
-    /**
      * Create an instance of {@link AccountIdentificationSCT }
      * 
      */
@@ -258,6 +202,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreditTransferTransactionInformationSCT }
+     * 
+     */
+    public CreditTransferTransactionInformationSCT createCreditTransferTransactionInformationSCT() {
+        return new CreditTransferTransactionInformationSCT();
+    }
+
+    /**
      * Create an instance of {@link PaymentInstructionInformationSCT }
      * 
      */
@@ -266,11 +218,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GroupHeaderSCT }
+     * Create an instance of {@link StructuredRemittanceInformationSCT }
      * 
      */
-    public GroupHeaderSCT createGroupHeaderSCT() {
-        return new GroupHeaderSCT();
+    public StructuredRemittanceInformationSCT createStructuredRemittanceInformationSCT() {
+        return new StructuredRemittanceInformationSCT();
+    }
+
+    /**
+     * Create an instance of {@link PartyIdentificationSCT2 }
+     * 
+     */
+    public PartyIdentificationSCT2 createPartyIdentificationSCT2() {
+        return new PartyIdentificationSCT2();
+    }
+
+    /**
+     * Create an instance of {@link PartyIdentificationSCT1 }
+     * 
+     */
+    public PartyIdentificationSCT1 createPartyIdentificationSCT1() {
+        return new PartyIdentificationSCT1();
+    }
+
+    /**
+     * Create an instance of {@link GenericIdentification3 }
+     * 
+     */
+    public GenericIdentification3 createGenericIdentification3() {
+        return new GenericIdentification3();
+    }
+
+    /**
+     * Create an instance of {@link GenericIdentification4 }
+     * 
+     */
+    public GenericIdentification4 createGenericIdentification4() {
+        return new GenericIdentification4();
+    }
+
+    /**
+     * Create an instance of {@link DateAndPlaceOfBirth }
+     * 
+     */
+    public DateAndPlaceOfBirth createDateAndPlaceOfBirth() {
+        return new DateAndPlaceOfBirth();
+    }
+
+    /**
+     * Create an instance of {@link AmountTypeSCT }
+     * 
+     */
+    public AmountTypeSCT createAmountTypeSCT() {
+        return new AmountTypeSCT();
     }
 
     /**

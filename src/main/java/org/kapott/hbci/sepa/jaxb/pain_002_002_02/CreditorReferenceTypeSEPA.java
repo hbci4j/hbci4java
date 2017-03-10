@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_002_002_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für CreditorReferenceTypeSEPA complex type.
+ * <p>Java class for CreditorReferenceTypeSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CreditorReferenceTypeSEPA">
@@ -36,13 +35,12 @@ import javax.xml.bind.annotation.XmlType;
 public class CreditorReferenceTypeSEPA {
 
     @XmlElement(name = "Cd", namespace = "urn:swift:xsd:$pain.002.002.02", required = true)
-    @XmlSchemaType(name = "string")
     protected DocumentType3CodeSEPA cd;
     @XmlElement(name = "Issr", namespace = "urn:swift:xsd:$pain.002.002.02")
     protected String issr;
 
     /**
-     * Ruft den Wert der cd-Eigenschaft ab.
+     * Gets the value of the cd property.
      * 
      * @return
      *     possible object is
@@ -54,7 +52,7 @@ public class CreditorReferenceTypeSEPA {
     }
 
     /**
-     * Legt den Wert der cd-Eigenschaft fest.
+     * Sets the value of the cd property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +64,7 @@ public class CreditorReferenceTypeSEPA {
     }
 
     /**
-     * Ruft den Wert der issr-Eigenschaft ab.
+     * Gets the value of the issr property.
      * 
      * @return
      *     possible object is
@@ -78,7 +76,7 @@ public class CreditorReferenceTypeSEPA {
     }
 
     /**
-     * Legt den Wert der issr-Eigenschaft fest.
+     * Sets the value of the issr property.
      * 
      * @param value
      *     allowed object is

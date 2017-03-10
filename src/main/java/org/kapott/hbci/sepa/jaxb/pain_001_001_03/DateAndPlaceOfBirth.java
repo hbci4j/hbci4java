@@ -4,15 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_001_001_03;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für DateAndPlaceOfBirth complex type.
+ * <p>Java class for DateAndPlaceOfBirth complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="DateAndPlaceOfBirth">
@@ -41,7 +40,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class DateAndPlaceOfBirth {
 
     @XmlElement(name = "BirthDt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
-    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar birthDt;
     @XmlElement(name = "PrvcOfBirth", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03")
     protected String prvcOfBirth;
@@ -51,7 +49,7 @@ public class DateAndPlaceOfBirth {
     protected String ctryOfBirth;
 
     /**
-     * Ruft den Wert der birthDt-Eigenschaft ab.
+     * Gets the value of the birthDt property.
      * 
      * @return
      *     possible object is
@@ -63,7 +61,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Legt den Wert der birthDt-Eigenschaft fest.
+     * Sets the value of the birthDt property.
      * 
      * @param value
      *     allowed object is
@@ -75,7 +73,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Ruft den Wert der prvcOfBirth-Eigenschaft ab.
+     * Gets the value of the prvcOfBirth property.
      * 
      * @return
      *     possible object is
@@ -87,7 +85,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Legt den Wert der prvcOfBirth-Eigenschaft fest.
+     * Sets the value of the prvcOfBirth property.
      * 
      * @param value
      *     allowed object is
@@ -99,7 +97,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Ruft den Wert der cityOfBirth-Eigenschaft ab.
+     * Gets the value of the cityOfBirth property.
      * 
      * @return
      *     possible object is
@@ -111,7 +109,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Legt den Wert der cityOfBirth-Eigenschaft fest.
+     * Sets the value of the cityOfBirth property.
      * 
      * @param value
      *     allowed object is
@@ -123,7 +121,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Ruft den Wert der ctryOfBirth-Eigenschaft ab.
+     * Gets the value of the ctryOfBirth property.
      * 
      * @return
      *     possible object is
@@ -135,7 +133,7 @@ public class DateAndPlaceOfBirth {
     }
 
     /**
-     * Legt den Wert der ctryOfBirth-Eigenschaft fest.
+     * Sets the value of the ctryOfBirth property.
      * 
      * @param value
      *     allowed object is

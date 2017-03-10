@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für CreditorReferenceInformation1 complex type.
+ * <p>Java class for CreditorReferenceInformation1 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CreditorReferenceInformation1">
@@ -40,7 +40,7 @@ public class CreditorReferenceInformation1 {
     protected String cdtrRef;
 
     /**
-     * Ruft den Wert der cdtrRefTp-Eigenschaft ab.
+     * Gets the value of the cdtrRefTp property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class CreditorReferenceInformation1 {
     }
 
     /**
-     * Legt den Wert der cdtrRefTp-Eigenschaft fest.
+     * Sets the value of the cdtrRefTp property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class CreditorReferenceInformation1 {
     }
 
     /**
-     * Ruft den Wert der cdtrRef-Eigenschaft ab.
+     * Gets the value of the cdtrRef property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class CreditorReferenceInformation1 {
     }
 
     /**
-     * Legt den Wert der cdtrRef-Eigenschaft fest.
+     * Sets the value of the cdtrRef property.
      * 
      * @param value
      *     allowed object is

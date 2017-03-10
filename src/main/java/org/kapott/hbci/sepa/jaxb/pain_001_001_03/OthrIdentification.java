@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_001_001_03;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für OthrIdentification complex type.
+ * <p>Java class for OthrIdentification complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="OthrIdentification">
@@ -34,11 +33,10 @@ import javax.xml.bind.annotation.XmlType;
 public class OthrIdentification {
 
     @XmlElement(name = "Id", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
-    @XmlSchemaType(name = "string")
     protected OthrIdentificationCode id;
 
     /**
-     * Ruft den Wert der id-Eigenschaft ab.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -50,7 +48,7 @@ public class OthrIdentification {
     }
 
     /**
-     * Legt den Wert der id-Eigenschaft fest.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is

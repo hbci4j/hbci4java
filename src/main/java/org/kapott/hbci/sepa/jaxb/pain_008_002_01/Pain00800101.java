@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für pain.008.001.01 complex type.
+ * <p>Java class for pain.008.001.01 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="pain.008.001.01">
@@ -42,7 +42,7 @@ public class Pain00800101 {
     protected List<PaymentInstructionInformationSDD> pmtInf;
 
     /**
-     * Ruft den Wert der grpHdr-Eigenschaft ab.
+     * Gets the value of the grpHdr property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class Pain00800101 {
     }
 
     /**
-     * Legt den Wert der grpHdr-Eigenschaft fest.
+     * Sets the value of the grpHdr property.
      * 
      * @param value
      *     allowed object is

@@ -7,14 +7,13 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für OriginalGroupInformationSEPA complex type.
+ * <p>Java class for OriginalGroupInformationSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="OriginalGroupInformationSEPA">
@@ -55,13 +54,12 @@ public class OriginalGroupInformationSEPA {
     @XmlElement(name = "OrgnlCtrlSum", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected BigDecimal orgnlCtrlSum;
     @XmlElement(name = "GrpSts", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
-    @XmlSchemaType(name = "string")
     protected TransactionGroupStatusCodeSEPA grpSts;
     @XmlElement(name = "StsRsnInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.002.001.03")
     protected List<StatusReasonInformationSEPA> stsRsnInf;
 
     /**
-     * Ruft den Wert der orgnlMsgId-Eigenschaft ab.
+     * Gets the value of the orgnlMsgId property.
      * 
      * @return
      *     possible object is
@@ -73,7 +71,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Legt den Wert der orgnlMsgId-Eigenschaft fest.
+     * Sets the value of the orgnlMsgId property.
      * 
      * @param value
      *     allowed object is
@@ -85,7 +83,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Ruft den Wert der orgnlMsgNmId-Eigenschaft ab.
+     * Gets the value of the orgnlMsgNmId property.
      * 
      * @return
      *     possible object is
@@ -97,7 +95,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Legt den Wert der orgnlMsgNmId-Eigenschaft fest.
+     * Sets the value of the orgnlMsgNmId property.
      * 
      * @param value
      *     allowed object is
@@ -109,7 +107,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Ruft den Wert der orgnlNbOfTxs-Eigenschaft ab.
+     * Gets the value of the orgnlNbOfTxs property.
      * 
      * @return
      *     possible object is
@@ -121,7 +119,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Legt den Wert der orgnlNbOfTxs-Eigenschaft fest.
+     * Sets the value of the orgnlNbOfTxs property.
      * 
      * @param value
      *     allowed object is
@@ -133,7 +131,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Ruft den Wert der orgnlCtrlSum-Eigenschaft ab.
+     * Gets the value of the orgnlCtrlSum property.
      * 
      * @return
      *     possible object is
@@ -145,7 +143,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Legt den Wert der orgnlCtrlSum-Eigenschaft fest.
+     * Sets the value of the orgnlCtrlSum property.
      * 
      * @param value
      *     allowed object is
@@ -157,7 +155,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Ruft den Wert der grpSts-Eigenschaft ab.
+     * Gets the value of the grpSts property.
      * 
      * @return
      *     possible object is
@@ -169,7 +167,7 @@ public class OriginalGroupInformationSEPA {
     }
 
     /**
-     * Legt den Wert der grpSts-Eigenschaft fest.
+     * Sets the value of the grpSts property.
      * 
      * @param value
      *     allowed object is

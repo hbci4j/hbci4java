@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für StatusReasonInformationSEPA complex type.
+ * <p>Java class for StatusReasonInformationSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="StatusReasonInformationSEPA">
@@ -40,7 +40,7 @@ public class StatusReasonInformationSEPA {
     protected StatusReasonSEPA rsn;
 
     /**
-     * Ruft den Wert der orgtr-Eigenschaft ab.
+     * Gets the value of the orgtr property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class StatusReasonInformationSEPA {
     }
 
     /**
-     * Legt den Wert der orgtr-Eigenschaft fest.
+     * Sets the value of the orgtr property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class StatusReasonInformationSEPA {
     }
 
     /**
-     * Ruft den Wert der rsn-Eigenschaft ab.
+     * Gets the value of the rsn property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class StatusReasonInformationSEPA {
     }
 
     /**
-     * Legt den Wert der rsn-Eigenschaft fest.
+     * Sets the value of the rsn property.
      * 
      * @param value
      *     allowed object is

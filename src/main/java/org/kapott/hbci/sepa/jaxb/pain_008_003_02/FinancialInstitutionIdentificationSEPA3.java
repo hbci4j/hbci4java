@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für FinancialInstitutionIdentificationSEPA3 complex type.
+ * <p>Java class for FinancialInstitutionIdentificationSEPA3 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="FinancialInstitutionIdentificationSEPA3">
@@ -42,7 +42,7 @@ public class FinancialInstitutionIdentificationSEPA3 {
     protected OthrIdentification othr;
 
     /**
-     * Ruft den Wert der bic-Eigenschaft ab.
+     * Gets the value of the bic property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class FinancialInstitutionIdentificationSEPA3 {
     }
 
     /**
-     * Legt den Wert der bic-Eigenschaft fest.
+     * Sets the value of the bic property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class FinancialInstitutionIdentificationSEPA3 {
     }
 
     /**
-     * Ruft den Wert der othr-Eigenschaft ab.
+     * Gets the value of the othr property.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class FinancialInstitutionIdentificationSEPA3 {
     }
 
     /**
-     * Legt den Wert der othr-Eigenschaft fest.
+     * Sets the value of the othr property.
      * 
      * @param value
      *     allowed object is

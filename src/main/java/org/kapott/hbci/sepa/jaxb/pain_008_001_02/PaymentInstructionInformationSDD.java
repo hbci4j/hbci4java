@@ -7,15 +7,14 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für PaymentInstructionInformationSDD complex type.
+ * <p>Java class for PaymentInstructionInformationSDD complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PaymentInstructionInformationSDD">
@@ -66,7 +65,6 @@ public class PaymentInstructionInformationSDD {
     @XmlElement(name = "PmtInfId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02", required = true)
     protected String pmtInfId;
     @XmlElement(name = "PmtMtd", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02", required = true)
-    @XmlSchemaType(name = "string")
     protected PaymentMethod2Code pmtMtd;
     @XmlElement(name = "BtchBookg", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02")
     protected Boolean btchBookg;
@@ -77,7 +75,6 @@ public class PaymentInstructionInformationSDD {
     @XmlElement(name = "PmtTpInf", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02", required = true)
     protected PaymentTypeInformationSDD pmtTpInf;
     @XmlElement(name = "ReqdColltnDt", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02", required = true)
-    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar reqdColltnDt;
     @XmlElement(name = "Cdtr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02", required = true)
     protected PartyIdentificationSEPA5 cdtr;
@@ -88,7 +85,6 @@ public class PaymentInstructionInformationSDD {
     @XmlElement(name = "UltmtCdtr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02")
     protected PartyIdentificationSEPA1 ultmtCdtr;
     @XmlElement(name = "ChrgBr", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02")
-    @XmlSchemaType(name = "string")
     protected ChargeBearerTypeSEPACode chrgBr;
     @XmlElement(name = "CdtrSchmeId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02")
     protected PartyIdentificationSEPA3 cdtrSchmeId;
@@ -96,7 +92,7 @@ public class PaymentInstructionInformationSDD {
     protected List<DirectDebitTransactionInformationSDD> drctDbtTxInf;
 
     /**
-     * Ruft den Wert der pmtInfId-Eigenschaft ab.
+     * Gets the value of the pmtInfId property.
      * 
      * @return
      *     possible object is
@@ -108,7 +104,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der pmtInfId-Eigenschaft fest.
+     * Sets the value of the pmtInfId property.
      * 
      * @param value
      *     allowed object is
@@ -120,7 +116,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der pmtMtd-Eigenschaft ab.
+     * Gets the value of the pmtMtd property.
      * 
      * @return
      *     possible object is
@@ -132,7 +128,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der pmtMtd-Eigenschaft fest.
+     * Sets the value of the pmtMtd property.
      * 
      * @param value
      *     allowed object is
@@ -144,7 +140,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der btchBookg-Eigenschaft ab.
+     * Gets the value of the btchBookg property.
      * 
      * @return
      *     possible object is
@@ -156,7 +152,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der btchBookg-Eigenschaft fest.
+     * Sets the value of the btchBookg property.
      * 
      * @param value
      *     allowed object is
@@ -168,7 +164,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der nbOfTxs-Eigenschaft ab.
+     * Gets the value of the nbOfTxs property.
      * 
      * @return
      *     possible object is
@@ -180,7 +176,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der nbOfTxs-Eigenschaft fest.
+     * Sets the value of the nbOfTxs property.
      * 
      * @param value
      *     allowed object is
@@ -192,7 +188,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der ctrlSum-Eigenschaft ab.
+     * Gets the value of the ctrlSum property.
      * 
      * @return
      *     possible object is
@@ -204,7 +200,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der ctrlSum-Eigenschaft fest.
+     * Sets the value of the ctrlSum property.
      * 
      * @param value
      *     allowed object is
@@ -216,7 +212,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der pmtTpInf-Eigenschaft ab.
+     * Gets the value of the pmtTpInf property.
      * 
      * @return
      *     possible object is
@@ -228,7 +224,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der pmtTpInf-Eigenschaft fest.
+     * Sets the value of the pmtTpInf property.
      * 
      * @param value
      *     allowed object is
@@ -240,7 +236,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der reqdColltnDt-Eigenschaft ab.
+     * Gets the value of the reqdColltnDt property.
      * 
      * @return
      *     possible object is
@@ -252,7 +248,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der reqdColltnDt-Eigenschaft fest.
+     * Sets the value of the reqdColltnDt property.
      * 
      * @param value
      *     allowed object is
@@ -264,7 +260,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der cdtr-Eigenschaft ab.
+     * Gets the value of the cdtr property.
      * 
      * @return
      *     possible object is
@@ -276,7 +272,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der cdtr-Eigenschaft fest.
+     * Sets the value of the cdtr property.
      * 
      * @param value
      *     allowed object is
@@ -288,7 +284,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der cdtrAcct-Eigenschaft ab.
+     * Gets the value of the cdtrAcct property.
      * 
      * @return
      *     possible object is
@@ -300,7 +296,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der cdtrAcct-Eigenschaft fest.
+     * Sets the value of the cdtrAcct property.
      * 
      * @param value
      *     allowed object is
@@ -312,7 +308,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der cdtrAgt-Eigenschaft ab.
+     * Gets the value of the cdtrAgt property.
      * 
      * @return
      *     possible object is
@@ -324,7 +320,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der cdtrAgt-Eigenschaft fest.
+     * Sets the value of the cdtrAgt property.
      * 
      * @param value
      *     allowed object is
@@ -336,7 +332,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der ultmtCdtr-Eigenschaft ab.
+     * Gets the value of the ultmtCdtr property.
      * 
      * @return
      *     possible object is
@@ -348,7 +344,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der ultmtCdtr-Eigenschaft fest.
+     * Sets the value of the ultmtCdtr property.
      * 
      * @param value
      *     allowed object is
@@ -360,7 +356,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der chrgBr-Eigenschaft ab.
+     * Gets the value of the chrgBr property.
      * 
      * @return
      *     possible object is
@@ -372,7 +368,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der chrgBr-Eigenschaft fest.
+     * Sets the value of the chrgBr property.
      * 
      * @param value
      *     allowed object is
@@ -384,7 +380,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der cdtrSchmeId-Eigenschaft ab.
+     * Gets the value of the cdtrSchmeId property.
      * 
      * @return
      *     possible object is
@@ -396,7 +392,7 @@ public class PaymentInstructionInformationSDD {
     }
 
     /**
-     * Legt den Wert der cdtrSchmeId-Eigenschaft fest.
+     * Sets the value of the cdtrSchmeId property.
      * 
      * @param value
      *     allowed object is

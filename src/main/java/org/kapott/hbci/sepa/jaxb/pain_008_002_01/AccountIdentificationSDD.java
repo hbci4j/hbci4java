@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für AccountIdentificationSDD complex type.
+ * <p>Java class for AccountIdentificationSDD complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="AccountIdentificationSDD">
@@ -36,7 +36,7 @@ public class AccountIdentificationSDD {
     protected String iban;
 
     /**
-     * Ruft den Wert der iban-Eigenschaft ab.
+     * Gets the value of the iban property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class AccountIdentificationSDD {
     }
 
     /**
-     * Legt den Wert der iban-Eigenschaft fest.
+     * Sets the value of the iban property.
      * 
      * @param value
      *     allowed object is

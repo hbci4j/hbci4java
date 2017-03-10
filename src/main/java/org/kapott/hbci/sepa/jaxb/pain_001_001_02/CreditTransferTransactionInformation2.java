@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für CreditTransferTransactionInformation2 complex type.
+ * <p>Java class for CreditTransferTransactionInformation2 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CreditTransferTransactionInformation2">
@@ -56,7 +56,7 @@ public class CreditTransferTransactionInformation2 {
     protected RemittanceInformation3 rmtInf;
 
     /**
-     * Ruft den Wert der pmtId-Eigenschaft ab.
+     * Gets the value of the pmtId property.
      * 
      * @return
      *     possible object is
@@ -68,7 +68,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der pmtId-Eigenschaft fest.
+     * Sets the value of the pmtId property.
      * 
      * @param value
      *     allowed object is
@@ -80,7 +80,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der amt-Eigenschaft ab.
+     * Gets the value of the amt property.
      * 
      * @return
      *     possible object is
@@ -92,7 +92,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der amt-Eigenschaft fest.
+     * Sets the value of the amt property.
      * 
      * @param value
      *     allowed object is
@@ -104,7 +104,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der cdtrAgt-Eigenschaft ab.
+     * Gets the value of the cdtrAgt property.
      * 
      * @return
      *     possible object is
@@ -116,7 +116,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der cdtrAgt-Eigenschaft fest.
+     * Sets the value of the cdtrAgt property.
      * 
      * @param value
      *     allowed object is
@@ -128,7 +128,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der cdtr-Eigenschaft ab.
+     * Gets the value of the cdtr property.
      * 
      * @return
      *     possible object is
@@ -140,7 +140,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der cdtr-Eigenschaft fest.
+     * Sets the value of the cdtr property.
      * 
      * @param value
      *     allowed object is
@@ -152,7 +152,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der cdtrAcct-Eigenschaft ab.
+     * Gets the value of the cdtrAcct property.
      * 
      * @return
      *     possible object is
@@ -164,7 +164,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der cdtrAcct-Eigenschaft fest.
+     * Sets the value of the cdtrAcct property.
      * 
      * @param value
      *     allowed object is
@@ -176,7 +176,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der rmtInf-Eigenschaft ab.
+     * Gets the value of the rmtInf property.
      * 
      * @return
      *     possible object is
@@ -188,7 +188,7 @@ public class CreditTransferTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der rmtInf-Eigenschaft fest.
+     * Sets the value of the rmtInf property.
      * 
      * @param value
      *     allowed object is

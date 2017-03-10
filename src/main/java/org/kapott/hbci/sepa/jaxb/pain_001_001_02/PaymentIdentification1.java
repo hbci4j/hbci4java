@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PaymentIdentification1 complex type.
+ * <p>Java class for PaymentIdentification1 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PaymentIdentification1">
@@ -40,7 +40,7 @@ public class PaymentIdentification1 {
     protected String endToEndId;
 
     /**
-     * Ruft den Wert der instrId-Eigenschaft ab.
+     * Gets the value of the instrId property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class PaymentIdentification1 {
     }
 
     /**
-     * Legt den Wert der instrId-Eigenschaft fest.
+     * Sets the value of the instrId property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class PaymentIdentification1 {
     }
 
     /**
-     * Ruft den Wert der endToEndId-Eigenschaft ab.
+     * Gets the value of the endToEndId property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class PaymentIdentification1 {
     }
 
     /**
-     * Legt den Wert der endToEndId-Eigenschaft fest.
+     * Sets the value of the endToEndId property.
      * 
      * @param value
      *     allowed object is

@@ -4,15 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_002_002_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für GroupHeaderSEPA complex type.
+ * <p>Java class for GroupHeaderSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="GroupHeaderSEPA">
@@ -45,7 +44,6 @@ public class GroupHeaderSEPA {
     @XmlElement(name = "MsgId", namespace = "urn:swift:xsd:$pain.002.002.02", required = true)
     protected String msgId;
     @XmlElement(name = "CreDtTm", namespace = "urn:swift:xsd:$pain.002.002.02", required = true)
-    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creDtTm;
     @XmlElement(name = "CdtrAgt", namespace = "urn:swift:xsd:$pain.002.002.02")
     protected BranchAndFinancialInstitutionIdentificationSEPA1 cdtrAgt;
@@ -53,7 +51,7 @@ public class GroupHeaderSEPA {
     protected BranchAndFinancialInstitutionIdentificationSEPA1 dbtrAgt;
 
     /**
-     * Ruft den Wert der msgId-Eigenschaft ab.
+     * Gets the value of the msgId property.
      * 
      * @return
      *     possible object is
@@ -65,7 +63,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Legt den Wert der msgId-Eigenschaft fest.
+     * Sets the value of the msgId property.
      * 
      * @param value
      *     allowed object is
@@ -77,7 +75,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Ruft den Wert der creDtTm-Eigenschaft ab.
+     * Gets the value of the creDtTm property.
      * 
      * @return
      *     possible object is
@@ -89,7 +87,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Legt den Wert der creDtTm-Eigenschaft fest.
+     * Sets the value of the creDtTm property.
      * 
      * @param value
      *     allowed object is
@@ -101,7 +99,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Ruft den Wert der cdtrAgt-Eigenschaft ab.
+     * Gets the value of the cdtrAgt property.
      * 
      * @return
      *     possible object is
@@ -113,7 +111,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Legt den Wert der cdtrAgt-Eigenschaft fest.
+     * Sets the value of the cdtrAgt property.
      * 
      * @param value
      *     allowed object is
@@ -125,7 +123,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Ruft den Wert der dbtrAgt-Eigenschaft ab.
+     * Gets the value of the dbtrAgt property.
      * 
      * @return
      *     possible object is
@@ -137,7 +135,7 @@ public class GroupHeaderSEPA {
     }
 
     /**
-     * Legt den Wert der dbtrAgt-Eigenschaft fest.
+     * Sets the value of the dbtrAgt property.
      * 
      * @param value
      *     allowed object is

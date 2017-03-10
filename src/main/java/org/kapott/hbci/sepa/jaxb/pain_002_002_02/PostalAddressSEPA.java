@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PostalAddressSEPA complex type.
+ * <p>Java class for PostalAddressSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PostalAddressSEPA">
@@ -71,7 +71,7 @@ public class PostalAddressSEPA {
     }
 
     /**
-     * Ruft den Wert der ctry-Eigenschaft ab.
+     * Gets the value of the ctry property.
      * 
      * @return
      *     possible object is
@@ -83,7 +83,7 @@ public class PostalAddressSEPA {
     }
 
     /**
-     * Legt den Wert der ctry-Eigenschaft fest.
+     * Sets the value of the ctry property.
      * 
      * @param value
      *     allowed object is

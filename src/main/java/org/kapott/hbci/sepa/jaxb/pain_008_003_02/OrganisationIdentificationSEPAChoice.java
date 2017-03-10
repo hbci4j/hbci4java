@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für OrganisationIdentificationSEPAChoice complex type.
+ * <p>Java class for OrganisationIdentificationSEPAChoice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="OrganisationIdentificationSEPAChoice">
@@ -42,7 +42,7 @@ public class OrganisationIdentificationSEPAChoice {
     protected GenericOrganisationIdentification1 othr;
 
     /**
-     * Ruft den Wert der bicOrBEI-Eigenschaft ab.
+     * Gets the value of the bicOrBEI property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der bicOrBEI-Eigenschaft fest.
+     * Sets the value of the bicOrBEI property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der othr-Eigenschaft ab.
+     * Gets the value of the othr property.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der othr-Eigenschaft fest.
+     * Sets the value of the othr property.
      * 
      * @param value
      *     allowed object is

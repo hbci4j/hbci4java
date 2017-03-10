@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PaymentTypeInformationSDD complex type.
+ * <p>Java class for PaymentTypeInformationSDD complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PaymentTypeInformationSDD">
@@ -44,14 +43,12 @@ public class PaymentTypeInformationSDD {
     @XmlElement(name = "LclInstrm", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected LocalInstrumentSDD lclInstrm;
     @XmlElement(name = "SeqTp", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
-    @XmlSchemaType(name = "string")
     protected SequenceType1Code seqTp;
     @XmlElement(name = "CtgyPurp", namespace = "urn:swift:xsd:$pain.008.002.01")
-    @XmlSchemaType(name = "string")
     protected PaymentCategoryPurpose1Code ctgyPurp;
 
     /**
-     * Ruft den Wert der svcLvl-Eigenschaft ab.
+     * Gets the value of the svcLvl property.
      * 
      * @return
      *     possible object is
@@ -63,7 +60,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Legt den Wert der svcLvl-Eigenschaft fest.
+     * Sets the value of the svcLvl property.
      * 
      * @param value
      *     allowed object is
@@ -75,7 +72,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Ruft den Wert der lclInstrm-Eigenschaft ab.
+     * Gets the value of the lclInstrm property.
      * 
      * @return
      *     possible object is
@@ -87,7 +84,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Legt den Wert der lclInstrm-Eigenschaft fest.
+     * Sets the value of the lclInstrm property.
      * 
      * @param value
      *     allowed object is
@@ -99,7 +96,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Ruft den Wert der seqTp-Eigenschaft ab.
+     * Gets the value of the seqTp property.
      * 
      * @return
      *     possible object is
@@ -111,7 +108,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Legt den Wert der seqTp-Eigenschaft fest.
+     * Sets the value of the seqTp property.
      * 
      * @param value
      *     allowed object is
@@ -123,7 +120,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Ruft den Wert der ctgyPurp-Eigenschaft ab.
+     * Gets the value of the ctgyPurp property.
      * 
      * @return
      *     possible object is
@@ -135,7 +132,7 @@ public class PaymentTypeInformationSDD {
     }
 
     /**
-     * Legt den Wert der ctgyPurp-Eigenschaft fest.
+     * Sets the value of the ctgyPurp property.
      * 
      * @param value
      *     allowed object is

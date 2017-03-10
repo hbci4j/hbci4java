@@ -4,15 +4,14 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für MandateRelatedInformationSDD complex type.
+ * <p>Java class for MandateRelatedInformationSDD complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="MandateRelatedInformationSDD">
@@ -45,7 +44,6 @@ public class MandateRelatedInformationSDD {
     @XmlElement(name = "MndtId", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected String mndtId;
     @XmlElement(name = "DtOfSgntr", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
-    @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dtOfSgntr;
     @XmlElement(name = "AmdmntInd", namespace = "urn:swift:xsd:$pain.008.002.01")
     protected Boolean amdmntInd;
@@ -55,7 +53,7 @@ public class MandateRelatedInformationSDD {
     protected String elctrncSgntr;
 
     /**
-     * Ruft den Wert der mndtId-Eigenschaft ab.
+     * Gets the value of the mndtId property.
      * 
      * @return
      *     possible object is
@@ -67,7 +65,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Legt den Wert der mndtId-Eigenschaft fest.
+     * Sets the value of the mndtId property.
      * 
      * @param value
      *     allowed object is
@@ -79,7 +77,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Ruft den Wert der dtOfSgntr-Eigenschaft ab.
+     * Gets the value of the dtOfSgntr property.
      * 
      * @return
      *     possible object is
@@ -91,7 +89,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Legt den Wert der dtOfSgntr-Eigenschaft fest.
+     * Sets the value of the dtOfSgntr property.
      * 
      * @param value
      *     allowed object is
@@ -103,7 +101,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Ruft den Wert der amdmntInd-Eigenschaft ab.
+     * Gets the value of the amdmntInd property.
      * 
      * @return
      *     possible object is
@@ -115,7 +113,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Legt den Wert der amdmntInd-Eigenschaft fest.
+     * Sets the value of the amdmntInd property.
      * 
      * @param value
      *     allowed object is
@@ -127,7 +125,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Ruft den Wert der amdmntInfDtls-Eigenschaft ab.
+     * Gets the value of the amdmntInfDtls property.
      * 
      * @return
      *     possible object is
@@ -139,7 +137,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Legt den Wert der amdmntInfDtls-Eigenschaft fest.
+     * Sets the value of the amdmntInfDtls property.
      * 
      * @param value
      *     allowed object is
@@ -151,7 +149,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Ruft den Wert der elctrncSgntr-Eigenschaft ab.
+     * Gets the value of the elctrncSgntr property.
      * 
      * @return
      *     possible object is
@@ -163,7 +161,7 @@ public class MandateRelatedInformationSDD {
     }
 
     /**
-     * Legt den Wert der elctrncSgntr-Eigenschaft fest.
+     * Sets the value of the elctrncSgntr property.
      * 
      * @param value
      *     allowed object is

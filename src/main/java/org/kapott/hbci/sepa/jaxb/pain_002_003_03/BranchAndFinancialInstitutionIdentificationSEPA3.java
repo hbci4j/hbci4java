@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für BranchAndFinancialInstitutionIdentificationSEPA3 complex type.
+ * <p>Java class for BranchAndFinancialInstitutionIdentificationSEPA3 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="BranchAndFinancialInstitutionIdentificationSEPA3">
@@ -36,7 +36,7 @@ public class BranchAndFinancialInstitutionIdentificationSEPA3 {
     protected FinancialInstitutionIdentificationSEPA3 finInstnId;
 
     /**
-     * Ruft den Wert der finInstnId-Eigenschaft ab.
+     * Gets the value of the finInstnId property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class BranchAndFinancialInstitutionIdentificationSEPA3 {
     }
 
     /**
-     * Legt den Wert der finInstnId-Eigenschaft fest.
+     * Sets the value of the finInstnId property.
      * 
      * @param value
      *     allowed object is

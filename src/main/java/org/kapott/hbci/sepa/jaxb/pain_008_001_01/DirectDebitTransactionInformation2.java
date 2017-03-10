@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für DirectDebitTransactionInformation2 complex type.
+ * <p>Java class for DirectDebitTransactionInformation2 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="DirectDebitTransactionInformation2">
@@ -64,7 +64,7 @@ public class DirectDebitTransactionInformation2 {
     protected RemittanceInformation3 rmtInf;
 
     /**
-     * Ruft den Wert der pmtId-Eigenschaft ab.
+     * Gets the value of the pmtId property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der pmtId-Eigenschaft fest.
+     * Sets the value of the pmtId property.
      * 
      * @param value
      *     allowed object is
@@ -88,7 +88,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der instdAmt-Eigenschaft ab.
+     * Gets the value of the instdAmt property.
      * 
      * @return
      *     possible object is
@@ -100,7 +100,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der instdAmt-Eigenschaft fest.
+     * Sets the value of the instdAmt property.
      * 
      * @param value
      *     allowed object is
@@ -112,7 +112,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der drctDbtTx-Eigenschaft ab.
+     * Gets the value of the drctDbtTx property.
      * 
      * @return
      *     possible object is
@@ -124,7 +124,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der drctDbtTx-Eigenschaft fest.
+     * Sets the value of the drctDbtTx property.
      * 
      * @param value
      *     allowed object is
@@ -136,7 +136,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der dbtrAgt-Eigenschaft ab.
+     * Gets the value of the dbtrAgt property.
      * 
      * @return
      *     possible object is
@@ -148,7 +148,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der dbtrAgt-Eigenschaft fest.
+     * Sets the value of the dbtrAgt property.
      * 
      * @param value
      *     allowed object is
@@ -160,7 +160,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der dbtr-Eigenschaft ab.
+     * Gets the value of the dbtr property.
      * 
      * @return
      *     possible object is
@@ -172,7 +172,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der dbtr-Eigenschaft fest.
+     * Sets the value of the dbtr property.
      * 
      * @param value
      *     allowed object is
@@ -184,7 +184,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der dbtrAcct-Eigenschaft ab.
+     * Gets the value of the dbtrAcct property.
      * 
      * @return
      *     possible object is
@@ -196,7 +196,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der dbtrAcct-Eigenschaft fest.
+     * Sets the value of the dbtrAcct property.
      * 
      * @param value
      *     allowed object is
@@ -208,7 +208,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der ultmtDbtr-Eigenschaft ab.
+     * Gets the value of the ultmtDbtr property.
      * 
      * @return
      *     possible object is
@@ -220,7 +220,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der ultmtDbtr-Eigenschaft fest.
+     * Sets the value of the ultmtDbtr property.
      * 
      * @param value
      *     allowed object is
@@ -232,7 +232,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Ruft den Wert der rmtInf-Eigenschaft ab.
+     * Gets the value of the rmtInf property.
      * 
      * @return
      *     possible object is
@@ -244,7 +244,7 @@ public class DirectDebitTransactionInformation2 {
     }
 
     /**
-     * Legt den Wert der rmtInf-Eigenschaft fest.
+     * Sets the value of the rmtInf property.
      * 
      * @param value
      *     allowed object is

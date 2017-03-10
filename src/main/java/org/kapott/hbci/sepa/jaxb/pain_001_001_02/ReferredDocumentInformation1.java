@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für ReferredDocumentInformation1 complex type.
+ * <p>Java class for ReferredDocumentInformation1 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ReferredDocumentInformation1">
@@ -40,7 +40,7 @@ public class ReferredDocumentInformation1 {
     protected String rfrdDocNb;
 
     /**
-     * Ruft den Wert der rfrdDocTp-Eigenschaft ab.
+     * Gets the value of the rfrdDocTp property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class ReferredDocumentInformation1 {
     }
 
     /**
-     * Legt den Wert der rfrdDocTp-Eigenschaft fest.
+     * Sets the value of the rfrdDocTp property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class ReferredDocumentInformation1 {
     }
 
     /**
-     * Ruft den Wert der rfrdDocNb-Eigenschaft ab.
+     * Gets the value of the rfrdDocNb property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class ReferredDocumentInformation1 {
     }
 
     /**
-     * Legt den Wert der rfrdDocNb-Eigenschaft fest.
+     * Sets the value of the rfrdDocNb property.
      * 
      * @param value
      *     allowed object is

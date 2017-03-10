@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für DirectDebitTransactionInformationSDD complex type.
+ * <p>Java class for DirectDebitTransactionInformationSDD complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="DirectDebitTransactionInformationSDD">
@@ -58,7 +57,6 @@ public class DirectDebitTransactionInformationSDD {
     @XmlElement(name = "InstdAmt", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected CurrencyAndAmountSDD instdAmt;
     @XmlElement(name = "ChrgBr", namespace = "urn:swift:xsd:$pain.008.002.01")
-    @XmlSchemaType(name = "string")
     protected ChargeBearerTypeSDDCode chrgBr;
     @XmlElement(name = "DrctDbtTx", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
     protected DirectDebitTransactionSDD drctDbtTx;
@@ -78,7 +76,7 @@ public class DirectDebitTransactionInformationSDD {
     protected RemittanceInformationSDDChoice rmtInf;
 
     /**
-     * Ruft den Wert der pmtId-Eigenschaft ab.
+     * Gets the value of the pmtId property.
      * 
      * @return
      *     possible object is
@@ -90,7 +88,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der pmtId-Eigenschaft fest.
+     * Sets the value of the pmtId property.
      * 
      * @param value
      *     allowed object is
@@ -102,7 +100,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der instdAmt-Eigenschaft ab.
+     * Gets the value of the instdAmt property.
      * 
      * @return
      *     possible object is
@@ -114,7 +112,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der instdAmt-Eigenschaft fest.
+     * Sets the value of the instdAmt property.
      * 
      * @param value
      *     allowed object is
@@ -126,7 +124,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der chrgBr-Eigenschaft ab.
+     * Gets the value of the chrgBr property.
      * 
      * @return
      *     possible object is
@@ -138,7 +136,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der chrgBr-Eigenschaft fest.
+     * Sets the value of the chrgBr property.
      * 
      * @param value
      *     allowed object is
@@ -150,7 +148,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der drctDbtTx-Eigenschaft ab.
+     * Gets the value of the drctDbtTx property.
      * 
      * @return
      *     possible object is
@@ -162,7 +160,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der drctDbtTx-Eigenschaft fest.
+     * Sets the value of the drctDbtTx property.
      * 
      * @param value
      *     allowed object is
@@ -174,7 +172,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der ultmtCdtr-Eigenschaft ab.
+     * Gets the value of the ultmtCdtr property.
      * 
      * @return
      *     possible object is
@@ -186,7 +184,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der ultmtCdtr-Eigenschaft fest.
+     * Sets the value of the ultmtCdtr property.
      * 
      * @param value
      *     allowed object is
@@ -198,7 +196,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der dbtrAgt-Eigenschaft ab.
+     * Gets the value of the dbtrAgt property.
      * 
      * @return
      *     possible object is
@@ -210,7 +208,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der dbtrAgt-Eigenschaft fest.
+     * Sets the value of the dbtrAgt property.
      * 
      * @param value
      *     allowed object is
@@ -222,7 +220,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der dbtr-Eigenschaft ab.
+     * Gets the value of the dbtr property.
      * 
      * @return
      *     possible object is
@@ -234,7 +232,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der dbtr-Eigenschaft fest.
+     * Sets the value of the dbtr property.
      * 
      * @param value
      *     allowed object is
@@ -246,7 +244,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der dbtrAcct-Eigenschaft ab.
+     * Gets the value of the dbtrAcct property.
      * 
      * @return
      *     possible object is
@@ -258,7 +256,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der dbtrAcct-Eigenschaft fest.
+     * Sets the value of the dbtrAcct property.
      * 
      * @param value
      *     allowed object is
@@ -270,7 +268,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der ultmtDbtr-Eigenschaft ab.
+     * Gets the value of the ultmtDbtr property.
      * 
      * @return
      *     possible object is
@@ -282,7 +280,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der ultmtDbtr-Eigenschaft fest.
+     * Sets the value of the ultmtDbtr property.
      * 
      * @param value
      *     allowed object is
@@ -294,7 +292,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der purp-Eigenschaft ab.
+     * Gets the value of the purp property.
      * 
      * @return
      *     possible object is
@@ -306,7 +304,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der purp-Eigenschaft fest.
+     * Sets the value of the purp property.
      * 
      * @param value
      *     allowed object is
@@ -318,7 +316,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Ruft den Wert der rmtInf-Eigenschaft ab.
+     * Gets the value of the rmtInf property.
      * 
      * @return
      *     possible object is
@@ -330,7 +328,7 @@ public class DirectDebitTransactionInformationSDD {
     }
 
     /**
-     * Legt den Wert der rmtInf-Eigenschaft fest.
+     * Sets the value of the rmtInf property.
      * 
      * @param value
      *     allowed object is

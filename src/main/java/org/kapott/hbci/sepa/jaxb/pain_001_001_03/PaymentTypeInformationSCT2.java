@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PaymentTypeInformationSCT2 complex type.
+ * <p>Java class for PaymentTypeInformationSCT2 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PaymentTypeInformationSCT2">
@@ -40,7 +40,7 @@ public class PaymentTypeInformationSCT2 {
     protected CategoryPurposeSEPA ctgyPurp;
 
     /**
-     * Ruft den Wert der svcLvl-Eigenschaft ab.
+     * Gets the value of the svcLvl property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class PaymentTypeInformationSCT2 {
     }
 
     /**
-     * Legt den Wert der svcLvl-Eigenschaft fest.
+     * Sets the value of the svcLvl property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class PaymentTypeInformationSCT2 {
     }
 
     /**
-     * Ruft den Wert der ctgyPurp-Eigenschaft ab.
+     * Gets the value of the ctgyPurp property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class PaymentTypeInformationSCT2 {
     }
 
     /**
-     * Legt den Wert der ctgyPurp-Eigenschaft fest.
+     * Sets the value of the ctgyPurp property.
      * 
      * @param value
      *     allowed object is

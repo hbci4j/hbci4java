@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PartyIdentificationSEPA6Choice complex type.
+ * <p>Java class for PartyIdentificationSEPA6Choice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PartyIdentificationSEPA6Choice">
@@ -42,7 +42,7 @@ public class PartyIdentificationSEPA6Choice {
     protected PartySEPA1 id;
 
     /**
-     * Ruft den Wert der nm-Eigenschaft ab.
+     * Gets the value of the nm property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class PartyIdentificationSEPA6Choice {
     }
 
     /**
-     * Legt den Wert der nm-Eigenschaft fest.
+     * Sets the value of the nm property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class PartyIdentificationSEPA6Choice {
     }
 
     /**
-     * Ruft den Wert der id-Eigenschaft ab.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class PartyIdentificationSEPA6Choice {
     }
 
     /**
-     * Legt den Wert der id-Eigenschaft fest.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is

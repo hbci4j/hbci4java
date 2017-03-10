@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für AmountTypeSCT complex type.
+ * <p>Java class for AmountTypeSCT complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="AmountTypeSCT">
@@ -36,7 +36,7 @@ public class AmountTypeSCT {
     protected CurrencyAndAmountSCT instdAmt;
 
     /**
-     * Ruft den Wert der instdAmt-Eigenschaft ab.
+     * Gets the value of the instdAmt property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class AmountTypeSCT {
     }
 
     /**
-     * Legt den Wert der instdAmt-Eigenschaft fest.
+     * Sets the value of the instdAmt property.
      * 
      * @param value
      *     allowed object is

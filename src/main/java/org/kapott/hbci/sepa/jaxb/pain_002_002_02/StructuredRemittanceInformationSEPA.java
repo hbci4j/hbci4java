@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für StructuredRemittanceInformationSEPA complex type.
+ * <p>Java class for StructuredRemittanceInformationSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="StructuredRemittanceInformationSEPA">
@@ -36,7 +36,7 @@ public class StructuredRemittanceInformationSEPA {
     protected CreditorReferenceInformationSEPA cdtrRefInf;
 
     /**
-     * Ruft den Wert der cdtrRefInf-Eigenschaft ab.
+     * Gets the value of the cdtrRefInf property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class StructuredRemittanceInformationSEPA {
     }
 
     /**
-     * Legt den Wert der cdtrRefInf-Eigenschaft fest.
+     * Sets the value of the cdtrRefInf property.
      * 
      * @param value
      *     allowed object is

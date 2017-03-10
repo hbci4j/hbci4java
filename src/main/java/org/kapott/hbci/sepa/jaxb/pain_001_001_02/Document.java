@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für Document complex type.
+ * <p>Java class for Document complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="Document">
@@ -36,7 +36,7 @@ public class Document {
     protected Pain00100102 pain00100102;
 
     /**
-     * Ruft den Wert der pain00100102-Eigenschaft ab.
+     * Gets the value of the pain00100102 property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class Document {
     }
 
     /**
-     * Legt den Wert der pain00100102-Eigenschaft fest.
+     * Sets the value of the pain00100102 property.
      * 
      * @param value
      *     allowed object is

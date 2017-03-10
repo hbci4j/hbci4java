@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für FinancialInstitutionIdentificationSEPA2 complex type.
+ * <p>Java class for FinancialInstitutionIdentificationSEPA2 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="FinancialInstitutionIdentificationSEPA2">
@@ -36,7 +36,7 @@ public class FinancialInstitutionIdentificationSEPA2 {
     protected String bic;
 
     /**
-     * Ruft den Wert der bic-Eigenschaft ab.
+     * Gets the value of the bic property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class FinancialInstitutionIdentificationSEPA2 {
     }
 
     /**
-     * Legt den Wert der bic-Eigenschaft fest.
+     * Sets the value of the bic property.
      * 
      * @param value
      *     allowed object is

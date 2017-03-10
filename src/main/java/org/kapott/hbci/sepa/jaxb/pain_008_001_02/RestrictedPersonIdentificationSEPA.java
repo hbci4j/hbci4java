@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für RestrictedPersonIdentificationSEPA complex type.
+ * <p>Java class for RestrictedPersonIdentificationSEPA complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="RestrictedPersonIdentificationSEPA">
@@ -40,7 +40,7 @@ public class RestrictedPersonIdentificationSEPA {
     protected RestrictedPersonIdentificationSchemeNameSEPA schmeNm;
 
     /**
-     * Ruft den Wert der id-Eigenschaft ab.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class RestrictedPersonIdentificationSEPA {
     }
 
     /**
-     * Legt den Wert der id-Eigenschaft fest.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class RestrictedPersonIdentificationSEPA {
     }
 
     /**
-     * Ruft den Wert der schmeNm-Eigenschaft ab.
+     * Gets the value of the schmeNm property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class RestrictedPersonIdentificationSEPA {
     }
 
     /**
-     * Legt den Wert der schmeNm-Eigenschaft fest.
+     * Sets the value of the schmeNm property.
      * 
      * @param value
      *     allowed object is

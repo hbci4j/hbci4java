@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für GenericOrganisationIdentification1 complex type.
+ * <p>Java class for GenericOrganisationIdentification1 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="GenericOrganisationIdentification1">
@@ -44,7 +44,7 @@ public class GenericOrganisationIdentification1 {
     protected String issr;
 
     /**
-     * Ruft den Wert der id-Eigenschaft ab.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -56,7 +56,7 @@ public class GenericOrganisationIdentification1 {
     }
 
     /**
-     * Legt den Wert der id-Eigenschaft fest.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
@@ -68,7 +68,7 @@ public class GenericOrganisationIdentification1 {
     }
 
     /**
-     * Ruft den Wert der schmeNm-Eigenschaft ab.
+     * Gets the value of the schmeNm property.
      * 
      * @return
      *     possible object is
@@ -80,7 +80,7 @@ public class GenericOrganisationIdentification1 {
     }
 
     /**
-     * Legt den Wert der schmeNm-Eigenschaft fest.
+     * Sets the value of the schmeNm property.
      * 
      * @param value
      *     allowed object is
@@ -92,7 +92,7 @@ public class GenericOrganisationIdentification1 {
     }
 
     /**
-     * Ruft den Wert der issr-Eigenschaft ab.
+     * Gets the value of the issr property.
      * 
      * @return
      *     possible object is
@@ -104,7 +104,7 @@ public class GenericOrganisationIdentification1 {
     }
 
     /**
-     * Legt den Wert der issr-Eigenschaft fest.
+     * Sets the value of the issr property.
      * 
      * @param value
      *     allowed object is

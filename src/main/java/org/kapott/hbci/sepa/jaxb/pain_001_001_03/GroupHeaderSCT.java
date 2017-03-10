@@ -5,15 +5,14 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für GroupHeaderSCT complex type.
+ * <p>Java class for GroupHeaderSCT complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="GroupHeaderSCT">
@@ -46,7 +45,6 @@ public class GroupHeaderSCT {
     @XmlElement(name = "MsgId", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
     protected String msgId;
     @XmlElement(name = "CreDtTm", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
-    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creDtTm;
     @XmlElement(name = "NbOfTxs", namespace = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03", required = true)
     protected String nbOfTxs;
@@ -56,7 +54,7 @@ public class GroupHeaderSCT {
     protected PartyIdentificationSEPA1 initgPty;
 
     /**
-     * Ruft den Wert der msgId-Eigenschaft ab.
+     * Gets the value of the msgId property.
      * 
      * @return
      *     possible object is
@@ -68,7 +66,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Legt den Wert der msgId-Eigenschaft fest.
+     * Sets the value of the msgId property.
      * 
      * @param value
      *     allowed object is
@@ -80,7 +78,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Ruft den Wert der creDtTm-Eigenschaft ab.
+     * Gets the value of the creDtTm property.
      * 
      * @return
      *     possible object is
@@ -92,7 +90,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Legt den Wert der creDtTm-Eigenschaft fest.
+     * Sets the value of the creDtTm property.
      * 
      * @param value
      *     allowed object is
@@ -104,7 +102,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Ruft den Wert der nbOfTxs-Eigenschaft ab.
+     * Gets the value of the nbOfTxs property.
      * 
      * @return
      *     possible object is
@@ -116,7 +114,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Legt den Wert der nbOfTxs-Eigenschaft fest.
+     * Sets the value of the nbOfTxs property.
      * 
      * @param value
      *     allowed object is
@@ -128,7 +126,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Ruft den Wert der ctrlSum-Eigenschaft ab.
+     * Gets the value of the ctrlSum property.
      * 
      * @return
      *     possible object is
@@ -140,7 +138,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Legt den Wert der ctrlSum-Eigenschaft fest.
+     * Sets the value of the ctrlSum property.
      * 
      * @param value
      *     allowed object is
@@ -152,7 +150,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Ruft den Wert der initgPty-Eigenschaft ab.
+     * Gets the value of the initgPty property.
      * 
      * @return
      *     possible object is
@@ -164,7 +162,7 @@ public class GroupHeaderSCT {
     }
 
     /**
-     * Legt den Wert der initgPty-Eigenschaft fest.
+     * Sets the value of the initgPty property.
      * 
      * @param value
      *     allowed object is

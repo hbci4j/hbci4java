@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PartyIdentification8 complex type.
+ * <p>Java class for PartyIdentification8 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PartyIdentification8">
@@ -48,7 +48,7 @@ public class PartyIdentification8 {
     protected String ctryOfRes;
 
     /**
-     * Ruft den Wert der nm-Eigenschaft ab.
+     * Gets the value of the nm property.
      * 
      * @return
      *     possible object is
@@ -60,7 +60,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Legt den Wert der nm-Eigenschaft fest.
+     * Sets the value of the nm property.
      * 
      * @param value
      *     allowed object is
@@ -72,7 +72,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Ruft den Wert der pstlAdr-Eigenschaft ab.
+     * Gets the value of the pstlAdr property.
      * 
      * @return
      *     possible object is
@@ -84,7 +84,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Legt den Wert der pstlAdr-Eigenschaft fest.
+     * Sets the value of the pstlAdr property.
      * 
      * @param value
      *     allowed object is
@@ -96,7 +96,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Ruft den Wert der id-Eigenschaft ab.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -108,7 +108,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Legt den Wert der id-Eigenschaft fest.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
@@ -120,7 +120,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Ruft den Wert der ctryOfRes-Eigenschaft ab.
+     * Gets the value of the ctryOfRes property.
      * 
      * @return
      *     possible object is
@@ -132,7 +132,7 @@ public class PartyIdentification8 {
     }
 
     /**
-     * Legt den Wert der ctryOfRes-Eigenschaft fest.
+     * Sets the value of the ctryOfRes property.
      * 
      * @param value
      *     allowed object is

@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_002_002_02;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für StatusReason1Choice complex type.
+ * <p>Java class for StatusReason1Choice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="StatusReason1Choice">
@@ -38,14 +37,12 @@ import javax.xml.bind.annotation.XmlType;
 public class StatusReason1Choice {
 
     @XmlElement(name = "Cd", namespace = "urn:swift:xsd:$pain.002.002.02")
-    @XmlSchemaType(name = "string")
     protected TransactionRejectReason2Code cd;
     @XmlElement(name = "Prtry", namespace = "urn:swift:xsd:$pain.002.002.02")
-    @XmlSchemaType(name = "string")
     protected RestrictedProprietaryReasonSEPA prtry;
 
     /**
-     * Ruft den Wert der cd-Eigenschaft ab.
+     * Gets the value of the cd property.
      * 
      * @return
      *     possible object is
@@ -57,7 +54,7 @@ public class StatusReason1Choice {
     }
 
     /**
-     * Legt den Wert der cd-Eigenschaft fest.
+     * Sets the value of the cd property.
      * 
      * @param value
      *     allowed object is
@@ -69,7 +66,7 @@ public class StatusReason1Choice {
     }
 
     /**
-     * Ruft den Wert der prtry-Eigenschaft ab.
+     * Gets the value of the prtry property.
      * 
      * @return
      *     possible object is
@@ -81,7 +78,7 @@ public class StatusReason1Choice {
     }
 
     /**
-     * Legt den Wert der prtry-Eigenschaft fest.
+     * Sets the value of the prtry property.
      * 
      * @param value
      *     allowed object is

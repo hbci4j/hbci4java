@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PersonIdentificationSEPA1Choice complex type.
+ * <p>Java class for PersonIdentificationSEPA1Choice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PersonIdentificationSEPA1Choice">
@@ -42,7 +42,7 @@ public class PersonIdentificationSEPA1Choice {
     protected GenericPersonIdentification1 othr;
 
     /**
-     * Ruft den Wert der dtAndPlcOfBirth-Eigenschaft ab.
+     * Gets the value of the dtAndPlcOfBirth property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class PersonIdentificationSEPA1Choice {
     }
 
     /**
-     * Legt den Wert der dtAndPlcOfBirth-Eigenschaft fest.
+     * Sets the value of the dtAndPlcOfBirth property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class PersonIdentificationSEPA1Choice {
     }
 
     /**
-     * Ruft den Wert der othr-Eigenschaft ab.
+     * Gets the value of the othr property.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class PersonIdentificationSEPA1Choice {
     }
 
     /**
-     * Legt den Wert der othr-Eigenschaft fest.
+     * Sets the value of the othr property.
      * 
      * @param value
      *     allowed object is

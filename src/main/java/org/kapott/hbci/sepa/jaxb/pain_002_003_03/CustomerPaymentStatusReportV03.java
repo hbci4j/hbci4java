@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für CustomerPaymentStatusReportV03 complex type.
+ * <p>Java class for CustomerPaymentStatusReportV03 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CustomerPaymentStatusReportV03">
@@ -46,7 +46,7 @@ public class CustomerPaymentStatusReportV03 {
     protected List<OriginalPaymentInformationSEPA> orgnlPmtInfAndSts;
 
     /**
-     * Ruft den Wert der grpHdr-Eigenschaft ab.
+     * Gets the value of the grpHdr property.
      * 
      * @return
      *     possible object is
@@ -58,7 +58,7 @@ public class CustomerPaymentStatusReportV03 {
     }
 
     /**
-     * Legt den Wert der grpHdr-Eigenschaft fest.
+     * Sets the value of the grpHdr property.
      * 
      * @param value
      *     allowed object is
@@ -70,7 +70,7 @@ public class CustomerPaymentStatusReportV03 {
     }
 
     /**
-     * Ruft den Wert der orgnlGrpInfAndSts-Eigenschaft ab.
+     * Gets the value of the orgnlGrpInfAndSts property.
      * 
      * @return
      *     possible object is
@@ -82,7 +82,7 @@ public class CustomerPaymentStatusReportV03 {
     }
 
     /**
-     * Legt den Wert der orgnlGrpInfAndSts-Eigenschaft fest.
+     * Sets the value of the orgnlGrpInfAndSts property.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für OrganisationIdentificationSEPAChoice complex type.
+ * <p>Java class for OrganisationIdentificationSEPAChoice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="OrganisationIdentificationSEPAChoice">
@@ -70,7 +70,7 @@ public class OrganisationIdentificationSEPAChoice {
     protected GenericIdentification3 prtryId;
 
     /**
-     * Ruft den Wert der bic-Eigenschaft ab.
+     * Gets the value of the bic property.
      * 
      * @return
      *     possible object is
@@ -82,7 +82,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der bic-Eigenschaft fest.
+     * Sets the value of the bic property.
      * 
      * @param value
      *     allowed object is
@@ -94,7 +94,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der ibei-Eigenschaft ab.
+     * Gets the value of the ibei property.
      * 
      * @return
      *     possible object is
@@ -106,7 +106,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der ibei-Eigenschaft fest.
+     * Sets the value of the ibei property.
      * 
      * @param value
      *     allowed object is
@@ -118,7 +118,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der bei-Eigenschaft ab.
+     * Gets the value of the bei property.
      * 
      * @return
      *     possible object is
@@ -130,7 +130,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der bei-Eigenschaft fest.
+     * Sets the value of the bei property.
      * 
      * @param value
      *     allowed object is
@@ -142,7 +142,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der eangln-Eigenschaft ab.
+     * Gets the value of the eangln property.
      * 
      * @return
      *     possible object is
@@ -154,7 +154,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der eangln-Eigenschaft fest.
+     * Sets the value of the eangln property.
      * 
      * @param value
      *     allowed object is
@@ -166,7 +166,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der uschu-Eigenschaft ab.
+     * Gets the value of the uschu property.
      * 
      * @return
      *     possible object is
@@ -178,7 +178,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der uschu-Eigenschaft fest.
+     * Sets the value of the uschu property.
      * 
      * @param value
      *     allowed object is
@@ -190,7 +190,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der duns-Eigenschaft ab.
+     * Gets the value of the duns property.
      * 
      * @return
      *     possible object is
@@ -202,7 +202,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der duns-Eigenschaft fest.
+     * Sets the value of the duns property.
      * 
      * @param value
      *     allowed object is
@@ -214,7 +214,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der bkPtyId-Eigenschaft ab.
+     * Gets the value of the bkPtyId property.
      * 
      * @return
      *     possible object is
@@ -226,7 +226,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der bkPtyId-Eigenschaft fest.
+     * Sets the value of the bkPtyId property.
      * 
      * @param value
      *     allowed object is
@@ -238,7 +238,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der taxIdNb-Eigenschaft ab.
+     * Gets the value of the taxIdNb property.
      * 
      * @return
      *     possible object is
@@ -250,7 +250,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der taxIdNb-Eigenschaft fest.
+     * Sets the value of the taxIdNb property.
      * 
      * @param value
      *     allowed object is
@@ -262,7 +262,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Ruft den Wert der prtryId-Eigenschaft ab.
+     * Gets the value of the prtryId property.
      * 
      * @return
      *     possible object is
@@ -274,7 +274,7 @@ public class OrganisationIdentificationSEPAChoice {
     }
 
     /**
-     * Legt den Wert der prtryId-Eigenschaft fest.
+     * Sets the value of the prtryId property.
      * 
      * @param value
      *     allowed object is

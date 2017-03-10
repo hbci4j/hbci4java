@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PartyIdentificationSDD2 complex type.
+ * <p>Java class for PartyIdentificationSDD2 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PartyIdentificationSDD2">
@@ -40,7 +40,7 @@ public class PartyIdentificationSDD2 {
     protected PostalAddressSDD pstlAdr;
 
     /**
-     * Ruft den Wert der nm-Eigenschaft ab.
+     * Gets the value of the nm property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class PartyIdentificationSDD2 {
     }
 
     /**
-     * Legt den Wert der nm-Eigenschaft fest.
+     * Sets the value of the nm property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class PartyIdentificationSDD2 {
     }
 
     /**
-     * Ruft den Wert der pstlAdr-Eigenschaft ab.
+     * Gets the value of the pstlAdr property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class PartyIdentificationSDD2 {
     }
 
     /**
-     * Legt den Wert der pstlAdr-Eigenschaft fest.
+     * Sets the value of the pstlAdr property.
      * 
      * @param value
      *     allowed object is

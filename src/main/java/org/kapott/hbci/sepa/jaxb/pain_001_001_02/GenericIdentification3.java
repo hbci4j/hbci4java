@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für GenericIdentification3 complex type.
+ * <p>Java class for GenericIdentification3 complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="GenericIdentification3">
@@ -40,7 +40,7 @@ public class GenericIdentification3 {
     protected String issr;
 
     /**
-     * Ruft den Wert der id-Eigenschaft ab.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class GenericIdentification3 {
     }
 
     /**
-     * Legt den Wert der id-Eigenschaft fest.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class GenericIdentification3 {
     }
 
     /**
-     * Ruft den Wert der issr-Eigenschaft ab.
+     * Gets the value of the issr property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class GenericIdentification3 {
     }
 
     /**
-     * Legt den Wert der issr-Eigenschaft fest.
+     * Sets the value of the issr property.
      * 
      * @param value
      *     allowed object is

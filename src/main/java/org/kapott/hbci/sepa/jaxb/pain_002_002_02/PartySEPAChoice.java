@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für PartySEPAChoice complex type.
+ * <p>Java class for PartySEPAChoice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PartySEPAChoice">
@@ -42,7 +42,7 @@ public class PartySEPAChoice {
     protected PersonIdentification3 prvtId;
 
     /**
-     * Ruft den Wert der orgId-Eigenschaft ab.
+     * Gets the value of the orgId property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class PartySEPAChoice {
     }
 
     /**
-     * Legt den Wert der orgId-Eigenschaft fest.
+     * Sets the value of the orgId property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class PartySEPAChoice {
     }
 
     /**
-     * Ruft den Wert der prvtId-Eigenschaft ab.
+     * Gets the value of the prvtId property.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class PartySEPAChoice {
     }
 
     /**
-     * Legt den Wert der prvtId-Eigenschaft fest.
+     * Sets the value of the prvtId property.
      * 
      * @param value
      *     allowed object is

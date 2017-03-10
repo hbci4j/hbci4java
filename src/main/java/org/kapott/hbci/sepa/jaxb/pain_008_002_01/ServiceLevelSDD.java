@@ -4,14 +4,13 @@ package org.kapott.hbci.sepa.jaxb.pain_008_002_01;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für ServiceLevelSDD complex type.
+ * <p>Java class for ServiceLevelSDD complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ServiceLevelSDD">
@@ -34,11 +33,10 @@ import javax.xml.bind.annotation.XmlType;
 public class ServiceLevelSDD {
 
     @XmlElement(name = "Cd", namespace = "urn:swift:xsd:$pain.008.002.01", required = true)
-    @XmlSchemaType(name = "string")
     protected ServiceLevelSDDCode cd;
 
     /**
-     * Ruft den Wert der cd-Eigenschaft ab.
+     * Gets the value of the cd property.
      * 
      * @return
      *     possible object is
@@ -50,7 +48,7 @@ public class ServiceLevelSDD {
     }
 
     /**
-     * Legt den Wert der cd-Eigenschaft fest.
+     * Sets the value of the cd property.
      * 
      * @param value
      *     allowed object is

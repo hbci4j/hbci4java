@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für Party2Choice complex type.
+ * <p>Java class for Party2Choice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="Party2Choice">
@@ -44,7 +44,7 @@ public class Party2Choice {
     protected List<PersonIdentification3> prvtId;
 
     /**
-     * Ruft den Wert der orgId-Eigenschaft ab.
+     * Gets the value of the orgId property.
      * 
      * @return
      *     possible object is
@@ -56,7 +56,7 @@ public class Party2Choice {
     }
 
     /**
-     * Legt den Wert der orgId-Eigenschaft fest.
+     * Sets the value of the orgId property.
      * 
      * @param value
      *     allowed object is

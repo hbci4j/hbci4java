@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für OrganisationIdentificationSchemeName1Choice complex type.
+ * <p>Java class for OrganisationIdentificationSchemeName1Choice complex type.
  * 
- * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="OrganisationIdentificationSchemeName1Choice">
@@ -42,7 +42,7 @@ public class OrganisationIdentificationSchemeName1Choice {
     protected String prtry;
 
     /**
-     * Ruft den Wert der cd-Eigenschaft ab.
+     * Gets the value of the cd property.
      * 
      * @return
      *     possible object is
@@ -54,7 +54,7 @@ public class OrganisationIdentificationSchemeName1Choice {
     }
 
     /**
-     * Legt den Wert der cd-Eigenschaft fest.
+     * Sets the value of the cd property.
      * 
      * @param value
      *     allowed object is
@@ -66,7 +66,7 @@ public class OrganisationIdentificationSchemeName1Choice {
     }
 
     /**
-     * Ruft den Wert der prtry-Eigenschaft ab.
+     * Gets the value of the prtry property.
      * 
      * @return
      *     possible object is
@@ -78,7 +78,7 @@ public class OrganisationIdentificationSchemeName1Choice {
     }
 
     /**
-     * Legt den Wert der prtry-Eigenschaft fest.
+     * Sets the value of the prtry property.
      * 
      * @param value
      *     allowed object is
