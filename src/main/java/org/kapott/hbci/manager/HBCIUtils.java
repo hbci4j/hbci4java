@@ -700,8 +700,9 @@ import org.kapott.hbci.swift.Swift;
  */
 public final class HBCIUtils
 {
-	private static final String							VERSION		= "HBCI4Java-2.5.12";
-
+  private final static String VERSION = HBCIUtils.class.getPackage().getImplementationVersion();
+  
+  /** Loglevel für keine Ausgaben */
 	public static final int								LOG_NONE	= 0;
 	/** Loglevel für Fehlerausgaben */
 	public static final int								LOG_ERR		= 1;
@@ -850,7 +851,7 @@ public final class HBCIUtils
 		try
 		{
 			initThread(props, callback);
-			HBCIUtils.log("This is " + version(), HBCIUtils.LOG_INFO);
+			HBCIUtils.log("hbci4java " + version(), HBCIUtils.LOG_INFO);
 
 			refreshBLZList(HBCIUtils.class.getClassLoader());
 
