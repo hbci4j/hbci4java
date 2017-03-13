@@ -49,6 +49,38 @@ Du kannst die aktuellste Version von HBCI4Java in Maven Central finden (zur Zeit
 
 https://oss.sonatype.org/content/repositories/snapshots/com/github/hbci4j/hbci4j-core/
 
+## Selbst compilieren
+
+Du benötigst:
+
+- GIT (https://git-scm.com/)
+- Java SDK 7 oder höher (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+- Apache Maven (https://maven.apache.org/)
+
+Öffne ein Terminal-Fenster und checke den Quellcode per GIT aus:
+
+    $> git clone https://github.com/hbci4j/hbci4java.git
+    
+Wechsle in den Ordner "hbci4java":
+
+    $> cd hbci4java
+
+Erzeuge die JAR-Datei per:
+
+    $> mvn jar:jar
+  
+Im Ordner "target" wird die Datei "hbci4j-core-<version>.jar" erzeugt.
+
+## Import in Eclipse
+
+Du benötigst:
+
+- Eine Eclipse-Version mit Maven-Support, z.Bsp.: "Eclipse IDE for Java EE Developers" (http://www.eclipse.org/downloads/eclipse-packages/) 
+- Den ausgecheckten Quellcode von HBCI4Java per GIT (siehe oben)
+
+Klicke im Menu von Eclipse auf "File->Import..." und wähle "Maven->Existing Maven Projects". Folge den Anweisungen des Assistenten. Klicke anschließend mit der rechten Maustaste im "Package Explorer" oder "Navigator" auf das Projekt und wähle im Contextmenu "Maven->Update Project...".
+
+
 ## Unit-Tests
 Im Ordner "src/main/test/" befinden sich einige JUnit-Tests. Viele davon erfordern jedoch das Vorhandensein spezieller Testumgebungen (Zugang zu Bank-Servern) bzw. vorkonfigurierte Bankzugänge. Die Tests können daher leider nicht automatisiert im Zuge der Erstellung von Deployment-Artefakten ausgeführt werden sondern nur manuell und selektiv.
 
