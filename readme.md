@@ -69,7 +69,7 @@ Erzeuge die JAR-Datei per:
 
     $> mvn package
   
-Im Ordner "target" wird die Datei "hbci4j-core-<version>.jar" erzeugt.
+Im Ordner "target" wird die Datei "hbci4j-core-${version}.jar" erzeugt.
 
 ## Import in Eclipse
 
