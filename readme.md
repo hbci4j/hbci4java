@@ -67,7 +67,7 @@ Wechsle in den Ordner "hbci4java":
 
 Erzeuge die JAR-Datei per:
 
-    $> mvn jar:jar
+    $> mvn package
   
 Im Ordner "target" wird die Datei "hbci4j-core-<version>.jar" erzeugt.
 
