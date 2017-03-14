@@ -1,3 +1,6 @@
+---
+title: Anleitung zum Release Prozess
+---
 
 Um ein Release zu erstellen, benötigt man zunächst die entsprechende Berechtigung, um ein Artifact auf Maven Central hochzuladen. Die Berechtigung für com.github.hbci4j haben zurzeit Olaf und Janning.
 
@@ -17,7 +20,7 @@ Lege in der Datei `~/.m2/settings.xml` einen zusätzlichen Eintrag für den Serv
 
 ## GPG
 
-Das Jar muss vor dem Upload signiert werden (http://central.sonatype.org/pages/apache-maven.html#gpg-signed-components). Falls das Kommando nicht `gpg` ist oder man den Release Prozess automatisieren möchte, kann man die `settings.xml` um folgenden Eintrag ergänzen: 
+Das Jar muss vor dem Upload signiert werden. Falls das Kommando nicht `gpg` ist oder man den Release Prozess automatisieren möchte, kann man die `settings.xml` um folgenden Eintrag ergänzen: 
 
     <settings>
       <profiles>
@@ -33,6 +36,9 @@ Das Jar muss vor dem Upload signiert werden (http://central.sonatype.org/pages/a
         </profile>
       </profiles> 
     </settings>
+
+Eine komplette Anleitung zum GPG Prozess findet man hier:
+- http://central.sonatype.org/pages/working-with-pgp-signatures.html
 
 ## Release
 
