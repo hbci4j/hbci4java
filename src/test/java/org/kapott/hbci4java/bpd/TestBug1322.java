@@ -2,6 +2,7 @@
  *
  * Copyright (c) by Olaf Willuhn
  * All rights reserved
+ * LGPLv2
  *
  **********************************************************************/
 
@@ -33,7 +34,7 @@ public class TestBug1322 extends AbstractTest
   {
     try
     {
-      String data = getFile("bpd/bugzilla-1322.txt");
+      String data = getFile("bugzilla-1322.txt");
       HBCIKernelImpl kernel = new HBCIKernelImpl(null,"300");
       kernel.rawNewMsg("DialogInitAnon");
       

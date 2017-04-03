@@ -67,6 +67,10 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         return "DauerSEPAList";
     }
     
+    /**
+     * ct.
+     * @param handler
+     */
     public GVDauerSEPAList(HBCIHandler handler)
     {
         super(handler,getLowlevelName(),new GVRDauerList());
@@ -87,10 +91,16 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
     }
 
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
+     */
+    @Override
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         Properties result=msgstatus.getData();
         GVRDauerList.Dauer entry=new GVRDauerList.Dauer();
+        
+        HBCIUtils.log("parsing SEPA standing orders from msg data [size: " + result.size() + "]",HBCIUtils.LOG_INFO);
 
         entry.my=new Konto();
         entry.my.country=result.getProperty(header+".My.KIK.country");
@@ -105,20 +115,29 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         
         String sepadescr = result.getProperty(header+".sepadescr");
         PainVersion version = PainVersion.byURN(sepadescr);
+        HBCIUtils.log("  detected pain version: " + version,HBCIUtils.LOG_INFO);
+
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();
         String pain = result.getProperty(header+".sepapain");
         try
         {
             // Encoding siehe GVTermUebSEPAList
+            HBCIUtils.log("  parsing sepa data: " + pain,HBCIUtils.LOG_DEBUG2);
             parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)), sepaResults);
+            HBCIUtils.log("  parsed sepa data, entries: " + sepaResults.size(),HBCIUtils.LOG_INFO);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
+            HBCIUtils.log("  unable to parse sepa data: " + e.getMessage(),HBCIUtils.LOG_ERR);
             throw new HBCI_Exception("Error parsing SEPA pain document",e);
         }
-
-        if(sepaResults.isEmpty()) return;
+        
+        if (sepaResults.isEmpty())
+        {
+          HBCIUtils.log("  found no sepa data",HBCIUtils.LOG_WARN);
+          return;
+        }
         Properties sepaResult = sepaResults.get(0);
         entry.other.iban = sepaResult.getProperty("dst.iban");
         entry.other.bic = sepaResult.getProperty("dst.bic");

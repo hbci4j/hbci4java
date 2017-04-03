@@ -1,11 +1,8 @@
 /**********************************************************************
- * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/bpd/HITANSTest.java,v $
- * $Revision: 1.1 $
- * $Date: 2011/05/17 12:48:05 $
- * $Author: willuhn $
  *
- * Copyright (c) by willuhn - software & services
+ * Copyright (c) by Olaf Willuhn
  * All rights reserved
+ * LGPLv2
  *
  **********************************************************************/
 
@@ -16,7 +13,6 @@ import java.util.Hashtable;
 import java.util.Properties;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
@@ -72,7 +68,7 @@ public class HITANSTest extends AbstractTest
   @Test
   public void testHitans5() throws Exception
   {
-    Properties bpd = getBPD("bpd/bpd2-formatted.txt","300");
+    Properties bpd = getBPD("bpd2-formatted.txt","300");
     Enumeration names = bpd.propertyNames();
     
     int version = 0;
@@ -104,7 +100,7 @@ public class HITANSTest extends AbstractTest
   @Test
   public void testCurrentSecMechInfo() throws Exception
   {
-    Properties bpd = getBPD("bpd/bpd2-formatted.txt","300");
+    Properties bpd = getBPD("bpd2-formatted.txt","300");
     HBCIPassportPinTan passport = new HBCIPassportPinTan(null,0);
     passport.setCurrentTANMethod("942");
     passport.setBPD(bpd);
@@ -119,15 +115,3 @@ public class HITANSTest extends AbstractTest
     Assert.assertEquals(secmech.getProperty("segversion"),"5");
   }
 }
-
-
-
-/**********************************************************************
- * $Log: HITANSTest.java,v $
- * Revision 1.1  2011/05/17 12:48:05  willuhn
- * @N Unit-Tests
- *
- * Revision 1.1  2011-05-13 15:07:58  willuhn
- * @N Testcode fuer das Parsen der HITANS-Segmente
- *
- **********************************************************************/

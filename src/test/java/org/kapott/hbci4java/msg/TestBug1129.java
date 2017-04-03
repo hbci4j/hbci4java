@@ -1,11 +1,8 @@
 /**********************************************************************
- * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/msg/TestBug1129.java,v $
- * $Revision: 1.1 $
- * $Date: 2012/03/06 23:18:26 $
- * $Author: willuhn $
  *
- * Copyright (c) by willuhn - software & services
+ * Copyright (c) by Olaf Willuhn
  * All rights reserved
+ * LGPLv2
  *
  **********************************************************************/
 
@@ -14,7 +11,6 @@ package org.kapott.hbci4java.msg;
 import java.util.Hashtable;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.kapott.hbci.exceptions.ParseErrorException;
 import org.kapott.hbci.manager.HBCIKernelImpl;
@@ -36,7 +32,7 @@ public class TestBug1129 extends AbstractTest
    */
   private Hashtable<String, String> parse() throws Exception
   {
-    String data = getFile("msg/bugzilla-1129.txt");
+    String data = this.getFile("bugzilla-1129.txt");
     HBCIKernelImpl kernel = new HBCIKernelImpl(null,"plus");
     kernel.rawNewMsg("DauerList");
     
@@ -92,12 +88,3 @@ public class TestBug1129 extends AbstractTest
   }
 
 }
-
-
-
-/**********************************************************************
- * $Log: TestBug1129.java,v $
- * Revision 1.1  2012/03/06 23:18:26  willuhn
- * @N Patch 37 - BUGZILLA 1129
- *
- **********************************************************************/
