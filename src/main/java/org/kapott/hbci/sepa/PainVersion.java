@@ -7,7 +7,9 @@
 
 package org.kapott.hbci.sepa;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +24,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.parsers.ISEPAParser;
+import org.kapott.hbci.comm.Comm;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -396,6 +400,59 @@ public class PainVersion implements Comparable<PainVersion>
         {
             throw new IllegalArgumentException(e2);
         }
+    }
+    
+    /**
+     * Die Bank sendet in ihren Antworten sowohl den SEPA-Deskriptor als auch die SEPA-Daten (die XML-Datei) selbst.
+     * Diese Funktion ermittelt sowohl aus dem SEPA-Deskriptor als auch aus den SEPA-Daten die angegebene PAIN-Version
+     * und vergleicht beide. Stimmen sie nicht ueberein, wird eine Warnung ausgegeben. Die Funktion liefert anschliessend
+     * die zum Parsen passende Version zurueck. Falls sich die angegebenen Versionen unterscheiden, wird die in den
+     * XML-Daten angegebene Version zurueckgeliefert.
+     * Siehe https://www.willuhn.de/bugzilla/show_bug.cgi?id=1806
+     * @param sepadesc die in der HBCI-Nachricht angegebene PAIN-Version.
+     * @param sepadata die eigentlichen XML-Daten.
+     * @return die zum Parsen zu verwendende PAIN-Version. NULL, wenn keinerlei Daten angegeben wurden.
+     */
+    public static PainVersion choose(String sepadesc, String sepadata)
+    {
+      final boolean haveDesc = sepadesc != null && sepadesc.length() > 0;
+      final boolean haveData = sepadata != null && sepadata.length() > 0;
+      
+      if (!haveDesc && !haveData)
+      {
+        HBCIUtils.log("neither sepadesr nor sepa data given",HBCIUtils.LOG_WARN);
+        return null;
+      }
+      
+      try
+      {
+        final PainVersion versionDesc = haveDesc ? PainVersion.byURN(sepadesc) : null;
+        final PainVersion versionData = haveData ? PainVersion.autodetect(new ByteArrayInputStream(sepadata.getBytes(Comm.ENCODING))) : null;
+        
+        HBCIUtils.log("pain version given in sepadescr: " + versionDesc,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("pain version according to data: " + versionData,HBCIUtils.LOG_INFO);
+        
+        // Wir haben keine Version im Deskriptor, dann bleibt nur die aus den Daten
+        if (versionDesc == null)
+          return versionData;
+        
+        // Wir haben keine Version in den Daten, dann bleibt nur die im Deskriptor
+        if (versionData == null)
+          return versionDesc;
+        
+        // Wir geben noch eine Warnung aus, wenn unterschiedliche Versionen angegeben sind
+        if (!versionDesc.equals(versionData))
+          HBCIUtils.log("pain version mismatch. sepadesc: " + versionDesc + " vs. data: " + versionData,HBCIUtils.LOG_WARN);
+        
+        // Wir geben priorisiert die Version aus den Daten zurueck, damit ist sicherer, dass die
+        // Daten gelesen werden koennen
+        return versionData;
+      }
+      catch (UnsupportedEncodingException e)
+      {
+        HBCIUtils.log(e,HBCIUtils.LOG_ERR);
+      }
+      return null;
     }
 
     /**

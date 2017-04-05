@@ -104,11 +104,12 @@ public final class GVTermUebSEPAList extends AbstractSEPAGV
 
         entry.other=new Konto();
         
-        String sepadescr = result.getProperty(header+".sepadescr");
-        PainVersion version = PainVersion.byURN(sepadescr);
+        final String sepadescr    = result.getProperty(header+".sepadescr");
+        final String pain         = result.getProperty(header+".sepapain");
+        final PainVersion version = PainVersion.choose(sepadescr,pain);
+
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();
-        String pain = result.getProperty(header+".sepapain");
         try
         {
             // Wir duerfen das hier nicht als UTF-8 interpretieren (das war vorher hier das Fall),

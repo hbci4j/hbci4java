@@ -113,13 +113,12 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
 
         entry.other=new Konto();
         
-        String sepadescr = result.getProperty(header+".sepadescr");
-        PainVersion version = PainVersion.byURN(sepadescr);
-        HBCIUtils.log("  detected pain version: " + version,HBCIUtils.LOG_INFO);
-
+        final String sepadescr    = result.getProperty(header+".sepadescr");
+        final String pain         = result.getProperty(header+".sepapain");
+        final PainVersion version = PainVersion.choose(sepadescr,pain);
+        
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();
-        String pain = result.getProperty(header+".sepapain");
         try
         {
             // Encoding siehe GVTermUebSEPAList
