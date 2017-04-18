@@ -43,11 +43,21 @@ LGPL 2.1 - GNU Lesser General Public License, version 2.1 (http://www.gnu.org/li
 *Hinweis*
 Bis 02.05.2016 unterlag HBCI4Java der GPLv2 - wurde mit https://github.com/willuhn/hbci4java/issues/36 aber auf LGPL 2.1 geändert.
 
-## Releases
+## Download
 
 Du kannst die aktuellste Version von HBCI4Java in Maven Central finden:
 
 https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.hbci4j%22%20AND%20a%3A%22hbci4j-core%22
+
+
+```
+<dependency>
+   <groupId>com.github.hbci4j</groupId>
+   <artifactId>hbci4j</artifactId>
+   <version>3.0.7</version>
+</dependency>
+```
+
 
 ## Selbst compilieren
 
