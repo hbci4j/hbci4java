@@ -50,13 +50,24 @@ Du kannst die aktuellste Version von HBCI4Java in Maven Central finden:
 https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.hbci4j%22%20AND%20a%3A%22hbci4j-core%22
 
 
+*Maven*
+
 ```
 <dependency>
    <groupId>com.github.hbci4j</groupId>
    <artifactId>hbci4j</artifactId>
-   <version>3.0.7</version>
+   <version>3.0.9</version>
 </dependency>
 ```
+
+*Gradle*
+
+```
+dependencies {
+  compile 'com.github.hbci4j:hbci4j-core:+'
+}
+```
+
 
 
 ## Selbst compilieren
