@@ -55,7 +55,7 @@ https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.hbci4j%22%20AND%2
 ```
 <dependency>
    <groupId>com.github.hbci4j</groupId>
-   <artifactId>hbci4j</artifactId>
+   <artifactId>hbci4j-core</artifactId>
    <version>3.0.9</version>
 </dependency>
 ```
