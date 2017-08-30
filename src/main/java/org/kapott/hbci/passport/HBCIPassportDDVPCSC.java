@@ -139,7 +139,8 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
               this.setPassportKey(calculatePassportKey(FOR_LOAD));
 
             PBEParameterSpec paramspec = new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-            Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+            String provider = HBCIUtils.getParam("kernel.security.provider");
+            Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
             cipher.init(Cipher.DECRYPT_MODE,getPassportKey(),paramspec);
               
             try
