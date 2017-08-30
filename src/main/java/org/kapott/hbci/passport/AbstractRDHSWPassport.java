@@ -295,7 +295,8 @@ public abstract class AbstractRDHSWPassport
     private byte[] encryptMessage(byte[] plainMsg,SecretKey msgkey)
     {
         try {
-            Cipher cipher=Cipher.getInstance("DESede/CBC/NoPadding");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/NoPadding") : Cipher.getInstance("DESede/CBC/NoPadding", provider);
             byte[] iv=new byte[8];
             Arrays.fill(iv,(byte)(0));
             IvParameterSpec spec=new IvParameterSpec(iv);
@@ -312,7 +313,8 @@ public abstract class AbstractRDHSWPassport
         try {
             // schluessel als byte-array abspeichern
 
-            SecretKeyFactory factory=SecretKeyFactory.getInstance("DESede");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	SecretKeyFactory factory = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(msgkey,DESedeKeySpec.class));
             byte[] plainKey=spec.getKey(); // plainKey ist der DESede-Key
 
@@ -386,11 +388,12 @@ public abstract class AbstractRDHSWPassport
             System.arraycopy(plainKey,plainKey.length-16,realPlainKey,16,8);
 
             DESedeKeySpec spec=new DESedeKeySpec(realPlainKey);
-            SecretKeyFactory fac=SecretKeyFactory.getInstance("DESede");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             SecretKey key=fac.generateSecret(spec);
 
             // nachricht entschluesseln
-            Cipher cipher=Cipher.getInstance("DESede/CBC/NoPadding");
+        	Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/NoPadding") : Cipher.getInstance("DESede/CBC/NoPadding", provider);
             byte[] ivarray=new byte[8];
             Arrays.fill(ivarray,(byte)(0));
             IvParameterSpec iv=new IvParameterSpec(ivarray);

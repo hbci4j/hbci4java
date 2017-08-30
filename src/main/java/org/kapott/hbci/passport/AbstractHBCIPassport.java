@@ -795,7 +795,8 @@ public abstract class AbstractHBCIPassport
             }
             LogFilter.getInstance().addSecretData(passphrase.toString(),"X",LogFilter.FILTER_SECRETS);
 
-            SecretKeyFactory fac=SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+            String provider = HBCIUtils.getParam("kernel.security.provider");
+            SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("PBEWithMD5AndDES") : SecretKeyFactory.getInstance("PBEWithMD5AndDES", provider);
             PBEKeySpec keyspec=new PBEKeySpec(passphrase.toString().toCharArray());
             SecretKey passportKey=fac.generateSecret(keyspec);
             keyspec.clearPassword();

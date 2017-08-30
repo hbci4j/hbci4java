@@ -121,7 +121,8 @@ public class RDHXFile
                 FileHeader       fileHeader=(FileHeader)getField(FileHeader.class);
                 String           algname=(fileHeader.getProfileVersion()==2)?"HmacSHA1":"HmacSHA256";
         	byte[]           derivedKey=deriveKey(24, algname);
-        	SecretKeyFactory keyfac=SecretKeyFactory.getInstance("DESede");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	SecretKeyFactory keyfac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
         	DESedeKeySpec    desKeyspec=new DESedeKeySpec(derivedKey);
         	SecretKey        key=keyfac.generateSecret(desKeyspec);
 
@@ -222,7 +223,8 @@ public class RDHXFile
                 FileHeader       fileHeader=(FileHeader)getField(FileHeader.class);
                 String           algname=(fileHeader.getProfileVersion()==2)?"HmacSHA1":"HmacSHA256";
                 byte[]           derivedKey=deriveKey(24, algname);
-                SecretKeyFactory keyfac=SecretKeyFactory.getInstance("DESede");
+            	String provider = HBCIUtils.getParam("kernel.security.provider");
+            	SecretKeyFactory keyfac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
                 DESedeKeySpec    desKeyspec=new DESedeKeySpec(derivedKey);
                 SecretKey        key=keyfac.generateSecret(desKeyspec);
 

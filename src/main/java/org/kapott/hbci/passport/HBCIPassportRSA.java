@@ -158,7 +158,8 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
                     setPassportKey(calculatePassportKey(FOR_LOAD));
                 
                 PBEParameterSpec paramspec = new PBEParameterSpec(CIPHER_SALT, CIPHER_ITERATIONS);
-                Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+                String provider = HBCIUtils.getParam("kernel.security.provider");
+                Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
                 cipher.init(Cipher.DECRYPT_MODE, getPassportKey(), paramspec);
                 
                 try {
@@ -519,7 +520,8 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
 
     private byte[] encryptMessage(byte[] plainMsg, SecretKey msgkey) {
         try {
-            Cipher cipher = Cipher.getInstance("DESede/CBC/NoPadding");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/NoPadding") : Cipher.getInstance("DESede/CBC/NoPadding", provider);
             byte[] iv = new byte[8];
             Arrays.fill(iv, (byte) 0);
             IvParameterSpec spec = new IvParameterSpec(iv);
@@ -534,7 +536,8 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
     private byte[] encryptKey(SecretKey msgkey) {
         try {
             // schluessel als byte-array abspeichern
-            SecretKeyFactory factory=SecretKeyFactory.getInstance("DESede");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	SecretKeyFactory factory = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(msgkey,DESedeKeySpec.class));
             byte[] plainKey=spec.getKey(); // plainKey ist der DESede-Key
 
@@ -581,11 +584,12 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             System.arraycopy(plainKey,plainKey.length-16,realPlainKey,16,8);
 
             DESedeKeySpec spec=new DESedeKeySpec(realPlainKey);
-            SecretKeyFactory fac=SecretKeyFactory.getInstance("DESede");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             SecretKey key=fac.generateSecret(spec);
 
             // nachricht entschluesseln
-            Cipher cipher=Cipher.getInstance("DESede/CBC/NoPadding");
+        	Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/NoPadding") : Cipher.getInstance("DESede/CBC/NoPadding", provider);
             byte[] ivarray=new byte[8];
             Arrays.fill(ivarray,(byte)(0));
             IvParameterSpec iv=new IvParameterSpec(ivarray);
@@ -701,7 +705,8 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             File tempfile = File.createTempFile(prefix, "", directory);
 
             PBEParameterSpec paramspec = new PBEParameterSpec(CIPHER_SALT, CIPHER_ITERATIONS);
-            Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+            String provider = HBCIUtils.getParam("kernel.security.provider");
+            Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
             cipher.init(Cipher.ENCRYPT_MODE, passportKey, paramspec);
             ObjectOutputStream o = new ObjectOutputStream(new CipherOutputStream(new FileOutputStream(tempfile), cipher));
             

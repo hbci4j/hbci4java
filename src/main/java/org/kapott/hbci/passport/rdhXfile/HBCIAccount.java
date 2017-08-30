@@ -289,7 +289,8 @@ public class HBCIAccount
             // TODO: exception
             
             // decrypt encrypted data
-            Cipher cipher=Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+            Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/PKCS5Padding") : Cipher.getInstance("DESede/CBC/PKCS5Padding", provider);
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(new byte[8]));
             byte[] plaindata=cipher.doFinal(this.encPrivateKey);
             int    offset=0;
@@ -481,7 +482,8 @@ public class HBCIAccount
             plaindata.write(reverseba(this.Aq));
 
             // encrypt encrypted data
-            Cipher cipher=Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        	String provider = HBCIUtils.getParam("kernel.security.provider");
+            Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/PKCS5Padding") : Cipher.getInstance("DESede/CBC/PKCS5Padding", provider);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(new byte[8]));
             this.encPrivateKey = cipher.doFinal(plaindata.toByteArray());
         }
