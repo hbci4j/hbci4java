@@ -165,6 +165,11 @@ public class UpdateBLZProperties
 			//
 			//////////////////////////////////////////////////////////////////////////
 		}
+		catch (Exception e)
+		{
+		  System.out.println("Fehler in Zeile: " + line);
+		  throw e;
+		}
 		finally
 		{
 			if (f1 != null)
