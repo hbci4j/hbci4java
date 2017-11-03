@@ -23,16 +23,21 @@ package org.kapott.hbci.GV_Result;
 
 import java.util.Date;
 
-// TODO: doku fehlt
-public class GVRKontoauszug
-    extends GVRKUms
+/**
+ * Response-Klasse fuer den Abruf von Kontoauszuegen.
+ */
+public class GVRKontoauszug extends GVRKUms
 {
     private String       format;
     private StringBuffer isodata;
     private StringBuffer pdfdata;
     
+    private Date date;
     private Date startDate;
     private Date endDate;
+    
+    private int year;
+    private int number;
     
     private String abschlussInfo;
     private String kundenInfo;
@@ -192,6 +197,59 @@ public class GVRKontoauszug
     {
         return pdfdata;
     }
+
+    /**
+     * Liefert das Erstelldatum des Kontoauszuges.
+     * @return das Erstelldatum des Kontoauszuges.
+     */
+    public Date getDate()
+    {
+      return date;
+    }
+
+    /**
+     * Speichert das Erstelldatum des Kontoauszuges.
+     * @param date das Erstelldatum des Kontoauszuges.
+     */
+    public void setDate(Date date)
+    {
+      this.date = date;
+    }
+
+    /**
+     * Liefert das Jahr des Kontoauszuges.
+     * @return das Jahr des Kontoauszuges.
+     */
+    public int getYear()
+    {
+      return year;
+    }
+
+    /**
+     * Speichert das Jahr des Kontoauszuges.
+     * @param year das Jahr des Kontoauszuges.
+     */
+    public void setYear(int year)
+    {
+      this.year = year;
+    }
+
+    /**
+     * Liefert die fortlaufende Nummer des Kontoauszuges.
+     * @return die fortlaufende Nummer des Kontoauszuges.
+     */
+    public int getNumber()
+    {
+      return number;
+    }
+
+    /**
+     * Speichert die fortlaufende Nummer des Kontoauszuges.
+     * @param number die fortlaufende Nummer des Kontoauszuges.
+     */
+    public void setNumber(int number)
+    {
+      this.number = number;
+    }
     
-    // TODO: toString() fehlt    
 }

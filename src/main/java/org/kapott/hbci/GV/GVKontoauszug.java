@@ -69,22 +69,39 @@ public class GVKontoauszug
         
         String format = result.getProperty(header+".format");
         String rawData = result.getProperty(header+".booked");
-        
-        if (rawData!=null) {
-            if (format.equals("1")) {
-                umsResult.appendMT940Data(Swift.decodeUmlauts(rawData));
-            } else if (format.equals("2")) {
-                umsResult.appendISOData(rawData);
-            } else if (format.equals("3")) {
-                umsResult.appendPDFData(rawData);
-            } else {
-                HBCIUtils.log(
-                    "unknown format in result for GV Kontoauszug: "+format,
-                    HBCIUtils.LOG_ERR);
-            }
-        }
-        
         umsResult.setFormat(format);
+        
+        if (rawData !=null )
+        {
+          if (format.equals("1"))
+          {
+            umsResult.appendMT940Data(Swift.decodeUmlauts(rawData));
+          }
+          else if (format.equals("2"))
+          {
+           umsResult.appendISOData(rawData);
+          }
+          else if (format.equals("3"))
+          {
+            umsResult.appendPDFData(rawData);
+          }
+          else
+          {
+            HBCIUtils.log("unknown format in result for GV Kontoauszug: "+format,HBCIUtils.LOG_ERR);
+          }
+        }
+
+        String date = result.getProperty(header+".date");
+        if (date != null && date.length() > 0)
+          umsResult.setDate(HBCIUtils.string2DateISO(date));
+        
+        String year   = result.getProperty(header+".year");
+        String number = result.getProperty(header+".number");
+        if (year != null && year.length() > 0)
+          umsResult.setYear(Integer.parseInt(year));
+        if (number != null && number.length() > 0)
+          umsResult.setNumber(Integer.parseInt(number));
+
         umsResult.setStartDate(HBCIUtils.string2DateISO(result.getProperty(header+".TimeRange.startdate")));
         umsResult.setEndDate(HBCIUtils.string2DateISO(result.getProperty(header+".TimeRange.enddate")));
         umsResult.setAbschlussInfo(result.getProperty(header+".abschlussinfo"));

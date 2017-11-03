@@ -3927,6 +3927,49 @@
             <value path="SegHead.version">4</value>
         </SEGdef>
         
+        <SEGdef id="KontoauszugSEPA5"> <!-- 3.0 -->
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="format" type="Code" maxsize="1" minnum="0"/>
+            <DE name="idx" type="Num" maxsize="5" minnum="0"/>
+            <DE name="year" type="Num" maxsize="4" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            
+            <value path="SegHead.code">HKEKA</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugSEPARes5">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="format" type="Code" maxsize="1"/>
+            <DEG type="TimeRange"/>
+            <DE name="date" type="Date" maxsize="0"/>
+            <DE name="year" type="Num" maxsize="4" minnum="0"/>
+            <DE name="number" type="Num" maxsize="5" minnum="0"/>
+            <DE name="booked" type="Bin" maxsize="0"/>
+            <DE name="abschlussinfo" type="AN" maxsize="65536" minnum="0"/>
+            <DE name="kondinfo" type="AN" maxsize="65536" minnum="0"/>
+            <DE name="ads" type="AN" maxsize="65536" minnum="0"/>
+            <DE name="iban" type="AN" maxsize="34" minnum="0"/>
+            <DE name="bic" type="AN" maxsize="11" minnum="0"/>
+            <DE name="name" type="AN" maxsize="35" minnum="0"/>
+            <DE name="name2" type="AN" maxsize="35" minnum="0"/>
+            <DE name="name3" type="AN" maxsize="35" minnum="0"/>
+            <DE name="receipt" type="Bin" maxsize="0" minnum="0"/>
+            
+            <value path="SegHead.code">HIEKA</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugSEPAPar5">
+            &GVP2;
+            <DEG type="ParKontoauszug"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HIEKAS</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+
         <SEGdef id="KUmsNew4"> <!-- 2.01 -->
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTO" name="KTV"/>
@@ -4300,13 +4343,13 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
 
-	<SEGdef id="Receipt1" needsRequestTag="1">
-	    <DEG type="SegHeadUser" name="SegHead" />
-	    <DE name="receipt" type="Bin" maxsize="0" minnum="0" />
-	    
-	    <value path="SegHead.code">HKQTG</value>
-	    <value path="SegHead.version">1</value>
-	</SEGdef>
+      	<SEGdef id="Receipt1" needsRequestTag="1">
+      	    <DEG type="SegHeadUser" name="SegHead" />
+      	    <DE name="receipt" type="Bin" maxsize="0" minnum="0" />
+      	    
+      	    <value path="SegHead.code">HKQTG</value>
+      	    <value path="SegHead.version">1</value>
+      	</SEGdef>
 
         <SEGdef id="Saldo3"> <!-- 2.01 -->
             <DEG type="SegHeadUser" name="SegHead"/>
