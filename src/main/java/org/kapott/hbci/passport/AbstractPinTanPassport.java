@@ -1283,4 +1283,19 @@ public abstract class AbstractPinTanPassport
     {
         return 1;
     }
+    
+    /**
+     * Ueberschrieben, um das "https://" am Anfang automatisch abzuschneiden.
+     * Das sorgte schon fuer so viele unnoetige Fehler.
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#getHost()
+     */
+    @Override
+    public String getHost()
+    {
+      String host = super.getHost();
+      if (host == null || host.length() == 0 || !host.startsWith("https://"))
+        return host;
+      
+      return host.replace("https://","");
+    }
 }
