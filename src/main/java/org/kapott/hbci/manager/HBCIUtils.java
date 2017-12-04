@@ -507,29 +507,6 @@ import org.kapott.hbci.swift.Swift;
  * Konvertierungs-Funktionen wie {@link #date2StringLocal(Date)} u.ä.
  * </p>
  * </li>
- * <li><code>infoPoint.enabled</code>
- * <p>
- * Der <em>HBCI4Java-InfoPoint-Server</em> ist ein Versuch, die richtigen
- * HBCI-Konfigurations-Einstellungen für alle Banken zentral zu sammeln und über
- * ein öffentliches Interface allgemein zur Verfügung zu stellen. Nähere Infos
- * dazu siehe Datei <em>README.InfoPoint</em>.
- * </p>
- * <p>
- * Dieser Parameter legt fest, ob <em>HBCI4Java</em> nach einem erfolgreichen
- * HBCI-Verbindungsaufbau Informationen über diese HBCI-Verbindung zum
- * InfoPoint-Server senden soll oder nicht. Standardmäßig ist dieser Parameter
- * deaktiviert (<code>0</code>). Durch setzen auf <code>1</code> kann das Senden
- * der Daten zum InfoPoint-Server aktiviert werden.
- * </p>
- * </li>
- * <li><code>infoPoint.url</code>
- * <p>
- * Der "normale" InfoPoint-Server ist für <em>HBCI4Java</em> unter der URL
- * <code>http://hbci4java.kapott.org/infoPoint</code> zu erreichen. Das ist auch
- * der default-Wert für diesen Parameter. Dieser Parameter dient momentan nur
- * Debugging-Zwecken und sollte normalerweise nicht geändert werden.
- * </p>
- * </li>
  * <li><code>kernel.rewriter</code>
  * <p>
  * Einige HBCI-Server-Implementationen bzw. die Backend-Systeme einiger Banken

@@ -1,8 +1,5 @@
 package org.kapott.hbci4java;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -10,8 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-
-import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,7 +23,8 @@ import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportPinTan;
 import org.kapott.hbci.status.HBCIExecStatus;
-import org.kapott.hbci4java.AbstractTest;
+
+import junit.framework.Assert;
 
 
 
@@ -92,7 +88,6 @@ public class AbstractTestGV extends AbstractTest {
               
       Properties props = new Properties();
       props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
-      props.put("infoPoint.enabled",Boolean.FALSE.toString());
       
       props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
       props.put("client.passport.PinTan.init","1");

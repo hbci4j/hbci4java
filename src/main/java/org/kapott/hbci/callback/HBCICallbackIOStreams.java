@@ -315,14 +315,6 @@ public class HBCICallbackIOStreams
                     }
                     break;
 
-                case NEED_INFOPOINT_ACK:
-                    getOutStream().println(msg);
-                    getOutStream().println(retData);
-                    getOutStream().print("Press <RETURN> to send this data; enter \"NO\" to NOT send this data: ");
-                    getOutStream().flush();
-                    retData.replace(0,retData.length(),getInStream().readLine());
-                    break;
-    
                 case NEED_CONNECTION:
                 case CLOSE_CONNECTION:
                     getOutStream().println(msg);
@@ -438,10 +430,6 @@ public class HBCICallbackIOStreams
             case STATUS_MSG_VERIFY:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_VERIFY"));
                 break;
-            case STATUS_SEND_INFOPOINT_DATA:
-                getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_SEND_INFOPOINT_DATA"));
-                break;
-                
             case STATUS_MSG_RAW_SEND:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_SEND",o[0].toString()));
                 break;

@@ -322,15 +322,9 @@ public interface HBCICallback
      * wird. Siehe dazu auch {@link #HAVE_CRC_ERROR}. */
     public final static int HAVE_IBAN_ERROR=30;
     
-    /** Ursache des Callbacks: Kernel fragt um Erlaubnis, Daten an den InfoPoint-Server
-     * zu senden. An bestimmten Punkten der HBCI-Kommunikation sendet der HBCI-Kernel
-     * Daten über erfolgreich gelaufene Verbindungen an den InfoPoint-Server (siehe
-     * Kernel-Parameter "<code>infoPoint.enabled</code>" und Datei <em>README.InfoPoint</em>).
-     * Bei diesem Callback wird im StringBuffer <code>retData</code> das XML-Document
-     * übergeben, welches an den InfoPoint-Server gesendet werden soll. Als Antwort
-     * wird ein Boolean-Wert erwartet (siehe {@link #TYPE_BOOLEAN}). Dürfen die
-     * Daten gesendet werden, ist von der Anwendung also ein leerer String in
-     * <code>retData</code> zurückzugeben, ansonsten ein beliebiger nicht-leerer String. */
+    /** 
+     * @deprecated
+     **/
     public final static int NEED_INFOPOINT_ACK=31;
     
     /** <p>Ursache des Callbacks: bei Verwendung von HBCI-PIN/TAN muss
@@ -523,10 +517,10 @@ public interface HBCICallback
         <em>HBCI4Java</em> versucht, die empfangene Nachricht zu parsen. Es wird
         der Name der erwarteten Nachricht als zusätzliche Information übergeben. */
     public final static int STATUS_MSG_PARSE=28;    
-    /** Kernel-Status: Der Kernel sendet Informationen über eine erfolgreiche
-     * Dialog-Initialisierung an den InfoPoint-Server (siehe auch <em>README.InfoPoint</em>).
-     * Als zusätzlicher Parameter wird das XML-Dokument (als String) übergeben,
-     * welches an den InfoPoint-Server gesendet wird. */
+    
+    /** 
+     * @deprecated
+     **/
     public final static int STATUS_SEND_INFOPOINT_DATA=29;
 
     /**

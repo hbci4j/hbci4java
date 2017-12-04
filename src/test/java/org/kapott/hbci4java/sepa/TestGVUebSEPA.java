@@ -17,10 +17,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Assert;
-
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -129,7 +128,6 @@ public class TestGVUebSEPA extends AbstractTest
   {
     Properties props = new Properties();
     props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
-    props.put("infoPoint.enabled",Boolean.FALSE.toString());
     
     props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
     props.put("client.passport.PinTan.init","1");

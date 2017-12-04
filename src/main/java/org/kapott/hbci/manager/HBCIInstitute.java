@@ -91,9 +91,6 @@ public final class HBCIInstitute
             passport.setBPD(p);
             HBCIUtils.log("installed new BPD with version "+passport.getBPDVersion(),HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_BPD_INIT_DONE,passport.getBPD());
-            
-            // send information about successfully received BPD to InfoPoint server
-            HBCIUtilsInternal.infoPointSendBPD(passport, result);
         }
     }
 
@@ -149,9 +146,6 @@ public final class HBCIInstitute
         if (foundChanges) {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_GET_KEYS_DONE,null);
             acknowledgeNewKeys();
-            
-            // send information about successfully received keys to InfoPoint server
-            HBCIUtilsInternal.infoPointSendPublicKeys(passport, result);
         }
     }
     

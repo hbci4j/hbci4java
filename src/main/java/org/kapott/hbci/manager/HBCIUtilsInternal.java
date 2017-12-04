@@ -34,7 +34,6 @@ import java.util.ResourceBundle;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.passport.HBCIPassport;
-import org.kapott.hbci.passport.HBCIPassportInternal;
 
 public class HBCIUtilsInternal
 {
@@ -45,8 +44,6 @@ public class HBCIUtilsInternal
     public static Hashtable<ThreadGroup, ResourceBundle>  locMsgs;    // threadgroup->resourceBundle
     public static Hashtable<ThreadGroup, Locale>  locales;    // threadgroup->Locale
     
-    private static InfoPointConnector infoPointConnector;
-
     public static String bigDecimal2String(BigDecimal value)
     {
         DecimalFormat format=new DecimalFormat("0.##");
@@ -263,25 +260,4 @@ public class HBCIUtilsInternal
     	return ret;
     }
     
-    private static synchronized InfoPointConnector getInfoPointConnector()
-    {
-        if (infoPointConnector==null) {
-            infoPointConnector=new InfoPointConnector();
-        }
-        return infoPointConnector;
-    }
-    
-    public static void infoPointSendBPD(HBCIPassportInternal passport, Properties msgData)
-    {
-        if (HBCIUtils.getParam("infoPoint.enabled", "0").equals("1")) {
-            getInfoPointConnector().sendBPD(passport, msgData);
-        }
-    }
-
-    public static void infoPointSendPublicKeys(HBCIPassportInternal passport, Properties msgData)
-    {
-        if (HBCIUtils.getParam("infoPoint.enabled", "0").equals("1")) {
-            getInfoPointConnector().sendPublicKeys(passport, msgData);
-        }
-    }
 }

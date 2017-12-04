@@ -122,7 +122,6 @@ public class TestGVLastSEPA extends AbstractTest
   {
     Properties props = new Properties();
     props.put("log.loglevel.default",Integer.toString(LOGLEVEL));
-    props.put("infoPoint.enabled",Boolean.FALSE.toString());
     
     props.put("client.passport.PinTan.filename",dir.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".pt");
     props.put("client.passport.PinTan.init","1");

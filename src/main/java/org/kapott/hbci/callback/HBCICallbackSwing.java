@@ -236,9 +236,6 @@ public class HBCICallbackSwing
                         needProxyData(currentData);
                     retData.replace(0,retData.length(),(String)currentData.get("proxy_pass"));
                     break;
-                case NEED_INFOPOINT_ACK:
-                    ackInfoPoint(currentData,"accinfopoint");
-                    break;
 
                 default:
                     throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
@@ -1519,78 +1516,6 @@ public class HBCICallbackSwing
             throw new AbortedException(HBCIUtilsInternal.getLocMsg("EXCMSG_USR_ABORT")); 
     }
 
-    private void ackInfoPoint(final Hashtable<String, Object> currentData,final String winname)
-    {
-        final SyncObject sync=new SyncObject();
-        
-        SwingUtilities.invokeLater(new Runnable() { public void run() {
-            try {
-                final Container win=createWin(currentData,"HBCI",winname);
-                
-                Box framebox=Box.createHorizontalBox();
-                win.add(framebox);
-                
-                framebox.add(Box.createHorizontalStrut(8));
-                Box mainbox=Box.createVerticalBox();
-                framebox.add(mainbox);
-                framebox.add(Box.createHorizontalStrut(8));
-                
-                mainbox.add(Box.createVerticalStrut(8));
-                Box box2=Box.createHorizontalBox();
-                mainbox.add(box2);
-                
-                JLabel l=new JLabel("Passport: "+
-                                    (String)((HBCIPassport)currentData.get("passport")).getClientData("init"));
-                l.setFont(new Font("Arial",Font.PLAIN,10));
-                box2.add(Box.createHorizontalGlue());
-                box2.add(l);
-                box2.add(Box.createHorizontalGlue());
-    
-                mainbox.add(Box.createVerticalStrut(8));
-    
-                box2=Box.createHorizontalBox();
-                mainbox.add(box2);
-                box2.add(new JLabel(HBCIUtilsInternal.getLocMsg("GUI_ACKINFOPOINT")));
-                box2.add(Box.createHorizontalGlue());
-                
-                mainbox.add(Box.createVerticalStrut(10));
-                
-                box2=Box.createHorizontalBox();
-                mainbox.add(box2);
-                mainbox.add(Box.createVerticalStrut(4));
-                
-                box2.add(Box.createHorizontalGlue());
-                JButton yes=new JButton(HBCIUtilsInternal.getLocMsg("YES"));
-                box2.add(yes);
-                ((JComponent)win).getRootPane().setDefaultButton(yes);
-                
-                JButton no=new JButton(HBCIUtilsInternal.getLocMsg("NO"));
-                box2.add(no);
-                box2.add(Box.createHorizontalGlue());
-                
-                final StringBuffer retData=(StringBuffer)currentData.get("retData");
-                yes.addActionListener(new ActionListener() { public void actionPerformed(ActionEvent e) {
-                    retData.replace(0,retData.length(),"");
-                    removeWin(currentData,winname);
-                    sync.stopWaiting();
-                }});
-                
-                no.addActionListener(new ActionListener() { public void actionPerformed(ActionEvent e) {
-                    retData.replace(0,retData.length(),"ERROR");
-                    removeWin(currentData,winname);
-                    sync.stopWaiting();
-                }});
-                
-                yes.requestFocus();
-                drawWin(currentData,winname);
-            } catch (Exception e) {
-                throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_ERR"),e);
-            }
-        }});
-        
-        sync.startWaiting();
-    }
-    
     protected Container createWin(Hashtable<String, Object> currentData,String title,String winname)
     {
         JDialog swingDialog=new JDialog((JFrame)(null),title,DIALOG_MODAL);
