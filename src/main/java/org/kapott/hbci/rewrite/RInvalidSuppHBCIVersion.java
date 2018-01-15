@@ -23,48 +23,93 @@ package org.kapott.hbci.rewrite;
 
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.HBCIVersion;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.SyntaxElement;
 import org.kapott.hbci.protocol.factory.MSGFactory;
 
-public class RInvalidSuppHBCIVersion
-    extends Rewrite
+/**
+ * Korrigiert falsche HBCI-Versionen in den BPD.
+ */
+public class RInvalidSuppHBCIVersion extends Rewrite
 {
+  /**
+   * @see org.kapott.hbci.rewrite.Rewrite#incomingClearText(java.lang.String, org.kapott.hbci.manager.MsgGen)
+   */
+  public String incomingClearText(String st, MsgGen gen)
+  {
     // TODO: den rewriter umschreiben, so dass er nur string-operationen
     // benutzt, weil nicht sichergestellt werden kann, dass die eingehende
     // nachricht hier tatsächlich schon geparst werden kann
-    public String incomingClearText(String st,MsgGen gen) 
+
+    // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
+    String myMsgName = (String) getData("msgName") + "Res";
+    MSG msg = MSGFactory.getInstance().createMSG(myMsgName, st, st.length(), gen, MSG.DONT_CHECK_SEQ, MSG.DONT_CHECK_VALIDS);
+
+    try
     {
-        // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
-        String myMsgName=(String)getData("msgName")+"Res";
-        MSG    msg=MSGFactory.getInstance().createMSG(myMsgName,st,st.length(),
-                gen,
-                MSG.DONT_CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
+      // in einer Schleife durch alle SuppVersions-Datensätze laufen
+      // Limiter bei 1000 setzen. "msg.getElement" kann u.U. "this" (=msg) zurueckliefern.
+      // Die Funktion koennte dann in einer Endlosschleife landen.
+      for (int i=0;i<1000;i++)
+      {
+        String elemName = HBCIUtilsInternal.withCounter(myMsgName + ".BPD.BPA.SuppVersions.version", i);
+        SyntaxElement elem = msg.getElement(elemName);
+
+        if (elem == null)
+          break;
         
-        // in einer Schleife durch alle SuppVersions-Datensätze laufen
-        for (int i=0;;i++) {
-            String        elemName=HBCIUtilsInternal.withCounter(myMsgName+".BPD.BPA.SuppVersions.version",i);
-            SyntaxElement elem=msg.getElement(elemName);
-
-            if (elem==null) {
-                break;
-            } 
-            
-            // Versionsnummer extrahieren
-            String version=elem.toString();
-            if (version.equals("2")) { // "2" ist ungültige Versionsnummer
-                HBCIUtils.log("there is an invalid hbci version number ('2') in this BPD - replacing it with '210'",HBCIUtils.LOG_WARN);
-
-                // versionsnummer "2" im string durch "210" ersetzen
-                int startpos=elem.getPosInMsg()+1;  // +1 wegen überspringen des pre-delimiters
-                st=new StringBuffer(st).replace(startpos,startpos+1,"210").toString();
-                HBCIUtils.log("new message after replacing: "+st,HBCIUtils.LOG_DEBUG);
-                break;
-            }
+        StringBuffer sb = new StringBuffer(st);
+        
+        if (this.replace(sb,elem,"2",HBCIVersion.HBCI_210))
+        {
+          st = sb.toString();
+          break;
         }
         
-        MSGFactory.getInstance().unuseObject(msg);
-        return st;
+        if (this.replace(sb,elem,"3",HBCIVersion.HBCI_300))
+        {
+          st = sb.toString();
+          break;
+        }
+      }
     }
+    finally
+    {
+      try
+      {
+        MSGFactory.getInstance().unuseObject(msg);
+      }
+      catch (Exception e)
+      {
+        HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+      }
+    }
+
+    return st;
+  }
+  
+  /**
+   * Ersetzt eine ungueltige HBCI-Version in der Nachricht.
+   * @param msg die Nachricht.
+   * @param elem Das Element mit der HBCI-Version.
+   * @param search die zu suchende HBCI-Version.
+   * @param replace die HBCI-Version, die stattdessen eingetragen werden soll.
+   * @return true, wenn eine Ersetzung vorgenommen wurde.
+   */
+  private boolean replace(StringBuffer msg, SyntaxElement elem, String search, HBCIVersion replace)
+  {
+    final String version = elem.toString();
+    if (version == null || search == null || !version.equals(search))
+      return false;
+      
+    final String s = replace.getId();
+    HBCIUtils.log("there is an invalid hbci version number ('" + version + "') in this BPD - replacing it with '" + s + " '",HBCIUtils.LOG_WARN);
+
+    int startpos = elem.getPosInMsg() + 1; // +1 wegen überspringen des pre-delimiters
+    msg.replace(startpos, startpos + 1,s);
+    HBCIUtils.log("new message after replacing: " + msg,HBCIUtils.LOG_DEBUG);
+    return true;
+  }
 }
