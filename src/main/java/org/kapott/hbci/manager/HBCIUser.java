@@ -230,8 +230,8 @@ public final class HBCIUser
                     kernel.rawSet("ProcPrep.BPD",passport.getBPDVersion());
                     kernel.rawSet("ProcPrep.UPD",passport.getUPDVersion());
                     kernel.rawSet("ProcPrep.lang",passport.getLang());
-                    kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name","HBCI4Java"));
-                    kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","2.5"));
+                    kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
+                    kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","3"));
                     ret=kernel.rawDoIt(HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,
                             HBCIKernelImpl.NEED_SIG,HBCIKernelImpl.NEED_CRYPT);
 
@@ -436,8 +436,8 @@ public final class HBCIUser
                 kernel.rawSet("ProcPrep.BPD", passport.getBPDVersion());
                 kernel.rawSet("ProcPrep.UPD", passport.getUPDVersion());
                 kernel.rawSet("ProcPrep.lang", "0");
-                kernel.rawSet("ProcPrep.prodName", HBCIUtils.getParam("client.product.name","HBCI4Java"));
-                kernel.rawSet("ProcPrep.prodVersion", HBCIUtils.getParam("client.product.version","2.5"));
+                kernel.rawSet("ProcPrep.prodName", HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
+                kernel.rawSet("ProcPrep.prodVersion", HBCIUtils.getParam("client.product.version","3"));
                 kernel.rawSet("Sync.mode", "0");
                 ret=kernel.rawDoIt(HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,
                         HBCIKernelImpl.NEED_SIG,HBCIKernelImpl.NEED_CRYPT);
@@ -508,8 +508,8 @@ public final class HBCIUser
                 kernel.rawSet("ProcPrep.BPD", passport.getBPDVersion());
                 kernel.rawSet("ProcPrep.UPD", passport.getUPDVersion());
                 kernel.rawSet("ProcPrep.lang", "0");
-                kernel.rawSet("ProcPrep.prodName", HBCIUtils.getParam("client.product.name","HBCI4Java"));
-                kernel.rawSet("ProcPrep.prodVersion", HBCIUtils.getParam("client.product.version","2.5"));
+                kernel.rawSet("ProcPrep.prodName", HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
+                kernel.rawSet("ProcPrep.prodVersion", HBCIUtils.getParam("client.product.version","3"));
                 kernel.rawSet("Sync.mode", "2");
                 ret=kernel.rawDoIt(passport.hasMySigKey(),HBCIKernelImpl.CRYPTIT,
                         HBCIKernelImpl.NEED_SIG,passport.hasMyEncKey());
@@ -618,8 +618,8 @@ public final class HBCIUser
                 kernel.rawSet("ProcPrep.BPD",passport.getBPDVersion());
                 kernel.rawSet("ProcPrep.UPD","0");
                 kernel.rawSet("ProcPrep.lang",passport.getLang());
-                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name","HBCI4Java"));
-                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","2.5"));
+                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
+                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","3"));
                 ret=kernel.rawDoIt(!isAnon && HBCIKernelImpl.SIGNIT,
                         !isAnon && HBCIKernelImpl.CRYPTIT,
                         !isAnon && HBCIKernelImpl.NEED_SIG,
@@ -721,8 +721,8 @@ public final class HBCIUser
                 kernel.rawSet("ProcPrep.BPD",passport.getBPDVersion());
                 kernel.rawSet("ProcPrep.UPD",passport.getUPDVersion());
                 kernel.rawSet("ProcPrep.lang",passport.getLang());
-                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name","HBCI4Java"));
-                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","2.5"));
+                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
+                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","3"));
 
                 status=kernel.rawDoIt(HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,
                         HBCIKernelImpl.NEED_SIG,HBCIKernelImpl.NEED_CRYPT);

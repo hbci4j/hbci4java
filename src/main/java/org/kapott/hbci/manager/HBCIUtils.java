@@ -677,6 +677,11 @@ import org.kapott.hbci.swift.Swift;
  */
 public final class HBCIUtils
 {
+  /**
+   * Die offizielle HBCI-Produktregistrierung von HBCI4Java - siehe http://hbci-zka.de/register/register_faq.htm
+   */
+  public final static String PRODUCT_ID = "36792786FA12F235F04647689";
+  
   private final static String VERSION = HBCIUtils.class.getPackage().getImplementationVersion();
   
   /** Loglevel für keine Ausgaben */

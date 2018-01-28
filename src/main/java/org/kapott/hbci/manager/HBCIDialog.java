@@ -144,8 +144,8 @@ public final class HBCIDialog
                 kernel.rawSet("ProcPrep.BPD", mainPassport.getBPDVersion());
                 kernel.rawSet("ProcPrep.UPD", mainPassport.getUPDVersion());
                 kernel.rawSet("ProcPrep.lang",mainPassport.getDefaultLang());
-                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name","HBCI4Java"));
-                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","2.5"));
+                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
+                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","3"));
                 ret=kernel.rawDoIt(!isAnon && HBCIKernelImpl.SIGNIT,
                         !isAnon && HBCIKernelImpl.CRYPTIT,
                         !isAnon && HBCIKernelImpl.NEED_SIG,
