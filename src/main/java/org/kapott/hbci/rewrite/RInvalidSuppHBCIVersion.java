@@ -43,12 +43,14 @@ public class RInvalidSuppHBCIVersion extends Rewrite
     // benutzt, weil nicht sichergestellt werden kann, dass die eingehende
     // nachricht hier tatsächlich schon geparst werden kann
 
-    // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
-    String myMsgName = (String) getData("msgName") + "Res";
-    MSG msg = MSGFactory.getInstance().createMSG(myMsgName, st, st.length(), gen, MSG.DONT_CHECK_SEQ, MSG.DONT_CHECK_VALIDS);
-
+    MSG msg = null;
+    
     try
     {
+      // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
+      String myMsgName = (String) getData("msgName") + "Res";
+      msg = MSGFactory.getInstance().createMSG(myMsgName, st, st.length(), gen, MSG.DONT_CHECK_SEQ, MSG.DONT_CHECK_VALIDS);
+
       // in einer Schleife durch alle SuppVersions-Datensätze laufen
       // Limiter bei 1000 setzen. "msg.getElement" kann u.U. "this" (=msg) zurueckliefern.
       // Die Funktion koennte dann in einer Endlosschleife landen.
@@ -75,15 +77,22 @@ public class RInvalidSuppHBCIVersion extends Rewrite
         }
       }
     }
+    catch (Exception e)
+    {
+      HBCIUtils.log(e,HBCIUtils.LOG_ERR);
+    }
     finally
     {
-      try
+      if (msg != null)
       {
-        MSGFactory.getInstance().unuseObject(msg);
-      }
-      catch (Exception e)
-      {
-        HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+        try
+        {
+          MSGFactory.getInstance().unuseObject(msg);
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+        }
       }
     }
 
