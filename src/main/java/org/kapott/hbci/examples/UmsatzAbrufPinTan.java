@@ -110,7 +110,7 @@ public class UmsatzAbrufPinTan
         error("Keine Konten ermittelbar");
 
       log("Anzahl Konten: " + konten.length);
-      Konto k = konten[1];
+      Konto k = konten[0];
 
       // 1. Auftrag fuer das Abrufen des Saldos erzeugen
       HBCIJob saldoJob = handle.newJob("SaldoReq");
