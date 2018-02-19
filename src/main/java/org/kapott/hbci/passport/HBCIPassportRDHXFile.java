@@ -147,8 +147,8 @@ public class HBCIPassportRDHXFile
                     // set all passport values
                     HBCIAccount hbciAccount=(HBCIAccount)(accountFields[entryIdx]);
 
-                    setCountry(hbciAccount.getCountry());
                     setBLZ(hbciAccount.getBLZ());
+                    setCountry(hbciAccount.getCountry());
                     setHost(hbciAccount.getHost());
                     setUserId(hbciAccount.getUserId());
                     setCustomerId(hbciAccount.getCustomerId());

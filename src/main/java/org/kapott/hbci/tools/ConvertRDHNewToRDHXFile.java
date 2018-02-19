@@ -49,8 +49,8 @@ public class ConvertRDHNewToRDHXFile
         HBCIUtils.setParam("client.passport.RDHXFile.init","0");
         HBCIPassportInternal passportNew=(HBCIPassportInternal)AbstractHBCIPassport.getInstance("RDHXFile");
 
-        passportNew.setCountry(passportOld.getCountry());
         passportNew.setBLZ(passportOld.getBLZ());
+        passportNew.setCountry(passportOld.getCountry());
         passportNew.setHost(passportOld.getHost());
         passportNew.setPort(passportOld.getPort());
         passportNew.setUserId(passportOld.getUserId());

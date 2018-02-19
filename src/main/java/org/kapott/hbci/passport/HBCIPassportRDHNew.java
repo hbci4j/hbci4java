@@ -180,8 +180,8 @@ public class HBCIPassportRDHNew
                         break;
                 }
                 
-                setCountry(getElementValue(root,"country"));
                 setBLZ(getElementValue(root,"blz"));
+                setCountry(getElementValue(root,"country"));
                 setHost(getElementValue(root,"host"));
                 setPort(new Integer(getElementValue(root,"port")));
                 setUserId(getElementValue(root,"userid"));

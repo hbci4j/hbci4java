@@ -864,8 +864,8 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
         
         RSABankData bankData = cardService.readBankData(idx);
         
-        setCountry(SyntaxCtr.getName(bankData.getCountry()));
         setBLZ(bankData.getBankCode());
+        setCountry(SyntaxCtr.getName(bankData.getCountry()));
         setHost(bankData.getComAddress());
         setUserId(bankData.getUserId());
         setBankId(bankData.getBankId());

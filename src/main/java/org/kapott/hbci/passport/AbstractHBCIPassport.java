@@ -98,16 +98,6 @@ public abstract class AbstractHBCIPassport
     {
         boolean dataChanged=false;
 
-        if (needCountry &&
-            (getCountry()==null || getCountry().length()==0)) {
-            StringBuffer sb=new StringBuffer("DE");
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_COUNTRY,HBCIUtilsInternal.getLocMsg("COUNTRY"),HBCICallback.TYPE_TEXT,sb);
-            if (sb.length()==0)
-                throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("COUNTRY")));
-            setCountry(sb.toString());
-            dataChanged=true;
-        }
-
         if (needBLZ && 
             (getBLZ()==null || getBLZ().length()==0)) {
             StringBuffer sb=new StringBuffer();
@@ -115,6 +105,16 @@ public abstract class AbstractHBCIPassport
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("BLZ")));
             setBLZ(sb.toString());
+            dataChanged=true;
+        }
+        
+        if (needCountry &&
+            (getCountry()==null || getCountry().length()==0)) {
+            StringBuffer sb=new StringBuffer("DE");
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_COUNTRY,HBCIUtilsInternal.getLocMsg("COUNTRY"),HBCICallback.TYPE_TEXT,sb);
+            if (sb.length()==0)
+                throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("COUNTRY")));
+            setCountry(sb.toString());
             dataChanged=true;
         }
 

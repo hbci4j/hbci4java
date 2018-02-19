@@ -80,8 +80,8 @@ public class ConvertRDHPassport
         HBCIUtils.setParam("client.passport.RDHNew.init","0");
         HBCIPassportInternal passportNew=(HBCIPassportInternal)AbstractHBCIPassport.getInstance("RDHNew");
 
-        passportNew.setCountry(passportOld.getCountry());
         passportNew.setBLZ(passportOld.getBLZ());
+        passportNew.setCountry(passportOld.getCountry());
         passportNew.setHost(passportOld.getHost());
         passportNew.setPort(passportOld.getPort());
         passportNew.setUserId(passportOld.getUserId());

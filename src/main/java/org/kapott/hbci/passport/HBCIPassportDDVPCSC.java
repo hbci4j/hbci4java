@@ -295,8 +295,8 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
       int idx = this.getEntryIdx()-1;
       DDVBankData bankData = this.cardService.readBankData(idx);
       
-      this.setCountry(SyntaxCtr.getName(bankData.country));
       this.setBLZ(bankData.blz);
+      this.setCountry(SyntaxCtr.getName(bankData.country));
       this.setHost(bankData.commaddr);
       this.setUserId(bankData.userid);
     }

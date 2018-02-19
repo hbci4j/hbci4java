@@ -148,8 +148,8 @@ public class HBCIPassportAnonymous
                         break;
                 }
 
-                setCountry(getElementValue(root,"country"));
                 setBLZ(getElementValue(root,"blz"));
+                setCountry(getElementValue(root,"country"));
                 setHost(getElementValue(root,"host"));
                 setPort(new Integer(getElementValue(root,"port")));
                 setHBCIVersion(getElementValue(root,"hbciversion"));
