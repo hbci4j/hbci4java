@@ -1214,6 +1214,12 @@ public class AccountCRCAlgs
         // Methode E
         sum = addProducts(number, 4, 8, new int[] {2, 1, 2, 1, 2}, false);
         crc = (10-sum%10)%10;
+        if (number[9]==crc)
+          return true;
+
+        // Methode G
+        sum = addProducts(number, 3, 8, new int[] {1, 2, 1, 2, 1, 2}, false);
+        crc = (7-sum%7)%7;
         return number[9]==crc;
     }
     
