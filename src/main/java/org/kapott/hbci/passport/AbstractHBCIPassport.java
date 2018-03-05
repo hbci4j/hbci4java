@@ -46,7 +46,6 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.IHandlerData;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.postprocessor.PostProcessor;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Limit;
@@ -78,8 +77,6 @@ public abstract class AbstractHBCIPassport
     private Comm       comm;
     private Hashtable<String, Object>  persistentData;
 
-    private PostProcessor postProcessor;
-    
     private IHandlerData parentHandlerData;
     
     protected static final boolean FOR_SAVE=true;
@@ -211,8 +208,6 @@ public abstract class AbstractHBCIPassport
     
     public final void setHBCIVersion(String hbciversion)
     {
-        if(getPostProcessor() != null)
-            hbciversion = getPostProcessor().processHBCIVersion(hbciversion);
         this.hbciversion=hbciversion;
     }
     
@@ -608,55 +603,39 @@ public abstract class AbstractHBCIPassport
 
     public final void setCountry(String country)
     {
-        if(getPostProcessor() != null)
-            country = getPostProcessor().processCountry(country);
         this.country=country;
     }
 
     public final void setBLZ(String blz)
     {
-        if(getPostProcessor() == null)
-            setPostProcessor(PostProcessor.getPostProcessor(blz));
-        else
-            blz = getPostProcessor().processBLZ(blz);
-    	LogFilter.getInstance().addSecretData(blz,"X",LogFilter.FILTER_MOST);
+      	LogFilter.getInstance().addSecretData(blz,"X",LogFilter.FILTER_MOST);
         this.blz=blz;
     }
 
     public final void setHost(String host)
     {
-        if(getPostProcessor() != null)
-            host = getPostProcessor().processHost(host);
         this.host=host;
     }
 
     public final void setPort(Integer port)
     {
-        if(getPostProcessor() != null)
-            port = getPostProcessor().processPort(port);
         this.port=port;
     }
     
     public final void setFilterType(String filter)
     {
-        if(getPostProcessor() != null)
-            filter = getPostProcessor().processFilterType(filter);
         this.filterType=filter;
     }
     
     public final void setUserId(String userid)
     {
-        if(getPostProcessor() != null)
-            userid = getPostProcessor().processUserId(userid);
-    	LogFilter.getInstance().addSecretData(userid,"X",LogFilter.FILTER_IDS);
+      	LogFilter.getInstance().addSecretData(userid,"X",LogFilter.FILTER_IDS);
         this.userid=userid;
     }
 
     public final void setCustomerId(String customerid)
     {
-        if(getPostProcessor() != null)
-            customerid = getPostProcessor().processCustomerId(customerid);
-    	LogFilter.getInstance().addSecretData(customerid,"X",LogFilter.FILTER_IDS);
+      	LogFilter.getInstance().addSecretData(customerid,"X",LogFilter.FILTER_IDS);
         this.customerid=customerid;
     }    
 
@@ -1115,15 +1094,5 @@ public abstract class AbstractHBCIPassport
         
         if (!origFile.exists())
             throw new HBCI_Exception("could not rename " + tmpFile.getName() + " to " + origFile.getName());
-    }
-
-    @Override
-    public PostProcessor getPostProcessor() {
-        return postProcessor;
-    }
-
-    @Override
-    public void setPostProcessor(PostProcessor postProcessor) {
-        this.postProcessor = postProcessor;
     }
 }

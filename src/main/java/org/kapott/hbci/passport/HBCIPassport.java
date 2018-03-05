@@ -24,7 +24,6 @@ package org.kapott.hbci.passport;
 import java.util.Properties;
 
 import org.kapott.hbci.manager.HBCIKey;
-import org.kapott.hbci.postprocessor.PostProcessor;
 import org.kapott.hbci.structures.Konto;
 
 /** <p>Public Interface für HBCI-Passports. Ein HBCI-Passport ist eine Art "Ausweis",
@@ -404,20 +403,4 @@ public interface HBCIPassport
         im Passport gespeichert wurde.*/ 
     public Object getClientData(String id);
 
-    /**
-     * Ändern von PostProcessor welcher genutzt wird um automatisch z.B. Kontonummern anzupassen.
-     * Sollte kein PostProcessor-Objekt beim <code>init</code>-Parameter übergeben wurden sein
-     * wird falls vorhanden basierend auf der BLZ der entsprechende gewählt.
-     * @param postProcessor zu nutzender PostProcessor für diesen Passport
-     */
-    public void setPostProcessor(PostProcessor postProcessor);
-
-    /**
-     * Holen von PostProcessor welcher genutzt wird um automatisch z.B. Kontonummern anzupassen.
-     * Sollte kein PostProcessor-Objekt beim <code>init</code>-Parameter übergeben wurden sein
-     * wird falls vorhanden basierend auf der BLZ der entsprechende gewählt.
-     * @return PostProcessor, welcher mit {@link #setPostProcessor(PostProcessor)} gesetzt wurde
-     * oder automatisch gewählter falls verfügbar.
-     */
-    public PostProcessor getPostProcessor();
 }

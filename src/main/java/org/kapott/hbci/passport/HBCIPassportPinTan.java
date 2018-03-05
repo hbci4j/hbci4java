@@ -203,8 +203,8 @@ public class HBCIPassportPinTan
                     break;
             }
 
-            setBLZ((String)(o.readObject()));
             setCountry((String)(o.readObject()));
+            setBLZ((String)(o.readObject()));
             setHost((String)(o.readObject()));
             setPort((Integer)(o.readObject()));
             setUserId((String)(o.readObject()));
