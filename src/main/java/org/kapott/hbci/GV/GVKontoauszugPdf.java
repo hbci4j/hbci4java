@@ -136,6 +136,7 @@ public class GVKontoauszugPdf extends HBCIJobImpl
       if (ASCII_ENCODER.canEncode(data))
       {
         // Ist Base64
+        umsResult.setPDFData(HBCIUtils.decodeBase64(data));
       }
       else
       {
