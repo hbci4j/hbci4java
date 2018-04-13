@@ -17,8 +17,6 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.passport.HBCIPassport;
-import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.sepa.PainVersion;
 import org.kapott.hbci.sepa.PainVersion.Type;
 
@@ -74,59 +72,6 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         super(handler, name, jobResult);
         this.pain = this.determinePainVersion(handler,name);
     }
-    
-    /**
-     * Durchsucht das BPD-Segment "HISPAS" nach dem Property "cannationalacc"
-     * um herauszufinden, ob beim Versand eines SEPA-Auftrages die nationale Bankverbindung
-     * angegeben sein darf.
-     * 
-     * Siehe FinTS_3.0_Messages_Geschaeftsvorfaelle_2013-05-28_final_version.pdf - Kapitel B.3.2
-     * 
-     * @param handler
-     * @return true, wenn der BPD-Parameter von der Bank mit "J" befuellt ist und die
-     * nationale Bankverbindung angegeben sein darf.
-     */
-    protected boolean canNationalAcc(HBCIHandler handler)
-    {
-        // Checken, ob das Flag im Passport durch die Anwendung hart codiert ist.
-        // Dort kann die Entscheidung ueberschrieben werden, ob die nationale Kontoverbindung
-        // mitgeschickt wird oder nicht.
-        // Das wird voraussichtlich u.a. fuer die Postbank benoetigt, weil die in HISPAS
-        // zwar mitteilt, dass die nationale Kontoverbindung NICHT angegeben werden soll.
-        // Beim anschliessenden Einreichen einer SEPA-Ueberweisung beschwert sie sich aber,
-        // wenn man sie nicht mitgesendet hat. Die verbieten also erst das Senden der
-        // nationalen Kontoverbindung, verlangen sie anschliessend aber. Ein Fehler der
-        // Bank. Siehe http://www.onlinebanking-forum.de/forum/topic.php?p=86444#real86444
-        HBCIPassport passport = handler.getPassport();
-        if (passport instanceof HBCIPassportInternal)
-        {
-            HBCIPassportInternal pi = (HBCIPassportInternal) passport;
-            Object o = pi.getPersistentData("cannationalacc");
-            if (o != null)
-            {
-                String s = o.toString();
-                HBCIUtils.log("value of \"cannationalacc\" overwritten in passport, value: " + s,HBCIUtils.LOG_INFO);
-                return s.equalsIgnoreCase("J");
-            }
-        }
-        
-        HBCIUtils.log("searching for value of \"cannationalacc\" in HISPAS",HBCIUtils.LOG_INFO);
-        
-        // Ansonsten suchen wir in HISPAS - aber nur, wenn wir die Daten schon haben
-        if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") == null)
-        {
-            HBCIUtils.log("no HISPAS data found",HBCIUtils.LOG_INFO);
-            return false; // Ne, noch nicht. Dann lassen wir das erstmal weg
-        }
-        
-        
-        // SEPAInfo laden und darüber iterieren
-        Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
-        String value = props.getProperty("cannationalacc");
-        HBCIUtils.log("cannationalacc=" + value,HBCIUtils.LOG_INFO);
-        return value != null && value.equalsIgnoreCase("J");
-    }
-    
     /**
      * Diese Methode schaut in den BPD nach den unterstützen pain Versionen
      * (bei LastSEPA pain.008.xxx.xx) und vergleicht diese mit den von HBCI4Java

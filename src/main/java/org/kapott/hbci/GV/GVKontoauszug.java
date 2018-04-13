@@ -30,9 +30,10 @@ import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.swift.Swift;
 
-// TODO: doku fehlt (html)
-public class GVKontoauszug
-    extends HBCIJobImpl
+/**
+ * Implementierung des Geschaeftsvorfalls fuer den elektronischen Kontoauszug (HKEKA)
+ */
+public class GVKontoauszug extends HBCIJobImpl
 {
     public final static String FORMAT_MT940="1";
     public final static String FORMAT_ISO8583="2";
@@ -52,10 +53,17 @@ public class GVKontoauszug
     {
         this(handler,getLowlevelName());
 
-        addConstraint("my.country","My.KIK.country","DE", LogFilter.FILTER_NONE);
-        addConstraint("my.blz","My.KIK.blz",null, LogFilter.FILTER_MOST);
-        addConstraint("my.number","My.number",null, LogFilter.FILTER_IDS);
-        addConstraint("my.subnumber","My.subnumber","", LogFilter.FILTER_MOST);
+        addConstraint("my.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
+        addConstraint("my.iban", "My.iban", null, LogFilter.FILTER_IDS);
+
+        if (this.canNationalAcc(handler)) // nationale Bankverbindung mitschicken, wenn erlaubt
+        {
+            addConstraint("my.country",  "My.KIK.country", "DE", LogFilter.FILTER_NONE);
+            addConstraint("my.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);
+            addConstraint("my.number",   "My.number",      "", LogFilter.FILTER_IDS);
+            addConstraint("my.subnumber","My.subnumber",   "", LogFilter.FILTER_MOST);
+        }
+
         addConstraint("format", "format", "", LogFilter.FILTER_NONE);
         addConstraint("idx", "idx", "", LogFilter.FILTER_NONE);
         addConstraint("year", "year", "", LogFilter.FILTER_NONE);

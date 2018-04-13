@@ -3504,7 +3504,7 @@
             <value path="SegHead.version">3</value>
         </SEGdef>
         
-        <SEGdef id="KontoauszugSEPA4"> <!-- 3.0 -->
+        <SEGdef id="Kontoauszug4"> <!-- 3.0 -->
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTVInt" name="My"/>
             <DE name="format" type="Code" maxsize="1" minnum="0"/>
@@ -3516,7 +3516,7 @@
             <value path="SegHead.code">HKEKA</value>
             <value path="SegHead.version">4</value>
         </SEGdef>
-        <SEGdef id="KontoauszugSEPARes4">
+        <SEGdef id="KontoauszugRes4">
             <DEG type="SegHeadInst" name="SegHead"/>
             <DE name="format" type="Code" maxsize="1"/>
             <DEG type="TimeRange"/>
@@ -3534,7 +3534,7 @@
             <value path="SegHead.code">HIEKA</value>
             <value path="SegHead.version">4</value>
         </SEGdef>
-        <SEGdef id="KontoauszugSEPAPar4">
+        <SEGdef id="KontoauszugPar4">
             &GVP2;
             <DEG type="ParKontoauszug"/>
             
@@ -6303,7 +6303,7 @@
             <SEG type="Kontoauszug1" minnum="0"/>
             <SEG type="Kontoauszug2" minnum="0"/>
             <SEG type="Kontoauszug3" minnum="0"/>
-            <SEG type="KontoauszugSEPA4" minnum="0"/>
+            <SEG type="Kontoauszug4" minnum="0"/>
             <SEG type="KUmsNew4" minnum="0"/>
             <SEG type="KUmsNew5" minnum="0"/>
             <SEG type="KUmsNew6" minnum="0"/>
@@ -6442,7 +6442,7 @@
             <SEG type="KontoauszugRes1" minnum="0"/>
             <SEG type="KontoauszugRes2" minnum="0"/>
             <SEG type="KontoauszugRes3" minnum="0"/>
-            <SEG type="KontoauszugSEPARes4" minnum="0"/>
+            <SEG type="KontoauszugRes4" minnum="0"/>
             <SEG type="KUmsNewRes4" minnum="0"/>
             <SEG type="KUmsNewRes5" minnum="0"/>
             <SEG type="KUmsNewRes6" minnum="0"/>
@@ -6560,7 +6560,7 @@
             <SEG type="KontoauszugPar1" minnum="0"/>
             <SEG type="KontoauszugPar2" minnum="0"/>
             <SEG type="KontoauszugPar3" minnum="0"/>
-            <SEG type="KontoauszugSEPAPar4" minnum="0"/>
+            <SEG type="KontoauszugPar4" minnum="0"/>
             <SEG type="KUmsNewPar4" minnum="0"/>
             <SEG type="KUmsNewPar5" minnum="0"/>
             <SEG type="KUmsNewPar6" minnum="0"/>
