@@ -9,8 +9,6 @@
 package org.kapott.hbci.GV;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRKontoauszugPdf;
@@ -26,11 +24,6 @@ import org.kapott.hbci.status.HBCIMsgStatus;
  */
 public class GVKontoauszugPdf extends HBCIJobImpl
 {
-  /**
-   * Der Encoder zum Pruefen, ob das PDF Base64-codiert ist.
-   */
-  private final static CharsetEncoder ASCII_ENCODER = Charset.forName("US-ASCII").newEncoder();
-  
   /**
    * Liefert den Lowlevel-Namen des Auftrags.
    * @return der Lowlevel-Name des Auftrags.
@@ -133,12 +126,7 @@ public class GVKontoauszugPdf extends HBCIJobImpl
     
     if (data != null && data.length() > 0)
     {
-      if (ASCII_ENCODER.canEncode(data))
-      {
-        // Ist Base64
-        umsResult.setPDFData(HBCIUtils.decodeBase64(data));
-      }
-      else
+      if (data.startsWith("%PDF-"))
       {
         // Ist Bin
         try
@@ -150,6 +138,11 @@ public class GVKontoauszugPdf extends HBCIJobImpl
           // Kann eigentlich nicht passieren
           HBCIUtils.log(e,HBCIUtils.LOG_WARN);
         }
+      }
+      else
+      {
+        // Ist Base64
+        umsResult.setPDFData(HBCIUtils.decodeBase64(data));
       }
     }
     umsResult.setReceipt(result.getProperty(header + ".receipt"));
