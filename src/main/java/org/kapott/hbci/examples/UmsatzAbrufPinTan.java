@@ -247,6 +247,7 @@ public class UmsatzAbrufPinTan
         // Die folgenden Callbacks sind nur fuer die Ausfuehrung TAN-pflichtiger
         // Geschaeftsvorfaelle bei der Verwendung des PIN/TAN-Verfahrens noetig.
         // Z.Bsp. beim Versand einer Ueberweisung
+        // "NEED_PT_SECMECH" kann jedoch auch bereits vorher auftreten.
           
         // HBCI4Java benoetigt die TAN per PhotoTAN-Verfahren
         // Liefert die anzuzeigende PhotoTAN-Grafik, die mit der entsprechenden
