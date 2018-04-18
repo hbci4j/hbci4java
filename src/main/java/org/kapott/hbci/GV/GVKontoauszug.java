@@ -80,6 +80,7 @@ public class GVKontoauszug extends HBCIJobImpl
         addConstraint("idx", "idx", "", LogFilter.FILTER_NONE);
         addConstraint("year", "year", "", LogFilter.FILTER_NONE);
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
+        addConstraint( "offset", "offset", "", LogFilter.FILTER_NONE );
     }
 
     /**
