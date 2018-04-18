@@ -49,6 +49,15 @@ public class GVRKontoauszug extends HBCIJobResultImpl
     }
     
     /**
+     * Liefert den Code des Formats.
+     * @return der Code des Formats.
+     */
+    public String getCode()
+    {
+      return this.code;
+    }
+    
+    /**
      * Liefert das passende Format oder NULL, wenn es nicht bekannt ist. 
      * @param code der Code des Formats.
      * @return das Format oder NULL, wenn es nicht bekannt ist.
