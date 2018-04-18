@@ -11,7 +11,8 @@ package org.kapott.hbci.GV;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
-import org.kapott.hbci.GV_Result.GVRKontoauszugPdf;
+import org.kapott.hbci.GV_Result.GVRKontoauszug;
+import org.kapott.hbci.GV_Result.GVRKontoauszug.Format;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -40,7 +41,7 @@ public class GVKontoauszugPdf extends HBCIJobImpl
    */
   public GVKontoauszugPdf(HBCIHandler handler, String name)
   {
-    super(handler, name, new GVRKontoauszugPdf());
+    super(handler, name, new GVRKontoauszug());
   }
 
   /**
@@ -73,7 +74,10 @@ public class GVKontoauszugPdf extends HBCIJobImpl
   protected void extractResults(HBCIMsgStatus msgstatus, String header, int idx)
   {
     Properties result = msgstatus.getData();
-    GVRKontoauszugPdf umsResult = (GVRKontoauszugPdf) jobResult;
+    GVRKontoauszug umsResult = (GVRKontoauszug) jobResult;
+    
+    // Das Format setzen wir hier pauschal auf PDF, weil HKEKP immer PDF liefert
+    umsResult.setFormat(Format.PDF);
 
     ////////////////////////////////////////////////////////////////////////
     // Die folgenden Parameter existieren in Segment-Version 1 noch
@@ -131,7 +135,7 @@ public class GVKontoauszugPdf extends HBCIJobImpl
         // Ist Bin
         try
         {
-          umsResult.setPDFData(data.getBytes(Comm.ENCODING));
+          umsResult.setData(data.getBytes(Comm.ENCODING));
         }
         catch (UnsupportedEncodingException e)
         {
@@ -142,7 +146,7 @@ public class GVKontoauszugPdf extends HBCIJobImpl
       else
       {
         // Ist Base64
-        umsResult.setPDFData(HBCIUtils.decodeBase64(data));
+        umsResult.setData(HBCIUtils.decodeBase64(data));
       }
     }
     umsResult.setReceipt(result.getProperty(header + ".receipt"));

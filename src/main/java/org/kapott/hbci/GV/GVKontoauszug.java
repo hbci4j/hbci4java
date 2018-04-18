@@ -21,9 +21,12 @@
 
 package org.kapott.hbci.GV;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRKontoauszug;
+import org.kapott.hbci.GV_Result.GVRKontoauszug.Format;
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
@@ -35,20 +38,29 @@ import org.kapott.hbci.swift.Swift;
  */
 public class GVKontoauszug extends HBCIJobImpl
 {
-    public final static String FORMAT_MT940="1";
-    public final static String FORMAT_ISO8583="2";
-    public final static String FORMAT_PDF="3";
-    
+    /**
+     * Liefert den Lowlevel-Namen.
+     * @return der Lowlevel-Name.
+     */
     public static String getLowlevelName()
     {
         return "Kontoauszug";
     }
     
+    /**
+     * ct.
+     * @param handler
+     * @param name
+     */
     public GVKontoauszug(HBCIHandler handler,String name)
     {
         super(handler, name, new GVRKontoauszug());
     }
 
+    /**
+     * ct.
+     * @param handler
+     */
     public GVKontoauszug(HBCIHandler handler)
     {
         this(handler,getLowlevelName());
@@ -70,33 +82,33 @@ public class GVKontoauszug extends HBCIJobImpl
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
     }
 
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
+     */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
-        Properties     result=msgstatus.getData();
-        GVRKontoauszug umsResult=(GVRKontoauszug)jobResult; 
+        Properties     result    = msgstatus.getData();
+        GVRKontoauszug umsResult = (GVRKontoauszug)jobResult; 
         
-        String format = result.getProperty(header+".format");
-        String rawData = result.getProperty(header+".booked");
+        Format format = Format.find(result.getProperty(header+".format"));
         umsResult.setFormat(format);
         
-        if (rawData !=null )
+        String data = result.getProperty(header+".booked");
+        
+        if (data != null && data.length() > 0)
         {
-          if (format.equals("1"))
+          if (format != null && format == Format.MT940)
+            data = Swift.decodeUmlauts(data);
+
+          try
           {
-            umsResult.appendMT940Data(Swift.decodeUmlauts(rawData));
+            umsResult.setData(data.getBytes(Comm.ENCODING));
           }
-          else if (format.equals("2"))
+          catch (UnsupportedEncodingException e)
           {
-           umsResult.appendISOData(rawData);
+            HBCIUtils.log(e,HBCIUtils.LOG_WARN);
           }
-          else if (format.equals("3"))
-          {
-            umsResult.appendPDFData(rawData);
-          }
-          else
-          {
-            HBCIUtils.log("unknown format in result for GV Kontoauszug: "+format,HBCIUtils.LOG_ERR);
-          }
+
         }
 
         String date = result.getProperty(header+".date");
@@ -123,6 +135,9 @@ public class GVKontoauszug extends HBCIJobImpl
         umsResult.setReceipt(result.getProperty(header+".receipt"));
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#verifyConstraints()
+     */
     public void verifyConstraints()
     {
         super.verifyConstraints();
