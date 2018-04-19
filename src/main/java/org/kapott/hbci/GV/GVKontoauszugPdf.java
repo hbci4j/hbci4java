@@ -52,10 +52,25 @@ public class GVKontoauszugPdf extends HBCIJobImpl
   {
     this(handler, getLowlevelName());
 
-    addConstraint("my.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
-    addConstraint("my.iban", "My.iban", null, LogFilter.FILTER_IDS);
+    boolean sepa = false;
+    try
+    {
+      sepa = Integer.parseInt(this.getSegVersion()) >= 2; 
+    }
+    catch (Exception e)
+    {
+      HBCIUtils.log(e);
+    }
+    
+    boolean nat = this.canNationalAcc(handler);
 
-    if (this.canNationalAcc(handler)) // nationale Bankverbindung mitschicken, wenn erlaubt
+    if (sepa)
+    {
+      addConstraint("my.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
+      addConstraint("my.iban", "My.iban", null, LogFilter.FILTER_IDS);
+    }
+
+    if (nat || !sepa)
     {
       addConstraint("my.country",  "My.KIK.country", "DE", LogFilter.FILTER_NONE);
       addConstraint("my.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);

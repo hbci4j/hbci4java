@@ -65,15 +65,31 @@ public class GVKontoauszug extends HBCIJobImpl
     {
         this(handler,getLowlevelName());
 
-        addConstraint("my.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
-        addConstraint("my.iban", "My.iban", null, LogFilter.FILTER_IDS);
-
-        if (this.canNationalAcc(handler)) // nationale Bankverbindung mitschicken, wenn erlaubt
+        
+        boolean sepa = false;
+        try
         {
-            addConstraint("my.country",  "My.KIK.country", "DE", LogFilter.FILTER_NONE);
-            addConstraint("my.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);
-            addConstraint("my.number",   "My.number",      "", LogFilter.FILTER_IDS);
-            addConstraint("my.subnumber","My.subnumber",   "", LogFilter.FILTER_MOST);
+          sepa = Integer.parseInt(this.getSegVersion()) >= 4; 
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log(e);
+        }
+        
+        boolean nat = this.canNationalAcc(handler);
+
+        if (sepa)
+        {
+          addConstraint("my.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
+          addConstraint("my.iban", "My.iban", null, LogFilter.FILTER_IDS);
+        }
+
+        if (nat || !sepa)
+        {
+          addConstraint("my.country",  "My.KIK.country", "DE", LogFilter.FILTER_NONE);
+          addConstraint("my.blz",      "My.KIK.blz",     "", LogFilter.FILTER_MOST);
+          addConstraint("my.number",   "My.number",      "", LogFilter.FILTER_IDS);
+          addConstraint("my.subnumber","My.subnumber",   "", LogFilter.FILTER_MOST);
         }
 
         addConstraint("format", "format", "", LogFilter.FILTER_NONE);
