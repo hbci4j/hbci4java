@@ -23,29 +23,32 @@ public class GVRKontoauszug extends HBCIJobResultImpl
     /**
      * Datenformat SWIFT MT940.
      */
-    MT940("1"),
+    MT940("1","sta"),
     
     /**
      * Datenformat ISO-8583.
      */
-    ISO8583("2"),
+    ISO8583("2","iso"),
     
     /**
      * Datenformat PDF.
      */
-    PDF("3"),
+    PDF("3","pdf"),
     
     ;
     
     private String code = null;
+    private String ext = null;
     
     /**
      * ct.
      * @param code
+     * @param ext
      */
-    private Format(String code)
+    private Format(String code, String ext)
     {
       this.code = code;
+      this.ext = ext;
     }
     
     /**
@@ -55,6 +58,15 @@ public class GVRKontoauszug extends HBCIJobResultImpl
     public String getCode()
     {
       return this.code;
+    }
+    
+    /**
+     * Liefert die Dateiendung fuer dieses Format.
+     * @return die Dateiendung - ohne fuehrenden Punkt.
+     */
+    public String getExtention()
+    {
+      return this.ext;
     }
     
     /**
