@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRKontoauszug;
 import org.kapott.hbci.GV_Result.GVRKontoauszug.Format;
+import org.kapott.hbci.GV_Result.GVRKontoauszug.GVRKontoauszugEntry;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -89,11 +90,14 @@ public class GVKontoauszugPdf extends HBCIJobImpl
    */
   protected void extractResults(HBCIMsgStatus msgstatus, String header, int idx)
   {
-    Properties result = msgstatus.getData();
-    GVRKontoauszug umsResult = (GVRKontoauszug) jobResult;
+    Properties result   = msgstatus.getData();
+    GVRKontoauszug list = (GVRKontoauszug) jobResult;
+    
+    GVRKontoauszugEntry auszug = new GVRKontoauszugEntry();
+    list.getEntries().add(auszug);
     
     // Das Format setzen wir hier pauschal auf PDF, weil HKEKP immer PDF liefert
-    umsResult.setFormat(Format.PDF);
+    auszug.setFormat(Format.PDF);
 
     ////////////////////////////////////////////////////////////////////////
     // Die folgenden Parameter existieren in Segment-Version 1 noch
@@ -107,27 +111,27 @@ public class GVKontoauszugPdf extends HBCIJobImpl
     String number = result.getProperty(header + ".number");
 
     if (start != null && start.length() > 0)
-      umsResult.setStartDate(HBCIUtils.string2DateISO(start));
+      auszug.setStartDate(HBCIUtils.string2DateISO(start));
 
     if (end != null && end.length() > 0)
-      umsResult.setEndDate(HBCIUtils.string2DateISO(end));
+      auszug.setEndDate(HBCIUtils.string2DateISO(end));
 
     if (date != null && date.length() > 0)
-      umsResult.setDate(HBCIUtils.string2DateISO(date));
+      auszug.setDate(HBCIUtils.string2DateISO(date));
 
     if (year != null && year.length() > 0)
-      umsResult.setYear(Integer.parseInt(year));
+      auszug.setYear(Integer.parseInt(year));
 
     if (number != null && number.length() > 0)
-      umsResult.setNumber(Integer.parseInt(number));
+      auszug.setNumber(Integer.parseInt(number));
 
     // Wenn hier NULL drin steht, ist es nicht weiter schlimm
-    umsResult.setIBAN(result.getProperty(header + ".iban"));
-    umsResult.setBIC(result.getProperty(header + ".bic"));
-    umsResult.setName(result.getProperty(header + ".name"));
-    umsResult.setName2(result.getProperty(header + ".name2"));
-    umsResult.setName3(result.getProperty(header + ".name3"));
-    umsResult.setFilename(result.getProperty(header + ".filename"));
+    auszug.setIBAN(result.getProperty(header + ".iban"));
+    auszug.setBIC(result.getProperty(header + ".bic"));
+    auszug.setName(result.getProperty(header + ".name"));
+    auszug.setName2(result.getProperty(header + ".name2"));
+    auszug.setName3(result.getProperty(header + ".name3"));
+    auszug.setFilename(result.getProperty(header + ".filename"));
     //
     ////////////////////////////////////////////////////////////////////////
 
@@ -151,7 +155,7 @@ public class GVKontoauszugPdf extends HBCIJobImpl
         // Ist Bin
         try
         {
-          umsResult.setData(data.getBytes(Comm.ENCODING));
+          auszug.setData(data.getBytes(Comm.ENCODING));
         }
         catch (UnsupportedEncodingException e)
         {
@@ -162,10 +166,25 @@ public class GVKontoauszugPdf extends HBCIJobImpl
       else
       {
         // Ist Base64
-        umsResult.setData(HBCIUtils.decodeBase64(data));
+        auszug.setData(HBCIUtils.decodeBase64(data));
       }
     }
-    umsResult.setReceipt(result.getProperty(header + ".receipt"));
+    
+    String receipt = result.getProperty(header+".receipt");
+    if (receipt != null)
+    {
+      try
+      {
+        auszug.setReceipt(receipt.getBytes(Comm.ENCODING));
+      }
+      catch (UnsupportedEncodingException e)
+      {
+        HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+        
+        // Wir versuchen es als Fallback ohne explizites Encoding
+        auszug.setReceipt(receipt.getBytes());
+      }
+    }
   }
 
   /**

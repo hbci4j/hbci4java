@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRKontoauszug;
 import org.kapott.hbci.GV_Result.GVRKontoauszug.Format;
+import org.kapott.hbci.GV_Result.GVRKontoauszug.GVRKontoauszugEntry;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -104,11 +105,14 @@ public class GVKontoauszug extends HBCIJobImpl
      */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
-        Properties     result    = msgstatus.getData();
-        GVRKontoauszug umsResult = (GVRKontoauszug)jobResult; 
+        Properties result   = msgstatus.getData();
+        GVRKontoauszug list = (GVRKontoauszug) jobResult;
+        
+        GVRKontoauszugEntry auszug = new GVRKontoauszugEntry();
+        list.getEntries().add(auszug);
         
         Format format = Format.find(result.getProperty(header+".format"));
-        umsResult.setFormat(format);
+        auszug.setFormat(format);
         
         String data = result.getProperty(header+".booked");
         
@@ -119,37 +123,55 @@ public class GVKontoauszug extends HBCIJobImpl
 
           try
           {
-            umsResult.setData(data.getBytes(Comm.ENCODING));
+            auszug.setData(data.getBytes(Comm.ENCODING));
           }
           catch (UnsupportedEncodingException e)
           {
             HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+            
+            // Wir versuchen es als Fallback ohne explizites Encoding
+            auszug.setData(data.getBytes());
           }
-
         }
 
         String date = result.getProperty(header+".date");
         if (date != null && date.length() > 0)
-          umsResult.setDate(HBCIUtils.string2DateISO(date));
+          auszug.setDate(HBCIUtils.string2DateISO(date));
         
         String year   = result.getProperty(header+".year");
         String number = result.getProperty(header+".number");
         if (year != null && year.length() > 0)
-          umsResult.setYear(Integer.parseInt(year));
+          auszug.setYear(Integer.parseInt(year));
         if (number != null && number.length() > 0)
-          umsResult.setNumber(Integer.parseInt(number));
+          auszug.setNumber(Integer.parseInt(number));
 
-        umsResult.setStartDate(HBCIUtils.string2DateISO(result.getProperty(header+".TimeRange.startdate")));
-        umsResult.setEndDate(HBCIUtils.string2DateISO(result.getProperty(header+".TimeRange.enddate")));
-        umsResult.setAbschlussInfo(result.getProperty(header+".abschlussinfo"));
-        umsResult.setKundenInfo(result.getProperty(header+".kondinfo"));
-        umsResult.setWerbetext(result.getProperty(header+".ads"));
-        umsResult.setIBAN(result.getProperty(header+".iban"));
-        umsResult.setBIC(result.getProperty(header+".bic"));
-        umsResult.setName(result.getProperty(header+".name"));
-        umsResult.setName2(result.getProperty(header+".name2"));
-        umsResult.setName3(result.getProperty(header+".name3"));
-        umsResult.setReceipt(result.getProperty(header+".receipt"));
+        auszug.setStartDate(HBCIUtils.string2DateISO(result.getProperty(header+".TimeRange.startdate")));
+        auszug.setEndDate(HBCIUtils.string2DateISO(result.getProperty(header+".TimeRange.enddate")));
+        auszug.setAbschlussInfo(result.getProperty(header+".abschlussinfo"));
+        auszug.setKundenInfo(result.getProperty(header+".kondinfo"));
+        auszug.setWerbetext(result.getProperty(header+".ads"));
+        auszug.setIBAN(result.getProperty(header+".iban"));
+        auszug.setBIC(result.getProperty(header+".bic"));
+        auszug.setName(result.getProperty(header+".name"));
+        auszug.setName2(result.getProperty(header+".name2"));
+        auszug.setName3(result.getProperty(header+".name3"));
+        
+        String receipt = result.getProperty(header+".receipt");
+        if (receipt != null)
+        {
+          try
+          {
+            auszug.setReceipt(receipt.getBytes(Comm.ENCODING));
+          }
+          catch (UnsupportedEncodingException e)
+          {
+            HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+            
+            // Wir versuchen es als Fallback ohne explizites Encoding
+            auszug.setReceipt(receipt.getBytes());
+          }
+        }
+
     }
     
     /**
