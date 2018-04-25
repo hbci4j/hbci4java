@@ -3956,7 +3956,7 @@
             <DEG type="SegHeadInst" name="SegHead"/>
             <DE name="format" type="Code" maxsize="1"/>
             <DEG type="TimeRange"/>
-            <DE name="date" type="Date" maxsize="0"/>
+            <DE name="date" type="Date" maxsize="0" minnum="0"/>
             <DE name="year" type="Num" maxsize="4" minnum="0"/>
             <DE name="number" type="Num" maxsize="5" minnum="0"/>
             <DE name="booked" type="Bin" maxsize="0"/>
@@ -3969,9 +3969,10 @@
             <DE name="name2" type="AN" maxsize="35" minnum="0"/>
             <DE name="name3" type="AN" maxsize="35" minnum="0"/>
             <DE name="receipt" type="Bin" maxsize="0" minnum="0"/>
-            
+
             <value path="SegHead.code">HIEKA</value>
             <value path="SegHead.version">5</value>
+            
         </SEGdef>
         <SEGdef id="KontoauszugPar5">
             &GVP2;
@@ -4027,7 +4028,7 @@
             <DEG type="SegHeadInst" name="SegHead"/>
             <DE name="booked" type="Bin" maxsize="0"/>
             <DEG type="TimeRange"/>
-            <DE name="date" type="Date" maxsize="0"/>
+            <DE name="date" type="Date" maxsize="0" minnum="0"/>
             <DE name="year" type="Num" maxsize="4" minnum="0"/>
             <DE name="number" type="Num" maxsize="5" minnum="0"/>
             <DE name="iban" type="AN" maxsize="34" minnum="0"/>
