@@ -31,27 +31,32 @@ import org.kapott.hbci.protocol.MultipleSyntaxElements;
 import org.kapott.hbci.protocol.SyntaxElement;
 import org.kapott.hbci.protocol.factory.MSGFactory;
 
-/** <p>Rewriter-Modul für falsche Informationen über TAN-Verfahren. Einige Banken
+/**
+ * Rewriter-Modul für falsche Informationen über TAN-Verfahren. Einige Banken
  * mit HBCI+ (HBCI-PIN/TAN) -Unterstützung stellen fälschlicherweise in die BPD 
  * die Information ein, dass das Sicherheitsverfahren "TAN" unterstützt wird.
  * "TAN" ist aber kein gültiger Code für Sicherheitsmechanismen, so dass dieses
- * Rewriter-Modul die "TAN"-Information aus den BPD entfernt.</p>
- * <p>Ist dieses Modul aktiv, so muss auch das Modul "<code>Olly</code>" aktiv
- * sein, weil einige hier vorgenommene Änderungen wiederum fehlerhafte Nachrichten
- * erzeugen, die aber durch "<code>Olly</code>" wieder korrigiert werden.</p> */
-public class RSecTypeTAN 
-    extends Rewrite 
+ * Rewriter-Modul die "TAN"-Information aus den BPD entfernt.
+ */
+public class RSecTypeTAN extends Rewrite 
 {
-    // TODO: den rewriter umschreiben, so dass er nur string-operationen
-    // benutzt, weil nicht sichergestellt werden kann, dass die eingehende
-    // nachricht hier tatsächlich schon geparst werden kann
+    /**
+     * @see org.kapott.hbci.rewrite.Rewrite#incomingClearText(java.lang.String, org.kapott.hbci.manager.MsgGen)
+     */
     public String incomingClearText(String st,MsgGen gen) 
     {
+      // Wir packen das Rewrite in ein try/catch, weil wir hier keine reinen String-Operationen
+      // verwenden und nicht 100%ig sichergestellt ist, ob die Nachricht zu diesem Zeitpunkt schon
+      // geparst werden kann (eventuell wird sie ja erst nach der Bearbeitung durch die Folge-Rewriter lesbar)
+      // Falls das Rewrite fehschlaegt, dann tolerieren wir es halt.
+
+      MSG msg = null;
+
+      try
+      {
         // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
-        String myMsgName=(String)getData("msgName")+"Res";
-        MSG    msg=MSGFactory.getInstance().createMSG(myMsgName,st,st.length(),
-                gen,
-                MSG.CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
+        String myMsgName = (String)getData("msgName")+"Res";
+        msg = MSGFactory.getInstance().createMSG(myMsgName,st,st.length(),gen,MSG.CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
         
         // in einer Schleife durch alle SuppSecMethods-Datensätze laufen
         for (int i=0;;i++) {
@@ -114,6 +119,26 @@ public class RSecTypeTAN
         }
         
         MSGFactory.getInstance().unuseObject(msg);
-        return st;
+      }
+      catch (Exception e)
+      {
+        HBCIUtils.log("unable to apply rewriter " + this.getClass().getSimpleName() + " - leaving messag unchanged", HBCIUtils.LOG_INFO);
+        HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
+      }
+      finally
+      {
+        if (msg != null)
+        {
+          try
+          {
+            MSGFactory.getInstance().unuseObject(msg);
+          }
+          catch (Exception e)
+          {
+            HBCIUtils.log(e,HBCIUtils.LOG_WARN);
+          }
+        }
+      }
+      return st;
     }
 }

@@ -39,12 +39,13 @@ public class RInvalidSuppHBCIVersion extends Rewrite
    */
   public String incomingClearText(String st, MsgGen gen)
   {
-    // TODO: den rewriter umschreiben, so dass er nur string-operationen
-    // benutzt, weil nicht sichergestellt werden kann, dass die eingehende
-    // nachricht hier tatsächlich schon geparst werden kann
-
-    MSG msg = null;
+    // Wir packen das Rewrite in ein try/catch, weil wir hier keine reinen String-Operationen
+    // verwenden und nicht 100%ig sichergestellt ist, ob die Nachricht zu diesem Zeitpunkt schon
+    // geparst werden kann (eventuell wird sie ja erst nach der Bearbeitung durch die Folge-Rewriter lesbar)
+    // Falls das Rewrite fehschlaegt, dann tolerieren wir es halt.
     
+    MSG msg = null;
+
     try
     {
       // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
@@ -79,7 +80,8 @@ public class RInvalidSuppHBCIVersion extends Rewrite
     }
     catch (Exception e)
     {
-      HBCIUtils.log(e,HBCIUtils.LOG_ERR);
+      HBCIUtils.log("unable to apply rewriter " + this.getClass().getSimpleName() + " - leaving messag unchanged", HBCIUtils.LOG_INFO);
+      HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
     }
     finally
     {

@@ -245,13 +245,16 @@ public final class MSG
     public void destroy()
     {
         List<MultipleSyntaxElements> childContainers=getChildContainers();
-        for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
+        if (childContainers != null)
+        {
+          for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
             MultipleSyntaxElements child=i.next();
             if (child instanceof MultipleSFs) {
                 MultipleSFsFactory.getInstance().unuseObject(child);
             } else {
                 MultipleSEGsFactory.getInstance().unuseObject(child);
             }
+          }
         }
         
         super.destroy();

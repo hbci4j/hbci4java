@@ -783,8 +783,11 @@ public abstract class SyntaxElement
     
     protected void destroy()
     {
-        childContainers.clear();
-        childContainers=null;
+        if (childContainers != null)
+        {
+            childContainers.clear();
+            childContainers=null;
+        }
         name=null;
         parent=null;
         path=null;
