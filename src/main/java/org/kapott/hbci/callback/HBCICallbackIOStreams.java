@@ -438,6 +438,10 @@ public class HBCICallbackIOStreams
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_RECV",o[0].toString()));
                 break;
 
+            case STATUS_MSG_RAW_RECV_ENCRYPTED:
+                getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_RECV_ENCRYPTED",o[0].toString()));
+                break;
+
             default:
                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("STATUS_INVALID",Integer.toString(statusTag)));
         }

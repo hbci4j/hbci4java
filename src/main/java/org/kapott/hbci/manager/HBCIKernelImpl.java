@@ -367,6 +367,7 @@ public final class HBCIKernelImpl implements HBCIKernel
                     HBCIUtils.log("decrypting using " + crypt,HBCIUtils.LOG_DEBUG);
                     newmsgstring=crypt.decryptIt();
                     HBCIUtils.log("decrypted",HBCIUtils.LOG_DEBUG);
+                    HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_MSG_RAW_RECV,newmsgstring);
                 } finally {
                     HBCIUtils.log("free crypt",HBCIUtils.LOG_DEBUG);
                     CryptFactory.getInstance().unuseObject(crypt);
@@ -396,6 +397,10 @@ public final class HBCIKernelImpl implements HBCIKernel
                 } catch (Exception ex) {
                     throw new CanNotParseMessageException(HBCIUtilsInternal.getLocMsg("EXCMSG_CANTPARSE"),newmsgstring,ex);
                 }
+            }
+            else
+            {
+              HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_MSG_RAW_RECV,msg.toString(0));
             }
             
             HBCIUtils.log("received message after decryption: "+msg.toString(0),HBCIUtils.LOG_DEBUG2);

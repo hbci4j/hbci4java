@@ -542,6 +542,16 @@ public interface HBCICallback
      * mit der Bank.
      */
     public final static int STATUS_MSG_RAW_RECV=31;
+    
+    /**
+     * Wie STATUS_MSG_RAW_RECV - jedoch noch vor der Entschluesselung der Daten.
+     * Abhaengig vom HBCI-Verfahren kann die Nachricht aber auch hier bereits entschluesselt
+     * sein. Naemlich bei HBCI-Verfahren, bei denen die Verschluesselung nicht auf
+     * im HBCI-Protokoll selbst stattfindet sondern auf dem Transport-Protokoll.
+     * Konkret ist das PIN/TAN. Bei Schluesseldatei und Chipkarte hingegen ist die
+     * Message zu diesem Zeitpunkt hier noch verschluesselt.
+     */
+    public final static int STATUS_MSG_RAW_RECV_ENCRYPTED=32;
 
     /** Wird aufgerufen, wenn der HBCI-Kernel eine Log-Ausgabe
         erzeugt. <em>HBCI4Java</em> gibt Logging-Ausgaben nicht selbst auf
