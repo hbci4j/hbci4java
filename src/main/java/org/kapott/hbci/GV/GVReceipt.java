@@ -27,4 +27,16 @@ public class GVReceipt extends HBCIJobImpl
       super(handler, getLowlevelName(), new HBCIJobResultImpl());
       addConstraint("receipt","receipt","", LogFilter.FILTER_NONE);
     }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
+     */
+    public void setParam(String paramName, String value)
+    {
+        // Feld als binaer markieren
+        if (paramName.equals("receipt"))
+            value="B"+value;
+        super.setParam(paramName,value);
+    }
+
 }

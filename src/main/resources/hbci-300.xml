@@ -4432,6 +4432,12 @@
       	    <value path="SegHead.code">HKQTG</value>
       	    <value path="SegHead.version">1</value>
       	</SEGdef>
+        <SEGdef id="ReceiptPar1">
+            &GVP2;
+            &SecClassValids;
+            <value path="SegHead.code">HIQTGS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
 
         <SEGdef id="Saldo3"> <!-- 2.01 -->
             <DEG type="SegHeadUser" name="SegHead"/>
@@ -7334,7 +7340,7 @@
             <SEG type="LastObjection1" minnum="0"/>
             <SEG type="LastObjection2" minnum="0"/>
             <SEG type="OrderHistory1" minnum="0"/>
-	    	<SEG type="Receipt1" minnum="0"/>
+	    	    <SEG type="Receipt1" minnum="0"/>
             <SEG type="Saldo3" minnum="0"/>
             <SEG type="Saldo4" minnum="0"/>
             <SEG type="Saldo5" minnum="0"/>
@@ -7628,6 +7634,7 @@
             <SEG type="OrderHistoryPar1" minnum="0"/>
             <SEG type="PinTanPar1" minnum="0"/>
             <SEG type="PinTanPar2" minnum="0"/>
+            <SEG type="ReceiptPar1" minnum="0"/>
             <SEG type="SaldoPar3" minnum="0"/>
             <SEG type="SaldoPar4" minnum="0"/>
             <SEG type="SaldoPar5" minnum="0"/>
