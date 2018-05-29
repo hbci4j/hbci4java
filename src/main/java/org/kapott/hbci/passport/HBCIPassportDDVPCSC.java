@@ -25,16 +25,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
-import java.util.List;
 import java.util.Properties;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.spec.PBEParameterSpec;
-import javax.smartcardio.Card;
-import javax.smartcardio.CardTerminal;
-import javax.smartcardio.CardTerminals;
-import javax.smartcardio.TerminalFactory;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.datatypes.SyntaxCtr;
@@ -46,6 +41,7 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.smartcardio.DDVBankData;
 import org.kapott.hbci.smartcardio.DDVCardService;
 import org.kapott.hbci.smartcardio.DDVKeyData;
+import org.kapott.hbci.smartcardio.SmartCardService;
 
 /**
  * Implementierung eines DDV-Passports, welcher intern die neue Chipkarten-API
@@ -54,7 +50,6 @@ import org.kapott.hbci.smartcardio.DDVKeyData;
  */
 public class HBCIPassportDDVPCSC extends HBCIPassportDDV
 {
-    private Card           smartCard;
     private DDVCardService cardService;
     
     /**
@@ -206,85 +201,9 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
      */
     protected void initCT()
     {
-      try
-      {
-        TerminalFactory terminalFactory = TerminalFactory.getDefault();
-        CardTerminals terminals = terminalFactory.terminals();
-        if (terminals == null)
-          throw new HBCI_Exception("Kein Kartenleser gefunden");
-        
-        List<CardTerminal> list = terminals.list();
-        if (list == null || list.size() == 0)
-          throw new HBCI_Exception("Kein Kartenleser gefunden");
-        
-        HBCIUtils.log("found card terminals:",HBCIUtils.LOG_INFO);
-        for (CardTerminal t:list) {
-            HBCIUtils.log("  "+t.getName(),HBCIUtils.LOG_INFO);
-        }
-
-        CardTerminal terminal = null;
-
-        // Checken, ob der User einen konkreten Kartenleser vorgegeben hat
-        String name = HBCIUtils.getParam(getParamHeader()+".pcsc.name",null);
-        if (name != null)
-        {
-          HBCIUtils.log("explicit terminal name given, trying to open terminal: " + name,HBCIUtils.LOG_DEBUG);
-          terminal = terminals.getTerminal(name);
-          if (terminal == null)
-            throw new HBCI_Exception("Kartenleser \"" + name + "\" nicht gefunden");
-        }
-        else
-        {
-          HBCIUtils.log("open first available card terminal",HBCIUtils.LOG_DEBUG);
-          terminal = list.get(0);
-        }
-        HBCIUtils.log("using card terminal " + terminal.getName(),HBCIUtils.LOG_DEBUG);
-
-        // wait for card
-        if (!terminal.waitForCardPresent(60 * 1000L))
-          throw new HBCI_Exception("Keine Chipkarte in Kartenleser " + terminal.getName() + " gefunden");
-
-        // Hier kann man gemaess
-        // http://download.oracle.com/javase/6/docs/jre/api/security/smartcardio/spec/javax/smartcardio/CardTerminal.html#connect%28java.lang.String%29
-        // auch "T=0" oder "T=1" angeben. Wir wissen allerdings noch nicht, von welchem
-        // Typ die Karte ist. Daher nehmen wir "*" fuer jedes verfuegbare. Wenn wir die
-        // Karte geoeffnet haben, kriegen wir dann auch das Protokoll raus.
-        this.smartCard = terminal.connect("*");
-        String type = this.smartCard.getProtocol();
-        HBCIUtils.log(" card type: " + type,HBCIUtils.LOG_INFO);
-        
-        // Card-Service basierend auf dem Kartentyp erzeugen
-        if (type == null || type.indexOf("=") == -1)
-          throw new HBCI_Exception("Unbekannter Kartentyp");
-
-        String id = type.substring(type.indexOf("=")+1);
-        String serviceName = "org.kapott.hbci.smartcardio.DDVCardService" + id;
-        HBCIUtils.log(" trying to load: " + serviceName,HBCIUtils.LOG_DEBUG);
-        this.cardService = (DDVCardService) Class.forName(serviceName).newInstance();
-        HBCIUtils.log(" using: " + this.cardService.getClass().getName(),HBCIUtils.LOG_INFO);
-        this.cardService.init(this.smartCard);
-        
-        // getCID
-        byte[] cid=this.cardService.getCID();
-        this.setCID(new String(cid,"ISO-8859-1"));
-        
-        // extract card id
-        StringBuffer cardId=new StringBuffer();
-        for (int i=0;i<8;i++)
-        {
-          cardId.append((char)(((cid[i+1]>>4)&0x0F) + 0x30));
-          cardId.append((char)((cid[i+1]&0x0F) + 0x30));
-        }
-        this.setCardId(cardId.toString());
-      }
-      catch (HBCI_Exception he)
-      {
-        throw he;
-      }
-      catch (Exception e)
-      {
-        throw new HBCI_Exception(e);
-      }
+      this.cardService = SmartCardService.createInstance(DDVCardService.class,HBCIUtils.getParam(getParamHeader() + ".pcsc.name", null));
+      this.setCID(this.cardService.getCID());
+      this.setCardId(this.cardService.getCardId());
     }
     
     /**
@@ -388,16 +307,12 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
     {
       try
       {
-        if (smartCard!=null)
-          smartCard.disconnect(false);
+        if (this.cardService != null)
+          this.cardService.close();
       }
-      catch (HBCI_Exception e1)
+      finally
       {
-        throw e1;
-      }
-      catch (Exception e2)
-      {
-        throw new HBCI_Exception(e2);
+        this.cardService = null;
       }
     }
 }

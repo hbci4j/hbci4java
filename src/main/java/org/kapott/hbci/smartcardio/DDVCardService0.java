@@ -30,9 +30,9 @@ import javax.smartcardio.CommandAPDU;
 public class DDVCardService0 extends DDVCardService
 {
   /**
-   * @see org.kapott.hbci.smartcardio.HBCICardService#init(javax.smartcardio.Card)
+   * @see org.kapott.hbci.smartcardio.SmartCardService#init(javax.smartcardio.Card)
    */
-  public void init(Card card)
+  protected void init(Card card)
   {
     super.init(card);
 
@@ -56,7 +56,7 @@ public class DDVCardService0 extends DDVCardService
     DDVKeyData[] ret=new DDVKeyData[2];
     
     selectSubFile(0x0013);
-    byte[] rawData=readRecord(0);
+    byte[] rawData=readRecordBySFI(0x00, 0);
     ret[0]=new DDVKeyData();
     ret[0].num=rawData[0];
     ret[0].version=rawData[4];
@@ -64,7 +64,7 @@ public class DDVCardService0 extends DDVCardService
     ret[0].alg=rawData[2];
 
     selectSubFile(0x0014);
-    rawData=readRecord(0);
+    rawData=readRecordBySFI(0x00, 0);
     ret[1]=new DDVKeyData();
     ret[1].num=rawData[0];
     ret[1].version=rawData[3];

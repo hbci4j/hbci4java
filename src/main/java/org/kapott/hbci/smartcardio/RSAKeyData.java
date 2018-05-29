@@ -4,7 +4,6 @@
 package org.kapott.hbci.smartcardio;
 
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -34,8 +33,6 @@ public class RSAKeyData {
         
     }
     
-    private final static Charset CHARSET = Charset.forName("ISO-8859-1");
-    
     private final int index;
     private final Type type;
     private final int status;
@@ -54,8 +51,8 @@ public class RSAKeyData {
         this.type = type;
         this.status = keyLogData[offset];
         this.keyType = keyLogData[offset + 1];
-        this.keyNum = Integer.valueOf(new String(keyLogData, offset + 2, 3, CHARSET).trim());
-        this.keyVersion = Integer.valueOf(new String(keyLogData, offset + 5, 3, CHARSET).trim());
+        this.keyNum = Integer.valueOf(new String(keyLogData, offset + 2, 3, SmartCardService.CHARSET).trim());
+        this.keyVersion = Integer.valueOf(new String(keyLogData, offset + 5, 3, SmartCardService.CHARSET).trim());
         
         if (publicKeyData == null || status != 0x10) {
             this.publicKey = null;

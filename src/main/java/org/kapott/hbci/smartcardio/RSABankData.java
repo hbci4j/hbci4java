@@ -14,8 +14,6 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
  */
 public class RSABankData {
     
-    private final static Charset CHARSET = Charset.forName("ISO-8859-1");
-    
     private int index;
     private String country;
     private String bankCode;
@@ -31,20 +29,23 @@ public class RSABankData {
     }
     
     public RSABankData(int index, byte[] record, byte[] customerIdData) {
+      
+      final Charset cs = SmartCardService.CHARSET;
+      
         this.index = index;
-        this.country = new String(record, 0, 3, CHARSET).trim();
-        this.bankCode = new String(record, 3, 30, CHARSET).trim();
-        this.userId = new String(record, 33, 30, CHARSET).trim();
+        this.country = new String(record, 0, 3, cs).trim();
+        this.bankCode = new String(record, 3, 30, cs).trim();
+        this.userId = new String(record, 33, 30, cs).trim();
         this.comService = record[63];
-        this.comAddress = new String(record, 64, 28, CHARSET).trim();
-        this.comSuffix = new String(record, 92, 2, CHARSET).trim();
-        this.bankId = new String(record, 94, 30, CHARSET).trim();
-        this.systemId = new String(record, 124, 30, CHARSET).trim();
-        this.customerId = customerIdData == null ? "" :new String(customerIdData, CHARSET).trim();
+        this.comAddress = new String(record, 64, 28, cs).trim();
+        this.comSuffix = new String(record, 92, 2, cs).trim();
+        this.bankId = new String(record, 94, 30, cs).trim();
+        this.systemId = new String(record, 124, 30, cs).trim();
+        this.customerId = customerIdData == null ? "" :new String(customerIdData, cs).trim();
     }
     
     private void fillRecord(byte[] record, int offset, int length, String value) {
-        byte[] bytes = value.getBytes(CHARSET);
+        byte[] bytes = value.getBytes(SmartCardService.CHARSET);
         if (bytes.length > length)
             throw new HBCI_Exception("string value for bank data record at offset " + offset + " is " + bytes.length + " bytes long but must not be longer than " + length + " bytes");
         

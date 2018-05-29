@@ -21,7 +21,8 @@
 
 package org.kapott.hbci.smartcardio;
 
-import org.kapott.hbci.exceptions.HBCI_Exception;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 
 
@@ -31,6 +32,8 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
  */
 public abstract class DDVCardService extends HBCICardService
 {
+  private String cid = null;
+  
   /**
    * Liefert die Schluesseldaten.
    * @return die Schluesseldaten.
@@ -45,12 +48,17 @@ public abstract class DDVCardService extends HBCICardService
   protected abstract byte[] calculateSignature(byte[] data_l);
   
   /**
-   * Liefert die CID.
-   * @return die CID.
+   * @see org.kapott.hbci.smartcardio.HBCICardService#getCID()
    */
-  public byte[] getCID() 
+  @Override
+  public String getCID() 
   {
-    return readRecordBySFI(HBCI_DDV_EF_ID, 0);
+    if (this.cid == null)
+    {
+      byte[] bytes = readRecordBySFI(HBCI_DDV_EF_ID, 0);
+      this.cid = new String(bytes,SmartCardService.CHARSET);
+    }
+    return this.cid;
   }
   
   /**
@@ -65,50 +73,39 @@ public abstract class DDVCardService extends HBCICardService
     if (rawData == null)
       return null;
     
-    try
-    {
-      DDVBankData ret = new DDVBankData();
-      
-      ret.recordnum = idx+1;
-      ret.shortname = new String(rawData,0,20,"ISO-8859-1").trim();
+    DDVBankData ret = new DDVBankData();
+    
+    ret.recordnum = idx+1;
+    ret.shortname = new String(rawData,0,20,SmartCardService.CHARSET).trim();
 
-      StringBuffer blz=new StringBuffer();
-      for (int i=0;i<4;i++)
-      {
-        // Linker Nibble ;)
-        // 4 Byte nach rechts verschoben
-        byte ch = rawData[20+i];
-    	byte nibble=(byte)((ch>>4) & 0x0F);
-    	if (nibble > 0x09)
-           nibble ^= 0x0F;
-    	
-        blz.append((char)(nibble + 0x30)); // In ASCII-Bereich verschieben
+    StringBuffer blz=new StringBuffer();
+    for (int i=0;i<4;i++)
+    {
+      // Linker Nibble ;)
+      // 4 Byte nach rechts verschoben
+      byte ch = rawData[20+i];
+  	byte nibble=(byte)((ch>>4) & 0x0F);
+  	if (nibble > 0x09)
+         nibble ^= 0x0F;
+  	
+      blz.append((char)(nibble + 0x30)); // In ASCII-Bereich verschieben
 
-        // Rechter Nibble
-        nibble=(byte)(ch & 0x0F);
-        if (nibble > 0x09)
-          nibble ^= 0x0F;
-        
-        blz.append((char)(nibble + 0x30));
-      }
-      ret.blz=blz.toString();
+      // Rechter Nibble
+      nibble=(byte)(ch & 0x0F);
+      if (nibble > 0x09)
+        nibble ^= 0x0F;
       
-      ret.commType  = rawData[24];
-      ret.commaddr  = new String(rawData,25,28,"ISO-8859-1").trim();
-      ret.commaddr2 = new String(rawData,53,2, "ISO-8859-1").trim();
-      ret.country   = new String(rawData,55,3, "ISO-8859-1").trim();
-      ret.userid    = new String(rawData,58,30,"ISO-8859-1").trim();
-      
-      return ret;
+      blz.append((char)(nibble + 0x30));
     }
-    catch (HBCI_Exception e1)
-    {
-      throw e1;
-    }
-    catch (Exception e2)
-    {
-      throw new HBCI_Exception(e2);
-    }
+    ret.blz=blz.toString();
+    
+    ret.commType  = rawData[24];
+    ret.commaddr  = new String(rawData,25,28,SmartCardService.CHARSET).trim();
+    ret.commaddr2 = new String(rawData,53,2, SmartCardService.CHARSET).trim();
+    ret.country   = new String(rawData,55,3, SmartCardService.CHARSET).trim();
+    ret.userid    = new String(rawData,58,30,SmartCardService.CHARSET).trim();
+    
+    return ret;
   }
   
   /**
@@ -118,41 +115,30 @@ public abstract class DDVCardService extends HBCICardService
    */
   public void writeBankData(int idx,DDVBankData bankData)
   {
-    try
+    byte[] rawData=new byte[88];
+    
+    System.arraycopy(expand(bankData.shortname,20),0, rawData,0, 20);
+    
+    byte[] blzData=bankData.blz.getBytes(SmartCardService.CHARSET);
+    for (int i=0;i<4;i++)
     {
-      byte[] rawData=new byte[88];
-      
-      System.arraycopy(expand(bankData.shortname,20),0, rawData,0, 20);
-      
-      byte[] blzData=bankData.blz.getBytes("ISO-8859-1");
-      for (int i=0;i<4;i++)
-      {
-      	byte ch1=(byte)(blzData[i<<1    ]-0x30);
-      	byte ch2=(byte)(blzData[(i<<1)+1]-0x30);
-      	
-      	if (ch1==2 && ch2==0) {
-      		ch1^=0x0F;
-      	}
-      	
-        rawData[20+i] = (byte)((ch1<<4)|ch2);
-      }
-      
-      rawData[24]=(byte)bankData.commType;
-      System.arraycopy(expand(bankData.commaddr,28),0, rawData,25, 28);
-      System.arraycopy(expand(bankData.commaddr2,2),0, rawData,53, 2);
-      System.arraycopy(expand(bankData.country,3),  0, rawData,55, 3);
-      System.arraycopy(expand(bankData.userid,30),  0, rawData,58, 30);
-      
-      updateRecordBySFI(HBCI_DDV_EF_BNK,idx,rawData);
+    	byte ch1=(byte)(blzData[i<<1    ]-0x30);
+    	byte ch2=(byte)(blzData[(i<<1)+1]-0x30);
+    	
+    	if (ch1==2 && ch2==0) {
+    		ch1^=0x0F;
+    	}
+    	
+      rawData[20+i] = (byte)((ch1<<4)|ch2);
     }
-    catch (HBCI_Exception e1)
-    {
-      throw e1;
-    }
-    catch (Exception e2)
-    {
-      throw new HBCI_Exception(e2);
-    }
+    
+    rawData[24]=(byte)bankData.commType;
+    System.arraycopy(expand(bankData.commaddr,28),0, rawData,25, 28);
+    System.arraycopy(expand(bankData.commaddr2,2),0, rawData,53, 2);
+    System.arraycopy(expand(bankData.country,3),  0, rawData,55, 3);
+    System.arraycopy(expand(bankData.userid,30),  0, rawData,58, 30);
+    
+    updateRecordBySFI(HBCI_DDV_EF_BNK,idx,rawData);
   }
   
   /**
@@ -238,5 +224,39 @@ public abstract class DDVCardService extends HBCICardService
     }
     
     return plaindata;
+  }
+  
+  /**
+   * @see org.kapott.hbci.smartcardio.HBCICardService#createPINVerificationDataStructure(int)
+   */
+  @Override
+  protected byte[] createPINVerificationDataStructure(int pwdId) throws IOException
+  {
+    ByteArrayOutputStream verifyCommand = new ByteArrayOutputStream();
+    verifyCommand.write(0x0f); // bTimeOut
+    verifyCommand.write(0x05); // bTimeOut2
+    verifyCommand.write(0x89); // bmFormatString
+    verifyCommand.write(0x07); // bmPINBlockString
+    verifyCommand.write(0x10); // bmPINLengthFormat
+    verifyCommand.write(new byte[] {(byte) 8,(byte) 4}); // PIN size (max/min), volker: 12,4=>8,4
+    verifyCommand.write(0x02); // bEntryValidationCondition
+    verifyCommand.write(0x01); // bNumberMessage
+    verifyCommand.write(new byte[] { 0x04, 0x09 }); // wLangId, volker: 13,8=>4,9
+    verifyCommand.write(0x00); // bMsgIndex
+    verifyCommand.write(new byte[] { 0x00, 0x00, 0x00 }); // bTeoPrologue
+    byte[] verifyApdu = new byte[] {
+        SECCOS_CLA_STD, // CLA
+        SECCOS_INS_VERIFY, // INS
+        0x00, // P1
+        (byte) (SECCOS_PWD_TYPE_DF|pwdId), // P2 volker: 01=>81
+        0x08, // Lc = 8 bytes in command data
+        (byte) 0x25, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,//volker:0x20=>0x25
+        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
+    verifyCommand.write(verifyApdu.length & 0xff); // ulDataLength[0]
+    verifyCommand.write(0x00); // ulDataLength[1]
+    verifyCommand.write(0x00); // ulDataLength[2]
+    verifyCommand.write(0x00); // ulDataLength[3]
+    verifyCommand.write(verifyApdu); // abData
+    return verifyCommand.toByteArray();
   }
 }

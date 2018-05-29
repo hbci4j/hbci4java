@@ -30,9 +30,9 @@ import javax.smartcardio.CommandAPDU;
 public class DDVCardService1 extends DDVCardService
 {
   /**
-   * @see org.kapott.hbci.smartcardio.HBCICardService#init(javax.smartcardio.Card)
+   * @see org.kapott.hbci.smartcardio.SmartCardService#init(javax.smartcardio.Card)
    */
-  public void init(Card card)
+  protected void init(Card card)
   {
     super.init(card);
 

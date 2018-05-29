@@ -13,7 +13,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 import javax.crypto.Cipher;
@@ -24,10 +23,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEParameterSpec;
-import javax.smartcardio.Card;
-import javax.smartcardio.CardTerminal;
-import javax.smartcardio.CardTerminals;
-import javax.smartcardio.TerminalFactory;
 
 import org.kapott.cryptalgs.SignatureParamSpec;
 import org.kapott.hbci.callback.HBCICallback;
@@ -41,6 +36,7 @@ import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.smartcardio.RSABankData;
 import org.kapott.hbci.smartcardio.RSACardService;
 import org.kapott.hbci.smartcardio.RSAKeyData;
+import org.kapott.hbci.smartcardio.SmartCardService;
 
 /**
  * HBCI-Passport fuer RDH-Chipkarten.
@@ -69,7 +65,6 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
     private String bankId;
     private String defaultCustomerId;
     
-    private Card smartCard;
     private RSACardService cardService;
     
     /**
@@ -793,63 +788,14 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
         }
     }
     
-    protected void initCT() {
-        try {
-            TerminalFactory terminalFactory = TerminalFactory.getDefault();
-            CardTerminals terminals = terminalFactory.terminals();
-            if (terminals == null)
-                throw new HBCI_Exception("Kein Kartenleser gefunden");
-            
-            List<CardTerminal> list = terminals.list();
-            if (list == null || list.size() == 0)
-                throw new HBCI_Exception("Kein Kartenleser gefunden");
-            
-            HBCIUtils.log("found card terminals:", HBCIUtils.LOG_INFO);
-            for (CardTerminal t : list) {
-                HBCIUtils.log("  " + t.getName(), HBCIUtils.LOG_INFO);
-            }
-
-            CardTerminal terminal = null;
-
-            // Checken, ob der User einen konkreten Kartenleser vorgegeben hat
-            String name = HBCIUtils.getParam(getParamHeader() + ".pcsc.name", null);
-            if (name != null) {
-                HBCIUtils.log("explicit terminal name given, trying to open terminal: " + name, HBCIUtils.LOG_DEBUG);
-                terminal = terminals.getTerminal(name);
-                if (terminal == null)
-                    throw new HBCI_Exception("Kartenleser \"" + name + "\" nicht gefunden");
-            } else {
-                HBCIUtils.log("open first available card terminal", HBCIUtils.LOG_DEBUG);
-                terminal = list.get(0);
-            }
-            HBCIUtils.log("using card terminal " + terminal.getName(), HBCIUtils.LOG_DEBUG);
-
-            // wait for card
-            if (!terminal.waitForCardPresent(60 * 1000L))
-              throw new HBCI_Exception("Keine Chipkarte in Kartenleser " + terminal.getName() + " gefunden");
-
-            this.smartCard = terminal.connect("T=1");
-            
-            this.cardService = new RSACardService();
-            HBCIUtils.log(" using: " + this.cardService.getClass().getName(),HBCIUtils.LOG_INFO);
-            this.cardService.init(this.smartCard);
-            
-            // getCID
-            byte[] cid = this.cardService.getCID();
-            this.setCID(new String(cid, "ISO-8859-1"));
-            
-            // extract card id
-            StringBuffer cardId = new StringBuffer();
-            for (int i = 0; i < cid.length; i++) {
-                cardId.append((char) (((cid[i] >> 4) & 0x0F) + 0x30));
-                cardId.append((char) ((cid[i] & 0x0F) + 0x30));
-            }
-            this.setCardId(cardId.toString());
-        } catch (HBCI_Exception he) {
-            throw he;
-        } catch (Exception e) {
-            throw new HBCI_Exception(e);
-        }
+    /**
+     * Initialisiert die Karte.
+     */
+    protected void initCT()
+    {
+      this.cardService = SmartCardService.createInstance(RSACardService.class,HBCIUtils.getParam(getParamHeader() + ".pcsc.name", null));
+      this.setCID(this.cardService.getCID());
+      this.setCardId(this.cardService.getCardId());
     }
     
     protected void ctEnterPIN() {
@@ -961,15 +907,17 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
         return cardService.decipher(idx, data);
     }
     
-    protected void closeCT() {
-        try {
-            if (smartCard!=null)
-                smartCard.disconnect(false);
-        } catch (HBCI_Exception e1) {
-            throw e1;
-        } catch (Exception e2) {
-            throw new HBCI_Exception(e2);
-        }
+    protected void closeCT()
+    {
+      try
+      {
+        if (this.cardService != null)
+          this.cardService.close();
+      }
+      finally
+      {
+        this.cardService = null;
+      }
     }
 
 }
