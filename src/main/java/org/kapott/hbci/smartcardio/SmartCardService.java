@@ -622,9 +622,7 @@ public abstract class SmartCardService
       sb.append((byte)(bytes[i] & 0x0f));
     }
     
-    // Ggf. fuehrende Null entfernen
-    String text = sb.toString();
-    return text.startsWith("0") ? sb.substring(1) : text;
+    return sb.toString();
   }
   
   /**
