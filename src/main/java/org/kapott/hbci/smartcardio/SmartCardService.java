@@ -567,6 +567,17 @@ public abstract class SmartCardService
    */
   protected final String toHex(byte[] bytes)
   {
+    return this.toHex(bytes," ");
+  }
+  
+  /**
+   * Konvertiert die Bytes in HEX-Darstellung.
+   * @param bytes
+   * @param sep Separator-Zeichen.
+   * @return String-Repraesentation.
+   */
+  protected final String toHex(byte[] bytes, String sep)
+  {
     StringBuffer sb = new StringBuffer();
     for (byte b:bytes)
     {
@@ -574,9 +585,46 @@ public abstract class SmartCardService
       if (s.length() == 1)
         sb.append("0");
       sb.append(s);
-      sb.append(" ");
+      
+      if (sep != null)
+        sb.append(sep);
     }
     return sb.toString();
+  }
+  
+  /**
+   * Konvertiert den HEX-String zurueck in ein Byte-Array.
+   * @param hex der Text in HEX-Schreibweise.
+   * @return das Byte-Array.
+   */
+  public byte[] toBytes(String hex)
+  {
+    byte[] result = new byte[hex.length() / 2];
+    for (int i=0;i<result.length;i++)
+    {
+      int index = i * 2;
+      result[i] = (byte) Integer.parseUnsignedInt(hex.substring(index,index+2),16);
+    }
+    return result;
+  }
+
+  /**
+   * Konvertiert die BCD-codierten Daten zurueck in einen String.
+   * @param bytes die Bytes.
+   * @return der String.
+   */
+  public String fromBCD(byte[] bytes)
+  {
+    StringBuilder sb = new StringBuilder();
+    for(int i=0;i<bytes.length;i++)
+    {
+      sb.append((byte)((bytes[i] & 0xf0)>>4));
+      sb.append((byte)(bytes[i] & 0x0f));
+    }
+    
+    // Ggf. fuehrende Null entfernen
+    String text = sb.toString();
+    return text.startsWith("0") ? sb.substring(1) : text;
   }
   
   /**
