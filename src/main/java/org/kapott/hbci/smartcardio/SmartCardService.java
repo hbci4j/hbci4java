@@ -618,8 +618,8 @@ public abstract class SmartCardService
     StringBuilder sb = new StringBuilder();
     for(int i=0;i<bytes.length;i++)
     {
-      sb.append((byte)((bytes[i] & 0xf0)>>4));
-      sb.append((byte)(bytes[i] & 0x0f));
+      sb.append((byte)((bytes[i] & 0xf0)>>4)); // mit 0xf0 UNDen, um das linke Halbbyte zu erhalten und dann 4 Bit nach rechts verschieben
+      sb.append((byte)(bytes[i] & 0x0f));      // mit 0x0f UNDen, um das rechte Halbbyte zu erhalten
     }
     
     return sb.toString();
