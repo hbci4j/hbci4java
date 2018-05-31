@@ -603,7 +603,7 @@ public abstract class SmartCardService
     for (int i=0;i<result.length;i++)
     {
       int index = i * 2;
-      result[i] = (byte) Integer.parseUnsignedInt(hex.substring(index,index+2),16);
+      result[i] = (byte) Integer.parseInt(hex.substring(index,index+2),16);
     }
     return result;
   }
