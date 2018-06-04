@@ -74,7 +74,7 @@ public class ChipTanCardService extends SmartCardService
           {
             byte[] tanBytes = new byte[tanLength];
             System.arraycopy(data,1,tanBytes,0,tanLength);
-            tan = this.fromBCD(tanBytes);
+            tan = this.parseTAN(tanBytes);
           }
         }
       }
@@ -115,6 +115,30 @@ public class ChipTanCardService extends SmartCardService
       throw new HBCI_Exception(e2);
     }
   }
+  
+  /**
+   * Konvertiert die BCD-codierte TAN in einen String.
+   * @param bytes die Bytes.
+   * @return der String.
+   */
+  public String parseTAN(byte[] bytes)
+  {
+    StringBuilder sb = new StringBuilder();
+    for(int i=0;i<bytes.length;i++)
+    {
+      byte b1 = (byte)((bytes[i] & 0xf0)>>4); // mit 0xf0 UNDen, um das linke Halbbyte zu erhalten und dann 4 Bit nach rechts verschieben
+      byte b2 = (byte)(bytes[i] & 0x0f);      // mit 0x0f UNDen, um das rechte Halbbyte zu erhalten
+      
+      sb.append(b1);
+
+      // Wenn die TAN eine ungerade Anzahl Stellen hat, wird das letzte Halbbyte
+      // mit "F" belegt.
+      if (i+1 == bytes.length && b2 == 0x0f)
+        break;
+      
+      sb.append(b2);      
+    }
+    
+    return sb.toString();
+  }
 }
-
-
