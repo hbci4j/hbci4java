@@ -97,7 +97,12 @@ public class ChipTanCardService extends SmartCardService
         
         byte[] response = this.getCard().transmitControlCommand(this.getFeatures().get(FEATURE_MCT_READER_DIRECT),cmd.toByteArray());
         ResponseAPDU apdu = new ResponseAPDU(response);
-        this.check(apdu,new byte[]{(byte)0x90,(byte)0x91});
+        
+        // Wir tolerieren hier auch 0x6D. Das liefert der Kartenleser,
+        // wenn er das Kommando nicht unterstuetzt. Die TAN haben wir
+        // ja bereits. Wenn das finalize danach nicht unterstuetzt wird,
+        // lassen wir das durchgehen.
+        this.check(apdu,new byte[]{(byte)0x90,(byte)0x91, (byte) 0x6D});
       }
       
       HBCIUtils.log("returning TAN",HBCIUtils.LOG_INFO);
