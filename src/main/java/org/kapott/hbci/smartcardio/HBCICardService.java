@@ -30,7 +30,7 @@ public abstract class HBCICardService extends SmartCardService
   {
     try
     {
-      byte[] response = this.getCard().transmitControlCommand(this.getFeatures().get(FEATURE_VERIFY_PIN_DIRECT),this.createPINVerificationDataStructure(pwdId));
+      byte[] response = this.getCard().transmitControlCommand(this.getFeatures().get(Feature.FEATURE_VERIFY_PIN_DIRECT),this.createPINVerificationDataStructure(pwdId));
       
       ResponseAPDU apdu = new ResponseAPDU(response);
 

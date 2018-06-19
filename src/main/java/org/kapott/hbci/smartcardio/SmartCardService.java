@@ -127,42 +127,64 @@ public abstract class SmartCardService
   final static byte SECCOS_SM_RESP_DESCR    = (byte) 0xba;
   final static byte SECCOS_SM_VALUE_LE      = (byte) 0x96;
   
-  private final static String[] FEATURES = new String[]
-  {
-    "NO_FEATURE",
-    "FEATURE_VERIFY_PIN_START",
-    "FEATURE_VERIFY_PIN_FINISH",
-    "FEATURE_MODIFY_PIN_START",
-    "FEATURE_MODIFY_PIN_FINISH",
-    "FEATURE_GET_KEY_PRESSED",
-    "FEATURE_VERIFY_PIN_DIRECT",
-    "FEATURE_MODIFY_PIN_DIRECT",
-    "FEATURE_MCT_READER_DIRECT",
-    "FEATURE_MCT_UNIVERSAL",
-    "FEATURE_IFD_PIN_PROPERTIES",
-    "FEATURE_ABORT",
-    "FEATURE_SET_SPE_MESSAGE",
-    "FEATURE_VERIFY_PIN_DIRECT_APP_ID",
-    "FEATURE_MODIFY_PIN_DIRECT_APP_ID",
-    "FEATURE_WRITE_DISPLAY",
-    "FEATURE_GET_KEY",
-    "FEATURE_IFD_DISPLAY_PROPERTIES",
-    "FEATURE_GET_TLV_PROPERTIES", // NEU
-    "FEATURE_CCID_ESC_COMMAND" //NEU
-  };
-
-  final static Byte FEATURE_VERIFY_PIN_START   = new Byte((byte) 0x01);
-  final static Byte FEATURE_VERIFY_PIN_FINISH  = new Byte((byte) 0x02);
-  final static Byte FEATURE_GET_KEY_PRESSED    = new Byte((byte) 0x05);
-  final static Byte FEATURE_VERIFY_PIN_DIRECT  = new Byte((byte) 0x06);
-  final static Byte FEATURE_MCT_READER_DIRECT  = new Byte((byte) 0x08);
-  final static Byte FEATURE_MCT_UNIVERSAL      = new Byte((byte) 0x09);
-  final static Byte FEATURE_IFD_PIN_PROPERTIES = new Byte((byte) 0x0a);
-
   private final static int IOCTL_GET_FEATURE_REQUEST = SCARD_CTL_CODE(3400);
 
-  private Map<Byte, Integer> features = new HashMap<Byte,Integer>();
+  private Map<Feature, Integer> features = new HashMap<Feature,Integer>();
   private Card smartCard = null;
+  
+  /**
+   * Kapselt die Features der Karte.
+   */
+  protected enum Feature
+  {
+    FEATURE_VERIFY_PIN_START((byte) 0x01),
+    FEATURE_VERIFY_PIN_FINISH((byte) 0x02),
+    FEATURE_MODIFY_PIN_START((byte) 0x03),
+    FEATURE_MODIFY_PIN_FINISH((byte) 0x04),
+    FEATURE_GET_KEY_PRESSED((byte) 0x05),
+    FEATURE_VERIFY_PIN_DIRECT((byte) 0x06),
+    FEATURE_MODIFY_PIN_DIRECT((byte) 0x07),
+    FEATURE_MCT_READER_DIRECT((byte) 0x08),
+    FEATURE_MCT_UNIVERSAL((byte) 0x09),
+    FEATURE_IFD_PIN_PROPERTIES((byte) 0x0a),
+    FEATURE_ABORT((byte) 0x0b),
+    FEATURE_SET_SPE_MESSAGE((byte) 0x0c),
+    FEATURE_VERIFY_PIN_DIRECT_APP_ID((byte) 0x0d),
+    FEATURE_MODIFY_PIN_DIRECT_APP_ID((byte) 0x0e),
+    FEATURE_WRITE_DISPLAY((byte) 0x0f),
+    FEATURE_GET_KEY((byte) 0x10),
+    FEATURE_IFD_DISPLAY_PROPERTIES((byte) 0x11),
+    FEATURE_GET_TLV_PROPERTIES((byte) 0x12),
+    FEATURE_CCID_ESC_COMMAND((byte) 0x13),
+    FEATURE_EXECUTE_PACE((byte) 0x20)
+    ;
+    
+    private byte number;
+    
+    /**
+     * ct.
+     * @param number die Feature-Nummer.
+     */
+    private Feature(byte number)
+    {
+      this.number = number;
+    }
+    
+    /**
+     * Liefert das Feature mit der angegebenen Feature-Nummer.
+     * @param b das Byte mit der Feature-Nummer.
+     * @return das Feature oder NULL, wenn es nicht existiert.
+     */
+    private static Feature find(byte b)
+    {
+      for (Feature f:Feature.values())
+      {
+        if (b == f.number)
+          return f;
+      }
+      return null;
+    }
+  }
   
   /**
    * Erzeut eine neue Instanz des Card-Service fuer die angegebene Karte.
@@ -308,22 +330,19 @@ public abstract class SmartCardService
       byte[] response = this.smartCard.transmitControlCommand(IOCTL_GET_FEATURE_REQUEST, new byte[0]);
       for (int i = 0; i < response.length; i += 6)
       {
-        Byte feature = new Byte(response[i]);
         Integer ioctl = new Integer((0xff & response[i + 2]) << 24)
                                  | ((0xff & response[i + 3]) << 16)
                                  | ((0xff & response[i + 4]) << 8)
                                  | (0xff & response[i + 5]);
         
-        String name = null;
-        try
+        Feature feature = Feature.find(response[i]);
+        if (feature == null)
         {
-          name = FEATURES[feature.intValue()];
+          HBCIUtils.log("  unknown feature: " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
+          continue;
         }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
-          name = "FEATURE_UNKNOWN";
-        }
-        HBCIUtils.log("  " +  name + ": " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
+        
+        HBCIUtils.log("  " +  feature.name() + ": " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
         features.put(feature, ioctl);
       }      
     }
@@ -337,7 +356,7 @@ public abstract class SmartCardService
    * Liefert die Map mit den verfuegbaren Features.
    * @return die Map mit den verfuegbaren Features.
    */
-  protected final Map<Byte, Integer> getFeatures()
+  protected final Map<Feature, Integer> getFeatures()
   {
     return Collections.unmodifiableMap(features);
   }

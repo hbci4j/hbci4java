@@ -57,7 +57,10 @@ public class ChipTanCardService extends SmartCardService
 
         // "transmitControlCommand" verwendet intern "ScardControl"
         // "getBasicChannel().transmit()" verwendet intern "ScardTransmit"
-        byte[] response = this.getCard().transmitControlCommand(this.getFeatures().get(FEATURE_MCT_READER_DIRECT),request);
+        Integer feature = this.getFeatures().get(Feature.FEATURE_MCT_READER_DIRECT);
+        if (feature == null)
+          throw new HBCI_Exception("card reader does not support feature " + Feature.FEATURE_MCT_READER_DIRECT.name());
+        byte[] response = this.getCard().transmitControlCommand(feature,request);
         ResponseAPDU apdu = new ResponseAPDU(response);
         this.check(apdu,new byte[]{(byte)0x90,(byte)0x91});
         
@@ -95,7 +98,7 @@ public class ChipTanCardService extends SmartCardService
         cmd.write(0x00);                                     // Control Byte
         cmd.write(new byte[]{0x00,0x00});                    // Le Le
         
-        byte[] response = this.getCard().transmitControlCommand(this.getFeatures().get(FEATURE_MCT_READER_DIRECT),cmd.toByteArray());
+        byte[] response = this.getCard().transmitControlCommand(this.getFeatures().get(Feature.FEATURE_MCT_READER_DIRECT),cmd.toByteArray());
         ResponseAPDU apdu = new ResponseAPDU(response);
         
         // Wir tolerieren hier auch 0x6D. Das liefert der Kartenleser,
