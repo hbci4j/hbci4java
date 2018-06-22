@@ -498,7 +498,7 @@ public abstract class SmartCardService
     // 0x90: Alles OK
     // 0x61: Warnung - im Response sind noch Bytes verfuegbar. Da wir das Response
     //       hier aber eh nicht brauchen, koennen wir das tolerieren
-    _receive(command,new byte[]{(byte)0x90,(byte)0x61});
+    receive(command,new byte[]{(byte)0x90,(byte)0x61});
   }
 
   /**
@@ -509,7 +509,7 @@ public abstract class SmartCardService
    */
   protected final byte[] receive(CommandAPDU command)
   {
-    return _receive(command,new byte[]{(byte)0x90});
+    return receive(command,new byte[]{(byte)0x90});
   }
 
   /**
@@ -519,7 +519,7 @@ public abstract class SmartCardService
    * @param returncodes zulaessige Return-Codes.
    * @return die Antwort.
    */
-  private byte[] _receive(CommandAPDU command, byte[] returncodes)
+  protected byte[] receive(CommandAPDU command, byte[] returncodes)
   {
     try
     {
