@@ -348,7 +348,8 @@ public abstract class SmartCardService
     }
     catch (Exception e)
     {
-      throw new HBCI_Exception(e);
+      HBCIUtils.log("unable to query features, continuing without having a feature set, error: " + e.getMessage(),HBCIUtils.LOG_WARN);
+      HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
     }
   }
   
