@@ -4132,7 +4132,7 @@
             <value path="SegHead.version">6</value>
         </SEGdef>
 
-        <SEGdef id="KUmsNewSEPA7"> <!-- 3.0 -->
+        <SEGdef id="KUmsNew7"> <!-- 3.0 -->
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTVInt" name="KTV"/>
             <DE name="allaccounts" type="JN"/>
@@ -4142,7 +4142,7 @@
             <value path="SegHead.code">HKKAN</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
-        <SEGdef id="KUmsNewSEPARes7">
+        <SEGdef id="KUmsNewRes7">
             <DEG type="SegHeadInst" name="SegHead"/>
             <DE name="booked" type="Bin" maxsize="0"/>
             <DE name="notbooked" type="Bin" maxsize="0" minnum="0"/>
@@ -4150,9 +4150,9 @@
             <value path="SegHead.code">HIKAN</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
-        <SEGdef id="KUmsNewSEPAPar7">
+        <SEGdef id="KUmsNewPar7">
             &GVP2;
-            <DEG type="ParKUmsNew2" name="ParKUmsNewSEPA"/>
+            <DEG type="ParKUmsNew2" name="ParKUmsNew"/>
             
             &SecClassValids;
             
@@ -4246,7 +4246,7 @@
             <value path="SegHead.version">6</value>
         </SEGdef>
         
-        <SEGdef id="KUmsZeitSEPA7"> <!-- 3.0 -->
+        <SEGdef id="KUmsZeit7"> <!-- 3.0 -->
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTVInt" name="KTV"/>
             <DE name="allaccounts" type="JN"/>
@@ -4258,7 +4258,7 @@
             <value path="SegHead.code">HKKAZ</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
-        <SEGdef id="KUmsZeitSEPARes7">
+        <SEGdef id="KUmsZeitRes7">
             <DEG type="SegHeadInst" name="SegHead"/>
             <DE name="booked" type="Bin" maxsize="0"/>
             <DE name="notbooked" type="Bin" maxsize="0" minnum="0"/>
@@ -4266,9 +4266,9 @@
             <value path="SegHead.code">HIKAZ</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
-        <SEGdef id="KUmsZeitSEPAPar7">
+        <SEGdef id="KUmsZeitPar7">
             &GVP2;
-            <DEG type="ParKUmsZeit2" name="ParKUmsZeitSEPA"/>
+            <DEG type="ParKUmsZeit2" name="ParKUmsZeit"/>
             
             &SecClassValids;
             
@@ -7325,11 +7325,11 @@
             <SEG type="KUmsNew4" minnum="0"/>
             <SEG type="KUmsNew5" minnum="0"/>
             <SEG type="KUmsNew6" minnum="0"/>
-            <SEG type="KUmsNewSEPA7" minnum="0"/>
+            <SEG type="KUmsNew7" minnum="0"/>
             <SEG type="KUmsZeit4" minnum="0"/>
             <SEG type="KUmsZeit5" minnum="0"/>
             <SEG type="KUmsZeit6" minnum="0"/>
-            <SEG type="KUmsZeitSEPA7" minnum="0"/>
+            <SEG type="KUmsZeit7" minnum="0"/>
             <SEG type="Last2" minnum="0"/>
             <SEG type="Last3" minnum="0"/>
             <SEG type="Last4" minnum="0"/>
@@ -7482,11 +7482,11 @@
             <SEG type="KUmsNewRes4" minnum="0"/>
             <SEG type="KUmsNewRes5" minnum="0"/>
             <SEG type="KUmsNewRes6" minnum="0"/>
-            <SEG type="KUmsNewSEPARes7" minnum="0"/>
+            <SEG type="KUmsNewRes7" minnum="0"/>
             <SEG type="KUmsZeitRes4" minnum="0"/>
             <SEG type="KUmsZeitRes5" minnum="0"/>
             <SEG type="KUmsZeitRes6" minnum="0"/>
-            <SEG type="KUmsZeitSEPARes7" minnum="0"/>
+            <SEG type="KUmsZeitRes7" minnum="0"/>
             <SEG type="LastSEPARes1" minnum="0"/>
             <SEG type="LastCOR1SEPARes1" minnum="0"/>
             <SEG type="LastB2BSEPARes1" minnum="0"/>
@@ -7617,11 +7617,11 @@
             <SEG type="KUmsNewPar4" minnum="0"/>
             <SEG type="KUmsNewPar5" minnum="0"/>
             <SEG type="KUmsNewPar6" minnum="0"/>
-            <SEG type="KUmsNewSEPAPar7" minnum="0"/>
+            <SEG type="KUmsNewPar7" minnum="0"/>
             <SEG type="KUmsZeitPar4" minnum="0"/>
             <SEG type="KUmsZeitPar5" minnum="0"/>
             <SEG type="KUmsZeitPar6" minnum="0"/>
-            <SEG type="KUmsZeitSEPAPar7" minnum="0"/>
+            <SEG type="KUmsZeitPar7" minnum="0"/>
             <SEG type="LastPar2" minnum="0"/>
             <SEG type="LastPar3" minnum="0"/>
             <SEG type="LastPar4" minnum="0"/>

@@ -26,31 +26,76 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.swift.Swift;
 
-public class GVKUmsAll
-    extends HBCIJobImpl
+/**
+ * Implementierung des Geschaeftsvorfalls zum Abruf von Umsaetzen mit Angabe des Zeitraums (HKKAZ).
+ */
+public class GVKUmsAll extends HBCIJobImpl
 {
+    /**
+     * @return der Lowlevelname.
+     */
     public static String getLowlevelName()
     {
         return "KUmsZeit";
     }
     
+    /**
+     * ct.
+     * @param handler
+     * @param name
+     */
     public GVKUmsAll(HBCIHandler handler,String name)
     {
         super(handler, name, new GVRKUms());
     }
 
+    /**
+     * ct.
+     * @param handler
+     */
     public GVKUmsAll(HBCIHandler handler)
     {
         this(handler,getLowlevelName());
 
-        addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
-        addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
-        addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
-        addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
+        
+        boolean sepa = false;
+        try
+        {
+          // Siehe auch GVKontoauszug/HKEKA. Die einzige Aenderung war die Umstellung
+          // der Bankverbindungsart von ktv auf kti (wegen IBAN-Support).
+          // Bei HKKAZ ist das ab Segment-Version 7 der Fall.
+          sepa = Integer.parseInt(this.getSegVersion()) >= 7; 
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log(e);
+        }
+        
+        // Dennoch kann es sein, dass die nationale Bankverbindung auch bei der
+        // SEPA-Variante noch mitgeschickt wird, wenn die Bank das zulaesst.
+        // (Es scheint auch Banken zu geben, die das in dem Fall nicht nur
+        // zulassen sondern erwarten).
+        boolean nat = this.canNationalAcc(handler);
+
+        if (sepa)
+        {
+          addConstraint("my.bic",  "KTV.bic",  null, LogFilter.FILTER_MOST);
+          addConstraint("my.iban", "KTV.iban", null, LogFilter.FILTER_IDS);
+        }
+
+        if (nat || !sepa)
+        {
+          addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
+          addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
+          addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
+          addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
+        }
+
         //currency wird in neueren Versionen nicht mehr benötigt, constraint liefert unnötige Warnung
         //im Prinzip müsste es möglich sein, die constraints versionsabhängig zu definieren
         //addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
