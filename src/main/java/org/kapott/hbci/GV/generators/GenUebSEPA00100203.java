@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.GV.SepaUtil;
-import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ActiveOrHistoricCurrencyAndAmountSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ActiveOrHistoricCurrencyCodeEUR;
@@ -42,9 +42,9 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator
      * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getPainVersion()
      */
     @Override
-    public PainVersion getPainVersion()
+    public SepaVersion getPainVersion()
     {
-        return PainVersion.PAIN_001_002_03;
+        return SepaVersion.PAIN_001_002_03;
     }
 
     /**

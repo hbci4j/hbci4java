@@ -9,19 +9,22 @@ import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
+/**
+ * Geschaeftsvorfall zum Loeschen von SEPA-Dauerauftraegen.
+ */
 public class GVDauerSEPADel extends AbstractSEPAGV {
 
-    private final static PainVersion DEFAULT = PainVersion.PAIN_001_001_02;
+    private final static SepaVersion DEFAULT = SepaVersion.PAIN_001_001_02;
     
     /**
      * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
      */
     @Override
-    protected PainVersion getDefaultPainVersion()
+    protected SepaVersion getDefaultPainVersion()
     {
         return DEFAULT;
     }
@@ -44,6 +47,10 @@ public class GVDauerSEPADel extends AbstractSEPAGV {
         return "DauerSEPADel";
     }
 
+    /**
+     * ct.
+     * @param handler
+     */
     public GVDauerSEPADel(HBCIHandler handler) {
         super(handler,getLowlevelName(), new GVRDauerEdit());
 
@@ -91,6 +98,9 @@ public class GVDauerSEPADel extends AbstractSEPAGV {
         
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
+     */
     public void setParam(String paramName,String value)
     {
         Properties res=getJobRestrictions();
@@ -162,6 +172,9 @@ public class GVDauerSEPADel extends AbstractSEPAGV {
         super.setParam(paramName,value);
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
+     */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         Properties result=msgstatus.getData();
@@ -183,6 +196,9 @@ public class GVDauerSEPADel extends AbstractSEPAGV {
         }
     }
     
+    /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
+     */
     public String getPainJobName() {
         return "UebSEPA";
     }

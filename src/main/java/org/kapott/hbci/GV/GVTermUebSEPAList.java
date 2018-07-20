@@ -34,21 +34,21 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
 public final class GVTermUebSEPAList extends AbstractSEPAGV
 {
-    private final static PainVersion DEFAULT = PainVersion.PAIN_001_001_02;
+    private final static SepaVersion DEFAULT = SepaVersion.PAIN_001_001_02;
 
     /**
      * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
      */
     @Override
-    protected PainVersion getDefaultPainVersion()
+    protected SepaVersion getDefaultPainVersion()
     {
         return DEFAULT;
     }
@@ -106,7 +106,7 @@ public final class GVTermUebSEPAList extends AbstractSEPAGV
         
         final String sepadescr    = result.getProperty(header+".sepadescr");
         final String pain         = result.getProperty(header+".sepapain");
-        final PainVersion version = PainVersion.choose(sepadescr,pain);
+        final SepaVersion version = SepaVersion.choose(sepadescr,pain);
 
         ISEPAParser parser = SEPAParserFactory.get(version);
         ArrayList<Properties> sepaResults = new ArrayList<Properties>();

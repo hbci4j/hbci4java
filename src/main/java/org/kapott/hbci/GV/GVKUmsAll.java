@@ -127,6 +127,9 @@ public class GVKUmsAll extends HBCIJobImpl
         jobResult.storeResult("notbooked",result.getProperty(header+".notbooked"));
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#verifyConstraints()
+     */
     public void verifyConstraints()
     {
         super.verifyConstraints();

@@ -28,7 +28,7 @@ import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.factory.MSGFactory;
-import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci4java.AbstractTest;
 
 /**
@@ -60,7 +60,7 @@ public class TestBug1806 extends AbstractTest
         continue;
       
       ByteArrayInputStream bis = new ByteArrayInputStream(ht.get(key).getBytes(Comm.ENCODING));
-      PainVersion version = PainVersion.autodetect(bis);
+      SepaVersion version = SepaVersion.autodetect(bis);
       Assert.assertNotNull(version);
       ISEPAParser parser = SEPAParserFactory.get(version);
       

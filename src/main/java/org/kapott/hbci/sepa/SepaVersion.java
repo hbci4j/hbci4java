@@ -11,7 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,40 +30,47 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- * Kapselt das Parsen und Vergleichen von SEPA Pain-Versionen.
- * @deprecated Bitte {@link SepaVersion} verwenden.
+ * Basis-Klasse fuer das Parsen und Vergleichen von SEPA Versionen (PAIN und CAMT).
  */
-@Deprecated
-public class PainVersion implements Comparable<PainVersion>
+public class SepaVersion implements Comparable<SepaVersion>
 {
+    private final static Pattern PATTERN = Pattern.compile("([a-z]{2,8})\\.(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
+    private final static Map<Type,List<SepaVersion>> knownVersions = new HashMap<Type,List<SepaVersion>>();
+    
     private final static String DF_MAJOR = "000";
     private final static String DF_MINOR = "00";
     
-    private final static Pattern PATTERN = Pattern.compile("(\\d\\d\\d)\\.(\\d\\d\\d)\\.(\\d\\d)");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_001_02 = new SepaVersion(1,"urn:sepade:xsd:pain.001.001.02",                "pain.001.001.02.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_002_02 = new SepaVersion(2,"urn:swift:xsd:$pain.001.002.02",                "pain.001.002.02.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_002_03 = new SepaVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.001.002.03","pain.001.002.03.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_003_03 = new SepaVersion(4,"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03","pain.001.003.03.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_001_03 = new SepaVersion(5,"urn:iso:std:iso:20022:tech:xsd:pain.001.001.03","pain.001.001.03.xsd");
+    
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_002_02 = new SepaVersion(1,"urn:swift:xsd:$pain.002.002.02",                "pain.002.002.02.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_003_03 = new SepaVersion(2,"urn:iso:std:iso:20022:tech:xsd:pain.002.003.03","pain.002.003.03.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_001_03 = new SepaVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03","pain.002.001.03.xsd");
+    
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_008_001_01 = new SepaVersion(1,"urn:sepade:xsd:pain.008.001.01",                "pain.008.001.01.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_008_002_01 = new SepaVersion(2,"urn:swift:xsd:$pain.008.002.01",                "pain.008.002.01.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_008_002_02 = new SepaVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.008.002.02","pain.008.002.02.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_008_003_02 = new SepaVersion(4,"urn:iso:std:iso:20022:tech:xsd:pain.008.003.02","pain.008.003.02.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion PAIN_008_001_02 = new SepaVersion(5,"urn:iso:std:iso:20022:tech:xsd:pain.008.001.02","pain.008.001.02.xsd");
 
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_02 = new PainVersion(1,"urn:sepade:xsd:pain.001.001.02",                "pain.001.001.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_02 = new PainVersion(2,"urn:swift:xsd:$pain.001.002.02",                "pain.001.002.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_002_03 = new PainVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.001.002.03","pain.001.002.03.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_003_03 = new PainVersion(4,"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03","pain.001.003.03.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_001_001_03 = new PainVersion(5,"urn:iso:std:iso:20022:tech:xsd:pain.001.001.03","pain.001.001.03.xsd");
-    
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_002_02 = new PainVersion(1,"urn:swift:xsd:$pain.002.002.02",                "pain.002.002.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_003_03 = new PainVersion(2,"urn:iso:std:iso:20022:tech:xsd:pain.002.003.03","pain.002.003.03.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_002_001_03 = new PainVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03","pain.002.001.03.xsd");
-    
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_001_01 = new PainVersion(1,"urn:sepade:xsd:pain.008.001.01",                "pain.008.001.01.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_01 = new PainVersion(2,"urn:swift:xsd:$pain.008.002.01",                "pain.008.002.01.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_002_02 = new PainVersion(3,"urn:iso:std:iso:20022:tech:xsd:pain.008.002.02","pain.008.002.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_003_02 = new PainVersion(4,"urn:iso:std:iso:20022:tech:xsd:pain.008.003.02","pain.008.003.02.xsd");
-    @SuppressWarnings("javadoc") public static PainVersion PAIN_008_001_02 = new PainVersion(5,"urn:iso:std:iso:20022:tech:xsd:pain.008.001.02","pain.008.001.02.xsd");
-    
-    private final static Map<Type,List<PainVersion>> knownVersion = new HashMap<Type,List<PainVersion>>()
-    {{
-        put(Type.PAIN_001,Collections.unmodifiableList(Arrays.asList(PAIN_001_001_02,PAIN_001_002_02,PAIN_001_002_03,PAIN_001_003_03,PAIN_001_001_03)));
-        put(Type.PAIN_002,Collections.unmodifiableList(Arrays.asList(PAIN_002_002_02,PAIN_002_003_03,PAIN_002_001_03)));
-        put(Type.PAIN_008,Collections.unmodifiableList(Arrays.asList(PAIN_008_001_01,PAIN_008_002_01,PAIN_008_002_02,PAIN_008_003_02,PAIN_008_001_02)));
-    }};
-    
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_01 = new SepaVersion(1,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.01","camt.052.001.01.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_02 = new SepaVersion(2,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.02","camt.052.001.02.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_03 = new SepaVersion(3,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.03","camt.052.001.03.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_04 = new SepaVersion(4,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.04","camt.052.001.04.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_05 = new SepaVersion(5,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.05","camt.052.001.05.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_06 = new SepaVersion(6,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.06","camt.052.001.06.xsd");
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_07 = new SepaVersion(7,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.07","camt.052.001.07.xsd");
+
+    private String urn  = null;
+    private String file = null;
+    private Type type   = null;
+    private int major   = 0;
+    private int minor   = 0;
+    private int order   = 0;
+
     /**
      * Enum fuer die Gruppierung der verschienden Typen von Geschaeftsvorfaellen.
      */
@@ -72,35 +79,54 @@ public class PainVersion implements Comparable<PainVersion>
         /**
          * Ueberweisungen.
          */
-        PAIN_001("001","credit transfer"),
+        PAIN_001("Pain","001","credit transfer"),
     
         /**
          * Kontoauszuege.
          */
-        PAIN_002("002","payment status"),
+        PAIN_002("Pain","002","payment status"),
         
         /**
          * Lastschriften.
          */
-        PAIN_008("008","direct debit");
+        PAIN_008("Pain","008","direct debit"),
+      
+        /**
+         * Umsaetze im CAMT.052-Format.
+         */
+        CAMT_052("Camt","052","bank to customer cash management"),
         
+        ;
+        
+        private String type  = null;
         private String value = null;
         private String name  = null;
         
         /**
          * ct.
+         * @param type
          * @param value
          * @param name
          */
-        private Type(String value, String name)
+        private Type(String type, String value, String name)
         {
+            this.type = type;
             this.value = value;
             this.name  = name;
         }
+
+        /**
+         * Liefert den Typ.
+         * @return type
+         */
+        public String getType()
+        {
+          return type;
+        }
         
         /**
-         * Liefert den numerischen Wert des PAIN-Typs.
-         * @return der numerischen Wert des PAIN-Typs.
+         * Liefert den numerischen Wert des Typs.
+         * @return der numerischen Wert des Typs.
          */
         public String getValue()
         {
@@ -108,60 +134,32 @@ public class PainVersion implements Comparable<PainVersion>
         }
         
         /**
-         * Liefert eine sprechende Bezeichnung des PAIN-Typs.
-         * @return eine sprechende Bezeichnung des PAIN-Typs.
+         * Liefert eine sprechende Bezeichnung des Typs.
+         * @return eine sprechende Bezeichnung des Typs.
          */
         public String getName()
         {
             return this.name;
         }
-        
-        /**
-         * Liefert den enum-Type fuer den angegebenen Wert.
-         * @param value der Wert. 001, 002 oder 008.
-         * @return der zugehoerige Enum-Wert.
-         * @throws IllegalArgumentException wenn der Typ unbekannt ist.
-         */
-        public static Type getType(String value) throws IllegalArgumentException
-        {
-            if (value != null && value.length() > 0)
-            {
-                for (Type t:Type.values())
-                {
-                    if (t.value.equals(value))
-                        return t;
-                }
-            }
-            
-            throw new IllegalArgumentException("unknown PAIN type: " + value);
-        }
     }
-    
-    private String urn  = null;
-    private String file = null;
-    private Type type   = null;
-    private int major   = 0;
-    private int minor   = 0;
-    private int order   = 0;
-    
-    
+
     /**
-     * Liefert die PAIN-Version aus dem URN.
+     * Liefert die SEPA-Version aus dem URN.
      * @param urn URN.
      * In der Form "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" oder in
      * der alten Form "sepade.pain.001.001.02.xsd".
-     * @return die PAIN-Version.
+     * @return die SEPA-Version.
      */
-    public static PainVersion byURN(String urn)
+    public static SepaVersion byURN(String urn)
     {
-        PainVersion test = new PainVersion(0,urn,null);
+      SepaVersion test = new SepaVersion(0,urn,null,false);
         
         if (urn == null || urn.length() == 0)
             return test;
         
-        for (List<PainVersion> types:knownVersion.values())
+        for (List<SepaVersion> types:knownVersions.values())
         {
-            for (PainVersion v:types)
+            for (SepaVersion v:types)
             {
                 if (v.equals(test))
                     return v;
@@ -171,55 +169,78 @@ public class PainVersion implements Comparable<PainVersion>
         // keine passende Version gefunden. Dann erzeugen wir selbst eine
         return test;
     }
-    
-    /**
-     * ct.
-     * Erzeugt eine neue PAIN-Version.
-     * @deprecated Bitte stattdessen {@link PainVersion#byURN(String)} verwenden.
-     * @param urn der URN.
-     */
-    @Deprecated
-    public PainVersion(String urn)
-    {
-        this(0,urn,null);
-    }
 
-    
     /**
-     * ct.
-     * Erzeugt eine neue PAIN-Version.
-     * @deprecated Bitte stattdessen {@link PainVersion#byURN(String)} verwenden.
-     * @param urn der URN.
-     * @param file Dateiname der Schema-Datei.
-     */
-    @Deprecated
-    public PainVersion(String urn, String file)
-    {
-        this(0,urn,file);
-    }
-    
-    /**
-     * Erzeugt eine PAIN-Version aus dem URN bzw dem Dateinamen.
+     * Erzeugt eine SEPA-Version aus dem URN bzw dem Dateinamen.
      * @param order die Reihenfolge bei der Sortierung.
      * @param urn URN.
      * In der Form "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" oder in
      * der alten Form "sepade.pain.001.001.02.xsd".
      * @param file Dateiname der Schema-Datei.
      */
-    private PainVersion(int order, String urn, String file)
+    private SepaVersion(int order, String urn, String file)
+    {
+        this(order,urn,file,true);
+    }
+
+    /**
+     * Erzeugt eine SEPA-Version aus dem URN bzw dem Dateinamen.
+     * @param order die Reihenfolge bei der Sortierung.
+     * @param urn URN.
+     * In der Form "urn:iso:std:iso:20022:tech:xsd:pain.001.002.03" oder in
+     * der alten Form "sepade.pain.001.001.02.xsd".
+     * @param file Dateiname der Schema-Datei.
+     * @param add true, wenn die Version zur Liste der bekannten Versionen hinzugefuegt werden soll.
+     */
+    private SepaVersion(int order, String urn, String file, boolean add)
     {
         Matcher m = PATTERN.matcher(urn);
-        if (!m.find() || m.groupCount() != 3)
-            throw new IllegalArgumentException("invalid pain-version: " + urn);
+        if (!m.find() || m.groupCount() != 4)
+            throw new IllegalArgumentException("invalid sepa-version: " + urn);
         
         this.order = order;
         this.urn   = urn;
         this.file  = file;
-        this.type  = Type.getType(m.group(1));
-        this.major = Integer.parseInt(m.group(2));
-        this.minor = Integer.parseInt(m.group(3));
+        this.type  = findType(m.group(1),m.group(2));
+        this.major = Integer.parseInt(m.group(3));
+        this.minor = Integer.parseInt(m.group(4));
+
+        // Zur Liste der bekannten Versionen hinzufuegen
+        if (add)
+        {
+            List<SepaVersion> list = knownVersions.get(this.type);
+            if (list == null)
+            {
+              list = new ArrayList<SepaVersion>();
+              knownVersions.put(type,list);
+            }
+            list.add(this);
+        }
     }
-    
+
+    /**
+     * Liefert den enum-Type fuer den angegebenen Wert.
+     * @param type der Type. "pain", "camt".
+     * @param value der Wert. 001, 002, 008, ....
+     * @return der zugehoerige Enum-Wert.
+     * @throws IllegalArgumentException wenn der Typ unbekannt ist.
+     */
+    private static Type findType(String type, String value) throws IllegalArgumentException
+    {
+      if (type == null || type.length() == 0)
+        throw new IllegalArgumentException("no SEPA type type given");
+      
+      if (value == null || value.length() == 0)
+        throw new IllegalArgumentException("no SEPA version value given");
+      
+      for (Type t:Type.values())
+      {
+          if (t.getType().equalsIgnoreCase(type) && t.getValue().equals(value))
+              return t;
+      }
+      throw new IllegalArgumentException("unknown SEPA version type: " + type + "." + value);
+    }
+
     /**
      * Liefert einen String "<URN> <FILE>" zurueck, der im erzeugten XML als
      * "xsi:schemaLocation" verwendet werden kann.
@@ -259,7 +280,9 @@ public class PainVersion implements Comparable<PainVersion>
     {
         StringBuilder sb = new StringBuilder();
         sb.append(ISEPAParser.class.getPackage().getName());
-        sb.append(".ParsePain");
+        sb.append(".Parse");
+        
+        sb.append(this.type.getType());
         sb.append(this.type.getValue());
         sb.append(new DecimalFormat(DF_MAJOR).format(this.major));
         sb.append(new DecimalFormat(DF_MINOR).format(this.minor));
@@ -268,7 +291,7 @@ public class PainVersion implements Comparable<PainVersion>
     }
     
     /**
-     * Prueft, ob die angegebene PAIN-Version fuer den angegebenen Job von HBCI4Java unterstuetzt wird.
+     * Prueft, ob die angegebene SEPA-Version fuer den angegebenen Job von HBCI4Java unterstuetzt wird.
      * @param jobName der Job-Name. Z.Bsp. "UebSEPA".
      * @return true, wenn sie unterstuetzt wird.
      */
@@ -286,8 +309,8 @@ public class PainVersion implements Comparable<PainVersion>
     }
     
     /**
-     * Liefert den Typ der PAIN-Version.
-     * @return der Typ der PAIN-Version.
+     * Liefert den Typ der SEPA-Version.
+     * @return der Typ der SEPA-Version.
      */
     public Type getType()
     {
@@ -313,8 +336,8 @@ public class PainVersion implements Comparable<PainVersion>
     }
     
     /**
-     * Liefert die URN der PAIN-Version.
-     * @return die URN der PAIN-Version.
+     * Liefert die URN der SEPA-Version.
+     * @return die URN der SEPA-Version.
      */
     public String getURN()
     {
@@ -331,11 +354,11 @@ public class PainVersion implements Comparable<PainVersion>
     }
     
     /**
-     * Findet in den der Liste die hoechste Pain-Version.
-     * @param list Liste mit PAIN-Versionen.
+     * Findet in den der Liste die hoechste SEPA-Version.
+     * @param list Liste mit SEPA-Versionen.
      * @return die hoechste Version oder NULL wenn die Liste leer ist.
      */
-    public static PainVersion findGreatest(List<PainVersion> list)
+    public static SepaVersion findGreatest(List<SepaVersion> list)
     {
         if (list == null || list.size() == 0)
             return null;
@@ -355,24 +378,24 @@ public class PainVersion implements Comparable<PainVersion>
     }
 
     /**
-     * Liefert eine Liste der bekannten PAIN-Versionen fuer den angegebenen Typ.
+     * Liefert eine Liste der bekannten SEPA-Versionen fuer den angegebenen Typ.
      * @param t der Typ.
-     * @return Liste der bekannten PAIN-Versionen fuer den angegebenen Typ.
+     * @return Liste der bekannten SEPA-Versionen fuer den angegebenen Typ.
      */
-    public static List<PainVersion> getKnownVersions(Type t)
+    public static List<SepaVersion> getKnownVersions(Type t)
     {
-        return knownVersion.get(t);
+        return knownVersions.get(t);
     }
     
     /**
-     * Ermittelt die PAIN-Version aus dem uebergebenen XML-Stream.
+     * Ermittelt die SEPA-Version aus dem uebergebenen XML-Stream.
      * @param xml der XML-Stream.
      * Achtung: Da der Stream hierbei gelesen werden muss, sollte eine Kopie des Streams uebergeben werden.
      * Denn nach dem Lesen des Streams, kann er nicht erneut gelesen werden.
      * Der Stream wird von dieser Methode nicht geschlossen. Das ist Aufgabe des Aufrufers.
-     * @return die ermittelte PAIN-Version oder NULL wenn das XML-Document keine entsprechenden Informationen enthielt.
+     * @return die ermittelte SEPA-Version oder NULL wenn das XML-Document keine entsprechenden Informationen enthielt.
      */
-    public static PainVersion autodetect(InputStream xml)
+    public static SepaVersion autodetect(InputStream xml)
     {
         try
         {
@@ -392,7 +415,7 @@ public class PainVersion implements Comparable<PainVersion>
             if (uri == null)
                 return null;
             
-            return PainVersion.byURN(uri);
+            return SepaVersion.byURN(uri);
         }
         catch (IllegalArgumentException e)
         {
@@ -406,16 +429,16 @@ public class PainVersion implements Comparable<PainVersion>
     
     /**
      * Die Bank sendet in ihren Antworten sowohl den SEPA-Deskriptor als auch die SEPA-Daten (die XML-Datei) selbst.
-     * Diese Funktion ermittelt sowohl aus dem SEPA-Deskriptor als auch aus den SEPA-Daten die angegebene PAIN-Version
+     * Diese Funktion ermittelt sowohl aus dem SEPA-Deskriptor als auch aus den SEPA-Daten die angegebene SEPA-Version
      * und vergleicht beide. Stimmen sie nicht ueberein, wird eine Warnung ausgegeben. Die Funktion liefert anschliessend
      * die zum Parsen passende Version zurueck. Falls sich die angegebenen Versionen unterscheiden, wird die in den
      * XML-Daten angegebene Version zurueckgeliefert.
      * Siehe https://www.willuhn.de/bugzilla/show_bug.cgi?id=1806
-     * @param sepadesc die in der HBCI-Nachricht angegebene PAIN-Version.
+     * @param sepadesc die in der HBCI-Nachricht angegebene SEPA-Version.
      * @param sepadata die eigentlichen XML-Daten.
-     * @return die zum Parsen zu verwendende PAIN-Version. NULL, wenn keinerlei Daten angegeben wurden.
+     * @return die zum Parsen zu verwendende SEPA-Version. NULL, wenn keinerlei Daten angegeben wurden.
      */
-    public static PainVersion choose(String sepadesc, String sepadata)
+    public static SepaVersion choose(String sepadesc, String sepadata)
     {
       final boolean haveDesc = sepadesc != null && sepadesc.length() > 0;
       final boolean haveData = sepadata != null && sepadata.length() > 0;
@@ -428,11 +451,11 @@ public class PainVersion implements Comparable<PainVersion>
       
       try
       {
-        final PainVersion versionDesc = haveDesc ? PainVersion.byURN(sepadesc) : null;
-        final PainVersion versionData = haveData ? PainVersion.autodetect(new ByteArrayInputStream(sepadata.getBytes(Comm.ENCODING))) : null;
+        final SepaVersion versionDesc = haveDesc ? SepaVersion.byURN(sepadesc) : null;
+        final SepaVersion versionData = haveData ? SepaVersion.autodetect(new ByteArrayInputStream(sepadata.getBytes(Comm.ENCODING))) : null;
         
-        HBCIUtils.log("pain version given in sepadescr: " + versionDesc,HBCIUtils.LOG_INFO);
-        HBCIUtils.log("pain version according to data: " + versionData,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("sepa version given in sepadescr: " + versionDesc,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("sepa version according to data: " + versionData,HBCIUtils.LOG_INFO);
         
         // Wir haben keine Version im Deskriptor, dann bleibt nur die aus den Daten
         if (versionDesc == null)
@@ -444,7 +467,7 @@ public class PainVersion implements Comparable<PainVersion>
         
         // Wir geben noch eine Warnung aus, wenn unterschiedliche Versionen angegeben sind
         if (!versionDesc.equals(versionData))
-          HBCIUtils.log("pain version mismatch. sepadesc: " + versionDesc + " vs. data: " + versionData,HBCIUtils.LOG_WARN);
+          HBCIUtils.log("sepa version mismatch. sepadesc: " + versionDesc + " vs. data: " + versionData,HBCIUtils.LOG_WARN);
         
         // Wir geben priorisiert die Version aus den Daten zurueck, damit ist sicherer, dass die
         // Daten gelesen werden koennen
@@ -480,9 +503,9 @@ public class PainVersion implements Comparable<PainVersion>
         if (this == obj) return true;
         if (obj == null) return false;
         
-        if (!(obj instanceof PainVersion)) return false;
+        if (!(obj instanceof SepaVersion)) return false;
         
-        PainVersion other = (PainVersion) obj;
+        SepaVersion other = (SepaVersion) obj;
         if (major != other.major)
             return false;
         if (minor != other.minor)
@@ -496,10 +519,10 @@ public class PainVersion implements Comparable<PainVersion>
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
-    public int compareTo(PainVersion v)
+    public int compareTo(SepaVersion v)
     {
         if (v.type != this.type)
-            throw new IllegalArgumentException("pain-type incompatible: " + v.type + " != " + this.type);
+            throw new IllegalArgumentException("sepa-type incompatible: " + v.type + " != " + this.type);
         
         // Es ist voellig krank!
         // Die Pain-Versionen waren bisher sauber versioniert. Und jetzt ist ploetzlich

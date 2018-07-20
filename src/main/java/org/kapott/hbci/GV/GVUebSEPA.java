@@ -23,21 +23,21 @@ package org.kapott.hbci.GV;
 
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 
 /**
  * Job-Implementierung fuer SEPA-Ueberweisungen.
  */
 public class GVUebSEPA extends AbstractSEPAGV
 {
-    private final static PainVersion DEFAULT = PainVersion.PAIN_001_001_02;
+    private final static SepaVersion DEFAULT = SepaVersion.PAIN_001_001_02;
     
     /**
      * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
      */
     @Override
-    protected PainVersion getDefaultPainVersion()
+    protected SepaVersion getDefaultPainVersion()
     {
         return DEFAULT;
     }

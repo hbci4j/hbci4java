@@ -14,13 +14,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.GenLastSEPA00800101;
 import org.kapott.hbci.GV.generators.GenUebSEPA00100303;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 
 /**
- * Tests fuer den PAIN-Version Parser 
+ * Tests fuer den SEPA-Version Parser 
  */
-public class TestPainVersion
+public class TestSepaVersion
 {
     /**
      * Testet simples Parsen einer PAIN-Version.
@@ -29,7 +29,7 @@ public class TestPainVersion
     @Test
     public void test001() throws Exception
     {
-        PainVersion v = PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
+        SepaVersion v = SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
         Assert.assertEquals(Type.PAIN_001,v.getType());
         Assert.assertEquals(3,v.getMajor());
         Assert.assertEquals(3,v.getMinor());
@@ -43,7 +43,7 @@ public class TestPainVersion
     @Test
     public void test002() throws Exception
     {
-        PainVersion v = PainVersion.byURN("sepade.pain.008.001.01.xsd");
+        SepaVersion v = SepaVersion.byURN("sepade.pain.008.001.01.xsd");
         Assert.assertEquals(Type.PAIN_008,v.getType());
         Assert.assertEquals(1,v.getMajor());
         Assert.assertEquals(1,v.getMinor());
@@ -57,7 +57,7 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test003() throws Exception
     {
-        PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.005.003.03");
+        SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.005.003.03");
     }
 
     /**
@@ -67,7 +67,7 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test004() throws Exception
     {
-        PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001");
+        SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001");
     }
     
     /**
@@ -77,7 +77,7 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test005() throws Exception
     {
-        PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001");
+        SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001");
     }
 
     /**
@@ -87,17 +87,17 @@ public class TestPainVersion
     @Test
     public void test006() throws Exception
     {
-        List<PainVersion> list = new ArrayList<PainVersion>()
+        List<SepaVersion> list = new ArrayList<SepaVersion>()
         {{
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
         }};
         
-        PainVersion highest = PainVersion.findGreatest(list);
+        SepaVersion highest = SepaVersion.findGreatest(list);
         Assert.assertNotNull(highest);
-        Assert.assertEquals(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"),highest);
+        Assert.assertEquals(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"),highest);
     }
     
     /**
@@ -108,22 +108,22 @@ public class TestPainVersion
     @Test
     public void test007() throws Exception
     {
-        List<PainVersion> list = new ArrayList<PainVersion>()
+        List<SepaVersion> list = new ArrayList<SepaVersion>()
         {{
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.01"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
 
             // Bizzar, aber ist so. Der Test prueft, dass 001.001.03 die aktuellste Version ist. Siehe die Hinweise in PainVersion#compareTo
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"));
 
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
             
         }};
         
-        PainVersion highest = PainVersion.findGreatest(list);
+        SepaVersion highest = SepaVersion.findGreatest(list);
         Assert.assertNotNull(highest);
-        Assert.assertEquals(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"),highest);
+        Assert.assertEquals(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"),highest);
     }
     
     /**
@@ -133,15 +133,15 @@ public class TestPainVersion
     @Test(expected=IllegalArgumentException.class)
     public void test008() throws Exception
     {
-        List<PainVersion> list = new ArrayList<PainVersion>()
+        List<SepaVersion> list = new ArrayList<SepaVersion>()
         {{
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.008.001.01"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
-            add(PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.008.001.01"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.001.02"));
         }};
         
-        PainVersion.findGreatest(list);
+        SepaVersion.findGreatest(list);
     }
     
     
@@ -152,7 +152,7 @@ public class TestPainVersion
     @Test
     public void test009() throws Exception
     {
-        PainVersion v = PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
+        SepaVersion v = SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
         Assert.assertTrue(v.isSupported("UebSEPA"));
     }
 
@@ -163,7 +163,7 @@ public class TestPainVersion
     @Test
     public void test010() throws Exception
     {
-        PainVersion v = PainVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.004.03");
+        SepaVersion v = SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.004.03");
         Assert.assertFalse(v.isSupported("UebSEPA"));
     }
 
@@ -179,11 +179,41 @@ public class TestPainVersion
     @Test
     public void test011() throws Exception
     {
-        PainVersion v = PainVersion.byURN("sepade.pain.001.002.03.xsd");
-        Assert.assertEquals(PainVersion.PAIN_001_002_03,v);
+        SepaVersion v = SepaVersion.byURN("sepade.pain.001.002.03.xsd");
+        Assert.assertEquals(SepaVersion.PAIN_001_002_03,v);
         Assert.assertEquals("urn:iso:std:iso:20022:tech:xsd:pain.001.002.03",v.getURN());
     }
 
+    /**
+     * Testet eine CAMT-Version.
+     * @throws Exception
+     */
+    @Test
+    public void test012() throws Exception
+    {
+        SepaVersion v = SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:camt.052.001.04");
+        Assert.assertEquals(SepaVersion.CAMT_052_001_04,v);
+        Assert.assertEquals("urn:iso:std:iso:20022:tech:xsd:camt.052.001.04",v.getURN());
+    }
+
+    /**
+     * Testet das Ermitteln der hoechsten CAMT-Version.
+     * @throws Exception
+     */
+    @Test
+    public void test013() throws Exception
+    {
+        List<SepaVersion> list = new ArrayList<SepaVersion>()
+        {{
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:camt.052.001.02"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:camt.052.001.05"));
+            add(SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:camt.052.001.07"));
+        }};
+        
+        SepaVersion highest = SepaVersion.findGreatest(list);
+        Assert.assertNotNull(highest);
+        Assert.assertEquals(SepaVersion.CAMT_052_001_07,highest);
+    }
 }
 
 

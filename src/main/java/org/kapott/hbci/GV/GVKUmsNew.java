@@ -83,4 +83,14 @@ public final class GVKUmsNew extends GVKUmsAll
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
         addConstraint("dummyall","allaccounts","N", LogFilter.FILTER_NONE);
     }
+
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#verifyConstraints()
+     */
+    public void verifyConstraints()
+    {
+        super.verifyConstraints();
+        checkAccountCRC("my");
+    }
 }

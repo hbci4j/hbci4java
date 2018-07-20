@@ -5,7 +5,7 @@ package org.kapott.hbci.GV.generators;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.SepaVersion;
 
 /**
  * Basis-Interface fuer alle SEPA-Job-Generatoren.
@@ -38,9 +38,9 @@ public interface ISEPAGenerator
 	public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception; 
 	
 	/**
-	 * Liefert die PAIN-Version des Generators.
+	 * Liefert die SEPA-Version des Generators.
 	 * Wenn die Methode implementiert wurde und eine "vollqualifizierte"
-	 * Pain-Version zurueckliefert, in der sowohl URN als auch FILE gesetzt sind,
+	 * SEPA-Version zurueckliefert, in der sowohl URN als auch FILE gesetzt sind,
 	 * dann wird die Schema-Location dem Marshaller mittels "Marshaller.JAXB_SCHEMA_LOCATION"
 	 * uebergeben, was bewirkt, dass im Root-Element das Attribute
 	 * "xsi:schemaLocation" gesetzt wird. Ausserdem kann dann die Schema-Validierung
@@ -48,6 +48,6 @@ public interface ISEPAGenerator
 	 * @return die zu deklarierende Schema-Location oder NULL, falls nichts
 	 * angegeben werden soll.
 	 */
-	public PainVersion getPainVersion();
+	public SepaVersion getPainVersion();
 	
 }

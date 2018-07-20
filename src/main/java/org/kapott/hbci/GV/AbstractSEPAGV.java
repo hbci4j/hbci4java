@@ -17,8 +17,8 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 
 /** 
  * Abstrakte Basis-Klasse fuer JAXB-basierte SEPA-Jobs.
@@ -34,7 +34,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
     public final static String ENDTOEND_ID_NOTPROVIDED = "NOTPROVIDED";
     
     protected final Properties sepaParams = new Properties();
-    private PainVersion pain         = null;
+    private SepaVersion pain         = null;
     private ISEPAGenerator generator = null;
 
     /**
@@ -42,7 +42,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * wenn von der Bank keine geliefert wurden.
      * @return Default-Pain-Version.
      */
-    protected abstract PainVersion getDefaultPainVersion();
+    protected abstract SepaVersion getDefaultPainVersion();
     
     /**
      * Liefert den PAIN-Type.
@@ -82,19 +82,19 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * gesucht werden soll.
      * @return die ermittelte PAIN-Version.
      */
-    private PainVersion determinePainVersion(HBCIHandler handler, String gvName)
+    private SepaVersion determinePainVersion(HBCIHandler handler, String gvName)
     {
         // Schritt 1: Wir holen uns die globale maximale PAIN-Version
-        PainVersion globalVersion = this.determinePainVersionInternal(handler,GVSEPAInfo.getLowlevelName());
+        SepaVersion globalVersion = this.determinePainVersionInternal(handler,GVSEPAInfo.getLowlevelName());
         
         // Schritt 2: Die des Geschaeftsvorfalls - fuer den Fall, dass die Bank
         // dort weitere Einschraenkungen hinterlegt hat
-        PainVersion jobVersion = this.determinePainVersionInternal(handler,gvName);
+        SepaVersion jobVersion = this.determinePainVersionInternal(handler,gvName);
         
         // Wir haben gar keine PAIN-Version gefunden
         if (globalVersion == null && jobVersion == null)
         {
-            PainVersion def = this.getDefaultPainVersion();
+            SepaVersion def = this.getDefaultPainVersion();
             HBCIUtils.log("unable to determine matching pain version, using default: " + def,HBCIUtils.LOG_WARN);
             return def;
         }
@@ -121,7 +121,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * gesucht werden soll.
      * @return die ermittelte PAIN-Version oder NULL wenn keine ermittelt werden konnte.
      */
-    private PainVersion determinePainVersionInternal(HBCIHandler handler, final String gvName)
+    private SepaVersion determinePainVersionInternal(HBCIHandler handler, final String gvName)
     {
         HBCIUtils.log("searching for supported pain versions for GV " + gvName,HBCIUtils.LOG_DEBUG);
         
@@ -131,7 +131,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
             return null;
         }
 
-        List<PainVersion> found = new ArrayList<PainVersion>();
+        List<SepaVersion> found = new ArrayList<SepaVersion>();
     
         // GV-Restrictions laden und darüber iterieren
         Properties props = handler.getLowlevelJobRestrictions(gvName);
@@ -147,7 +147,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
             String urn = props.getProperty(key);
             try
             {
-                PainVersion version = PainVersion.byURN(urn);
+                SepaVersion version = SepaVersion.byURN(urn);
                 if (version.getType() == this.getPainType())
                 {
                     if (!version.isSupported(this.getPainJobName()))
@@ -163,7 +163,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                     // noetig, da das "PainVersion.byURN" (siehe oben) ohnehin bereits
                     // macht - wenn wir die PAIN-Version kennen, nehmen wir gleich die
                     // eigene Instanz. Siehe auch
-                    // TestPainVersion#test011 bzw. http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=95160#95160
+                    // TestSepaVersion#test011 bzw. http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=95160#95160
                     HBCIUtils.log("  found " + version,HBCIUtils.LOG_DEBUG);
                     found.add(version);
                 }
@@ -175,7 +175,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
             }
         }
         
-        return PainVersion.findGreatest(found);
+        return SepaVersion.findGreatest(found);
     }
 
     /**
@@ -271,7 +271,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      * Liefert den zu verwendenden PAIN-Version fuer die HBCI-Nachricht.
      * @return der zu verwendende PAIN-Version fuer die HBCI-Nachricht.
      */
-    protected PainVersion getPainVersion()
+    protected SepaVersion getPainVersion()
     {
         return this.pain;
     }

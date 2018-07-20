@@ -1305,6 +1305,21 @@
             <DE name="canmaxentries" type="JN"/>
             <DE name="canallaccounts" type="JN"/>
         </DEGdef>
+
+        <DEGdef id="ParKUmsZeitCamt">
+            <DE name="timerange" type="Num" maxsize="4"/>
+            <DE name="canmaxentries" type="JN"/>
+            <DE name="canallaccounts" type="JN"/>
+            <DE name="suppformat" type="AN" maxsize="256" maxnum="99" />
+        </DEGdef>
+        
+        <DEGdef id="CamtBooked">
+            <DE name="message" type="Bin"/>
+        </DEGdef>
+        
+        <DEGdef id="CamtFormats">
+            <DE name="suppformat" type="AN" maxsize="256" maxnum="99" />
+        </DEGdef>
         
         <DEGdef id="ParLast">
             <DE name="maxusage" type="Num" maxsize="2"/>
@@ -4275,6 +4290,41 @@
             <value path="SegHead.code">HIKAZS</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
+
+
+        <SEGdef id="KUmsZeitCamt1">
+            <DEG name="SegHead" type="SegHeadUser"/>
+            <DEG name="KTV" type="KTVInt" />
+            <DEG name="formats" type="CamtFormats" />
+            <DE name="allaccounts" type="JN"/>
+            <DE name="startdate" type="Date" minnum="0"/>
+            <DE name="enddate" type="Date" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            
+            <value path="SegHead.code">HKCAZ</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="KUmsZeitCamtRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="KTV"/>
+            <DE name="camtFormat" type="AN" maxsize="256" />
+            <DEG name="booked" type="CamtBooked" />
+            <DE name="notbooked" type="Bin" maxsize="0" minnum="0"/>
+            
+            <value path="SegHead.code">HICAZ</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="KUmsZeitCamtPar1">
+            &GVP2;
+            <DEG type="ParKUmsZeitCamt" name="ParKUmsZeitCamt"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HICAZS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
         
         <SEGdef id="Last2"> <!-- 2.01 -->
             &SingleInlandUser1;
@@ -7330,6 +7380,7 @@
             <SEG type="KUmsZeit5" minnum="0"/>
             <SEG type="KUmsZeit6" minnum="0"/>
             <SEG type="KUmsZeit7" minnum="0"/>
+            <SEG type="KUmsZeitCamt1" minnum="0"/>
             <SEG type="Last2" minnum="0"/>
             <SEG type="Last3" minnum="0"/>
             <SEG type="Last4" minnum="0"/>
@@ -7487,6 +7538,7 @@
             <SEG type="KUmsZeitRes5" minnum="0"/>
             <SEG type="KUmsZeitRes6" minnum="0"/>
             <SEG type="KUmsZeitRes7" minnum="0"/>
+            <SEG type="KUmsZeitCamtRes1" minnum="0"/>
             <SEG type="LastSEPARes1" minnum="0"/>
             <SEG type="LastCOR1SEPARes1" minnum="0"/>
             <SEG type="LastB2BSEPARes1" minnum="0"/>
@@ -7622,6 +7674,7 @@
             <SEG type="KUmsZeitPar5" minnum="0"/>
             <SEG type="KUmsZeitPar6" minnum="0"/>
             <SEG type="KUmsZeitPar7" minnum="0"/>
+            <SEG type="KUmsZeitCamtPar1" minnum="0"/>
             <SEG type="LastPar2" minnum="0"/>
             <SEG type="LastPar3" minnum="0"/>
             <SEG type="LastPar4" minnum="0"/>

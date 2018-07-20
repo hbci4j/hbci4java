@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.GV.SepaUtil;
-import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.AccountIdentification2;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.AmendmentInformationDetails4;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.CashAccount8;
@@ -52,9 +52,9 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator
      * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getPainVersion()
      */
     @Override
-    public PainVersion getPainVersion()
+    public SepaVersion getPainVersion()
     {
-        return PainVersion.PAIN_008_001_01;
+        return SepaVersion.PAIN_008_001_01;
     }
 
     /**

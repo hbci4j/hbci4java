@@ -1,10 +1,6 @@
 /**********************************************************************
- * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/ddv/PCSCTest.java,v $
- * $Revision: 1.1 $
- * $Date: 2011/11/24 21:59:37 $
- * $Author: willuhn $
  *
- * Copyright (c) by willuhn - software & services
+ * Copyright (c) by Olaf Willuhn
  * All rights reserved
  *
  **********************************************************************/
@@ -18,13 +14,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kapott.hbci.GV.generators.ISEPAGenerator;
 import org.kapott.hbci.GV.generators.SEPAGeneratorFactory;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 
 /**
- * Testet das pure Generieren von Pain XML-Dateien - ohne HBCI-Context.
+ * Testet das pure Generieren von SEPA XML-Dateien - ohne HBCI-Context.
  */
-public class TestPainGen
+public class TestSepaGen
 {
     /**
      * Testet das Erstellen von SEPA-Ueberweisungen.
@@ -46,7 +42,7 @@ public class TestPainGen
         props.setProperty("sepaid",     "abcde");
         props.setProperty("endtoendid", "fghij");
 
-        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_001))
+        for (SepaVersion version:SepaVersion.getKnownVersions(Type.PAIN_001))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
@@ -82,7 +78,7 @@ public class TestPainGen
         props.setProperty("targetdate",     "2013-11-30");
         props.setProperty("type",           "CORE");
 
-        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_008))
+        for (SepaVersion version:SepaVersion.getKnownVersions(Type.PAIN_008))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("LastSEPA", version);
@@ -120,7 +116,7 @@ public class TestPainGen
         props.setProperty("usage[1]",      "Verwendungszweck 2");
         props.setProperty("endtoendid[1]", "fghij");
 
-        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_001))
+        for (SepaVersion version:SepaVersion.getKnownVersions(Type.PAIN_001))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
@@ -169,7 +165,7 @@ public class TestPainGen
         props.setProperty("endtoendid[1]",     "fghij");
         props.setProperty("creditorid[1]",     "DE1234567890");
 
-        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_008))
+        for (SepaVersion version:SepaVersion.getKnownVersions(Type.PAIN_008))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("LastSEPA", version);
@@ -206,7 +202,7 @@ public class TestPainGen
         props.setProperty("targetdate",     "2013-11-30");
         props.setProperty("type",           "B2B");
 
-        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_008))
+        for (SepaVersion version:SepaVersion.getKnownVersions(Type.PAIN_008))
         {
             // Der Test schlaegt automatisch fehl, wenn die Schema-Validierung nicht klappt
             ISEPAGenerator gen = SEPAGeneratorFactory.get("LastSEPA", version);
@@ -236,7 +232,7 @@ public class TestPainGen
         props.setProperty("sepaid",     "abcde");
         props.setProperty("endtoendid", "fghij");
 
-        for (PainVersion version:PainVersion.getKnownVersions(Type.PAIN_001))
+        for (SepaVersion version:SepaVersion.getKnownVersions(Type.PAIN_001))
         {
             ISEPAGenerator gen = SEPAGeneratorFactory.get("UebSEPA", version);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();

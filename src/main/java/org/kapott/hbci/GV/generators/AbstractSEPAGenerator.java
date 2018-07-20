@@ -15,7 +15,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.SepaVersion;
 
 /**
  * Abstrakte Basis-Implementierung der SEPA-Generatoren.
@@ -49,7 +49,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        PainVersion version = this.getPainVersion();
+        SepaVersion version = this.getPainVersion();
         if (version != null)
         {
             String schemaLocation = version.getSchemaLocation();
@@ -97,7 +97,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
      * @see org.kapott.hbci.GV.generators.ISEPAGenerator#getPainVersion()
      */
     @Override
-    public PainVersion getPainVersion()
+    public SepaVersion getPainVersion()
     {
         return null;
     }

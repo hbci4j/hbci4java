@@ -9,19 +9,22 @@ import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.sepa.PainVersion;
-import org.kapott.hbci.sepa.PainVersion.Type;
+import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.sepa.SepaVersion.Type;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
+/**
+ * Geschaeftsvorfall zum Anlegen eines neuen SEPA-Dauerauftrages.
+ */
 public class GVDauerSEPANew extends AbstractSEPAGV {
 
-    private final static PainVersion DEFAULT = PainVersion.PAIN_001_001_02;
+    private final static SepaVersion DEFAULT = SepaVersion.PAIN_001_001_02;
     
     /**
      * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
      */
     @Override
-    protected PainVersion getDefaultPainVersion()
+    protected SepaVersion getDefaultPainVersion()
     {
         return DEFAULT;
     }
@@ -44,6 +47,10 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         return "DauerSEPANew";
     }
 
+    /**
+     * ct.
+     * @param handler
+     */
     public GVDauerSEPANew(HBCIHandler handler) {
         super(handler,getLowlevelName(), new GVRDauerNew());
 
@@ -88,6 +95,9 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         addConstraint("lastdate","DauerDetails.lastdate","", LogFilter.FILTER_NONE);
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
+     */
     public void setParam(String paramName,String value)
     {
         Properties res=getJobRestrictions();
@@ -179,6 +189,9 @@ public class GVDauerSEPANew extends AbstractSEPAGV {
         }
     }
     
+    /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainJobName()
+     */
     public String getPainJobName() {
         return "UebSEPA";
     }

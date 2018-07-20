@@ -71,6 +71,107 @@
 				<artifactId>maven-jaxb2-plugin</artifactId>
 				<version>${maven-jaxb2-plugin.version}</version>
 				<executions>
+        
+          <!--
+            CAMT: Offizieller Download der Schema-Datei von https://www.iso20022.org/payments_messages.page
+            Vorherige Versionen von https://www.iso20022.org/message_archive.page#sixth_b2c
+          -->
+          <execution>
+            <id>camt.052.001.07</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.07.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_07</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_07/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camt.052.001.06</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.06.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_06</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_06/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camt.052.001.05</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.05.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_05</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_05/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camt.052.001.04</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.04.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_04</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_04/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camt.052.001.03</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.03.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_03</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_03/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camt.052.001.02</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.02.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_02</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_02/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camt.052.001.01</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>camt.052.001.01.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_01</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_01/*.java</produces>
+            </configuration>
+          </execution>
+          
+          <!--
+            PAIN: Offizieller Download der Schema-Dateien und vorherigen Versionen
+            von http://www.ebics.de/spezifikation/dfue-abkommen-anlage-3-formatstandards/
+          -->
 					<execution>
 						<id>pain.001.001.02</id>
 						<goals>

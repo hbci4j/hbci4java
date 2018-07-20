@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
-import org.kapott.hbci.sepa.PainVersion;
+import org.kapott.hbci.sepa.SepaVersion;
 
 /**
  * Factory zum Ermitteln des passenden Pain-Generators fuer den angegebenen Job.
@@ -28,7 +28,7 @@ public class SEPAGeneratorFactory
 	 * @throws InstantiationException 
 	 * @throws ClassNotFoundException 
 	 */
-	public static ISEPAGenerator get(HBCIJob job, PainVersion version) throws ClassNotFoundException, InstantiationException, IllegalAccessException
+	public static ISEPAGenerator get(HBCIJob job, SepaVersion version) throws ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
         String jobname = ((AbstractSEPAGV)job).getPainJobName(); // referenzierter pain-Geschäftsvorfall
         return get(jobname,version);
@@ -43,10 +43,10 @@ public class SEPAGeneratorFactory
      * @throws IllegalAccessException 
      * @throws InstantiationException 
      */
-    public static ISEPAGenerator get(String jobname, PainVersion version) throws ClassNotFoundException, InstantiationException, IllegalAccessException
+    public static ISEPAGenerator get(String jobname, SepaVersion version) throws ClassNotFoundException, InstantiationException, IllegalAccessException
     {
         if (!version.isSupported(jobname))
-            throw new InvalidUserDataException("PAIN version is not supported: " + version);
+            throw new InvalidUserDataException("SEPA version is not supported: " + version);
 
         String className = version.getGeneratorClass(jobname);
         LOG.fine("trying to init SEPA creator: " + className);
