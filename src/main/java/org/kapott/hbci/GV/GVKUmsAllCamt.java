@@ -9,9 +9,8 @@
 package org.kapott.hbci.GV;
 
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kapott.hbci.GV_Result.GVRKUmsCamt;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -23,8 +22,10 @@ import org.kapott.hbci.status.HBCIMsgStatus;
 /**
  * Implementierung des Geschaeftsvorfalls zum Abruf von Umsaetzen mit Angabe des Zeitraums im CAMT-Format (HKCAZ).
  */
-public class GVKUmsAllCamt extends HBCIJobImpl
+public class GVKUmsAllCamt extends AbstractSEPAGV
 {
+    private final static AtomicInteger count = new AtomicInteger();
+    
     /**
      * @return der Lowlevelname.
      */
@@ -42,7 +43,25 @@ public class GVKUmsAllCamt extends HBCIJobImpl
     {
         super(handler, name, new GVRKUmsCamt());
     }
-
+    
+    /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getDefaultPainVersion()
+     */
+    @Override
+    protected SepaVersion getDefaultPainVersion()
+    {
+        return SepaVersion.CAMT_052_001_01;
+    }
+    
+    /**
+     * @see org.kapott.hbci.GV.AbstractSEPAGV#getPainType()
+     */
+    @Override
+    protected Type getPainType()
+    {
+        return Type.CAMT_052;
+    }
+    
     /**
      * ct.
      * @param handler
@@ -62,11 +81,12 @@ public class GVKUmsAllCamt extends HBCIJobImpl
           addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
         }
         
-        // Wir schicken alle Formate mit, weil wir alle unterstuetzen
-        for (SepaVersion v:SepaVersion.getKnownVersions(Type.CAMT_052))
-        {
-            addConstraint("formats","formats.suppformat",v.getURN(),LogFilter.FILTER_NONE,true);
-        }
+        // Das DE erlaubt zwar, dass wir alle CAMT-Versionen mitschicken,
+        // die wir unterstuetzen. Einige Banken (u.a. die Sparkassen) kommen
+        // damit aber nicht klar. Deswegen schicken wir immer genau eine Version
+        // mit. Und zwar genau die hoechste, die die Bank in den GV-spezifischen BPD
+        // mitgeteilt hat
+        addConstraint("suppformat","formats.suppformat",this.getPainVersion().getURN(),LogFilter.FILTER_NONE);
         addConstraint("dummy","allaccounts","N", LogFilter.FILTER_NONE);
 
         addConstraint("startdate","startdate","", LogFilter.FILTER_NONE);
@@ -82,32 +102,10 @@ public class GVKUmsAllCamt extends HBCIJobImpl
     {
         Properties result     = msgstatus.getData();
         GVRKUmsCamt umsResult = (GVRKUmsCamt)jobResult;
-        
-        FileOutputStream fos = null;
-        
-        try
-        {
-            fos = new FileOutputStream("/home/willuhn/download/kumscamt.properties");
-            result.store(fos,"");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            if (fos != null)
-            {
-                try
-                {
-                    fos.close();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
+
+        String booked    = result.getProperty(header+".booked.message");
+        String notbooked = result.getProperty(header+".notbooked");
+
     }
     
     /**

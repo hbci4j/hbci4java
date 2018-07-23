@@ -1310,15 +1310,24 @@
             <DE name="timerange" type="Num" maxsize="4"/>
             <DE name="canmaxentries" type="JN"/>
             <DE name="canallaccounts" type="JN"/>
-            <DE name="suppformat" type="AN" maxsize="256" maxnum="99" />
+            <DE name="suppformats" type="AN" maxsize="256" maxnum="99" />
         </DEGdef>
         
         <DEGdef id="CamtBooked">
-            <DE name="message" type="Bin"/>
+            <!-- Die erlaubte Maximalanzahl ist nicht spezifiziert. Da steht nur "n" als Anzahl -->
+            <DE name="message" type="Bin" minnum="1" maxnum="999" />
         </DEGdef>
         
         <DEGdef id="CamtFormats">
-            <DE name="suppformat" type="AN" maxsize="256" maxnum="99" />
+            <!--
+                 Wir koennten zwar alle unterstuetzten Formate mitsenden.
+                 Einige Banken (u.a. die Sparkassen) kommen damit aber nicht klar.
+                 Deswegen schicken wir immer genau eine Version mit.
+                 Und zwar genau die hoechste, die die Bank in den GV-spezifischen
+                 BPD mitgeteilt hat
+                 
+             -->
+            <DE name="suppformat" type="AN" minsize="0" maxsize="256" minnum="1" maxnum="99"/>
         </DEGdef>
         
         <DEGdef id="ParLast">
@@ -4308,7 +4317,7 @@
         <SEGdef id="KUmsZeitCamtRes1">
             <DEG type="SegHeadInst" name="SegHead"/>
             <DEG type="KTVInt" name="KTV"/>
-            <DE name="camtFormat" type="AN" maxsize="256" />
+            <DE name="format" type="AN" maxsize="256" />
             <DEG name="booked" type="CamtBooked" />
             <DE name="notbooked" type="Bin" maxsize="0" minnum="0"/>
             

@@ -1,9 +1,14 @@
 package org.kapott.hbci4java;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -14,7 +19,7 @@ import org.junit.Before;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.callback.HBCICallback;
-import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.callback.HBCICallbackIOStreams;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -33,21 +38,9 @@ public abstract class AbstractTestGV
     private Properties  params                = null;
     private HBCIPassportPinTanMemory passport = null;
     private HBCIHandler handler               = null;
+    private PrintStream out                   = null;
     
     
-//    /**
-//     * Beispiel-Code fuer einen Test in einer abgeleiteten Klasse.
-//     */
-//    public void exampleTest()
-//    {
-//        this.execute(new Execution() {
-//            @Override
-//            public String getJobname() {
-//                return "GVKUmsAll";
-//            }
-//        });
-//    }
-
     /**
      * Erzeugt das Passport-Objekt.
      * @throws Exception
@@ -56,6 +49,14 @@ public abstract class AbstractTestGV
     public void beforeTest() throws Exception
     {
         this.params = new Properties();
+        
+        ////////////////////////////////////////////////////////////////////////
+        // Checken, ob die Messages in einer Logdatei oder auf STDERR landen sollen
+        final String logfile = System.getProperty("log");
+        out = logfile != null ? new PrintStream(new BufferedOutputStream(new FileOutputStream(logfile))) : System.out;
+        ////////////////////////////////////////////////////////////////////////
+        
+        
         
         String configfile = System.getProperty("config",System.getProperty("user.dir") + File.separator + this.getClass().getSimpleName() + ".properties");
         File file = new File(configfile);
@@ -93,7 +94,7 @@ public abstract class AbstractTestGV
               
         // Initialisierungsparameter fuer HBCI4Java selbst
         Properties props = new Properties();
-        props.put("log.loglevel.default",this.params.getProperty("log.loglevel.default",Integer.toString(HBCIUtils.LOG_DEBUG)));
+        props.put("log.loglevel.default",this.params.getProperty("log.loglevel.default",System.getProperty("log.loglevel.default",Integer.toString(HBCIUtils.LOG_DEBUG))));
         props.put("client.passport.PinTan.init","1");
         props.put("client.passport.PinTan.checkcert",this.params.getProperty("client.passport.PinTan.checkcert","1"));
         props.put("client.passport.PinTan.proxy",    this.params.getProperty("client.passport.PinTan.proxy",""));
@@ -103,7 +104,7 @@ public abstract class AbstractTestGV
         // Callback initialisieren.
         // Wenn wir passende Antworten in den Presets haben, koennen wir sie direkt
         // beantworten
-        final HBCICallback callback = new HBCICallbackConsole()
+        final HBCICallback callback = new HBCICallbackIOStreams(out,new BufferedReader(new InputStreamReader(System.in)))
         {
             /**
              * @see org.kapott.hbci.callback.HBCICallbackIOStreams#callback(org.kapott.hbci.passport.HBCIPassport, int, java.lang.String, int, java.lang.StringBuffer)
@@ -119,8 +120,22 @@ public abstract class AbstractTestGV
                     return;
                 }
                 
-                // Ne, dann an Super-Klasse delegieren
-                super.callback(passport, reason, msg, datatype, retData);
+                // Ne, dann an Super-Klasse delegieren.
+                // Wenn ein Logfile angegeben ist, muessen wir auf der Console trotzdem noch die Moeglichkeit
+                // zur Interaktion geben. Daher setzen wir in dem Fall den Ausgabestrom kurz auf System.out
+                try
+                {
+                    if (logfile != null)
+                        setOutStream(System.out);
+                    
+                    super.callback(passport, reason, msg, datatype, retData);
+                }
+                finally
+                {
+                    // Wieder zuruecksetzen
+                    if (logfile != null)
+                        setOutStream(out);
+                }
             }
         };
       
@@ -187,6 +202,8 @@ public abstract class AbstractTestGV
           this.handler = null;
           this.passport = null;
           this.params = null;
+          out.flush();
+          out.close();
         }
       }
     }
