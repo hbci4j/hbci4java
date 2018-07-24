@@ -18,17 +18,18 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_02.PurposeSEPA;
 /**
  * Parser-Implementierung fuer Pain 008.002.02.
  */
-public class ParsePain00800202 extends AbstractSepaParser
+public class ParsePain00800202 extends AbstractSepaParser<List<Properties>>
 {
-    
     /**
-     * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.util.List)
+     * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.lang.Object)
      */
     public void parse(InputStream xml, List<Properties> sepaResults)
     {
-        
         Document doc = JAXB.unmarshal(xml, Document.class);
         CustomerDirectDebitInitiationV02 pain = doc.getCstmrDrctDbtInitn();
+        
+        if (pain == null)
+            return;
                 
         List<PaymentInstructionInformationSDD> pmtInfs = pain.getPmtInf();
         

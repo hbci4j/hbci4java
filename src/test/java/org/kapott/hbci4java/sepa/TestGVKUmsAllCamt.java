@@ -34,6 +34,14 @@ public class TestGVKUmsAllCamt extends AbstractTestGV
                 super.configure(job, passport, params);
                 job.setParam("my.bic",params.getProperty("bic",System.getProperty("bic")));
                 job.setParam("my.iban",params.getProperty("iban",System.getProperty("iban")));
+                
+                String start = params.getProperty("startdate",System.getProperty("startdate"));
+                if (start != null)
+                    job.setParam("startdate",start);
+                
+                String end = params.getProperty("enddate",System.getProperty("enddate"));
+                if (end != null)
+                    job.setParam("enddate",end);
             }
         });
     }

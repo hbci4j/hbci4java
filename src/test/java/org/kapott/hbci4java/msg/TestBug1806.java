@@ -62,11 +62,11 @@ public class TestBug1806 extends AbstractTest
       ByteArrayInputStream bis = new ByteArrayInputStream(ht.get(key).getBytes(Comm.ENCODING));
       SepaVersion version = SepaVersion.autodetect(bis);
       Assert.assertNotNull(version);
-      ISEPAParser parser = SEPAParserFactory.get(version);
+      ISEPAParser<List<Properties>> parser = SEPAParserFactory.get(version);
       
       bis.reset();
       
-      ArrayList<Properties> sepaResults = new ArrayList<Properties>();
+      List<Properties> sepaResults = new ArrayList<Properties>();
       parser.parse(bis,sepaResults);
       Assert.assertTrue(sepaResults.size() > 0);
       for (int i=0;i<sepaResults.size();++i)

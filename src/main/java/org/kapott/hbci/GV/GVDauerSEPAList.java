@@ -24,6 +24,7 @@ package org.kapott.hbci.GV;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.parsers.ISEPAParser;
@@ -120,13 +121,13 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         final String pain         = result.getProperty(header+".sepapain");
         final SepaVersion version = SepaVersion.choose(sepadescr,pain);
         
-        ISEPAParser parser = SEPAParserFactory.get(version);
-        ArrayList<Properties> sepaResults = new ArrayList<Properties>();
+        ISEPAParser<List<Properties>> parser = SEPAParserFactory.get(version);
+        List<Properties> sepaResults = new ArrayList<Properties>();
         try
         {
             // Encoding siehe GVTermUebSEPAList
             HBCIUtils.log("  parsing sepa data: " + pain,HBCIUtils.LOG_DEBUG2);
-            parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)), sepaResults);
+            parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)),sepaResults);
             HBCIUtils.log("  parsed sepa data, entries: " + sepaResults.size(),HBCIUtils.LOG_INFO);
         }
         catch (Exception e)

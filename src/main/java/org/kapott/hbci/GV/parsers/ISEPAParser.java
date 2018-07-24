@@ -1,17 +1,17 @@
 package org.kapott.hbci.GV.parsers;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * Basis-Interface der SEPA-XML Parser.
+ * @param <T> Die konkrete Struktur, in die die Daten geparst werden.
  */
-public interface ISEPAParser
+public interface ISEPAParser<T>
 {
     /**
      * Enums fuer die verwendeten Schluessel-Namen in den Properties.
      */
+    @SuppressWarnings("javadoc")
     public static enum Names
     {
         SRC_NAME("src.name"),
@@ -64,7 +64,7 @@ public interface ISEPAParser
     /**
      * Parst SEPA-XML-Daten aus dem Stream und schreib die Ergebnisse in die Liste von Properties-Objekten. 
      * @param xml der Stream mit den XML-Daten.
-     * @param target Die Liste mit Properties. Pro Geschaeftsvorfall wird ein Properties-Objekt eingefuegt.
+     * @param target das Zielobjekt, in das die Daten gelesen werden.
      */
-    public void parse(InputStream xml, List<Properties> target);
+    public void parse(InputStream xml, T target);
 }

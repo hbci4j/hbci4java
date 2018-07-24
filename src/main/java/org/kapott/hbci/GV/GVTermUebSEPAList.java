@@ -24,6 +24,7 @@ package org.kapott.hbci.GV;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.parsers.ISEPAParser;
@@ -108,8 +109,8 @@ public final class GVTermUebSEPAList extends AbstractSEPAGV
         final String pain         = result.getProperty(header+".sepapain");
         final SepaVersion version = SepaVersion.choose(sepadescr,pain);
 
-        ISEPAParser parser = SEPAParserFactory.get(version);
-        ArrayList<Properties> sepaResults = new ArrayList<Properties>();
+        ISEPAParser<List<Properties>> parser = SEPAParserFactory.get(version);
+        List<Properties> sepaResults = new ArrayList<Properties>();
         try
         {
             // Wir duerfen das hier nicht als UTF-8 interpretieren (das war vorher hier das Fall),
@@ -122,7 +123,7 @@ public final class GVTermUebSEPAList extends AbstractSEPAGV
             // beim Empfang vom Server kamen, wenn der XML-Parser sie kriegt. Er macht dann die Conversion Byte->String
             // korrekt basierend auf dem im XML angegebenen Header.
             // Siehe auch AbstractSEPAGenerator#marshal
-            parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)), sepaResults);
+            parser.parse(new ByteArrayInputStream(pain.getBytes(Comm.ENCODING)),sepaResults);
         }
         catch(Exception e)
         {

@@ -116,6 +116,22 @@ public class GVRKUms
         
         /** Gibt an, ob ein Umsatz ein SEPA-Umsatz ist **/
         public boolean isSepa;
+        
+        /**
+         * Gibt an, ob ein Umsatz per CAMT abgerufen wurde.
+         */
+        public boolean isCamt;
+        
+        /**
+         * NUR BEI CAMT: Eindeutiger Identifier der Buchung. Erst seit SEPA mit Abruf per CAMT
+         * verfuegbar. Bei MT940-Abruf ist der Wert leer.
+         */
+        public String id;
+        
+        /**
+         * NUR BEI CAMT: Der Purpose-Code der Buchung.
+         */
+        public String purposecode;
 
         public UmsLine()
         {
@@ -266,14 +282,27 @@ public class GVRKUms
         this.bufferMT942.append(data);
     }
 
-    /** Gibt die Umsatzinformationen gruppiert nach Buchungstagen zurück.
-        @return Liste mit Informationen zu einzelnen Buchungstagen ({@link GVRKUms.BTag}) */
+    /**
+     * Gibt die Umsatzinformationen gruppiert nach Buchungstagen zurück.
+     * @return Liste mit Informationen zu einzelnen Buchungstagen ({@link GVRKUms.BTag})
+     **/
     public List<BTag> getDataPerDay()
     {
         verifyMT94xParsing("getDataPerDay()");
         return tageMT940;
     }
+    
+    /**
+     * Gibt die vorgemerkten Umsaetze gruppiert nach Buchungstagen zurueck.
+     * @return Liste mit Informationen zu einzelnen Buchungstagen der Vormerkbuchungen ({@link GVRKUms.BTag})
+     **/
+    public List<BTag> getDataPerDayUnbooked()
+    {
+        verifyMT94xParsing("getDataPerDayUnbooked()");
+        return tageMT942;
+    }
 
+    
     /** Gibt alle Transaktionsdatensätze in einer "flachen" Struktur zurück.
         D.h. nicht in einzelne Buchungstage unterteilt, sondern in einer Liste
         analog zu einem "normalen" Kontoauszug.
@@ -361,8 +390,13 @@ public class GVRKUms
 
     private void parseMT94x(StringBuffer buffer, List<BTag> tage, StringBuffer rest)
     {
+        parsed = true;
+        
+        // Verwenden wir bei CAMT-Umsaetzen.
+        if (buffer == null || buffer.length() == 0)
+            return;
+        
         HBCIUtils.log("now parsing MT94x data", HBCIUtils.LOG_DEBUG);
-        parsed=true;
 
         try {
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyMMdd");

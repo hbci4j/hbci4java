@@ -20,15 +20,13 @@ import org.kapott.hbci.sepa.jaxb.pain_001_002_02.PurposeSCT;
 /**
  * Parser-Implementierung fuer Pain 001.002.02.
  */
-public class ParsePain00100202 extends AbstractSepaParser
+public class ParsePain00100202 extends AbstractSepaParser<List<Properties>>
 {
-    
     /**
-     * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.util.List)
+     * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.lang.Object)
      */
     public void parse(InputStream xml, List<Properties> sepaResults)
     {
-        
         Document doc = JAXB.unmarshal(xml, Document.class);
                 
         //Payment Information 

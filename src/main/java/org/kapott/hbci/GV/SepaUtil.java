@@ -65,7 +65,20 @@ public class SepaUtil
             format = DATE_FORMAT;
         
         SimpleDateFormat df = new SimpleDateFormat(format);
-        return df.format(cal.toGregorianCalendar().getTime());
+        return df.format(toDate(cal));
+    }
+    
+    /**
+     * Liefert ein Date-Objekt fuer den Kalender.
+     * @param cal der Kalender.
+     * @return das Date-Objekt.
+     */
+    public static Date toDate(XMLGregorianCalendar cal)
+    {
+        if (cal == null)
+            return null;
+        
+        return cal.toGregorianCalendar().getTime();
     }
     
     /**
