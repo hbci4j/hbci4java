@@ -45,7 +45,7 @@ public class SEPAGeneratorFactory
      */
     public static ISEPAGenerator get(String jobname, SepaVersion version) throws ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        if (!version.isSupported(jobname))
+        if (!version.canGenerate(jobname))
             throw new InvalidUserDataException("SEPA version is not supported: " + version);
 
         String className = version.getGeneratorClass(jobname);

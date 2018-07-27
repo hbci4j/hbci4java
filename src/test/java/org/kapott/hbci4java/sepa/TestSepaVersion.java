@@ -153,7 +153,7 @@ public class TestSepaVersion
     public void test009() throws Exception
     {
         SepaVersion v = SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.003.03");
-        Assert.assertTrue(v.isSupported("UebSEPA"));
+        Assert.assertTrue(v.canGenerate("UebSEPA"));
     }
 
     /**
@@ -164,7 +164,7 @@ public class TestSepaVersion
     public void test010() throws Exception
     {
         SepaVersion v = SepaVersion.byURN("urn:iso:std:iso:20022:tech:xsd:pain.001.004.03");
-        Assert.assertFalse(v.isSupported("UebSEPA"));
+        Assert.assertFalse(v.canGenerate("UebSEPA"));
     }
 
     /**
