@@ -12,6 +12,7 @@ package org.kapott.hbci.GV.parsers;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXB;
@@ -274,16 +275,20 @@ public class ParseCamt05200102 implements ISEPAParser<GVRKUms>
 
         ////////////////////////////////////////////////////////////////
         // Start- un End-Saldo ermitteln
+        final long day = 24 * 60 * 60 * 1000L; 
         for (CashBalance3 bal:report.getBal())
         {
             BalanceType12Code code = bal.getTp().getCdOrPrtry().getCd();
             
-            // Schluss-Saldo vom Vortag
+            // Schluss-Saldo vom Vortag.
             if (code == BalanceType12Code.PRCD)
             {
                 tag.start.value = new Value(bal.getAmt().getValue());
                 tag.start.value.setCurr(bal.getAmt().getCcy());
-                tag.start.timestamp = SepaUtil.toDate(bal.getDt().getDt());
+                
+                //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
+                // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
+                tag.start.timestamp = new Date(SepaUtil.toDate(bal.getDt().getDt()).getTime() + day);
             }
             
             // End-Saldo
@@ -291,14 +296,9 @@ public class ParseCamt05200102 implements ISEPAParser<GVRKUms>
             {
                 tag.end.value = new Value(bal.getAmt().getValue());
                 tag.end.value.setCurr(bal.getAmt().getCcy());
+                tag.end.timestamp = SepaUtil.toDate(bal.getDt().getDt());
             }
         }
-        
-        // Bei CAMT gibt es keinen Start-Saldo des aktuellen Tages
-        // sondern einen Schluss-Saldo des Vortages. Da per Definition
-        // immer genau ein Tag in der Datei ist, koennen wir das
-        // End-Datum auch als Start-Datum nehmen
-        tag.end.timestamp = tag.start.timestamp;
         //
         ////////////////////////////////////////////////////////////////
         
