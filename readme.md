@@ -1,5 +1,3 @@
-# [![Build Status](https://travis-ci.org/willuhn/hbci4java.svg?branch=master)](https://travis-ci.org/willuhn/hbci4java) HBCI4Java
-
 ## Vorab
 
 Dies ist ein aktuell gepflegter Fork von [HBCI4Java](http://hbci4java.kapott.org/),
@@ -20,8 +18,11 @@ Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 - Die Unterstützung der neuen TAN-Verfahren (smsTAN, photoTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
 - Unterstützung von PC/SC-Kartenlesern via javax.smartcardio API
 - Eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
-- Unterstützung für alle aktuellen SEPA-PAIN-Versionen
-- Unterstützung für SEPA-Überweisungen und -Lastschriften (jeweils Einzel- und Sammelaufträge) sowie SEPA-Daueraufträge 
+- Support für alle aktuellen SEPA-PAIN-Versionen
+- SEPA-Überweisungen und -Lastschriften (jeweils Einzel- und Sammelaufträge) sowie SEPA-Daueraufträge 
+- Abruf des elektronischen Kontoauszuges (HKEKA und HKEKP)
+- Unterstützung für chipTAN USB
+- Abruf von Umsätzen im CAMT-Format (HKCAZ)
 
 ## Lizenz
 
@@ -43,7 +44,6 @@ https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.hbci4j%22%20AND%2
 <dependency>
    <groupId>com.github.hbci4j</groupId>
    <artifactId>hbci4j-core</artifactId>
-   <version>3.0.15</version>
 </dependency>
 ```
 
@@ -62,8 +62,8 @@ dependencies {
 Du benötigst:
 
 - GIT (https://git-scm.com/)
-- Java SDK 7 oder höher (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-- Apache Maven (https://maven.apache.org/)
+- Java SDK 8 oder höher (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+- Apache Maven 3.3.9 oder höher (https://maven.apache.org/)
 
 Öffne ein Terminal-Fenster und checke den Quellcode per GIT aus:
 
@@ -90,7 +90,7 @@ Klicke im Menu von Eclipse auf "File->Import..." und wähle "Maven->Existing Mav
 
 
 ## Unit-Tests
-Im Ordner "src/main/test/" befinden sich einige JUnit-Tests. Viele davon erfordern jedoch das Vorhandensein spezieller Testumgebungen (Zugang zu Bank-Servern) bzw. vorkonfigurierte Bankzugänge. Die Tests können daher leider nicht automatisiert im Zuge der Erstellung von Deployment-Artefakten ausgeführt werden sondern nur manuell und selektiv.
+Im Ordner "src/main/test/" befinden sich einige JUnit-Tests. Einige davon erfordern jedoch das Vorhandensein spezieller Testumgebungen (Vorhandensein von Bankzugängen oder Chipkartenleser). Diese Tests werden im Zuge der Erstellung von Deployment-Artefakten nur dann ausgeführt, wenn die entsprechenden System-Properties "test.online=true" und "test.chipcard=true" aktiv sind. Die Tests zur Ausführung von HBCI-Geschäftsvorfällen benötigen jedoch weitere Daten (Empfängerkonto, Betrag, Verwendungszweck, usw.). Wenn du diese Tests ausführen möchtest, schaue dir den Quellcode der entsprechenden Tests an.
 
 ## Beispiel-Code
 
