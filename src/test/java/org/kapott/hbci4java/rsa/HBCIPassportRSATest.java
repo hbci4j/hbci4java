@@ -1,12 +1,10 @@
-/**
- * 
- */
 package org.kapott.hbci4java.rsa;
 
 import java.io.File;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,8 +22,21 @@ public class HBCIPassportRSATest extends AbstractTest {
     
     private static File dir = null;
     
+    /**
+     * Deaktiviert den Test, wenn das System-Property nicht auf "true" steht.
+     * @throws Exception
+     */
+    @BeforeClass
+    public static void beforeClass() throws Exception
+    {
+        Assume.assumeTrue(Boolean.getBoolean(AbstractTest.SYSPROP_CHIPCARD));
+    }
+    
     @BeforeClass
     public static void beforeCardClass() throws Exception {
+        
+        Assume.assumeTrue(Boolean.getBoolean(AbstractTest.SYSPROP_CHIPCARD));
+        
         String tmpDir = System.getProperty("java.io.tmpdir", "/tmp");
         dir = new File(tmpDir, "rsajava");
         dir.mkdirs();

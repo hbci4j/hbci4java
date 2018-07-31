@@ -12,7 +12,6 @@ import org.kapott.hbci4java.AbstractTestGV;
  */
 public class TestGVKUmsAllCamt extends AbstractTestGV
 {
-
     /**
      * Testet das Ausfuehren einer SEPA-Lastschrift.
      */

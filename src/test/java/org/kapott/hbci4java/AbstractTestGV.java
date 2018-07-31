@@ -15,7 +15,9 @@ import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.callback.HBCICallback;
@@ -40,6 +42,15 @@ public abstract class AbstractTestGV
     private HBCIHandler handler               = null;
     private PrintStream out                   = null;
     
+    /**
+     * Deaktiviert den Test, wenn das System-Property nicht auf "true" steht.
+     * @throws Exception
+     */
+    @BeforeClass
+    public static void beforeClass() throws Exception
+    {
+        Assume.assumeTrue(Boolean.getBoolean(AbstractTest.SYSPROP_ONLINE));
+    }
     
     /**
      * Erzeugt das Passport-Objekt.

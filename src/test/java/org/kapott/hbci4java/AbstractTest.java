@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -28,6 +29,20 @@ import org.kapott.hbci.manager.HBCIUtils;
  */
 public abstract class AbstractTest
 {
+  private final static AtomicBoolean initialized = new AtomicBoolean(false);
+  
+  /**
+   * System-Property, mit dem festgelegt werden kann, ob die Tests ausgefuehrt
+   * werden sollen, die eine Onlineverbindung (z.Bsp. zur Bank) erfordern.
+   */
+  public final static String SYSPROP_ONLINE = "test.online";
+
+  /**
+   * System-Property, mit dem festgelegt werden kann, ob die Tests ausgefuehrt
+   * werden sollen, die Kartenleser und Chipkarte erfordern.
+   */
+  public final static String SYSPROP_CHIPCARD = "test.chipcard";
+
   /**
    * Liefert den Inhalt der angegebenen Datei.
    * @param name Dateiname.
@@ -104,21 +119,24 @@ public abstract class AbstractTest
    * @throws Exception
    */
   @BeforeClass
-  public static void beforeClass() throws Exception
+  public static void beforeClassAbstractTest() throws Exception
   {
     Locale.setDefault(Locale.GERMANY);
     Properties props = new Properties();
     props.put("log.loglevel.default", "" + HBCIUtils.LOG_DEBUG2);
+    props.putAll(System.getProperties());
     HBCIUtils.init(props, new HBCICallbackConsole());
+    initialized.set(true);
   }
-
+  
   /**
    * Beendet HBCI4Java
    * @throws Exception
    */
   @AfterClass
-  public static void afterClass() throws Exception
+  public static void afterClassAbstractTest() throws Exception
   {
-    HBCIUtils.done();
+    if (initialized.get())
+      HBCIUtils.done();
   }
 }

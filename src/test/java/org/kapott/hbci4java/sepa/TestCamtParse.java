@@ -64,7 +64,6 @@ public class TestCamtParse extends AbstractTest
 
     /**
      * Testet die Autodetection fuer eine XML-Datei ohne Namespace.
-     * 
      * @throws Exception
      */
     @Test
@@ -86,7 +85,6 @@ public class TestCamtParse extends AbstractTest
 
     /**
      * Testet das Fehlschlagen der Autodetection fuer eine XML-Datei mit falschem Namespace.
-     * 
      * @throws Exception
      */
     @Test
@@ -112,7 +110,6 @@ public class TestCamtParse extends AbstractTest
 
     /**
      * Testet das Lesen einer CAMT-Datei.
-     * 
      * @throws Exception
      */
     @Test
@@ -142,6 +139,8 @@ public class TestCamtParse extends AbstractTest
             Assert.assertTrue("Endsaldo falsch", new BigDecimal("110.50").compareTo(day.end.value.getBigDecimalValue()) == 0);
             Assert.assertEquals("Startdatum falsch", DF.parse("2018-07-20"), day.start.timestamp);
             Assert.assertEquals("Enddatum falsch", DF.parse("2018-07-20"), day.end.timestamp);
+            Assert.assertEquals("Startsaldo Waehrung falsch", "EUR",day.start.value.getCurr());
+            Assert.assertEquals("Endsaldo Waehrung falsch", "EUR",day.end.value.getCurr());
 
             Assert.assertNotNull("Konto fehlt",day.my);
             Assert.assertEquals("IBAN falsch","DE12345678901234567890",day.my.iban);
@@ -173,15 +172,51 @@ public class TestCamtParse extends AbstractTest
                 Assert.assertEquals("purposecode falsch","RINP",l.purposecode);
                 Assert.assertNotNull("Saldo fehlt",l.saldo);
                 Assert.assertTrue("Saldo falsch", new BigDecimal("110").compareTo(l.saldo.value.getBigDecimalValue()) == 0);
-                
-                // TODO: Weitere Tests
-//                Assert.assertEquals("",null,l.saldo);
-//                Assert.assertEquals("",null,l.text);
-//                Assert.assertEquals("",null,l.usage);
-//                Assert.assertEquals("",null,l.value);
-//                Assert.assertEquals("",null,l.valuta);
+                Assert.assertEquals("Saldodatum falsch", DF.parse("2018-07-20"), l.saldo.timestamp);
+                Assert.assertEquals("Saldo-Waehrung falsch", "EUR",l.saldo.value.getCurr());
+                Assert.assertEquals("Text falsch","DAUERAUFTRAG",l.text);
+                Assert.assertNotNull("Verwendungszweck fehlt",l.usage);
+                Assert.assertEquals("Anzahl Verwendungszwecke falsch",1,l.usage.size());
+                Assert.assertEquals("Verwendungszweck falsch","Verwendungszweck 1",l.usage.get(0));
+                Assert.assertNotNull("Betrag fehlt",l.value);
+                Assert.assertTrue("Betrag falsch", new BigDecimal("10").compareTo(l.value.getBigDecimalValue()) == 0);
+                Assert.assertEquals("Betrag-Waehrung falsch", "EUR",l.value.getCurr());
+                Assert.assertEquals("Valuta falsch",DF.parse("2018-07-21"),l.valuta);
             }
 
+            {
+                UmsLine l = lines.get(1);
+                Assert.assertNull("additional falsch",l.additional);
+                Assert.assertEquals("addkey falsch","000",l.addkey);
+                Assert.assertEquals("Buchungsdatum falsch",DF.parseObject("2018-07-20"),l.bdate);
+                Assert.assertNull("charge_value falsch",l.charge_value);
+                Assert.assertEquals("customerref falsch","NONREF",l.customerref);
+                Assert.assertEquals("gvcode falsch","152",l.gvcode);
+                Assert.assertEquals("id falsch","2018-07-20-07.51.28.370057",l.id);
+                Assert.assertNull("instref falsch",l.instref);
+                Assert.assertTrue("Buchung nicht als CAMT-Buchung markiert",l.isCamt);
+                Assert.assertTrue("Buchung nicht als SEPA-Buchung markiert",l.isSepa);
+                Assert.assertFalse("Buchung ist kein Storno",l.isStorno);
+                Assert.assertNull("orig_value falsch",l.orig_value);
+                Assert.assertNotNull("Gegenkonto fehlt",l.other);
+                Assert.assertEquals("Gegenkonto IBAN falsch","DE12345678901234567892",l.other.iban);
+                Assert.assertEquals("Gegenkonto BIC falsch","ABCDEFG3ABC",l.other.bic);
+                Assert.assertEquals("Gegenkonto Name falsch","Bert Bezahler",l.other.name);
+                Assert.assertEquals("primanota falsch","9201",l.primanota);
+                Assert.assertEquals("purposecode falsch","DEPT",l.purposecode);
+                Assert.assertNotNull("Saldo fehlt",l.saldo);
+                Assert.assertTrue("Saldo falsch", new BigDecimal("110.50").compareTo(l.saldo.value.getBigDecimalValue()) == 0);
+                Assert.assertEquals("Saldodatum falsch", DF.parse("2018-07-20"), l.saldo.timestamp);
+                Assert.assertEquals("Saldo-Waehrung falsch", "EUR",l.saldo.value.getCurr());
+                Assert.assertEquals("Text falsch","EINZAHLUNG",l.text);
+                Assert.assertNotNull("Verwendungszweck fehlt",l.usage);
+                Assert.assertEquals("Anzahl Verwendungszwecke falsch",1,l.usage.size());
+                Assert.assertEquals("Verwendungszweck falsch","Verwendungszweck 2",l.usage.get(0));
+                Assert.assertNotNull("Betrag fehlt",l.value);
+                Assert.assertTrue("Betrag falsch", new BigDecimal("0.50").compareTo(l.value.getBigDecimalValue()) == 0);
+                Assert.assertEquals("Betrag-Waehrung falsch", "EUR",l.value.getCurr());
+                Assert.assertEquals("Valuta falsch",DF.parse("2018-07-22"),l.valuta);
+            }
         }
         finally
         {

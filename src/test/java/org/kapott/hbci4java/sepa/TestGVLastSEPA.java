@@ -14,7 +14,6 @@ import org.kapott.hbci4java.AbstractTestGV;
  */
 public class TestGVLastSEPA extends AbstractTestGV
 {
-
     /**
      * Testet das Ausfuehren einer SEPA-Lastschrift.
      */
@@ -34,17 +33,17 @@ public class TestGVLastSEPA extends AbstractTestGV
             @Override
             public void configure(HBCIJob job, HBCIPassport passport, Properties params) {
                 Konto acc = new Konto();
-                acc.blz = params.getProperty("target_blz");
-                acc.number = params.getProperty("target_number");
-                acc.name = "Kurt Mustermann";
-                acc.bic = params.getProperty("target_bic");
-                acc.iban = params.getProperty("target_iban");
-                int source_acc_idx = Integer.parseInt(params.getProperty("source_account_idx"));
-                job.setParam("src",passport.getAccounts()[source_acc_idx]);
+                acc.blz = params.getProperty("blz");
+                acc.number = params.getProperty("konto");
+                acc.name = params.getProperty("name");
+                acc.bic = params.getProperty("bic");
+                acc.iban = params.getProperty("iban");
                 job.setParam("dst",acc);
                 
-                String value = params.getProperty("value");
-                if(value == null) value = "100";
+                int idx = Integer.parseInt(params.getProperty("passport_index","0"));
+                job.setParam("src",passport.getAccounts()[idx]);
+                
+                String value = params.getProperty("value","1");
                 job.setParam("btg",new Value(Integer.parseInt(value),"EUR"));
                 job.setParam("usage",params.getProperty("usage"));
                 job.setParam("targetdate", params.getProperty("date"));

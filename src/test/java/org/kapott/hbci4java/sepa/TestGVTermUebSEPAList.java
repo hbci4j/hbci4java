@@ -1,43 +1,40 @@
 package org.kapott.hbci4java.sepa;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kapott.hbci.GV.HBCIJob;
-import org.kapott.hbci.GV_Result.HBCIJobResult;
-import org.kapott.hbci.callback.HBCICallback;
-import org.kapott.hbci.callback.HBCICallbackConsole;
-import org.kapott.hbci.manager.HBCIHandler;
-import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
-import org.kapott.hbci.passport.HBCIPassportPinTan;
-import org.kapott.hbci.status.HBCIExecStatus;
-import org.kapott.hbci4java.AbstractTest;
 import org.kapott.hbci4java.AbstractTestGV;
 
 
 
-public class TestGVTermUebSEPAList extends AbstractTestGV {
-
-    protected String getJobname()
+/**
+ * Testet das Abrufen der Liste der SEPA-Termin-Ueberweisungen.
+ */
+public class TestGVTermUebSEPAList extends AbstractTestGV
+{
+    /**
+     * Testet das Abrufen der Liste der SEPA-Termin-Ueberweisungen.
+     */
+    @Test
+    public void test()
     {
-        return "TermUebSEPAList";
+        this.execute(new Execution() {
+            @Override
+            public String getJobname() {
+                return "TermUebSEPAList";
+            }
+            
+            /**
+             * @see org.kapott.hbci4java.AbstractTestGV.Execution#configure(org.kapott.hbci.GV.HBCIJob, org.kapott.hbci.passport.HBCIPassport, java.util.Properties)
+             */
+            @Override
+            public void configure(HBCIJob job, HBCIPassport passport, Properties params) {
+                super.configure(job, passport, params);
+                job.setParam("my.bic",params.getProperty("bic",System.getProperty("bic")));
+                job.setParam("my.iban",params.getProperty("iban",System.getProperty("iban")));
+            }
+        });
     }
-
 }

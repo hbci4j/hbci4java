@@ -219,6 +219,7 @@ public class ParseCamt05200102 implements ISEPAParser<GVRKUms>
         // Saldo
         line.saldo = new Saldo();
         line.saldo.value = new Value(currSaldo.add(line.value.getBigDecimalValue()));
+        line.saldo.value.setCurr(line.value.getCurr());
         line.saldo.timestamp = line.bdate;
         //
         ////////////////////////////////////////////////////////////////////////

@@ -1,14 +1,3 @@
-/**********************************************************************
- * $Source: /cvsroot/hibiscus/hbci4java/test/hbci4java/ddv/PCSCTest.java,v $
- * $Revision: 1.1 $
- * $Date: 2011/11/24 21:59:37 $
- * $Author: willuhn $
- *
- * Copyright (c) by willuhn - software & services
- * All rights reserved
- *
- **********************************************************************/
-
 package org.kapott.hbci4java.ddv;
 
 import java.io.File;
@@ -16,6 +5,7 @@ import java.util.Properties;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,6 +25,16 @@ public class PCSCTest extends AbstractTest
   private static File dir = null;
   HBCIPassportDDVPCSC passport = null;
   
+  /**
+   * Deaktiviert den Test, wenn das System-Property nicht auf "true" steht.
+   * @throws Exception
+   */
+  @BeforeClass
+  public static void beforeClass() throws Exception
+  {
+      Assume.assumeTrue(Boolean.getBoolean(AbstractTest.SYSPROP_CHIPCARD));
+  }
+
   /**
    * List die Daten aus der Karte.
    * @throws Exception
@@ -120,12 +120,3 @@ public class PCSCTest extends AbstractTest
     // TODO: Verzeichnis und Inhalt muesste mal noch geloescht werden.
   }
 }
-
-
-
-/**********************************************************************
- * $Log: PCSCTest.java,v $
- * Revision 1.1  2011/11/24 21:59:37  willuhn
- * @N Patch 33 - erster Code fuer PC/SC-Support via javax.smartcardio - noch nicht funktionsfaehig
- *
- **********************************************************************/
