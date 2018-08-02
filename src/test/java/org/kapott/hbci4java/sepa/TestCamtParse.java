@@ -128,8 +128,11 @@ public class TestCamtParse extends AbstractTest
             GVRKUms ums = new GVRKUms();
             parser.parse(is2, ums.getDataPerDay());
 
-            List<BTag> days = ums.getDataPerDay();
-            Assert.assertEquals("Anzahl Tage falsch", 1, days.size());
+            List<BTag> days = ums.getDataPerDayUnbooked();
+            Assert.assertEquals("Anzahl Tage ungebuchte Umsaetze falsch", 0, days.size());
+
+            days = ums.getDataPerDay();
+            Assert.assertEquals("Anzahl Buchungstage falsch", 1, days.size());
 
             BTag day = days.get(0);
             List<UmsLine> lines = day.lines;
