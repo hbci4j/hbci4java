@@ -150,7 +150,7 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
                 SepaVersion version = SepaVersion.byURN(urn);
                 if (version.getType() == this.getPainType())
                 {
-                    if (!version.canGenerate(this.getPainJobName()))
+                    if (!version.isSupported(this.getPainJobName()))
                     {
                         HBCIUtils.log("  unsupported " + version,HBCIUtils.LOG_DEBUG);
                         continue;
