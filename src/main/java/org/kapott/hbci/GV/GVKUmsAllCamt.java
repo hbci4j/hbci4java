@@ -11,11 +11,13 @@ package org.kapott.hbci.GV;
 
 import java.io.ByteArrayInputStream;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.parsers.ISEPAParser;
 import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -151,10 +153,11 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
                 // Das betraf PAIN-Messages. Ich weiss nicht, ob das bei CAMT auch vorkommt.
                 // Ich gehe aber auf Nummer sicher.
                 final SepaVersion version = SepaVersion.choose(format,booked);
-                ISEPAParser<GVRKUms> parser = SEPAParserFactory.get(version);
+                ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
                 
                 HBCIUtils.log("  parsing camt data: " + booked,HBCIUtils.LOG_DEBUG2);
-                parser.parse(new ByteArrayInputStream(booked.getBytes(Comm.ENCODING)),result);
+                result.camtBooked = booked;
+                parser.parse(new ByteArrayInputStream(booked.getBytes(Comm.ENCODING)),result.getDataPerDay());
                 HBCIUtils.log("  parsed camt data, entries: " + result.getFlatData().size(),HBCIUtils.LOG_INFO);
             }
             catch (Exception e)
@@ -170,10 +173,11 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
             try
             {
                 final SepaVersion version = SepaVersion.choose(format,notbooked);
-                ISEPAParser<GVRKUms> parser = SEPAParserFactory.get(version);
+                ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
                 
                 HBCIUtils.log("  parsing unbooked camt data: " + notbooked,HBCIUtils.LOG_DEBUG2);
-                parser.parse(new ByteArrayInputStream(notbooked.getBytes(Comm.ENCODING)),result);
+                result.camtNotBooked = notbooked;
+                parser.parse(new ByteArrayInputStream(notbooked.getBytes(Comm.ENCODING)),result.getDataPerDayUnbooked());
                 HBCIUtils.log("  parsed unbooked camt data, entries: " + result.getFlatDataUnbooked().size(),HBCIUtils.LOG_INFO);
             }
             catch (Exception e)

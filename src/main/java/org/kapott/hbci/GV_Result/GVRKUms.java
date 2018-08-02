@@ -245,6 +245,16 @@ public class GVRKUms
     private List<BTag> tageMT940;
     private List<BTag> tageMT942;
 
+    /**
+     * Die originale empfangene CAMT-Datei mit den gebuchten Umsaetzen.
+     */
+    public String camtBooked;
+    
+    /**
+     * Die originale empfangene CAMT-Datei mit den Vormerkbuchungen.
+     */
+    public String camtNotBooked;
+
     private boolean parsed;
 
     /** Dieses Feld enthält einen String, der den nicht-auswertbaren Teil der Kontoauszüge

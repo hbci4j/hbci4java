@@ -18,7 +18,6 @@ import java.util.List;
 import javax.xml.bind.JAXB;
 
 import org.kapott.hbci.GV.SepaUtil;
-import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -50,13 +49,13 @@ import org.kapott.hbci.structures.Value;
 /**
  * Parser zum Lesen von Umsaetzen im CAMT.052 Format in Version 001.01.
  */
-public class ParseCamt05200101 implements ISEPAParser<GVRKUms>
+public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
 {
     /**
      * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.lang.Object)
      */
     @Override
-    public void parse(InputStream xml, GVRKUms result)
+    public void parse(InputStream xml, List<BTag> tage)
     {
         
         Document doc = JAXB.unmarshal(xml, Document.class);
@@ -86,7 +85,7 @@ public class ParseCamt05200101 implements ISEPAParser<GVRKUms>
             ////////////////////////////////////////////////////////////////////
             // Kopf des Buchungstages
             BTag tag = this.createDay(report);
-            result.getDataPerDay().add(tag);
+            tage.add(tag);
             //
             ////////////////////////////////////////////////////////////////////
 

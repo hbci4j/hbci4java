@@ -122,11 +122,11 @@ public class TestCamtParse extends AbstractTest
         {
             is1 = this.getStream(file);
             SepaVersion version = SepaVersion.autodetect(is1);
-            ISEPAParser<GVRKUms> parser = SEPAParserFactory.get(version);
+            ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
 
             is2 = this.getStream(file);
             GVRKUms ums = new GVRKUms();
-            parser.parse(is2, ums);
+            parser.parse(is2, ums.getDataPerDay());
 
             List<BTag> days = ums.getDataPerDay();
             Assert.assertEquals("Anzahl Tage falsch", 1, days.size());
