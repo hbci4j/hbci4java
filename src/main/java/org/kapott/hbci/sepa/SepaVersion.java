@@ -482,8 +482,8 @@ public class SepaVersion implements Comparable<SepaVersion>
         final SepaVersion versionDesc = haveDesc ? SepaVersion.byURN(sepadesc) : null;
         final SepaVersion versionData = haveData ? SepaVersion.autodetect(new ByteArrayInputStream(sepadata.getBytes(Comm.ENCODING))) : null;
         
-        HBCIUtils.log("sepa version given in sepadescr: " + versionDesc,HBCIUtils.LOG_INFO);
-        HBCIUtils.log("sepa version according to data: " + versionData,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("sepa version given in sepadescr: " + versionDesc,HBCIUtils.LOG_DEBUG);
+        HBCIUtils.log("sepa version according to data: " + versionData,HBCIUtils.LOG_DEBUG);
         
         // Wir haben keine Version im Deskriptor, dann bleibt nur die aus den Daten
         if (versionDesc == null)
