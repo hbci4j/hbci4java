@@ -158,7 +158,7 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
                 HBCIUtils.log("  parsing camt data: " + booked,HBCIUtils.LOG_DEBUG2);
                 result.camtBooked = booked;
                 parser.parse(new ByteArrayInputStream(booked.getBytes(Comm.ENCODING)),result.getDataPerDay());
-                HBCIUtils.log("  parsed camt data, entries: " + result.getFlatData().size(),HBCIUtils.LOG_INFO);
+                HBCIUtils.log("  parsed camt data, entries: " + result.getFlatData().size(),HBCIUtils.LOG_DEBUG);
             }
             catch (Exception e)
             {
@@ -178,7 +178,7 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
                 HBCIUtils.log("  parsing unbooked camt data: " + notbooked,HBCIUtils.LOG_DEBUG2);
                 result.camtNotBooked = notbooked;
                 parser.parse(new ByteArrayInputStream(notbooked.getBytes(Comm.ENCODING)),result.getDataPerDayUnbooked());
-                HBCIUtils.log("  parsed unbooked camt data, entries: " + result.getFlatDataUnbooked().size(),HBCIUtils.LOG_INFO);
+                HBCIUtils.log("  parsed unbooked camt data, entries: " + result.getFlatDataUnbooked().size(),HBCIUtils.LOG_DEBUG);
             }
             catch (Exception e)
             {
