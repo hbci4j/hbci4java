@@ -38,6 +38,7 @@ import org.kapott.hbci.sepa.jaxb.camt_052_001_07.Document;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.EntryDetails8;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.EntryTransaction9;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.FinancialInstitutionIdentification8;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_07.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.Party35Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.PartyIdentification125;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.ProprietaryBankTransactionCodeStructure1;
@@ -53,7 +54,7 @@ import org.kapott.hbci.structures.Saldo;
 /**
  * Generator fuer CAMT-Dateien im Format CAMT052.001.07
  */
-public class GenCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
+public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
 {
     /**
      * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(java.lang.Object, java.io.OutputStream, boolean)
@@ -76,6 +77,9 @@ public class GenCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
                 entries.add(this.createLine(line));
             }
         }
+        
+        ObjectFactory of = new ObjectFactory();
+        this.marshal(of.createDocument(doc), os, validate);
     }
     
     /**
