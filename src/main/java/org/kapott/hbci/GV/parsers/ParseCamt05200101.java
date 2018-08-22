@@ -144,7 +144,7 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         if (other != null)
         {
             CashAccount7 acc = haben ? other.getDbtrAcct() : other.getCdtrAcct();
-            AccountIdentification3Choice id = acc != null ? other.getDbtrAcct().getId() : null;
+            AccountIdentification3Choice id = acc != null ? acc.getId() : null;
             line.other.iban = id != null ? id.getIBAN() : null;
             
             PartyIdentification8 name = haben ? other.getDbtr() : other.getCdtr();

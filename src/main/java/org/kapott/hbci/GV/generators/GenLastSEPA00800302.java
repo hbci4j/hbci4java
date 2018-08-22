@@ -53,19 +53,19 @@ import org.kapott.hbci.sepa.jaxb.pain_008_003_02.ServiceLevelSEPA;
 /**
  * SEPA-Generator fuer pain.008.003.02.
  */
-public class GenLastSEPA00800302 extends AbstractSEPAGenerator
+public class GenLastSEPA00800302 extends AbstractSEPAGenerator<Properties>
 {
     /**
-     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getPainVersion()
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getSepaVersion()
      */
     @Override
-    public SepaVersion getPainVersion()
+    public SepaVersion getSepaVersion()
     {
         return SepaVersion.PAIN_008_003_02;
     }
 
     /**
-     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(java.util.Properties, java.io.OutputStream, boolean)
+     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(java.lang.Object, java.io.OutputStream, boolean)
      */
     @Override
     public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception

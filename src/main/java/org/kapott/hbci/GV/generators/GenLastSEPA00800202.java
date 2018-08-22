@@ -9,7 +9,6 @@ import org.kapott.hbci.GV.AbstractSEPAGV;
 import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.sepa.SepaVersion;
-import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_02.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_02.ActiveOrHistoricCurrencyAndAmountSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_02.ActiveOrHistoricCurrencyCodeEUR;
@@ -55,19 +54,19 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_02.ServiceLevelSEPACode;
 /**
  * SEPA-Generator fuer pain.008.002.02.
  */
-public class GenLastSEPA00800202 extends AbstractSEPAGenerator
+public class GenLastSEPA00800202 extends AbstractSEPAGenerator<Properties>
 {
     /**
-     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getPainVersion()
+     * @see org.kapott.hbci.GV.generators.AbstractSEPAGenerator#getSepaVersion()
      */
     @Override
-    public SepaVersion getPainVersion()
+    public SepaVersion getSepaVersion()
     {
         return SepaVersion.PAIN_008_002_02;
     }
 
     /**
-     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(java.util.Properties, java.io.OutputStream, boolean)
+     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#generate(java.lang.Object, java.io.OutputStream, boolean)
      */
     @Override
     public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception

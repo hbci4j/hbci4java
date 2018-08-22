@@ -3,14 +3,14 @@ package org.kapott.hbci.GV.generators;
 
 
 import java.io.OutputStream;
-import java.util.Properties;
 
 import org.kapott.hbci.sepa.SepaVersion;
 
 /**
  * Basis-Interface fuer alle SEPA-Job-Generatoren.
+ * @param <T> Die konkrete Struktur, aus der die Daten gelesen werden.
  */
-public interface ISEPAGenerator
+public interface ISEPAGenerator<T>
 {
     /**
      * Das verwendete Encoding. UTF-8.
@@ -20,7 +20,7 @@ public interface ISEPAGenerator
     
 	/**
 	 * Schreibt den Job als SEPA-XML in den Stream.
-	 * @param sepaParams die sepaParams aus dem SEPA-Geschaeftsvorfall.
+	 * @param source die zu generierenden Daten.
 	 * Urspruenglich wurde hier direkt eine Instanz von "AbstractSEPAGV" uebergeben
 	 * und dort job.getSEPAParam($targetname(ohne "sepa.") aufgerufen. Das hatte jedoch
 	 * den Nachteil, dass fuer die Instanziierung eines "AbstractSEPAGV" (welche
@@ -35,7 +35,7 @@ public interface ISEPAGenerator
 	 * @param validate true, wenn das erzeugte XML gegen das PAIN-Schema validiert werden soll.
 	 * @throws Exception
 	 */
-	public void generate(Properties sepaParams, OutputStream os, boolean validate) throws Exception; 
+	public void generate(T source, OutputStream os, boolean validate) throws Exception; 
 	
 	/**
 	 * Liefert die SEPA-Version des Generators.
@@ -48,6 +48,6 @@ public interface ISEPAGenerator
 	 * @return die zu deklarierende Schema-Location oder NULL, falls nichts
 	 * angegeben werden soll.
 	 */
-	public SepaVersion getPainVersion();
+	public SepaVersion getSepaVersion();
 	
 }

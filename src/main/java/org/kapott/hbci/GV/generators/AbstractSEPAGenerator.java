@@ -19,15 +19,16 @@ import org.kapott.hbci.sepa.SepaVersion;
 
 /**
  * Abstrakte Basis-Implementierung der SEPA-Generatoren.
+ * @param <T> Die konkrete Struktur, aus der die Daten gelesen werden.
  * 
  * WICHTIG: Diese Klasse sowie die Ableitungen sollten auch ohne initialisiertes HBCI-System
  * funktionieren, um das XML ohne HBCI-Handler erstellen zu koennen. Daher sollte auf die
  * Verwendung von "HBCIUtils" & Co verzichtet werden. Das ist auch der Grund, warum hier
  * das Java-Logging verwendet wird und nicht das HBCI4Java-eigene.
  */
-public abstract class AbstractSEPAGenerator implements ISEPAGenerator
+public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
 {
-    private final static Logger LOG            = Logger.getLogger(AbstractSEPAGenerator.class.getName());
+    private final static Logger LOG = Logger.getLogger(AbstractSEPAGenerator.class.getName());
 
     /**
      * Schreibt die Bean mittels JAXB in den Strean.
@@ -49,7 +50,7 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
         if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        SepaVersion version = this.getPainVersion();
+        SepaVersion version = this.getSepaVersion();
         if (version != null)
         {
             String schemaLocation = version.getSchemaLocation();
@@ -94,10 +95,10 @@ public abstract class AbstractSEPAGenerator implements ISEPAGenerator
     }
     
     /**
-     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#getPainVersion()
+     * @see org.kapott.hbci.GV.generators.ISEPAGenerator#getSepaVersion()
      */
     @Override
-    public SepaVersion getPainVersion()
+    public SepaVersion getSepaVersion()
     {
         return null;
     }
