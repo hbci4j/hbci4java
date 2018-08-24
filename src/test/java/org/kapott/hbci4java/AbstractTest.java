@@ -34,14 +34,22 @@ public abstract class AbstractTest
   /**
    * System-Property, mit dem festgelegt werden kann, ob die Tests ausgefuehrt
    * werden sollen, die eine Onlineverbindung (z.Bsp. zur Bank) erfordern.
+   * Default-Wert ist false.
    */
   public final static String SYSPROP_ONLINE = "test.online";
 
   /**
    * System-Property, mit dem festgelegt werden kann, ob die Tests ausgefuehrt
    * werden sollen, die Kartenleser und Chipkarte erfordern.
+   * Default-Wert ist false.
    */
   public final static String SYSPROP_CHIPCARD = "test.chipcard";
+
+  /**
+   * System-Property, mit dem festgelegt werden kann, ob Performance-Tests durchgefuehrt werden sollen.
+   * Default-Wert ist true.
+   */
+  public final static String SYSPROP_PERFORMANCE = "test.performance";
 
   /**
    * Liefert den Inhalt der angegebenen Datei.

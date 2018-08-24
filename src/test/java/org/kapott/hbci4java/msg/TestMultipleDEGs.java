@@ -3,6 +3,8 @@ package org.kapott.hbci4java.msg;
 import java.util.Hashtable;
 
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
@@ -17,6 +19,17 @@ import org.kapott.hbci4java.AbstractTest;
  */
 public class TestMultipleDEGs extends AbstractTest
 {
+  /**
+   * Deaktiviert den Test, wenn das System-Property nicht auf "true" steht.
+   * @throws Exception
+   */
+  @BeforeClass
+  public static void beforeClass() throws Exception
+  {
+      Assume.assumeTrue(Boolean.valueOf(System.getProperty(AbstractTest.SYSPROP_PERFORMANCE,Boolean.TRUE.toString())));
+  }
+    
+
 
   /**
    * @throws Exception
