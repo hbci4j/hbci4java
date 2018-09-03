@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -36,8 +37,10 @@ import org.kapott.hbci.sepa.jaxb.camt_052_001_07.CreditDebitCode;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.DateAndDateTime2Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.Document;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.EntryDetails8;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_07.EntryStatus1Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.EntryTransaction9;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.FinancialInstitutionIdentification8;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_07.GroupHeader73;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.Party35Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_07.PartyIdentification125;
@@ -62,19 +65,35 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
     @Override
     public void generate(List<BTag> source, OutputStream os, boolean validate) throws Exception
     {
+        final long now = System.currentTimeMillis();
+        
         final Document doc = new Document();
         final BankToCustomerAccountReportV07 container = new BankToCustomerAccountReportV07();
         doc.setBkToCstmrAcctRpt(container);
         
+        ///////////////////////////////////////////////////////////////////////////
+        // Wir haben zwar keine Informationen fuer den Header. Er ist aber Pflicht.
+        GroupHeader73 grphdr = new GroupHeader73();
+        grphdr.setMsgId(Long.toString(now));
+        grphdr.setCreDtTm(this.createCalendar(now));
+        container.setGrpHdr(grphdr);
+        //
+        ///////////////////////////////////////////////////////////////////////////
+        
         for (BTag tag:source)
         {
             AccountReport22 report = this.createDay(tag);
+            
+            // ID ist Pflicht. Wir tragen einfach immer die Typ-Bezeichnung ein.
+            report.setId("camt05200107");
+            report.setCreDtTm(this.createCalendar(now));
+            
             container.getRpt().add(report);
 
             final List<ReportEntry9> entries = report.getNtry();
             for (UmsLine line:tag.lines)
             {
-                entries.add(this.createLine(line));
+                entries.add(this.createLine(tag,line));
             }
         }
         
@@ -84,13 +103,18 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
     
     /**
      * Erzeugt eine einzelne CAMT-Umsatzbuchung.
+     * @param tag der Buchungstag.
      * @param line eine Umsatzbuchung aus HBCI4Java.
      * @return die CAMT-Umsatzbuchung.
      * @throws Exception
      */
-    private ReportEntry9 createLine(UmsLine line) throws Exception
+    private ReportEntry9 createLine(BTag tag, UmsLine line) throws Exception
     {
         ReportEntry9 entry = new ReportEntry9();
+        
+        EntryStatus1Choice status = new EntryStatus1Choice();
+        status.setCd("BOOK");
+        entry.setSts(status);
         
         EntryDetails8 detail = new EntryDetails8();
         entry.getNtryDtls().add(detail);
@@ -110,29 +134,74 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
             tx.setRefs(ref);
             
             ProprietaryReference1 prt = new ProprietaryReference1();
+            prt.setTp("UNKNOWN"); // Feld ist Pficht, wir haben aber nichts zum Reinschreiben
             prt.setRef(line.id);
             ref.getPrtry().add(prt);
         }
         //
         ////////////////////////////////////////////////////////////////////////
-        
+
+        TransactionParties4 other = new TransactionParties4();
+        tx.setRltdPties(other);
+
+        TransactionAgents4 banks = new TransactionAgents4();
+        tx.setRltdAgts(banks);
+
         ////////////////////////////////////////////////////////////////////////
-        // Gegenkonto: IBAN + Name
+        // Eigenes Konto: IBAN + Name
+        if (tag != null && tag.my != null)
+        {
+            // IBAN
+            CashAccount24 acc = new CashAccount24();
+            if (haben)
+                other.setCdtrAcct(acc);
+            else
+                other.setDbtrAcct(acc);
+            
+            AccountIdentification4Choice id = new AccountIdentification4Choice();
+            acc.setId(id);
+            id.setIBAN(tag.my.iban);
+            
+            // Name
+            Party35Choice party = new Party35Choice();
+            PartyIdentification125 pi = new PartyIdentification125();
+            pi.setNm(tag.my.name);
+            party.setPty(pi);
+            
+            if (haben)
+                other.setCdtr(party);
+            else
+                other.setDbtr(party);
+
+            // BIC
+            BranchAndFinancialInstitutionIdentification5 bank = new BranchAndFinancialInstitutionIdentification5();
+            if (haben)
+                banks.setCdtrAgt(bank);
+            else
+                banks.setDbtrAgt(bank);
+            
+            FinancialInstitutionIdentification8 bic = new FinancialInstitutionIdentification8();
+            bank.setFinInstnId(bic);
+            bic.setBICFI(tag.my.bic);
+        }
+        ////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////
+        // Gegenkonto: IBAN + Name + BIC
         if (line.other != null)
         {
-            TransactionParties4 other = new TransactionParties4();
-            tx.setRltdPties(other);
-            
             CashAccount24 acc = new CashAccount24();
             if (haben)
                 other.setDbtrAcct(acc);
             else
                 other.setCdtrAcct(acc);
             
+            // IBAN
             AccountIdentification4Choice id = new AccountIdentification4Choice();
             acc.setId(id);
             id.setIBAN(line.other.iban);
-            
+
+            // Name
             Party35Choice party = new Party35Choice();
             PartyIdentification125 pi = new PartyIdentification125();
             pi.setNm(line.other.name);
@@ -142,17 +211,8 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
                 other.setDbtr(party);
             else
                 other.setCdtr(party);
-        }
-        //
-        ////////////////////////////////////////////////////////////////////////
-        
-        ////////////////////////////////////////////////////////////////////////
-        // Gegenkonto: BIC
-        if (line.other != null)
-        {
-            TransactionAgents4 banks = new TransactionAgents4();
-            tx.setRltdAgts(banks);
-            
+
+            // BIC
             BranchAndFinancialInstitutionIdentification5 bank = new BranchAndFinancialInstitutionIdentification5();
             if (haben)
                 banks.setDbtrAgt(bank);
@@ -165,7 +225,7 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
         }
         //
         ////////////////////////////////////////////////////////////////////////
-
+        
         ////////////////////////////////////////////////////////////////////////
         // Verwendungszweck
         if (line.usage != null && line.usage.size() > 0)
@@ -293,6 +353,8 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
         if (tag != null && tag.my != null)
         {
             CashAccount36 acc = new CashAccount36();
+            report.setAcct(acc);
+            
             AccountIdentification4Choice id = new AccountIdentification4Choice();
             id.setIBAN(tag.my.iban);
             acc.setId(id);
@@ -300,10 +362,12 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
             acc.setCcy(tag.my.curr);
             
             BranchAndFinancialInstitutionIdentification5 svc = new BranchAndFinancialInstitutionIdentification5();
+            acc.setSvcr(svc);
+            
             FinancialInstitutionIdentification8 inst = new FinancialInstitutionIdentification8();
             svc.setFinInstnId(inst);
+            
             inst.setBICFI(tag.my.bic);
-            report.setAcct(acc);
         }
         
         return report;
@@ -332,6 +396,10 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
         {
             amt.setCcy(saldo.value.getCurr());
             amt.setValue(saldo.value.getBigDecimalValue());
+            
+            // Checken, ob es Soll- oder Habenbuchung ist
+            boolean haben = saldo.value.getBigDecimalValue().compareTo(BigDecimal.ZERO) > 0;
+            bal.setCdtDbtInd(haben ? CreditDebitCode.CRDT : CreditDebitCode.DBIT);
         }
         
         long ts = saldo != null && saldo.timestamp != null ? saldo.timestamp.getTime() : 0;
@@ -358,7 +426,11 @@ public class GenKUmsAllCamt05200107 extends AbstractSEPAGenerator<List<BTag>>
         DatatypeFactory df = DatatypeFactory.newInstance();
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTimeInMillis(timestamp != null ? timestamp.longValue() : System.currentTimeMillis());
-        return df.newXMLGregorianCalendar(cal);
+        XMLGregorianCalendar xml = df.newXMLGregorianCalendar(cal);
+        
+        // Explizit die Zeitzone streichen - die landet sonst mit im XML
+        xml.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+        return xml;
     }
 }
 

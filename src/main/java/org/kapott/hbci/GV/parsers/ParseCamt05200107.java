@@ -246,6 +246,12 @@ public class ParseCamt05200107 implements ISEPAParser<List<BTag>>
                 line.primanota = parts[2];
                 line.addkey    = parts[3];
             }
+            else if (parts.length == 3)
+            {
+                line.gvcode    = parts[0];
+                line.primanota = parts[1];
+                line.addkey    = parts[2];
+            }
         }
         //
         ////////////////////////////////////////////////////////////////////////
