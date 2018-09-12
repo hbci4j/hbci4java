@@ -144,7 +144,12 @@ public class ParseCamt05200102 implements ISEPAParser<List<BTag>>
         ////////////////////////////////////////////////////////////////////////
         // Buchungs-ID
         TransactionReferences2 ref = tx.getRefs();
-        line.id = ref.getPrtry() != null ? ref.getPrtry().getRef() : null;
+        if (ref != null)
+        {
+            line.id = ref.getPrtry() != null ? ref.getPrtry().getRef() : null;
+            line.endToEndId = ref.getEndToEndId();
+        }
+        
         ////////////////////////////////////////////////////////////////////////
         
         ////////////////////////////////////////////////////////////////////////

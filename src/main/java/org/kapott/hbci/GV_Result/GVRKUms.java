@@ -129,6 +129,11 @@ public class GVRKUms
         public String id;
         
         /**
+         * NUR BEI CAMT: Ende-zu-Ende-Referenz (EREF)
+         */
+        public String endToEndId;
+        
+        /**
          * NUR BEI CAMT: Der Purpose-Code der Buchung.
          */
         public String purposecode;
