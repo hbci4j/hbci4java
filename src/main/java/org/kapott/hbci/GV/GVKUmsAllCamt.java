@@ -156,7 +156,7 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
                 ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
                 
                 HBCIUtils.log("  parsing camt data: " + booked,HBCIUtils.LOG_DEBUG2);
-                result.camtBooked = booked;
+                result.camtBooked.add(booked);
                 parser.parse(new ByteArrayInputStream(booked.getBytes(Comm.ENCODING)),result.getDataPerDay());
                 HBCIUtils.log("  parsed camt data, entries: " + result.getFlatData().size(),HBCIUtils.LOG_DEBUG);
             }
@@ -176,7 +176,7 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
                 ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
                 
                 HBCIUtils.log("  parsing unbooked camt data: " + notbooked,HBCIUtils.LOG_DEBUG2);
-                result.camtNotBooked = notbooked;
+                result.camtNotBooked.add(notbooked);
                 parser.parse(new ByteArrayInputStream(notbooked.getBytes(Comm.ENCODING)),result.getDataPerDayUnbooked());
                 HBCIUtils.log("  parsed unbooked camt data, entries: " + result.getFlatDataUnbooked().size(),HBCIUtils.LOG_DEBUG);
             }

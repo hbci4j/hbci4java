@@ -251,14 +251,14 @@ public class GVRKUms
     private List<BTag> tageMT942;
 
     /**
-     * Die originale empfangene CAMT-Datei mit den gebuchten Umsaetzen.
+     * Die originale empfangenen CAMT-Dateien mit den gebuchten Umsaetzen.
      */
-    public String camtBooked;
+    public List<String> camtBooked = new ArrayList<String>();
     
     /**
-     * Die originale empfangene CAMT-Datei mit den Vormerkbuchungen.
+     * Die originale empfangenen CAMT-Dateien mit den Vormerkbuchungen.
      */
-    public String camtNotBooked;
+    public List<String> camtNotBooked = new ArrayList<String>();
 
     private boolean parsed;
 
