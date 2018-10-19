@@ -49,7 +49,7 @@ import org.kapott.hbci.structures.Value;
 /**
  * Parser zum Lesen von Umsaetzen im CAMT.052 Format in Version 001.01.
  */
-public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
+public class ParseCamt05200101 extends AbstractCamtParser
 {
     /**
      * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.lang.Object)
@@ -137,8 +137,8 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         TransactionReferences1 ref = tx.getRefs();
         if (ref != null)
         {
-            line.id = ref.getPrtry() != null ? ref.getPrtry().getRef() : null;
-            line.endToEndId = ref.getEndToEndId();
+            line.id = trim(ref.getPrtry() != null ? ref.getPrtry().getRef() : null);
+            line.endToEndId = trim(ref.getEndToEndId());
         }
         ////////////////////////////////////////////////////////////////////////
         
@@ -149,10 +149,10 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         {
             CashAccount7 acc = haben ? other.getDbtrAcct() : other.getCdtrAcct();
             AccountIdentification3Choice id = acc != null ? acc.getId() : null;
-            line.other.iban = id != null ? id.getIBAN() : null;
+            line.other.iban = trim(id != null ? id.getIBAN() : null);
             
             PartyIdentification8 name = haben ? other.getDbtr() : other.getCdtr();
-            line.other.name = name != null ? name.getNm() : null;
+            line.other.name = trim(name != null ? name.getNm() : null);
         }
         //
         ////////////////////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         {
             BranchAndFinancialInstitutionIdentification3 bank = haben ? banks.getDbtrAgt() : banks.getCdtrAgt();
             FinancialInstitutionIdentification5Choice bic = bank != null ? bank.getFinInstnId() : null;
-            line.other.bic = bank != null ? bic.getBIC() : null;
+            line.other.bic = trim(bank != null ? bic.getBIC() : null);
         }
         //
         ////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         // Verwendungszweck
         List<String> usages = tx.getRmtInf() != null ? tx.getRmtInf().getUstrd() : null;
         if (usages != null && usages.size() > 0)
-            line.usage.addAll(usages);
+            line.usage.addAll(trim(usages));
         //
         ////////////////////////////////////////////////////////////////////////
 
@@ -220,8 +220,8 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         
         ////////////////////////////////////////////////////////////////////////
         // Art und Kundenreferenz
-        line.text = entry.getAddtlNtryInf();
-        line.customerref = entry.getAcctSvcrRef();
+        line.text = trim(entry.getAddtlNtryInf());
+        line.customerref = trim(entry.getAcctSvcrRef());
         //
         ////////////////////////////////////////////////////////////////////////
         
@@ -247,7 +247,7 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         ////////////////////////////////////////////////////////////////////////
         // Purpose-Code
         Purpose1Choice purp = tx.getPurp();
-        line.purposecode = purp != null ? purp.getCd() : null;
+        line.purposecode = trim(purp != null ? purp.getCd() : null);
         //
         ////////////////////////////////////////////////////////////////////////
         
@@ -301,9 +301,9 @@ public class ParseCamt05200101 implements ISEPAParser<List<BTag>>
         // Das eigene Konto ermitteln
         CashAccount13 acc = report.getAcct();
         tag.my = new Konto();
-        tag.my.iban = acc.getId().getIBAN();
-        tag.my.curr = acc.getCcy();
-        tag.my.bic  = acc.getSvcr().getFinInstnId().getBIC();
+        tag.my.iban = trim(acc.getId().getIBAN());
+        tag.my.curr = trim(acc.getCcy());
+        tag.my.bic  = trim(acc.getSvcr().getFinInstnId().getBIC());
         ////////////////////////////////////////////////////////////////
         
         return tag;
