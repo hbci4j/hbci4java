@@ -181,7 +181,7 @@ public class ParseCamt05200101 extends AbstractCamtParser
         // Betrag
         CurrencyAndAmount amt = entry.getAmt();
         BigDecimal bd = amt.getValue() != null ? amt.getValue() : BigDecimal.ZERO;
-        line.value = new Value(haben ? bd : BigDecimal.ZERO.subtract(bd)); // Negativ-Betrag bei Soll-Buchung
+        line.value = new Value(this.checkDebit(bd,entry.getCdtDbtInd()));
         line.value.setCurr(amt.getCcy());
         //
         ////////////////////////////////////////////////////////////////////////
@@ -278,7 +278,7 @@ public class ParseCamt05200101 extends AbstractCamtParser
             // Schluss-Saldo vom Vortag.
             if (code == BalanceType8Code.PRCD)
             {
-                tag.start.value = new Value(bal.getAmt().getValue());
+                tag.start.value = new Value(this.checkDebit(bal.getAmt().getValue(),bal.getCdtDbtInd()));
                 tag.start.value.setCurr(bal.getAmt().getCcy());
                 
                 //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
@@ -289,7 +289,7 @@ public class ParseCamt05200101 extends AbstractCamtParser
             // End-Saldo
             else if (code == BalanceType8Code.CLBD)
             {
-                tag.end.value = new Value(bal.getAmt().getValue());
+                tag.end.value = new Value(this.checkDebit(bal.getAmt().getValue(),bal.getCdtDbtInd()));
                 tag.end.value.setCurr(bal.getAmt().getCcy());
                 tag.end.timestamp = SepaUtil.toDate(bal.getDt().getDt());
             }
@@ -307,6 +307,20 @@ public class ParseCamt05200101 extends AbstractCamtParser
         ////////////////////////////////////////////////////////////////
         
         return tag;
+    }
+    
+    /**
+     * Prueft, ob es sich um einen Soll-Betrag handelt und setzt in dem Fall ein negatives Vorzeichen vor den Wert.
+     * @param d die zu pruefende Zahl.
+     * @param code das Soll-/Haben-Kennzeichen.
+     * @return der ggf korrigierte Betrag.
+     */
+    private BigDecimal checkDebit(BigDecimal d, CreditDebitCode code)
+    {
+        if (d == null || code == null || code == CreditDebitCode.CRDT)
+            return d;
+        
+        return BigDecimal.ZERO.subtract(d);
     }
 }
 
