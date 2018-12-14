@@ -312,7 +312,10 @@ public class ParseCamt05200104 extends AbstractCamtParser
         tag.my = new Konto();
         tag.my.iban = trim(acc.getId().getIBAN());
         tag.my.curr = trim(acc.getCcy());
-        tag.my.bic  = trim(acc.getSvcr().getFinInstnId().getBICFI());
+        
+        BranchAndFinancialInstitutionIdentification5 bank = acc.getSvcr();
+        if (bank != null && bank.getFinInstnId() != null)
+        tag.my.bic  = trim(bank.getFinInstnId().getBICFI());
         ////////////////////////////////////////////////////////////////
         
         return tag;
