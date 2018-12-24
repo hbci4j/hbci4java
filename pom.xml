@@ -51,7 +51,7 @@
 		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
 		<maven-site-plugin.version>3.6</maven-site-plugin.version>
 
-		<maven-jaxb2-plugin.version>0.13.2</maven-jaxb2-plugin.version>
+		<maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
 		<jaxb.packageName>org.kapott</jaxb.packageName>
 	</properties>
 	<distributionManagement>
