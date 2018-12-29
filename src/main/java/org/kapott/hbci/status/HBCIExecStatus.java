@@ -218,9 +218,8 @@ public class HBCIExecStatus
         HBCIDialogStatus status=getDialogStatus(customerId);
         
         ok&=(exc==null);
-        ok&=(status!=null);
-        ok&=status.isOK();
-        
+        ok&=(status!=null) && status.isOK();
+
         return ok;
     }
     
