@@ -349,7 +349,7 @@ public interface HBCICallback
      * Im Callback wird im StringBuffer der Wert aus dem HHDuc uebergeben. Das sind die Roh-Daten
      * des Bildes. HBCI4Java enthaelt eine Klasse "QRCode", mit dem diese Daten dann gelesen werden koennen.
      **/
-    public final static int NEED_PT_QRCODE=34;
+    public final static int NEED_PT_QRTAN=34;
 
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
     public final static int WRONG_PIN=40;

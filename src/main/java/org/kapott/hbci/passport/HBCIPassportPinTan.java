@@ -447,7 +447,7 @@ public class HBCIPassportPinTan
                         // Bei QR-Code haengen wir ungeparst das HHDuc an. Das kann dann auf
                         // Anwendungsseite per QRCode geparst werden
                         payload.append(hhduc);
-                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_QRCODE,msg,HBCICallback.TYPE_TEXT,payload);
+                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_QRTAN,msg,HBCICallback.TYPE_TEXT,payload);
                     }
                     else
                     {
