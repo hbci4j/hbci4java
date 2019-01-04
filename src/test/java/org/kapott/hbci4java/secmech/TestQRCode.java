@@ -27,7 +27,7 @@ public class TestQRCode extends AbstractTest
   {
     String data = new String(this.getBytes("TestQRCode-001.txt"),Comm.ENCODING);
     String msg = "Sie haben eine \"Einzelüberweisung\" erfasst: Überprüfen Sie die Richtigkeit der \"letzten 10 Zeichen der IBAN des Empfängers\" bei dem Institut \"MUSTER-BANK\" und bestätigen Sie diese mit der Taste \"OK\". Überprüfen Sie die Richtigkeit des \"Betrags\" und bestätigen Sie diesen mit der Taste \"OK\".";
-    QRCode code = new QRCode(null,data);
+    QRCode code = new QRCode("1234",data);
     Assert.assertEquals("Mime-Type falsch", "image/png", code.getMimetype());
     
     byte[] image = code.getImage();

@@ -33,7 +33,8 @@ public class QRCode
         // Ich weiss nicht, ob es ueberhaupt Banken gibt, die den QR-Code in dieser
         // Form senden - also identisch zu Photo-TAN. Es ist aber anzunehmen, dass das bei
         // HHD 1.4 so ist. Die Sparkassen embedden den QR-Code jedenfalls als Base64-codiertes PNG direkt in den Text.
-        if (data != null)
+        // Scherz am Rand: Die Sparkassen senden in "data" tatsaechlich: [0x6e,0x75,0x6c,0x6c] -> "null" ;)             
+        if (data != null && data.length > 100) // unter 100 Bytes kann es nichts sinnvolles sein.
         {
             int offset = 0;
             // Mime-Type
