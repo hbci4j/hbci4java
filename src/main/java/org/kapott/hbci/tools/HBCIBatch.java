@@ -180,6 +180,7 @@ public class HBCIBatch
                     break;
                 case NEED_PT_TAN:
                 case NEED_PT_PHOTOTAN:
+                case NEED_PT_QRTAN:
                     // TODO tan-liste aktivieren
                     retData.replace(0,retData.length(),answers.getProperty("tan"));
                     break;

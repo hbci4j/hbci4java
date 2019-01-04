@@ -52,7 +52,7 @@ public abstract class AbstractTest
   public final static String SYSPROP_PERFORMANCE = "test.performance";
 
   /**
-   * Liefert den Inhalt der angegebenen Datei.
+   * Liefert den Inhalt der angegebenen Datei in einer Zeile.
    * @param name Dateiname.
    * @return der Inhalt der Datei.
    * @throws Exception

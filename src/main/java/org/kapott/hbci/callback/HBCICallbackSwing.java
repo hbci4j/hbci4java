@@ -137,6 +137,7 @@ public class HBCICallbackSwing
                     break;
                 case NEED_PT_TAN:
                 case NEED_PT_PHOTOTAN:
+                case NEED_PT_QRTAN:
                     needSecret(currentData,"pttan");
                     break;
                     

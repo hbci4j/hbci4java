@@ -282,7 +282,34 @@ public class UmsatzAbrufPinTan
           }
 
           break;
-          
+
+        case NEED_PT_QRTAN:
+            // Die Klasse "QRCode" kann zum Parsen der Daten verwendet werden
+            try
+            {
+              // QRCode code = new QRCode(retData.toString(),msg);
+              
+              // Der Stream enthaelt jetzt die Binaer-Daten des Bildes
+              // InputStream stream = new ByteArrayInputStream(code.getImage());
+              
+              // .... Hier Dialog mit der Grafik anzeigen und User-Eingabe der TAN
+              // Die Variable "msg" aus der Methoden-Signatur enthaelt uebrigens
+              // den bankspezifischen Text mit den Instruktionen fuer den User.
+              // Der Text aus "msg" sollte daher im Dialog dem User angezeigt
+              // werden. Da Sparkassen den eigentlichen Bild u.U. auch in msg verpacken,
+              // sollte zur Anzeige nicht der originale Text verwendet werden sondern
+              // der von QRCode - dort ist dann die ggf. enthaltene Base64-codierte QR-Grafik entfernt
+              // msg = code.getMessage();
+              String tan = null;
+              retData.replace(0,retData.length(),tan);
+            }
+            catch (Exception e)
+            {
+              throw new HBCI_Exception(e);
+            }
+
+            break;
+
         // HBCI4Java benoetigt den Code des verwendenden TAN-Verfahren (smsTAN,
         // chipTAN optisch, photoTAN,...)
         // I.d.R. ist das eine dreistellige mit "9" beginnende Ziffer
