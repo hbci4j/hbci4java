@@ -343,6 +343,14 @@ public interface HBCICallback
      **/
     public final static int NEED_PT_PHOTOTAN=33;
 
+    /**
+     * Ursache des Callback-Aufrufes: eine QR-Code-TAN für PIN/TAN-Verfahren benötigt. Dieser
+     * Callback tritt nur bei Verwendung von PIN/TAN-Passports mit dem QRCODE-TAN-Verfahren auf.
+     * Im Callback wird im StringBuffer der Wert aus dem HHDuc uebergeben. Das sind die Roh-Daten
+     * des Bildes. HBCI4Java enthaelt eine Klasse "QRCode", mit dem diese Daten dann gelesen werden koennen.
+     **/
+    public final static int NEED_PT_QRCODE=34;
+
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
     public final static int WRONG_PIN=40;
     
