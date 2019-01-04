@@ -62,6 +62,7 @@ public class QRCode
                 this.image = b;
             }
             
+            this.text = msg;
             return;
         }
 
