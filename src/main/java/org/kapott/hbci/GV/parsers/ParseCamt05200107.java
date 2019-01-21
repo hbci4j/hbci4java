@@ -164,12 +164,10 @@ public class ParseCamt05200107 extends AbstractCamtParser
             PartyIdentification125 pi = party != null ? party.getPty() : null;
             line.other.name = trim(pi != null ? pi.getNm() : null);
             
-            // Wenn wir einen abweichenden Zahlungsempfaenger haben, hat der Prioritaet
+            // Abweichender Name, falls vorhanden
             party = haben ? other.getUltmtDbtr() : other.getUltmtCdtr();
             pi = party != null ? party.getPty() : null;
-            String s = trim(pi != null ? pi.getNm() : null);
-            if (s != null)
-                line.other.name = s;
+            line.other.name2 = trim(pi != null ? pi.getNm() : null);
         }
         //
         ////////////////////////////////////////////////////////////////////////

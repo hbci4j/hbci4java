@@ -164,11 +164,9 @@ public class ParseCamt05200102 extends AbstractCamtParser
             PartyIdentification32 name = haben ? other.getDbtr() : other.getCdtr();
             line.other.name = trim(name != null ? name.getNm() : null);
             
-            // Wenn wir einen abweichenden Zahlungsempfaenger haben, hat der Prioritaet
+            // Abweichender Name, falls vorhanden
             name = haben ? other.getUltmtDbtr() : other.getUltmtCdtr();
-            String s = trim(name != null ? name.getNm() : null);
-            if (name != null)
-                line.other.name = s;
+            line.other.name2 = trim(name != null ? name.getNm() : null);
         }
         //
         ////////////////////////////////////////////////////////////////////////
