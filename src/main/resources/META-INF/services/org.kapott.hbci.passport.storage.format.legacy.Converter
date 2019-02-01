@@ -2,3 +2,5 @@
 
 org.kapott.hbci.passport.storage.format.legacy.ConverterDDV
 org.kapott.hbci.passport.storage.format.legacy.ConverterPinTan
+org.kapott.hbci.passport.storage.format.legacy.ConverterAnonymous
+org.kapott.hbci.passport.storage.format.legacy.ConverterRSA

@@ -76,6 +76,7 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
           HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),HBCICallback.TYPE_NONE,null);
           HBCIUtils.log("initializing javax.smartcardio",HBCIUtils.LOG_DEBUG);
           this.initCT();
+          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.TYPE_NONE,null);
           
           this.ctReadBankData();
           
@@ -104,7 +105,7 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
         }
         catch (Exception e)
         {
-            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INSTDATAERR"),e);
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CTERR"),e);
         }
         finally
         {
@@ -116,8 +117,6 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
             {
                 HBCIUtils.log(e);
             }
-            
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.TYPE_NONE,null);
         }
     }
 

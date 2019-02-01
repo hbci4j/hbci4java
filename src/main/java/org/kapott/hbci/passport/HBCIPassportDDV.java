@@ -138,6 +138,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
         {
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),HBCICallback.TYPE_NONE,null);
             initCT();
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.TYPE_NONE,null);
             
             this.ctReadBankData();
 
@@ -177,7 +178,6 @@ public class HBCIPassportDDV extends AbstractDDVPassport
             {
                 HBCIUtils.log(e);
             }
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.TYPE_NONE,null);
         }
     }
 

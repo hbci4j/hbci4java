@@ -22,36 +22,14 @@
 package org.kapott.hbci.passport;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.PBEParameterSpec;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.tools.IOUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.kapott.hbci.passport.storage.PassportData;
+import org.kapott.hbci.passport.storage.PassportStorage;
 
 /** <p>Passport-Implementation für anonyme Zugänge. Bei dieser Passport-Variante
     handelt es sich nicht um einen "echten" HBCI-Zugang. Statt dessen handelt
@@ -75,16 +53,14 @@ import org.xml.sax.SAXException;
     HBCI-Dialog verwendet werden, der aus (anonymer) Dialog-Initialisierung und
     (anonymem) Dialog-Ende besteht. Damit kann zumindest die Verfügbarkeit des
     HBCI-Servers bzw. von anonymen Zugängen überprüft werden.</p>*/
-public class HBCIPassportAnonymous 
-    extends AbstractHBCIPassport
+public class HBCIPassportAnonymous extends AbstractHBCIPassport
 {
-    private String    filename;
-    private SecretKey passportKey;
+    private String filename;
     
-    protected final static byte[] CIPHER_SALT={(byte)0x26,(byte)0x19,(byte)0x38,(byte)0xa7,
-                                               (byte)0x99,(byte)0xbc,(byte)0xf1,(byte)0x55};
-    protected final static int CIPHER_ITERATIONS=987;
-
+    /**
+     * ct.
+     * @param initObject
+     */
     public HBCIPassportAnonymous(Object initObject)
     {
         super(initObject);
@@ -93,265 +69,318 @@ public class HBCIPassportAnonymous
         String  filename=HBCIUtils.getParam(header+"filename");
         boolean init=HBCIUtils.getParam(header+"init","1").equals("1");
         
-        if (filename==null) {
+        if (filename==null)
             throw new NullPointerException("*** client.passport.Anonymous.filename must not be null");
-        }
 
         HBCIUtils.log("loading passport data from file "+filename,HBCIUtils.LOG_DEBUG);
         setFileName(filename);
         setFilterType("None");
-        setPort(new Integer(3000));
+        setPort(Integer.valueOf(3000));
 
-        if (init) {
+        if (init)
+        {
             HBCIUtils.log("loading data from file "+filename,HBCIUtils.LOG_DEBUG);
 
-            if (!new File(filename).canRead()) {
+            if (!new File(filename).canRead())
+            {
                 HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
                 askForMissingData(true,true,true,true,false,false,false);
                 saveChanges();
             }
 
-            try {
-                DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
-                dbf.setValidating(false);
-                DocumentBuilder db=dbf.newDocumentBuilder();
-                Element root=null;
+            PassportData data = PassportStorage.load(this,new File(filename));
+            this.setBLZ(data.blz);
+            this.setCountry(data.country);
+            this.setHost(data.host);
+            this.setPort(data.port);
+            this.setHBCIVersion(data.hbciVersion);
 
-                int retries=Integer.parseInt(HBCIUtils.getParam("client.retries.passphrase","3"));
-
-                while (true) {          // loop for entering the correct passphrase
-                    if (passportKey==null)
-                        passportKey=calculatePassportKey(FOR_LOAD);
-
-                    PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-                    String provider = HBCIUtils.getParam("kernel.security.provider");
-                    Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider) ;
-                    cipher.init(Cipher.DECRYPT_MODE,passportKey,paramspec);
-
-                    root=null;
-                    CipherInputStream ci=null;
-
-                    try {
-                        ci=new CipherInputStream(new FileInputStream(getFileName()),cipher);
-                        root=db.parse(ci).getDocumentElement();
-                    } catch (SAXException e) {
-                        passportKey=null;
-
-                        retries--;
-                        if (retries<=0)
-                            throw new InvalidPassphraseException();
-                    } finally {
-                        if (ci!=null)
-                            ci.close();
-                    }
-
-                    if (root!=null)
-                        break;
-                }
-
-                setBLZ(getElementValue(root,"blz"));
-                setCountry(getElementValue(root,"country"));
-                setHost(getElementValue(root,"host"));
-                setPort(new Integer(getElementValue(root,"port")));
-                setHBCIVersion(getElementValue(root,"hbciversion"));
-
-                setBPD(getElementProps(root,"bpd"));
-                setUPD(getElementProps(root,"upd"));
+            this.setBPD(data.bpd);
+            this.setUPD(data.upd);
                 
-                if (askForMissingData(true,true,true,true,false,false,false))
-                    saveChanges();
-            } catch (Exception e) {
-                throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_READERR"),e);
-            }
+            if (askForMissingData(true,true,true,true,false,false,false))
+                saveChanges();
         }
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getPassportTypeName()
+     */
+    @Override
     public String getPassportTypeName()
     {
         return "Anonymous";
     }
     
-    private String getElementValue(Element root,String name)
-    {
-        String ret=null;
-
-        NodeList list=root.getElementsByTagName(name);
-        if (list!=null && list.getLength()!=0) {
-            Node content=list.item(0).getFirstChild();
-            if (content!=null)
-                ret=content.getNodeValue();
-        }
-
-        return ret;
-    }
-
-    private Properties getElementProps(Element root,String name)
-    {
-        Properties ret=null;
-
-        Node base=root.getElementsByTagName(name).item(0);
-        if (base!=null) {
-            ret=new Properties();
-            NodeList entries=base.getChildNodes();
-            int len=entries.getLength();
-
-            for (int i=0;i<len;i++) {
-                Node n=entries.item(i);
-                if (n.getNodeType()==Node.ELEMENT_NODE) {
-                    ret.setProperty(((Element)n).getAttribute("name"),
-                                    ((Element)n).getAttribute("value"));
-                }
-            }
-        }
-
-        return ret;
-    }
-    
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setMyPublicDigKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setMyPublicDigKey(HBCIKey key)
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getSigFunction()
+     */
+    @Override
     public String getSigFunction()
     {
          return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getProfileMethod()
+     */
+    @Override
     public String getProfileMethod()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#needUserKeys()
+     */
+    @Override
     public boolean needUserKeys()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getInstEncKey()
+     */
+    @Override
     public HBCIKey getInstEncKey()
     {
         return null;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMyEncKeyVersion()
+     */
+    @Override
     public String getMyEncKeyVersion()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMySigKeyNum()
+     */
+    @Override
     public String getMySigKeyNum()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getCryptMode()
+     */
+    @Override
     public String getCryptMode()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#needInstKeys()
+     */
+    @Override
     public boolean needInstKeys()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getSigAlg()
+     */
+    @Override
     public String getSigAlg()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getSigMode()
+     */
+    @Override
     public String getSigMode()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#encrypt(byte[])
+     */
+    @Override
     public byte[][] encrypt(byte[] parm1)
     {
         return new byte[][] {null,parm1};
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getInstSigKeyVersion()
+     */
+    @Override
     public String getInstSigKeyVersion()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setInstSigKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setInstSigKey(HBCIKey key)
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getCryptKeyType()
+     */
+    @Override
     public String getCryptKeyType()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMySigKeyName()
+     */
+    @Override
     public String getMySigKeyName()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMySigKeyVersion()
+     */
+    @Override
     public String getMySigKeyVersion()
     {
         return "";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getMyPublicEncKey()
+     */
+    @Override
     public HBCIKey getMyPublicEncKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#needUserSig()
+     */
+    @Override
     public boolean needUserSig()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getMyPublicDigKey()
+     */
+    @Override
     public HBCIKey getMyPublicDigKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setMyPrivateEncKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setMyPrivateEncKey(HBCIKey key)
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#getCommInstance()
+     */
+    @Override
     protected Comm getCommInstance()
     {
         return Comm.getInstance("Standard",this);
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getProfileVersion()
+     */
+    @Override
     public String getProfileVersion()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setMyPrivateSigKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setMyPrivateSigKey(HBCIKey key)
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getMyPrivateSigKey()
+     */
+    @Override
     public HBCIKey getMyPrivateSigKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getMyPublicSigKey()
+     */
+    @Override
     public HBCIKey getMyPublicSigKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getCryptAlg()
+     */
+    @Override
     public String getCryptAlg()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setMyPublicSigKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setMyPublicSigKey(HBCIKey key)
     {
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMyEncKeyNum()
+     */
+    @Override
     public String getMyEncKeyNum()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#hasMyEncKey()
+     */
+    @Override
     public boolean hasMyEncKey()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#hash(byte[])
+     */
+    @Override
     public byte[] hash(byte[] data)
     {
         /* the function hash-before-sign has nothing to do here, so we simply
@@ -359,205 +388,261 @@ public class HBCIPassportAnonymous
         return data;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#sign(byte[])
+     */
+    @Override
     public byte[] sign(byte[] data)
     {
         /* no signature at all */
         return new byte[0];
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getMyPrivateDigKey()
+     */
+    @Override
     public HBCIKey getMyPrivateDigKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#isSupported()
+     */
+    @Override
     public boolean isSupported()
     {
         return true;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#hasMySigKey()
+     */
+    @Override
     public boolean hasMySigKey()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#resetPassphrase()
+     */
+    @Override
     public void resetPassphrase()
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMyEncKeyName()
+     */
+    @Override
     public String getMyEncKeyName()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getCryptFunction()
+     */
+    @Override
     public String getCryptFunction()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getInstSigKeyName()
+     */
+    @Override
     public String getInstSigKeyName()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setMyPrivateDigKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setMyPrivateDigKey(HBCIKey key)
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getMyPrivateEncKey()
+     */
+    @Override
     public HBCIKey getMyPrivateEncKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setMyPublicEncKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setMyPublicEncKey(HBCIKey key)
     {
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getInstEncKeyVersion()
+     */
+    @Override
     public String getInstEncKeyVersion()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getHashAlg()
+     */
+    @Override
     public String getHashAlg()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#decrypt(byte[], byte[])
+     */
+    @Override
     public byte[] decrypt(byte[] parm1, byte[] parm2)
     {
         return parm2;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#setInstEncKey(org.kapott.hbci.manager.HBCIKey)
+     */
+    @Override
     public void setInstEncKey(HBCIKey key)
     {
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#hasInstEncKey()
+     */
+    @Override
     public boolean hasInstEncKey()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getInstSigKeyNum()
+     */
+    @Override
     public String getInstSigKeyNum()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#getInstSigKey()
+     */
+    @Override
     public HBCIKey getInstSigKey()
     {
         return null;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#verify(byte[], byte[])
+     */
+    @Override
     public boolean verify(byte[] parm1, byte[] parm2)
     {
         return true;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getInstEncKeyName()
+     */
+    @Override
     public String getInstEncKeyName()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getInstEncKeyNum()
+     */
+    @Override
     public String getInstEncKeyNum()
     {
         return "";
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#hasInstSigKey()
+     */
+    @Override
     public boolean hasInstSigKey()
     {
         return false;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getSysStatus()
+     */
+    @Override
     public String getSysStatus()
     {
         return "0";
     }
     
+    /**
+     * Speichert den Dateinamen.
+     * @param filename der Dateiname.
+     */
     private void setFileName(String filename)
     {
         this.filename=filename;
     }
     
+    /**
+     * Liefert den Dateinamen.
+     * @return der Dateiname.
+     */
     public String getFileName()
     {
         return filename;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
+     */
+    @Override
     public void saveChanges()
     {
-        try {
-            if (passportKey==null)
-                passportKey=calculatePassportKey(FOR_SAVE);
+        try
+        {
+            final PassportData data = new PassportData();
+            data.country     = this.getCountry();
+            data.blz         = this.getBLZ();
+            data.host        = this.getHost();
+            data.port        = this.getPort();
+            data.hbciVersion = this.getHBCIVersion();
+            data.bpd         = this.getBPD();
+            data.upd         = this.getUPD();
 
-            PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-            String provider = HBCIUtils.getParam("kernel.security.provider");
-            Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
-            cipher.init(Cipher.ENCRYPT_MODE,passportKey,paramspec);
-
-            DocumentBuilderFactory fac=DocumentBuilderFactory.newInstance();
-            fac.setValidating(false);
-            DocumentBuilder db=fac.newDocumentBuilder();
-
-            Document doc=db.newDocument();
-            Element root=doc.createElement("HBCIPassportRDHNew");
-
-            createElement(doc,root,"country",getCountry());
-            createElement(doc,root,"blz",getBLZ());
-            createElement(doc,root,"host",getHost());
-            createElement(doc,root,"port",getPort().toString());
-            createElement(doc,root,"hbciversion",getHBCIVersion());
-
-            createPropsElement(doc,root,"bpd",getBPD());
-            createPropsElement(doc,root,"upd",getUPD());
-
-            TransformerFactory tfac=TransformerFactory.newInstance();
-            Transformer tform=tfac.newTransformer();
-
-            tform.setOutputProperty(OutputKeys.METHOD,"xml");
-            tform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"no");
-            tform.setOutputProperty(OutputKeys.ENCODING,"ISO-8859-1");
-            tform.setOutputProperty(OutputKeys.INDENT,"yes");
-
-            File passportfile=new File(getFileName());
-            File directory=passportfile.getAbsoluteFile().getParentFile();
-            String prefix=passportfile.getName()+"_";
-            File tempfile=File.createTempFile(prefix,"",directory);
-
-            CipherOutputStream co=new CipherOutputStream(new FileOutputStream(tempfile),cipher);
-            tform.transform(new DOMSource(root),new StreamResult(co));
-
-            co.close();
-            IOUtils.safeReplace(passportfile,tempfile);
-            
-        } catch (Exception e) {
+            PassportStorage.save(this,data,new File(this.getFileName()));
+        }
+        catch (HBCI_Exception he)
+        {
+            throw he;
+        }
+        catch (Exception e)
+        {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_WRITEERR"),e);
         }
     }
 
-    private void createElement(Document doc,Element root,String elemName,String elemValue)
-    {
-        Node elem=doc.createElement(elemName);
-        root.appendChild(elem);
-        Node data=doc.createTextNode(elemValue);
-        elem.appendChild(data);
-    }
-
-    private void createPropsElement(Document doc,Element root,String elemName,Properties p)
-    {
-        if (p!=null) {
-            Node base=doc.createElement(elemName);
-            root.appendChild(base);
-
-            for (Enumeration e=p.propertyNames();e.hasMoreElements();) {
-                String key=(String)e.nextElement();
-                String value=p.getProperty(key);
-
-                Element data=doc.createElement("entry");
-                data.setAttribute("name",key);
-                data.setAttribute("value",value);
-                base.appendChild(data);
-            }
-        }
-    }
-    
+    /**
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#isAnonymous()
+     */
+    @Override
     public boolean isAnonymous()
     {
         return true;
