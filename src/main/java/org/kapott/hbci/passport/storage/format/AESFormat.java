@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
@@ -221,6 +222,10 @@ public class AESFormat extends AbstractFormat
             HBCIUtils.log("used time for encrypting passort into " + result.length + " bytes: " + (System.currentTimeMillis() - started) + " millis",HBCIUtils.LOG_DEBUG);
             return result;
         }
+        catch (UnsupportedOperationException uoe)
+        {
+            throw uoe;
+        }
         catch (HBCI_Exception e)
         {
             throw e;
@@ -256,11 +261,19 @@ public class AESFormat extends AbstractFormat
         
         LogFilter.getInstance().addSecretData(passphrase.toString(),"X",LogFilter.FILTER_SECRETS);
 
-        final String provider = this.getSecurityProvider();
-        final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(KEY_ALG_NAME,provider) : SecretKeyFactory.getInstance(KEY_ALG_NAME);
-        final KeySpec spec = new PBEKeySpec(passphrase.toString().toCharArray(), salt, CIPHER_ITERATIONS, KEY_SIZE);
-        final SecretKey tmp = fac.generateSecret(spec);
-        final SecretKey secret = new SecretKeySpec(tmp.getEncoded(),KEY_ALG);
-        return secret;
+        try
+        {
+            final String provider = this.getSecurityProvider();
+            final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(KEY_ALG_NAME,provider) : SecretKeyFactory.getInstance(KEY_ALG_NAME);
+            final KeySpec spec = new PBEKeySpec(passphrase.toString().toCharArray(), salt, CIPHER_ITERATIONS, KEY_SIZE);
+            final SecretKey tmp = fac.generateSecret(spec);
+            final SecretKey secret = new SecretKeySpec(tmp.getEncoded(),KEY_ALG);
+            return secret;
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            HBCIUtils.log("AES-Format not supported in this Java version",HBCIUtils.LOG_DEBUG);
+            throw new UnsupportedOperationException("AES-Format not supported in this Java version");
+        }
     }
 }
