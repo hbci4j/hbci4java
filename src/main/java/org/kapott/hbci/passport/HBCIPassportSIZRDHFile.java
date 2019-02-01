@@ -28,6 +28,7 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.tools.IOUtils;
 
 /** <p>Passport-Klasse für die Verwendung von SIZ-RDH-Schlüsseldateien mit <em>HBCI4Java</em>. 
     SIZ-RDH-Schlüsseldateien sind Schlüsseldateien für RDH-Zugänge, die von
@@ -135,7 +136,7 @@ public class HBCIPassportSIZRDHFile
 
             saveData(tempfile.getAbsolutePath());
 
-            this.safeReplace(passportfile,tempfile);
+            IOUtils.safeReplace(passportfile,tempfile);
             
         } catch (Exception e) {
             throw new HBCI_Exception("*** saving of passport file failed",e);

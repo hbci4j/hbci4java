@@ -54,6 +54,7 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.tools.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -388,7 +389,7 @@ public class HBCIPassportRDHNew
             tform.transform(new DOMSource(root),new StreamResult(co));
             
             co.close();
-            this.safeReplace(passportfile,tempfile);
+            IOUtils.safeReplace(passportfile,tempfile);
         }
         catch (HBCI_Exception e1)
         {
@@ -400,7 +401,7 @@ public class HBCIPassportRDHNew
         }
     }
 
-    protected void createElement(Document doc,Element root,String elemName,String elemValue)
+    private void createElement(Document doc,Element root,String elemName,String elemValue)
     {
         Node elem=doc.createElement(elemName);
         root.appendChild(elem);
@@ -418,7 +419,7 @@ public class HBCIPassportRDHNew
         return value != null ? value : "";
     }
     
-    protected void createPropsElement(Document doc,Element root,String elemName,Properties p)
+    private void createPropsElement(Document doc,Element root,String elemName,Properties p)
     {
         if (p!=null) {
             Node base=doc.createElement(elemName);
@@ -436,7 +437,7 @@ public class HBCIPassportRDHNew
         }
     }
     
-    protected void createKeyElement(Document doc,Element root,String owner,String type,String part,HBCIKey key)
+    private void createKeyElement(Document doc,Element root,String owner,String type,String part,HBCIKey key)
     {
         if (key!=null) {
             Element base=doc.createElement("key");

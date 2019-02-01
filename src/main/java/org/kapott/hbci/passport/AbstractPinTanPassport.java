@@ -895,9 +895,9 @@ public abstract class AbstractPinTanPassport
         return certfile;
     }
     
-    protected void setCheckCert(boolean skip)
+    protected void setCheckCert(boolean doCheck)
     {
-        this.checkCert=skip;
+        this.checkCert=doCheck;
     }
     
     public boolean getCheckCert()

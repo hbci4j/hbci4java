@@ -21,9 +21,11 @@
 
 package org.kapott.hbci.passport;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
@@ -34,6 +36,7 @@ import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.rdhXfile.HBCIAccount;
 import org.kapott.hbci.passport.rdhXfile.RDHXFile;
 import org.kapott.hbci.passport.rdhXfile.TLV;
+import org.kapott.hbci.tools.IOUtils;
 
 /**<p>
  * Passport-Klasse für die Verwendung von RDH-2- und RDH-10-Schlüsseldateien mit
@@ -87,6 +90,8 @@ public class HBCIPassportRDHXFile
                 saveChanges();
             }
             
+            InputStream is = null;
+            
             try {
                 if (this.passphrase==null) {
                     StringBuffer retData=new StringBuffer();
@@ -95,26 +100,13 @@ public class HBCIPassportRDHXFile
                             HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                             HBCICallback.TYPE_SECRET,
                             retData);
-                    // TODO: passwort-bedingungen nach spez. prüfen
                     LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                     setPassphrase(retData.toString().getBytes());
                 }
             	
-            	// daten einlesen
-                FileInputStream fin=new FileInputStream(fname);
-                StringBuffer    sb=new StringBuffer();
-                byte[]          buffer=new byte[1024];
-                int             size;
+                is = new BufferedInputStream(new FileInputStream(fname));
+                byte[] data = IOUtils.read(is);
                 
-                while ((size=fin.read(buffer))>0) {
-                    sb.append(new String(buffer,0,size,"ISO-8859-1"));
-                }
-                
-                fin.close();
-                byte[] data=sb.toString().getBytes("ISO-8859-1");
-                // System.out.println("read "+data.length+" bytes from "+getFileName());
-                
-                // filecontent-content
                 this.filecontent=new RDHXFile(data, passphrase);
                 this.entryIdx=0;
                 
@@ -179,6 +171,10 @@ public class HBCIPassportRDHXFile
             } catch (Exception e) {
                 throw new HBCI_Exception("*** error while reading passport file",e);
             }
+            finally
+            {
+                IOUtils.close(is);
+            }
         }
     }
     
@@ -238,7 +234,7 @@ public class HBCIPassportRDHXFile
             fo.write(data);
             fo.close();
 
-            this.safeReplace(passportfile,tempfile);
+            IOUtils.safeReplace(passportfile,tempfile);
             
         } catch (Exception e) {
             throw new HBCI_Exception("*** saving of passport file failed", e);

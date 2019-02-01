@@ -28,7 +28,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIVersion;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
-import org.kapott.hbci.passport.HBCIPassportPinTanMemory;
+import org.kapott.hbci.passport.HBCIPassportPinTan;
 import org.kapott.hbci.status.HBCIExecStatus;
 
 /**
@@ -37,10 +37,10 @@ import org.kapott.hbci.status.HBCIExecStatus;
 public abstract class AbstractTestGV
 {
     private final Map<Integer,String> callbackValues = new HashMap<Integer,String>();
-    private Properties  params                = null;
-    private HBCIPassportPinTanMemory passport = null;
-    private HBCIHandler handler               = null;
-    private PrintStream out                   = null;
+    private Properties  params          = null;
+    private HBCIPassportPinTan passport = null;
+    private HBCIHandler handler         = null;
+    private PrintStream out             = null;
     
     /**
      * Deaktiviert den Test, wenn das System-Property nicht auf "true" steht.
@@ -90,11 +90,15 @@ public abstract class AbstractTestGV
       
         // Presets fuer den Callback
         this.callbackValues.put(HBCICallback.NEED_COUNTRY,          params.getProperty("country",System.getProperty("country","DE")));
-        this.callbackValues.put(HBCICallback.NEED_CUSTOMERID,       params.getProperty("customerid",System.getProperty("customerid")));
-        this.callbackValues.put(HBCICallback.NEED_USERID,           params.getProperty("userid",System.getProperty("useris")));
-        this.callbackValues.put(HBCICallback.NEED_PT_PIN,           params.getProperty("pin",System.getProperty("pin")));
-        this.callbackValues.put(HBCICallback.NEED_PT_SECMECH,       params.getProperty("secmech",System.getProperty("secmech")));
-        
+        this.callbackValues.put(HBCICallback.NEED_CUSTOMERID,       params.getProperty("customerid",System.getProperty("customerid","")));
+        this.callbackValues.put(HBCICallback.NEED_USERID,           params.getProperty("userid",System.getProperty("userid","")));
+        this.callbackValues.put(HBCICallback.NEED_PT_PIN,           params.getProperty("pin",System.getProperty("pin","")));
+        this.callbackValues.put(HBCICallback.NEED_PT_SECMECH,       params.getProperty("secmech",System.getProperty("secmech","")));
+
+        // Das Passport-Passwort
+        this.callbackValues.put(HBCICallback.NEED_PASSPHRASE_LOAD,  params.getProperty("password",System.getProperty("password","")));
+        this.callbackValues.put(HBCICallback.NEED_PASSPHRASE_SAVE,  params.getProperty("password",System.getProperty("password","")));
+
         final String blz = params.getProperty("blz",System.getProperty("blz"));
         this.callbackValues.put(HBCICallback.NEED_BLZ,              blz);
         this.callbackValues.put(HBCICallback.NEED_PORT,             params.getProperty("port",System.getProperty("port","443")));
@@ -106,11 +110,17 @@ public abstract class AbstractTestGV
         // Initialisierungsparameter fuer HBCI4Java selbst
         Properties props = new Properties();
         props.put("log.loglevel.default",this.params.getProperty("log.loglevel.default",System.getProperty("log.loglevel.default",Integer.toString(HBCIUtils.LOG_DEBUG))));
+
+        props.put("passportformat.order.load",this.params.getProperty("passportformat.order.load",System.getProperty("passportformat.order.load","")));
+        props.put("passportformat.order.save",this.params.getProperty("passportformat.order.save",System.getProperty("passportformat.order.save","")));
+        
         props.put("client.passport.PinTan.init","1");
-        props.put("client.passport.PinTan.checkcert",this.params.getProperty("client.passport.PinTan.checkcert","1"));
+        props.put("client.passport.PinTan.checkcert",this.params.getProperty("client.passport.PinTan.checkcert",System.getProperty("checkcert","1")));
         props.put("client.passport.PinTan.proxy",    this.params.getProperty("client.passport.PinTan.proxy",""));
         props.put("client.passport.PinTan.proxyuser",this.params.getProperty("client.passport.PinTan.proxyuser",""));
         props.put("client.passport.PinTan.proxypass",this.params.getProperty("client.passport.PinTan.proxypass",""));
+        props.put("client.passport.PinTan.filename", this.params.getProperty("client.passport.PinTan.filename",System.getProperty("file","")));
+
       
         // Callback initialisieren.
         // Wenn wir passende Antworten in den Presets haben, koennen wir sie direkt
@@ -156,7 +166,7 @@ public abstract class AbstractTestGV
         ////////////////////////////////////////////////////////////////////////
         // Nach dem Initialisieren von HBCI4Java noch checken, ob wir den
         // Host selbst ermitteln koennen
-        String host = params.getProperty("host");
+        String host = params.getProperty("host",System.getProperty("host"));
         if (blz != null && host == null)
         {
             BankInfo bank = HBCIUtils.getBankInfo(blz);
@@ -167,10 +177,11 @@ public abstract class AbstractTestGV
         //
         ////////////////////////////////////////////////////////////////////////
 
-        this.passport = (HBCIPassportPinTanMemory) AbstractHBCIPassport.getInstance("PinTanMemory");
+        
+        this.passport = (HBCIPassportPinTan) AbstractHBCIPassport.getInstance(System.getProperty("passport","PinTanMemory"));
       
         // init handler
-        this.handler = new HBCIHandler(this.params.getProperty("hbciversion",HBCIVersion.HBCI_300.getId()),this.passport);
+        this.handler = new HBCIHandler(this.params.getProperty("hbciversion",System.getProperty("hbciversion",HBCIVersion.HBCI_300.getId())),this.passport);
     }
     
     /**

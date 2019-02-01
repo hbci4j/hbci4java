@@ -22,22 +22,15 @@
 package org.kapott.hbci.passport;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.io.StreamCorruptedException;
-import java.util.Properties;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.spec.PBEParameterSpec;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.datatypes.SyntaxCtr;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.passport.storage.PassportData;
+import org.kapott.hbci.passport.storage.PassportStorage;
 import org.kapott.hbci.smartcardio.DDVBankData;
 import org.kapott.hbci.smartcardio.DDVCardService;
 import org.kapott.hbci.smartcardio.DDVKeyData;
@@ -68,132 +61,64 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
      */
     public HBCIPassportDDVPCSC(Object init)
     {
-      this(init,0);
+        this(init,0);
       
-      ObjectInputStream is = null;
-      
-      try
-      {
-        ////////////////////////////////////////////////////////////////////////
-        // set parameters for initializing card
         this.setUseBio(Integer.parseInt(HBCIUtils.getParam(getParamHeader()+".usebio","-1")));
         this.setUseSoftPin(Integer.parseInt(HBCIUtils.getParam(getParamHeader()+".softpin","-1")));
         this.setSoftPin(new byte[0]);
         this.setPINEntered(false);
         this.setEntryIdx(Integer.parseInt(HBCIUtils.getParam(getParamHeader()+".entryidx","1")));
-        //
-        ////////////////////////////////////////////////////////////////////////
+        this.setPort(new Integer(3000));
+        this.setFilterType("None");
 
-        ////////////////////////////////////////////////////////////////////////
-        // init card
-        HBCIUtils.log("initializing javax.smartcardio",HBCIUtils.LOG_DEBUG);
-        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),HBCICallback.TYPE_NONE,null);
-        
-        this.initCT();
-        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.TYPE_NONE,null);
-        //
-        ////////////////////////////////////////////////////////////////////////
-        
-        ////////////////////////////////////////////////////////////////////////
-        // init basic bank data
-        try {
-          this.setPort(new Integer(3000));
-          this.setFilterType("None");
+        try
+        {
+          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),HBCICallback.TYPE_NONE,null);
+          HBCIUtils.log("initializing javax.smartcardio",HBCIUtils.LOG_DEBUG);
+          this.initCT();
+          
           this.ctReadBankData();
-            
+          
+          // Wenn wir neue Daten haben, speichern wir die gleich auf der Karte
           if (this.askForMissingData(true,true,true,false,false,true,false))
             this.saveBankData();
-                
+
+          // Schluesseldaten von der Karte laden.
           this.ctReadKeyData();
+          
+          // Lokale Passport-Datei laden, wenn sie existiert
+          final String path = HBCIUtils.getParam(getParamHeader()+".path","./");
+          this.setFileName(HBCIUtilsInternal.withCounter(path + "pcsc" + getCardId(),getEntryIdx()-1));
+          File file = new File(this.getFileName());
+          if (file.exists() && file.isFile() && file.canRead())
+          {
+              PassportData data = PassportStorage.load(this,new File(this.getFileName()));
+              this.setBPD(data.bpd);
+              this.setUPD(data.upd);
+              this.setHBCIVersion(data.hbciVersion);
+          }
         }
-        catch (HBCI_Exception e1)
+        catch (HBCI_Exception ex)
         {
-          throw e1;
+            throw ex;
         }
         catch (Exception e)
         {
-          throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INSTDATAERR"),e);
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_INSTDATAERR"),e);
         }
-        //
-        ////////////////////////////////////////////////////////////////////////
-
-        ////////////////////////////////////////////////////////////////////////
-        // read passport file
-        String path = HBCIUtils.getParam(getParamHeader()+".path","./");
-        this.setFileName(HBCIUtilsInternal.withCounter(path+"pcsc"+getCardId(),getEntryIdx()-1));
-        HBCIUtils.log("loading passport data from file "+getFileName(),HBCIUtils.LOG_DEBUG);
-        
-        File file = new File(this.getFileName());
-        if (file.exists() && file.isFile() && file.canRead())
+        finally
         {
-          int retries = Integer.parseInt(HBCIUtils.getParam("client.retries.passphrase","3"));
-
-          while (true) // loop for entering the correct passphrase
-          {
-            if (this.getPassportKey() == null)
-              this.setPassportKey(calculatePassportKey(FOR_LOAD));
-
-            PBEParameterSpec paramspec = new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-            String provider = HBCIUtils.getParam("kernel.security.provider");
-            Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
-            cipher.init(Cipher.DECRYPT_MODE,getPassportKey(),paramspec);
-              
             try
             {
-              is = new ObjectInputStream(new CipherInputStream(new FileInputStream(file),cipher));
+                closeCT();
             }
-            catch (StreamCorruptedException e1)
+            catch (Exception e)
             {
-              setPassportKey(null); // Passwort resetten
-              retries--;
-              if (retries<=0)
-                throw new InvalidPassphraseException();
-            }
-            catch (Exception e2)
-            {
-              throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_READERR"),e2);
+                HBCIUtils.log(e);
             }
             
-            // wir habens
-            if (is != null)
-            {
-              setBPD((Properties)(is.readObject()));
-              setUPD((Properties)(is.readObject()));
-              setHBCIVersion((String)is.readObject());
-              break;
-            }
-          }
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.TYPE_NONE,null);
         }
-        //
-        ////////////////////////////////////////////////////////////////////////
-      }
-      catch (Exception e)
-      {
-        // Im Fehlerfall wieder schliessen
-        try {
-          closeCT();
-        }
-        catch (Exception ex) {
-          HBCIUtils.log(ex);
-        }
-        
-        if (e instanceof HBCI_Exception)
-          throw (HBCI_Exception) e;
-        
-        throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CTERR"),e);
-      }
-      finally
-      {
-        // Close Passport-File
-        if (is != null) {
-          try {
-            is.close();
-          }
-          catch (Exception e) {
-            HBCIUtils.log(e);
-          }
-        }
-      }
     }
 
     /**

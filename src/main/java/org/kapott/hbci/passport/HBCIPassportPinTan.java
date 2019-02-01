@@ -22,30 +22,20 @@
 package org.kapott.hbci.passport;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.PBEParameterSpec;
-
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.HHDVersion;
 import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.passport.storage.PassportData;
+import org.kapott.hbci.passport.storage.PassportStorage;
 import org.kapott.hbci.security.Sig;
 
 /** <p>Passport-Klasse für HBCI mit PIN/TAN. Dieses Sicherheitsverfahren wird erst
@@ -62,28 +52,31 @@ import org.kapott.hbci.security.Sig;
     Transportschicht. Die Nachrichten werden nämlich nicht direkt via TCP/IP übertragen,
     sondern in das HTTP-Protokoll eingebettet. Die Verschlüsselung der übertragenen Daten
     erfolgt dabei auf HTTP-Ebene (via SSL = HTTPS).</p><p>
-    Wie auch bei {@link org.kapott.hbci.passport.HBCIPassportRDH} wird eine "Schlüsseldatei"
+    Wie auch bei {@link org.kapott.hbci.passport.HBCIPassportRDHNew} wird eine "Schlüsseldatei"
     verwendet. In dieser werden allerdings keine kryptografischen Schlüssel abgelegt, sondern
     lediglich die Zugangsdaten für den HBCI-Server (Hostadresse, Nutzerkennung, usw.) sowie
     einige zusätzliche Daten (BPD, UPD, zuletzt benutzte HBCI-Version). Diese Datei wird
     vor dem Abspeichern verschlüsselt. Vor dem Erzeugen bzw. erstmaligen Einlesen wird via
     Callback nach einem Passwort gefragt, aus welchem der Schlüssel für die Verschlüsselung
     der Datei berechnet wird</p>*/
-public class HBCIPassportPinTan
-    extends AbstractPinTanPassport
+public class HBCIPassportPinTan extends AbstractPinTanPassport
 {
-    private String    filename;
-    private SecretKey passportKey;
+    private String filename;
 
-    private final static byte[] CIPHER_SALT={(byte)0x26,(byte)0x19,(byte)0x38,(byte)0xa7,
-                                             (byte)0x99,(byte)0xbc,(byte)0xf1,(byte)0x55};
-    private final static int CIPHER_ITERATIONS=987;
-
+    /**
+     * ct.
+     * @param init
+     * @param dummy
+     */
     public HBCIPassportPinTan(Object init,int dummy)
     {
         super(init);
     }
 
+    /**
+     * ct.
+     * @param initObject
+     */
     public HBCIPassportPinTan(Object initObject)
     {
         this(initObject,0);
@@ -100,7 +93,8 @@ public class HBCIPassportPinTan
         setProxyUser(HBCIUtils.getParam(header+"proxyuser",""));
         setProxyPass(HBCIUtils.getParam(header+"proxypass",""));
 
-        if (init) {
+        if (init)
+        {
             this.read();
 
             
@@ -132,7 +126,6 @@ public class HBCIPassportPinTan
      */
     public void resetPassphrase()
     {
-        passportKey=null;
     }
     
     /**
@@ -165,86 +158,23 @@ public class HBCIPassportPinTan
         create();
         
         String fname = this.getFileName();
-        if (fname==null) {
+        if (fname == null)
             throw new NullPointerException("client.passport.PinTan.filename must not be null");
-        }
 
-        HBCIUtils.log("loading data from file " + fname,HBCIUtils.LOG_DEBUG);
-
-        ObjectInputStream o = null;
-        try
-        {
-            int retries = Integer.parseInt(HBCIUtils.getParam("client.retries.passphrase","3"));
-            
-            while (true) {
-                if (passportKey == null)
-                    passportKey = calculatePassportKey(FOR_LOAD);
-
-                PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-                String provider = HBCIUtils.getParam("kernel.security.provider");
-                Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
-                cipher.init(Cipher.DECRYPT_MODE,passportKey,paramspec);
-                
-                o = null;
-                try
-                {
-                    o=new ObjectInputStream(new CipherInputStream(new FileInputStream(fname),cipher));
-                }
-                catch (StreamCorruptedException e)
-                {
-                    passportKey=null;
-                    
-                    retries--;
-                    if (retries<=0)
-                        throw new InvalidPassphraseException();
-                }
-                
-                if (o!=null)
-                    break;
-            }
-
-            setCountry((String)(o.readObject()));
-            setBLZ((String)(o.readObject()));
-            setHost((String)(o.readObject()));
-            setPort((Integer)(o.readObject()));
-            setUserId((String)(o.readObject()));
-            setSysId((String)(o.readObject()));
-            setBPD((Properties)(o.readObject()));
-            setUPD((Properties)(o.readObject()));
-
-            setHBCIVersion((String)o.readObject());
-            setCustomerId((String)o.readObject());
-            setFilterType((String)o.readObject());
-            
-            try {
-                setAllowedTwostepMechanisms((List<String>)o.readObject());
-                try
-                {
-                    setCurrentTANMethod((String)o.readObject());
-                }
-                catch (Exception e)
-                {
-                    HBCIUtils.log("no current secmech found in passport file - automatically upgrading to new file format", HBCIUtils.LOG_WARN);
-                }
-            }
-            catch (Exception e)
-            {
-                HBCIUtils.log("no list of allowed secmechs found in passport file - automatically upgrading to new file format", HBCIUtils.LOG_WARN);
-            }
-        } 
-        catch (Exception e)
-        {
-            throw new HBCI_Exception("*** loading of passport file failed",e);
-        }
-
-        try
-        {
-            o.close();
-        }
-        catch (Exception e)
-        {
-            HBCIUtils.log(e);
-        }
+        PassportData data = PassportStorage.load(this,new File(fname));
+        this.setCountry(data.country);
+        this.setBLZ(data.blz);
+        this.setHost(data.host);
+        this.setPort(data.port);
+        this.setUserId(data.userId);
+        this.setSysId(data.sysId);
+        this.setBPD(data.bpd);
+        this.setUPD(data.upd);
+        this.setHBCIVersion(data.hbciVersion);
+        this.setCustomerId(data.customerId);
+        this.setFilterType(data.filter);
+        this.setAllowedTwostepMechanisms(data.twostepMechs);
+        this.setCurrentTANMethod(data.tanMethod);
     }
 
     /**
@@ -253,52 +183,32 @@ public class HBCIPassportPinTan
     @Override
     public void saveChanges()
     {
-        File passportfile = new File(getFileName());
-        File tempfile     = null;
-        
-        try
-        {
-            if (passportKey==null) 
-                passportKey=calculatePassportKey(FOR_SAVE);
+        try {
+
+            final PassportData data = new PassportData();
             
-            PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-            String provider = HBCIUtils.getParam("kernel.security.provider");
-            Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
-            cipher.init(Cipher.ENCRYPT_MODE,passportKey,paramspec);
+            data.country     = this.getCountry();
+            data.blz         = this.getBLZ();
+            data.host        = this.getHost();
+            data.port        = this.getPort();
+            data.userId      = this.getUserId();
+            data.sysId       = this.getSysId();
+            data.bpd         = this.getBPD();
+            data.upd         = this.getUPD();
 
-            File directory = passportfile.getAbsoluteFile().getParentFile();
-            String prefix  = passportfile.getName()+"_";
-            tempfile       = File.createTempFile(prefix,"",directory);
-
-            HBCIUtils.log("writing to passport file " + tempfile, HBCIUtils.LOG_DEBUG);
-            ObjectOutputStream o = new ObjectOutputStream(new CipherOutputStream(new FileOutputStream(tempfile),cipher));
-
-            o.writeObject(getCountry());
-            o.writeObject(getBLZ());
-            o.writeObject(getHost());
-            o.writeObject(getPort());
-            o.writeObject(getUserId());
-            o.writeObject(getSysId());
-            o.writeObject(getBPD());
-            o.writeObject(getUPD());
-
-            o.writeObject(getHBCIVersion());
-            o.writeObject(getCustomerId());
-            o.writeObject(getFilterType());
+            data.hbciVersion = this.getHBCIVersion();
+            data.customerId  = this.getCustomerId();
+            data.filter      = this.getFilterType();
             
-            // hier auch gewähltes zweischritt-verfahren abspeichern
-            List<String> l = getAllowedTwostepMechanisms();
+            final List<String> l = getAllowedTwostepMechanisms();
             HBCIUtils.log("saving two step mechs: " + l, HBCIUtils.LOG_DEBUG);
-            o.writeObject(l);
+            data.twostepMechs = l;
             
-            String s=getCurrentTANMethod(false);
+            final String s = this.getCurrentTANMethod(false);
             HBCIUtils.log("saving current tan method: "+s, HBCIUtils.LOG_DEBUG);
-            o.writeObject(s);
+            data.tanMethod = s;
 
-            HBCIUtils.log("closing output stream", HBCIUtils.LOG_DEBUG);
-            o.close();
-            
-            this.safeReplace(passportfile,tempfile);
+            PassportStorage.save(this,data,new File(this.getFileName()));
         }
         catch (HBCI_Exception he)
         {
@@ -306,7 +216,7 @@ public class HBCIPassportPinTan
         }
         catch (Exception e)
         {
-            throw new HBCI_Exception("*** saving of passport file failed",e);
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_WRITEERR"),e);
         }
     }
     
@@ -528,12 +438,18 @@ public class HBCIPassportPinTan
       return null;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#verify(byte[], byte[])
+     */
     public boolean verify(byte[] data,byte[] sig)
     {
         // TODO: fuer bankensignaturen fuer HITAN muss dass hier geändert werden
         return true;
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#encrypt(byte[])
+     */
     public byte[][] encrypt(byte[] plainMsg)
     {
         try {
@@ -545,6 +461,9 @@ public class HBCIPassportPinTan
         }
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#decrypt(byte[], byte[])
+     */
     public byte[] decrypt(byte[] cryptedKey,byte[] cryptedMsg)
     {
         try {
@@ -554,10 +473,12 @@ public class HBCIPassportPinTan
         }
     }
     
+    /**
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#close()
+     */
     public void close()
     {
         super.close();
-        passportKey=null;
     }
     
 }

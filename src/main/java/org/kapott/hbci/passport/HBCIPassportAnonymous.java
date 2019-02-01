@@ -46,6 +46,7 @@ import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.tools.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -524,7 +525,7 @@ public class HBCIPassportAnonymous
             tform.transform(new DOMSource(root),new StreamResult(co));
 
             co.close();
-            this.safeReplace(passportfile,tempfile);
+            IOUtils.safeReplace(passportfile,tempfile);
             
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_WRITEERR"),e);

@@ -8,12 +8,12 @@ import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci4java.AbstractTestGV;
 
 /**
- * Testet die Abrufen der Umsaetze per CAMT.
+ * Testet die Abrufen der Umsaetze.
  */
-public class TestGVKUmsAllCamt extends AbstractTestGV
+public class TestGVKUmsAll extends AbstractTestGV
 {
     /**
-     * Testet das Abrufen der Umsaetze per CAMT.
+     * Testet das Abrufen der Umsaetze.
      */
     @Test
     public void test()
@@ -22,7 +22,7 @@ public class TestGVKUmsAllCamt extends AbstractTestGV
             
             @Override
             public String getJobname() {
-                return "KUmsAllCamt";
+                return "KUmsAll";
             }
             
             /**
@@ -31,9 +31,9 @@ public class TestGVKUmsAllCamt extends AbstractTestGV
             @Override
             public void configure(HBCIJob job, HBCIPassport passport, Properties params) {
                 super.configure(job, passport, params);
-                job.setParam("my.bic",params.getProperty("bic",System.getProperty("bic")));
-                job.setParam("my.iban",params.getProperty("iban",System.getProperty("iban")));
-                
+                job.setParam("my.blz",params.getProperty("blz",System.getProperty("blz")));
+                job.setParam("my.number",params.getProperty("number",System.getProperty("number")));
+
                 String start = params.getProperty("startdate",System.getProperty("startdate"));
                 if (start != null)
                     job.setParam("startdate",start);

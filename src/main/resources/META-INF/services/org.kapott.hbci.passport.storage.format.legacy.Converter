@@ -1,0 +1,4 @@
+# Die unterstuetzten Legacy-Formate.
+
+org.kapott.hbci.passport.storage.format.legacy.ConverterDDV
+org.kapott.hbci.passport.storage.format.legacy.ConverterPinTan

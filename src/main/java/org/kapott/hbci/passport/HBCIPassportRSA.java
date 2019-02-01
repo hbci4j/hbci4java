@@ -37,6 +37,7 @@ import org.kapott.hbci.smartcardio.RSABankData;
 import org.kapott.hbci.smartcardio.RSACardService;
 import org.kapott.hbci.smartcardio.RSAKeyData;
 import org.kapott.hbci.smartcardio.SmartCardService;
+import org.kapott.hbci.tools.IOUtils;
 
 /**
  * HBCI-Passport fuer RDH-Chipkarten.
@@ -714,7 +715,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             
             o.close();
             
-            this.safeReplace(passportfile,tempfile);
+            IOUtils.safeReplace(passportfile,tempfile);
             
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_WRITEERR"), e);
