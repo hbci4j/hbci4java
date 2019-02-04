@@ -8,30 +8,17 @@
 package org.kapott.hbci.passport.storage.format.legacy;
 
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportAnonymous;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Implementierung des Converter fuer Anonymous-Passports.
  */
-public class ConverterAnonymous extends AbstractConverter
+public class ConverterAnonymous extends AbstractConverterXML
 {
     /**
      * @see org.kapott.hbci.passport.storage.format.legacy.Converter#load(java.io.InputStream)
@@ -39,11 +26,7 @@ public class ConverterAnonymous extends AbstractConverter
     @Override
     public PassportData load(InputStream is) throws Exception
     {
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setValidating(false);
-        
-        final DocumentBuilder db = dbf.newDocumentBuilder();
-        Element root = db.parse(is).getDocumentElement();
+        Element root = this.read(is);
 
         final PassportData data = new PassportData();
         data.blz         = this.getElementValue(root,"blz");
@@ -61,18 +44,11 @@ public class ConverterAnonymous extends AbstractConverter
     }
     
     /**
-     * @see org.kapott.hbci.passport.storage.format.legacy.Converter#save(org.kapott.hbci.passport.storage.PassportData, java.io.OutputStream)
+     * @see org.kapott.hbci.passport.storage.format.legacy.AbstractConverterXML#fill(org.w3c.dom.Document, org.w3c.dom.Element, org.kapott.hbci.passport.storage.PassportData)
      */
     @Override
-    public void save(PassportData data, OutputStream os) throws Exception
+    protected void fill(Document doc, Element root, PassportData data)
     {
-        final DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
-        fac.setValidating(false);
-        final DocumentBuilder db = fac.newDocumentBuilder();
-
-        final Document doc = db.newDocument();
-        final Element root = doc.createElement("HBCIPassportRDHNew");
-
         this.createElement(doc,root,"country",data.country);
         this.createElement(doc,root,"blz",data.blz);
         this.createElement(doc,root,"host",data.host);
@@ -83,17 +59,6 @@ public class ConverterAnonymous extends AbstractConverter
 
         this.createPropsElement(doc,root,"bpd",data.bpd);
         this.createPropsElement(doc,root,"upd",data.upd);
-
-        final TransformerFactory tfac = TransformerFactory.newInstance();
-        final Transformer tform = tfac.newTransformer();
-
-        tform.setOutputProperty(OutputKeys.METHOD,"xml");
-        tform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"no");
-        tform.setOutputProperty(OutputKeys.ENCODING,"ISO-8859-1");
-        tform.setOutputProperty(OutputKeys.INDENT,"yes");
-
-        tform.transform(new DOMSource(root),new StreamResult(os));
-        os.flush();
     }
 
     /**
@@ -105,92 +70,4 @@ public class ConverterAnonymous extends AbstractConverter
         return passport != null && (passport instanceof HBCIPassportAnonymous);
     }
     
-    /**
-     * Liefert einen einzelnen Wert.
-     * @param root das Element.
-     * @param name der Name des Elements.
-     * @return
-     */
-    private String getElementValue(Element root, String name)
-    {
-        NodeList list = root.getElementsByTagName(name);
-        if (list != null && list.getLength() != 0)
-        {
-            Node content = list.item(0).getFirstChild();
-            if (content != null)
-                return content.getNodeValue();
-        }
-        return null;
-    }
-    
-    /**
-     * Liefert die Werte aus dem XML-Teil als Properties.
-     * @param root Das Basis-Element.
-     * @param name der Name des Elements.
-     * @return die Properties.
-     */
-    private Properties getElementProps(Element root, String name)
-    {
-        Node base=root.getElementsByTagName(name).item(0);
-        if (base == null)
-            return null;
-        
-        Properties ret = new Properties();
-        NodeList entries=base.getChildNodes();
-        int len=entries.getLength();
-
-        for (int i=0;i<len;i++)
-        {
-            Node n = entries.item(i);
-            if (n.getNodeType() == Node.ELEMENT_NODE)
-            {
-                Element e = (Element) n;
-                ret.setProperty(e.getAttribute("name"),e.getAttribute("value"));
-            }
-        }
-
-        return ret;
-    }
-    
-    /**
-     * Erzeugt ein XML-Element.
-     * @param doc das Dokument.
-     * @param root das Root-Element.
-     * @param elemName der Name des Elements.
-     * @param elemValue der Wert des Elements.
-     */
-    private void createElement(Document doc, Element root, String elemName, String elemValue)
-    {
-        Node elem = doc.createElement(elemName);
-        root.appendChild(elem);
-        Node data = doc.createTextNode(elemValue);
-        elem.appendChild(data);
-    }
-
-    /**
-     * Erzeugt ein Properties-Element.
-     * @param doc das Dokument.
-     * @param root das Root-Element.
-     * @param elemName der Name des Element.s
-     * @param p die Properties.
-     */
-    private void createPropsElement(Document doc, Element root, String elemName, Properties p)
-    {
-        if (p == null)
-            return;
-        
-        Node base = doc.createElement(elemName);
-        root.appendChild(base);
-
-        for (Enumeration e = p.propertyNames();e.hasMoreElements();)
-        {
-            String key = (String) e.nextElement();
-            String value = p.getProperty(key);
-
-            Element data = doc.createElement("entry");
-            data.setAttribute("name",key);
-            data.setAttribute("value",value);
-            base.appendChild(data);
-        }
-    }
 }

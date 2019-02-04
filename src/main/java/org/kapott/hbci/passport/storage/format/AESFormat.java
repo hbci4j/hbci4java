@@ -28,12 +28,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.tools.IOUtils;
@@ -250,22 +246,12 @@ public class AESFormat extends AbstractFormat
      */
     private SecretKey getPassportKey(final HBCIPassport passport, final byte[] salt, final boolean forSaving) throws GeneralSecurityException
     {
-        StringBuffer passphrase = new StringBuffer();
-        HBCIUtilsInternal.getCallback().callback(passport,
-                                         forSaving ? HBCICallback.NEED_PASSPHRASE_SAVE : HBCICallback.NEED_PASSPHRASE_LOAD,
-                                         forSaving ? HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW") : HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                         HBCICallback.TYPE_SECRET,
-                                         passphrase);
-        if (passphrase.length() == 0)
-            throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSZERO"));
-        
-        LogFilter.getInstance().addSecretData(passphrase.toString(),"X",LogFilter.FILTER_SECRETS);
-
         try
         {
+            char[] pw = this.getPassword(passport,forSaving);
             final String provider = this.getSecurityProvider();
             final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(KEY_ALG_NAME,provider) : SecretKeyFactory.getInstance(KEY_ALG_NAME);
-            final KeySpec spec = new PBEKeySpec(passphrase.toString().toCharArray(), salt, CIPHER_ITERATIONS, KEY_SIZE);
+            final KeySpec spec = new PBEKeySpec(pw, salt, CIPHER_ITERATIONS, KEY_SIZE);
             final SecretKey tmp = fac.generateSecret(spec);
             final SecretKey secret = new SecretKeySpec(tmp.getEncoded(),KEY_ALG);
             return secret;
@@ -275,5 +261,20 @@ public class AESFormat extends AbstractFormat
             HBCIUtils.log("AES-Format not supported in this Java version",HBCIUtils.LOG_DEBUG);
             throw new UnsupportedOperationException("AES-Format not supported in this Java version");
         }
+    }
+    
+    /**
+     * @see org.kapott.hbci.passport.storage.format.PassportFormat#getLoadOrder()
+     */
+    @Override
+    public int getLoadOrder()
+    {
+        // Beim Laden sollte das AESFormat immer vorn stehen, da es - im Gegensatz zum LegacyFormat - selbst
+        // erkennen kann, ob es die Daten lesen kann oder nicht (es speichert in der Datei Header-Informationen)
+        // Das LegacyFormat entschluesselt die Daten jedoch blind. Wenn es ein Fremdformat einliest, kommt es
+        // bei der eigentlichen Entschluesselung nicht zu einem Fehler. Stattdessen wird die Datei halt einfach zu
+        // binaerem Muell entschluesselt, der sich anschliessend nicht deserialisieren laesst. Daher sollte immer
+        // erst das AESFormat die Entschluesselung probieren
+        return Integer.MIN_VALUE;
     }
 }

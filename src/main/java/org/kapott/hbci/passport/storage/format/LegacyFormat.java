@@ -10,7 +10,6 @@ package org.kapott.hbci.passport.storage.format;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,12 +23,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.passport.storage.format.legacy.Converter;
@@ -108,7 +103,7 @@ public class LegacyFormat extends AbstractFormat
         // Passenden Converter ermitteln
         final Converter converter = this.getConverter(passport);
         
-        OutputStream os = null;
+        CipherOutputStream os = null;
         
         try
         {
@@ -148,21 +143,11 @@ public class LegacyFormat extends AbstractFormat
      */
     private SecretKey getPassportKey(final HBCIPassport passport, final boolean forSaving) throws GeneralSecurityException
     {
-        StringBuffer passphrase = new StringBuffer();
-        HBCIUtilsInternal.getCallback().callback(passport,
-                                         forSaving ? HBCICallback.NEED_PASSPHRASE_SAVE : HBCICallback.NEED_PASSPHRASE_LOAD,
-                                         forSaving ? HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW") : HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                         HBCICallback.TYPE_SECRET,
-                                         passphrase);
-        if (passphrase.length() == 0)
-            throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSZERO"));
-        
-        LogFilter.getInstance().addSecretData(passphrase.toString(),"X",LogFilter.FILTER_SECRETS);
-
+        char[] pw = this.getPassword(passport,forSaving);
         final String provider = this.getSecurityProvider();
         final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(CIPHER_NAME,provider) : SecretKeyFactory.getInstance(CIPHER_NAME);
-        final PBEKeySpec keyspec = new PBEKeySpec(passphrase.toString().toCharArray());
-        SecretKey passportKey = fac.generateSecret(keyspec);
+        final PBEKeySpec keyspec = new PBEKeySpec(pw);
+        final SecretKey passportKey = fac.generateSecret(keyspec);
         keyspec.clearPassword();
         
         return passportKey;
@@ -202,5 +187,15 @@ public class LegacyFormat extends AbstractFormat
         }
         if (converters.size() == 0)
             HBCIUtils.log("no supported legacy converters found",HBCIUtils.LOG_ERR);
+    }
+    
+    /**
+     * @see org.kapott.hbci.passport.storage.format.PassportFormat#getLoadOrder()
+     */
+    @Override
+    public int getLoadOrder()
+    {
+        // Beim Lesen versuchen wir dieses Format zum Schluss. Das ist quasi der Fallback
+        return Integer.MAX_VALUE;
     }
 }

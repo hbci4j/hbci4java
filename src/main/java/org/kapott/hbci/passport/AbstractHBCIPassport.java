@@ -30,10 +30,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.comm.Filter;
@@ -77,9 +73,6 @@ public abstract class AbstractHBCIPassport
     private Hashtable<String, Object>  persistentData;
 
     private IHandlerData parentHandlerData;
-    
-    protected static final boolean FOR_SAVE=true;
-    protected static final boolean FOR_LOAD=false;
     
     public AbstractHBCIPassport(Object init)
     {
@@ -773,40 +766,6 @@ public abstract class AbstractHBCIPassport
         closeComm();
     }
     
-    /**
-     * Fragt den User per Callback nach dem Passwort fuer die Passport-Datei.
-     * @param forSaving true, wenn das Passwort zum Speichern erfragt werden soll.
-     * @return der Secret-Key.
-     */
-    protected SecretKey calculatePassportKey(boolean forSaving)
-    {
-        try {
-            StringBuffer passphrase=new StringBuffer();
-            HBCIUtilsInternal.getCallback().callback(this,
-                                             forSaving?HBCICallback.NEED_PASSPHRASE_SAVE
-                                                      :HBCICallback.NEED_PASSPHRASE_LOAD,
-                                             forSaving?HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW")
-                                                      :HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                             HBCICallback.TYPE_SECRET,
-                                             passphrase);
-            if (passphrase.length()==0) {
-                throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSZERO"));
-            }
-            LogFilter.getInstance().addSecretData(passphrase.toString(),"X",LogFilter.FILTER_SECRETS);
-
-            String provider = HBCIUtils.getParam("kernel.security.provider");
-            SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("PBEWithMD5AndDES") : SecretKeyFactory.getInstance("PBEWithMD5AndDES", provider);
-            PBEKeySpec keyspec=new PBEKeySpec(passphrase.toString().toCharArray());
-            SecretKey passportKey=fac.generateSecret(keyspec);
-            keyspec.clearPassword();
-            passphrase=null;
-
-            return passportKey;
-        } catch (Exception ex) {
-            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_KEYCALCERR"),ex);
-        }
-    }
-    
     public Properties getParamSegmentNames()
     {
         Properties ret=new Properties();
@@ -907,6 +866,7 @@ public abstract class AbstractHBCIPassport
     
     public void changePassphrase()
     {
+        persistentData.clear(); // Stellt sicher, dass auch gecachte Passwoerter geleert werden - siehe AbstractFormat
         resetPassphrase();
         saveChanges();
     }

@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 
+import org.kapott.hbci.manager.HBCIKey;
+
 /**
  * Kapselt die Daten des Passport zum Lesen und Schreiben.
  */
@@ -65,6 +67,16 @@ public class PassportData implements Serializable
     public String sysId = null;
     
     /**
+     * Die Signatur-ID.
+     */
+    public Long sigId = null;
+    
+    /**
+     * Die Profil-Version.
+     */
+    public String profileVersion = null;
+    
+    /**
      * Die Kunden-ID.
      */
     public String customerId = null;
@@ -83,4 +95,34 @@ public class PassportData implements Serializable
      * Das TAN-Verfahren.
      */
     public String tanMethod = null;
+
+    /**
+     * Der Signatur-Key der Bank.
+     */
+    public HBCIKey instSigKey = null;
+    
+    /**
+     * Der Verschluesselungskey der Bank.
+     */
+    public HBCIKey instEncKey = null;
+    
+    /**
+     * Der eigene Public-Signatur-Key.
+     */
+    public HBCIKey myPublicSigKey = null;
+    
+    /**
+     * Der eigene Private-Signatur-Key.
+     */
+    public HBCIKey myPrivateSigKey = null;
+    
+    /**
+     * Der eigene Public-Verschluesselungskey.
+     */
+    public HBCIKey myPublicEncKey = null;
+    
+    /**
+     * Der eigene Private-Verschluesselungskey.
+     */
+    public HBCIKey myPrivateEncKey = null;
 }

@@ -21,45 +21,13 @@
 
 package org.kapott.hbci.passport;
 
-import java.io.CharConversionException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPrivateCrtKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.RSAPrivateCrtKeySpec;
-import java.security.spec.RSAPrivateKeySpec;
-import java.security.spec.RSAPublicKeySpec;
-import java.util.Enumeration;
-import java.util.Properties;
 
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.spec.PBEParameterSpec;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.kapott.cryptalgs.RSAPrivateCrtKey2;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidPassphraseException;
-import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.tools.IOUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.passport.storage.PassportData;
+import org.kapott.hbci.passport.storage.PassportStorage;
 
 /** <p>Passport-Klasse für RDH-Zugänge mit Sicherheitsmedium "Datei". Bei dieser Variante
     werden sowohl die HBCI-Zugangsdaten wie auch die kryptografischen Schlüssel für
@@ -95,16 +63,24 @@ import org.xml.sax.SAXException;
     dem <a href="mailto:hbci4java@kapott.org">Autor</a> zukommen zu lassen, damit eine Passport-Variante
     implementiert werden kann, die mit Schlüsseldateien dieser "anderen" Software arbeiten kann.</p>
     @see org.kapott.hbci.tools.INILetter INILetter */
-public class HBCIPassportRDHNew 
-    extends AbstractRDHSWFileBasedPassport
+public class HBCIPassportRDHNew extends AbstractRDHSWFileBasedPassport
 {
 	private String profileVersion;
 	
+    /**
+     * ct.
+     * @param init
+     * @param dummy
+     */
     public HBCIPassportRDHNew(Object init,int dummy)
     {
         super(init);
     }
     
+    /**
+     * ct.
+     * @param initObject
+     */
     public HBCIPassportRDHNew(Object initObject)
     {
         this(initObject,0);
@@ -113,9 +89,8 @@ public class HBCIPassportRDHNew
         String  filename=HBCIUtils.getParam(getParamHeader()+".filename");
         boolean init=HBCIUtils.getParam(getParamHeader()+".init","1").equals("1");
         
-        if (filename==null) {
+        if (filename==null)
             throw new NullPointerException(getParamHeader()+".filename must not be null");
-        }
 
         HBCIUtils.log("loading passport data from file "+filename,HBCIUtils.LOG_DEBUG);
         setFilename(filename);
@@ -126,385 +101,89 @@ public class HBCIPassportRDHNew
             setFilterType("None");
             setPort(new Integer(3000));
 
-            if (!new File(filename).canRead()) {
+            if (!new File(filename).canRead())
+            {
                 HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
                 askForMissingData(true,true,true,true,false,true,true);
                 saveChanges();
             }
             
-            try {
-                DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
-                dbf.setValidating(false);
-                DocumentBuilder db=dbf.newDocumentBuilder();
-                Element root=null;
+            PassportData data = PassportStorage.load(this,new File(filename));
+            this.setBLZ(data.blz);
+            this.setCountry(data.country);
+            this.setHost(data.host);
+            this.setPort(data.port);
+            this.setUserId(data.userId);
+            this.setCustomerId(data.customerId);
+            this.setSysId(data.sysId);
+            this.setSigId(data.sigId);
+            this.setProfileVersion(data.profileVersion != null ? data.profileVersion : "");
+            this.setHBCIVersion(data.hbciVersion);
 
-                int retries=Integer.parseInt(HBCIUtils.getParam("client.retries.passphrase","3"));
-
-                while (true) {          // loop for entering the correct passphrase
-                    if (getPassportKey()==null)
-                    	setPassportKey(calculatePassportKey(FOR_LOAD));
-
-                    PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-                    String provider = HBCIUtils.getParam("kernel.security.provider");
-                    Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
-                    cipher.init(Cipher.DECRYPT_MODE,getPassportKey(),paramspec);
-
-                    root=null;
-                    CipherInputStream ci=null;
-                    
-                    try {
-                        ci=new CipherInputStream(new FileInputStream(getFilename()),cipher);
-                        root=db.parse(ci).getDocumentElement();
-                    } catch (Exception e) {
-                      
-                        // willuhn 2011-05-25 Wir lassen einen erneuten Versuch nur bei einer der beiden
-                        // folgenden Exceptions zu. 
-                        // Die "CharConversionException" ist in der Praxis eine
-                        // " com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException: Invalid byte 2 of 2-byte UTF-8 sequence."
-                        // Sie fliegt in "db.parse()". Sprich: Der CipherInputStream kann nicht erkennen,
-                        // ob das Passwort falsch ist. Stattdessen decodiert er einfach Muell, der
-                        // anschliessend nicht als XML-Dokument gelesen werden kann
-                        if (!(e instanceof SAXException) && !(e instanceof CharConversionException))
-                          throw e;
-                        
-                        resetPassphrase();
-
-                        retries--;
-                        if (retries<=0)
-                            throw new InvalidPassphraseException();
-                    } finally {
-                        if (ci!=null)
-                            ci.close();
-                    }
-
-                    if (root!=null)
-                        break;
-                }
+            this.setBPD(data.bpd);
+            this.setUPD(data.upd);
+            this.setInstSigKey(data.instSigKey);
+            this.setInstEncKey(data.instEncKey);
+            this.setMyPublicSigKey(data.myPublicSigKey);
+            this.setMyPrivateSigKey(data.myPrivateSigKey);
+            this.setMyPublicEncKey(data.myPublicEncKey);
+            this.setMyPrivateEncKey(data.myPrivateEncKey);
                 
-                setBLZ(getElementValue(root,"blz"));
-                setCountry(getElementValue(root,"country"));
-                setHost(getElementValue(root,"host"));
-                setPort(new Integer(getElementValue(root,"port")));
-                setUserId(getElementValue(root,"userid"));
-                setCustomerId(getElementValue(root,"customerid"));
-                setSysId(getElementValue(root,"sysid"));
-                setSigId(new Long(getElementValue(root,"sigid")));
-                
-                String rdhprofile=getElementValue(root,"rdhprofile");
-                setProfileVersion(rdhprofile!=null?rdhprofile:"");
-                
-                setHBCIVersion(getElementValue(root,"hbciversion"));
-                
-                setBPD(getElementProps(root,"bpd"));
-                setUPD(getElementProps(root,"upd"));
-                
-                setInstSigKey(getElementKey(root,"inst","S","public"));
-                setInstEncKey(getElementKey(root,"inst","V","public"));
-                setMyPublicSigKey(getElementKey(root,"user","S","public"));
-                setMyPrivateSigKey(getElementKey(root,"user","S","private"));
-                setMyPublicEncKey(getElementKey(root,"user","V","public"));
-                setMyPrivateEncKey(getElementKey(root,"user","V","private"));
-                
-                if (askForMissingData(true,true,true,true,false,true,true))
-                    saveChanges();
-            }
-            catch (HBCI_Exception e1)
-            {
-                throw e1;
-            }
-            catch (Exception e) {
-                throw new HBCI_Exception("*** error while reading passport file",e);
-            }
+            if (askForMissingData(true,true,true,true,false,true,true))
+                saveChanges();
         }
     }
     
-    protected String getElementValue(Element root,String name)
-    {
-        String ret=null;
-        
-        NodeList list=root.getElementsByTagName(name);
-        if (list!=null && list.getLength()!=0) {
-            Node content=list.item(0).getFirstChild();
-            if (content!=null)
-                ret=content.getNodeValue();
-        }
-            
-        return ret != null && ret.length() > 0 ? ret : null;
-    }
-    
-    protected Properties getElementProps(Element root,String name)
-    {
-        Properties ret=null;
-        
-        Node base=root.getElementsByTagName(name).item(0);
-        if (base!=null) {
-            ret=new Properties();
-            NodeList entries=base.getChildNodes();
-            int len=entries.getLength();
-
-            for (int i=0;i<len;i++) {
-                Node n=entries.item(i);
-                if (n.getNodeType()==Node.ELEMENT_NODE) {
-                    ret.setProperty(((Element)n).getAttribute("name"),
-                                    ((Element)n).getAttribute("value"));
-                }
-            }
-        }
-        
-        return ret;
-    }
-    
-    protected HBCIKey getElementKey(Element root,String owner,String type,String part)
-        throws Exception
-    {
-        HBCIKey ret=null;
-        
-        NodeList keys=root.getElementsByTagName("key");
-        int len=keys.getLength();
-        
-        for (int i=0;i<len;i++) {
-            Node n=keys.item(i);
-            if (n.getNodeType()==Node.ELEMENT_NODE) {
-                Element keynode=(Element)n;
-                if (keynode.getAttribute("owner").equals(owner) &&
-                    keynode.getAttribute("type").equals(type) &&
-                    keynode.getAttribute("part").equals(part)) {
-                
-                    Key key;
-                    
-                    if (part.equals("public")) {
-                        RSAPublicKeySpec spec=new RSAPublicKeySpec(new BigInteger(getElementValue(keynode,"modulus")),
-                                                                   new BigInteger(getElementValue(keynode,"exponent")));
-                        key=KeyFactory.getInstance("RSA").generatePublic(spec);
-                    } else {
-                        String modulus=getElementValue(keynode,"modulus");
-                        String privexponent=getElementValue(keynode,"exponent");
-                        String pubexponent=getElementValue(keynode,"pubexponent");
-                        String p=getElementValue(keynode,"p");
-                        String q=getElementValue(keynode,"q");
-                        String dP=getElementValue(keynode,"dP");
-                        String dQ=getElementValue(keynode,"dQ");
-                        String qInv=getElementValue(keynode,"qInv");
-                        
-                        if (privexponent==null) {
-                            // only CRT
-                            HBCIUtils.log("private "+type+" key is CRT-only",HBCIUtils.LOG_DEBUG);
-                            key=new RSAPrivateCrtKey2(new BigInteger(p),
-                                                      new BigInteger(q),
-                                                      new BigInteger(dP),
-                                                      new BigInteger(dQ),
-                                                      new BigInteger(qInv));
-                        } else if (p==null) {
-                            // only exponent
-                            HBCIUtils.log("private "+type+" key is exponent-only",HBCIUtils.LOG_DEBUG);
-                            RSAPrivateKeySpec spec=new RSAPrivateKeySpec(new BigInteger(modulus),
-                                                                         new BigInteger(privexponent));
-                            key=KeyFactory.getInstance("RSA").generatePrivate(spec);
-                        } else {
-                            // complete data
-                            HBCIUtils.log("private "+type+" key is fully specified",HBCIUtils.LOG_DEBUG);
-                            RSAPrivateCrtKeySpec spec=new RSAPrivateCrtKeySpec(new BigInteger(modulus),
-                                                                               new BigInteger(pubexponent),
-                                                                               new BigInteger(privexponent),
-                                                                               new BigInteger(p),
-                                                                               new BigInteger(q),
-                                                                               new BigInteger(dP),
-                                                                               new BigInteger(dQ),
-                                                                               new BigInteger(qInv));
-                            key=KeyFactory.getInstance("RSA").generatePrivate(spec);
-                        }
-                    }
-                    
-                    ret=new HBCIKey(getElementValue(keynode,"country"),
-                                    getElementValue(keynode,"blz"),
-                                    getElementValue(keynode,"userid"),
-                                    getElementValue(keynode,"keynum"),
-                                    getElementValue(keynode,"keyversion"),
-                                    key);
-                    
-                    break;
-                }
-            }
-        }
-        
-        return ret;
-    }
-
     /**
      * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
      */
     public void saveChanges()
     {
-        try {
-            if (getPassportKey()==null)
-                setPassportKey(calculatePassportKey(FOR_SAVE));
-
-            PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-            String provider = HBCIUtils.getParam("kernel.security.provider");
-            Cipher cipher = provider == null ? Cipher.getInstance("PBEWithMD5AndDES") : Cipher.getInstance("PBEWithMD5AndDES", provider);
-            cipher.init(Cipher.ENCRYPT_MODE,getPassportKey(),paramspec);
-
-            DocumentBuilderFactory fac=DocumentBuilderFactory.newInstance();
-            fac.setValidating(false);
-            DocumentBuilder db=fac.newDocumentBuilder();
-            
-            Document doc=db.newDocument();
-            Element root=doc.createElement("HBCIPassportRDHNew");
-            
-            createElement(doc,root,"country",getCountry());
-            createElement(doc,root,"blz",getBLZ());
-            createElement(doc,root,"host",getHost());
-            createElement(doc,root,"port",getPort().toString());
-            createElement(doc,root,"userid",getUserId());
-            createElement(doc,root,"customerid",getCustomerId());
-            createElement(doc,root,"sysid",getSysId());
-            createElement(doc,root,"sigid",getSigId().toString());
-            createElement(doc,root,"rdhprofile",getProfileVersion());
-            createElement(doc,root,"hbciversion",getHBCIVersion());
-            
-            createPropsElement(doc,root,"bpd",getBPD());
-            createPropsElement(doc,root,"upd",getUPD());
-            
-            createKeyElement(doc,root,"inst","S","public",getInstSigKey());
-            createKeyElement(doc,root,"inst","V","public",getInstEncKey());
-            createKeyElement(doc,root,"user","S","public",getMyPublicSigKey());
-            createKeyElement(doc,root,"user","S","private",getMyPrivateSigKey());
-            createKeyElement(doc,root,"user","V","public",getMyPublicEncKey());
-            createKeyElement(doc,root,"user","V","private",getMyPrivateEncKey());
-            
-            TransformerFactory tfac=TransformerFactory.newInstance();
-            Transformer tform=tfac.newTransformer();
-            
-            tform.setOutputProperty(OutputKeys.METHOD,"xml");
-            tform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"no");
-            tform.setOutputProperty(OutputKeys.ENCODING,"ISO-8859-1");
-            tform.setOutputProperty(OutputKeys.INDENT,"yes");
-            
-            File passportfile=new File(getFilename());
-            File directory=passportfile.getAbsoluteFile().getParentFile();
-            String prefix=passportfile.getName()+"_";
-            File tempfile=File.createTempFile(prefix,"",directory);
-            
-            CipherOutputStream co=new CipherOutputStream(new FileOutputStream(tempfile),cipher);
-            tform.transform(new DOMSource(root),new StreamResult(co));
-            
-            co.close();
-            IOUtils.safeReplace(passportfile,tempfile);
-        }
-        catch (HBCI_Exception e1)
+        try
         {
-            throw e1;
+            final PassportData data = new PassportData();
+            data.country         = this.getCountry();
+            data.blz             = this.getBLZ();
+            data.host            = this.getHost();
+            data.port            = this.getPort();
+            data.userId          = this.getUserId();
+            data.customerId      = this.getCustomerId();
+            data.sysId           = this.getSysId();
+            data.sigId           = this.getSigId();
+            data.profileVersion  = this.getProfileVersion();
+            data.hbciVersion     = this.getHBCIVersion();
+            data.bpd             = this.getBPD();
+            data.upd             = this.getUPD();
+            data.instSigKey      = this.getInstSigKey();
+            data.instEncKey      = this.getInstEncKey();
+            data.myPublicSigKey  = this.getMyPublicSigKey();
+            data.myPrivateSigKey = this.getMyPrivateSigKey();
+            data.myPublicEncKey  = this.getMyPublicEncKey();
+            data.myPrivateEncKey = this.getMyPrivateEncKey();
+
+            PassportStorage.save(this,data,new File(this.getFilename()));
+        }
+        catch (HBCI_Exception he)
+        {
+            throw he;
         }
         catch (Exception e)
         {
-            throw new HBCI_Exception("*** saving of passport file failed",e);
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_WRITEERR"),e);
         }
     }
 
-    private void createElement(Document doc,Element root,String elemName,String elemValue)
-    {
-        Node elem=doc.createElement(elemName);
-        root.appendChild(elem);
-        Node data=doc.createTextNode(notNull(elemValue));
-        elem.appendChild(data);
-    }
-    
     /**
-     * Liefert den Wert oder einen Leerstring, wenn "value" NULL ist.
-     * @param value der Wert.
-     * @return Leerstring oder der Wert, aber niemals NULL.
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#setProfileVersion(java.lang.String)
      */
-    private String notNull(String value)
-    {
-        return value != null ? value : "";
-    }
-    
-    private void createPropsElement(Document doc,Element root,String elemName,Properties p)
-    {
-        if (p!=null) {
-            Node base=doc.createElement(elemName);
-            root.appendChild(base);
-            
-            for (Enumeration e=p.propertyNames();e.hasMoreElements();) {
-                String key=(String)e.nextElement();
-                String value=p.getProperty(key);
-                
-                Element data=doc.createElement("entry");
-                data.setAttribute("name",key);
-                data.setAttribute("value",notNull(value)); // Der Wert kann bei Properties eigentlich nicht null sein.
-                base.appendChild(data);
-            }
-        }
-    }
-    
-    private void createKeyElement(Document doc,Element root,String owner,String type,String part,HBCIKey key)
-    {
-        if (key!=null) {
-            Element base=doc.createElement("key");
-            base.setAttribute("owner",owner);
-            base.setAttribute("type",type);
-            base.setAttribute("part",part);
-            root.appendChild(base);
-            
-            createElement(doc,base,"country",notNull(key.country));
-            createElement(doc,base,"blz",notNull(key.blz));
-            createElement(doc,base,"userid",notNull(key.userid));
-            createElement(doc,base,"keynum",notNull(key.num));
-            createElement(doc,base,"keyversion",notNull(key.version));
-            
-            Element keydata=doc.createElement("keydata");
-            base.appendChild(keydata);
-
-            byte[] e=key.key.getEncoded();
-            String encoded=(e!=null)?HBCIUtils.encodeBase64(e):null;
-            String format=key.key.getFormat();
-
-            if (encoded!=null) {
-                Element data=doc.createElement("rawdata");
-                data.setAttribute("format",format);
-                data.setAttribute("encoding","base64");
-                keydata.appendChild(data);
-                Node content=doc.createTextNode(encoded);
-                data.appendChild(content);
-            }
-            
-            if (part.equals("public") && key.key != null) {
-                createElement(doc,keydata,"modulus",((RSAPublicKey)key.key).getModulus().toString());
-                createElement(doc,keydata,"exponent",((RSAPublicKey)key.key).getPublicExponent().toString());
-            } else {
-                if (key.key instanceof RSAPrivateCrtKey) {
-                    HBCIUtils.log("saving "+type+" key as fully specified",HBCIUtils.LOG_DEBUG);
-                    createElement(doc,keydata,"modulus",((RSAPrivateCrtKey)key.key).getModulus().toString());
-                    createElement(doc,keydata,"exponent",((RSAPrivateCrtKey)key.key).getPrivateExponent().toString());
-                    createElement(doc,keydata,"pubexponent",((RSAPrivateCrtKey)key.key).getPublicExponent().toString());
-                    createElement(doc,keydata,"p",((RSAPrivateCrtKey)key.key).getPrimeP().toString());
-                    createElement(doc,keydata,"q",((RSAPrivateCrtKey)key.key).getPrimeQ().toString());
-                    createElement(doc,keydata,"dP",((RSAPrivateCrtKey)key.key).getPrimeExponentP().toString());
-                    createElement(doc,keydata,"dQ",((RSAPrivateCrtKey)key.key).getPrimeExponentQ().toString());
-                    createElement(doc,keydata,"qInv",((RSAPrivateCrtKey)key.key).getCrtCoefficient().toString());
-                } else if (key.key instanceof RSAPrivateKey) {
-                    HBCIUtils.log("saving "+type+" key as exponent-only",HBCIUtils.LOG_DEBUG);
-                    createElement(doc,keydata,"modulus",((RSAPrivateKey)key.key).getModulus().toString());
-                    createElement(doc,keydata,"exponent",((RSAPrivateKey)key.key).getPrivateExponent().toString());
-                } else if (key.key instanceof RSAPrivateCrtKey2) {
-                    HBCIUtils.log("saving "+type+" key as crt-only",HBCIUtils.LOG_DEBUG);
-                    createElement(doc,keydata,"p",((RSAPrivateCrtKey2)key.key).getP().toString());
-                    createElement(doc,keydata,"q",((RSAPrivateCrtKey2)key.key).getQ().toString());
-                    createElement(doc,keydata,"dP",((RSAPrivateCrtKey2)key.key).getdP().toString());
-                    createElement(doc,keydata,"dQ",((RSAPrivateCrtKey2)key.key).getdQ().toString());
-                    createElement(doc,keydata,"qInv",((RSAPrivateCrtKey2)key.key).getQInv().toString());
-                } else {
-                    HBCIUtils.log("key has none of the known types - please contact the author!",HBCIUtils.LOG_WARN);
-                }
-            }
-        }         
-    }
-    
     public void setProfileVersion(String version)
     {
     	this.profileVersion=version;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getProfileVersion()
+     */
     public String getProfileVersion()
     {
         String ret=this.profileVersion;

@@ -96,7 +96,9 @@ public class PassportStorage
             {
                 try
                 {
-                    return format.load(passport,data);
+                    PassportData result = format.load(passport,data);
+                    HBCIUtils.log("passport data loaded using " + format.getClass().getSimpleName(),HBCIUtils.LOG_DEBUG);
+                    return result;
                 }
                 catch (UnsupportedOperationException ue)
                 {
@@ -176,6 +178,7 @@ public class PassportStorage
                     byte[] bytes = format.save(passport,data);
                     os.write(bytes);
                     os.flush(); // Sicherstellen, dass die Daten geflusht sind.
+                    HBCIUtils.log("passport data saved using " + format.getClass().getSimpleName(),HBCIUtils.LOG_DEBUG);
                     return; // Wenn wir fehlerfrei geschrieben haben, sind wir fertig
                 }
                 catch (UnsupportedOperationException ue)
@@ -223,27 +226,39 @@ public class PassportStorage
         if (formatsLoad.size() == 0)
             HBCIUtils.log("No supported passport formats found",HBCIUtils.LOG_ERR);
 
-        //////////////////////////////////////////////////
-        // Legt die Priorisierung der Formate beim Lesen und Schreiben fest
+        sort("load",formatsLoad,new Comparator<PassportFormat>() {
+            /**
+             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+             */
+            @Override
+            public int compare(PassportFormat o1, PassportFormat o2)
+            {
+                return Integer.compare(o1.getLoadOrder(),o2.getLoadOrder());
+            }
+        });
         
-        // Beim Laden sollte das AESFormat immer vorn stehen, da es - im Gegensatz zum LegacyFormat - selbst
-        // erkennen kann, ob es die Daten lesen kann oder nicht (es speichert in der Datei Header-Informationen)
-        // Das LegacyFormat entschluesselt die Daten jedoch blind. Wenn es ein Fremdformat einliest, kommt es
-        // bei der eigentlichen Entschluesselung nicht zu einem Fehler. Stattdessen wird die Datei halt einfach zu
-        // binaerem Muell entschluesselt, der sich anschliessend nicht deserialisieren laesst. Daher sollte immer
-        // erst das AESFormat die Entschluesselung probieren
-        final String[] orderLoad = getFormatOrder("passportformat.order.load",new String[]{"AESFormat","LegacyFormat"});
-                
         // Beim Speichern haengt die Reihenfolge davon ab, ob die Passports automatisch in das neue AESFormat
         // konvertiert werden sollen oder nicht. Wenn hier das AESFormat vorn steht, werden die Passports beim
         // ersten Schreibvorgang - egal aus welchem Format sie gelesen wurden - automatisch in das neue Format
         // konvertiert.
-        final String[] orderSave = getFormatOrder("passportformat.order.save",new String[]{"LegacyFormat","AESFormat"});
-        //
-        //////////////////////////////////////////////////
-
-        sort("load",formatsLoad,orderLoad);
-        sort("save",formatsSave,orderSave);
+        final List<String> orderSave = getFormatOrder("passportformat.order.save",Arrays.asList("LegacyFormat","AESFormat"));
+        sort("save",formatsSave,new Comparator<PassportFormat>() {
+            /**
+             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+             */
+            @Override
+            public int compare(PassportFormat o1, PassportFormat o2)
+            {
+                int x = orderSave.indexOf(o1.getClass().getSimpleName());
+                int y = orderSave.indexOf(o2.getClass().getSimpleName());
+                
+                // Wenn der Name nicht in der Liste enthalten ist, stellen wir das Format hinten an
+                if (x == -1) x = Integer.MAX_VALUE;
+                if (y == -1) y = Integer.MAX_VALUE;
+                
+                return (x < y) ? -1 : ((x == y) ? 0 : 1);
+            }
+        });
     }
     
     /**
@@ -252,7 +267,7 @@ public class PassportStorage
      * @param def die Default-Reihenfolge.
      * @return die zu verwendende Format-Reihenfolge.
      */
-    private static String[] getFormatOrder(String parameter, String[] def)
+    private static List<String> getFormatOrder(String parameter, List<String> def)
     {
         String value = HBCIUtils.getParam(parameter);
         if (value == null || value.length() == 0)
@@ -267,38 +282,20 @@ public class PassportStorage
 
         // Liste enthaelt nur einen Wert
         if (!value.contains(","))
-            return new String[]{value};
+            return Arrays.asList(value);
 
-        return value.split(",");
+        return Arrays.asList(value.split(","));
     }
-    
+
     /**
      * Sortiert die Formate in der angegebenen benannten Reihenfolge.
      * @param name sprechender Name fuer die Sortierung fuer das Logging.
      * @param formats die Formate.
-     * @param order die Reihenfolge.
+     * @param c der Comparator.
      */
-    private static void sort(String name, List<PassportFormat> formats, String[] order)
+    private static void sort(String name, List<PassportFormat> formats, Comparator<PassportFormat> c)
     {
-        final List<String> list = Arrays.asList(order);
-        Collections.sort(formats,new Comparator<PassportFormat>()
-        {
-            /**
-             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-             */
-            @Override
-            public int compare(PassportFormat o1, PassportFormat o2)
-            {
-                int x = list.indexOf(o1.getClass().getSimpleName());
-                int y = list.indexOf(o2.getClass().getSimpleName());
-                
-                // Wenn der Name nicht in der Liste enthalten ist, stellen wir das Format hinten an
-                if (x == -1) x = Integer.MAX_VALUE;
-                if (y == -1) y = Integer.MAX_VALUE;
-                
-                return (x < y) ? -1 : ((x == y) ? 0 : 1);
-            }
-        });
+        Collections.sort(formats,c);
         
         // Logging
         HBCIUtils.log("format order: " + name,HBCIUtils.LOG_DEBUG);
