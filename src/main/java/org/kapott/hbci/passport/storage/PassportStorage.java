@@ -257,7 +257,7 @@ public class PassportStorage
         
         // Checkt erst, ob es ein passport-spezifisches Format-Parameter gibt. Z.Bsp. "passport.format.HBCIPassportPinTan"
         // Wenn icht, dann ob es einen generischen Format-Parameter "passport.format"
-        final String name = HBCIUtils.getParam("passport.format" + type,HBCIUtils.getParam("passport.format"));
+        final String name = HBCIUtils.getParam("passport.format." + type,HBCIUtils.getParam("passport.format"));
 
 
         // Es ist ein Format konfiguriert. Checken, ob wir es unterstuetzen
