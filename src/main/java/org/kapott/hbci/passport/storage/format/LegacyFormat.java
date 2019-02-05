@@ -37,7 +37,7 @@ public class LegacyFormat extends AbstractFormat
 {
     private static List<Converter> converters   = null;
 
-    private final static String CIPHER_NAME     = "PBEWithMD5AndDES";
+    private final static String CIPHER_ALG      = "PBEWithMD5AndDES";
     private final static int CIPHER_ITERATIONS  = 987;
 
     static
@@ -62,10 +62,11 @@ public class LegacyFormat extends AbstractFormat
             
             try
             {
-                final String provider = this.getSecurityProvider();
+                final Cipher cipher = this.getCipher();
+                
                 final SecretKey key = this.getPassportKey(passport, false);
                 final PBEParameterSpec paramspec = new PBEParameterSpec(converter.getSalt(), CIPHER_ITERATIONS);
-                final Cipher cipher = provider != null ? Cipher.getInstance(CIPHER_NAME, provider) : Cipher.getInstance(CIPHER_NAME);
+
                 cipher.init(Cipher.DECRYPT_MODE, key, paramspec);
                 
                 is = new CipherInputStream(new ByteArrayInputStream(data),cipher);
@@ -107,10 +108,11 @@ public class LegacyFormat extends AbstractFormat
         
         try
         {
-            final String provider = this.getSecurityProvider();
+            final Cipher cipher = this.getCipher();
+            
             final SecretKey key = this.getPassportKey(passport, false);
             final PBEParameterSpec paramspec = new PBEParameterSpec(converter.getSalt(), CIPHER_ITERATIONS);
-            final Cipher cipher = provider != null ? Cipher.getInstance(CIPHER_NAME, provider) : Cipher.getInstance(CIPHER_NAME);
+
             cipher.init(Cipher.ENCRYPT_MODE, key, paramspec);
 
             final ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -135,6 +137,15 @@ public class LegacyFormat extends AbstractFormat
     }
     
     /**
+     * @see org.kapott.hbci.passport.storage.format.AbstractFormat#getCipherAlg()
+     */
+    @Override
+    protected String getCipherAlg()
+    {
+        return CIPHER_ALG;
+    }
+    
+    /**
      * Fragt den User per Callback nach dem Passwort fuer die Passport-Datei.
      * @param passport der Passport.
      * @param forSaving true, wenn das Passwort zum Speichern erfragt werden soll.
@@ -145,7 +156,7 @@ public class LegacyFormat extends AbstractFormat
     {
         char[] pw = this.getPassword(passport,forSaving);
         final String provider = this.getSecurityProvider();
-        final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(CIPHER_NAME,provider) : SecretKeyFactory.getInstance(CIPHER_NAME);
+        final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(CIPHER_ALG,provider) : SecretKeyFactory.getInstance(CIPHER_ALG);
         final PBEKeySpec keyspec = new PBEKeySpec(pw);
         final SecretKey passportKey = fac.generateSecret(keyspec);
         keyspec.clearPassword();
@@ -187,15 +198,5 @@ public class LegacyFormat extends AbstractFormat
         }
         if (converters.size() == 0)
             HBCIUtils.log("no supported legacy converters found",HBCIUtils.LOG_ERR);
-    }
-    
-    /**
-     * @see org.kapott.hbci.passport.storage.format.PassportFormat#getLoadOrder()
-     */
-    @Override
-    public int getLoadOrder()
-    {
-        // Beim Lesen versuchen wir dieses Format zum Schluss. Das ist quasi der Fallback
-        return Integer.MAX_VALUE;
     }
 }

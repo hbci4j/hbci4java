@@ -8,6 +8,7 @@
 package org.kapott.hbci.passport.storage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -89,7 +90,7 @@ public class PassportData implements Serializable
     /**
      * Die Liste der Zweischritt-Verfahren.
      */
-    public List<String> twostepMechs = null;
+    public List<String> twostepMechs = new ArrayList<String>();
     
     /**
      * Das TAN-Verfahren.

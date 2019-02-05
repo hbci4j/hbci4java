@@ -7,8 +7,6 @@
 
 package org.kapott.hbci.passport.storage.format;
 
-import java.util.Collections;
-
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.storage.PassportData;
 
@@ -40,10 +38,8 @@ public interface PassportFormat
     public byte[] save(HBCIPassport passport, PassportData data) throws UnsupportedOperationException;
     
     /**
-     * Liefert die Reihenfolge, in der das Format waehrend des Ladens beim Durchprobieren dran kommen soll.
-     * Die Liste der Formate wird anhand dieses Wertes per {@link Collections#sort(java.util.List)} sortiert.
-     * Ein niedriger Wert bedeutet also, dass ein Format hoeher priorisiert wird.
-     * @return die Reihenfolge. 
+     * Testet, ob das Format auf dem System unterstuetzt wird.
+     * @return true, wenn es unterstuetzt wird.
      */
-    public int getLoadOrder();
+    public boolean supported();
 }

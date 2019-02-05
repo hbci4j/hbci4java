@@ -16,15 +16,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.HBCIPassport;
+import org.kapott.hbci.passport.storage.format.AESFormat;
 import org.kapott.hbci.passport.storage.format.PassportFormat;
 import org.kapott.hbci.tools.IOUtils;
 
@@ -33,8 +34,8 @@ import org.kapott.hbci.tools.IOUtils;
  */
 public class PassportStorage
 {
-    private static List<PassportFormat> formatsLoad = null;
-    private static List<PassportFormat> formatsSave = null;
+    private final static List<String> ORDER_DEFAULT = Arrays.asList("AESFormat","LegacyFormat");
+    private static Map<String,PassportFormat> formats = null;
     
     static
     {
@@ -92,7 +93,14 @@ public class PassportStorage
             // Wir laden die Datei erstmal komplett in den Speicher, damit wir die Formate durchprobieren koennen
             byte[] data = IOUtils.read(is);
             
-            for (PassportFormat format:getFormats(true))
+            // Wenn die Datei leer ist, brauchen wir sie nicht einlesen sondern liefern einfach ein leeres
+            // PassportData-Objekt. Dann werfen wir naemlich keinen Fehler beim Laden, wenn das Schreiben einer
+            // Passport-Datei mal fehlschlug und sie als leere Datei erzeugt wurde. Stattdessen erstellen wir
+            // einfach einen neuen Passport.
+            if (data != null && data.length == 0)
+                return new PassportData();
+            
+            for (PassportFormat format:getLoadFormats())
             {
                 try
                 {
@@ -108,7 +116,7 @@ public class PassportStorage
             }
             
             // Wenn wir hier angekommen sind, unterstuetzen wir das Format nicht.
-            throw new HBCI_Exception("unsupported passport file format");
+            throw new HBCI_Exception("unknown passport file format");
         }
         catch (IOException e)
         {
@@ -169,24 +177,16 @@ public class PassportStorage
         if (data == null)
             throw new HBCI_Exception("no passport data given");
         
+        // Ermitteln, welches Dateiformat verwendet werden soll.
+        final PassportFormat format = getSaveFormat(passport);
+        
         try
         {
-            for (PassportFormat format:getFormats(false))
-            {
-                try
-                {
-                    byte[] bytes = format.save(passport,data);
-                    os.write(bytes);
-                    os.flush(); // Sicherstellen, dass die Daten geflusht sind.
-                    HBCIUtils.log("passport data saved using " + format.getClass().getSimpleName(),HBCIUtils.LOG_DEBUG);
-                    return; // Wenn wir fehlerfrei geschrieben haben, sind wir fertig
-                }
-                catch (UnsupportedOperationException ue)
-                {
-                    // Passport unterstuetzt das Format nicht - ueberspringen - Fehlermeldung koennen wir ignorieren,
-                    // sie wird vom Format bewusst geworfen, um anzuzeigen, dass es das Format nicht unterstuetzt
-                }
-            }
+            byte[] bytes = format.save(passport,data);
+            os.write(bytes);
+            os.flush(); // Sicherstellen, dass die Daten geflusht sind.
+            HBCIUtils.log("passport data saved using " + format.getClass().getSimpleName(),HBCIUtils.LOG_DEBUG);
+            return; // Wenn wir fehlerfrei geschrieben haben, sind wir fertig
         }
         catch (IOException e)
         {
@@ -195,113 +195,117 @@ public class PassportStorage
     }
     
     /**
-     * Liefert die Passport-Formate in der angegebenen Reihenfolge.
-     * @param load true, wenn die Passports in der Ladereihenfolge geliefert werden sollen. Sonst in der Speicher-Reihenfolge. 
-     * @return die Passports in der angegebenen Reihenfolge.
-     */
-    private static List<PassportFormat> getFormats(boolean load)
-    {
-        return load ? formatsLoad : formatsSave;
-    }
-
-    /**
      * Initialisiert die Liste der unterstuetzten Dateiformate.
      */
     private static void init()
     {
-        if (formatsLoad != null && formatsSave != null)
+        if (formats != null)
             return;
 
-        formatsLoad = new LinkedList<PassportFormat>();
-        formatsSave = new LinkedList<PassportFormat>();
+        formats = new HashMap<String,PassportFormat>();
         
         HBCIUtils.log("searching supported passport formats",HBCIUtils.LOG_DEBUG);
         final ServiceLoader<PassportFormat> loader = ServiceLoader.load(PassportFormat.class);
         for (PassportFormat f:loader)
         {
-            formatsLoad.add(f);
-            formatsSave.add(f);
+            final String name = f.getClass().getSimpleName();
+            
+            if (!f.supported())
+            {
+                HBCIUtils.log("passport format " + name + " not supported on this plattform",HBCIUtils.LOG_INFO);
+                continue;
+            }
+            formats.put(name,f);
         }
         
-        if (formatsLoad.size() == 0)
+        if (formats.size() == 0)
             HBCIUtils.log("No supported passport formats found",HBCIUtils.LOG_ERR);
+    }
 
-        sort("load",formatsLoad,new Comparator<PassportFormat>() {
-            /**
-             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-             */
-            @Override
-            public int compare(PassportFormat o1, PassportFormat o2)
+    /**
+     * Liefert die Passport-Formate in der angegebenen Reihenfolge zum Laden.
+     * @return die Passports in der konfigurierten Reihenfolge.
+     */
+    private static List<PassportFormat> getLoadFormats()
+    {
+        List<PassportFormat> result = new LinkedList<PassportFormat>();
+        for (String name:getFormatOrder())
+        {
+            PassportFormat f = formats.get(name);
+            if (f == null)
             {
-                return Integer.compare(o1.getLoadOrder(),o2.getLoadOrder());
+                HBCIUtils.log("passport format unknown or not supported: " + name,HBCIUtils.LOG_DEBUG);
+                continue;
             }
-        });
+            
+            result.add(f);
+        }
         
-        // Beim Speichern haengt die Reihenfolge davon ab, ob die Passports automatisch in das neue AESFormat
-        // konvertiert werden sollen oder nicht. Wenn hier das AESFormat vorn steht, werden die Passports beim
-        // ersten Schreibvorgang - egal aus welchem Format sie gelesen wurden - automatisch in das neue Format
-        // konvertiert.
-        final List<String> orderSave = getFormatOrder("passportformat.order.save",Arrays.asList("LegacyFormat","AESFormat"));
-        sort("save",formatsSave,new Comparator<PassportFormat>() {
-            /**
-             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-             */
-            @Override
-            public int compare(PassportFormat o1, PassportFormat o2)
-            {
-                int x = orderSave.indexOf(o1.getClass().getSimpleName());
-                int y = orderSave.indexOf(o2.getClass().getSimpleName());
-                
-                // Wenn der Name nicht in der Liste enthalten ist, stellen wir das Format hinten an
-                if (x == -1) x = Integer.MAX_VALUE;
-                if (y == -1) y = Integer.MAX_VALUE;
-                
-                return (x < y) ? -1 : ((x == y) ? 0 : 1);
-            }
-        });
+        return result;
+    }
+
+
+    /**
+     * Liefert das fuer die Speicherung zu verwendende Dateiformat.
+     * @param passport der Passport.
+     * @return das zu verwendende Format. Nie NULL.
+     * Wenn keines per Konfiguration ermittelbar ist, wird das Default-Format {@link AESFormat} verwendet.
+     */
+    private static PassportFormat getSaveFormat(HBCIPassport passport)
+    {
+        final String type = passport.getClass().getSimpleName();
+        
+        // Checkt erst, ob es ein passport-spezifisches Format-Parameter gibt. Z.Bsp. "passport.format.HBCIPassportPinTan"
+        // Wenn icht, dann ob es einen generischen Format-Parameter "passport.format"
+        final String name = HBCIUtils.getParam("passport.format" + type,HBCIUtils.getParam("passport.format"));
+
+
+        // Es ist ein Format konfiguriert. Checken, ob wir es unterstuetzen
+        if (name != null)
+        {
+            PassportFormat format = formats.get(name);
+            if (format != null)
+                return format;
+        }
+        
+        // Entweder wir kennen es nicht oder wir unterstuetzen es nicht. Dann nehmen wir das
+        // erste Format, das wir kennen
+        for (String s:getFormatOrder())
+        {
+            PassportFormat format = formats.get(s);
+            if (format != null)
+                return format;
+        }
+        
+        // Wenn auch hier nichts da ist, nehmen wir das erste, das ueberhaupt existiert
+        if (formats.size() == 0)
+            throw new HBCI_Exception("No supported passport formats found");
+        
+        return formats.values().iterator().next();
     }
     
     /**
-     * Liefert die Format-Reihenfolge fuer den Parameter.
-     * @param parameter der Parameter.
-     * @param def die Default-Reihenfolge.
+     * Liefert die Format-Reihenfolge.
      * @return die zu verwendende Format-Reihenfolge.
      */
-    private static List<String> getFormatOrder(String parameter, List<String> def)
+    private static List<String> getFormatOrder()
     {
-        String value = HBCIUtils.getParam(parameter);
+        String value = HBCIUtils.getParam("passport.order");
         if (value == null || value.length() == 0)
-            return def;
+            return ORDER_DEFAULT;
         
         // Whitespaces und Leerzeichen entfernen - auch mittendrin
         value = value.trim().replace(" ","");
 
         // Nur Leerzeichen?
         if (value.length() == 0)
-            return def;
+            return ORDER_DEFAULT;
 
+        
         // Liste enthaelt nur einen Wert
         if (!value.contains(","))
             return Arrays.asList(value);
 
         return Arrays.asList(value.split(","));
-    }
-
-    /**
-     * Sortiert die Formate in der angegebenen benannten Reihenfolge.
-     * @param name sprechender Name fuer die Sortierung fuer das Logging.
-     * @param formats die Formate.
-     * @param c der Comparator.
-     */
-    private static void sort(String name, List<PassportFormat> formats, Comparator<PassportFormat> c)
-    {
-        Collections.sort(formats,c);
-        
-        // Logging
-        HBCIUtils.log("format order: " + name,HBCIUtils.LOG_DEBUG);
-        for (PassportFormat f:formats)
-        {
-            HBCIUtils.log("  " + f.getClass().getSimpleName(),HBCIUtils.LOG_DEBUG);
-        }
     }
 }

@@ -128,10 +128,10 @@ public class AESFormat extends AbstractFormat
             
             try
             {
-                final String provider = this.getSecurityProvider();
+                final Cipher cipher = this.getCipher();
                 final SecretKey key = this.getPassportKey(passport, salt, false);
-                final Cipher cipher = provider != null ? Cipher.getInstance(CIPHER_ALG,provider) : Cipher.getInstance(CIPHER_ALG);
                 cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+                
                 is = new ObjectInputStream(new CipherInputStream(new ByteArrayInputStream(Arrays.copyOfRange(data,pos,data.length)),cipher));
                 PassportData result = (PassportData) is.readObject();
                 
@@ -173,16 +173,18 @@ public class AESFormat extends AbstractFormat
 
         try
         {
+            final Cipher cipher = this.getCipher();
+            
             // Neues Salt generieren
             final byte[] salt = new byte[SALT_SIZE];
             RAND.nextBytes(salt);
 
             // Secret Key erzeugen
             final SecretKey key = this.getPassportKey(passport,salt,true);
-            
-            final Cipher cipher = Cipher.getInstance(CIPHER_ALG);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             final AlgorithmParameters params = cipher.getParameters();
+            
+            // IV erzeugen
             final byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
             
             final ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -237,6 +239,40 @@ public class AESFormat extends AbstractFormat
     }
     
     /**
+     * @see org.kapott.hbci.passport.storage.format.AbstractFormat#getCipherAlg()
+     */
+    @Override
+    protected String getCipherAlg()
+    {
+        return CIPHER_ALG;
+    }
+    
+    /**
+     * @see org.kapott.hbci.passport.storage.format.AbstractFormat#supported()
+     */
+    @Override
+    public boolean supported()
+    {
+        try
+        {
+            this.getCipher();
+            
+            // Wir muessen bei AES ausserdem noch checken, ob er KEY_ALG_NAME unterstuetzt wird
+            final String provider = this.getSecurityProvider();
+            if (provider != null)
+                SecretKeyFactory.getInstance(KEY_ALG_NAME,provider);
+            else
+                SecretKeyFactory.getInstance(KEY_ALG_NAME);
+
+            return super.supported();
+        }
+        catch (Exception e) {
+            HBCIUtils.log("no support for passport format " + this.getClass().getSimpleName() + ": " + e.getMessage(),HBCIUtils.LOG_INFO);
+        }
+        return false;
+    }
+    
+    /**
      * Fragt den User per Callback nach dem Passwort fuer die Passport-Datei.
      * @param passport der Passport.
      * @param salt das zu verwendende Salt.
@@ -261,20 +297,5 @@ public class AESFormat extends AbstractFormat
             HBCIUtils.log("AES-Format not supported in this Java version",HBCIUtils.LOG_DEBUG);
             throw new UnsupportedOperationException("AES-Format not supported in this Java version");
         }
-    }
-    
-    /**
-     * @see org.kapott.hbci.passport.storage.format.PassportFormat#getLoadOrder()
-     */
-    @Override
-    public int getLoadOrder()
-    {
-        // Beim Laden sollte das AESFormat immer vorn stehen, da es - im Gegensatz zum LegacyFormat - selbst
-        // erkennen kann, ob es die Daten lesen kann oder nicht (es speichert in der Datei Header-Informationen)
-        // Das LegacyFormat entschluesselt die Daten jedoch blind. Wenn es ein Fremdformat einliest, kommt es
-        // bei der eigentlichen Entschluesselung nicht zu einem Fehler. Stattdessen wird die Datei halt einfach zu
-        // binaerem Muell entschluesselt, der sich anschliessend nicht deserialisieren laesst. Daher sollte immer
-        // erst das AESFormat die Entschluesselung probieren
-        return Integer.MIN_VALUE;
     }
 }

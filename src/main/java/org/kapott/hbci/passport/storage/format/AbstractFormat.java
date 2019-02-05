@@ -9,6 +9,8 @@ package org.kapott.hbci.passport.storage.format;
 
 import java.security.GeneralSecurityException;
 
+import javax.crypto.Cipher;
+
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -31,6 +33,41 @@ public abstract class AbstractFormat implements PassportFormat
     {
         return HBCIUtils.getParam("kernel.security.provider");
     }
+    
+    /**
+     * @see org.kapott.hbci.passport.storage.format.PassportFormat#supported()
+     */
+    @Override
+    public boolean supported()
+    {
+        try
+        {
+            this.getCipher();
+            return true;
+        }
+        catch (Exception e) {
+            HBCIUtils.log("no support for passport format " + this.getClass().getSimpleName() + ": " + e.getMessage(),HBCIUtils.LOG_INFO);
+        }
+        return false;
+    }
+    
+    /**
+     * Liefert den zu verwendenden Cipher.
+     * @return der zu verwendende Cipher.
+     * @throws GeneralSecurityException
+     */
+    protected Cipher getCipher() throws GeneralSecurityException
+    {
+        final String provider = this.getSecurityProvider();
+        final String alg      = this.getCipherAlg();
+        return provider != null ? Cipher.getInstance(alg,provider) : Cipher.getInstance(alg);
+    }
+    
+    /**
+     * Liefert den zu verwendenden Cipher-Algorithmus.
+     * @return der zu verwendende Cipher-Algorithmus.
+     */
+    protected abstract String getCipherAlg();
     
     /**
      * Liefert die Anzahl der Versuche beim Entschluesseln.
