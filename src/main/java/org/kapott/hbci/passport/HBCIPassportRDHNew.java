@@ -255,4 +255,12 @@ public class HBCIPassportRDHNew extends AbstractRDHSWFileBasedPassport
 
         return ret;
     }
+    
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#resetPassphrase()
+     */
+    @Override
+    public void resetPassphrase()
+    {
+    }
 }

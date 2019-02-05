@@ -126,6 +126,15 @@ public class HBCIPassportSIZRDHFile
         return passphrase;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#resetPassphrase()
+     */
+    @Override
+    public void resetPassphrase()
+    {
+        this.passphrase = null;
+    }
+    
     public void saveChanges()
     {
         try {

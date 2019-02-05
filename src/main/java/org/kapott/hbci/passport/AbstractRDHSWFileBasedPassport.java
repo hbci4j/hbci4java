@@ -21,42 +21,34 @@
 
 package org.kapott.hbci.passport;
 
-import javax.crypto.SecretKey;
-
-public abstract class AbstractRDHSWFileBasedPassport 
-	extends AbstractRDHSWPassport 
+/**
+ * 
+ */
+public abstract class AbstractRDHSWFileBasedPassport  extends AbstractRDHSWPassport 
 {
     private String    filename;
-    private SecretKey passportKey;
     
-    protected final static byte[] CIPHER_SALT={(byte)0x26,(byte)0x19,(byte)0x38,(byte)0xa7,
-                                               (byte)0x99,(byte)0xbc,(byte)0xf1,(byte)0x55};
-    protected final static int CIPHER_ITERATIONS=987;
-
     protected AbstractRDHSWFileBasedPassport(Object init) {
         super(init);
     }
 
+    /**
+     * @return
+     */
     public String getFilename() {
         return filename;
     }
 
+    /**
+     * @param filename
+     */
     public void setFilename(String filename) {
         this.filename = filename;
     }
 
-    public SecretKey getPassportKey() {
-        return passportKey;
-    }
-
-    public void setPassportKey(SecretKey passportKey) {
-        this.passportKey = passportKey;
-    }
-
-    public void resetPassphrase() {
-        setPassportKey(null);
-    }
-
+    /**
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#close()
+     */
     public void close() {
         super.close();
         resetPassphrase();
