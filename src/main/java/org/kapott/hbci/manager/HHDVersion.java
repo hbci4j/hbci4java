@@ -18,7 +18,7 @@ public enum HHDVersion
      * QR-Code in HHD-Version 1.3 - die Sparkasse verwendet das so.
      * Muss als erstes hier stehen, weil es sonst falsch als "HHD_1_3" erkannt wird (ID beginnt genauso).
      */
-    QR_1_3(Type.QRCODE,"HHD1\\.3\\..*?QR","1.3",-1,"hhd13"),
+    QR_1_3(Type.QRCODE,"HHD1\\.3\\..*?QR",null,-1,"hhd13"),
 
     /**
      * QR-Code.

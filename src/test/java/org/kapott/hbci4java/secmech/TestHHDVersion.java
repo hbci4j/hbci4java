@@ -93,6 +93,27 @@ public class TestHHDVersion extends AbstractTest
             t.props.put("segversion","5");
             testdata.add(t);
         }
+
+        // smsTAN bei der HASPA - wurde versehentlich als QR-TAN erkannt.
+        // https://homebanking-hilfe.de/forum/topic.php?t=22515&page=2
+        // {zkamethod_name=mobileTAN, segversion=4, zkamethod_version=1.3.2, id=mTAN, name=smsTAN}
+        {
+            TestData t = new TestData(HHDVersion.HHD_1_3);
+            t.props.put("id","mTAN");
+            t.props.put("name","smsTAN");
+            t.props.put("zkamethod_version","1.3.2");
+            t.props.put("segversion","4");
+            testdata.add(t);
+        }
+
+        // Konstruiertes Beispiel fuer smsTAN
+        {
+            TestData t = new TestData(HHDVersion.HHD_1_3);
+            t.props.put("id","mTAN");
+            t.props.put("zkamethod_version","1.3");
+            testdata.add(t);
+        }
+
     }
     
     
