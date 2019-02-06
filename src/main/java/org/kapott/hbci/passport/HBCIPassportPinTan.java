@@ -34,6 +34,8 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.HHDVersion;
 import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.manager.MatrixCode;
+import org.kapott.hbci.manager.QRCode;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.passport.storage.PassportStorage;
 import org.kapott.hbci.security.Sig;
@@ -341,33 +343,41 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
 
                     HHDVersion hhd = HHDVersion.find(secmechInfo);
                     HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
-
+                    
                     final StringBuffer payload = new StringBuffer();
                     final String msg = secmechInfo.getProperty("name")+"\n"+secmechInfo.getProperty("inputinfo")+"\n\n"+challenge;
-                    
-                    if (hhd.getType() == Type.PHOTOTAN)
+
+                    int callback = HBCICallback.NEED_PT_TAN;
+
+                    // Um sicherzustellen, dass wird keinen falschen Callback ausloesen, weil wir die HHD-Version
+                    // eventuell falsch erkannt haben, versuchen wir bei PhotoTAN und QR-Code zusaetzlich, die Daten
+                    // zu parsen. Nur wenn sie korrekt geparst werden koennen, verwenden wir auch den spezifischen Callback
+                    if (hhd.getType() == Type.PHOTOTAN && (MatrixCode.tryParse(hhduc) != null))
                     {
                         // Bei PhotoTAN haengen wir ungeparst das HHDuc an. Das kann dann auf
                         // Anwendungsseite per MatrixCode geparst werden
                         payload.append(hhduc);
-                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_PHOTOTAN,msg,HBCICallback.TYPE_TEXT,payload);
+                        callback = HBCICallback.NEED_PT_PHOTOTAN;
                     }
-                    else if (hhd.getType() == Type.QRCODE)
+                    else if (hhd.getType() == Type.QRCODE && (QRCode.tryParse(hhduc,msg) != null))
                     {
                         // Bei QR-Code haengen wir ungeparst das HHDuc an. Das kann dann auf
                         // Anwendungsseite per QRCode geparst werden
                         payload.append(hhduc);
-                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_QRTAN,msg,HBCICallback.TYPE_TEXT,payload);
+                        callback = HBCICallback.NEED_PT_QRTAN;
                     }
                     else
                     {
-                        // willuhn 2011-05-27: Flicker-Code anhaengen, falls vorhanden
-                        String flicker = parseFlickercode(challenge,hhduc);
+                        FlickerCode flicker = FlickerCode.tryParse(challenge,hhduc);
                         if (flicker != null)
-                            payload.append(flicker);
-                        
-                        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TAN,msg,HBCICallback.TYPE_TEXT,payload);
+                        {
+                            // Bei chipTAN liefern wir den bereits geparsten und gerenderten Flickercode
+                            payload.append(flicker.render());
+                        }
                     }
+
+                    // Callback durchfuehren
+                    HBCIUtilsInternal.getCallback().callback(this,callback,msg,HBCICallback.TYPE_TEXT,payload);
 
                     setPersistentData("externalid",null); // External-ID aus Passport entfernen
                     if (payload == null || payload.length()==0) {
@@ -386,58 +396,6 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
         }
     }
     
-    /**
-     * Versucht, aus Challenge und Challenge HHDuc den Flicker-Code zu extrahieren
-     * und ihn in einen flickerfaehigen Code umzuwandeln.
-     * Nur wenn tatsaechlich ein gueltiger Code enthalten ist, der als
-     * HHDuc-Code geparst und in einen Flicker-Code umgewandelt werden konnte,
-     * liefert die Funktion den Code. Sonst immer NULL.
-     * @param challenge der Challenge-Text. Das DE "Challenge HHDuc" gibt es
-     * erst seit HITAN4. Einige Banken haben aber schon vorher optisches chipTAN
-     * gemacht. Die haben das HHDuc dann direkt im Freitext des Challenge
-     * mitgeschickt (mit String-Tokens zum Extrahieren markiert). Die werden vom
-     * FlickerCode-Parser auch unterstuetzt.
-     * @param hhduc das echte Challenge HHDuc.
-     * @return der geparste und in Flicker-Format konvertierte Code oder NULL.
-     */
-    private String parseFlickercode(String challenge, String hhduc)
-    {
-      // 1. Prioritaet hat hhduc. Gibts aber erst seit HITAN4
-      if (hhduc != null && hhduc.trim().length() > 0)
-      {
-        try
-        {
-          FlickerCode code = new FlickerCode(hhduc);
-          return code.render();
-        }
-        catch (Exception e)
-        {
-          HBCIUtils.log("unable to parse Challenge HHDuc " + hhduc + ":" + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG);
-        }
-      }
-      
-      // 2. Checken, ob im Freitext-Challenge was parse-faehiges steht.
-      // Kann seit HITAN1 auftreten
-      if (challenge != null && challenge.trim().length() > 0)
-      {
-        try
-        {
-          FlickerCode code = new FlickerCode(challenge);
-          return code.render();
-        }
-        catch (Exception e)
-        {
-          // Das darf durchaus vorkommen, weil das Challenge auch bei manuellem
-          // chipTAN- und smsTAN Verfahren verwendet wird, wo gar kein Flicker-Code enthalten ist.
-          // Wir loggen es aber trotzdem - fuer den Fall, dass tatsaechlich ein Flicker-Code
-          // enthalten ist. Sonst koennen wir das nicht debuggen.
-          HBCIUtils.log("challenge contains no HHDuc (no problem in most cases):" + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG2);
-        }
-      }
-      // Ne, definitiv kein Flicker-Code.
-      return null;
-    }
-
     /**
      * @see org.kapott.hbci.passport.HBCIPassportInternal#verify(byte[], byte[])
      */

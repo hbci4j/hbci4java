@@ -18,6 +18,23 @@ public class MatrixCode
     private byte[] image = null;
     
     /**
+     * Versucht den Text als Matrix-Code zu parsen.
+     * @param data die zu parsenden Daten.
+     * @return der Matrix-Code, wenn er lesbar war, sonst NULL.
+     */
+    public static MatrixCode tryParse(String data)
+    {
+        try
+        {
+            return new MatrixCode(data);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+    
+    /**
      * ct.
      * @param data die Rohdaten aus dem HHDuc als String.
      * @throws Exception wenn die Daten nicht als Bild geparst werden konnten.

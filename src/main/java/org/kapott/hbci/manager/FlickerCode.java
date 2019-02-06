@@ -130,6 +130,60 @@ public class FlickerCode
   public String rest      = null;
 
   /**
+   * Versucht, aus Challenge und Challenge HHDuc den Flicker-Code zu extrahieren
+   * und ihn in einen flickerfaehigen Code umzuwandeln.
+   * Nur wenn tatsaechlich ein gueltiger Code enthalten ist, der als
+   * HHDuc-Code geparst und in einen Flicker-Code umgewandelt werden konnte,
+   * liefert die Funktion den Code. Sonst immer NULL.
+   * @param challenge der Challenge-Text. Das DE "Challenge HHDuc" gibt es
+   * erst seit HITAN4. Einige Banken haben aber schon vorher optisches chipTAN
+   * gemacht. Die haben das HHDuc dann direkt im Freitext des Challenge
+   * mitgeschickt (mit String-Tokens zum Extrahieren markiert). Die werden vom
+   * FlickerCode-Parser auch unterstuetzt.
+   * @param hhduc das echte Challenge HHDuc.
+   * @return der geparste Flickercode oder NULL.
+   */
+  public static FlickerCode tryParse(String challenge, String hhduc)
+  {
+      // 1. Prioritaet hat hhduc. Gibts aber erst seit HITAN4
+      if (hhduc != null && hhduc.trim().length() > 0)
+      {
+        try
+        {
+          FlickerCode code = new FlickerCode(hhduc);
+          code.render(); // testweise rendern
+          return code;
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log("unable to parse Challenge HHDuc " + hhduc + ":" + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG);
+        }
+      }
+      
+      // 2. Checken, ob im Freitext-Challenge was parse-faehiges steht.
+      // Kann seit HITAN1 auftreten
+      if (challenge != null && challenge.trim().length() > 0)
+      {
+        try
+        {
+          FlickerCode code = new FlickerCode(challenge);
+          code.render(); // testweise rendern
+          return code;
+        }
+        catch (Exception e)
+        {
+          // Das darf durchaus vorkommen, weil das Challenge auch bei manuellem
+          // chipTAN- und smsTAN Verfahren verwendet wird, wo gar kein Flicker-Code enthalten ist.
+          // Wir loggen es aber trotzdem - fuer den Fall, dass tatsaechlich ein Flicker-Code
+          // enthalten ist. Sonst koennen wir das nicht debuggen.
+          HBCIUtils.log("challenge contains no HHDuc (no problem in most cases):" + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG2);
+        }
+      }
+      // Ne, definitiv kein Flicker-Code.
+      return null;
+  }
+  
+  /**
    * ct.
    * Parameterloser Konstruktor zum manuellen Zusammenstecken eines Codes.
    */

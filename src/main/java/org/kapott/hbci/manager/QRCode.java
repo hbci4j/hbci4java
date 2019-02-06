@@ -19,6 +19,24 @@ public class QRCode
     private byte[] image = null;
     
     /**
+     * Versucht die Daten als QR-Code zu parsen.
+     * @param hhd der HHDuc.
+     * @param msg die Nachricht.
+     * @return der QR-Code oder NULL.
+     */
+    public static QRCode tryParse(String hhd, String msg)
+    {
+        try
+        {
+            return new QRCode(hhd,msg);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+    
+    /**
      * ct.
      * @param hhd die Rohdaten aus dem HHDuc als String.
      * @param msg Die Sparkassen verwenden QR-Code in HHD 1.3 und uebertragen dort (wie beim Flickercode auch) die
