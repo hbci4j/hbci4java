@@ -41,6 +41,7 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.passport.storage.PassportStorage;
+import org.kapott.hbci.tools.IOUtils;
 
 /** <p>Passport-Klasse für Sicherheitsverfahren DDV mit Medium Chipkarte. Bei dieser
     Variante gibt die Bank eine Chipkarte aus, auf der die Zugangsdaten des
@@ -196,31 +197,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
     @Override
     public void setFileName(String filename) 
     { 
-      // Checken, ob der Dateiname ungueltige Zeichen enthaelt. Wenn das der Fall ist, schneiden wir die raus
-      // Siehe https://homebanking-hilfe.de/forum/topic.php?p=138325#real138325
-      if (filename != null && filename.length() > 0)
-      {
-        File f = new File(filename);
-        String name = f.getName();
-        
-        // Zeichen, die nicht enthalten sein sollten, entfernen wir
-        // Konkret sind nur Buchstaben, Zahlen und Unterstrich erlaubt
-        name = name.replaceAll("[^a-zA-Z0-9_-]","");
-        
-        // Wenn die Datei laenger als 25 Zeichen ist, schneiden wir die ueberzaehligen ab
-        if (name.length() > 25)
-          name = name.substring(0,25);
-        
-        f = new File(f.getParentFile(),name);
-        String newName = f.getAbsolutePath();
-        if (!newName.equals(filename))
-        {
-          HBCIUtils.log("auto-fixed passport filename from " + filename + " to " + newName,HBCIUtils.LOG_INFO);
-          filename = newName;
-        }
-      }
-      
-      this.filename = filename;
+        this.filename = IOUtils.safeFilename(filename);
     }
 
     public void setComPort(int comport)

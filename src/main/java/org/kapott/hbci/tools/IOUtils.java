@@ -157,6 +157,40 @@ public class IOUtils
             HBCIUtils.log(e, HBCIUtils.LOG_DEBUG);
         }
     }
+    
+    /**
+     * Prueft, ob ein Dateipfad ungueltige Zeichen enthaelt oder zu lang ist und kuerzt ihn automatisch.
+     * Siehe https://homebanking-hilfe.de/forum/topic.php?p=138325#real138325
+     * Die Funktion laesst in Dateinamen ausschliesslich Buchstaben, Zahlen, Unterstrich, Bindestrich und Punkt zu.
+     * Wenn der Dateiname laenger als 25 Zeichen ist, wuerde er auf 25 Zeichen abgeschnitten.
+     * @param filename der zu pruefende Dateiname inclusive Pfad.
+     * @return der ggf korrigierte Dateiname.
+     */
+    public static String safeFilename(String filename)
+    {
+        if (filename == null || filename.length() == 0)
+            return filename;
+        
+        File f = new File(filename).getAbsoluteFile();
+        String name = f.getName();
+        
+        // Zeichen, die nicht enthalten sein sollten, entfernen wir.
+        name = name.replaceAll("[^a-zA-Z0-9_\\.-]","");
+        
+        // Wenn die Datei laenger als 25 Zeichen ist, schneiden wir die ueberzaehligen ab
+        if (name.length() > 25)
+          name = name.substring(0,25);
+        
+        f = new File(f.getParentFile(),name);
+        String newName = f.getAbsolutePath();
+        
+        // Dateiname ist unveraendert. Dann wurden keine Korrekturen vorgenommen.
+        if (newName.equals(filename))
+            return filename;
+        
+        HBCIUtils.log("auto-fixed filename from " + f + " to " + newName,HBCIUtils.LOG_INFO);
+        return newName;
+    }
 }
 
 
