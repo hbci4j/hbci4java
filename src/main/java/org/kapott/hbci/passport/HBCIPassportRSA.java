@@ -142,24 +142,22 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             //
             ////////////////////////////////////////////////////////////////////////
         }
-        catch (HBCI_Exception ex)
-        {
-            throw ex;
-        }
         catch (Exception e)
         {
-            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CTERR"), e);
-        }
-        finally
-        {
+            // Verbindung zum Kartenleser nur im Fehlerfall schliessen
             try
             {
                 closeCT();
             }
-            catch (Exception e)
+            catch (Exception e2)
             {
-                HBCIUtils.log(e);
+                HBCIUtils.log(e2);
             }
+            
+            if (e instanceof HBCI_Exception)
+                throw (HBCI_Exception) e;
+                
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CTERR"),e);
         }
     }
     
