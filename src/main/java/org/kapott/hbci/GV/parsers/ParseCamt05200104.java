@@ -148,6 +148,7 @@ public class ParseCamt05200104 extends AbstractCamtParser
         {
             line.id = trim(ref.getPrtry() != null && ref.getPrtry().size() > 0 ? ref.getPrtry().get(0).getRef() : null);
             line.endToEndId = trim(ref.getEndToEndId());
+            line.mandateId = trim(ref.getMndtId());
         }
         ////////////////////////////////////////////////////////////////////////
         

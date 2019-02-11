@@ -137,6 +137,11 @@ public class GVRKUms
          * NUR BEI CAMT: Der Purpose-Code der Buchung.
          */
         public String purposecode;
+        
+        /**
+         * NUR BEI CAMT: Mandats-Referenz (MREF)
+         */
+        public String mandateId;
 
         public UmsLine()
         {
