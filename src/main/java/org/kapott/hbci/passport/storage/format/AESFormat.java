@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
@@ -255,15 +256,21 @@ public class AESFormat extends AbstractFormat
     {
         try
         {
-            this.getCipher();
+            final Cipher cipher = this.getCipher();
             
-            // Wir muessen bei AES ausserdem noch checken, ob er KEY_ALG_NAME unterstuetzt wird
-            final String provider = this.getSecurityProvider();
-            if (provider != null)
-                SecretKeyFactory.getInstance(KEY_ALG_NAME,provider);
-            else
-                SecretKeyFactory.getInstance(KEY_ALG_NAME);
+            // Salt generieren
+            final byte[] salt = new byte[SALT_SIZE];
+            RAND.nextBytes(salt);
+            
+            // Zufaelliges Passwort generieren - das Passwort selbst ist egal, wir wollen
+            // lediglich testen, ob sich der Cipher initialisieren laesst
+            final byte[] b = new byte[10];
+            RAND.nextBytes(b);
+            final char[] pw = new String(b,StandardCharsets.UTF_8).toCharArray();
 
+            // Secret Key erzeugen
+            final SecretKey key = this.getPassportKey(pw,salt);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
             return super.supported();
         }
         catch (Exception e) {
@@ -285,9 +292,29 @@ public class AESFormat extends AbstractFormat
         try
         {
             char[] pw = this.getPassword(passport,forSaving);
+            return this.getPassportKey(pw,salt);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            HBCIUtils.log("AES-Format not supported in this Java version",HBCIUtils.LOG_DEBUG);
+            throw new UnsupportedOperationException("AES-Format not supported in this Java version");
+        }
+    }
+
+    /**
+     * Erzeugt den Secret-Key aus Passwort und Salt.
+     * @param password das zu verwendende Passwort.
+     * @param salt das zu verwendende Salt.
+     * @return der Secret-Key.
+     * @throws GeneralSecurityException wenn das Passwort nicht ermittelt werden konnte.
+     */
+    private SecretKey getPassportKey(final char[] password, final byte[] salt) throws GeneralSecurityException
+    {
+        try
+        {
             final String provider = this.getSecurityProvider();
             final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(KEY_ALG_NAME,provider) : SecretKeyFactory.getInstance(KEY_ALG_NAME);
-            final KeySpec spec = new PBEKeySpec(pw, salt, CIPHER_ITERATIONS, KEY_SIZE);
+            final KeySpec spec = new PBEKeySpec(password, salt, CIPHER_ITERATIONS, KEY_SIZE);
             final SecretKey tmp = fac.generateSecret(spec);
             final SecretKey secret = new SecretKeySpec(tmp.getEncoded(),KEY_ALG);
             return secret;
