@@ -230,7 +230,7 @@ public abstract class AbstractConverterXML extends AbstractConverter
     {
         Node elem = doc.createElement(elemName);
         root.appendChild(elem);
-        Node data = doc.createTextNode(elemValue);
+        Node data = doc.createTextNode(this.notNull(elemValue));
         elem.appendChild(data);
     }
 
@@ -256,7 +256,7 @@ public abstract class AbstractConverterXML extends AbstractConverter
 
             Element data = doc.createElement("entry");
             data.setAttribute("name",key);
-            data.setAttribute("value",value);
+            data.setAttribute("value",this.notNull(value));
             base.appendChild(data);
         }
     }
@@ -276,9 +276,9 @@ public abstract class AbstractConverterXML extends AbstractConverter
             return;
         
         Element base = doc.createElement("key");
-        base.setAttribute("owner", owner);
-        base.setAttribute("type", type);
-        base.setAttribute("part", part);
+        base.setAttribute("owner", this.notNull(owner));
+        base.setAttribute("type", this.notNull(type));
+        base.setAttribute("part", this.notNull(part));
         root.appendChild(base);
 
         createElement(doc, base, "country", notNull(key.country));
