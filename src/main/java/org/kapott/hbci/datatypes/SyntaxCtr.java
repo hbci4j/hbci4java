@@ -21,8 +21,8 @@
 
 package org.kapott.hbci.datatypes;
 
-import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 /* @brief class for storing data of type "country"
@@ -199,7 +199,8 @@ public final class SyntaxCtr
         } else if (x.equals("978")) {
             ret="EU";
         } else {
-            throw new InvalidArgumentException(HBCIUtilsInternal.getLocMsg("EXC_DT_UNNKOWN_CTR",x));
+            HBCIUtils.log("unable to determine country code for: \"" + x + "\", fallback to DE",HBCIUtils.LOG_WARN);
+            ret = "DE";
         }
 
         return ret;
