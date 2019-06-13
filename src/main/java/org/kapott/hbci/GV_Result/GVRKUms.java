@@ -433,7 +433,7 @@ public class GVRKUms
 
                 // extract konto data
                 String konto_info=Swift.getTagValue(st_tag,"25",0);
-                int pos=konto_info.indexOf("/");
+                int pos = konto_info != null ? konto_info.indexOf("/") : -1;
                 String blz;
                 String number;
                 String iban;
