@@ -1285,7 +1285,21 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         final String tanMethod = this.getCurrentTANMethod(false);
         if (tanMethod.equals(Sig.SECFUNC_SIG_PT_1STEP))
             return;
-        
+
+        final HBCIMsgStatus status = ctx.getMsgStatus();
+        if (status == null)
+            return;
+
+        // Bank hat uns eine Ausnahme erteilt - wir brauchen keine TAN. Dennoch muss das HKTAN - zumindest das erste - gesendet werden.
+        // Wir duerfen aber die TAN-Abfrage nicht triggern. Und das zweite HKTAN koennen wir auch weglassen.
+        boolean haveSCA = false;
+        if (status.segStatus != null && this.searchHBCIRetVal(status.segStatus.getWarnings(),"3076") != null)
+        {
+            HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_INFO);
+            setPersistentData("pintan_haveSCA","true");
+            haveSCA = true;
+        }
+
         // wenn es sich um das pintan-verfahren im zweischritt-modus handelt,
         // müssen evtl. zusätzliche nachrichten bzw. segmente eingeführt werden
         
@@ -1323,6 +1337,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         additional_msg_tasks=new ArrayList<HBCIJobImpl>();
 
                         GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
+                        hktan.setSCA(haveSCA);
                         hktan.setExternalId(task.getExternalId()); // externe ID durchreichen
                         
                         // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
@@ -1431,6 +1446,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         
                         // dazu noch einen hktan-job hinzufügen
                         GVTAN2Step hktan1 = (GVTAN2Step) handler.newJob("TAN2Step");
+                        hktan1.setSCA(haveSCA);
                         hktan1.setExternalId(task.getExternalId()); // externe ID durchreichen
 
                         // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
@@ -1453,6 +1469,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         
                         // HKTAN-job für das einreichen der TAN erzeugen
                         GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
+                        hktan2.setSCA(haveSCA);
                         hktan2.setExternalId(task.getExternalId()); // externe ID durchreichen
 
                         // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version
@@ -1464,8 +1481,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         
                         // willuhn 2011-05-09 TAN-Media gibts nur bei Prozess 1,3,4 - also nicht in hktan2
 
-                        // hktan-job zur neuen msg hinzufügen
-                        additional_msg_tasks.add(hktan2);
+                        // hktan-job zur neuen msg hinzufügen - aber nur, wenn wir ihn brauchen
+                        // Den zweiten HKTAN-Schritt brauchen wir nur, wenn wirklich eine TAN noetig ist
+                        if (!haveSCA)
+                            additional_msg_tasks.add(hktan2);
                         
                         // in dem ersten HKTAN-job eine referenz auf den zweiten speichern,
                         // damit der erste die auftragsreferenz später im zweiten speichern kann

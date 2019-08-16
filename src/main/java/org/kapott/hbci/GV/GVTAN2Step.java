@@ -38,6 +38,7 @@ public class GVTAN2Step
 {
     private GVTAN2Step  otherTAN2StepTask;
     private HBCIJobImpl origTask;
+    private boolean haveSCA = false;
     
     public static String getLowlevelName()
     {
@@ -104,6 +105,15 @@ public class GVTAN2Step
 
     }
     
+    /**
+     * Legt fest, ob fuer die TAN-Abfrage eine SCA vorliegt und wir nur den ersten Schritt des HKTAN brauchen
+     * @param b true, wenn eine SCA vorliegt.
+     */
+    public void setSCA(boolean b)
+    {
+        this.haveSCA = b;
+    }
+    
     public void setParam(String paramName, String value)
     {
         if (paramName.equals("orderhash")) {
@@ -143,11 +153,18 @@ public class GVTAN2Step
             // antwortsegment des jobs aus der vorherigen Nachricht zurückommt
             HBCIUtils.log("this is a response segment for the original task - storing results in the original job",HBCIUtils.LOG_DEBUG);
             origTask.extractResults(msgstatus,header,idx);
-        } else {
+        }
+        else if (!this.haveSCA)
+        {
+            // Nur uebernehmen, wenn wir keine SCA-Ausnahme haben
+            // wir wuerden sonst eine TAN-Abfrage beim Dialog-Ende ausloesen, da in der Empfangsbestaetigung der Bank
+            // ja ein HITAN zurueckkommt. Das muessen wir aber ignorieren
+            
             HBCIUtils.log("this is a \"real\" HKTAN response - analyzing HITAN data",HBCIUtils.LOG_DEBUG);
             
             String challenge=result.getProperty(header+".challenge");
             if (challenge!=null) {
+                
                 HBCIUtils.log("found challenge '"+challenge+"' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
                 // das ist für PV#1 (die antwort auf das einreichen des auftrags-hashs) oder 
                 // für PV#2 (die antwort auf das einreichen des auftrages)

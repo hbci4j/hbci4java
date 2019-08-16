@@ -321,14 +321,22 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     }
                 }
             } else {
+
                 HBCIUtils.log("twostep method - checking passport(challenge) to decide whether or not we need a TAN",HBCIUtils.LOG_DEBUG);
                 Properties secmechInfo=getCurrentSecMechInfo();
-                
+
+                String haveSCA = (String) getPersistentData("pintan_haveSCA");
+                setPersistentData("pintan_haveSCA",null);
+
                 // gespeicherte challenge aus passport holen
                 String challenge=(String)getPersistentData("pintan_challenge");
                 setPersistentData("pintan_challenge",null);
                 
-                if (challenge==null)
+                if (haveSCA != null)
+                {
+                    HBCIUtils.log("will not sign with a TAN, found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
+                }
+                else if (challenge==null) // manche Banken senden auch "nochallenge" *facepalm*
                 {
                     // es gibt noch keine challenge
                     HBCIUtils.log("will not sign with a TAN, because there is no challenge",HBCIUtils.LOG_DEBUG);
