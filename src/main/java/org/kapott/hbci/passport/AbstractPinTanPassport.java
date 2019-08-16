@@ -467,13 +467,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".orderref",step2 ? (String) this.getPersistentData("pintan_challenge_orderref") : "");
         k.rawSet(prefix + ".notlasttan","N");
         k.rawSet(prefix + ".challengeklass",isP2 ? "" : "99");
-        
-        String tanmedia = this.getTanMedia(hktanVersion);
-        
-        // Wir haben noch kein TAN-Medium, laut BPD HITAN verlangt die Bank aber eines. Dann tragen wir einen Fuellwert ein
-        if ("".equals(tanmedia) && secmechInfo.getProperty("needtanmedia","").equals("2"))
-            tanmedia = "noref";
-        k.rawSet(prefix + ".tanmedia",tanmedia);
+        k.rawSet(prefix + ".tanmedia",this.getTanMedia(hktanVersion));
     }
 
     /**
@@ -1412,9 +1406,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                             ChallengeInfo cinfo = ChallengeInfo.getInstance();
                             cinfo.applyParams(task,hktan,secmechInfo);
                         }
-
-                        // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
-                        hktan.setParam("tanmedia",this.getTanMedia(Integer.parseInt(hktan.getSegVersion())));
+                        
+                        final String tanMedia = this.getTanMedia(Integer.parseInt(hktan.getSegVersion()));
+                        if (tanMedia != null && tanMedia.length() > 0) // Sonst meckert HBCIJobIml#702
+                            hktan.setParam("tanmedia",tanMedia);
                         
                         // hktan-job zur neuen msg hinzufügen
                         additional_msg_tasks.add(hktan);
@@ -1445,7 +1440,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         hktan1.setParam("process","4");
 
                         // willuhn 2011-05-09: Bei Bedarf noch das TAN-Medium erfragen
-                        hktan1.setParam("tanmedia",this.getTanMedia(Integer.parseInt(hktan1.getSegVersion())));
+                        final String tanMedia = this.getTanMedia(Integer.parseInt(hktan1.getSegVersion()));
+                        if (tanMedia != null && tanMedia.length() > 0) // Sonst meckert HBCIJobIml#702
+                            hktan1.setParam("tanmedia",tanMedia);
 
                         // den hktan-job zusätzlich zur aktuellen msg hinzufügen
                         new_msg_tasks.add(hktan1);
@@ -1537,18 +1534,26 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Ich hab Mails von Usern erhalten, bei denen die Angabe des TAN-Mediums auch
         // dann noetig war, wenn nur eine Handy-Nummer hinterlegt war. Daher loggen wir
         // "num" nur, bringen die Abfrage jedoch schon bei num<2 - insofern needed=2.
+        
+        String result = "";
         final Properties upd = this.getUPD();
-        if (needed.equals("2") && upd != null && upd.size() > 0)
+        final boolean tn = needed.equals("2");
+        if (tn && upd != null && upd.size() > 0)
         {
             HBCIUtils.log("we have to add the tan media",HBCIUtils.LOG_DEBUG);
     
             StringBuffer retData=new StringBuffer();
             retData.append(upd.getProperty("tanmedia.names",""));
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.TYPE_TEXT,retData);
-            return retData.toString();
+            result = retData.toString();
         }
+
+        if (result != null && result.length() > 0)
+            return result;
         
-        return "";
+        // Seit HKTAN 6: Wenn die Angabe eines TAN-Mediennamens laut BPD erforderlich ist, wir aber gar keinen Namen haben,
+        // dann "noref" eintragen.
+        return tn ? "noref" : "";
     }
     
     public void setPIN(String pin)
