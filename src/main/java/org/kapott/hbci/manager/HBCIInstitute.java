@@ -33,6 +33,10 @@ import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
+import org.kapott.hbci.dialog.DialogContext;
+import org.kapott.hbci.dialog.HBCIDialogEnd;
+import org.kapott.hbci.dialog.HBCIDialogFirstKeyRequest;
+import org.kapott.hbci.dialog.HBCIDialogInit;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.exceptions.ProcessException;
@@ -171,29 +175,6 @@ public final class HBCIInstitute
         }
     }
 
-    private void doDialogEnd(String dialogid,boolean needSig)
-    {
-        HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_DIALOG_END,null);
-        
-        kernel.rawNewMsg("DialogEndAnon");
-        kernel.rawSet("MsgHead.dialogid",dialogid);
-        kernel.rawSet("MsgHead.msgnum","2");
-        kernel.rawSet("DialogEndS.dialogid",dialogid);
-        kernel.rawSet("MsgTail.msgnum","2");
-        HBCIMsgStatus status=kernel.rawDoIt(HBCIKernelImpl.DONT_SIGNIT,HBCIKernelImpl.DONT_CRYPTIT,needSig,HBCIKernelImpl.DONT_NEED_CRYPT);
-        HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_DIALOG_END_DONE,status);
-        
-        if (!status.isOK()) {
-            HBCIUtils.log("dialog end failed: "+status.getErrorString(),HBCIUtils.LOG_ERR);
-            
-            String msg=HBCIUtilsInternal.getLocMsg("ERR_INST_ENDFAILED");
-            if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreDialogEndErrors",
-                                       msg+": "+status.getErrorString())) {
-                throw new ProcessException(msg,status);
-            }
-        }
-    }
-    
     /**
      * Prueft, ob die BPD abgelaufen sind und neu geladen werden muessen.
      * @return true, wenn die BPD abgelaufen sind.
@@ -286,49 +267,29 @@ public final class HBCIInstitute
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_BPD_INIT,null);
                 HBCIUtils.log("fetching BPD",HBCIUtils.LOG_INFO);
                 
-                HBCIMsgStatus status=null;
-                boolean       restarted=false;
-                while (true) {
-                    kernel.rawNewMsg("DialogInitAnon");
-                    kernel.rawSet("Idn.KIK.blz", passport.getBLZ());
-                    kernel.rawSet("Idn.KIK.country", passport.getCountry());
-                    kernel.rawSet("ProcPrep.BPD", "0");
-                    kernel.rawSet("ProcPrep.UPD", passport.getUPDVersion());
-                    kernel.rawSet("ProcPrep.lang", "0");
-                    kernel.rawSet("ProcPrep.prodName", HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
-                    kernel.rawSet("ProcPrep.prodVersion", HBCIUtils.getParam("client.product.version","3"));
+                // Dialog-Context erzeugen
+                final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                ctx.setAnonymous(true);
 
-                    status=kernel.rawDoIt(HBCIKernelImpl.DONT_SIGNIT,HBCIKernelImpl.DONT_CRYPTIT,
-                            HBCIKernelImpl.DONT_NEED_SIG,HBCIKernelImpl.DONT_NEED_CRYPT);
+                // Dialog-Initialisierung senden
+                final HBCIDialogInit init = new HBCIDialogInit();
+                final HBCIMsgStatus ret = init.execute(ctx);
 
-                    boolean need_restart=passport.postInitResponseHook(status, true);
-                    if (need_restart) {
-                        HBCIUtils.log("for some reason we have to restart this dialog", HBCIUtils.LOG_INFO);
-                        if (restarted) {
-                            HBCIUtils.log("this dialog already has been restarted once - to avoid endless loops we stop here", HBCIUtils.LOG_WARN);
-                            throw new HBCI_Exception("*** restart loop - aborting");
-                        }
-                        restarted=true;
-                    } else {
-                        break;
-                    }
-                }
-
-                Properties result=status.getData();
-                updateBPD(result);
+                final Properties result = ret.getData();
+                this.updateBPD(result);
                 passport.saveChanges();
+
+                final HBCIDialogEnd end = new HBCIDialogEnd();
+                end.execute(ctx);
                 
-                try {
-                    doDialogEnd(result.getProperty("MsgHead.dialogid"),HBCIKernelImpl.DONT_NEED_SIG);
-                } catch (Exception ex) {
-                    HBCIUtils.log(ex);
+                if (!ret.isOK())
+                {
+                    HBCIUtils.log("fetching BPD failed: "+ret.getErrorString(),HBCIUtils.LOG_ERR);
+                    throw new ProcessException(HBCIUtilsInternal.getLocMsg("ERR_INST_BPDFAILED"),ret);
                 }
-                
-                if (!status.isOK()) {
-                    HBCIUtils.log("fetching BPD failed: "+status.getErrorString(),HBCIUtils.LOG_ERR);
-                    throw new ProcessException(HBCIUtilsInternal.getLocMsg("ERR_INST_BPDFAILED"),status);
-                }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 if (e instanceof HBCI_Exception)
                 {
                   HBCI_Exception he = (HBCI_Exception) e;
@@ -336,10 +297,12 @@ public final class HBCIInstitute
                     throw he;
                 }
                 HBCIUtils.log(e,HBCIUtils.LOG_INFO);
-                // Viele Kreditinstitute unterstützen den anonymen Login nicht. Dass sollte nicht als Fehler den Anwender beunruhigen
+                // Viele Kreditinstitute unterstützen den anonymen Login nicht. Wir tolerieren den Fehler daher
                 HBCIUtils.log("FAILED! - maybe this institute does not support anonymous logins",HBCIUtils.LOG_INFO);
                 HBCIUtils.log("we will nevertheless go on",HBCIUtils.LOG_INFO);
-            } finally {
+            }
+            finally
+            {
                 passport.closeComm();
             }
         }
@@ -367,76 +330,40 @@ public final class HBCIInstitute
     public void fetchKeys()
     {
         // bei RDH institut-keys abholen (wenn nicht vorhanden)
-        if (passport.needInstKeys() && !passport.hasInstEncKey()) {
-            // TODO: hasInstEncKey(): bei Bankensignatur für HKTAN gibt es
-            // hier kollisionen, weil hasInstEncKey() für PINTAN eigentlich
-            // *immer* true zurückgibt
+        if (!passport.needInstKeys() || passport.hasInstEncKey())
+            return;
+        
+        // TODO: hasInstEncKey(): bei Bankensignatur für HKTAN gibt es
+        // hier kollisionen, weil hasInstEncKey() für PINTAN eigentlich
+        // *immer* true zurückgibt
             
-            try {
-                HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_GET_KEYS,null);
-                HBCIUtils.log("fetching institute keys",HBCIUtils.LOG_INFO);
-                
-                String country=passport.getCountry();
-                String blz=passport.getBLZ();
-    
-                HBCIMsgStatus status=null;
-                boolean       restarted=false;
-                while (true) {
-                    kernel.rawNewMsg("FirstKeyReq");
-                    kernel.rawSet("Idn.KIK.blz", blz);
-                    kernel.rawSet("Idn.KIK.country", country);
-                    kernel.rawSet("KeyReq.SecProfile.method",passport.getProfileMethod());
-                    kernel.rawSet("KeyReq.SecProfile.version",passport.getProfileVersion());
-                    kernel.rawSet("KeyReq.KeyName.keytype", "V");
-                    kernel.rawSet("KeyReq.KeyName.KIK.blz", blz);
-                    kernel.rawSet("KeyReq.KeyName.KIK.country", country);
-                    kernel.rawSet("KeyReq_2.SecProfile.method",passport.getProfileMethod());
-                    kernel.rawSet("KeyReq_2.SecProfile.version",passport.getProfileVersion());
-                    kernel.rawSet("KeyReq_2.KeyName.keytype", "S");
-                    kernel.rawSet("KeyReq_2.KeyName.KIK.blz", blz);
-                    kernel.rawSet("KeyReq_2.KeyName.KIK.country", country);
-                    kernel.rawSet("ProcPrep.BPD", passport.getBPDVersion());
-                    kernel.rawSet("ProcPrep.UPD", passport.getUPDVersion());
-                    kernel.rawSet("ProcPrep.lang", "0");
-                    kernel.rawSet("ProcPrep.prodName", HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
-                    kernel.rawSet("ProcPrep.prodVersion", HBCIUtils.getParam("client.product.version","3"));
+        try {
+            HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_GET_KEYS,null);
+            HBCIUtils.log("fetching institute keys",HBCIUtils.LOG_INFO);
+            
+            // Dialog-Context erzeugen
+            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
 
-                    status = kernel.rawDoIt(HBCIKernelImpl.DONT_SIGNIT,HBCIKernelImpl.DONT_CRYPTIT,
-                            HBCIKernelImpl.DONT_NEED_SIG,HBCIKernelImpl.DONT_NEED_CRYPT);
+            // Dialog-Initialisierung senden
+            final HBCIDialogFirstKeyRequest init = new HBCIDialogFirstKeyRequest();
+            final HBCIMsgStatus ret = init.execute(ctx);
 
-                    boolean need_restart=passport.postInitResponseHook(status, true);
-                    if (need_restart) {
-                        HBCIUtils.log("for some reason we have to restart this dialog", HBCIUtils.LOG_INFO);
-                        if (restarted) {
-                            HBCIUtils.log("this dialog already has been restarted once - to avoid endless loops we stop here", HBCIUtils.LOG_WARN);
-                            throw new HBCI_Exception("*** restart loop - aborting");
-                        }
-                        restarted=true;
-                    } else {
-                        break;
-                    }
-                }
+            final Properties result = ret.getData();
+            updateBPD(result);
+            extractKeys(result);
+            passport.saveChanges();
+            
+            final HBCIDialogEnd end = new HBCIDialogEnd();
+            end.execute(ctx);
 
-                Properties result=status.getData();
-                updateBPD(result);
-                extractKeys(result);
-                passport.saveChanges();
-                
-                try {
-                    doDialogEnd(result.getProperty("MsgHead.dialogid"),HBCIKernelImpl.DONT_NEED_SIG);
-                } catch (Exception ex) {
-                    HBCIUtils.log(ex);
-                }
-                
-                if (!status.isOK()) {
-                    HBCIUtils.log("fetching institute keys failed: "+status.getErrorString(),HBCIUtils.LOG_ERR);
-                    throw new ProcessException(HBCIUtilsInternal.getLocMsg("ERR_INST_GETKEYSFAILED"),status);
-                }
-            } catch (Exception e) {
-                throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_FETCH_IKEYS_ERR"),e);
-            } finally {
-                passport.closeComm();
+            if (!ret.isOK()) {
+                HBCIUtils.log("fetching institute keys failed: "+ret.getErrorString(),HBCIUtils.LOG_ERR);
+                throw new ProcessException(HBCIUtilsInternal.getLocMsg("ERR_INST_GETKEYSFAILED"),ret);
             }
+        } catch (Exception e) {
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_FETCH_IKEYS_ERR"),e);
+        } finally {
+            passport.closeComm();
         }
     }
     

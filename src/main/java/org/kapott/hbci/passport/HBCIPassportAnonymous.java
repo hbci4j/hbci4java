@@ -302,7 +302,7 @@ public class HBCIPassportAnonymous extends AbstractHBCIPassport
      * @see org.kapott.hbci.passport.AbstractHBCIPassport#getCommInstance()
      */
     @Override
-    protected Comm getCommInstance()
+    public Comm getCommInstance()
     {
         return Comm.getInstance("Standard",this);
     }

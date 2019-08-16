@@ -199,7 +199,7 @@ public final class SyntaxCtr
         } else if (x.equals("978")) {
             ret="EU";
         } else {
-            HBCIUtils.log("unable to determine country code for: \"" + x + "\", fallback to DE",HBCIUtils.LOG_WARN);
+            HBCIUtils.log("unable to determine country code for: \"" + x + "\", fallback to DE",HBCIUtils.LOG_DEBUG);
             ret = "DE";
         }
 

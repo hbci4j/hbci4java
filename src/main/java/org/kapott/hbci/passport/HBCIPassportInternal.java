@@ -25,10 +25,10 @@ import java.util.Properties;
 
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.comm.Filter;
-import org.kapott.hbci.manager.HBCIDialog;
+import org.kapott.hbci.dialog.DialogContext;
+import org.kapott.hbci.dialog.DialogEvent;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.IHandlerData;
-import org.kapott.hbci.status.HBCIMsgStatus;
 
 /** Interface, welches alle Passport-Varianten implementieren müssen.
     Diese Schnittstelle wird nur intern verwendet. Sie beschreibt alle
@@ -117,22 +117,12 @@ public interface HBCIPassportInternal
     public void setParentHandlerData(IHandlerData handler);
     public IHandlerData getParentHandlerData();
     
-    /* Diese Methode wird nach jeder Dialog-Initialisierung aufgerufen. Ein
-     * Passport-Objekt kann den Status der Response mit Hilfe von msgStatus
-     * auswerten. Durch Zurückgeben von "true" wird angezeigt, dass eine
-     * erneute Dialog-Initialisierung stattfinden sollte (z.B. weil sich grund-
-     * legende Zugangsdaten geändert haben, secMechs neu festgelegt wurden o.ä.) */
-    public boolean postInitResponseHook(HBCIMsgStatus msgStatus, boolean anonDialog);
-    
-    /* Diese Methode wird aufgerufen, bevor ein "normaler" Dialog (also mit GVs)
-     * geführt wird. */
-    public void beforeCustomDialogHook(HBCIDialog dialog);
-    
-    /* Diese Methode wird aufgerufen, nachdem bei einem normalen Dialog die
-     * Dialog-Initialisierung abgeschlossen ist. 
-     * Wird im Moment nur von PinTan-Passports benutzt, um bei
-     * Verwendung des Zweischritt-Verfahrens die Message-Liste zu patchen */
-    public void afterCustomDialogInitHook(HBCIDialog dialog);
+    /**
+     * Wird bei einem Dialog-Event ausgefuehrt.
+     * @param event das Event.
+     * @param ctx der Dialog-Kontext.
+     */
+    public void onDialogEvent(DialogEvent event, DialogContext ctx);
     
     /* Gibt zurück, wieviele GV-Segmente in einer Nachricht enthalten sein dürfen.
      * Normalerweise wird das schon durch die BPD bzw. die Job-Params festgelegt,
@@ -147,4 +137,5 @@ public interface HBCIPassportInternal
      * oder nicht.
      */
     public int getMaxGVSegsPerMsg();
+    
 }

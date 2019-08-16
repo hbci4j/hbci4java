@@ -54,8 +54,6 @@ public final class HBCIKernelImpl implements HBCIKernel
     public final static boolean DONT_SIGNIT=false;
     public final static boolean CRYPTIT=true;
     public final static boolean DONT_CRYPTIT=false;
-    public final static boolean NEED_SIG=true;
-    public final static boolean DONT_NEED_SIG=false;
     public final static boolean NEED_CRYPT=true;
     public final static boolean DONT_NEED_CRYPT=false;
     
@@ -170,12 +168,12 @@ public final class HBCIKernelImpl implements HBCIKernel
         }
     }
     
-    public HBCIMsgStatus rawDoIt(boolean signit,boolean cryptit,boolean needSig,boolean needCrypt)
+    public HBCIMsgStatus rawDoIt(boolean signit,boolean cryptit,boolean needCrypt)
     {
         HBCIPassportList     passports=new HBCIPassportList();
         HBCIPassportInternal passport=(HBCIPassportInternal)getParentHandlerData().getPassport();
         passports.addPassport(passport,HBCIPassport.ROLE_ISS);
-        return rawDoIt(passports,signit,cryptit,needSig,needCrypt);
+        return rawDoIt(passports,signit,cryptit,needCrypt);
     }
 
     /*  Processes the current message (mid-level API).
@@ -196,7 +194,7 @@ public final class HBCIKernelImpl implements HBCIKernel
         @param cryptit A boolean value specifying, if the message to be sent should be encrypted.
         @return A Properties object that contains a path-value-pair for each dataelement of
                 the received message. */
-    public HBCIMsgStatus rawDoIt(HBCIPassportList passports,boolean signit,boolean cryptit,boolean needSig,boolean needCrypt)
+    public HBCIMsgStatus rawDoIt(HBCIPassportList passports,boolean signit,boolean cryptit,boolean needCrypt)
     {
         HBCIMsgStatus ret=new HBCIMsgStatus();
         MSG           msg=null;
@@ -209,15 +207,13 @@ public final class HBCIKernelImpl implements HBCIKernel
 
             // plaintextnachricht erzeugen
             msg=gen.generate(currentMsgName);
-
+            
             // alle daten für den rewriter setzen
             Rewrite.setData("passports",passports);
             Rewrite.setData("msgStatus",ret);
             Rewrite.setData("msgName",currentMsgName);
             Rewrite.setData("signIt",Boolean.valueOf(signit));
             Rewrite.setData("cryptIt",Boolean.valueOf(cryptit));
-            Rewrite.setData("needSig",Boolean.valueOf(needSig));
-            Rewrite.setData("needCrypt",Boolean.valueOf(needCrypt));
 
             // liste der rewriter erzeugen
             String rewriters_st=HBCIUtils.getParam("kernel.rewriter");

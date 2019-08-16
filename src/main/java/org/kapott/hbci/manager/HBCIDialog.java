@@ -29,6 +29,9 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.dialog.DialogContext;
+import org.kapott.hbci.dialog.DialogEvent;
+import org.kapott.hbci.dialog.HBCIDialogInit;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.passport.HBCIPassportList;
@@ -93,7 +96,7 @@ public final class HBCIDialog
         update their internal state with the data received from the institute. */
     private HBCIMsgStatus doDialogInit()
     {
-        HBCIMsgStatus ret=new HBCIMsgStatus();
+        HBCIMsgStatus ret = null;
         
         try {
             HBCIPassportInternal mainPassport=(HBCIPassportInternal)getParentHandler().getPassport();
@@ -106,85 +109,41 @@ public final class HBCIDialog
             
             HBCIUtils.log(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_INIT"),HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT,null);
-            String country=mainPassport.getCountry();
-            String blz=mainPassport.getBLZ();
     
-            boolean restarted=false;
-            while (true) {
-                kernel.rawNewMsg("DialogInit"+anonSuffix);
-                kernel.rawSet("Idn.KIK.blz", blz);
-                kernel.rawSet("Idn.KIK.country", country);
-                if (!isAnon) {
-                    kernel.rawSet("Idn.customerid", mainPassport.getCustomerId());
-                    kernel.rawSet("Idn.sysid", mainPassport.getSysId());
-                    String sysstatus=mainPassport.getSysStatus();
-                    kernel.rawSet("Idn.sysStatus",sysstatus);
-                    if (mainPassport.needInstKeys()) {
-                        kernel.rawSet("KeyReq.SecProfile.method",mainPassport.getProfileMethod());
-                        kernel.rawSet("KeyReq.SecProfile.version",mainPassport.getProfileVersion());
-                        kernel.rawSet("KeyReq.KeyName.keytype", "V");
-                        kernel.rawSet("KeyReq.KeyName.KIK.country", country);
-                        kernel.rawSet("KeyReq.KeyName.KIK.blz", blz);
-                        kernel.rawSet("KeyReq.KeyName.userid", mainPassport.getInstEncKeyName());
-                        kernel.rawSet("KeyReq.KeyName.keynum", mainPassport.getInstEncKeyNum());
-                        kernel.rawSet("KeyReq.KeyName.keyversion", mainPassport.getInstEncKeyVersion());
-
-                        if (mainPassport.hasInstSigKey()) {
-                            kernel.rawSet("KeyReq_2.SecProfile.method",mainPassport.getProfileMethod());
-                            kernel.rawSet("KeyReq_2.SecProfile.version",mainPassport.getProfileVersion());
-                            kernel.rawSet("KeyReq_2.KeyName.keytype", "S");
-                            kernel.rawSet("KeyReq_2.KeyName.KIK.country", country);
-                            kernel.rawSet("KeyReq_2.KeyName.KIK.blz", blz);
-                            kernel.rawSet("KeyReq_2.KeyName.userid", mainPassport.getInstSigKeyName());
-                            kernel.rawSet("KeyReq_2.KeyName.keynum", mainPassport.getInstSigKeyNum());
-                            kernel.rawSet("KeyReq_2.KeyName.keyversion", mainPassport.getInstSigKeyVersion());
-                        }
-                    }
-                }
-                kernel.rawSet("ProcPrep.BPD", mainPassport.getBPDVersion());
-                kernel.rawSet("ProcPrep.UPD", mainPassport.getUPDVersion());
-                kernel.rawSet("ProcPrep.lang",mainPassport.getDefaultLang());
-                kernel.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
-                kernel.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","3"));
-                ret=kernel.rawDoIt(!isAnon && HBCIKernelImpl.SIGNIT,
-                        !isAnon && HBCIKernelImpl.CRYPTIT,
-                        !isAnon && HBCIKernelImpl.NEED_SIG,
-                        !isAnon && HBCIKernelImpl.NEED_CRYPT);
-
-                boolean need_restart=mainPassport.postInitResponseHook(ret,isAnon);
-                if (need_restart) {
-                    HBCIUtils.log("for some reason we have to restart this dialog", HBCIUtils.LOG_INFO);
-                    if (restarted) {
-                        HBCIUtils.log("this dialog already has been restarted once - to avoid endless loops we stop here", HBCIUtils.LOG_WARN);
-                        throw new HBCI_Exception("*** restart loop - aborting");
-                    }
-                    restarted=true;
-                } else {
-                    break;
-                }
-            }
+            // Dialog-Context erzeugen
+            final DialogContext ctx = DialogContext.create(kernel,mainPassport);
+            ctx.setPayload(this);
+            ctx.setAnonymous(this.isAnon);
             
-            Properties result=ret.getData();
-            if (ret.isOK()) {
-                HBCIInstitute inst=new HBCIInstitute(kernel,mainPassport,false);
+            // Dialog-Initialisierung senden
+            final HBCIDialogInit init = new HBCIDialogInit();
+            ret = init.execute(ctx);
+            
+            if (ret.isOK())
+            {
+                final Properties result = ret.getData();
+                final HBCIInstitute inst = new HBCIInstitute(kernel,mainPassport,false);
                 inst.updateBPD(result);
                 inst.extractKeys(result);
     
-                HBCIUser user=new HBCIUser(kernel,mainPassport,false);
+                final HBCIUser user = new HBCIUser(kernel,mainPassport,false);
                 user.updateUPD(result);
                
                 mainPassport.saveChanges();
     
-                msgnum=2;
-                dialogid=result.getProperty("MsgHead.dialogid");
-                HBCIUtils.log("dialog-id set to "+dialogid,HBCIUtils.LOG_DEBUG);
+                this.msgnum = ctx.getMsgNum();
+                this.dialogid = ctx.getDialogId();
 
                 HBCIInstMessage msg=null;
-                for (int i=0;true;i++) {
-                    try {
+                for (int i=0;true;i++)
+                {
+                    try
+                    {
                         String header=HBCIUtilsInternal.withCounter("KIMsg",i);
                         msg=new HBCIInstMessage(result,header);
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         break;
                     }
                     HBCIUtilsInternal.getCallback().callback(mainPassport,
@@ -196,7 +155,12 @@ public final class HBCIDialog
             }
 
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT_DONE,new Object[] {ret,dialogid});
-        } catch (Exception e) {
+            mainPassport.onDialogEvent(DialogEvent.MSG_COMPLETED,ctx);
+        }
+        catch (Exception e)
+        {
+            if (ret == null)
+                ret = new HBCIMsgStatus();
             ret.addException(e);
         }
 
@@ -290,7 +254,7 @@ public final class HBCIDialog
                     nextMsgNum();
                     
                     // nachrichtenaustausch durchführen
-                    msgstatus=kernel.rawDoIt(msgPassports,HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.NEED_SIG,HBCIKernelImpl.NEED_CRYPT);
+                    msgstatus=kernel.rawDoIt(msgPassports,HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.NEED_CRYPT);
                     Properties result=msgstatus.getData();
                     
                     // searching for first segment number that belongs to the custom_msg
@@ -349,10 +313,15 @@ public final class HBCIDialog
     }
 
     /** @brief Processes the DialogEnd stage of an HBCIDialog (mid-level API).
-
         Works similarily to doDialogInit(). */
+    @Deprecated
     private HBCIMsgStatus doDialogEnd()
     {
+        
+        // Neues Dialog-Ende: Koennen wir noch nicht verwenden, weil wir hier noch nicht die aktuelle Nachrichten-Nummer haben.
+//        HBCIDialogEnd end = new HBCIDialogEnd(Flag.ACCEPT_ERROR);
+//        end.execute(ctx);
+        
         HBCIMsgStatus ret=new HBCIMsgStatus();
         
         HBCIHandler          handler=getParentHandler();
@@ -371,7 +340,6 @@ public final class HBCIDialog
             nextMsgNum();
             ret=kernel.rawDoIt(!isAnon && HBCIKernelImpl.SIGNIT,
                                !isAnon && HBCIKernelImpl.CRYPTIT,
-                               !isAnon && HBCIKernelImpl.NEED_SIG,
                                !isAnon && HBCIKernelImpl.NEED_CRYPT);
 
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_END_DONE,ret);
@@ -392,21 +360,13 @@ public final class HBCIDialog
     {
         try {
             HBCIUtils.log("executing dialog",HBCIUtils.LOG_DEBUG);
-            HBCIDialogStatus ret=new HBCIDialogStatus();
+            final HBCIDialogStatus ret = new HBCIDialogStatus();
             
-            HBCIPassportInternal passport=(HBCIPassportInternal)getParentHandler().getPassport();
-            
-            // first call passports's before-dialog-hook
-            passport.beforeCustomDialogHook(this);
-            
-            HBCIMsgStatus initStatus=doDialogInit();
+            HBCIMsgStatus initStatus = this.doDialogInit();
             ret.setInitStatus(initStatus);
                 
-            // so that e.g. pintan-passports can patch the list of messages to 
-            // be executed (needed for twostep-mech)
-            passport.afterCustomDialogInitHook(this);
-            
-            if (initStatus.isOK()) {
+            if (initStatus.isOK())
+            {
                 ret.setMsgStatus(doJobs());
                 ret.setEndStatus(doDialogEnd());
             }
@@ -524,17 +484,24 @@ public final class HBCIDialog
         }
     }
     
-    public List getAllTasks()
+    /**
+     * Liefert die Liste aller Tasks.
+     * @return die Liste aller Tasks.
+     */
+    public List<HBCIJobImpl> getAllTasks()
     {
-        List tasks=new ArrayList();
+        List<HBCIJobImpl> tasks=new ArrayList<HBCIJobImpl>();
         
-        for (Iterator i=msgs.iterator();i.hasNext();) {
-            tasks.addAll((List)i.next());
+        for (ArrayList<HBCIJobImpl> l:this.msgs)
+        {
+            tasks.addAll(l);
         }
-        
         return tasks;
     }
 
+    /**
+     * Erzeugt explizit eine neue Message.
+     */
     public void newMsg()
     {
         HBCIUtils.log("starting new message",HBCIUtils.LOG_DEBUG);
@@ -542,6 +509,10 @@ public final class HBCIDialog
         listOfGVs.clear();
     }
     
+    /**
+     * Liefert die Liste aller Messages mit den jeweiligen Tasks.
+     * @return die Liste aller Messages mit den jeweiligen Tasks.
+     */
     public List<ArrayList<HBCIJobImpl>> getMessages()
     {
         return this.msgs;

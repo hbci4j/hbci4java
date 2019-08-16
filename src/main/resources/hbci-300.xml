@@ -988,6 +988,14 @@
             <DE name="param9" type="AN" minsize="0" maxsize="999" minnum="0" maxnum="1"/>
         </DEGdef>
         
+        <DEGdef id="HHDUCAnswer">
+            <DE name="atc" type="AN" maxsize="5" />
+            <DE name="appcrypto_ac" type="Bin" maxsize="256" />
+            <DE name="ef_id_data" type="Bin" maxsize="256" />
+            <DE name="cvr" type="Bin" maxsize="256" />
+            <DE name="versioninfo" type="Bin" maxsize="256" />
+        </DEGdef>
+        
         <DEGdef id="ChallengeValidity">
             <DE name="date" type="Date"/>
             <DE name="time" type="Time"/>
@@ -1515,6 +1523,19 @@
             </valids>
         </DEGdef>
 
+        <DEGdef id="ParTAN2Step6">
+            <DE name="can1step" type="JN"/>
+            <DE name="canmultitangvs" type="JN"/>
+            <DE name="orderhashmode" type="Code" maxsize="1"/>
+            <DEG type="TAN2StepParams6" name="TAN2StepParams" maxnum="98"/>
+            
+            <valids path="orderhashmode">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>
+
         <DEGdef id="ParTemplateD">
             <DE name="dummy" type="AN" minsize="0" maxsize="999" minnum="2" maxnum="999"/>
         </DEGdef>
@@ -1773,8 +1794,8 @@
             <DE name="secfunc" type="Code" maxsize="3"/>
             <DE name="process" type="Code" maxsize="1"/>
             <DE name="id" type="ID"/>
-	    <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" />
-	    <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
+            <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" />
+            <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
             <DE name="name" type="AN" maxsize="30"/>
             <DE name="maxlentan2step" type="Num" maxsize="2"/>
             <DE name="tanformat" type="Code" maxsize="1"/>
@@ -1785,10 +1806,10 @@
             <DE name="cantandelay" type="Code" maxsize="1"/>
             <DE name="needtanlistidx" type="Code" maxsize="1"/>
             <DE name="canstorno" type="JN"/>
-	    <DE name="needsmsaccount" type="JN" />
+            <DE name="needsmsaccount" type="JN" />
             <DE name="needchallengeklass" type="JN"/>
             <DE name="needchallengevalue" type="JN"/>
-	    <DE name="ischallengestructured" type="JN" />
+            <DE name="ischallengestructured" type="JN" />
             <DE name="initmode" type="Code"/>
             <DE name="needtanmedia" type="Code"/>
             <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
@@ -1825,6 +1846,39 @@
             <DE name="ischallengestructured" type="JN" />
             <DE name="initmode" type="Code"/>
             <DE name="needtanmedia" type="Code"/>
+            <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <valids path="tanformat">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>
+
+        <DEGdef id="TAN2StepParams6">
+            <DE name="secfunc" type="Code" maxsize="3"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="id" type="ID"/>
+            <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" />
+            <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
+            <DE name="name" type="AN" maxsize="30"/>
+            <DE name="maxlentan2step" type="Num" maxsize="2"/>
+            <DE name="tanformat" type="Code" maxsize="1"/>
+            <DE name="inputinfo" type="AN" maxsize="30"/>
+            <DE name="maxleninput2step" type="Num" maxsize="4"/>
+            <DE name="canmultitan" type="JN"/>
+            <DE name="cantandelay" type="Code" maxsize="1"/>
+            <DE name="canstorno" type="JN"/>
+            <DE name="needsmsaccount" type="Code" maxsize="1"/>
+            <DE name="needorderaccount" type="Code" maxsize="1"/>
+            <DE name="needchallengeklass" type="JN"/>
+            <DE name="ischallengestructured" type="JN" />
+            <DE name="initmode" type="Code"/>
+            <DE name="needtanmedia" type="Code"/>
+            <DE name="need_hhducresponse" type="JN"/>
             <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
             
             <valids path="process">
@@ -1931,6 +1985,40 @@
         <DEGdef id="TANMediaInfo4">
             <DE name="mediacategory" type="AN" maxsize="1"/>
             <DE name="status" type="Code" maxsize="1"/>
+            <DE name="cardnumber" type="ID" minnum="0"/>
+            <DE name="cardseqnumber" type="ID" minnum="0"/>
+            <DE name="cardtype" type="Num" maxsize="2" minnum="0"/>
+            <DEG type="KTV2opt" name="KTV" minnum="0"/>
+            <DE name="validfrom" type="Date" minnum="0"/>
+            <DE name="validto" type="Date" minnum="0"/>
+            <DE name="tanlistnumber" type="AN" maxsize="20" minnum="0"/>
+            <DE name="medianame" type="AN" maxsize="32" minnum="0"/>
+            <DE name="mobilenumber_secure" type="AN" maxsize="35" minnum="0"/>
+            <DE name="mobilenumber" type="AN" maxsize="35" minnum="0"/>
+            <DEG type="KTVInt" name="smsaccount" minnum="0"/>
+            <DE name="freetans" type="Num" maxsize="3" minnum="0"/>
+            <DE name="lastuse" type="Date" minnum="0"/>
+            <DE name="activatedon" type="Date" minnum="0"/>
+            
+            <valids path="mediacategory">
+                <validvalue>G</validvalue>
+                <validvalue>L</validvalue>
+                <validvalue>M</validvalue>
+                <validvalue>S</validvalue>
+                <validvalue>A</validvalue>
+            </valids>
+            <valids path="status">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+        </DEGdef>
+
+        <DEGdef id="TANMediaInfo5">
+            <DE name="mediacategory" type="AN" maxsize="1"/>
+            <DE name="status" type="Code" maxsize="1"/>
+            <DE name="secfunc" type="Code" maxsize="3"/>
             <DE name="cardnumber" type="ID" minnum="0"/>
             <DE name="cardseqnumber" type="ID" minnum="0"/>
             <DE name="cardtype" type="Num" maxsize="2" minnum="0"/>
@@ -5285,6 +5373,64 @@
         <!--  willuhn 2011-05-16 END HKTAN/HITAN/HITANS Version 5 -->
 
 
+        <!--  BEGIN HKTAN 6 -->
+        <SEGdef id="TAN2Step6" needsRequestTag="1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="ordersegcode" type="AN" maxsize="6" minnum="0"/>
+            <DEG name="OrderAccount" type="KTVInt" minnum="0" />
+            <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+            <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            <DE name="notlasttan" type="JN" minnum="0"/>
+            <DE name="storno" type="JN" minnum="0"/>
+            <DEG name="SMSAccount" type="KTV3" minnum="0" />
+            <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0" />
+            <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+            <DEG name="HHDUCAnswer" type="HHDUCAnswer" minnum="0" />
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            
+            <value path="SegHead.code">HKTAN</value>
+            <value path="SegHead.version">6</value>
+        </SEGdef>
+        <SEGdef id="TAN2StepRes6">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+            <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            <DE name="challenge" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="challenge_hhd_uc" type="Bin" maxsize="0" minnum="0" />
+            <DEG type="ChallengeValidity" minnum="0"/>
+            <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            
+            <value path="SegHead.code">HITAN</value>
+            <value path="SegHead.version">6</value>
+        </SEGdef>
+        <SEGdef id="TAN2StepPar6">
+            &GVP2;
+            <DEG type="ParTAN2Step6" name="ParTAN2Step"/>
+            
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITANS</value>
+            <value path="SegHead.version">6</value>
+        </SEGdef>
+        <!--  END HKTAN 6 -->
+
+
         <!--  macemmi 2012-02-20 BEGIN HKTAB -->
         <!--  Version 1 -->
         <SEGdef id="TANMediaList1">
@@ -5441,6 +5587,55 @@
             <value path="SegHead.code">HITABS</value>
             <value path="SegHead.version">4</value>
         </SEGdef>
+
+
+        <!--  Version 5 -->
+        <SEGdef id="TANMediaList5">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="mediatype" type="Code" maxsize="1"/>
+            <DE name="mediacategory" type="Code" maxsize="1"/>
+            
+            <valids path="mediatype">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>           
+            <valids path="mediacategory">
+                <validvalue>A</validvalue>
+                <validvalue>L</validvalue>
+                <validvalue>G</validvalue>
+                <validvalue>M</validvalue>
+                <validvalue>S</validvalue>
+                <validvalue>B</validvalue>
+            </valids>           
+            
+            <value path="SegHead.code">HKTAB</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+
+        <SEGdef id="TANMediaListRes5">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="tanoption" type="Code" maxsize="1"/>
+            <DEG type="TANMediaInfo5" name="MediaInfo" minnum="0" maxnum="999"/>
+                            
+            <valids path="tanoption">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <value path="SegHead.code">HITAB</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+
+        <SEGdef id="TANMediaListPar5">
+            &GVP2;
+            &SecClassValids;
+            
+            <value path="SegHead.code">HITABS</value>
+            <value path="SegHead.version">5</value>
+        </SEGdef>
+
+
 
         <!--  macemmi 2012-02-20 END HKTAB -->
 
@@ -7400,7 +7595,7 @@
             <SEG type="LastObjection1" minnum="0"/>
             <SEG type="LastObjection2" minnum="0"/>
             <SEG type="OrderHistory1" minnum="0"/>
-	    	    <SEG type="Receipt1" minnum="0"/>
+            <SEG type="Receipt1" minnum="0"/>
             <SEG type="Saldo3" minnum="0"/>
             <SEG type="Saldo4" minnum="0"/>
             <SEG type="Saldo5" minnum="0"/>
@@ -7428,11 +7623,13 @@
             <SEG type="TAN2Step3" minnum="0"/>
             <SEG type="TAN2Step4" minnum="0"/>
             <SEG type="TAN2Step5" minnum="0"/>
+            <SEG type="TAN2Step6" minnum="0"/>
             <SEG type="TANListList1" minnum="0"/>
             <SEG type="TANMediaList1" minnum="0"/>
             <SEG type="TANMediaList2" minnum="0"/>
             <SEG type="TANMediaList3" minnum="0"/>
             <SEG type="TANMediaList4" minnum="0"/>
+            <SEG type="TANMediaList5" minnum="0"/>
             <SEG type="TermSammelLast3" minnum="0"/>
             <SEG type="TermSammelLastDel3" minnum="0"/>
             <SEG type="TermSammelLastList3" minnum="0"/>
@@ -7569,11 +7766,13 @@
             <SEG type="TAN2StepRes3" minnum="0"/>
             <SEG type="TAN2StepRes4" minnum="0"/>
             <SEG type="TAN2StepRes5" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0"/>
             <SEG type="TANListListRes1" minnum="0"/>
             <SEG type="TANMediaListRes1" minnum="0"/>
             <SEG type="TANMediaListRes2" minnum="0"/>
             <SEG type="TANMediaListRes3" minnum="0"/>
             <SEG type="TANMediaListRes4" minnum="0"/>
+            <SEG type="TANMediaListRes5" minnum="0"/>
             <SEG type="TermSammelLastRes3" minnum="0"/>
             <SEG type="TermSammelLastListRes3" minnum="0"/>
             <SEG type="TermSammelUebRes3" minnum="0"/>
@@ -7621,8 +7820,8 @@
             <SEG type="AccInfoPar2" minnum="0"/>
             <SEG type="CardListPar1" minnum="0"/>
             <SEG type="CardListPar2" minnum="0"/>
-    	    <SEG type="ChangePINPar1" minnum="0" />
-	        <SEG type="ChangePINOldPar1" minnum="0" />
+            <SEG type="ChangePINPar1" minnum="0" />
+            <SEG type="ChangePINOldPar1" minnum="0" />
             <SEG type="CommListPar2" minnum="0"/>
             <SEG type="CommListPar3" minnum="0"/>
             <SEG type="CommListPar4" minnum="0"/>
@@ -7724,11 +7923,13 @@
             <SEG type="TAN2StepPar3" minnum="0"/>
             <SEG type="TAN2StepPar4" minnum="0"/>
             <SEG type="TAN2StepPar5" minnum="0"/>
+            <SEG type="TAN2StepPar6" minnum="0"/>
             <SEG type="TANListListPar1" minnum="0"/>
             <SEG type="TANMediaListPar1" minnum="0"/>
             <SEG type="TANMediaListPar2" minnum="0"/>
             <SEG type="TANMediaListPar3" minnum="0"/>
             <SEG type="TANMediaListPar4" minnum="0"/>
+            <SEG type="TANMediaListPar5" minnum="0"/>
             <SEG type="TermSammelLastPar3" minnum="0"/>
             <SEG type="TermSammelLastDelPar3" minnum="0"/>
             <SEG type="TermSammelLastListPar3" minnum="0"/>
@@ -7807,6 +8008,8 @@
             &MsgSigTailInst;
         </MSGdef>
 
+        <!-- Das ist zwar auch eine Dialog-Initialisierung. Da es die aber nur bei Schluesseldateien
+             und nicht bei PIN/TAN gibt, wuerde ein HKTAN hier gar keinen Sinn machen -->
         <MSGdef id="FirstKeyReq" dontsign="1" dontcrypt="1">
             <SEG type="MsgHeadUser" name="MsgHead"/>
             <SEG type="Idn"/>
@@ -7814,8 +8017,6 @@
             <SEG type="KeyReq" minnum="2" maxnum="3"/>
             <SEG type="MsgTailUser" name="MsgTail"/>
 
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
             <value path="Idn.customerid">9999999999</value>
             <value path="Idn.sysid">0</value>
             <value path="Idn.sysStatus">0</value>
@@ -7825,7 +8026,6 @@
             <value path="KeyReq_2.KeyName.userid">999</value>
             <value path="KeyReq_2.KeyName.keynum">999</value>
             <value path="KeyReq_2.KeyName.keyversion">999</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="FirstKeyReqRes" dontcrypt="1">
             &MsgSigHeadInst;
@@ -7839,38 +8039,31 @@
         </MSGdef>
 
         <MSGdef id="DialogInitAnon" dontsign="1" dontcrypt="1">
-            <SEG type="MsgHeadUser" name="MsgHead"/>
-            <SEG type="Idn"/>
-            <SEG type="ProcPrep"/>
-            <SEG type="MsgTailUser" name="MsgTail"/>
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="Idn.customerid">9999999999</value>
-            <value path="Idn.sysid">0</value>
-            <value path="Idn.sysStatus">0</value>
-            <value path="MsgTail.msgnum">1</value>
+            <!-- HNHBK --> <SEG type="MsgHeadUser" name="MsgHead"/>
+            <!-- HKIDN --> <SEG type="Idn"/>
+            <!-- HKVVB --> <SEG type="ProcPrep"/>
+            <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/> <!-- Ja, auch bei der anonymen Initialisierung darf HKTAN6 gesendet werden -->
+            <!-- HNHBS --> <SEG type="MsgTailUser" name="MsgTail"/>
         </MSGdef>
+        
         <MSGdef id="DialogInitAnonRes" dontsign="1" dontcrypt="1">
             &MsgSigHeadInst;
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
 
         <MSGdef id="DialogInit">
-            &MsgSigHeadUser;
-            <SEG type="Idn"/>
-            <SEG type="ProcPrep"/>
-            <SEG type="KeyReq" minnum="0" maxnum="3"/>
-            &MsgSigTailUser;
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="MsgTail.msgnum">1</value>
+            <!-- HNHBK+HNSHK --> &MsgSigHeadUser;
+            <!-- HKIDN --> <SEG type="Idn"/>
+            <!-- HKVVB --> <SEG type="ProcPrep"/>
+            <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <!-- HKISA --> <SEG type="KeyReq" minnum="0" maxnum="3"/>
+            <!-- HNSHA+HNHBS --> &MsgSigTailUser;
         </MSGdef>
         <MSGdef id="DialogInitRes">
             &MsgSigHeadInst;
@@ -7878,20 +8071,51 @@
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
 
-        <MSGdef id="DialogEndAnon" dontsign="1" dontcrypt="1">
-            <SEG type="MsgHeadUser" name="MsgHead"/>
-            <SEG type="DialogEndS"/>
-            <SEG type="MsgTailUser" name="MsgTail"/>
+        <MSGdef id="Synch">
+            <!-- HNHBK+HNSHK --> &MsgSigHeadUser;
+            <!-- HKIDN --> <SEG type="Idn"/>
+            <!-- HKVVB --> <SEG type="ProcPrep"/>
+            <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <!-- HKISA --> <SEG type="KeyReq" minnum="0" maxnum="3"/>
+            <!-- HKSYN --> <SEG type="Sync"/>
+            <!-- HNSHA+HNHBS --> &MsgSigTailUser;
         </MSGdef>
-        <MSGdef id="DialogEndAnonRes" dontsign="1" dontcrypt="1">
+        <MSGdef id="SynchRes">
             &MsgSigHeadInst;
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            <SF type="BPD" minnum="0"/>
+            <SF type="UPD" minnum="0"/>
+            <SEG type="SendPubKey" minnum="0" maxnum="3"/>
+            <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
+            <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            &MsgSigTailInst;
+        </MSGdef>
+
+        <MSGdef id="DialogInitSCA">
+            &MsgSigHeadUser;
+            <SEG type="TAN2Step6"/>
+            &MsgSigTailUser;
+        </MSGdef>
+        <MSGdef id="DialogInitSCARes">
+            &MsgSigHeadInst;
+            <SEG type="RetGlob"/>
+            <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            <SF type="BPD" minnum="0"/>
+            <SF type="UPD" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="SendPubKey" minnum="0" maxnum="3"/>
+            <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
+            <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
+            <SEG type="KIMsg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -7907,6 +8131,18 @@
             &MsgSigTailInst;
         </MSGdef>
 
+        <MSGdef id="DialogEndAnon" dontsign="1" dontcrypt="1">
+            <SEG type="MsgHeadUser" name="MsgHead"/>
+            <SEG type="DialogEndS"/>
+            <SEG type="MsgTailUser" name="MsgTail"/>
+        </MSGdef>
+        <MSGdef id="DialogEndAnonRes" dontsign="1" dontcrypt="1">
+            &MsgSigHeadInst;
+            <SEG type="RetGlob"/>
+            <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            &MsgSigTailInst;
+        </MSGdef>
+        
         <MSGdef id="ChangeKeys">
             &MsgSigHeadUser;
             <SEG type="KeyChange" minnum="1" maxnum="3"/>
@@ -7947,27 +8183,6 @@
             &MsgSigHeadInst;
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
-            &MsgSigTailInst;
-        </MSGdef>
-
-        <MSGdef id="Synch">
-            &MsgSigHeadUser;
-            <SEG type="Idn"/>
-            <SEG type="ProcPrep"/>
-            <SEG type="KeyReq" minnum="0" maxnum="3"/>
-            <SEG type="Sync"/>
-            &MsgSigTailUser;
-        </MSGdef>
-        <MSGdef id="SynchRes">
-            &MsgSigHeadInst;
-            <SEG type="RetGlob"/>
-            <SEG type="RetSeg" minnum="0" maxnum="0"/>
-            <SF type="BPD" minnum="0"/>
-            <SF type="UPD" minnum="0"/>
-            <SEG type="SendPubKey" minnum="0" maxnum="3"/>
-            <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
-            <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
-            <SEG type="KIMsg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
 

@@ -48,14 +48,41 @@ public class GVTAN2Step
     {
         super(handler,getLowlevelName(),new GVRSaldoReq());
 
+        int version = 5;
+        try
+        {
+          version = Integer.parseInt(this.getSegVersion());
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log(e);
+        }
+
         addConstraint("process","process",null, LogFilter.FILTER_NONE);
+        addConstraint("ordersegcode", "ordersegcode","", LogFilter.FILTER_NONE);
+        addConstraint("orderaccount.bic","OrderAccount.bic",null, LogFilter.FILTER_MOST);
+        addConstraint("orderaccount.iban","OrderAccount.iban",null, LogFilter.FILTER_IDS);
+        addConstraint("orderaccount.number","OrderAccount.number",null, LogFilter.FILTER_IDS);
+        addConstraint("orderaccount.subnumber","OrderAccount.subnumber","", LogFilter.FILTER_MOST);
+        addConstraint("orderaccount.blz","OrderAccount.KIK.blz",null, LogFilter.FILTER_MOST);
+        addConstraint("orderaccount.country","OrderAccount.KIK.country","DE", LogFilter.FILTER_NONE);
         addConstraint("orderhash","orderhash","", LogFilter.FILTER_NONE);
         addConstraint("orderref","orderref","", LogFilter.FILTER_NONE);
-        addConstraint("listidx","listidx","", LogFilter.FILTER_NONE);
-        addConstraint("notlasttan","notlasttan","N", LogFilter.FILTER_NONE);
-        addConstraint("info","info","", LogFilter.FILTER_NONE);
         
+        if (version < 6)
+            addConstraint("listidx","listidx","", LogFilter.FILTER_NONE);
+        
+        addConstraint("notlasttan","notlasttan","N", LogFilter.FILTER_NONE);
+        
+        if (version <= 1) // Gabs nur in HKTAN 1
+            addConstraint("info","info","", LogFilter.FILTER_NONE);
+
         addConstraint("storno","storno","", LogFilter.FILTER_NONE);
+        // willuhn 2011-05-17 wird noch nicht genutzt
+        // addConstraint("smsaccount.number","SMSAccount.number",null, LogFilter.FILTER_IDS);
+        // addConstraint("smsaccount.subnumber","SMSAccount.subnumber","", LogFilter.FILTER_MOST);
+        // addConstraint("smsaccount.blz","SMSAccount.KIK.blz",null, LogFilter.FILTER_MOST);
+        // addConstraint("smsaccount.country","SMSAccount.KIK.country","DE", LogFilter.FILTER_NONE);
         addConstraint("challengeklass","challengeklass","", LogFilter.FILTER_NONE);
         addConstraint("ChallengeKlassParam1", "ChallengeKlassParams.param1","", LogFilter.FILTER_IDS);
         addConstraint("ChallengeKlassParam2", "ChallengeKlassParams.param2","", LogFilter.FILTER_IDS);
@@ -68,21 +95,13 @@ public class GVTAN2Step
         addConstraint("ChallengeKlassParam9", "ChallengeKlassParams.param9","", LogFilter.FILTER_IDS);
 
         addConstraint("tanmedia", "tanmedia","", LogFilter.FILTER_IDS);
+        
+        addConstraint("HHDUCAnswer", "HHDUCAnswer.atc","", LogFilter.FILTER_IDS);
+        addConstraint("HHDUCAnswer", "HHDUCAnswer.appcrypto_ac","", LogFilter.FILTER_IDS);
+        addConstraint("HHDUCAnswer", "HHDUCAnswer.ef_id_data","", LogFilter.FILTER_IDS);
+        addConstraint("HHDUCAnswer", "HHDUCAnswer.cvr","", LogFilter.FILTER_IDS);
+        addConstraint("HHDUCAnswer", "HHDUCAnswer.versioninfo","", LogFilter.FILTER_IDS);
 
-        addConstraint("ordersegcode", "ordersegcode","", LogFilter.FILTER_NONE);
-
-        addConstraint("orderaccount.bic","OrderAccount.bic",null, LogFilter.FILTER_MOST);
-        addConstraint("orderaccount.iban","OrderAccount.iban",null, LogFilter.FILTER_IDS);
-        addConstraint("orderaccount.number","OrderAccount.number",null, LogFilter.FILTER_IDS);
-        addConstraint("orderaccount.subnumber","OrderAccount.subnumber","", LogFilter.FILTER_MOST);
-        addConstraint("orderaccount.blz","OrderAccount.KIK.blz",null, LogFilter.FILTER_MOST);
-        addConstraint("orderaccount.country","OrderAccount.KIK.country","DE", LogFilter.FILTER_NONE);
-
-        // willuhn 2011-05-17 wird noch nicht genutzt
-        // addConstraint("smsaccount.number","SMSAccount.number",null, LogFilter.FILTER_IDS);
-        // addConstraint("smsaccount.subnumber","SMSAccount.subnumber","", LogFilter.FILTER_MOST);
-        // addConstraint("smsaccount.blz","SMSAccount.KIK.blz",null, LogFilter.FILTER_MOST);
-        // addConstraint("smsaccount.country","SMSAccount.KIK.country","DE", LogFilter.FILTER_NONE);
     }
     
     public void setParam(String paramName, String value)

@@ -34,7 +34,12 @@ import javax.crypto.spec.DESedeKeySpec;
 
 import org.kapott.cryptalgs.SignatureParamSpec;
 import org.kapott.hbci.comm.Comm;
+import org.kapott.hbci.dialog.DialogContext;
+import org.kapott.hbci.dialog.DialogEvent;
+import org.kapott.hbci.dialog.KnownDialogTemplate;
+import org.kapott.hbci.dialog.RawHBCIDialog;
 import org.kapott.hbci.exceptions.HBCI_Exception;
+import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
@@ -96,6 +101,10 @@ public abstract class AbstractRDHPassport
         return "1";
     }
 
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassport#needInstKeys()
+     */
+    @Override
     public boolean needInstKeys()
     {
         return true;
@@ -366,5 +375,47 @@ public abstract class AbstractRDHPassport
         
         return result;
     }
+    
+    /**
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#onDialogEvent(org.kapott.hbci.dialog.DialogEvent, org.kapott.hbci.dialog.DialogContext)
+     */
+    @Override
+    public void onDialogEvent(DialogEvent event, DialogContext ctx)
+    {
+        super.onDialogEvent(event, ctx);
 
+        if (event != DialogEvent.MSG_CREATED)
+            return;
+        
+        // Wenn es eine nicht-anonyme Dialog-Initialisierung ist, rufen wir die Schluessel mit ab
+        RawHBCIDialog init = ctx.getDialogInit();
+        if (init.getTemplate() != KnownDialogTemplate.INIT)
+            return;
+        
+        if (!this.needInstKeys())
+            return;
+
+        HBCIKernelImpl k = ctx.getKernel();
+        
+        k.rawSet("KeyReq.SecProfile.method",this.getProfileMethod());
+        k.rawSet("KeyReq.SecProfile.version",this.getProfileVersion());
+        k.rawSet("KeyReq.KeyName.keytype", "V");
+        k.rawSet("KeyReq.KeyName.KIK.country", this.getCountry());
+        k.rawSet("KeyReq.KeyName.KIK.blz", this.getBLZ());
+        k.rawSet("KeyReq.KeyName.userid", this.getInstEncKeyName());
+        k.rawSet("KeyReq.KeyName.keynum", this.getInstEncKeyNum());
+        k.rawSet("KeyReq.KeyName.keyversion", this.getInstEncKeyVersion());
+
+        if (this.hasInstSigKey())
+        {
+            k.rawSet("KeyReq_2.SecProfile.method",this.getProfileMethod());
+            k.rawSet("KeyReq_2.SecProfile.version",this.getProfileVersion());
+            k.rawSet("KeyReq_2.KeyName.keytype", "S");
+            k.rawSet("KeyReq_2.KeyName.KIK.country", this.getCountry());
+            k.rawSet("KeyReq_2.KeyName.KIK.blz", this.getBLZ());
+            k.rawSet("KeyReq_2.KeyName.userid", this.getInstSigKeyName());
+            k.rawSet("KeyReq_2.KeyName.keynum", this.getInstSigKeyNum());
+            k.rawSet("KeyReq_2.KeyName.keyversion", this.getInstSigKeyVersion());
+        }
+    }
 }

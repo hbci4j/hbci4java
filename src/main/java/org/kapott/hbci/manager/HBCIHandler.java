@@ -138,128 +138,130 @@ public final class HBCIHandler
             }
 
             dialogs=new Hashtable<String, HBCIDialog>();
+            
+            updateMetaInfo();
+
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_CREATE_HANDLE"),e);
         }
-        
-        // wenn in den UPD noch keine SEPA- und TAN-Medien-Informationen ueber die Konten enthalten
-        // sind, versuchen wir, diese zu holen
-        Properties upd=passport.getUPD();
-        if (upd!=null && !upd.containsKey("_fetchedMetaInfo"))
-        {
-        	// wir haben UPD, in denen aber nicht "_fetchedMetaInfo" drinsteht
-        	updateMetaInfo();
-        }
     }
     
     /**
-     * Ruft die SEPA-Infos der Konten sowie die TAN-Medienbezeichnungen ab.
-     * unterstuetzt wird und speichert diese Infos in den UPD.
+     * Aktualisiert die Meta-Informationen.
      */
     public void updateMetaInfo()
     {
-        Properties bpd = passport.getBPD();
-        if (bpd == null)
+        final String UPD_KEY = "_fetchedMetaInfo";
+        
+        if (this.passport.getBPD() == null)
         {
-          HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_WARN);
+          HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_INFO);
           return;
         }
+        
+        final Properties upd = passport.getUPD();
+        if (upd == null)
+        {
+            HBCIUtils.log("have no upd skip fetching of meta info", HBCIUtils.LOG_INFO);
+            return;
+        }
+        if (upd.containsKey(UPD_KEY))
+        {
+            HBCIUtils.log("meta info already fetched", HBCIUtils.LOG_DEBUG);
+            return;
+        }
 
+        final Properties lowlevel = this.getSupportedLowlevelJobs();
+        
+        boolean tanMedia = false;
+        boolean sepaInfo = false;
+
+        //////////////////////////////////////////////////////////////////////////////////
+        // 1. Abruf der TAN-Medien
+        // Seit SCA muessen wir den Abruf in einem dedizierten Dialog machen, weil
+        // wir in der Dialoginitialisierung im HKTAN ja eine Referenz zu HKTAB mitschicken.
+        // Daher darf nach der Dialog-Initialisierung nichts anderes gesendet werden
+        // als der HKTAB.
+        // Daher machen wir zwei getrennte Dialoge.
         try
         {
-            final Properties lowlevel = this.getSupportedLowlevelJobs();
-            
-            // SEPA-Infos abrufen
-            if (lowlevel.getProperty("SEPAInfo") != null)
-            {
-                HBCIUtils.log("fetching SEPA information", HBCIUtils.LOG_INFO);
-                HBCIJob sepainfo = this.newJob("SEPAInfo");
-                sepainfo.addToQueue();
-            }
-
-            // TAN-Medien abrufen - aber nur bei PIN/TAN-Verfahren
+            // TAN-Medien-Liste macht natuerlich nur bei PIN/TAN Sinn.
             if (lowlevel.getProperty("TANMediaList") != null && (this.passport instanceof AbstractPinTanPassport))
             {
                 HBCIUtils.log("fetching TAN media list", HBCIUtils.LOG_INFO);
-                HBCIJob tanMedia = this.newJob("TANMediaList");
-                tanMedia.addToQueue();
-            }
-
-            HBCIExecStatus status = this.execute();
-            if (status.isOK())
-            {
-                HBCIUtils.log("successfully fetched meta info", HBCIUtils.LOG_INFO);
-                passport.getUPD().setProperty("_fetchedMetaInfo",new Date().toString());
-                passport.saveChanges();
+                final HBCIJob job = this.newJob("TANMediaList");
+                job.addToQueue();
+                final HBCIExecStatus status = this.execute();
+                if (status.isOK())
+                {
+                    HBCIUtils.log("successfully fetched tan media list", HBCIUtils.LOG_INFO);
+                    tanMedia = true;
+                    passport.saveChanges();
+                }
+                else
+                {
+                    HBCIUtils.log("error while fetching tan media info: " + status.toString(), HBCIUtils.LOG_ERR);
+                }
             }
             else
             {
-                HBCIUtils.log("error while fetching meta info: " + status.toString(), HBCIUtils.LOG_ERR);
+                HBCIUtils.log("fetching of tan media list not supported by institute", HBCIUtils.LOG_INFO);
             }
         }
         catch (Exception e)
         {
-            // Wir werfen das nicht als Exception. Unschoen, wenn das nicht klappt.
-            // Aber kein Grund zur Panik.
+            // Den Fehler tolerieren wir. Dann muss der User die Medienbezeichnung eben selbst eingeben
             HBCIUtils.log(e);
         }
-    }
-
-    
-    /**
-     * Wenn der GV SEPAInfo unterstützt wird, heißt das, dass die Bank mit
-     * SEPA-Konten umgehen kann. In diesem Fall holen wir die SEPA-Informationen
-     * über die Konten von der Bank ab - für jedes SEPA-fähige Konto werden u.a. 
-     * BIC/IBAN geliefert
-     * @deprecated Bitte <code>updateMetaInfo</code> verwenden. Das aktualisiert auch die TAN-Medien.
-     */
-    public void updateSEPAInfo()
-    {
-        Properties bpd = passport.getBPD();
-        if (bpd == null)
+        //
+        //////////////////////////////////////////////////////////////////////////////////
+        
+        //////////////////////////////////////////////////////////////////////////////////
+        // Abruf der SEPA-Infos
+        try
         {
-          HBCIUtils.log("have no bpd, skipping SEPA information fetching", HBCIUtils.LOG_WARN);
-          return;
-        }
-
-        // jetzt noch zusaetzliche die SEPA-Informationen abholen
-        try {
-        	if (getSupportedLowlevelJobs().getProperty("SEPAInfo")!=null) {
-        		HBCIUtils.log("trying to fetch SEPA information from institute", HBCIUtils.LOG_INFO);
-        		
-        		// HKSPA wird unterstuetzt
-        		HBCIJob sepainfo=newJob("SEPAInfo");
-        		sepainfo.addToQueue();
-        		HBCIExecStatus status=execute();
-        		if (status.isOK()) {
-        			HBCIUtils.log("successfully fetched information about SEPA accounts from institute", HBCIUtils.LOG_INFO);
-        			
-        			passport.getUPD().setProperty("_fetchedSEPA","1");
-        			passport.saveChanges();
-        		} else {
-        			HBCIUtils.log("error while fetching information about SEPA accounts from institute:", HBCIUtils.LOG_ERR);
-        			HBCIUtils.log(status.toString(), HBCIUtils.LOG_ERR);
-        		}
-        		/* beim execute() werden die Job-Result-Objekte automatisch
-        		 * gefuellt. Der GV-Klasse fuer SEPAInfo haengt sich in diese
-        		 * Logik rein, um gleich die UPD mit den SEPA-Konto-Daten
-        		 * zu aktualisieren, so dass an dieser Stelle die UPD um
-        		 * die SEPA-Informationen erweitert wurden. 
-        		 */
-        	} else {
-        		HBCIUtils.log("institute does not support SEPA accounts, so we skip fetching information about SEPA", HBCIUtils.LOG_DEBUG);
-        	}
-        }
-        catch (HBCI_Exception he)
-        {
-          throw he;
+            if (lowlevel.getProperty("SEPAInfo") != null)
+            {
+                HBCIUtils.log("fetching TAN media list", HBCIUtils.LOG_INFO);
+                final HBCIJob job = this.newJob("SEPAInfo");
+                job.addToQueue();
+                final HBCIExecStatus status = this.execute();
+                if (status.isOK())
+                {
+                    HBCIUtils.log("successfully fetched sepa info", HBCIUtils.LOG_INFO);
+                    sepaInfo = true;
+                    passport.saveChanges();
+                }
+                else
+                {
+                    HBCIUtils.log("error while fetching sepa info: " + status.toString(), HBCIUtils.LOG_ERR);
+                }
+            }
+            else
+            {
+                HBCIUtils.log("fetching of sepa info not supported by institute", HBCIUtils.LOG_DEBUG);
+            }
         }
         catch (Exception e)
         {
-        	throw new HBCI_Exception(e);
+            // Fehler tolerieren
+            HBCIUtils.log(e);
+        }
+        //
+        //////////////////////////////////////////////////////////////////////////////////
+
+        // Wenn eins von beiden funktioniert hat, markieren wir den Task als erledigt.
+        if (sepaInfo || tanMedia)
+        {
+            HBCIUtils.log("meta info successfully fetched",HBCIUtils.LOG_INFO);
+            passport.getUPD().setProperty(UPD_KEY,new Date().toString());
+            passport.saveChanges();
         }
     }
-    
+
+    /**
+     * Macht die anonyme Initialisierung und ruft die BPD ab.
+     */
     private void registerInstitute()
     {
         try {
@@ -271,6 +273,9 @@ public final class HBCIHandler
         }
     }
 
+    /**
+     * Ruft die UPD ab.
+     */
     private void registerUser()
     {
         try {
@@ -281,7 +286,7 @@ public final class HBCIHandler
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_REG_USER"),ex);
         }
     }
-
+    
     /** <p>Schließen des Handlers. Diese Methode sollte immer dann aufgerufen werden,
         wenn die entsprechende HBCI-Verbindung nicht mehr benötigt wird. </p><p>
         Beim Schließen des Handlers wird das Passport ebenfalls geschlossen.

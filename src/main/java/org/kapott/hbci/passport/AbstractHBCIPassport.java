@@ -33,15 +33,15 @@ import java.util.Properties;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.comm.Filter;
+import org.kapott.hbci.dialog.DialogContext;
+import org.kapott.hbci.dialog.DialogEvent;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
-import org.kapott.hbci.manager.HBCIDialog;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.IHandlerData;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Limit;
 import org.kapott.hbci.structures.Value;
@@ -178,7 +178,7 @@ public abstract class AbstractHBCIPassport
         return comm;
     }
     
-    protected abstract Comm getCommInstance();
+    public abstract Comm getCommInstance();
     
     public final Filter getCommFilter()
     {
@@ -954,24 +954,20 @@ public abstract class AbstractHBCIPassport
         
         return result;
     }
-
-    public boolean postInitResponseHook(HBCIMsgStatus msgStatus, boolean anonDialog)
-    {
-        // die default-Implementierung tut nichts und verlangt auch keine
-        // erneute Dialog-Initialisierung
-        return false;
-    }
-
-    public void beforeCustomDialogHook(HBCIDialog dialog)
-    {
-        // default implementation does nothing
-    }
     
-    public void afterCustomDialogInitHook(HBCIDialog dialog)
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#onDialogEvent(org.kapott.hbci.dialog.DialogEvent, org.kapott.hbci.dialog.DialogContext)
+     */
+    @Override
+    public void onDialogEvent(DialogEvent event, DialogContext ctx)
     {
-        // default implementation does nothing - only PinTan variant will override this
+        // Default-Implementierung macht nichts.
     }
-    
+
+    /**
+     * @see org.kapott.hbci.passport.HBCIPassportInternal#getMaxGVSegsPerMsg()
+     */
+    @Override
     public int getMaxGVSegsPerMsg()
     {
         return 0;
