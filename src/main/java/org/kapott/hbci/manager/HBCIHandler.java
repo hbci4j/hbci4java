@@ -165,6 +165,7 @@ public final class HBCIHandler
             HBCIUtils.log("have no upd skip fetching of meta info", HBCIUtils.LOG_INFO);
             return;
         }
+        
         if (upd.containsKey(UPD_KEY))
         {
             HBCIUtils.log("meta info already fetched", HBCIUtils.LOG_DEBUG);

@@ -74,6 +74,12 @@ public class HBCIDialogSync extends AbstractRawHBCIDialogInit
             k.rawSet("Idn.sysStatus", p.getSysStatus());
             k.rawSet("Sync.mode", "2");
         }
+        
+        // PSD2: Beim Synchronisieren senden wir der Bank, dass wir angeblich nur BPD-Version 0 haben.
+        // Das forciert, dass die Bank uns die BPD neu schickt. Diesmal aber nicht die anoyme Version sondern
+        // die mit SCA. Dort sind im HIPINS-Segment dann naemlich auch HKKAZ & Co. TAN-pflichtig
+        if (!ctx.isAnonymous())
+            k.rawSet("ProcPrep.BPD", "0");
     }
     
     /**
