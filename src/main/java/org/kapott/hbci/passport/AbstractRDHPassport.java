@@ -32,6 +32,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 
+import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.cryptalgs.SignatureParamSpec;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
@@ -276,11 +277,11 @@ public abstract class AbstractRDHPassport
         switch (profile) {
         case 1:
             hashalg="RIPEMD160";
-            hashprovider="CryptAlgs4Java";
+            hashprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 2:
             hashalg="RIPEMD160";
-            hashprovider="CryptAlgs4Java";
+            hashprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 10:
             hashalg="SHA-256";
@@ -305,15 +306,15 @@ public abstract class AbstractRDHPassport
         switch (profile) {
         case 1:
             sigalg="ISO9796p1";
-            sigprovider="CryptAlgs4Java";
+            sigprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 2:
             sigalg="ISO9796p2";
-            sigprovider="CryptAlgs4Java";
+            sigprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 10:
             sigalg="PKCS1_PSS";
-            sigprovider="CryptAlgs4Java";
+            sigprovider=CryptAlgs4JavaProvider.NAME;
             break;
         default:
             // TODO das später vom security profile abhängig machen

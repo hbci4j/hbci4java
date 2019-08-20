@@ -25,26 +25,35 @@ package org.kapott.hbci.GV;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
+import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.passport.AbstractPinTanPassport;
+import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
 /**
  * @author stefan.palme
  */
-public class GVTAN2Step 
-    extends HBCIJobImpl
+public class GVTAN2Step extends HBCIJobImpl
 {
-    private GVTAN2Step  otherTAN2StepTask;
-    private HBCIJobImpl origTask;
-    private boolean haveSCA = false;
+    // Wenn der Wert NULL ist, ist "this" also das zweite HKTAN 
+    private GVTAN2Step step2;
+    
+    // Wenn der Wert NULL ist, ist "this" also das erste HKTAN, da die Task-Referenz nur im zweiten HKTAN enthalten ist.
+    private HBCIJobImpl task;
+    private boolean hdaveSCA = false;
     
     public static String getLowlevelName()
     {
         return "TAN2Step";
     }
     
+    /**
+     * ct.
+     * @param handler
+     */
     public GVTAN2Step(HBCIHandler handler)
     {
         super(handler,getLowlevelName(),new GVRSaldoReq());
@@ -105,15 +114,6 @@ public class GVTAN2Step
 
     }
     
-    /**
-     * Legt fest, ob fuer die TAN-Abfrage eine SCA vorliegt und wir nur den ersten Schritt des HKTAN brauchen
-     * @param b true, wenn eine SCA vorliegt.
-     */
-    public void setSCA(boolean b)
-    {
-        this.haveSCA = b;
-    }
-    
     public void setParam(String paramName, String value)
     {
         if (paramName.equals("orderhash")) {
@@ -122,90 +122,138 @@ public class GVTAN2Step
         super.setParam(paramName,value);
     }
 
-    public void storeOtherTAN2StepTask(GVTAN2Step other)
+    /**
+     * Speichert die Referenz auf das zweite HKTAN im ersten HKTAN.
+     * Wird fuer Prozess-Variante 2 benoetigt.
+     * @param step2 die Referenz auf den ersten HKTAN.
+     */
+    public void setStep2(GVTAN2Step step2)
     {
-        this.otherTAN2StepTask=other;
+        this.step2 = step2;
     }
     
-    public void storeOriginalTask(HBCIJobImpl task)
+    /**
+     * Speichert eine Referenz auf den eigentlichen Geschaeftsvorfall.
+     * @param task
+     */
+    public void setTask(HBCIJobImpl task)
     {
-        this.origTask=task;
+        this.task = task;
     }
     
-    protected void saveReturnValues(HBCIMsgStatus status, int sref) {
+    protected void saveReturnValues(HBCIMsgStatus status, int sref)
+    {
         super.saveReturnValues(status, sref);
         
-        if (origTask!=null) {
-            int orig_segnum=Integer.parseInt(origTask.getJobResult().getSegNum());
+        if (this.task != null)
+        {
+            int orig_segnum=Integer.parseInt(task.getJobResult().getSegNum());
             HBCIUtils.log("storing return values in orig task (segnum="+orig_segnum+")", HBCIUtils.LOG_DEBUG);
-            origTask.saveReturnValues(status,orig_segnum);
+            task.saveReturnValues(status,orig_segnum);
         }
     }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#needsContinue(int)
+     */
+    @Override
+    public boolean needsContinue(int loop)
+    {
+        return super.needsContinue(loop);
+    }
 
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
+     */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
-        Properties result=msgstatus.getData();
-        String segcode=result.getProperty(header+".SegHead.code");
-        HBCIUtils.log("found HKTAN response with segcode "+segcode,HBCIUtils.LOG_DEBUG);
+        Properties result = msgstatus.getData();
+        String segcode = result.getProperty(header+".SegHead.code");
         
-        if (origTask!=null && new StringBuffer(origTask.getHBCICode()).replace(1,2,"I").toString().equals(segcode)) {
+        final boolean isStep2 = this.task != null && this.step2 == null;
+                        
+        ///////////////////////////////////////////////////////////////////////
+        // Das ist das Ergebnis des zweiten HKTAN bei Prozess-Variante 2. Das ignorieren wir
+        if (isStep2 && "HITAN".equals(segcode))
+            return;
+        //
+        ///////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////
+        // Die Rueckmeldung des eigentlichen Geschaeftsvorfalls an den Task durchreichen
+        // Kommt nur bei Prozess-Variante 2 zum Einsatz, weil dort im zweiten Schritt ja nur noch das HKTAN
+        // gesendet wird und die Instituts-Antwort des GV quasi ohne direkten Request davor kommt
+        if (task != null && new StringBuffer(task.getHBCICode()).replace(1,2,"I").toString().equals(segcode))
+        {
             // das ist für PV#2, wenn nach dem nachträglichen versenden der TAN das
             // antwortsegment des jobs aus der vorherigen Nachricht zurückommt
             HBCIUtils.log("this is a response segment for the original task - storing results in the original job",HBCIUtils.LOG_DEBUG);
-            origTask.extractResults(msgstatus,header,idx);
+            this.task.extractResults(msgstatus,header,idx);
+            
+            // Hier koennen wir auch aufhoeren. Wenn wir das Ergebnis haben, ist der TAN-Prozess zu Ende
+            return;
         }
-        else if (!this.haveSCA)
+        //
+        ///////////////////////////////////////////////////////////////////////
+
+        final HBCIPassportInternal p = this.getMainPassport();
+        
+        
+        ///////////////////////////////////////////////////////////////////////
+        // SCA-Ausnahme checken. Wenn wir in der Auswertung des ersten HKTAN sind, pruefen wir, ob die Bank einen 3076 geschickt
+        // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
+        // "task == null" ist in zwei Situationen der Fall: PV#1 oder HKTAN1 von PV2. Genau die Stelle, wo wir die SCA-Ausnahme
+        // pruefen wollen.
+        boolean haveSCA = false;
+        if (this.task == null && KnownReturncode.W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
         {
-            // Nur uebernehmen, wenn wir keine SCA-Ausnahme haben
-            // wir wuerden sonst eine TAN-Abfrage beim Dialog-Ende ausloesen, da in der Empfangsbestaetigung der Bank
-            // ja ein HITAN zurueckkommt. Das muessen wir aber ignorieren
-            
-            HBCIUtils.log("this is a \"real\" HKTAN response - analyzing HITAN data",HBCIUtils.LOG_DEBUG);
-            
-            String challenge=result.getProperty(header+".challenge");
-            if (challenge!=null) {
-                
-                HBCIUtils.log("found challenge '"+challenge+"' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
-                // das ist für PV#1 (die antwort auf das einreichen des auftrags-hashs) oder 
-                // für PV#2 (die antwort auf das einreichen des auftrages)
-                // in jedem fall muss mit der nächsten nachricht die TAN übertragen werden
-                getMainPassport().setPersistentData("pintan_challenge",challenge);
+            HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_INFO);
+            p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true");
+            haveSCA = true;
+        }
+        //
+        ///////////////////////////////////////////////////////////////////////
 
-                // External-ID des originalen Jobs durchreichen
-                getMainPassport().setPersistentData("externalid",this.getExternalId());
+        HBCIUtils.log("found HKTAN response with segcode " + segcode,HBCIUtils.LOG_DEBUG);
+        
+        // Wir haben eine SCA-Ausnahme erhalten. Wir koennen uns die Auswertung des HITAN schenken
+        if (haveSCA)
+            return;
+        
+        // Daten fuer die TAN-Abfrage einsammeln
+        
+        /////////////////////////////////////////////////////////////////
+        // Prozess-Variante 1:
+        final String challenge = result.getProperty(header+".challenge");
+        if (challenge != null)
+        {
+            HBCIUtils.log("found challenge '" + challenge + "' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
+            // das ist für PV#1 (die antwort auf das einreichen des auftrags-hashs) oder 
+            // für PV#2 (die antwort auf das einreichen des auftrages)
+            // in jedem fall muss mit der nächsten nachricht die TAN übertragen werden
+            p.setPersistentData(AbstractPinTanPassport.KEY_PD_CHALLENGE,challenge);
+        }
+        //
+        /////////////////////////////////////////////////////////////////
 
-                // TODO: es muss hier evtl. noch überprüft werden, ob
-                // der zurückgegebene auftragshashwert mit dem ursprünglich versandten
-                // übereinstimmt
-                // für pv#1 gilt: hitan_orderhash == sent_orderhash (from previous hktan)
-                // für pv#2 gilt: hitan_orderhash == orderhash(gv from previous GV segment)
-                
-                // TODO: hier noch die optionale DEG ChallengeValidity bereitstellen
-            }
+        // External-ID des originalen Jobs durchreichen
+        p.setPersistentData("externalid",this.getExternalId());
 
-            // willuhn 2011-05-27 Challenge HHDuc aus dem Reponse holen und im Passport zwischenspeichern
-            String hhdUc = result.getProperty(header + ".challenge_hhd_uc");
-            if (hhdUc != null)
-            {
-              HBCIUtils.log("found Challenge HHDuc '" + hhdUc + "' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
-              getMainPassport().setPersistentData("pintan_challenge_hhd_uc",hhdUc);
-            }
-            
-            String orderref=result.getProperty(header+".orderref");
-            if (orderref!=null) {
-                // orderref ist nur für PV#2 relevant
-                HBCIUtils.log("found orderref '"+orderref+"' in HITAN",HBCIUtils.LOG_DEBUG);
-                if (otherTAN2StepTask!=null) {
-                    // hier sind wir ganz sicher in PV#2. das hier ist die antwort auf das
-                    // erste HKTAN (welches mit dem eigentlichen auftrag verschickt wird)
-                    // die orderref muss im zweiten HKTAN-job gespeichert werden, weil in
-                    // dieser zweiten nachricht dann die TAN mit übertragen werden muss
-                    HBCIUtils.log("storing it in following HKTAN task",HBCIUtils.LOG_DEBUG);
-                    otherTAN2StepTask.setParam("orderref",orderref);
-                } else {
-                    HBCIUtils.log("no other HKTAN task known - ignoring orderref",HBCIUtils.LOG_DEBUG);
-                }
-            }
+        // Challenge HHDuc aus dem Reponse holen und im Passport zwischenspeichern
+        String hhdUc = result.getProperty(header + ".challenge_hhd_uc");
+        if (hhdUc != null)
+        {
+          HBCIUtils.log("found Challenge HHDuc '" + hhdUc + "' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
+          getMainPassport().setPersistentData(AbstractPinTanPassport.KEY_PD_HHDUC,hhdUc);
+        }
+        
+        // Die Auftragsreferenz aus dem ersten HITAN bei Prozessvariante 2. Die muessen wir bei dem HKTAN#2 mitschicken, damit die Bank
+        // weiss, auf welchen Auftrag sich die TAN bezieht
+        final String orderref = result.getProperty(header+".orderref");
+        if (step2 != null && orderref != null)
+        {
+            HBCIUtils.log("found orderref '" + orderref + "' in HITAN",HBCIUtils.LOG_DEBUG);
+            step2.setParam("orderref",orderref);
         }
     }
 }

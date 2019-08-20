@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
@@ -724,10 +725,14 @@ public abstract class HBCIJobImpl
         }
     }
     
+    /**
+     * Ermittelt fuer den Durchlauf den Offset-Wert aus dem Rueckmeldecode.
+     * @param loop die Nummer des Durchlaufs, beginnend bei 1.
+     */
     public void setContinueOffset(int loop)
     {
-        String offset=getContinueOffset(loop);
-        setLowlevelParam(getName()+".offset",(offset!=null)?offset:"");
+        final String offset = this.getContinueOffset(loop);
+        this.setLowlevelParam(this.getName() + ".offset",(offset != null) ? offset : "");
     }
     
     protected void setLowlevelParam(String key,String value)
@@ -761,49 +766,54 @@ public abstract class HBCIJobImpl
         return this.segVersion;
     }
 
-    /* stellt fest, ob für diesen Task ein neues Auftragssegment generiert werden muss.
-       Das ist in zwei Fällen der Fall: der Task wurde noch nie ausgeführt; oder der Task
-       wurde bereits ausgeführt, hat aber eine "offset"-Meldung zurückgegeben */
+    /**
+     * Stellt fest, ob für diesen Task ein neues Auftragssegment generiert werden muss.
+     * Das ist in zwei Fällen der Fall: der Task wurde noch nie ausgeführt; oder der Task
+     * wurde bereits ausgeführt, hat aber eine "offset"-Meldung zurückgegeben
+     * @param loop
+     * @return true, wenn der Code ausgefuehrt werden muss.
+     */
     public boolean needsContinue(int loop)
     {
-        boolean needs=false;
+        // Wurde noch nie ausgefuehrt
+        if (!this.executed)
+            return true;
 
-        if (executed) {
-            HBCIRetVal retval=null;
-            int        num=jobResult.getRetNumber();
-
-            for (int i=0;i<num;i++) {
-                retval=jobResult.getRetVal(i);
-                
-                if (retval.code.equals("3040") && retval.params.length!=0 && (--loop)==0) {
-                    needs=true;
-                    break;
-                }
-            }
-        }
-        else needs=true;
-            
-        return needs;
+        return this.getContinueOffset(loop) != null;
     }
-
-    /* gibt (sofern vorhanden) den offset-Wert des letzten HBCI-Rückgabecodes
-       zurück */
+    
+    /**
+     * Gibt (sofern vorhanden) den offset-Wert des letzten HBCI-Rückgabecodes zurück.
+     * @param loop die Nummer des Durchlaufs, beginnend bei 0.
+     * @return der Offset-Wert oder NULL.
+     */
     private String getContinueOffset(int loop)
     {
-        String ret=null;
-        int    num=jobResult.getRetNumber();
-        
-        for (int i=0;i<num;i++) {
-            HBCIRetVal retval=jobResult.getRetVal(i);
-
-            if (retval.code.equals("3040") && retval.params.length!=0 && (--loop)==0) {
-                ret=retval.params[0];
-                break;
-            }
-        }
-
-        return ret;
+        HBCIRetVal ret = this.getW3040(loop);
+        return ret != null ? ret.params[0] : null;
     }
+    
+    /**
+     * Liefert den Rueckgabecode 3040 (fuer "Weitere Daten folgen"), insofern vorhanden. 
+     * @param loop die Nummer des Durchlaufs, beginnend bei 0.
+     * @return der Rueckgabewert, insofern vorhanden. Sonst NULL.
+     */
+    private HBCIRetVal getW3040(int loop)
+    {
+        final int num = jobResult.getRetNumber();
+
+        for (int i=0;i<num;i++)
+        {
+            HBCIRetVal retval = jobResult.getRetVal(i);
+            
+            if (KnownReturncode.W3040.is(retval.code) && retval.params.length!=0 && (--loop)==0)
+                return retval;
+        }
+        
+        return null;
+    }
+
+
 
     /* füllt das Objekt mit den Rückgabedaten. Dazu wird zuerst eine Liste aller
        Segmente erstellt, die Rückgabedaten für diesen Task enthalten. Anschließend

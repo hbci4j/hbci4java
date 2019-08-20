@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 
 /** <p>Enthält alle Status-Informationen zu genau einem Nachrichtenaustausch.
@@ -215,8 +216,7 @@ public final class HBCIMsgStatus
         for (Iterator<HBCIRetVal> i=retvals.iterator(); i.hasNext();) {
             HBCIRetVal ret=i.next();
             
-            if (ret.code.equals("9942") ||      // PIN falsch (konkret)
-                    ret.code.equals("9340"))    // Signatur falsch (generisch)
+            if (KnownReturncode.contains(ret.code,KnownReturncode.LIST_AUTH_FAIL))
             {
                 result=true;
                 break;

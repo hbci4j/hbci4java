@@ -23,7 +23,6 @@ package org.kapott.hbci.manager;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -155,7 +154,7 @@ public final class HBCIDialog
             }
 
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT_DONE,new Object[] {ret,dialogid});
-            mainPassport.onDialogEvent(DialogEvent.MSG_COMPLETED,ctx);
+            mainPassport.onDialogEvent(DialogEvent.INIT_COMPLETED,ctx);
         }
         catch (Exception e)
         {
@@ -205,27 +204,28 @@ public final class HBCIDialog
                     
                     // durch alle jobs loopen, die eigentlich in der aktuellen
                     // nachricht abgearbeitet werden müssten
-                    for (Iterator<HBCIJobImpl> i=tasks.iterator();i.hasNext();) {
-                        HBCIJobImpl task=i.next();
-                        
+                    for (HBCIJobImpl task:tasks)
+                    {
                         // wenn der Task entweder noch gar nicht ausgeführt wurde
                         // oder in der letzten Antwortnachricht ein entsprechendes
                         // Offset angegeben wurde
-                        if (task.needsContinue(loop)) {
+                        if (task.needsContinue(loop))
+                        {
                             task.setContinueOffset(loop);
                             
-                            Properties p=task.getLowlevelParams();
-                            String header=HBCIUtilsInternal.withCounter("GV",taskNum);
+                            final Properties p = task.getLowlevelParams();
+                            String header = HBCIUtilsInternal.withCounter("GV",taskNum);
                             
-                            String taskName=task.getName();
-                            HBCIUtils.log("adding task "+taskName,HBCIUtils.LOG_DEBUG);
+                            final String taskName = task.getName();
+                            HBCIUtils.log("adding task " + taskName,HBCIUtils.LOG_DEBUG);
                             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_SEND_TASK,task);
                             task.setIdx(taskNum);
                             
                             // Daten für den Task festlegen
-                            for (Enumeration e=p.keys();e.hasMoreElements();) {
-                                String key=(String)(e.nextElement());
-                                kernel.rawSet(header+"."+key,p.getProperty(key));
+                            for (Enumeration e = p.keys(); e.hasMoreElements();)
+                            {
+                                String key = (String) e.nextElement();
+                                kernel.rawSet(header + "." + key,p.getProperty(key));
                             }
                             
                             // additional passports für diesen task ermitteln
@@ -240,22 +240,21 @@ public final class HBCIDialog
                     }
                     
                     // wenn keine jobs für die aktuelle message existieren
-                    if (taskNum==0) {
-                        HBCIUtils.log(
-                                "loop "+(loop+1)+" aborted, because there are no more tasks to be executed",
-                                HBCIUtils.LOG_DEBUG);
+                    if (taskNum == 0)
+                    {
+                        HBCIUtils.log("loop "+(loop+1)+" aborted, because there are no more tasks to be executed",HBCIUtils.LOG_DEBUG);
                         addMsgStatus=false;
                         break;
                     }
                     
                     kernel.rawSet("MsgHead.dialogid", dialogid);
-                    kernel.rawSet("MsgHead.msgnum", getMsgNum());
-                    kernel.rawSet("MsgTail.msgnum", getMsgNum());
-                    nextMsgNum();
+                    kernel.rawSet("MsgHead.msgnum", this.getMsgNum());
+                    kernel.rawSet("MsgTail.msgnum", this.getMsgNum());
+                    this.nextMsgNum();
                     
                     // nachrichtenaustausch durchführen
-                    msgstatus=kernel.rawDoIt(msgPassports,HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.NEED_CRYPT);
-                    Properties result=msgstatus.getData();
+                    msgstatus = kernel.rawDoIt(msgPassports,HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.NEED_CRYPT);
+                    final Properties result = msgstatus.getData();
                     
                     // searching for first segment number that belongs to the custom_msg
                     // we look for entries like {"1","CustomMsg.MsgHead"} and so
@@ -263,49 +262,61 @@ public final class HBCIDialog
                     // until we find the first segment containing a task
                     int offset=0;   // this specifies, how many segments precede the first task segment
                     for (offset=1;true;offset++) {
-                        String path=result.getProperty(Integer.toString(offset));
-                        if (path==null || path.startsWith("CustomMsg.GV")) {
-                            if (path==null) { // wenn kein entsprechendes Segment gefunden, dann offset auf 0 setzen
-                                offset=0;
+                        String path = result.getProperty(Integer.toString(offset));
+                        if (path == null || path.startsWith("CustomMsg.GV"))
+                        {
+                            if (path == null)
+                            {
+                                // wenn kein entsprechendes Segment gefunden, dann offset auf 0 setzen
+                                offset = 0;
                             }
                             break;
                         }
                     }
                     
-                    if (offset!=0) {           
+                    if (offset != 0)
+                    {           
                         // für jeden Task die entsprechenden Rückgabedaten-Klassen füllen
                         // in fillOutStore wird auch "executed" fuer den jeweiligen Task auf true gesetzt.
-                        for (Iterator<HBCIJobImpl> i=tasks.iterator();i.hasNext();) {
-                            HBCIJobImpl task=i.next();
-                            if (task.needsContinue(loop)) {
+                        for (HBCIJobImpl task : tasks)
+                        {
+                            if (task.needsContinue(loop))
+                            {
                                 // nur wenn der auftrag auch tatsaechlich gesendet werden musste
-                                try {
+                                try
+                                {
                                     task.fillJobResult(msgstatus,offset);
                                     HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_SEND_TASK_DONE,task);
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e)
+                                {
                                     msgstatus.addException(e);
                                 }
                             }
                         }
                     }
                     
-                    if (msgstatus.hasExceptions()) {
+                    if (msgstatus.hasExceptions())
+                    {
                         HBCIUtils.log("aborting current loop because of errors",HBCIUtils.LOG_ERR);
                         break;
                     }
                     
                     loop++;
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     msgstatus.addException(e);
-                } finally {
-                    if (addMsgStatus) {
+                }
+                finally
+                {
+                    if (addMsgStatus)
                         msgstatus_a.add(msgstatus);
-                    }
                 }
             }
         }
 
-        HBCIMsgStatus[] ret=new HBCIMsgStatus[0];
+        HBCIMsgStatus[] ret = new HBCIMsgStatus[0];
         if (msgstatus_a.size()!=0)
             ret=(msgstatus_a.toArray(ret));
 

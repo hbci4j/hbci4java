@@ -33,6 +33,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
+import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
@@ -577,7 +578,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
          * the sign() method later */
         MessageDigest dig;
         try {
-            dig = MessageDigest.getInstance("RIPEMD160","CryptAlgs4Java");
+            dig = MessageDigest.getInstance("RIPEMD160",CryptAlgs4JavaProvider.NAME);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         } catch (NoSuchProviderException e) {

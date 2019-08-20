@@ -325,12 +325,12 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                 HBCIUtils.log("twostep method - checking passport(challenge) to decide whether or not we need a TAN",HBCIUtils.LOG_DEBUG);
                 Properties secmechInfo=getCurrentSecMechInfo();
 
-                String haveSCA = (String) getPersistentData("pintan_haveSCA");
-                setPersistentData("pintan_haveSCA",null);
+                String haveSCA = (String) getPersistentData(KEY_PD_SCA);
+                setPersistentData(KEY_PD_SCA,null);
 
                 // gespeicherte challenge aus passport holen
-                String challenge=(String)getPersistentData("pintan_challenge");
-                setPersistentData("pintan_challenge",null);
+                String challenge=(String)getPersistentData(KEY_PD_CHALLENGE);
+                setPersistentData(KEY_PD_CHALLENGE,null);
                 
                 if (haveSCA != null)
                 {
@@ -346,8 +346,8 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     HBCIUtils.log("found challenge in passport, so we ask for a TAN",HBCIUtils.LOG_DEBUG);
                     
                     // willuhn 2011-05-27 Wir versuchen, den Flickercode zu ermitteln und zu parsen
-                    String hhduc = (String) getPersistentData("pintan_challenge_hhd_uc");
-                    setPersistentData("pintan_challenge_hhd_uc",null); // gleich wieder aus dem Passport loeschen
+                    String hhduc = (String) getPersistentData(KEY_PD_HHDUC);
+                    setPersistentData(KEY_PD_HHDUC,null); // gleich wieder aus dem Passport loeschen
 
                     HHDVersion hhd = HHDVersion.find(secmechInfo);
                     HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);

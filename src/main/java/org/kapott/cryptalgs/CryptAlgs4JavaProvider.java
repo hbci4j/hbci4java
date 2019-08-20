@@ -23,10 +23,14 @@ package org.kapott.cryptalgs;
 
 import java.util.logging.Logger;
 
-public final class CryptAlgs4JavaProvider
-     extends java.security.Provider
+public final class CryptAlgs4JavaProvider extends java.security.Provider
 {
     private static final long serialVersionUID=1;
+    
+    /**
+     * Der Provider-Name.
+     */
+    public final static String NAME = "CryptAlgs4Java";
     
     protected Logger getLogger()
     {
@@ -35,7 +39,7 @@ public final class CryptAlgs4JavaProvider
     
     public CryptAlgs4JavaProvider()
     {
-        super("CryptAlgs4Java", 1.5, "Some hand-coded algorithms for special use cases");
+        super(NAME, 1.5, "Some hand-coded algorithms for special use cases");
 
         put("MessageDigest.RIPEMD160", "org.kapott.cryptalgs.RIPEMD160");
         put("MessageDigest.MDC2", "org.kapott.cryptalgs.MDC2");

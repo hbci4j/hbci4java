@@ -837,7 +837,7 @@ public final class HBCIUtils
 
 			refreshBLZList(HBCIUtils.class.getClassLoader());
 
-			if (Security.getProvider("CryptAlgs4Java") == null)
+			if (Security.getProvider(CryptAlgs4JavaProvider.NAME) == null)
 			{
 				Security.addProvider(new CryptAlgs4JavaProvider());
 			}

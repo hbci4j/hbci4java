@@ -34,9 +34,9 @@ public enum DialogEvent
     MSG_SENT,
     
     /**
-     * Wird gesendet, nachdem HBCI4Java die Nachricht abgeschlossen hat. 
+     * Wird gesendet, nachdem die Dialog-Initialisierung abgeschlossen ist. 
      */
-    MSG_COMPLETED,
+    INIT_COMPLETED,
 }
 
 
