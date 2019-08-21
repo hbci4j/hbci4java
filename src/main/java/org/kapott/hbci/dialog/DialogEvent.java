@@ -34,9 +34,9 @@ public enum DialogEvent
     MSG_SENT,
     
     /**
-     * Wird gesendet, nachdem die Dialog-Initialisierung abgeschlossen ist. 
+     * Wird gesendet, nachdem die Dialog-Initialisierung abgeschlossen ist und bevor die eigentlichen Geschaeftsvorfaelle an die Bank gesendet werden.
      */
-    INIT_COMPLETED,
+    JOBS_CREATED,
 }
 
 

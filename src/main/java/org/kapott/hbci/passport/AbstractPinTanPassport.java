@@ -36,8 +36,11 @@ import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.DialogEvent;
+import org.kapott.hbci.dialog.HBCIMessage;
+import org.kapott.hbci.dialog.HBCIMessageQueue;
 import org.kapott.hbci.dialog.KnownDialogTemplate;
 import org.kapott.hbci.dialog.KnownReturncode;
+import org.kapott.hbci.dialog.KnownTANProcess;
 import org.kapott.hbci.dialog.RawHBCIDialog;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
@@ -238,7 +241,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             this.check3072(ctx);
             this.checkSCAResponse(ctx);
         }
-        else if (event == DialogEvent.INIT_COMPLETED)
+        else if (event == DialogEvent.JOBS_CREATED)
         {
             this.patchMessagesFor2StepMethods(ctx);
         }
@@ -425,7 +428,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         // Prozess-Variante 1 ist die mit den Schabloben und Challenge-Klassen
         final boolean step2 = scaStep.intValue() == 2;
-        final String pn = isP2 ? (step2 ? "2" : "4") : "1";
+        final KnownTANProcess tp = isP2 ? (step2 ? KnownTANProcess.PROCESS2_STEP2 : KnownTANProcess.PROCESS2_STEP1) : KnownTANProcess.PROCESS1;
         
         final HBCIKernelImpl k = ctx.getKernel();
         
@@ -433,29 +436,28 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         // wir fuegen die Daten des HKTAN ein
         k.rawSet(prefix,"requested"); // forcieren, dass das Segment mit gesendet wird - auch wenn es eigentlich optional ist
-        k.rawSet(prefix + ".process",pn);
+        k.rawSet(prefix + ".process",tp.getCode());
         
         // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber
         // bei PIN/TAN-Management-Geschaeftsvorfaellen mit dem GV des jeweiligen Geschaeftsvorfalls belegt werden.
         // Daher muessen wir im Payload schauen, ob ein entsprechender Geschaeftsvorfall enthalten ist.
         // Wird muessen nur nach HKPAE, HKTAB schauen - das sind die einzigen beiden, die wir unterstuetzen
         String segcode = "HKIDN";
-        List<String> check = Arrays.asList("HKPAE","HKTAB"); // Das sind GVChangePIN und GVTANMediaList
-        HBCIDialog payload = ctx.getPayload();
+        HBCIDialog payload = ctx.getDialog();
         if (payload != null)
         {
-            for (HBCIJobImpl job:payload.getAllTasks())
+            final HBCIMessageQueue queue = payload.getMessageQueue();
+            for (String code:Arrays.asList("HKPAE","HKTAB")) // Das sind GVChangePIN und GVTANMediaList
             {
-                String name = job.getHBCICode();
-                if (name != null && check.contains(name))
+                if (queue.findTask(code) != null)
                 {
-                    segcode = name;
+                    segcode = code;
                     break;
                 }
             }
         }
         
-        HBCIUtils.log("creating " + (step2 ? "2nd" : "1st") + " HKTAN for SCA [process variant: " + process + ", process number: " + pn + ", order code: " + segcode + "]",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("creating " + (step2 ? "2nd" : "1st") + " HKTAN for SCA [process variant: " + process + ", process number: " + tp.getCode() + ", order code: " + segcode + "]",HBCIUtils.LOG_INFO);
         
         k.rawSet(prefix + ".ordersegcode",segcode);
         k.rawSet(prefix + ".OrderAccount.bic","");
@@ -1290,8 +1292,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      */
     private void patchMessagesFor2StepMethods(DialogContext ctx)
     {
-        final HBCIDialog dialog = ctx.getPayload();
+        final HBCIDialog dialog = ctx.getDialog();
         if (dialog == null)
+            return;
+        
+        final HBCIMessageQueue queue = dialog.getMessageQueue();
+        if (queue == null)
             return;
         
         // Einschritt-Verfahren - kein HKTAN erforderlich
@@ -1301,44 +1307,29 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         // wenn es sich um das pintan-verfahren im zweischritt-modus handelt,
         // müssen evtl. zusätzliche nachrichten bzw. segmente eingeführt werden
-        HBCIUtils.log("patching message queues for twostep method",HBCIUtils.LOG_DEBUG);
+        HBCIUtils.log("patching message for twostep method",HBCIUtils.LOG_DEBUG);
         
         final HBCIHandler handler    = (HBCIHandler) this.getParentHandlerData();
         final Properties secmechInfo = this.getCurrentSecMechInfo();
         final String segversion      = secmechInfo.getProperty("segversion");
         final String process         = secmechInfo.getProperty("process");
-        
-        // Die Liste aller Nachrichten
-        final List<ArrayList<HBCIJobImpl>> messages = dialog.getMessages();
-        
-        // Die neue - korrigierte/erweiterte Liste der Nachrichten
-        final List<ArrayList<HBCIJobImpl>> fixedMessages = new ArrayList<ArrayList<HBCIJobImpl>>();
-        
-        // durch alle ursprünglichen nachrichten laufen
-        for (ArrayList<HBCIJobImpl> msg : messages)
+
+        for (HBCIMessage message:queue.getMessages())
         {
-            // die neue - korrigierte/erweiterte - Liste mit den Tasks fuer die Nachricht
-            final List<HBCIJobImpl> fixedTasks = new ArrayList<HBCIJobImpl>();
-            
-            ArrayList<HBCIJobImpl> newTasks = null;
-            
-            // jeden task einer nachricht ansehen
-            for (HBCIJobImpl task : msg)
+            for (HBCIJobImpl task:message.getTasks())
             {
-                String segcode = task.getHBCICode();
+                final String segcode = task.getHBCICode();
                 
                 // Braucht der Job eine TAN?
-                if (!getPinTanInfo(segcode).equals("J"))
+                if (!this.getPinTanInfo(segcode).equals("J"))
                 {
-                    // kein tan-pflichtiger task, also einfach zur gepatchten msg-queue hinzufügen
                     HBCIUtils.log("found task that does not require HKTAN: " + segcode + " - adding it to current msg",HBCIUtils.LOG_DEBUG);
-                    fixedTasks.add(task);
                     continue;
                 }
-
-                // OK, Task braucht vermutlich eine TAN
-                // es handelt sich um einen tan-pflichtigen task
-                HBCIUtils.log("found task that requires HKTAN: " + segcode + " - have to patch message queue",HBCIUtils.LOG_DEBUG);
+    
+                // OK, Task braucht vermutlich eine TAN - es handelt sich um einen tan-pflichtigen task
+                // Ob letztlich tatsaechlich beim User eine TAN-Abfrage ankommt, haengt davon ab, ob die Bank ggf. eine 3076 SCA-Ausnahme sendet
+                HBCIUtils.log("found task that probably requires HKTAN: " + segcode + " - have to patch message queue",HBCIUtils.LOG_DEBUG);
                 
                 final GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
                 hktan.setExternalId(task.getExternalId()); // externe ID durchreichen
@@ -1356,8 +1347,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 if (process.equals("1"))
                 {
                     HBCIUtils.log("process variant 1: adding new message with HKTAN(p=1,hash=...) before current message",HBCIUtils.LOG_DEBUG);
-                    
-                    hktan.setParam("process","1");
+                    hktan.setProcess(KnownTANProcess.PROCESS1);
                     hktan.setParam("notlasttan","N");
                     
                     // willuhn 2011-05-16
@@ -1368,7 +1358,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                       // Bis HKTAN4/hhd1.3 wurde das noch als Challenge-Parameter uebermittelt. Jetzt hat es einen
                       // eigenen Platz in den Job-Parametern
                       hktan.setParam("ordersegcode",task.getHBCICode());
-
+    
                       // Zitat aus HITANS5: Diese Funktion ermöglicht das Sicherstellen einer gültigen Kontoverbindung
                       // z. B. für die Abrechnung von SMS-Kosten bereits vor Erzeugen und Versenden einer
                       // (ggf. kostenpflichtigen!) TAN.
@@ -1390,14 +1380,14 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         }
                       }
                     }
-
+    
                     // Challenge-Klasse, wenn erforderlich
                     if (secmechInfo.getProperty("needchallengeklass","N").equals("J"))
                     {
                         ChallengeInfo cinfo = ChallengeInfo.getInstance();
                         cinfo.applyParams(task,hktan,secmechInfo);
                     }
-
+    
                     // orderhash ermitteln
                     SEG seg = null;
                     try
@@ -1412,16 +1402,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     {
                         SEGFactory.getInstance().unuseObject(seg);
                     }
-
-                    // Neue Nachricht innerhalb einer neuen HKTAN am Ende anhaengen
-                    final ArrayList<HBCIJobImpl> addMessage = new ArrayList<HBCIJobImpl>();
-                    addMessage.add(hktan);
-                    
-                    // HKTAN *vor* dem eigentlichen Auftrag einreihen
-                    fixedMessages.add(addMessage);
-                    
-                    // den eigentlichen Auftrag bleibt in der aktuellen Nachricht
-                    fixedTasks.add(task);
+    
+                    // HKTAN in einer neuen Nachricht *vor* dem eigentlichen Auftrag einreihen
+                    HBCIMessage newMsg = queue.insertBefore(message);
+                    newMsg.append(hktan);
                 }
                 //
                 ////////////////////////////////////////////////////////////////////////////
@@ -1433,55 +1417,39 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 else
                 {
                     HBCIUtils.log("process variant 2: adding new task HKTAN(p=4) to current message",HBCIUtils.LOG_DEBUG);
-
-                    hktan.setParam("process","4");
-
-                    // der eigentliche Auftrag
-                    fixedTasks.add(task);
-                    
+                    hktan.setProcess(KnownTANProcess.PROCESS2_STEP1);
+    
                     // das HKTAN direkt dahinter - in der selben Nachricht
-                    fixedTasks.add(hktan);
+                    message.append(hktan);
                     
                     // Neue Nachricht fuer das zweite HKTAN
                     HBCIUtils.log("process variant 2: creating new msg with HKTAN(p=2,orderref=DELAYED)",HBCIUtils.LOG_DEBUG);
                     
                     // HKTAN-job für das einreichen der TAN erzeugen
                     final GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
+                    hktan2.setProcess(KnownTANProcess.PROCESS2_STEP2);
                     hktan2.setExternalId(task.getExternalId()); // externe ID auch an HKTAN2 durchreichen
                     hktan2.setSegVersion(segversion);
-                    hktan2.setParam("process","2");
                     hktan2.setParam("notlasttan","N");
-
-                    // in dem ersten HKTAN-job eine referenz auf den zweiten speichern,
-                    // damit der erste die auftragsreferenz später im zweiten speichern kann
-                    hktan.setStep2(hktan2);
-
-                    // Die Liste der Tasks fuer die neue Message
-                    newTasks = new ArrayList<HBCIJobImpl>();
-                    newTasks.add(hktan2);
-                    
+    
                     // in dem zweiten HKTAN-Job eine referenz auf den originalen job
                     // speichern, damit die antwortdaten für den job, die als antwortdaten
                     // für hktan2 ankommen, dem richtigen job zugeordnet werden können
                     HBCIUtils.log("storing reference to original job in new HKTAN segment",HBCIUtils.LOG_DEBUG);
                     hktan2.setTask(task);
+    
+                    // in dem ersten HKTAN-job eine referenz auf den zweiten speichern,
+                    // damit der erste die auftragsreferenz später im zweiten speichern kann
+                    hktan.setStep2(hktan2);
+    
+                    // Dahinter eine neue Nachricht mit dem einzelnen HKTAN#2
+                    HBCIUtils.log("adding newly created message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
+                    HBCIMessage newMsg = new HBCIMessage();
+                    newMsg.append(hktan2);
+                    queue.append(newMsg);
                 }
             }
-            
-            msg.clear();
-            msg.addAll(fixedTasks);
-            fixedMessages.add(msg);
-            
-            if (newTasks != null)
-            {
-                HBCIUtils.log("adding newly created message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
-                fixedMessages.add(newTasks);
-                newTasks = null;
-            }
         }
-        
-        messages.clear();
-        messages.addAll(fixedMessages);
     }
     
     /**

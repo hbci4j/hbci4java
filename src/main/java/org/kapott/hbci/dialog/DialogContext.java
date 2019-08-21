@@ -41,7 +41,7 @@ public class DialogContext
     private HBCIPassportInternal passport;
     private HBCIMsgStatus msgStatus;
     private RawHBCIDialog init;
-    private HBCIDialog payload;
+    private HBCIDialog dialog;
     private Map<String,Object> meta = new HashMap<String,Object>();
     
     private AtomicInteger msgNum = new AtomicInteger(MSGNUM_INITIAL);
@@ -128,23 +128,23 @@ public class DialogContext
     }
     
     /**
-     * Liefert den Dialog mit dem aktuellen Payload.
-     * @return der Dialog mit dem aktuellen Payload. Kann NULL sein.
+     * Liefert den aktuellen Dialog.
+     * @return der aktuelle Dialog. Kann NULL sein.
      */
-    public HBCIDialog getPayload()
+    public HBCIDialog getDialog()
     {
-        return payload;
+        return dialog;
     }
 
     /**
-     * Speichert den Dialog mit dem aktuellen Payload.
-     * @param payload der Dialog mit dem aktuellen Payload.
+     * Speichert den aktuellen Dialog.
+     * @param dialog der aktuelle Dialog.
      */
-    public void setPayload(HBCIDialog payload)
+    public void setDialog(HBCIDialog dialog)
     {
-        this.payload = payload;
+        this.dialog = dialog;
     }
-
+    
     /**
      * Liefert den Passport.
      * @return der Passport.

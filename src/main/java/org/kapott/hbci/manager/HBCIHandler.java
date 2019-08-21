@@ -424,9 +424,9 @@ public final class HBCIHandler
         
         customerId=fixUnspecifiedCustomerId(customerId);
         
-        HBCIDialog dialog=null;
+        HBCIDialog dialog = null;
         try {
-            dialog=getDialogFor(customerId);
+            dialog = getDialogFor(customerId);
             dialog.addTask((HBCIJobImpl)job);
         } finally {
             // wenn beim hinzufügen des jobs ein fehler auftrat, und wenn der
@@ -435,7 +435,8 @@ public final class HBCIHandler
             // auszuführender dialoge entfernt werden
             
             if (dialog!=null) {
-                if (dialog.getAllTasks().size()==0) {
+                if (dialog.getMessageQueue().getTaskCount() == 0)
+                {
                     HBCIUtils.log("removing empty dialog for customerid "+customerId+" from list of dialogs",HBCIUtils.LOG_DEBUG);
                     dialogs.remove(customerId);
                 }

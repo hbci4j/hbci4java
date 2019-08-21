@@ -89,6 +89,7 @@ public abstract class HBCIJobImpl
                                           über den logfilter-Mechanimus geschützt werden soll */
     
     private String externalId;
+    private int loopCount = 0;
     
     private HashSet<String> indexedConstraints;
     
@@ -726,12 +727,12 @@ public abstract class HBCIJobImpl
     }
     
     /**
-     * Ermittelt fuer den Durchlauf den Offset-Wert aus dem Rueckmeldecode.
-     * @param loop die Nummer des Durchlaufs, beginnend bei 1.
+     * Setzt den Offset-Parameter mit dem aktuellen Loop-Count.
+     * Der Counter wird jedesmal in fillJobResult erhoeht - also mit jedem neuen Ergebnis.
      */
-    public void setContinueOffset(int loop)
+    public void applyOffset()
     {
-        final String offset = this.getContinueOffset(loop);
+        final String offset = this.getContinueOffset();
         this.setLowlevelParam(this.getName() + ".offset",(offset != null) ? offset : "");
     }
     
@@ -767,29 +768,23 @@ public abstract class HBCIJobImpl
     }
 
     /**
-     * Stellt fest, ob für diesen Task ein neues Auftragssegment generiert werden muss.
-     * Das ist in zwei Fällen der Fall: der Task wurde noch nie ausgeführt; oder der Task
-     * wurde bereits ausgeführt, hat aber eine "offset"-Meldung zurückgegeben
-     * @param loop
-     * @return true, wenn der Code ausgefuehrt werden muss.
+     * Liefert den ggf erneut auszufuehrenden Job.
+     * Die Default-Implementierung liefert "this", wenn die Bank ein 3040 zurueckgemeldet hat.
+     * Das kann aber auch ein anderer sein, als "this". Naemlich bei HKTAN in Prozess-Variante #2. Dort liefert es stattdessen den eigentlichen GV.
+     * @return den ggf erneut auszufuehrenden Job.
      */
-    public boolean needsContinue(int loop)
+    public HBCIJobImpl redo()
     {
-        // Wurde noch nie ausgefuehrt
-        if (!this.executed)
-            return true;
-
-        return this.getContinueOffset(loop) != null;
+        return (this.getContinueOffset() != null) ? this : null;
     }
     
     /**
-     * Gibt (sofern vorhanden) den offset-Wert des letzten HBCI-Rückgabecodes zurück.
-     * @param loop die Nummer des Durchlaufs, beginnend bei 0.
+     * Gibt (sofern vorhanden) den offset-Wert des letzten HBCI-Rückgabecodes 3040 zurück.
      * @return der Offset-Wert oder NULL.
      */
-    private String getContinueOffset(int loop)
+    private String getContinueOffset()
     {
-        HBCIRetVal ret = this.getW3040(loop);
+        HBCIRetVal ret = this.getW3040(this.loopCount);
         return ret != null ? ret.params[0] : null;
     }
     
@@ -806,7 +801,7 @@ public abstract class HBCIJobImpl
         {
             HBCIRetVal retval = jobResult.getRetVal(i);
             
-            if (KnownReturncode.W3040.is(retval.code) && retval.params.length!=0 && (--loop)==0)
+            if (KnownReturncode.W3040.is(retval.code) && retval.params.length != 0 && (--loop) == 0)
                 return retval;
         }
         
@@ -822,7 +817,8 @@ public abstract class HBCIJobImpl
     public void fillJobResult(HBCIMsgStatus status,int offset)
     {
         try {
-            executed=true;
+            this.executed = true;
+            this.loopCount++;
             Properties result=status.getData();
 
             // nachsehen, welche antwortsegmente ueberhaupt
