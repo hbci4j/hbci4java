@@ -91,6 +91,7 @@ public abstract class HBCIJobImpl
     private String externalId;
     private int loopCount = 0;
     private boolean haveTan = false;
+    private boolean skip = false;
     
     private HashSet<String> indexedConstraints;
     
@@ -754,6 +755,23 @@ public abstract class HBCIJobImpl
         this.haveTan = true;
     }
     
+    /**
+     * Markiert den Auftrag als zu ueberspringend.
+     */
+    public void skip()
+    {
+        this.skip = true;
+    }
+    
+    /**
+     * Prueft, ob der Auftrag uebersprungen werden soll.
+     * @return true, wenn der Auftrag uebersprungen werden soll.
+     */
+    public boolean skipped()
+    {
+        return this.skip;
+    }
+    
     protected void setLowlevelParam(String key,String value)
     {
         HBCIUtils.log("setting lowlevel parameter "+key+" = "+value,HBCIUtils.LOG_DEBUG);
@@ -837,6 +855,7 @@ public abstract class HBCIJobImpl
         try {
             this.executed = true;
             this.haveTan = false;
+            this.skip = false;
             this.loopCount++;
             Properties result=status.getData();
 

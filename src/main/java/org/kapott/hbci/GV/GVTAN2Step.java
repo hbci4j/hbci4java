@@ -246,7 +246,12 @@ public class GVTAN2Step extends HBCIJobImpl
         if ((this.process == KnownTANProcess.PROCESS1 || this.process == KnownTANProcess.PROCESS2_STEP1) && KnownReturncode.W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
         {
             HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_INFO);
-            p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true");
+            p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint
+            if (this.step2 != null)
+            {
+                // Bewirkt, dass das zweite HKTAN bei Prozess-Variante 2 nicht mehr gesendet wird
+                this.step2.skip();
+            }
             return;
         }
         //

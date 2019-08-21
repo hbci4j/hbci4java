@@ -223,6 +223,9 @@ public final class HBCIDialog
                 int taskNum = 0;
                 for (HBCIJobImpl task:tasks)
                 {
+                    if (task.skipped())
+                        continue;
+                    
                     final String name = task.getName();
                     HBCIUtils.log("adding task " + name,HBCIUtils.LOG_DEBUG);
                     HBCIUtilsInternal.getCallback().status(p,HBCICallback.STATUS_SEND_TASK,task);
@@ -249,6 +252,14 @@ public final class HBCIDialog
                 }
                 //
                 ////////////////////////////////////////////////////////////////////
+                
+                // Das passiert immer dann, wenn wir in der Message nur ein HKTAN#2 aus Prozess-Variante 2 hatten.
+                // Dieses aufgrund einer 3076-SCA-Ausnahme aber nicht benoetigt wird.
+                if (taskNum == 0)
+                {
+                    HBCIUtils.log("no tasks in message #" + msgCount + ", skipping",HBCIUtils.LOG_DEBUG);
+                    continue;
+                }
                     
                 ////////////////////////////////////////////////////////////////////
                 // Nachricht an die Bank senden
@@ -265,6 +276,9 @@ public final class HBCIDialog
                     // für jeden Task die entsprechenden Rückgabedaten-Klassen füllen
                     for (HBCIJobImpl task:tasks)
                     {
+                        if (task.skipped())
+                            continue;
+                        
                         try
                         {
                             task.fillJobResult(msgstatus,segnum);
@@ -294,6 +308,9 @@ public final class HBCIDialog
                 HBCIMessage newMsg = null;
                 for (HBCIJobImpl task:tasks)
                 {
+                    if (task.skipped())
+                        continue;
+                    
                     HBCIJobImpl redo = task.redo();
                     if (redo != null)
                     {
