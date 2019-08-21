@@ -1318,6 +1318,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
             for (HBCIJobImpl task:message.getTasks())
             {
+                // Damit wir keine doppelten erzeugen
+                if (task.haveTan())
+                    continue;
+                
                 final String segcode = task.getHBCICode();
                 
                 // Braucht der Job eine TAN?
@@ -1334,6 +1338,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 final GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
                 hktan.setExternalId(task.getExternalId()); // externe ID durchreichen
                 hktan.setSegVersion(segversion); // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version schicken, in der das HITANS kam.
+                task.tanApplied();
                 
                 final String tanMedia = this.getTanMedia(Integer.parseInt(hktan.getSegVersion()));
                 if (tanMedia != null && tanMedia.length() > 0) // tanmedia nur setzen, wenn vorhanden Sonst meckert HBCIJobIml

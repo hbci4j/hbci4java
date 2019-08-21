@@ -180,6 +180,17 @@ public class GVTAN2Step extends HBCIJobImpl
     }
     
     /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#haveTan()
+     */
+    @Override
+    public boolean haveTan()
+    {
+        // Das HKTAN selbst kann nie ein HKTAN benoetigen.
+        // Das ist hier nur zur Sicherheit. Eigentlich sollte HIPINS niemals fuer HKTAN=J liefern.
+        return true;
+    }
+    
+    /**
      * Liefert zu einem HBCI-Code vom Client den zugehoerigen HBCI-Code des Instituts.
      * @param hbciCode der HBCI-Code des Clients.
      * @return der HBCI-Code des Instituts.

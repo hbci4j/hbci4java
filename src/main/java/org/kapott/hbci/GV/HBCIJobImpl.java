@@ -90,6 +90,7 @@ public abstract class HBCIJobImpl
     
     private String externalId;
     private int loopCount = 0;
+    private boolean haveTan = false;
     
     private HashSet<String> indexedConstraints;
     
@@ -736,6 +737,23 @@ public abstract class HBCIJobImpl
         this.setLowlevelParam(this.getName() + ".offset",(offset != null) ? offset : "");
     }
     
+    /**
+     * Liefert true, wenn fuer den Auftrag ein HKTAN erzeugt wurde.
+     * @return true, wenn fuer den Auftrag ein HKTAN erzeugt wurde.
+     */
+    public boolean haveTan()
+    {
+        return this.haveTan;
+    }
+    
+    /**
+     * Vermerkt den Auftrag als "HKTAN erzeugt".
+     */
+    public void tanApplied()
+    {
+        this.haveTan = true;
+    }
+    
     protected void setLowlevelParam(String key,String value)
     {
         HBCIUtils.log("setting lowlevel parameter "+key+" = "+value,HBCIUtils.LOG_DEBUG);
@@ -818,6 +836,7 @@ public abstract class HBCIJobImpl
     {
         try {
             this.executed = true;
+            this.haveTan = false;
             this.loopCount++;
             Properties result=status.getData();
 
