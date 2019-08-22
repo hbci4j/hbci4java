@@ -1,845 +1,975 @@
 <?xml version="1.0"?>
 <!DOCTYPE challengedata
-[
+    [
 
-<!ELEMENT challengedata (job)*>
+        <!ELEMENT challengedata (job)*>
 
-<!ELEMENT job (challengeinfo)+>
-<!ATTLIST job 
-  code CDATA #REQUIRED
->
+        <!ELEMENT job (challengeinfo)+>
+        <!ATTLIST job
+            code CDATA #REQUIRED
+            >
 
-<!ELEMENT challengeinfo (klass,param*)>
-<!ATTLIST challengeinfo
-  spec CDATA #REQUIRED
->
+        <!ELEMENT challengeinfo (klass,param*)>
+        <!ATTLIST challengeinfo
+            spec CDATA #REQUIRED
+            >
 
-<!ELEMENT klass (#PCDATA)>
-<!ELEMENT param (#PCDATA)>
-<!ATTLIST param
-  type CDATA ""
-  condition-name CDATA #IMPLIED
-  condition-value CDATA #IMPLIED
->
+        <!ELEMENT klass (#PCDATA)>
+        <!ELEMENT param (#PCDATA)>
+        <!ATTLIST param
+            type CDATA ""
+            condition-name CDATA #IMPLIED
+            condition-value CDATA #IMPLIED
+            >
 
-]>
+        ]>
 
 <challengedata>
-  <!--
-     beim Versenden eines Jobs muessen u.U. eine Challenge-Klasse, Challenge-
-     Parameter sowie evtl. auch ein Challenge-Wert uebertragen werden.
-       
-     Hier wird nun fuer jeden Job definiert, welche Challenge-Klasse zu
-     diesem Job gehoert und wie der Pfad zu dem (den) Datenelement(en)
-     lautet, die die jeweils benoetigten Challenge-Parameter enthalten.
-         
-     Das ganze jeweils fuer jede Spezifikation separat.
-  -->
+    <!--
+       beim Versenden eines Jobs muessen u.U. eine Challenge-Klasse, Challenge-
+       Parameter sowie evtl. auch ein Challenge-Wert uebertragen werden.
 
-  <job code="DKTAZ">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>64</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+       Hier wird nun fuer jeden Job definiert, welche Challenge-Klasse zu
+       diesem Job gehoert und wie der Pfad zu dem (den) Datenelement(en)
+       lautet, die die jeweils benoetigten Challenge-Parameter enthalten.
 
-  <job code="HKAOM">
-    <challengeinfo spec="hhd12">
-      <klass>20</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>20</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>10</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>otheriban</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+       Das ganze jeweils fuer jede Spezifikation separat.
+    -->
 
-  <job code="HKAUE">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="DKTAZ">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>64</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKAZK">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKAOM">
+        <challengeinfo spec="hhd12">
+            <klass>20</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>20</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>10</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>otheriban</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <!-- SEPA-Einzelueberweisung -->
-  <job code="HKCCS">
-    <challengeinfo spec="hhd12">
-      <klass>22</klass>
-      <param>sepa.dst.iban</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>22</klass>
-      <param>SegHead.code</param>
-      <param>sepa.dst.iban</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>09</klass>
-      <param type="Wrt">sepa.btg.value</param>
-      <param>sepa.dst.iban</param>
-    </challengeinfo>
-  </job>
+    <job code="HKAUE">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <!-- SEPA-Einzellastschrift CORE -->
-  <job code="HKDSE">
-    <challengeinfo spec="hhd14">
-      <klass>29</klass>
-      <param type="Wrt">sepa.btg.value</param>
-      <param>sepa.dst.iban</param>
-      <param type="Date">sepa.targetdate</param>
-    </challengeinfo>
-  </job>
+    <job code="HKAZK">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <!-- SEPA-Einzellastschrift COR1 -->
-  <job code="HKDSC">
-    <challengeinfo spec="hhd14">
-      <klass>29</klass>
-      <param type="Wrt">sepa.btg.value</param>
-      <param>sepa.dst.iban</param>
-      <param type="Date">sepa.targetdate</param>
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Einzelueberweisung -->
+    <job code="HKCCS">
+        <challengeinfo spec="hhd12">
+            <klass>22</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>22</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>09</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <!-- SEPA-Einzellastschrift B2B -->
-  <job code="HKBSE">
-    <challengeinfo spec="hhd14">
-      <klass>29</klass>
-      <param type="Wrt">sepa.btg.value</param>
-      <param>sepa.dst.iban</param>
-      <param type="Date">sepa.targetdate</param>
-    </challengeinfo>
-  </job>
-  
-  
+    <!-- SEPA-Terminueberweisung -->
+    <job code="HKCME">
+        <challengeinfo spec="hhd12">
+            <klass>22</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>22</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>09</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKDAB">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Terminueberweisung -->
+    <job code="HKCSE">
+        <challengeinfo spec="hhd12">
+            <klass>22</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>22</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>09</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKDAE">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>34</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Terminueberweisung loeschen -->
+    <job code="HKCSL">
+        <challengeinfo spec="hhd12">
+            <klass>22</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>22</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>09</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKDAL">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>40</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>orderid</param>
-      <param type="Wrt">BTG.value</param>
-      <param>My.number</param>
-      <param></param>          <!-- IBAN Empfaenger -->
-      <param>Other.number</param>
-      <param></param>          <!-- ISIN -->
-      <param></param>          <!-- WP-Kenn-Nr -->
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Sammelueberweisung -->
+    <job code="HKCCM">
+        <challengeinfo spec="hhd12">
+            <klass>22</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>22</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>09</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKDAN">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>43</klass>
-      <param></param>          <!-- Anzahl -->
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param></param>          <!-- IBAN Empfaenger -->
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Einzellastschrift CORE -->
+    <job code="HKDSE">
+        <challengeinfo spec="hhd14">
+            <klass>29</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+            <param type="Date">sepa.targetdate</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKDTE">
-    <challengeinfo spec="hhd12">
-      <klass>50</klass>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>50</klass>
-      <param>SegHead.code</param>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>12</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Einzellastschrift COR1 -->
+    <job code="HKDSC">
+        <challengeinfo spec="hhd14">
+            <klass>29</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+            <param type="Date">sepa.targetdate</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKEIL">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>04</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <!-- SEPA-Einzellastschrift B2B -->
+    <job code="HKBSE">
+        <challengeinfo spec="hhd14">
+            <klass>29</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+            <param type="Date">sepa.targetdate</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKEKA">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>51</klass>
-      <param>My.KIK.blz</param>
-      <param></param>          <!-- eigene IBAN -->
-      <param>My.number</param>
-    </challengeinfo>
-  </job>
+    <!-- Dauerauftrag -->
+    <job code="HKCDE">
+        <challengeinfo spec="hhd12">
+            <klass>34</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>34</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>34</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKFGB">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <!-- Dauerauftrag loeschen -->
+    <job code="HKCDL">
+        <challengeinfo spec="hhd12">
+            <klass>34</klass>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>34</klass>
+            <param>SegHead.code</param>
+            <param>sepa.dst.iban</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sepa.btg.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">sepa.btg.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>34</klass>
+            <param type="Wrt">sepa.btg.value</param>
+            <param>sepa.dst.iban</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKFGK">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
-      <param></param>          <!-- BLZ Absender -->
-      <param></param>          <!-- IBAN Absender -->
-      <param></param>          <!-- Konto Absender -->
-    </challengeinfo>
-  </job>
+    <job code="HKDAB">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKFGN">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Belastungskto.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">Anlagebetrag.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">Anlagebetrag.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Belastungskto.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">Anlagebetrag.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">Anlagebetrag.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>59</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKDAE">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>34</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKGUB">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>04</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKDAL">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>40</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>orderid</param>
+            <param type="Wrt">BTG.value</param>
+            <param>My.number</param>
+            <param></param>          <!-- IBAN Empfaenger -->
+            <param>Other.number</param>
+            <param></param>          <!-- ISIN -->
+            <param></param>          <!-- WP-Kenn-Nr -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKINF">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>63</klass>
-      <param>Address.plz</param>
-    </challengeinfo>
-  </job>
+    <job code="HKDAN">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>43</klass>
+            <param></param>          <!-- Anzahl -->
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param></param>          <!-- IBAN Empfaenger -->
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKLAS">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>15</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKDTE">
+        <challengeinfo spec="hhd12">
+            <klass>50</klass>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>50</klass>
+            <param>SegHead.code</param>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>12</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKLSW">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>16</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKEIL">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>04</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKKAN">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKEKA">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>51</klass>
+            <param>My.KIK.blz</param>
+            <param></param>          <!-- eigene IBAN -->
+            <param>My.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKKAZ">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKFGB">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKKDM">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>63</klass>
-      <param></param>          <!-- Postleitzahl -->
-    </challengeinfo>
-  </job>
+    <job code="HKFGK">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
+            <param></param>          <!-- BLZ Absender -->
+            <param></param>          <!-- IBAN Absender -->
+            <param></param>          <!-- Konto Absender -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKKIA">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param></param>          <!-- BLZ Absender -->
-      <param></param>          <!-- IBAN Absender -->
-      <param></param>          <!-- Konto Absender -->
-    </challengeinfo>
-  </job>
+    <job code="HKFGN">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Belastungskto.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">Anlagebetrag.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">Anlagebetrag.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Belastungskto.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">Anlagebetrag.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">Anlagebetrag.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>59</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKKIF">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKGUB">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>04</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKKOM">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKINF">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>63</klass>
+            <param>Address.plz</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKPAE">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>63</klass>
-      <param></param>          <!-- Postleitzahl -->
-    </challengeinfo>
-  </job>
+    <job code="HKLAS">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>15</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKPRO">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param></param>          <!-- BLZ Absender -->
-      <param></param>          <!-- IBAN Absender -->
-      <param></param>          <!-- Konto Absender -->
-    </challengeinfo>
-  </job>
+    <job code="HKLSW">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>16</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKSAL">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKKAN">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKSLA">
-    <challengeinfo spec="hhd12">
-      <klass>50</klass>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>50</klass>
-      <param>SegHead.code</param>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>19</klass>
-      <param>sumCount</param>
-      <param type="Wrt">sumValue</param>
-      <param>KTV.number</param>
-      <param>sumOthers</param>
-    </challengeinfo>
-  </job>
+    <job code="HKKAZ">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl, Abhaengig vom BPD-Parameter "Eingabe Anzahl Eintraege erlaubt" -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKSLB">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKKDM">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>63</klass>
+            <param></param>          <!-- Postleitzahl -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKSLE">
-    <challengeinfo spec="hhd12">
-      <klass>50</klass>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>50</klass>
-      <param>SegHead.code</param>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>31</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKKIA">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param></param>          <!-- BLZ Absender -->
+            <param></param>          <!-- IBAN Absender -->
+            <param></param>          <!-- Konto Absender -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKSLL">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>40</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKKIF">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKSUB">
-    <challengeinfo spec="hhd12">
-      <klass>50</klass>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>50</klass>
-      <param>SegHead.code</param>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>12</klass>
-      <param>sumCount</param>
-      <param type="Wrt">sumValue</param>
-      <param>KTV.number</param>
-      <param>sumOthers</param>
-    </challengeinfo>
-  </job>
+    <job code="HKKOM">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKTAZ">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>64</klass>
-      <param></param>          <!-- Kartennummer -->
-      <param></param>          <!-- Mobilfunknr -->
-      <param></param>          <!-- Referenzkonto -->
-      <param></param>          <!-- TAN-Medium -->
-    </challengeinfo>
-  </job>
+    <job code="HKPAE">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>63</klass>
+            <param></param>          <!-- Postleitzahl -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKTSB">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKPRO">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param></param>          <!-- BLZ Absender -->
+            <param></param>          <!-- IBAN Absender -->
+            <param></param>          <!-- Konto Absender -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKTSE">
-    <challengeinfo spec="hhd12">
-      <klass>50</klass>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>50</klass>
-      <param>SegHead.code</param>
-      <param>sumOthers</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
-      <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>25</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKSAL">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKTSL">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>40</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKSLA">
+        <challengeinfo spec="hhd12">
+            <klass>50</klass>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>50</klass>
+            <param>SegHead.code</param>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>19</klass>
+            <param>sumCount</param>
+            <param type="Wrt">sumValue</param>
+            <param>KTV.number</param>
+            <param>sumOthers</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKTUA">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>43</klass>
-      <param></param>          <!-- Anzahl -->
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param></param>          <!-- IBAN Empfaenger -->
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKSLB">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKTUB">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>KTV.KIK.blz</param>
-      <param></param>          <!-- IBAN Absender -->
-      <param>KTV.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKSLE">
+        <challengeinfo spec="hhd12">
+            <klass>50</klass>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>50</klass>
+            <param>SegHead.code</param>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>31</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKTUE">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>22</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>Other.number</param>
-      <param type="Date">date</param>
-    </challengeinfo>
-  </job>
+    <job code="HKSLL">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>40</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKTUL">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>40</klass>
-      <param></param>          <!-- Anzahl -->
-      <param>id</param>
-      <param></param>          <!-- Betrag -->
-      <param></param>          <!-- Eigenes Konto -->
-      <param></param>          <!-- IBAN Empfaenger -->
-      <param></param>          <!-- Konto Empfaenger -->
-      <param></param>          <!-- ISIN -->
-      <param></param>          <!-- WP-Kenn-Nr -->
-    </challengeinfo>
-  </job>
+    <job code="HKSUB">
+        <challengeinfo spec="hhd12">
+            <klass>50</klass>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>50</klass>
+            <param>SegHead.code</param>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>12</klass>
+            <param>sumCount</param>
+            <param type="Wrt">sumValue</param>
+            <param>KTV.number</param>
+            <param>sumOthers</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKUEB">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>04</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.KIK.blz</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKTAZ">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>64</klass>
+            <param></param>          <!-- Kartennummer -->
+            <param></param>          <!-- Mobilfunknr -->
+            <param></param>          <!-- Referenzkonto -->
+            <param></param>          <!-- TAN-Medium -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKUMB">
-    <challengeinfo spec="hhd12">
-      <klass>10</klass>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd13">
-      <klass>10</klass>
-      <param>SegHead.code</param>
-      <param>Other.number</param>
-      <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
-      <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>05</klass>
-      <param type="Wrt">BTG.value</param>
-      <param>Other.number</param>
-    </challengeinfo>
-  </job>
+    <job code="HKTSB">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKWDU">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKTSE">
+        <challengeinfo spec="hhd12">
+            <klass>50</klass>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>50</klass>
+            <param>SegHead.code</param>
+            <param>sumOthers</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">sumValue</param>
+            <param condition-name="needchallengevalue" condition-value="J">sumCurr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>25</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKWPD">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKTSL">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>40</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 
-  <job code="HKWPI">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKTUA">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>43</klass>
+            <param></param>          <!-- Anzahl -->
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param></param>          <!-- IBAN Empfaenger -->
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKWPK">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKTUB">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>KTV.KIK.blz</param>
+            <param></param>          <!-- IBAN Absender -->
+            <param>KTV.number</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKWPR">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKTUE">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>22</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>Other.number</param>
+            <param type="Date">date</param>
+        </challengeinfo>
+    </job>
 
-  <job code="HKWSD">
-    <challengeinfo spec="hhd12">
-      <klass>90</klass>
-    </challengeinfo>
-    <challengeinfo spec="hhd14">
-      <klass>39</klass>
-      <!-- keine GV-Klasse vorhanden -->
-    </challengeinfo>
-  </job>
+    <job code="HKTUL">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>40</klass>
+            <param></param>          <!-- Anzahl -->
+            <param>id</param>
+            <param></param>          <!-- Betrag -->
+            <param></param>          <!-- Eigenes Konto -->
+            <param></param>          <!-- IBAN Empfaenger -->
+            <param></param>          <!-- Konto Empfaenger -->
+            <param></param>          <!-- ISIN -->
+            <param></param>          <!-- WP-Kenn-Nr -->
+        </challengeinfo>
+    </job>
+
+    <job code="HKUEB">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>04</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.KIK.blz</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
+
+    <job code="HKUMB">
+        <challengeinfo spec="hhd12">
+            <klass>10</klass>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd13">
+            <klass>10</klass>
+            <param>SegHead.code</param>
+            <param>Other.number</param>
+            <param condition-name="needchallengevalue" condition-value="J" type="Wrt">BTG.value</param>
+            <param condition-name="needchallengevalue" condition-value="J">BTG.curr</param>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>05</klass>
+            <param type="Wrt">BTG.value</param>
+            <param>Other.number</param>
+        </challengeinfo>
+    </job>
+
+    <job code="HKWDU">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
+
+    <job code="HKWPD">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
+
+    <job code="HKWPI">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
+
+    <job code="HKWPK">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
+
+    <job code="HKWPR">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
+
+    <job code="HKWSD">
+        <challengeinfo spec="hhd12">
+            <klass>90</klass>
+        </challengeinfo>
+        <challengeinfo spec="hhd14">
+            <klass>39</klass>
+            <!-- keine GV-Klasse vorhanden -->
+        </challengeinfo>
+    </job>
 </challengedata>
