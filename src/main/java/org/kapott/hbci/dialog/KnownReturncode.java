@@ -43,6 +43,16 @@ public enum KnownReturncode
     E9340("9340"),
     
     /**
+     * PIN ist gesperrt
+     */
+    E9930("9930"),
+    
+    /**
+     * Konto gesperrt wegen falscher PIN
+     */
+    E9931("9931"),
+    
+    /**
      * PIN falsch (konkret)
      */
     E9942("9942"),
@@ -52,7 +62,7 @@ public enum KnownReturncode
     /**
      * Die Liste der Return-Codes, die als "PIN falsch" interpretiert werden sollen.
      */
-    public final static KnownReturncode[] LIST_AUTH_FAIL = new KnownReturncode[]{E9340,E9942};
+    public final static KnownReturncode[] LIST_AUTH_FAIL = new KnownReturncode[]{E9340,E9930,E9931,E9942};
     
     private String code = null;
     
