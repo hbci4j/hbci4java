@@ -399,22 +399,25 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (!KnownDialogTemplate.LIST_SEND_SCA.contains(init.getTemplate()))
             return;
 
+        final int segversionDefault = 6;
+        final String processDefault = "2";
+        
         /////////////////////////////////////////////////////////////////////////
-        // HKTAN-Version und Prozessvariante ermitteln
+        // HKTAN-Version und Prozessvariante ermitteln - kann NULL sein
         final Properties secmechInfo = this.getCurrentSecMechInfo();
         
-        // Wir haben keine TAN-Verfahren - dann koennen wir eh noch nichts ermitteln
-        if (secmechInfo == null || secmechInfo.size() == 0)
-            return;
+//        // Wir haben keine TAN-Verfahren - dann koennen wir eh noch nichts ermitteln
+//        if (secmechInfo == null || secmechInfo.size() == 0)
+//            return;
 
-        final int hktanVersion = NumberUtil.parseInt(secmechInfo.getProperty("segversion"),-1);
+        final int hktanVersion = secmechInfo != null ? NumberUtil.parseInt(secmechInfo.getProperty("segversion"),segversionDefault) : segversionDefault;
         
         // Erst ab HKTAN 6 noetig. Die Bank unterstuetzt es scheinbar noch nicht
         // Siehe B.4.3.1 - Wenn die Bank HITAN < 6 geschickt hat, dann kann sie keine SCA
         if (hktanVersion < 6)
             return;
 
-        final String process = secmechInfo.getProperty("process"); // Prozessvariante (meist 2, gibt es ueberhaupt noch jemand mit 1?)
+        final String process = secmechInfo != null ? secmechInfo.getProperty("process",processDefault) : processDefault; // Prozessvariante (meist 2, gibt es ueberhaupt noch jemand mit 1?)
         final boolean isP2 = process != null && process.equals("2");
         //
         /////////////////////////////////////////////////////////////////////////
@@ -1480,9 +1483,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         Properties  secmechInfo = getCurrentSecMechInfo();
         
         // Anzahl aktiver TAN-Medien ermitteln
-        int num        = Integer.parseInt(secmechInfo.getProperty("nofactivetanmedia","0"));
-        String needed  = secmechInfo.getProperty("needtanmedia","");
-        HBCIUtils.log("nofactivetanmedia: " + num + ", needtanmedia: " + needed,HBCIUtils.LOG_DEBUG);
+        String needed = secmechInfo != null ? secmechInfo.getProperty("needtanmedia","") : "";
+        HBCIUtils.log("needtanmedia: " + needed,HBCIUtils.LOG_DEBUG);
     
         // Ich hab Mails von Usern erhalten, bei denen die Angabe des TAN-Mediums auch
         // dann noetig war, wenn nur eine Handy-Nummer hinterlegt war. Daher loggen wir
