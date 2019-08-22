@@ -120,4 +120,16 @@ public class TestBrokenMT940
         String value = Swift.getTagValue(st,"62F",0);
         Assert.assertEquals("C150626EUR91,32",value);
     }
+    
+    /**
+     * Testet ein falsches "-" nach dem Header.
+     * @throws Exception
+     */
+    @Test
+    public void test008() throws Exception
+    {
+        String st = "\r\n:20:STARTUMSE\r\n-:25:12030000/1019815776\r\n:28C:00000/002\r\n:60M:C181031EUR2776,22\r\n";
+        String value = Swift.getTagValue(st, "25", 0);
+        Assert.assertEquals("12030000/1019815776", value);
+    }
 }
