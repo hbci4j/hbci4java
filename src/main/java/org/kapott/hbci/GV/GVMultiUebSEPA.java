@@ -69,6 +69,21 @@ public class GVMultiUebSEPA extends GVUebSEPA
         addConstraint("Total.value", "Total.value", null, LogFilter.FILTER_MOST);
         addConstraint("Total.curr", "Total.curr", null, LogFilter.FILTER_NONE);
     }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#getChallengeParam(java.lang.String)
+     */
+    @Override
+    public String getChallengeParam(String path)
+    {
+        if (path.equals("sepa.btg.value")) {
+            return getLowlevelParam(getName()+".Total.value");
+        }
+        else if (path.equals("sepa.btg.curr")) {
+            return getLowlevelParam(getName()+".Total.curr");
+        }
+        return null;
+    }
 
     @Override protected void createSEPAFromParams()
     {
