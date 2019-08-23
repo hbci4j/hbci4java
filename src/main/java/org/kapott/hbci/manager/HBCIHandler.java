@@ -155,14 +155,14 @@ public final class HBCIHandler
         
         if (this.passport.getBPD() == null)
         {
-          HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_INFO);
+          HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_DEBUG);
           return;
         }
         
         final Properties upd = passport.getUPD();
         if (upd == null)
         {
-            HBCIUtils.log("have no upd skip fetching of meta info", HBCIUtils.LOG_INFO);
+            HBCIUtils.log("have no upd skip fetching of meta info", HBCIUtils.LOG_DEBUG);
             return;
         }
         
@@ -189,15 +189,14 @@ public final class HBCIHandler
             // TAN-Medien-Liste macht natuerlich nur bei PIN/TAN Sinn.
             if (lowlevel.getProperty("TANMediaList") != null && (this.passport instanceof AbstractPinTanPassport))
             {
-                HBCIUtils.log("fetching TAN media list", HBCIUtils.LOG_INFO);
+                HBCIUtils.log("Aktualisiere TAN-Medien", HBCIUtils.LOG_INFO);
                 final HBCIJob job = this.newJob("TANMediaList");
                 job.addToQueue();
                 final HBCIExecStatus status = this.execute();
                 if (status.isOK())
                 {
-                    HBCIUtils.log("successfully fetched tan media list", HBCIUtils.LOG_INFO);
+                    HBCIUtils.log("successfully fetched tan media list", HBCIUtils.LOG_DEBUG);
                     tanMedia = true;
-                    passport.saveChanges();
                 }
                 else
                 {
@@ -206,7 +205,7 @@ public final class HBCIHandler
             }
             else
             {
-                HBCIUtils.log("fetching of tan media list not supported by institute", HBCIUtils.LOG_INFO);
+                HBCIUtils.log("fetching of tan media list not supported by institute", HBCIUtils.LOG_DEBUG);
             }
         }
         catch (Exception e)
@@ -223,15 +222,14 @@ public final class HBCIHandler
         {
             if (lowlevel.getProperty("SEPAInfo") != null)
             {
-                HBCIUtils.log("fetching TAN media list", HBCIUtils.LOG_INFO);
+                HBCIUtils.log("Aktualisiere SEPA-Informationen", HBCIUtils.LOG_INFO);
                 final HBCIJob job = this.newJob("SEPAInfo");
                 job.addToQueue();
                 final HBCIExecStatus status = this.execute();
                 if (status.isOK())
                 {
-                    HBCIUtils.log("successfully fetched sepa info", HBCIUtils.LOG_INFO);
+                    HBCIUtils.log("successfully fetched sepa info", HBCIUtils.LOG_DEBUG);
                     sepaInfo = true;
-                    passport.saveChanges();
                 }
                 else
                 {
@@ -254,7 +252,7 @@ public final class HBCIHandler
         // Wenn eins von beiden funktioniert hat, markieren wir den Task als erledigt.
         if (sepaInfo || tanMedia)
         {
-            HBCIUtils.log("meta info successfully fetched",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("meta info successfully fetched",HBCIUtils.LOG_DEBUG);
             passport.getUPD().setProperty(UPD_KEY,new Date().toString());
             passport.saveChanges();
         }

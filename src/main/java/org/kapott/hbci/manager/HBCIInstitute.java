@@ -93,7 +93,7 @@ public final class HBCIInstitute
             p.setProperty(BPD_KEY_HBCIVERSION,kernel.getHBCIVersion());
             p.setProperty(BPD_KEY_LASTUPDATE,String.valueOf(System.currentTimeMillis()));
             passport.setBPD(p);
-            HBCIUtils.log("installed new BPD with version "+passport.getBPDVersion(),HBCIUtils.LOG_INFO);
+            HBCIUtils.log("installed new BPD with version "+passport.getBPDVersion(),HBCIUtils.LOG_DEBUG);
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_BPD_INIT_DONE,passport.getBPD());
         }
     }
@@ -121,7 +121,7 @@ public final class HBCIInstitute
                 HBCIUtils.log("found key "+
                         keyCountry+"_"+keyBLZ+"_"+keyUserId+"_"+keyType+"_"+
                         keyNum+"_"+keyVersion,
-                        HBCIUtils.LOG_INFO);
+                        HBCIUtils.LOG_DEBUG);
 
                 byte[] keyExponent=result.getProperty(head+".PubKey.exponent").getBytes(Comm.ENCODING);
                 byte[] keyModulus=result.getProperty(head+".PubKey.modulus").getBytes(Comm.ENCODING);
@@ -183,7 +183,7 @@ public final class HBCIInstitute
     {
         Properties bpd = passport.getBPD();
         String maxAge = HBCIUtils.getParam("bpd.maxage.days","7");
-        HBCIUtils.log("[BPD] max age: " + maxAge + " days",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("[BPD] max age: " + maxAge + " days",HBCIUtils.LOG_DEBUG);
         
         long maxMillis = -1L;
         try
@@ -191,7 +191,7 @@ public final class HBCIInstitute
             int days = Integer.parseInt(maxAge);
             if (days == 0)
             {
-                HBCIUtils.log("[BPD] auto-expiry disabled",HBCIUtils.LOG_INFO);
+                HBCIUtils.log("[BPD] auto-expiry disabled",HBCIUtils.LOG_DEBUG);
                 return false;
             }
             
@@ -217,13 +217,13 @@ public final class HBCIInstitute
                 HBCIUtils.log(e);
                 return false;
             }
-            HBCIUtils.log("[BPD] last update: " + (lastUpdate == 0 ? "never" : new Date(lastUpdate)),HBCIUtils.LOG_INFO);
+            HBCIUtils.log("[BPD] last update: " + (lastUpdate == 0 ? "never" : new Date(lastUpdate)),HBCIUtils.LOG_DEBUG);
         }
 
         long now = System.currentTimeMillis();
         if (maxMillis < 0 || (now - lastUpdate) > maxMillis)
         {
-            HBCIUtils.log("[BPD] expired, will be updated now",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("[BPD] expired, will be updated now",HBCIUtils.LOG_DEBUG);
             return true;
         }
         
@@ -259,13 +259,13 @@ public final class HBCIInstitute
                 // gelandet sind.
                 if (!version.equals("0"))
                 {
-                    HBCIUtils.log("resetting BPD version from " + version + " to 0",HBCIUtils.LOG_INFO);
+                    HBCIUtils.log("resetting BPD version from " + version + " to 0",HBCIUtils.LOG_DEBUG);
                     passport.getBPD().setProperty("BPA.version","0");
                     passport.saveChanges();
                 }
                 
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_BPD_INIT,null);
-                HBCIUtils.log("fetching BPD",HBCIUtils.LOG_INFO);
+                HBCIUtils.log("Aktualisiere Bankparameter (BPD)",HBCIUtils.LOG_INFO);
                 
                 // Dialog-Context erzeugen
                 final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
@@ -339,7 +339,7 @@ public final class HBCIInstitute
             
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_GET_KEYS,null);
-            HBCIUtils.log("fetching institute keys",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Rufe Institutsschlüssel ab",HBCIUtils.LOG_INFO);
             
             // Dialog-Context erzeugen
             final DialogContext ctx = DialogContext.create(this.kernel,this.passport);

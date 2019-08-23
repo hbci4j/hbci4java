@@ -123,7 +123,7 @@ public class DialogContext
             this.dialogId = (result != null ? result.getProperty("MsgHead.dialogid",null) : null);
 
             if (this.dialogId != null)
-                HBCIUtils.log("new dialog-id: " + this.dialogId,HBCIUtils.LOG_INFO);
+                HBCIUtils.log("new dialog-id: " + this.dialogId,HBCIUtils.LOG_DEBUG);
         }
     }
     

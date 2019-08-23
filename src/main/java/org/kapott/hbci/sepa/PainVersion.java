@@ -431,8 +431,8 @@ public class PainVersion implements Comparable<PainVersion>
         final PainVersion versionDesc = haveDesc ? PainVersion.byURN(sepadesc) : null;
         final PainVersion versionData = haveData ? PainVersion.autodetect(new ByteArrayInputStream(sepadata.getBytes(Comm.ENCODING))) : null;
         
-        HBCIUtils.log("pain version given in sepadescr: " + versionDesc,HBCIUtils.LOG_INFO);
-        HBCIUtils.log("pain version according to data: " + versionData,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("pain version given in sepadescr: " + versionDesc,HBCIUtils.LOG_DEBUG);
+        HBCIUtils.log("pain version according to data: " + versionData,HBCIUtils.LOG_DEBUG);
         
         // Wir haben keine Version im Deskriptor, dann bleibt nur die aus den Daten
         if (versionDesc == null)

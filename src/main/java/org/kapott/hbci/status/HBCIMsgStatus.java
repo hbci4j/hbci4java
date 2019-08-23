@@ -208,8 +208,15 @@ public final class HBCIMsgStatus
      * @return <code>true</code> oder <code>false</code> */
     public boolean isInvalidPIN()
     {
-        boolean result=false;
-        
+        return this.getInvalidPINCode() != null;
+    }
+    
+    /**
+     * Liefert den Status-Code fuer "PIN falsch", insofern er im Response enthalten ist.
+     * @return der Status-Code fuer "PIN falsch", insofern er im Response enthalten ist.
+     */
+    public HBCIRetVal getInvalidPINCode()
+    {
         List<HBCIRetVal> retvals=new ArrayList<HBCIRetVal>(Arrays.asList(globStatus.getErrors()));
         retvals.addAll(new ArrayList<HBCIRetVal>(Arrays.asList(segStatus.getErrors())));
         
@@ -217,12 +224,9 @@ public final class HBCIMsgStatus
             HBCIRetVal ret=i.next();
             
             if (KnownReturncode.contains(ret.code,KnownReturncode.LIST_AUTH_FAIL))
-            {
-                result=true;
-                break;
-            }
+                return ret;
         }
         
-        return result;
+        return null;
     }
 }

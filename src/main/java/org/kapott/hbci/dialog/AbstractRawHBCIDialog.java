@@ -63,7 +63,7 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
             // Erstellung der Nachricht
             p.onDialogEvent(DialogEvent.MSG_CREATE,ctx);
             final String dialog = this.getActualTemplate(ctx);
-            HBCIUtils.log("creating dialog " + dialog + ", id " + ctx.getDialogId() + ", message number: " + ctx.getMsgNum() + ", execution count: " + this.executions.get(),HBCIUtils.LOG_INFO);
+            HBCIUtils.log("creating dialog " + dialog + ", id " + ctx.getDialogId() + ", message number: " + ctx.getMsgNum() + ", execution count: " + this.executions.get(),HBCIUtils.LOG_DEBUG);
             k.rawNewMsg(dialog);
             this.applyData(ctx);
             p.onDialogEvent(DialogEvent.MSG_CREATED,ctx);
@@ -72,7 +72,7 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
             
             ///////////////////////////////////////////////////////
             // Versand der Nachricht
-            HBCIUtils.log("sending message using dialog " + dialog + ", id " + ctx.getDialogId() + ", message number: " + ctx.getMsgNum(),HBCIUtils.LOG_INFO);
+            HBCIUtils.log("sending message using dialog " + dialog + ", id " + ctx.getDialogId() + ", message number: " + ctx.getMsgNum(),HBCIUtils.LOG_DEBUG);
             status = this.sendData(ctx);
             //
             ///////////////////////////////////////////////////////

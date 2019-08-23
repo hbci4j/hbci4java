@@ -65,7 +65,7 @@ public class ChipTanCardService extends SmartCardService
       // Flickercode als Byte-Array rendern
       byte[] hhdBytes = this.toBytes(hhduc);
       
-      HBCIUtils.log("sending HHDuc to chipcard using ScardControl, length: " + hhdBytes.length,HBCIUtils.LOG_INFO);
+      HBCIUtils.log("sending HHDuc to chipcard using ScardControl, length: " + hhdBytes.length,HBCIUtils.LOG_DEBUG);
       
       int len = 4 + 1 + 1 + 2 + hhdBytes.length; // Laenge von Activation ID, POF, Control Byte, HHD-Laenge, Payload
       ByteArrayOutputStream cmd = new ByteArrayOutputStream();
@@ -94,13 +94,13 @@ public class ChipTanCardService extends SmartCardService
       if (data != null && data.length > 1)
       {
         int tanLength = data[0];
-        HBCIUtils.log("received TAN",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("received TAN",HBCIUtils.LOG_DEBUG);
         if (tanLength > 0)
         {
           byte[] tanBytes = new byte[tanLength];
           System.arraycopy(data,1,tanBytes,0,tanLength);
           tan = this.parseTAN(tanBytes);
-          HBCIUtils.log("TAN length: " + tan.length() + " chars",HBCIUtils.LOG_INFO);
+          HBCIUtils.log("TAN length: " + tan.length() + " chars",HBCIUtils.LOG_DEBUG);
         }
       }
     }
@@ -112,7 +112,7 @@ public class ChipTanCardService extends SmartCardService
     
     // Transaktion finalisieren
     {
-      HBCIUtils.log("finalizing chipcard transaction",HBCIUtils.LOG_INFO);
+      HBCIUtils.log("finalizing chipcard transaction",HBCIUtils.LOG_DEBUG);
       ByteArrayOutputStream cmd = new ByteArrayOutputStream();
       cmd.write(new byte[]{0x20,0x77,0x00,0x00});          // Header
       cmd.write(new byte[]{0x00,0x00,0x06});               // Li Lc Lc
@@ -131,7 +131,7 @@ public class ChipTanCardService extends SmartCardService
       this.check(apdu,new byte[]{(byte)0x90,(byte)0x91, (byte) 0x6D});
     }
     
-    HBCIUtils.log("returning TAN",HBCIUtils.LOG_INFO);
+    HBCIUtils.log("returning TAN",HBCIUtils.LOG_DEBUG);
     return tan;
 
     //
@@ -156,7 +156,7 @@ public class ChipTanCardService extends SmartCardService
       // Flickercode als Byte-Array rendern
       byte[] hhdBytes = this.toBytes(hhduc);
       
-      HBCIUtils.log("sending HHDuc to chipcard using ScardTransmit, length: " + hhdBytes.length,HBCIUtils.LOG_INFO);
+      HBCIUtils.log("sending HHDuc to chipcard using ScardTransmit, length: " + hhdBytes.length,HBCIUtils.LOG_DEBUG);
       
       int len = 4 + 1 + 1 + 2 + hhdBytes.length; // Laenge von Activation ID, POF, Control Byte, HHD-Laenge, Payload
       ByteArrayOutputStream cmd = new ByteArrayOutputStream();
@@ -180,13 +180,13 @@ public class ChipTanCardService extends SmartCardService
       if (data != null && data.length > 1)
       {
         int tanLength = data[0];
-        HBCIUtils.log("received TAN",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("received TAN",HBCIUtils.LOG_DEBUG);
         if (tanLength > 0)
         {
           byte[] tanBytes = new byte[tanLength];
           System.arraycopy(data,1,tanBytes,0,tanLength);
           tan = this.parseTAN(tanBytes);
-          HBCIUtils.log("TAN length: " + tan.length() + " chars",HBCIUtils.LOG_INFO);
+          HBCIUtils.log("TAN length: " + tan.length() + " chars",HBCIUtils.LOG_DEBUG);
         }
       }
     }
@@ -198,7 +198,7 @@ public class ChipTanCardService extends SmartCardService
     
     // Transaktion finalisieren
     {
-      HBCIUtils.log("finalizing chipcard transaction",HBCIUtils.LOG_INFO);
+      HBCIUtils.log("finalizing chipcard transaction",HBCIUtils.LOG_DEBUG);
       ByteArrayOutputStream cmd = new ByteArrayOutputStream();
       cmd.write(new byte[]{(byte)0xFF,(byte)0x91,0x07,0x00}); // Header
       cmd.write(new byte[]{0x00,0x00,0x06});                  // Li Lc Lc
@@ -217,7 +217,7 @@ public class ChipTanCardService extends SmartCardService
       this.receive(apdu,new byte[]{(byte)0x90,(byte)0x91,(byte)0x6D});
     }
     
-    HBCIUtils.log("returning TAN",HBCIUtils.LOG_INFO);
+    HBCIUtils.log("returning TAN",HBCIUtils.LOG_DEBUG);
     return tan;
 
     //

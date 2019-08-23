@@ -105,7 +105,7 @@ public final class HBCIUser
     private void sendAndActivateNewUserKeys(HBCIKey[] sigKey,HBCIKey[] encKey)
     {
         try {
-            HBCIUtils.log("sending user keys to institute",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Sende neue Benutzerschlüssel",HBCIUtils.LOG_INFO);
             
             String country=passport.getCountry();
             String blz=passport.getBLZ();
@@ -358,7 +358,7 @@ public final class HBCIUser
             HBCIKey[] newEncKey=null;
 
             try {
-                HBCIUtils.log("manually setting new user keys",HBCIUtils.LOG_INFO);
+                HBCIUtils.log("Speichere neue Benutzerschlüssel",HBCIUtils.LOG_INFO);
 
                 String blz=passport.getBLZ();
                 String country=passport.getCountry();
@@ -394,7 +394,7 @@ public final class HBCIUser
     {
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_SYSID,null);
-            HBCIUtils.log("fetching new sys-id from institute",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Rufe neue System-ID ab",HBCIUtils.LOG_INFO);
             
             // autosecmech
             HBCIUtils.log("checking whether passport is supported (but ignoring result)",HBCIUtils.LOG_DEBUG);
@@ -438,7 +438,7 @@ public final class HBCIUser
     {
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_SIGID,null);
-            HBCIUtils.log("syncing signature id",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Synchronisiere Signatur-ID",HBCIUtils.LOG_INFO);
             
             // autosecmech
             HBCIUtils.log("checking whether passport is supported (but ignoring result)",HBCIUtils.LOG_DEBUG);
@@ -504,7 +504,7 @@ public final class HBCIUser
                 String mediaInfo = upd.getProperty("tanmedia.names");
                 if (mediaInfo != null)
                 {
-                    HBCIUtils.log("rescued TAN media info to new UPD: " + mediaInfo,HBCIUtils.LOG_INFO);
+                    HBCIUtils.log("rescued TAN media info to new UPD: " + mediaInfo,HBCIUtils.LOG_DEBUG);
                     p.setProperty("tanmedia.names",mediaInfo);
                 }
             }
@@ -512,7 +512,7 @@ public final class HBCIUser
             String oldVersion = passport.getUPDVersion();
             passport.setUPD(p);
             
-            HBCIUtils.log("installed new UPD [old version: " + oldVersion + ", new version: " + passport.getUPDVersion() + "]",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Benutzerparameter (UPD) aktualisiert [Bisherige Version: " + oldVersion + ", neue Version: " + passport.getUPDVersion() + "]",HBCIUtils.LOG_INFO);
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_UPD_DONE,passport.getUPD());
         }
     }
@@ -524,7 +524,8 @@ public final class HBCIUser
     {
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_UPD,null);
-            HBCIUtils.log("fetching UPD (BPD-Version: " + passport.getBPDVersion() + ")",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("updating UPD (BPD-Version: " + passport.getBPDVersion() + ")",HBCIUtils.LOG_DEBUG);
+            HBCIUtils.log("Aktualisiere Benutzerparameter (UPD)",HBCIUtils.LOG_INFO);
             
             // autosecmech
             HBCIUtils.log("checking whether passport is supported (but ignoring result)",HBCIUtils.LOG_DEBUG);
@@ -534,7 +535,7 @@ public final class HBCIUser
             final String version = passport.getUPDVersion();
             if (!version.equals("0"))
             {
-                HBCIUtils.log("resetting UPD version from " + version + " to 0",HBCIUtils.LOG_INFO);
+                HBCIUtils.log("resetting UPD version from " + version + " to 0",HBCIUtils.LOG_DEBUG);
                 passport.getBPD().setProperty("UPA.version","0");
                 passport.saveChanges();
             }
@@ -617,7 +618,7 @@ public final class HBCIUser
         
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_DIALOG_INIT,null);
-            HBCIUtils.log("locking user keys",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Sperre Benutzerschlüssel",HBCIUtils.LOG_INFO);
             
             // Dialog-Context erzeugen
             final DialogContext ctx = DialogContext.create(this.kernel,this.passport);

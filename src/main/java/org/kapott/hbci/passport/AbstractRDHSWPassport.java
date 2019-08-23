@@ -441,7 +441,7 @@ public abstract class AbstractRDHSWPassport
         HBCIKey[] newSigKey=null;
         HBCIKey[] newEncKey=null;
         try {
-            HBCIUtils.log("generating new user keys",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("Erzeuge neue Benutzerschlüssel",HBCIUtils.LOG_INFO);
 
             String blz=getBLZ();
             String country=getCountry();

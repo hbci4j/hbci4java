@@ -199,7 +199,7 @@ public abstract class SmartCardService
 
     try
     {
-      HBCIUtils.log("creating smartcard-service, using type " + type.getSimpleName(), HBCIUtils.LOG_INFO);
+      HBCIUtils.log("Starte Smartcard-Service (Typ " + type.getSimpleName() + ")", HBCIUtils.LOG_INFO);
   
       TerminalFactory terminalFactory = TerminalFactory.getDefault();
       CardTerminals terminals = terminalFactory.terminals();
@@ -210,7 +210,7 @@ public abstract class SmartCardService
       if (list == null || list.size() == 0)
         throw new HBCI_Exception("Kein Kartenleser gefunden");
       
-      HBCIUtils.log("found card terminals:",HBCIUtils.LOG_INFO);
+      HBCIUtils.log("Gefundene Kartenlesegeräte:",HBCIUtils.LOG_INFO);
       for (CardTerminal t : list)
       {
         HBCIUtils.log("  " + t.getName(), HBCIUtils.LOG_INFO);
@@ -221,7 +221,7 @@ public abstract class SmartCardService
       // Checken, ob der User einen konkreten Kartenleser vorgegeben hat
       if (name != null)
       {
-        HBCIUtils.log("explicit terminal name given, trying to open terminal: " + name,HBCIUtils.LOG_DEBUG);
+        HBCIUtils.log("terminal name given, trying to open terminal: " + name,HBCIUtils.LOG_DEBUG);
         terminal = terminals.getTerminal(name);
         if (terminal == null)
           throw new HBCI_Exception("Kartenleser \"" + name + "\" nicht gefunden");
@@ -248,7 +248,7 @@ public abstract class SmartCardService
         throw new HBCI_Exception("Keine Karte angegeben");
     
       String proto = smartCard.getProtocol();
-      HBCIUtils.log("card type: " + proto,HBCIUtils.LOG_INFO);
+      HBCIUtils.log("Kartetyp: " + proto,HBCIUtils.LOG_INFO);
       
       // Card-Service basierend auf dem Kartentyp erzeugen
       if (proto == null || proto.indexOf("=") == -1)
@@ -269,7 +269,7 @@ public abstract class SmartCardService
       }
       
       SmartCardService cardService = type.newInstance();
-      HBCIUtils.log(" using: " + cardService.getClass().getName(),HBCIUtils.LOG_INFO);
+      HBCIUtils.log(" using: " + cardService.getClass().getName(),HBCIUtils.LOG_DEBUG);
       cardService.init(smartCard);
       return (T) cardService;
     }
@@ -326,7 +326,7 @@ public abstract class SmartCardService
     // Liste der Features abrufen
     try
     {
-      HBCIUtils.log("querying features",HBCIUtils.LOG_INFO);
+      HBCIUtils.log("querying features",HBCIUtils.LOG_DEBUG);
       byte[] response = this.smartCard.transmitControlCommand(IOCTL_GET_FEATURE_REQUEST, new byte[0]);
       for (int i = 0; i < response.length; i += 6)
       {
@@ -338,11 +338,11 @@ public abstract class SmartCardService
         Feature feature = Feature.find(response[i]);
         if (feature == null)
         {
-          HBCIUtils.log("  unknown feature: " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
+          HBCIUtils.log("  unknown feature: " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_DEBUG);
           continue;
         }
         
-        HBCIUtils.log("  " +  feature.name() + ": " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_INFO);
+        HBCIUtils.log("  " +  feature.name() + ": " + Integer.toHexString(ioctl.intValue()),HBCIUtils.LOG_DEBUG);
         features.put(feature, ioctl);
       }      
     }

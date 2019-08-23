@@ -69,7 +69,7 @@ public final class HBCIStatus
     {
         retVals.add(ret);
         if (ret.isError()) {
-            HBCIUtils.log("HBCI error code: "+ret.toString(), HBCIUtils.LOG_ERR);
+            HBCIUtils.log("Meldung der Bank: " + ret.toString(), HBCIUtils.LOG_ERR);
         }
     }
 

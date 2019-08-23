@@ -104,7 +104,7 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         Properties result=msgstatus.getData();
         GVRDauerList.Dauer entry=new GVRDauerList.Dauer();
         
-        HBCIUtils.log("parsing SEPA standing orders from msg data [size: " + result.size() + "]",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("parsing SEPA standing orders from msg data [size: " + result.size() + "]",HBCIUtils.LOG_DEBUG);
 
         entry.my=new Konto();
         entry.my.country=result.getProperty(header+".My.KIK.country");

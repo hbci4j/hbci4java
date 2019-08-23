@@ -2230,7 +2230,7 @@ public final class HBCIUtils
 		// Im Zweifel lassen wir die Bankverbindung lieber durch
 		if (alg == null || alg.length() != 2)
 		{
-			HBCIUtils.log("no crc information about " + blz + " in database", HBCIUtils.LOG_WARN);
+			HBCIUtils.log("no crc information about " + blz + " in database", HBCIUtils.LOG_DEBUG);
 			return true;
 		}
 

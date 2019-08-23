@@ -125,7 +125,7 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
             cal.add(Calendar.DATE,-Integer.parseInt(days));
             date = HBCIUtils.date2StringISO(cal.getTime());
         }
-        HBCIUtils.log("earliest start date according to BPD: " + (date != null && date.length() > 0 ? date : "<none>"),HBCIUtils.LOG_INFO);
+        HBCIUtils.log("earliest start date according to BPD: " + (date != null && date.length() > 0 ? date : "<none>"),HBCIUtils.LOG_DEBUG);
         return date;
     }
 

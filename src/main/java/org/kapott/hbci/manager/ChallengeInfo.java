@@ -147,7 +147,7 @@ public class ChallengeInfo
     // auch keine Challenge-Parameter setzen
     if (job == null)
     {
-      HBCIUtils.log("have no challenge data for " + code + ", will not apply challenge params", HBCIUtils.LOG_INFO);
+      HBCIUtils.log("have no challenge data for " + code + ", will not apply challenge params", HBCIUtils.LOG_DEBUG);
       return;
     }
     
@@ -160,7 +160,7 @@ public class ChallengeInfo
     // Wir haben keine Parameter fuer diese HHD-Version
     if (hhd == null)
     {
-      HBCIUtils.log("have no challenge data for " + code + " in " + version + ", will not apply challenge params", HBCIUtils.LOG_INFO);
+      HBCIUtils.log("have no challenge data for " + code + " in " + version + ", will not apply challenge params", HBCIUtils.LOG_DEBUG);
       return;
     }
 

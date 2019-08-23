@@ -210,7 +210,7 @@ public abstract class HBCIJobImpl
                     // willuhn 2011-06-06 Segment-Versionen ueberspringen, die groesser als die max. zulaessige sind
                     if (maxAllowedVersion > 0 && version > maxAllowedVersion)
                     {
-                      HBCIUtils.log("skipping segment version " + version + " for task " + jobnameLL + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_INFO);
+                      HBCIUtils.log("skipping segment version " + version + " for task " + jobnameLL + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_DEBUG);
                       continue;
                     }
                     // merken der größten jemals aufgetretenen versionsnummer
@@ -264,7 +264,7 @@ public abstract class HBCIJobImpl
       if (version.equals(this.segVersion))
         return;
       
-      HBCIUtils.log("changing segment version for task " + this.jobName + " explicit from " + this.segVersion + " to " + version,HBCIUtils.LOG_INFO);
+      HBCIUtils.log("changing segment version for task " + this.jobName + " explicitly from " + this.segVersion + " to " + version,HBCIUtils.LOG_DEBUG);
 
       // Der alte Name
       String oldName = this.name;
@@ -1269,17 +1269,17 @@ public abstract class HBCIJobImpl
             if (o != null)
             {
                 String s = o.toString();
-                HBCIUtils.log("value of \"cannationalacc\" overwritten in passport, value: " + s,HBCIUtils.LOG_INFO);
+                HBCIUtils.log("value of \"cannationalacc\" overwritten in passport, value: " + s,HBCIUtils.LOG_DEBUG);
                 return s.equalsIgnoreCase("J");
             }
         }
         
-        HBCIUtils.log("searching for value of \"cannationalacc\" in HISPAS",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("searching for value of \"cannationalacc\" in HISPAS",HBCIUtils.LOG_DEBUG);
         
         // Ansonsten suchen wir in HISPAS - aber nur, wenn wir die Daten schon haben
         if (handler.getSupportedLowlevelJobs().getProperty("SEPAInfo") == null)
         {
-            HBCIUtils.log("no HISPAS data found",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("no HISPAS data found",HBCIUtils.LOG_DEBUG);
             return false; // Ne, noch nicht. Dann lassen wir das erstmal weg
         }
         
@@ -1287,7 +1287,7 @@ public abstract class HBCIJobImpl
         // SEPAInfo laden und darüber iterieren
         Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
         String value = props.getProperty("cannationalacc");
-        HBCIUtils.log("cannationalacc=" + value,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("cannationalacc=" + value,HBCIUtils.LOG_DEBUG);
         return value != null && value.equalsIgnoreCase("J");
     }
     

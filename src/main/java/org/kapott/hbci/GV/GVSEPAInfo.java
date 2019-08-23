@@ -27,6 +27,7 @@ import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
 public class GVSEPAInfo 
@@ -45,7 +46,8 @@ public class GVSEPAInfo
     public void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         Properties result=msgstatus.getData();
-        Properties upd=getParentHandler().getPassport().getUPD();
+        HBCIPassport p = getParentHandler().getPassport();
+        Properties upd =p.getUPD();
         
         for (int i=0;;i++) {
         	String subheader=HBCIUtilsInternal.withCounter(header+".Acc", i);

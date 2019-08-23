@@ -64,7 +64,7 @@ public class IOUtils
             }
             if (!origFile.exists())
             {
-                HBCIUtils.log("file now gone: " + origFile, HBCIUtils.LOG_INFO);
+                HBCIUtils.log("file now gone: " + origFile, HBCIUtils.LOG_DEBUG);
                 break;
             }
         }
@@ -188,7 +188,7 @@ public class IOUtils
         if (newName.equals(filename))
             return filename;
         
-        HBCIUtils.log("auto-fixed filename from " + f + " to " + newName,HBCIUtils.LOG_INFO);
+        HBCIUtils.log("auto-fixed filename from " + f + " to " + newName,HBCIUtils.LOG_DEBUG);
         return newName;
     }
 }

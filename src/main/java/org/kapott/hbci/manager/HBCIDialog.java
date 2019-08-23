@@ -189,7 +189,7 @@ public final class HBCIDialog
             msg = this.queue.poll();
             if (msg == null)
             {
-                HBCIUtils.log("dialog completed after " + msgCount + " messages",HBCIUtils.LOG_INFO);
+                HBCIUtils.log("dialog completed after " + msgCount + " messages",HBCIUtils.LOG_DEBUG);
                 break;
             }
             
@@ -492,7 +492,7 @@ public final class HBCIDialog
         // signatur-anforderungen (anzahl) in einer msg stehen
         
         try {
-            HBCIUtils.log(HBCIUtilsInternal.getLocMsg("EXCMSG_ADDJOB",job.getName()),HBCIUtils.LOG_INFO);
+            HBCIUtils.log(HBCIUtilsInternal.getLocMsg("EXCMSG_ADDJOB",job.getName()),HBCIUtils.LOG_DEBUG);
             job.verifyConstraints();
             
             // check bpd.numgva here

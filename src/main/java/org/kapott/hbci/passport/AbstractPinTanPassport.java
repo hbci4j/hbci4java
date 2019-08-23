@@ -169,7 +169,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                             // willuhn 2011-06-06 Segment-Versionen ueberspringen, die groesser als die max. zulaessige sind
                             if (maxAllowedVersion > 0 && segVersion > maxAllowedVersion)
                             {
-                              HBCIUtils.log("skipping segversion " + segVersion + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_INFO);
+                              HBCIUtils.log("skipping segversion " + segVersion + ", larger than allowed version " + maxAllowedVersion, HBCIUtils.LOG_DEBUG);
                               continue;
                             }
 
@@ -265,10 +265,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (status.isOK())
             return;
         
-        if (!status.isInvalidPIN())
+        HBCIRetVal ret = status.getInvalidPINCode();
+        
+        if (ret == null)
             return;
 
-        HBCIUtils.log("detected 'invalid PIN' error - clearing passport PIN", HBCIUtils.LOG_INFO);
+        HBCIUtils.log("PIN-Fehler erkannt, Meldung der Bank: " + ret.code + ": " + ret.text, HBCIUtils.LOG_INFO);
         this.clearPIN();
         
         // Aufrufer informieren, dass falsche PIN eingegeben wurde (um evtl. PIN aus Puffer zu löschen, etc.) 
@@ -314,7 +316,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
             this.allowedTwostepMechanisms.clear();
             this.allowedTwostepMechanisms.addAll(newList);
-            HBCIUtils.log("autosecfunc: found 3920 in response - updated list of allowed twostepmechs - old: " + oldList + ", new: " + this.allowedTwostepMechanisms, HBCIUtils.LOG_INFO);
+            HBCIUtils.log("autosecfunc: found 3920 in response - updated list of allowed twostepmechs - old: " + oldList + ", new: " + this.allowedTwostepMechanisms, HBCIUtils.LOG_DEBUG);
         }
         //
         ////////////////////////////////////////////////////
@@ -336,7 +338,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // wenn sich das ausgewählte secmech geändert hat, müssen wir
         // einen dialog-restart fordern, weil während eines dialoges
         // das secmech nicht gewechselt werden darf
-        HBCIUtils.log("autosecfunc: after this dialog-init we had to change selected pintan method from " + oldMethod + " to " + newMethod + ", so a restart of this dialog is needed", HBCIUtils.LOG_INFO);
+        HBCIUtils.log("autosecfunc: after this dialog-init we had to change selected pintan method from " + oldMethod + " to " + newMethod + ", so a restart of this dialog is needed", HBCIUtils.LOG_DEBUG);
+        HBCIUtils.log("Derzeitiges TAN-Verfahren aktualisiert, starte Dialog neu", HBCIUtils.LOG_INFO);
         ctx.setRepeat(true);
         //
         ////////////////////////////////////////////////////
@@ -460,7 +463,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             }
         }
         
-        HBCIUtils.log("creating " + (step2 ? "2nd" : "1st") + " HKTAN for SCA [process variant: " + process + ", process number: " + tp.getCode() + ", order code: " + segcode + "]",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("creating " + (step2 ? "2nd" : "1st") + " HKTAN for SCA [process variant: " + process + ", process number: " + tp.getCode() + ", order code: " + segcode + "]",HBCIUtils.LOG_DEBUG);
         
         k.rawSet(prefix + ".ordersegcode",segcode);
         k.rawSet(prefix + ".OrderAccount.bic","");
@@ -496,7 +499,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Wenn wir noch in der anonymen Dialog-Initialisierung sind, interessiert uns das nicht.
         if (ctx.isAnonymous() || this.isAnonymous())
         {
-            HBCIUtils.log("anonymous dialog, skip SCA response analysis",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("anonymous dialog, skip SCA response analysis",HBCIUtils.LOG_DEBUG);
             ctx.getMeta().remove(CACHE_KEY_SCA_STEP);
             return;
         }
@@ -515,7 +518,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Bank hat uns eine Ausnahme erteilt - wir brauchen keine TAN
         if (status.segStatus != null && KnownReturncode.W3076.searchReturnValue(status.segStatus.getWarnings()) != null)
         {
-            HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             ctx.getMeta().remove(CACHE_KEY_SCA_STEP);
             return;
         }
@@ -523,14 +526,14 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Schritt 1: Wir haben eine HKTAN-Anfrage gesendet. Mal schauen, ob die Bank tatsaechlich eine TAN will
         if (scaStep.intValue() == 1)
         {
-            HBCIUtils.log("HKTAN step 1 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("HKTAN step 1 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_DEBUG);
 
             Properties props = ParameterFinder.find(status.getData(),"TAN2StepRes*.");
             if (props == null || props.size() == 0)
                 return; // Wir haben kein HITAN
 
             // HITAN erhalten - Daten uebernehmen
-            HBCIUtils.log("SCA HITAN response found, triggering TAN request",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("SCA HITAN response found, triggering TAN request",HBCIUtils.LOG_DEBUG);
             final String challenge = props.getProperty("challenge");
             if (challenge != null && challenge.length() > 0)
                 this.setPersistentData(KEY_PD_CHALLENGE,challenge);
@@ -558,10 +561,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (scaStep.intValue() == 2)
         {
             ctx.getMeta().remove(CACHE_KEY_SCA_STEP); // Geschafft
-            HBCIUtils.log("HKTAN step 2 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("HKTAN step 2 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_DEBUG);
             Properties props = ParameterFinder.find(status.getData(),"TAN2StepRes*.");
             if (props.size() > 0)
-                HBCIUtils.log("final SCA HITAN response found",HBCIUtils.LOG_INFO);
+                HBCIUtils.log("final SCA HITAN response found",HBCIUtils.LOG_DEBUG);
         }
     }
     
@@ -1373,13 +1376,13 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                       //  0: Auftraggeberkonto darf nicht angegeben werden
                       //  2: Auftraggeberkonto muss angegeben werden, wenn im Geschäftsvorfall enthalten
                       String noa = secmechInfo.getProperty("needorderaccount","");
-                      HBCIUtils.log("needorderaccount=" + noa,HBCIUtils.LOG_INFO);
+                      HBCIUtils.log("needorderaccount=" + noa,HBCIUtils.LOG_DEBUG);
                       if (noa.equals("2"))
                       {
                         Konto k = task.getOrderAccount();
                         if (k != null)
                         {
-                            HBCIUtils.log("applying orderaccount to HKTAN for " + task.getHBCICode(),HBCIUtils.LOG_INFO);
+                            HBCIUtils.log("applying orderaccount to HKTAN for " + task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                             hktan.setParam("orderaccount",k);
                         }
                         else

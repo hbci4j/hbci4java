@@ -219,7 +219,8 @@ public class GVTAN2Step extends HBCIJobImpl
             // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
             if (this.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
             {
-                HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_INFO);
+                HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
+                HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
                 this.redo = this.task;
             }
 
@@ -245,7 +246,7 @@ public class GVTAN2Step extends HBCIJobImpl
         // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
         if ((this.process == KnownTANProcess.PROCESS1 || this.process == KnownTANProcess.PROCESS2_STEP1) && KnownReturncode.W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
         {
-            HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_INFO);
+            HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint
             if (this.step2 != null)
             {
