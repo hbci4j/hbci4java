@@ -7646,13 +7646,6 @@
             <SEG type="Idn"/>
             <SEG type="ProcPrep"/>
             <SEG type="MsgTailUser" name="MsgTail"/>
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="Idn.customerid">9999999999</value>
-            <value path="Idn.sysid">0</value>
-            <value path="Idn.sysStatus">0</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="DialogInitAnonRes" dontsign="1" dontcrypt="1">
             &MsgSigHeadInst;
@@ -7670,10 +7663,6 @@
             <SEG type="ProcPrep"/>
             <SEG type="KeyReq" minnum="0" maxnum="2"/>
             &MsgSigTailUser;
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="DialogInitRes">
             &MsgSigHeadInst;
