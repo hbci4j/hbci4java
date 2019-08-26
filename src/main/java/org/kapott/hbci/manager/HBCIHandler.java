@@ -151,8 +151,6 @@ public final class HBCIHandler
      */
     public void updateMetaInfo()
     {
-        final String UPD_KEY = "_fetchedMetaInfo";
-        
         if (this.passport.getBPD() == null)
         {
           HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_DEBUG);
@@ -166,7 +164,7 @@ public final class HBCIHandler
             return;
         }
         
-        if (upd.containsKey(UPD_KEY))
+        if (upd.containsKey(HBCIUser.UPD_KEY_METAINFO))
         {
             HBCIUtils.log("meta info already fetched", HBCIUtils.LOG_DEBUG);
             return;
@@ -253,7 +251,7 @@ public final class HBCIHandler
         if (sepaInfo || tanMedia)
         {
             HBCIUtils.log("meta info successfully fetched",HBCIUtils.LOG_DEBUG);
-            passport.getUPD().setProperty(UPD_KEY,new Date().toString());
+            passport.getUPD().setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString());
             passport.saveChanges();
         }
     }

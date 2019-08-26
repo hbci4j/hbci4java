@@ -84,10 +84,12 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
         this(initObject,0);
 
         String  header="client.passport.PinTan.";
-        String  fname=HBCIUtils.getParam(header+"filename");
-        boolean init=HBCIUtils.getParam(header+"init","1").equals("1");
         
-        setFileName(fname);
+        String filename = HBCIUtils.getParam(header+"filename");
+        if (initObject instanceof File)
+            filename = ((File) initObject).getAbsolutePath();
+        
+        this.setFileName(filename);
         setCertFile(HBCIUtils.getParam(header+"certfile"));
         setCheckCert(HBCIUtils.getParam(header+"checkcert","1").equals("1"));
         
@@ -95,6 +97,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
         setProxyUser(HBCIUtils.getParam(header+"proxyuser",""));
         setProxyPass(HBCIUtils.getParam(header+"proxypass",""));
 
+        boolean init=HBCIUtils.getParam(header+"init","1").equals("1");
         if (init)
         {
             this.read();

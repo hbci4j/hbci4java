@@ -49,6 +49,7 @@ import org.kapott.hbci.manager.HBCIDialog;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIKey;
+import org.kapott.hbci.manager.HBCIUser;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.protocol.SEG;
@@ -1501,7 +1502,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             HBCIUtils.log("we have to add the tan media",HBCIUtils.LOG_DEBUG);
     
             StringBuffer retData=new StringBuffer();
-            retData.append(upd.getProperty("tanmedia.names",""));
+            retData.append(upd.getProperty(HBCIUser.UPD_KEY_TANMEDIA,""));
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.TYPE_TEXT,retData);
             result = retData.toString();
         }

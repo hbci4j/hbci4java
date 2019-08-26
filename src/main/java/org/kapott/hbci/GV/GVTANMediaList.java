@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRTANMediaList;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.HBCIUser;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
@@ -104,7 +105,7 @@ public class GVTANMediaList extends HBCIJobImpl {
             HBCIUtils.log("adding TAN media names to UPD: " + names, HBCIUtils.LOG_DEBUG);
             HBCIPassport p = getParentHandler().getPassport();
             Properties upd = p.getUPD();
-            upd.setProperty("tanmedia.names",names);
+            upd.setProperty(HBCIUser.UPD_KEY_TANMEDIA,names);
         }
     }
 

@@ -24,7 +24,11 @@ package org.kapott.hbci.manager;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
@@ -45,9 +49,14 @@ import org.kapott.hbci.status.HBCIMsgStatus;
 
 /* @brief Instances of this class represent a certain user in combination with
     a certain institute. */
-public final class HBCIUser
-	implements IHandlerData
+public final class HBCIUser implements IHandlerData
 {
+    public final static String UPD_KEY_HBCIVERSION = "_hbciversion";
+    public final static String UPD_KEY_TANMEDIA = "tanmedia.names";
+    public final static String UPD_KEY_METAINFO = "_fetchedMetaInfo";
+    
+    private final static List<String> UPD_PROTECT_KEYS = Arrays.asList(UPD_KEY_METAINFO,UPD_KEY_TANMEDIA);
+
     private HBCIPassportInternal passport;
     private HBCIKernelImpl       kernel;
     private boolean              isAnon;
@@ -477,44 +486,63 @@ public final class HBCIUser
             passport.closeComm();
         }
     }
-
+    
+    /**
+     * Uebernimmt die aktualisierten UPD in den Passport.
+     * @param result die Ergebnis-Daten mit den UPD.
+     */
     public void updateUPD(Properties result)
     {
         HBCIUtils.log("extracting UPD from results",HBCIUtils.LOG_DEBUG);
 
-        Properties p = new Properties();
-        
+        ///////////////////////////////////////////////////////////////////
+        // Wir fischen alle UPD aus den Ergebnisdaten raus
+        final Properties p = new Properties();
         for (Enumeration e = result.keys(); e.hasMoreElements(); ) {
             String key = (String)(e.nextElement());
             if (key.startsWith("UPD.")) {
                 p.setProperty(key.substring(("UPD.").length()), result.getProperty(key));
             }
         }
+        //
+        ///////////////////////////////////////////////////////////////////
+        
+        // Keine UPD enthalten
+        if (p.size() == 0)
+            return;
 
-        if (p.size()!=0) {
-            p.setProperty("_hbciversion",kernel.getHBCIVersion());
-            
-            // Wir sichern wenigstens noch die TAN-Media-Infos, die vom HBCIHandler vorher abgerufen wurden
-            // Das ist etwas unschoen. Sinnvollerweise sollten die SEPA-Infos und TAN-Medien nicht in den
-            // UPD gespeichert werden. Dann gehen die auch nicht jedesmal wieder verloren und muessen nicht
-            // dauernd neu abgerufen werden. Das wuerde aber einen groesseren Umbau erfordern
-            Properties upd = passport.getUPD();
-            if (upd != null)
+        p.setProperty(UPD_KEY_HBCIVERSION,kernel.getHBCIVersion());
+        
+        ///////////////////////////////////////////////////////////////////
+        // Die UPD-Keys sicher, die nicht direkt von der Bank kommen sondern
+        // von uns. Eigentlich sollten die nicht direkt in den UPD-Properties
+        // gespeichert sondern separat. Dazu muesste ich aber die Datenstruktur
+        // von PassportData erweitern und das auch bei allen anderen Passports
+        // nachziehen sowie eine Migration einbauen. Dafuer lohnt sich das nicht.
+        final Map<String,String> protectedKeys = new HashMap<String,String>();
+        final Properties upd = passport.getUPD();
+        if (upd != null && upd.size() > 0)
+        {
+            for (String key:UPD_PROTECT_KEYS)
             {
-                String mediaInfo = upd.getProperty("tanmedia.names");
-                if (mediaInfo != null)
-                {
-                    HBCIUtils.log("rescued TAN media info to new UPD: " + mediaInfo,HBCIUtils.LOG_DEBUG);
-                    p.setProperty("tanmedia.names",mediaInfo);
-                }
+                String value = upd.getProperty(key);
+                if (value != null) // Achtung: In Properties darf es keine NULL-Keys geben
+                    protectedKeys.put(key,value);
             }
             
-            String oldVersion = passport.getUPDVersion();
-            passport.setUPD(p);
-            
-            HBCIUtils.log("Benutzerparameter (UPD) aktualisiert [Bisherige Version: " + oldVersion + ", neue Version: " + passport.getUPDVersion() + "]",HBCIUtils.LOG_INFO);
-            HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_UPD_DONE,passport.getUPD());
+            p.putAll(protectedKeys);
         }
+        
+        // Wir aktualisieren unabhaengig davon, ob sich die Versionsnummer erhoeht hat oder nicht,
+        // da nicht alle Banken die Versionsnummern erhoehen, wenn es Aenderungen gibt. Manche bleiben
+        // einfach pauschal immer bei Version 0. Daher aktualisieren wir immer dann, wenn wir neue
+        // UPDs erhalten haben.
+        final String oldVersion = passport.getUPDVersion();
+        passport.setUPD(p);
+        final String newVersion = passport.getUPDVersion();
+
+        HBCIUtils.log("Benutzerparameter (UPD) aktualisiert [Bisherige Version: " + oldVersion + ", neue Version: " + newVersion + "]",HBCIUtils.LOG_INFO);
+        HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_UPD_DONE,passport.getUPD());
     }
 
     /**
@@ -583,14 +611,12 @@ public final class HBCIUser
         
         Properties upd=passport.getUPD();
         Properties bpd=passport.getBPD();
-        String     hbciVersionOfUPD=(upd!=null)?upd.getProperty("_hbciversion"):null;
+        String     hbciVersionOfUPD=(upd!=null)?upd.getProperty(UPD_KEY_HBCIVERSION):null;
 
         // Wir haben noch keine BPD. Offensichtlich unterstuetzt die Bank
         // das Abrufen von BPDs ueber einen anonymen Dialog nicht. Also machen
         // wir das jetzt hier mit einem nicht-anonymen Dialog gleich mit
-        if (bpd == null || passport.getUPD() == null ||
-            hbciVersionOfUPD==null ||
-            !hbciVersionOfUPD.equals(kernel.getHBCIVersion())) 
+        if (bpd == null || passport.getUPD() == null || hbciVersionOfUPD==null || !hbciVersionOfUPD.equals(kernel.getHBCIVersion())) 
         {
             fetchUPD();
         }
