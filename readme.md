@@ -15,14 +15,15 @@ Das Projekt entstand 2010 als Fork von http://hbci4java.kapott.org, da dessen We
 
 Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 
-- Die Unterstützung der neuen TAN-Verfahren (smsTAN, photoTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
+- Unterstützung für die neuen EU-weiten PSD2-Anforderungen (SCA), die ab Mitte September 2019 für FinTS verpflichtend sind
+- Abruf von Umsätzen im CAMT-Format (HKCAZ)
+- Unterstützung für chipTAN USB
+- Abruf des elektronischen Kontoauszuges (HKEKA und HKEKP)
+- SEPA-Überweisungen und -Lastschriften (jeweils Einzel- und Sammelaufträge) sowie SEPA-Daueraufträge 
+- Support für alle aktuellen SEPA-PAIN-Versionen
 - Unterstützung von PC/SC-Kartenlesern via javax.smartcardio API
 - Eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
-- Support für alle aktuellen SEPA-PAIN-Versionen
-- SEPA-Überweisungen und -Lastschriften (jeweils Einzel- und Sammelaufträge) sowie SEPA-Daueraufträge 
-- Abruf des elektronischen Kontoauszuges (HKEKA und HKEKP)
-- Unterstützung für chipTAN USB
-- Abruf von Umsätzen im CAMT-Format (HKCAZ)
+- Die Unterstützung der neuen TAN-Verfahren (smsTAN, photoTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
 
 ## Lizenz
 
