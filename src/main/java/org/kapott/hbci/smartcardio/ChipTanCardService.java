@@ -111,6 +111,7 @@ public class ChipTanCardService extends SmartCardService
     // SECODER FINALIZE TRANSACTION (SECODER 3G)
     
     // Transaktion finalisieren
+    try
     {
       HBCIUtils.log("finalizing chipcard transaction",HBCIUtils.LOG_DEBUG);
       ByteArrayOutputStream cmd = new ByteArrayOutputStream();
@@ -130,7 +131,13 @@ public class ChipTanCardService extends SmartCardService
       // lassen wir das durchgehen.
       this.check(apdu,new byte[]{(byte)0x90,(byte)0x91, (byte) 0x6D});
     }
-    
+    catch (Exception e)
+    {
+        // Den Fehler tolerieren wir
+        HBCIUtils.log("error while finalizing transaction, continue nevertheless since we already have a TAN - stacktrace for debugging purpose",HBCIUtils.LOG_DEBUG);
+        HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
+    }
+
     HBCIUtils.log("returning TAN",HBCIUtils.LOG_DEBUG);
     return tan;
 
