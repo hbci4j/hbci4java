@@ -106,7 +106,7 @@ public final class CommStandard
         boolean      sizeknown = false;
         int          msgsize=-1;
 
-        HBCIUtils.log("waiting for response",HBCIUtils.LOG_INFO);
+        HBCIUtils.log(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RECV"),HBCIUtils.LOG_INFO);
 
         try {
             StringBuffer res=new StringBuffer();
