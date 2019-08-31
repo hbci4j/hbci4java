@@ -1455,10 +1455,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     hktan.setStep2(hktan2);
     
                     // Dahinter eine neue Nachricht mit dem einzelnen HKTAN#2
-                    HBCIUtils.log("adding newly created message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
-                    HBCIMessage newMsg = new HBCIMessage();
+                    HBCIUtils.log("adding new message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
+                    HBCIMessage newMsg = queue.insertAfter(message);
                     newMsg.append(hktan2);
-                    queue.append(newMsg);
                 }
             }
         }

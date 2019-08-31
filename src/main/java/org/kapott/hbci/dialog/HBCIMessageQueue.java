@@ -128,5 +128,24 @@ public class HBCIMessageQueue
         this.messages.add(pos,m);
         return m;
     }
-
+    
+    /**
+     * Fuegt nach der angegebenen Nachricht noch eine neue hinzu und liefert sie zurueck.
+     * @param message die Nachricht, vor der noch eine neue eingfuegt werden soll.
+     * @return die neue Nachricht.
+     */
+    public HBCIMessage insertAfter(HBCIMessage message)
+    {
+        if (message == null)
+            throw new IllegalArgumentException("no message given");
+        
+        final int pos = this.messages.indexOf(message);
+        
+        if (pos == -1)
+            throw new IllegalArgumentException("message unknown to queue");
+        
+        HBCIMessage m = new HBCIMessage();
+        this.messages.add(pos+1,m);
+        return m;
+    }
 }
