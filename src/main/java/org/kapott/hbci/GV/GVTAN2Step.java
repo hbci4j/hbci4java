@@ -244,7 +244,7 @@ public class GVTAN2Step extends HBCIJobImpl
         ///////////////////////////////////////////////////////////////////////
         // SCA-Ausnahme checken. Wenn wir in der Auswertung des ersten HKTAN sind, pruefen wir, ob die Bank einen 3076 geschickt
         // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
-        if ((this.process == KnownTANProcess.PROCESS1 || this.process == KnownTANProcess.PROCESS2_STEP1) && KnownReturncode.W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
+        if ((this.process == KnownTANProcess.PROCESS1 || this.process == KnownTANProcess.PROCESS2_STEP1) && (KnownReturncode.W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null || KnownReturncode.W3076.searchReturnValue(msgstatus.globStatus.getWarnings()) != null))
         {
             HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint

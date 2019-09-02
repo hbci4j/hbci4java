@@ -517,7 +517,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             return;
 
         // Bank hat uns eine Ausnahme erteilt - wir brauchen keine TAN
-        if (status.segStatus != null && KnownReturncode.W3076.searchReturnValue(status.segStatus.getWarnings()) != null)
+        if (status.segStatus != null && (KnownReturncode.W3076.searchReturnValue(status.segStatus.getWarnings()) != null || KnownReturncode.W3076.searchReturnValue(status.globStatus.getWarnings()) != null))
         {
             HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             ctx.getMeta().remove(CACHE_KEY_SCA_STEP);
