@@ -22,6 +22,7 @@
 package org.kapott.hbci.callback;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -79,6 +80,18 @@ public class HBCICallbackIOStreams
         return outStream;
     }
     
+    /**
+     * NPE-sichere Variante zum Lesen einer Zeile aus dem Eingabestream (normalerweise STDIN).
+     * Wenn der NULL ist, weil der Prozess von der Konsole abgekoppelt ist, dann wird ein Leerstring geliefert.
+     * @return den auf der Konsole eingegebenen Text oder einen Leerstring, wenn kein Eingabestream vorhanden ist.
+     * @throws IOException
+     */
+    protected String readLine() throws IOException
+    {
+        BufferedReader r = this.getInStream();
+        return r != null ? r.readLine() : "";
+    }
+    
     /** Schreiben von Logging-Ausgaben in einen <code>PrintStream</code>. Diese Methode implementiert die Logging-Schnittstelle
     des {@link org.kapott.hbci.callback.HBCICallback}-Interfaces</a>. Die Log-Informationen,
     die dieser Methode übergeben werden, werden formatiert auf dem jeweiligen <code>outStream</code> ausgegeben. In dem
@@ -114,12 +127,12 @@ public class HBCICallbackIOStreams
                     getOutStream().print(msg+": ");
                     getOutStream().flush();
                     
-                    st=getInStream().readLine();
+                    st=this.readLine();
                     if (reason==NEED_PASSPHRASE_SAVE) {
                         getOutStream().print(msg+" (again): ");
                         getOutStream().flush();
                         
-                        String st2=getInStream().readLine();
+                        String st2=this.readLine();
                         if (!st.equals(st2))
                             throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PWDONTMATCH"));
                     }
@@ -143,7 +156,7 @@ public class HBCICallbackIOStreams
                 case NEED_PROXY_PASS:
                     getOutStream().print(msg+": ");
                     getOutStream().flush();
-                    String secret=getInStream().readLine();
+                    String secret=this.readLine();
                     logfilter.addSecretData(secret,"X",LogFilter.FILTER_SECRETS);
                     retData.replace(0,retData.length(),secret);
                     break;
@@ -166,7 +179,7 @@ public class HBCICallbackIOStreams
                 case NEED_PROXY_USER:
                     getOutStream().print(msg+" ["+retData.toString()+"]: ");
                     getOutStream().flush();
-                    st=getInStream().readLine();
+                    st=this.readLine();
                     if (st.length()==0)
                         st=retData.toString();
                     
@@ -187,7 +200,7 @@ public class HBCICallbackIOStreams
                     getOutStream().println(HBCIUtilsInternal.getLocMsg("HASH")+": "+HBCIUtils.data2hex(iniletter.getKeyHashDisplay()));
                     getOutStream().print("<ENTER>=OK, \"ERR\"=ERROR: ");
                     getOutStream().flush();
-                    retData.replace(0, retData.length(), getInStream().readLine());
+                    retData.replace(0, retData.length(), this.readLine());
                     break;
     
                 case HAVE_NEW_MY_KEYS:
@@ -209,7 +222,7 @@ public class HBCICallbackIOStreams
                     getOutStream().println(msg);
                     getOutStream().println(HBCIUtilsInternal.getLocMsg("CONTINUE"));
                     getOutStream().flush();
-                    getInStream().readLine();
+                    this.readLine();
                     break;
     
                 case NEED_REMOVE_CHIPCARD:
@@ -225,14 +238,14 @@ public class HBCICallbackIOStreams
     
                     getOutStream().print(HBCIUtilsInternal.getLocMsg("BLZ")+" ["+blz+"]: ");
                     getOutStream().flush();
-                    String s=getInStream().readLine();
+                    String s=this.readLine();
                     if (s.length()==0)
                         s=blz;
                     blz=s;
     
                     getOutStream().print(HBCIUtilsInternal.getLocMsg("ACCNUMBER")+" ["+number+"]: ");
                     getOutStream().flush();
-                    s=getInStream().readLine();
+                    s=this.readLine();
                     if (s.length()==0)
                         s=number;
                     number=s;
@@ -249,7 +262,7 @@ public class HBCICallbackIOStreams
                     String iban=retData.toString();
                     getOutStream().print(HBCIUtilsInternal.getLocMsg("IBAN")+" ["+iban+"]: ");
                     getOutStream().flush();
-                    String newiban=getInStream().readLine();
+                    String newiban=this.readLine();
                     if (newiban.length()!=0 && !newiban.equals(iban)) {
                     	retData.replace(0,retData.length(),newiban);
                     	logfilter.addSecretData(newiban,"X",LogFilter.FILTER_IDS);
@@ -260,7 +273,7 @@ public class HBCICallbackIOStreams
                     getOutStream().println(msg);
                     getOutStream().print("<ENTER>=OK, \"ERR\"=ERROR: ");
                     getOutStream().flush();
-                    retData.replace(0,retData.length(), getInStream().readLine());
+                    retData.replace(0,retData.length(), this.readLine());
                     break;
                     
                 case NEED_SIZENTRY_SELECT:
@@ -277,7 +290,7 @@ public class HBCICallbackIOStreams
                     }
                     getOutStream().print(HBCIUtilsInternal.getLocMsg("CALLB_SELECT_ENTRY")+": ");
                     getOutStream().flush();
-                    retData.replace(0,retData.length(),getInStream().readLine());
+                    retData.replace(0,retData.length(),this.readLine());
                     break;
     
                 case NEED_PT_SECMECH:
@@ -291,7 +304,7 @@ public class HBCICallbackIOStreams
                     }
                     getOutStream().print(HBCIUtilsInternal.getLocMsg("CALLB_SELECT_ENTRY")+": ");
                     getOutStream().flush();
-                    retData.replace(0,retData.length(),getInStream().readLine());
+                    retData.replace(0,retData.length(),this.readLine());
                     break;
 
                 case NEED_PT_TANMEDIA:
@@ -312,7 +325,7 @@ public class HBCICallbackIOStreams
                         }
                         getOutStream().print(HBCIUtilsInternal.getLocMsg("CALLB_SELECT_ENTRY")+": ");
                         getOutStream().flush();
-                        retData.replace(0,retData.length(),getInStream().readLine());
+                        retData.replace(0,retData.length(),this.readLine());
                     }
                     break;
 
@@ -321,7 +334,7 @@ public class HBCICallbackIOStreams
                     getOutStream().println(msg);
                     getOutStream().println(HBCIUtilsInternal.getLocMsg("CONTINUE"));
                     getOutStream().flush();
-                    getInStream().readLine();
+                    this.readLine();
                     break;
                     
                 case USERID_CHANGED:
