@@ -44,6 +44,8 @@ import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
+import org.kapott.hbci.tools.DigestUtils;
+import org.kapott.hbci.tools.SignUtils;
 
 
 public abstract class AbstractRDHPassport 
@@ -181,7 +183,7 @@ public abstract class AbstractRDHPassport
 
     public String getCryptFunction()
     {
-        return Crypt.SECFUNC_ENC_3DES;
+        return Crypt.SECFUNC_ENC;
     }
 
     public String getCryptAlg()
@@ -225,6 +227,13 @@ public abstract class AbstractRDHPassport
         case 1:
         case 2:
         case 10:
+            // Sieht bizzar aus, macht aber nichts anderes, als die Anzahl
+            // noetiger Bytes auszurechnen, um die Anzahl Bits unterzukriegen
+            // Wuerde auch lesbarer gehen mit:
+            // int bytes = bits / 8;
+            // if (bits % 8 != 0) // Wenns nicht ganz aufging, brauchen wir ein Byte extra
+            //   bytes++;
+
             int bits=((RSAPublicKey)key).getModulus().bitLength();
             int bytes=bits>>3;
             if ((bits&0x07)!=0) {
@@ -276,15 +285,15 @@ public abstract class AbstractRDHPassport
         
         switch (profile) {
         case 1:
-            hashalg="RIPEMD160";
+            hashalg=DigestUtils.ALG_RIPE_MD160;
             hashprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 2:
-            hashalg="RIPEMD160";
+            hashalg=DigestUtils.ALG_RIPE_MD160;
             hashprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 10:
-            hashalg="SHA-256";
+            hashalg=DigestUtils.ALG_SHA256;
             // hashprovider=null;
             break;
         default:
@@ -313,7 +322,7 @@ public abstract class AbstractRDHPassport
             sigprovider=CryptAlgs4JavaProvider.NAME;
             break;
         case 10:
-            sigalg="PKCS1_PSS";
+            sigalg=SignUtils.ALG_RSA;
             sigprovider=CryptAlgs4JavaProvider.NAME;
             break;
         default:

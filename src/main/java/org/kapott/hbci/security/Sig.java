@@ -62,7 +62,7 @@ public final class Sig
     public final static String HASHALG_SHA512="5";
     public final static String HASHALG_SHA256_SHA256="6";
     public final static String HASHALG_RIPEMD160="999";
-    
+
     public final static String SIGALG_DES="1";
     public final static String SIGALG_RSA="10";
     

@@ -31,6 +31,11 @@ public class DigestUtils
     public final static String ALG_RIPE_MD160 = "RIPEMD160";
     
     /**
+     * Hash-Algorithmus SHA-256.
+     */
+    public final static String ALG_SHA256="SHA-256";
+    
+    /**
      * Hash-Algorithmus SHA1.
      */
     public final static String ALG_SHA1 = "SHA-1";

@@ -42,6 +42,7 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.passport.storage.PassportStorage;
+import org.kapott.hbci.tools.DigestUtils;
 import org.kapott.hbci.tools.IOUtils;
 
 /** <p>Passport-Klasse für Sicherheitsverfahren DDV mit Medium Chipkarte. Bei dieser
@@ -578,7 +579,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
          * the sign() method later */
         MessageDigest dig;
         try {
-            dig = MessageDigest.getInstance("RIPEMD160",CryptAlgs4JavaProvider.NAME);
+            dig = MessageDigest.getInstance(DigestUtils.ALG_RIPE_MD160,CryptAlgs4JavaProvider.NAME);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         } catch (NoSuchProviderException e) {
