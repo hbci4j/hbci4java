@@ -8048,12 +8048,15 @@
         
         <MSGdef id="DialogInitAnonRes" dontsign="1" dontcrypt="1">
             &MsgSigHeadInst;
+            
+            <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8067,6 +8070,8 @@
         </MSGdef>
         <MSGdef id="DialogInitRes">
             &MsgSigHeadInst;
+            
+            <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SF type="BPD" minnum="0"/>
@@ -8074,6 +8079,7 @@
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8088,10 +8094,13 @@
         </MSGdef>
         <MSGdef id="SynchRes">
             &MsgSigHeadInst;
+            
+            <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
             <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
@@ -8107,6 +8116,8 @@
         </MSGdef>
         <MSGdef id="DialogInitSCARes">
             &MsgSigHeadInst;
+
+            <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SF type="BPD" minnum="0"/>
@@ -8115,6 +8126,7 @@
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
             <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
