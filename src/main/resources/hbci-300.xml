@@ -7761,12 +7761,6 @@
             <SEG type="StatusRes2" minnum="0"/>
             <SEG type="StatusRes3" minnum="0"/>
             <SEG type="StatusRes4" minnum="0"/>
-            <SEG type="TAN2StepRes1" minnum="0"/>
-            <SEG type="TAN2StepRes2" minnum="0"/>
-            <SEG type="TAN2StepRes3" minnum="0"/>
-            <SEG type="TAN2StepRes4" minnum="0"/>
-            <SEG type="TAN2StepRes5" minnum="0"/>
-            <SEG type="TAN2StepRes6" minnum="0"/>
             <SEG type="TANListListRes1" minnum="0"/>
             <SEG type="TANMediaListRes1" minnum="0"/>
             <SEG type="TANMediaListRes2" minnum="0"/>
@@ -7813,6 +7807,12 @@
             <SEG type="WPStammListRes1" minnum="0"/>
             <SEG type="WPStammListRes2" minnum="0"/>
             <SEG type="WPStammListRes3" minnum="0"/>
+            <SEG type="TAN2StepRes1" minnum="0"/>
+            <SEG type="TAN2StepRes2" minnum="0"/>
+            <SEG type="TAN2StepRes3" minnum="0"/>
+            <SEG type="TAN2StepRes4" minnum="0"/>
+            <SEG type="TAN2StepRes5" minnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0"/>
         </SFdef>
         
         <SFdef id="Params">
