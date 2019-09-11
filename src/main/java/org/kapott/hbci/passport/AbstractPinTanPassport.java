@@ -1343,6 +1343,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 HBCIUtils.log("found task that probably requires HKTAN: " + segcode + " - have to patch message queue",HBCIUtils.LOG_DEBUG);
                 
                 final GVTAN2Step hktan = (GVTAN2Step) handler.newJob("TAN2Step");
+                hktan.setParam("ordersegcode",task.getHBCICode()); // Seit HKTAN auch bei HKTAN#6 Pflicht
                 hktan.setExternalId(task.getExternalId()); // externe ID durchreichen
                 hktan.setSegVersion(segversion); // muessen wir explizit setzen, damit wir das HKTAN in der gleichen Version schicken, in der das HITANS kam.
                 task.tanApplied();
@@ -1367,10 +1368,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     int hktanVersion = Integer.parseInt(hktan.getSegVersion());
                     if (hktanVersion >= 5)
                     {
-                      // Bis HKTAN4/hhd1.3 wurde das noch als Challenge-Parameter uebermittelt. Jetzt hat es einen
-                      // eigenen Platz in den Job-Parametern
-                      hktan.setParam("ordersegcode",task.getHBCICode());
-    
                       // Zitat aus HITANS5: Diese Funktion ermöglicht das Sicherstellen einer gültigen Kontoverbindung
                       // z. B. für die Abrechnung von SMS-Kosten bereits vor Erzeugen und Versenden einer
                       // (ggf. kostenpflichtigen!) TAN.
