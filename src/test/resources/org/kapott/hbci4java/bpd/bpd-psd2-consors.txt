@@ -1,0 +1,27 @@
+HNHBK:1:3+000000002500+300+000003OVVOUIGFJ995A7NH0KRH7QRH+2+000003OVVOUIGFJ995A7NH0KRH7QRH:2
+'HIRMG:2:2:+3060::Teilweise liegen Warnungen/Hinweise vor.
+'HIRMS:3:2:3+0020::Angemeldet.+3050::BPD nicht mehr aktuell. Aktuelle Version folgt.+3050::UPD nicht mehr aktuell. Aktuelle Version folgt.+3920::Zugelassene Ein- und Zwei-Schritt-Verfahren für den Benutzer:900:999
+'HITAN:4:6:3+2++000003OVVOUIGFJ995A7NH0KRH7QRHvb
+'HIBPA:5:3:3+1+280:76030080+Consors+0+1:2+201:210:220:300:400+100
+'HIKOM:6:4:3+280:76030080+1+3:https?://brokerage-hbci.consorsbank.de/hbci::MIM:1
+'HISPAS:7:1:3+1+1+0+J:J:J:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.001.002.03:urn?:swift?:xsd?:$pain.001.002.02:sepade.pain.001.001.02.xsd:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.008.002.02:urn?:swift?:xsd?:$pain.008.002.01:sepade.pain.008.001.01.xsd
+'HIKAZS:8:7:3+1+1+0+30:J:N
+'HISALS:9:3:3+1+1
+'HIKAZS:10:6:3+1+1+1+90:J:N
+'HICCSS:11:1:3+1+1+0
+'HIKAZS:12:5:3+1+1+90:J:N
+'HIKAZS:13:4:3+1+1+90:J'XIADAS:14:1:3+1+1
+'HIKAZS:15:3:3+1+1+90:J
+'HITANS:16:6:3+1+1+0+J:N:1:900:2:MS1.0.0:photoTAN::SecurePlus:8:1:Secure Plus TAN:999:J:1:N:0:0:N:J:00:0:J:1
+'HIWPDS:17:2:3+1+1+J
+'HIWPDS:18:6:3+1+1+0+J:J:J
+'HIWPDS:19:5:3+1+1+J:J:J
+'HIPROS:20:4:3+1+1+0
+'HIWPDS:21:4:3+1+1+J:J:J
+'HIPROS:22:3:3+1+1
+'HIWPDS:23:3:3+1+1+J'XIADSS:24:1:3+1+1
+'HISALS:25:4:3+1+1
+'HISALS:26:5:3+1+1
+'HISALS:27:6:3+1+1+0
+'HIPINS:28:1:3+1+1+0+:::::HKSPA:J:HKKAZ:J:HKSAL:J:HKCCS:J:XKADA:N:HKTAN:N:HKWPD:N:HKPRO:N:XKADS:N
+'HNHBS:29:1+2
