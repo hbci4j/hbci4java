@@ -8080,6 +8080,7 @@
             <SF type="UPD" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
@@ -8109,6 +8110,7 @@
             <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8132,6 +8134,7 @@
             <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
