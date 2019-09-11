@@ -48,7 +48,8 @@ public class DialogContext
     private String dialogId;
     private boolean anonymous = false;
     
-    private final AtomicBoolean repeat = new AtomicBoolean(false);
+    private final AtomicBoolean repeat    = new AtomicBoolean(false);
+    private final AtomicBoolean dialogEnd = new AtomicBoolean(false);
 
     /**
      * Erzeugt einen neuen Dialog-Context.
@@ -206,6 +207,24 @@ public class DialogContext
     public int getMsgNum()
     {
         return this.msgNum.get();
+    }
+    
+    /**
+     * Legt fest, ob vor dem Repeat ein Dialog-Ende gesendet werden soll.
+     * @param end true, wenn vor dem Repeat ein Dialog-Ende gesendet werden soll.
+     */
+    public void setDialogEnd(boolean end)
+    {
+        this.dialogEnd.set(end);
+    }
+    
+    /**
+     * Liefert true, wenn vor dem Repeat ein Dialog-Ende gesendet werden soll.
+     * @return true, wenn vor dem Repeat ein Dialog-Ende gesendet werden soll.
+     */
+    public boolean isDialogEnd()
+    {
+        return this.dialogEnd.get();
     }
     
     /**

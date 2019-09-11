@@ -44,6 +44,12 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
         
         do
         {
+            if (ctx.isDialogEnd())
+            {
+                ctx.setDialogEnd(false);
+                final HBCIDialogEnd end = new HBCIDialogEnd();
+                end.execute(ctx);
+            }
             // Sicherstellen, dass das Flag false ist, wenn wir starten. Kann von einem Event wieder aktiviert werden
             ctx.setRepeat(false);
             

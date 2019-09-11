@@ -335,13 +335,20 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         if (Objects.equals(oldMethod,newMethod))
             return;
-                        
+
+        // Wenn es eine Synchronisierung ist, lassen wir das Repeat weg.
+        // Die Postbank kommt nicht damit klar, wenn man eine neue Synchronisierung mit dem anderen TAN-Verfahren direkt hinterher sendet
+        if (ctx.getDialogInit().getTemplate() == KnownDialogTemplate.SYNC)
+            return;
+
         // wenn sich das ausgewählte secmech geändert hat, müssen wir
         // einen dialog-restart fordern, weil während eines dialoges
         // das secmech nicht gewechselt werden darf
         HBCIUtils.log("autosecfunc: after this dialog-init we had to change selected pintan method from " + oldMethod + " to " + newMethod + ", so a restart of this dialog is needed", HBCIUtils.LOG_DEBUG);
         HBCIUtils.log("Derzeitiges TAN-Verfahren aktualisiert, starte Dialog neu", HBCIUtils.LOG_INFO);
+        
         ctx.setRepeat(true);
+        //ctx.setDialogEnd(true);
         //
         ////////////////////////////////////////////////////
 
