@@ -184,7 +184,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                               int prevVersion = Integer.parseInt(prev.getProperty("segversion"));
                               if (prevVersion > segVersion)
                               {
-                                HBCIUtils.log("found another twostepmech " + secfunc + " in segversion " + segVersion + ", allready have one in segversion " + prevVersion + ", ignoring segversion " + segVersion, HBCIUtils.LOG_DEBUG);
+                                HBCIUtils.log("found another twostepmech " + secfunc + " in segversion " + segVersion + ", already have one in segversion " + prevVersion + ", ignoring segversion " + segVersion, HBCIUtils.LOG_DEBUG);
                                 continue;
                               }
                             }
@@ -782,15 +782,21 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         // nur wenn wir die liste der gültigen secmechs noch gar 
                         // nicht haben KÖNNEN, wählen wir einen automatisch aus.
                         
-                        String autoSelection=(options.get(0))[0];
-                        HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, but we don't know which of them are allowed for the current user, so we automatically choose "+autoSelection,HBCIUtils.LOG_DEBUG);
-                        setCurrentTANMethod(autoSelection);
+//                        String autoSelection=(options.get(0))[0];
+//                        HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, but we don't know which of them are allowed for the current user, so we automatically choose "+autoSelection,HBCIUtils.LOG_DEBUG);
+//                        setCurrentTANMethod(autoSelection);
+//                        
+//                        // autosecmech: hier merken, dass dieses verfahren AUTOMATISCH
+//                        // ausgewaehlt wurde, so dass wir spaeter immer mal wieder pruefen
+//                        // muessen, ob inzwischen nicht mehr/andere unterstuetzte secmechs bekannt sind
+//                        // (passiert z.b. wenn das anonyme abholen der bpd fehlschlaegt)
+//                        this.currentTANMethodWasAutoSelected=true;
                         
-                        // autosecmech: hier merken, dass dieses verfahren AUTOMATISCH
-                        // ausgewaehlt wurde, so dass wir spaeter immer mal wieder pruefen
-                        // muessen, ob inzwischen nicht mehr/andere unterstuetzte secmechs bekannt sind
-                        // (passiert z.b. wenn das anonyme abholen der bpd fehlschlaegt)
-                        this.currentTANMethodWasAutoSelected=true;
+                      HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, asking user what method to use",HBCIUtils.LOG_DEBUG);
+                      final String selected = this.chooseTANMethod(options);
+                      
+                      setCurrentTANMethod(selected);
+                      this.currentTANMethodWasAutoSelected=false;
                         
                     } else {
                         // wir wissen schon, welche secmechs erlaubt sind (entweder
@@ -805,37 +811,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         // denn nun verwendet werden soll
                         
                         HBCIUtils.log("autosecfunc: we have to callback to ask for pintan method to be used", HBCIUtils.LOG_DEBUG);
-                        
-                        // auswahlliste als string zusammensetzen
-                        StringBuffer retData=new StringBuffer();
-                        for (Iterator<String[]> i=options.iterator();i.hasNext();) {
-                            if (retData.length()!=0) {
-                                retData.append("|");
-                            }
-                            String[] entry= i.next();
-                            retData.append(entry[0]).append(":").append(entry[1]);
-                        }
-                        
-                        // callback erzeugen
-                        HBCIUtilsInternal.getCallback().callback(this,
-                            HBCICallback.NEED_PT_SECMECH,
-                            "*** Select a pintan method from the list",
-                            HBCICallback.TYPE_TEXT,
-                            retData);
-                        
-                        // überprüfen, ob das gewählte verfahren einem aus der liste entspricht
-                        String  selected=retData.toString();
-                        boolean ok=false;
-                        for (Iterator<String[]> i=options.iterator();i.hasNext();) {
-                            if (selected.equals((i.next())[0])) {
-                                ok=true;
-                                break;
-                            }
-                        }
-                        
-                        if (!ok) {
-                            throw new InvalidUserDataException("*** selected pintan method not supported!");
-                        }
+                        final String selected = this.chooseTANMethod(options);
                         
                         setCurrentTANMethod(selected);
                         this.currentTANMethodWasAutoSelected=false;
@@ -854,6 +830,36 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         }
             
         return currentTANMethod;
+    }
+    
+    /**
+     * Fuehrt den Callback zur Auswahl des TAN-Verfahrens durch.
+     * @param options die verfuegbaren Optionen.
+     * @return das gewaehlte TAN-Verfahren.
+     */
+    private String chooseTANMethod(List<String[]> options)
+    {
+        final StringBuffer retData = new StringBuffer();
+        for (String[] entry:options)
+        {
+            if (retData.length()!=0)
+                retData.append("|");
+            
+            retData.append(entry[0]).append(":").append(entry[1]);
+        }
+        
+        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_SECMECH,"*** Select a pintan method from the list",HBCICallback.TYPE_TEXT,retData);
+        
+        // Pruefen, ob das gewaehlte Verfahren einem aus der Liste entspricht
+        final String selected = retData.toString();
+        
+        for (String[] entry:options)
+        {
+            if  (selected.equals(entry[0]))
+                return selected;
+        }
+        
+        throw new InvalidUserDataException("*** selected pintan method not supported: " + selected);
     }
     
     public Properties getCurrentSecMechInfo()
