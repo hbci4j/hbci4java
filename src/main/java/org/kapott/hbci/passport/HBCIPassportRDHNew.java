@@ -246,7 +246,7 @@ public class HBCIPassportRDHNew extends AbstractRDHSWFileBasedPassport
         
         if (ret == null || ret.length() == 0)
         {
-            ret = HBCIUtils.getParam(getParamHeader()+".defaultprofile",null);
+            ret = HBCIUtils.getParam(getParamHeader()+".defaultprofile","10");
             HBCIUtils.log("unable to determine rdh-profile-version using BPD, using default version " + ret, HBCIUtils.LOG_WARN);
         }
 
