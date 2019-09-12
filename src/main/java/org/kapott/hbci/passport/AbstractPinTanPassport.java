@@ -1506,12 +1506,13 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         String result = "";
         final Properties upd = this.getUPD();
         final boolean tn = needed.equals("2");
-        if (tn && upd != null && upd.size() > 0)
+        if (tn)// && upd != null && upd.size() > 0)
         {
             HBCIUtils.log("we have to add the tan media",HBCIUtils.LOG_DEBUG);
     
             StringBuffer retData=new StringBuffer();
-            retData.append(upd.getProperty(HBCIUser.UPD_KEY_TANMEDIA,""));
+            if (upd != null)
+                retData.append(upd.getProperty(HBCIUser.UPD_KEY_TANMEDIA,""));
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.TYPE_TEXT,retData);
             result = retData.toString();
         }
