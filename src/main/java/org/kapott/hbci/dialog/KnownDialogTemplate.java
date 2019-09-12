@@ -58,7 +58,7 @@ public enum KnownDialogTemplate
      * FIRSTKEYREQUEST ist zwar auch eine Dialog-Initialisierung. Da es die aber nur bei Schluesseldateien
      * und nicht bei PIN/TAN gibt, wuerde ein HKTAN hier gar keinen Sinn machen.
      */
-    public static List<KnownDialogTemplate> LIST_SEND_SCA = Arrays.asList(INIT,INIT_SCA);
+    public static List<KnownDialogTemplate> LIST_SEND_SCA = Arrays.asList(INIT,INIT_SCA,SYNC);
     
     /**
      * ct.
