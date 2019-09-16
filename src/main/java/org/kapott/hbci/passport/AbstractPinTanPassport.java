@@ -708,6 +708,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         /////////////////////////////////////////
         // Die Liste der verfuegbaren Optionen ermitteln
         final List<TanMethod> options = new ArrayList<TanMethod>();
+        final List<TanMethod> fallback = new ArrayList<TanMethod>();
 
         // Einschritt-Verfahren optional hinzufuegen
         if (this.isOneStepAllowed())
@@ -723,11 +724,13 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         Arrays.sort(secfuncs);
         for (String secfunc:secfuncs)
         {
+            final Properties entry = this.twostepMechanisms.get(secfunc);
+            final TanMethod m = new TanMethod(secfunc,entry.getProperty("name"));
             if (this.allowedTANMethods.contains(secfunc))
             {
-                Properties entry = this.twostepMechanisms.get(secfunc);
-                options.add(new TanMethod(secfunc,entry.getProperty("name")));
+                options.add(m);
             }
+            fallback.add(m);
         }
         //
         /////////////////////////////////////////
@@ -739,13 +742,30 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Wir haben keine Optionen gefunden
         if (options.size() == 0)
         {
-          // es wird scheinbar GAR KEIN verfahren unterstuetzt. also nehmen
-          // wir automatisch Einschritt-TAN - was anderes haben wir nicht
-          TanMethod m = TanMethod.ONESTEP;
-          HBCIUtils.log("autosecfunc: absolutely no information about allowed pintan methods available - automatically falling back to " + m, HBCIUtils.LOG_DEBUG);
-          setCurrentTANMethod(m.getId());
-          this.currentTANMethodWasAutoSelected = true;
-          return this.currentTANMethod;
+            // wir lassen das hier mal noch auf true stehen, weil das bestimmt noch nicht final war. Schliesslich basierte die
+            // Auswahl des Verfahrens nicht auf den fuer den User freigeschalteten Verfahren sondern nur den allgemein von der
+            // Bank unterstuetzten
+            this.currentTANMethodWasAutoSelected = true;
+            
+            HBCIUtils.log("autosecfunc: no information about allowed pintan methods available", HBCIUtils.LOG_INFO);
+            // Wir haben keine TAN-Verfahren, die fuer den User per 3920 zugelassen sind.
+            // Wir schauen mal, ob die Bank wenigstens welche in HIPINS gemeldet hat. Wenn ja, dann soll der
+            // User eins von dort auswaehlen. Ob das dann aber ein erlaubtes ist, wissen wir nicht.
+            if (fallback.size() > 0)
+            {
+                HBCIUtils.log("autosecfunc: have some pintan methods in HIPINS, asking user, what to use from: " + fallback, HBCIUtils.LOG_INFO);
+                final String selected = this.chooseTANMethod(fallback);
+                this.setCurrentTANMethod(selected);
+                HBCIUtils.log("autosecfunc: manually selected pintan method from HIPINS " + currentTANMethod, HBCIUtils.LOG_DEBUG);
+            }
+            else
+            {
+                TanMethod m = TanMethod.ONESTEP;
+                HBCIUtils.log("autosecfunc: absolutly no information about allowed pintan methods available, fallback to " + m, HBCIUtils.LOG_WARN);
+                this.setCurrentTANMethod(m.getId());
+            }
+            
+            return this.currentTANMethod;
         }
         //
         /////////////////////////////////////////
