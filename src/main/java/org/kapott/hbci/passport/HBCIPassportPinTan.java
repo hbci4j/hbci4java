@@ -36,9 +36,9 @@ import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.manager.MatrixCode;
 import org.kapott.hbci.manager.QRCode;
+import org.kapott.hbci.manager.TanMethod;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.passport.storage.PassportStorage;
-import org.kapott.hbci.security.Sig;
 
 /** <p>Passport-Klasse für HBCI mit PIN/TAN. Dieses Sicherheitsverfahren wird erst
     in FinTS 3.0 spezifiziert, von einigen Banken aber schon mit früheren HBCI-Versionen
@@ -269,7 +269,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
             
             String pintanMethod=getCurrentTANMethod(false);
 
-            if (pintanMethod.equals(Sig.SECFUNC_SIG_PT_1STEP)) {
+            if (pintanMethod.equals(TanMethod.ONESTEP.getId())) {
                 // nur beim normalen einschritt-verfahren muss anhand der segment-
                 // codes ermittelt werden, ob eine tan benötigt wird
                 HBCIUtils.log("onestep method - checking GVs to decide whether or not we need a TAN",HBCIUtils.LOG_DEBUG);

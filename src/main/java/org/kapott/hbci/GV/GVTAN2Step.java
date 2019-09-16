@@ -33,6 +33,7 @@ import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
+import org.kapott.hbci.tools.StringUtil;
 
 /**
  * @author stefan.palme
@@ -191,16 +192,6 @@ public class GVTAN2Step extends HBCIJobImpl
     }
     
     /**
-     * Liefert zu einem HBCI-Code vom Client den zugehoerigen HBCI-Code des Instituts.
-     * @param hbciCode der HBCI-Code des Clients.
-     * @return der HBCI-Code des Instituts.
-     */
-    private String toInsCode(String hbciCode)
-    {
-        return new StringBuffer(hbciCode).replace(1,2,"I").toString();
-    }
-    
-    /**
      * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
      */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
@@ -217,7 +208,7 @@ public class GVTAN2Step extends HBCIJobImpl
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
             // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
             // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
-            if (this.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
+            if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
             {
                 HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                 HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
@@ -226,7 +217,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
             // Das ist das Response auf den eigentlichen GV - an den Task durchreichen
             // Muessen wir extra pruefen, weil das hier auch das HITAN sein koennte. Das schauen wir aber nicht an
-            if (this.toInsCode(this.task.getHBCICode()).equals(segCode))
+            if (StringUtil.toInsCode(this.task.getHBCICode()).equals(segCode))
             {
                 HBCIUtils.log("this is a response segment for the original task - storing results in the original job",HBCIUtils.LOG_DEBUG);
                 this.task.extractResults(msgstatus,header,idx);

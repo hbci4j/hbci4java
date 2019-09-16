@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -52,6 +51,7 @@ import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUser;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.TanMethod;
 import org.kapott.hbci.protocol.SEG;
 import org.kapott.hbci.protocol.factory.SEGFactory;
 import org.kapott.hbci.security.Crypt;
@@ -62,6 +62,8 @@ import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.tools.DigestUtils;
 import org.kapott.hbci.tools.NumberUtil;
 import org.kapott.hbci.tools.ParameterFinder;
+import org.kapott.hbci.tools.ParameterFinder.Query;
+import org.kapott.hbci.tools.StringUtil;
 
 public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 {
@@ -99,14 +101,17 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
     private boolean   verifyTANMode;
     
-    private Hashtable<String,Properties> twostepMechanisms;
-    private List<String>      allowedTwostepMechanisms;
-    
     private String    currentTANMethod;
     private boolean   currentTANMethodWasAutoSelected;
+    
+    // Die IDs aller erlaubten TAN-Verfahren
+    private List<String> allowedTANMethods;
+
+    // Die Map mit den BPDs zu den TAN-Verfahren
+    private Hashtable<String,Properties> twostepMechanisms;
 
     private String    pin;
-
+    
     /**
      * ct.
      * @param initObject
@@ -115,7 +120,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     {
         super(initObject);
         this.twostepMechanisms=new Hashtable<String, Properties>();
-        this.allowedTwostepMechanisms=new ArrayList<String>();
+        this.allowedTANMethods=new ArrayList<String>();
     }
     
     /**
@@ -305,7 +310,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (globRet == null && segRet == null)
             return;
         
-        final List<String> oldList = new ArrayList<String>(this.allowedTwostepMechanisms);
+        final List<String> oldList = new ArrayList<String>(this.allowedTANMethods);
         final List<String> newList = new ArrayList<String>();
         
         if (globRet != null && globRet.params != null)
@@ -315,9 +320,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         if (newList.size() > 0 && !newList.equals(oldList))
         {
-            this.allowedTwostepMechanisms.clear();
-            this.allowedTwostepMechanisms.addAll(newList);
-            HBCIUtils.log("autosecfunc: found 3920 in response - updated list of allowed twostepmechs - old: " + oldList + ", new: " + this.allowedTwostepMechanisms, HBCIUtils.LOG_DEBUG);
+            this.allowedTANMethods.clear();
+            this.allowedTANMethods.addAll(newList);
+            HBCIUtils.log("autosecfunc: found 3920 in response - updated list of allowed twostepmechs - old: " + oldList + ", new: " + this.allowedTANMethods, HBCIUtils.LOG_DEBUG);
         }
         //
         ////////////////////////////////////////////////////
@@ -327,8 +332,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         ////////////////////////////////////////////////////
         // Dialog neu starten, wenn das Verfahren sich geaendert hat
-        this.setPersistentData("_authed_dialog_executed", Boolean.TRUE);
-
         // aktuelle secmech merken und neue auswählen (basierend auf evtl. gerade neu empfangenen informationen (3920s))
         final String oldMethod = this.currentTANMethod;
         final String newMethod = this.getCurrentTANMethod(true);
@@ -612,7 +615,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 // hier evtl. automatisch ermittelte secmechs neu verifzieren soll
                 String current=getCurrentTANMethod(true);
                 
-                if (current.equals(Sig.SECFUNC_SIG_PT_1STEP)) {
+                if (current.equals(TanMethod.ONESTEP.getId())) {
                     // einschrittverfahren gewählt
                     if (!isOneStepAllowed()) {
                         HBCIUtils.log("not supported: onestep method not allowed by BPD",HBCIUtils.LOG_ERR);
@@ -639,37 +642,17 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         return ret;
     }
     
+    /**
+     * Liefert true, wenn das TAN-Einschritt-Verfahren unterstuetzt wird.
+     * @return true, wenn das TAN-Einschritt-Verfahren unterstuetzt wird.
+     */
     private boolean isOneStepAllowed()
     {
-        // default ist true, weil entweder *nur* das einschritt-verfahren unter-
-        // stützt wird oder keine BPD vorhanden sind, um das zu entscheiden
-        boolean    ret=true;
-        
-        Properties bpd=getBPD();
-        if (bpd!=null) {
-            for (Enumeration e=bpd.propertyNames();e.hasMoreElements();) {
-                String key=(String)e.nextElement();
-                
-                // TODO: willuhn 2011-05-13: Das nimmt einfach den ersten gefundenen Parameter, liefert
-                // jedoch faelschlicherweise false, wenn das erste gefundene kein Einschritt-Verfahren ist
-                // Hier muesste man durch alle iterieren und dann true liefern, wenn wenigstens
-                // eines den Wert "J" hat.
-
-                // p.getProperty("Params_x.TAN2StepParY.ParTAN2StepZ.can1step")
-                if (key.startsWith("Params")) {
-                    String subkey=key.substring(key.indexOf('.')+1);
-                    if (subkey.startsWith("TAN2StepPar") && 
-                            subkey.endsWith(".can1step")) 
-                    {
-                        String value=bpd.getProperty(key);
-                        ret=value.equals("J");
-                        break;
-                    }
-                }
-            }
-        }
-        
-        return ret;
+      final Properties bpd = this.getBPD();
+      if (bpd == null)
+        return true;
+      
+      return ParameterFinder.findAll(bpd,ParameterFinder.Query.BPD_PINTAN_CAN1STEP).containsValue("J");
     }
     
     /** Kann vor <code>new HBCIHandler()</code> aufgerufen werden, um zu
@@ -677,158 +660,136 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      * neu vom Server abgeholt wird und evtl. neu vom Nutzer abgefragt wird. */
     public void resetSecMechs()
     {
-        this.allowedTwostepMechanisms=new ArrayList<String>();
+        this.allowedTANMethods=new ArrayList<String>();
         this.currentTANMethod=null;
         this.currentTANMethodWasAutoSelected=false;
     }
     
+    /**
+     * Legt das aktuelle TAN-Verfahren fest.
+     * @param method das aktuelle TAN-Verfahren.
+     */
     public void setCurrentTANMethod(String method)
     {
         this.currentTANMethod=method;
     }
     
-    public String getCurrentTANMethod(boolean recheckSupportedSecMechs)
+    /**
+     * Liefert das aktuelle TAN-Verfahren.
+     * @param recheck true, wenn die gespeicherte Auswahl auf Aktualitaet und Verfuegbarkeit geprueft werden soll.
+     * Die Funktion kann in dem Fall einen Callback ausloesen, wenn mehrere Optionen zur Wahl stehen.
+     * @return das TAN-Verfahren.
+     */
+    public String getCurrentTANMethod(boolean recheck)
     {
-        // autosecmech: hier auch dann checken, wenn recheckSupportedSecMechs==true
-        // UND die vorherige auswahl AUTOMATISCH getroffen wurde (manuelle auswahl
-        // also in jedem fall weiter verwenden) (das AUTOMATISCH erkennt man daran,
-        // dass recheckCurrentTANMethodNeeded==true ist)
-        if (currentTANMethod==null || recheckSupportedSecMechs) {
-            HBCIUtils.log("autosecfunc: (re)checking selected pintan secmech", HBCIUtils.LOG_DEBUG);
-            
-            // es ist noch kein zweischrittverfahren ausgewaehlt, oder die 
-            // aktuelle auswahl soll gegen die liste der tatsaechlich unterstuetzten
-            // verfahren validiert werden
-            
-            List<String[]> options=new ArrayList<String[]>();
-            
-            if (isOneStepAllowed()) {
-                // wenn einschrittverfahren unterstützt, dass zur liste hinzufügen
-                if (allowedTwostepMechanisms.size()==0 || allowedTwostepMechanisms.contains(Sig.SECFUNC_SIG_PT_1STEP)) {
-                    options.add(new String[] {Sig.SECFUNC_SIG_PT_1STEP,"Einschritt-Verfahren"});
-                }
-            }
-            
-            // alle zweischritt-verfahren zur auswahlliste hinzufügen
-            String[] secfuncs= twostepMechanisms.keySet().toArray(new String[twostepMechanisms.size()]);
-            Arrays.sort(secfuncs);
-            int len=secfuncs.length;
-            for (int i=0;i<len;i++) {
-                String secfunc=secfuncs[i];
-                if (allowedTwostepMechanisms.size()==0 || allowedTwostepMechanisms.contains(secfunc)) {
-                    Properties entry=twostepMechanisms.get(secfunc);
-                    options.add(new String[] {secfunc,entry.getProperty("name")});
-                }
-            }
-            
-            if (options.size()==1) {
-                // wenn nur ein verfahren unterstützt wird, das automatisch auswählen
-                String autoSelection=(options.get(0))[0];
-                
-                HBCIUtils.log("autosecfunc: there is only one pintan method ("+autoSelection+") supported - choosing this automatically",HBCIUtils.LOG_DEBUG);
-                if (currentTANMethod!=null && !autoSelection.equals(currentTANMethod)) {
-                    HBCIUtils.log("autosecfunc: currently selected method ("+currentTANMethod+") differs from auto-selected method ("+autoSelection+")", HBCIUtils.LOG_DEBUG);
-                }
-                
-                setCurrentTANMethod(autoSelection);
-                
-                // autosecmech: hier merken, dass dieses verfahren AUTOMATISCH
-                // ausgewaehlt wurde, so dass wir spaeter immer mal wieder pruefen
-                // muessen, ob inzwischen nicht mehr/andere unterstuetzte secmechs bekannt sind
-                // (passiert z.b. wenn das anonyme abholen der bpd fehlschlaegt)
-                this.currentTANMethodWasAutoSelected=true;
-                
-            } else if (options.size()>1) {
-                // es werden mehrere verfahren unterstützt
-                
-                if (currentTANMethod!=null) {
-                    // es ist schon ein verfahren ausgewaehlt. falls dieses verfahren
-                    // nicht in der liste der unterstuetzten verfahren enthalten ist,
-                    // setzen wir das auf "null" zurueck, damit das zu verwendende
-                    // verfahren neu ermittelt wird
-                    
-                    boolean ok=false;
-                    for (Iterator<String[]> i=options.iterator();i.hasNext();) {
-                        if (currentTANMethod.equals((i.next())[0])) {
-                            ok=true;
-                            break;
-                        }
-                    }
-                    
-                    if (!ok) {
-                        HBCIUtils.log("autosecfunc: currently selected pintan method ("+currentTANMethod+") not in list of supported methods - resetting current selection", HBCIUtils.LOG_DEBUG);
-                        currentTANMethod=null;
-                    }
-                }
-                
-                if (currentTANMethod==null || this.currentTANMethodWasAutoSelected) {
-                    // wenn noch kein verfahren ausgewaehlt ist, oder das bisherige
-                    // verfahren automatisch ausgewaehlt wurde, muessen wir uns
-                    // neu fuer eine method aus der liste entscheiden
-                    
-                    // TODO: damit das sinnvoll funktioniert, sollte die liste der
-                    // allowedTwostepMechs mit im passport gespeichert werden.
-                    if (allowedTwostepMechanisms.size()==0 &&
-                            getPersistentData("_authed_dialog_executed")==null) 
-                    {
-                        // wir wählen einen secmech automatisch aus, wenn wir
-                        // die liste der erlaubten secmechs nicht haben
-                        // (entweder weil wir sie noch nie abgefragt haben oder weil
-                        // diese daten einfach nicht geliefert werden). im fall
-                        // "schon abgefragt, aber nicht geliefert" dürfen wir aber 
-                        // wiederum NICHT automatisch auswählen, so dass wir zusätzlich 
-                        // fragen, ob schon mal ein dialog gelaufen ist, bei dem 
-                        // diese daten hätten geliefert werden KÖNNEN (_authed_dialog_executed). 
-                        // nur wenn wir die liste der gültigen secmechs noch gar 
-                        // nicht haben KÖNNEN, wählen wir einen automatisch aus.
-                        
-//                        String autoSelection=(options.get(0))[0];
-//                        HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, but we don't know which of them are allowed for the current user, so we automatically choose "+autoSelection,HBCIUtils.LOG_DEBUG);
-//                        setCurrentTANMethod(autoSelection);
-//                        
-//                        // autosecmech: hier merken, dass dieses verfahren AUTOMATISCH
-//                        // ausgewaehlt wurde, so dass wir spaeter immer mal wieder pruefen
-//                        // muessen, ob inzwischen nicht mehr/andere unterstuetzte secmechs bekannt sind
-//                        // (passiert z.b. wenn das anonyme abholen der bpd fehlschlaegt)
-//                        this.currentTANMethodWasAutoSelected=true;
-                        
-                      HBCIUtils.log("autosecfunc: there are "+options.size()+" pintan methods supported, asking user what method to use",HBCIUtils.LOG_DEBUG);
-                      final String selected = this.chooseTANMethod(options);
-                      
-                      setCurrentTANMethod(selected);
-                      this.currentTANMethodWasAutoSelected=false;
-                        
-                    } else {
-                        // wir wissen schon, welche secmechs erlaubt sind (entweder
-                        // durch einen vorhergehenden dialog oder aus den persistenten
-                        // passport-daten), oder wir wissen es nicht (size==0), haben aber schonmal
-                        // danach gefragt (ein authed_dialog ist schon gelaufen, bei dem
-                        // diese daten aber nicht geliefert wurden). 
-                        // in jedem fall steht in "options" die liste der prinzipiell
-                        // verfügbaren secmechs drin, u.U. gekürzt auf die tatsächlich
-                        // erlaubten secmechs.
-                        // wir fragen also via callback nach, welcher dieser secmechs
-                        // denn nun verwendet werden soll
-                        
-                        HBCIUtils.log("autosecfunc: we have to callback to ask for pintan method to be used", HBCIUtils.LOG_DEBUG);
-                        final String selected = this.chooseTANMethod(options);
-                        
-                        setCurrentTANMethod(selected);
-                        this.currentTANMethodWasAutoSelected=false;
-                        
-                        HBCIUtils.log("autosecfunc: manually selected pintan method "+currentTANMethod, HBCIUtils.LOG_DEBUG);
-                    }
-                }
-                
-            } else {
-                // es wird scheinbar GAR KEIN verfahren unterstuetzt. also nehmen
-                // wir automatisch 999
-                HBCIUtils.log("autosecfunc: absolutely no information about allowed pintan methods available - automatically falling back to 999", HBCIUtils.LOG_DEBUG);
-                setCurrentTANMethod("999");
-                this.currentTANMethodWasAutoSelected=true;
+        // Wir haben ein aktuelles TAN-Verfahren und eine Neupruefung ist nicht noetig
+        if (this.currentTANMethod != null && !recheck)
+            return this.currentTANMethod;
+        
+        
+        HBCIUtils.log("(re)checking selected pintan method", HBCIUtils.LOG_DEBUG);
+
+        /////////////////////////////////////////
+        // Die Liste der verfuegbaren Optionen ermitteln
+        final List<TanMethod> options = new ArrayList<TanMethod>();
+
+        // Einschritt-Verfahren optional hinzufuegen
+        if (this.isOneStepAllowed())
+        {
+            TanMethod m = TanMethod.ONESTEP;
+            // Nur hinzufuegen, wenn wir entweder gar keine erlaubten haben oder es in der Liste der erlaubten drin ist
+            if (this.allowedTANMethods.size() == 0 || this.allowedTANMethods.contains(m.getId()))
+                options.add(m);
+        }
+        
+        // Die Zweischritt-Verfahren hinzufuegen
+        String[] secfuncs= this.twostepMechanisms.keySet().toArray(new String[this.twostepMechanisms.size()]);
+        Arrays.sort(secfuncs);
+        for (String secfunc:secfuncs)
+        {
+            if (this.allowedTANMethods.contains(secfunc))
+            {
+                Properties entry = this.twostepMechanisms.get(secfunc);
+                options.add(new TanMethod(secfunc,entry.getProperty("name")));
             }
         }
+        //
+        /////////////////////////////////////////
+
+        
+        /////////////////////////////////////////
+        // 0 Optionen verfuegbar
+        
+        // Wir haben keine Optionen gefunden
+        if (options.size() == 0)
+        {
+          // es wird scheinbar GAR KEIN verfahren unterstuetzt. also nehmen
+          // wir automatisch Einschritt-TAN - was anderes haben wir nicht
+          TanMethod m = TanMethod.ONESTEP;
+          HBCIUtils.log("autosecfunc: absolutely no information about allowed pintan methods available - automatically falling back to " + m, HBCIUtils.LOG_DEBUG);
+          setCurrentTANMethod(m.getId());
+          this.currentTANMethodWasAutoSelected = true;
+          return this.currentTANMethod;
+        }
+        //
+        /////////////////////////////////////////
+        
+        
+        /////////////////////////////////////////
+        // 1 Option verfuegbar
+        if (options.size() == 1)
+        {
+            final TanMethod m = options.get(0);
             
+            HBCIUtils.log("autosecfunc: there is only one pintan method supported - choosing this automatically: " + m,HBCIUtils.LOG_DEBUG);
+            
+            if (this.currentTANMethod != null && !this.currentTANMethod.equals(m.getId()))
+                HBCIUtils.log("autosecfunc: auto-selected method differs from current: " + this.currentTANMethod, HBCIUtils.LOG_DEBUG);
+            
+            this.setCurrentTANMethod(m.getId());
+            this.currentTANMethodWasAutoSelected = true;
+            
+            return this.currentTANMethod;
+        }
+        //
+        /////////////////////////////////////////
+
+
+        /////////////////////////////////////////
+        // Mehrere Optionen verfuegbar
+
+        // Checken, was gerade eingestellt ist.
+        if (this.currentTANMethod != null)
+        {
+            boolean found = false;
+            for (TanMethod m:options)
+            {
+                found |= this.currentTANMethod.equals(m.getId());
+                if (found)
+                    break;
+            }
+            
+            if (!found)
+            {
+                HBCIUtils.log("autosecfunc: currently selected pintan method ("+this.currentTANMethod+") not in list of supported methods  " + options + " - resetting current selection", HBCIUtils.LOG_DEBUG);
+                this.currentTANMethod = null;
+            }
+        }
+        //
+        /////////////////////////////////////////
+
+        // Wenn wir jetzt immer noch ein Verfahren haben und dieses nicht automatisch gewaehlt wurde, dann
+        // duerfen wir es verwenden.
+        if (this.currentTANMethod != null && !this.currentTANMethodWasAutoSelected)
+            return this.currentTANMethod;
+        
+        // User fragen
+        HBCIUtils.log("autosecfunc: asking user what tan method to use. available methods: " + options,HBCIUtils.LOG_DEBUG);
+        final String selected = this.chooseTANMethod(options);
+          
+        this.setCurrentTANMethod(selected);
+        this.currentTANMethodWasAutoSelected = false;
+        HBCIUtils.log("autosecfunc: manually selected pintan method "+currentTANMethod, HBCIUtils.LOG_DEBUG);
         return currentTANMethod;
     }
     
@@ -837,15 +798,15 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      * @param options die verfuegbaren Optionen.
      * @return das gewaehlte TAN-Verfahren.
      */
-    private String chooseTANMethod(List<String[]> options)
+    private String chooseTANMethod(List<TanMethod> options)
     {
         final StringBuffer retData = new StringBuffer();
-        for (String[] entry:options)
+        for (TanMethod entry:options)
         {
             if (retData.length()!=0)
                 retData.append("|");
             
-            retData.append(entry[0]).append(":").append(entry[1]);
+            retData.append(entry.getId()).append(":").append(entry.getName());
         }
         
         HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_SECMECH,"*** Select a pintan method from the list",HBCICallback.TYPE_TEXT,retData);
@@ -853,9 +814,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Pruefen, ob das gewaehlte Verfahren einem aus der Liste entspricht
         final String selected = retData.toString();
         
-        for (String[] entry:options)
+        for (TanMethod entry:options)
         {
-            if  (selected.equals(entry[0]))
+            if  (selected.equals(entry.getId()))
                 return selected;
         }
         
@@ -879,7 +840,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public String getProfileVersion()
     {
-        return getCurrentTANMethod(false).equals(Sig.SECFUNC_SIG_PT_1STEP)?"1":"2";
+        return getCurrentTANMethod(false).equals(TanMethod.ONESTEP.getId())?"1":"2";
     }
 
     public boolean needUserKeys()
@@ -1159,9 +1120,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (bpd == null)
             return ret;
         
-        boolean isGV=false;
-        StringBuffer paramCode=new StringBuffer(code).replace(1,2,"I").append("S");
-
+        boolean isGV = false;
+        final String paramCode = StringUtil.toParameterCode(code);
+        
         for (Enumeration e=bpd.propertyNames();e.hasMoreElements();) {
             String key=(String)e.nextElement();
 
@@ -1180,7 +1141,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                        key.endsWith(".SegHead.code")) {
 
                 String code2=bpd.getProperty(key);
-                if (paramCode.toString().equals(code2)) {
+                if (paramCode.equals(code2)) {
                     isGV=true;
                 }
             }
@@ -1275,31 +1236,16 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         // Wir muessen auch bei der richtigen Segment-Version schauen
         final Properties props = this.getCurrentSecMechInfo();
-        String segVersion = props.getProperty("segversion");
-
-        for (Enumeration<?> e=bpd.propertyNames();e.hasMoreElements();)
-        {
-            String key = (String) e.nextElement();
-
-            // p.getProperty("Params_x.TAN2StepParY.ParTAN2StepZ.orderhashmode")
-            if (key.startsWith("Params"))
-            {
-                String subkey=key.substring(key.indexOf('.')+1);
-                if (subkey.startsWith("TAN2StepPar" + (segVersion != null ? segVersion : "")) &&  subkey.endsWith(".orderhashmode"))
-                {
-                    // Der Parameter ist codiert
-                    String id = bpd.getProperty(key);
-                    if ("1".equals(id))
-                        return DigestUtils.ALG_RIPE_MD160;
-                    if ("2".equals(id))
-                        return DigestUtils.ALG_SHA1;
-                    
-                    throw new HBCI_Exception("unknown orderhash mode " + id);
-                }
-            }
-        }
+        final String segVersion = props.getProperty("segversion");
         
-        return null;
+        final String s = ParameterFinder.getValue(bpd,Query.BPD_PINTAN_ORDERHASHMODE.withParameters((segVersion != null ? segVersion : "")),null);
+        
+        if ("1".equals(s))
+            return DigestUtils.ALG_RIPE_MD160;
+        if ("2".equals(s))
+            return DigestUtils.ALG_SHA1;
+                    
+        throw new HBCI_Exception("unknown orderhash mode " + s);
     }
     
     /**
@@ -1322,7 +1268,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         // Einschritt-Verfahren - kein HKTAN erforderlich
         final String tanMethod = this.getCurrentTANMethod(false);
-        if (tanMethod.equals(Sig.SECFUNC_SIG_PT_1STEP))
+        if (tanMethod.equals(TanMethod.ONESTEP.getId()))
             return;
 
         // wenn es sich um das pintan-verfahren im zweischritt-modus handelt,
@@ -1542,12 +1488,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public List<String> getAllowedTwostepMechanisms() 
     {
-        return this.allowedTwostepMechanisms;
+        return this.allowedTANMethods;
     }
     
     public void setAllowedTwostepMechanisms(List<String> l)
     {
-        this.allowedTwostepMechanisms=l;
+        this.allowedTANMethods=l;
     }
     
     public int getMaxGVSegsPerMsg()

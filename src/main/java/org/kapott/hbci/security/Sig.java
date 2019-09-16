@@ -52,7 +52,6 @@ public final class Sig
     public final static String SECFUNC_FINTS_SIG_DIG="1";
     public final static String SECFUNC_FINTS_SIG_SIG="2";
     
-    public final static String SECFUNC_SIG_PT_1STEP="999";
     public final static String SECFUNC_SIG_PT_2STEP_MIN="900";
     public final static String SECFUNC_SIG_PT_2STEP_MAX="997";
 
