@@ -8,7 +8,7 @@ import org.kapott.hbci.manager.HBCIUser;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.passport.HBCIPassport;
+import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
 public class GVTANMediaList extends HBCIJobImpl {
@@ -103,8 +103,14 @@ public class GVTANMediaList extends HBCIJobImpl {
         {
             HBCIUtils.log("TAN-Medienbezeichnungen empfangen: " + names, HBCIUtils.LOG_INFO);
             HBCIUtils.log("adding TAN media names to UPD: " + names, HBCIUtils.LOG_DEBUG);
-            HBCIPassport p = getParentHandler().getPassport();
+            HBCIPassportInternal p = (HBCIPassportInternal) getParentHandler().getPassport();
             Properties upd = p.getUPD();
+            if (upd == null)
+            {
+                // Fuer den Fall, dass wir das zu einem Zeitpunkt aufgerufen haben, wo wir noch gar keine UPD haben
+                upd = new Properties();
+                p.setUPD(upd);
+            }
             upd.setProperty(HBCIUser.UPD_KEY_TANMEDIA,names);
         }
     }

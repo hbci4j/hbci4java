@@ -157,14 +157,10 @@ public final class HBCIHandler
           return;
         }
         
-        final Properties upd = passport.getUPD();
-        if (upd == null)
-        {
-            HBCIUtils.log("have no upd skip fetching of meta info", HBCIUtils.LOG_DEBUG);
-            return;
-        }
+        final Properties upd = this.passport.getUPD();
         
-        if (upd.containsKey(HBCIUser.UPD_KEY_METAINFO))
+        // Wenn wir schon UPD haben, checken wir, ob wir die Daten erst kuerzlich abgerufen haben
+        if (upd != null && upd.containsKey(HBCIUser.UPD_KEY_METAINFO))
         {
             HBCIUtils.log("meta info already fetched", HBCIUtils.LOG_DEBUG);
             return;
@@ -172,9 +168,6 @@ public final class HBCIHandler
 
         final Properties lowlevel = this.getSupportedLowlevelJobs();
         
-        boolean tanMedia = false;
-        boolean sepaInfo = false;
-
         //////////////////////////////////////////////////////////////////////////////////
         // 1. Abruf der TAN-Medien
         // Seit SCA muessen wir den Abruf in einem dedizierten Dialog machen, weil
@@ -192,14 +185,9 @@ public final class HBCIHandler
                 job.addToQueue();
                 final HBCIExecStatus status = this.execute();
                 if (status.isOK())
-                {
                     HBCIUtils.log("successfully fetched tan media list", HBCIUtils.LOG_DEBUG);
-                    tanMedia = true;
-                }
                 else
-                {
                     HBCIUtils.log("error while fetching tan media info: " + status.toString(), HBCIUtils.LOG_ERR);
-                }
             }
             else
             {
@@ -215,24 +203,19 @@ public final class HBCIHandler
         //////////////////////////////////////////////////////////////////////////////////
         
         //////////////////////////////////////////////////////////////////////////////////
-        // Abruf der SEPA-Infos
+        // Abruf der SEPA-Infos - nur wenn wir schon UPDs haben - dort tragen wir ja die Kontodaten dann ein
         try
         {
-            if (lowlevel.getProperty("SEPAInfo") != null)
+            if (lowlevel.getProperty("SEPAInfo") != null && upd != null)
             {
                 HBCIUtils.log("Aktualisiere SEPA-Informationen", HBCIUtils.LOG_INFO);
                 final HBCIJob job = this.newJob("SEPAInfo");
                 job.addToQueue();
                 final HBCIExecStatus status = this.execute();
                 if (status.isOK())
-                {
                     HBCIUtils.log("successfully fetched sepa info", HBCIUtils.LOG_DEBUG);
-                    sepaInfo = true;
-                }
                 else
-                {
                     HBCIUtils.log("error while fetching sepa info: " + status.toString(), HBCIUtils.LOG_ERR);
-                }
             }
             else
             {
@@ -247,13 +230,11 @@ public final class HBCIHandler
         //
         //////////////////////////////////////////////////////////////////////////////////
 
-        // Wenn eins von beiden funktioniert hat, markieren wir den Task als erledigt.
-        if (sepaInfo || tanMedia)
-        {
-            HBCIUtils.log("meta info successfully fetched",HBCIUtils.LOG_DEBUG);
-            passport.getUPD().setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString());
-            passport.saveChanges();
-        }
+        // Wir markieren das immer als erledigt - egal, ob es geklappt hat oder nicht
+        // Dafür wiederholen wir es zyklisch immer mal wieder
+        HBCIUtils.log("meta info fetched",HBCIUtils.LOG_DEBUG);
+        passport.getUPD().setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString());
+        passport.saveChanges();
     }
 
     /**
