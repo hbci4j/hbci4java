@@ -10,6 +10,9 @@
 
 package org.kapott.hbci.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.kapott.hbci.status.HBCIRetVal;
 
 /**
@@ -120,6 +123,7 @@ public enum KnownReturncode
      * Sucht nach dem angegebenen Status-Code in den Rueckmeldungen und liefert den Code zurueck.
      * @param rets die Rueckmeldungen.
      * @return der gesuchte Rueckmeldecode oder NULL, wenn er nicht existiert.
+     * Es wird der erste gefundene verwendet.
      */
     public HBCIRetVal searchReturnValue(HBCIRetVal[] rets)
     {
@@ -132,5 +136,25 @@ public enum KnownReturncode
                 return ret;
         }
         return null;
+    }
+
+    /**
+     * Sucht nach dem angegebenen Status-Code in den Rueckmeldungen und liefert den Code zurueck.
+     * @param rets die Rueckmeldungen.
+     * @return die gesuchten Rueckmeldecodes oder NULL, wenn sie nicht existieren.
+     * Es werden alle gefundenen geliefert.
+     */
+    public List<HBCIRetVal> searchReturnValues(HBCIRetVal[] rets)
+    {
+        if (rets == null || rets.length == 0)
+            return null;
+
+        List<HBCIRetVal> result = new ArrayList<HBCIRetVal>();
+        for (HBCIRetVal ret:rets)
+        {
+            if (this.is(ret.code))
+                result.add(ret);
+        }
+        return result;
     }
 }

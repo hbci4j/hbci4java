@@ -24,10 +24,12 @@ package org.kapott.hbci.passport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 
 import org.kapott.hbci.GV.GVTAN2Step;
 import org.kapott.hbci.GV.HBCIJobImpl;
@@ -304,19 +306,33 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         HBCIUtils.log("autosecfunc: search for 3920 in response to detect allowed twostep secmechs", HBCIUtils.LOG_DEBUG);
 
-        HBCIRetVal globRet = KnownReturncode.W3920.searchReturnValue(glob);
-        HBCIRetVal segRet  = KnownReturncode.W3920.searchReturnValue(seg);
+        List<HBCIRetVal> globRet = KnownReturncode.W3920.searchReturnValues(glob);
+        List<HBCIRetVal> segRet  = KnownReturncode.W3920.searchReturnValues(seg);
 
         if (globRet == null && segRet == null)
             return;
         
         final List<String> oldList = new ArrayList<String>(this.allowedTANMethods);
-        final List<String> newList = new ArrayList<String>();
+        final Set<String> newSet = new HashSet<String>(); // Damit doppelte nicht doppelt in der Liste landen
         
-        if (globRet != null && globRet.params != null)
-            newList.addAll(Arrays.asList(globRet.params));
-        if (segRet != null && segRet.params != null && segRet.params.length > 0)
-            newList.addAll(Arrays.asList(segRet.params));
+        if (globRet != null)
+        {
+            for (HBCIRetVal r:globRet)
+            {
+                if (r.params != null)
+                    newSet.addAll(Arrays.asList(r.params));
+            }
+        }
+        if (segRet != null)
+        {
+            for (HBCIRetVal r:segRet)
+            {
+                if (r.params != null)
+                    newSet.addAll(Arrays.asList(r.params));
+            }
+        }
+        
+        final List<String> newList = new ArrayList<String>(newSet);
 
         if (newList.size() > 0 && !newList.equals(oldList))
         {
