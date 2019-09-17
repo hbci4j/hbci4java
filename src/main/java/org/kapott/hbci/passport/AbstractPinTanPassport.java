@@ -815,13 +815,16 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (this.currentTANMethod != null && !this.currentTANMethodWasAutoSelected)
             return this.currentTANMethod;
         
-        // User fragen
-        HBCIUtils.log("autosecfunc: asking user what tan method to use. available methods: " + options,HBCIUtils.LOG_DEBUG);
-        final String selected = this.chooseTANMethod(options);
-          
-        this.setCurrentTANMethod(selected);
-        this.currentTANMethodWasAutoSelected = false;
-        HBCIUtils.log("autosecfunc: manually selected pintan method "+currentTANMethod, HBCIUtils.LOG_DEBUG);
+        // User fragen - aber nur, wenn wir was zum Auswahlen haben
+        if (options != null && options.size() > 0)
+        {
+            HBCIUtils.log("autosecfunc: asking user what tan method to use. available methods: " + options,HBCIUtils.LOG_DEBUG);
+            final String selected = this.chooseTANMethod(options);
+              
+            this.setCurrentTANMethod(selected);
+            this.currentTANMethodWasAutoSelected = false;
+            HBCIUtils.log("autosecfunc: manually selected pintan method "+currentTANMethod, HBCIUtils.LOG_DEBUG);
+        }
         return currentTANMethod;
     }
     
