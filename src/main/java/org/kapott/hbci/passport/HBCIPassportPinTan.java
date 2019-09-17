@@ -209,9 +209,21 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
             HBCIUtils.log("saving two step mechs: " + l, HBCIUtils.LOG_DEBUG);
             data.twostepMechs = l;
             
-            final String s = this.getCurrentTANMethod(false);
-            HBCIUtils.log("saving current tan method: "+s, HBCIUtils.LOG_DEBUG);
-            data.tanMethod = s;
+            try
+            {
+                final String s = this.getCurrentTANMethod(false);
+                HBCIUtils.log("saving current tan method: "+s, HBCIUtils.LOG_DEBUG);
+                data.tanMethod = s;
+            }
+            catch (Exception e)
+            {
+                // Nur zur Sicherheit. In der obigen Funktion werden u.U. eine Menge Sachen losgetreten.
+                // Wenn da irgendwas schief laeuft, soll deswegen nicht gleich das Speichern der Config
+                // scheitern. Im Zweifel speichern wir dann halt das ausgewaehlte Verfahren erstmal nicht
+                // und der User muss es beim naechsten Mal neu waehlen
+                HBCIUtils.log("could not determine current tan methode, skipping: " + e.getMessage(),HBCIUtils.LOG_DEBUG);
+                HBCIUtils.log(e,HBCIUtils.LOG_DEBUG2);
+            }
 
             PassportStorage.save(this,data,new File(this.getFileName()));
         }
