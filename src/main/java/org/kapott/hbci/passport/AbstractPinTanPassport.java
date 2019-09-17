@@ -875,7 +875,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public String getProfileVersion()
     {
-        return "1";
+        return getCurrentTANMethod(false).equals(TanMethod.ONESTEP.getId())?"1":"2";
     }
 
     public boolean needUserKeys()
