@@ -106,11 +106,11 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     private String    currentTANMethod;
     private boolean   currentTANMethodWasAutoSelected;
     
-    // Die IDs aller erlaubten TAN-Verfahren
-    private List<String> allowedTANMethods;
+    // Die TAN-Verfahren fuer den User
+    private List<String> tanMethodsUser;
 
-    // Die Map mit den BPDs zu den TAN-Verfahren
-    private Hashtable<String,Properties> twostepMechanisms;
+    // Die TAN-Verfahren mit den Parametern aus den BPD
+    private Hashtable<String,Properties> tanMethodsBank;
 
     private String    pin;
     
@@ -121,8 +121,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     public AbstractPinTanPassport(Object initObject)
     {
         super(initObject);
-        this.twostepMechanisms=new Hashtable<String, Properties>();
-        this.allowedTANMethods=new ArrayList<String>();
+        this.tanMethodsBank=new Hashtable<String, Properties>();
+        this.tanMethodsUser=new ArrayList<String>();
     }
     
     /**
@@ -144,7 +144,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             // hier die liste der verfügbaren sicherheitsverfahren aus den
             // bpd (HITANS) extrahieren
 
-            twostepMechanisms.clear();
+            tanMethodsBank.clear();
             
             // willuhn 2011-06-06 Maximal zulaessige HITANS-Segment-Version ermitteln
             // Hintergrund: Es gibt User, die nur HHD 1.3-taugliche TAN-Generatoren haben,
@@ -184,7 +184,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                             String secfunc=p.getProperty(key);
 
                             // willuhn 2011-05-13 Checken, ob wir das Verfahren schon aus einer aktuelleren Segment-Version haben
-                            Properties prev = twostepMechanisms.get(secfunc);
+                            Properties prev = tanMethodsBank.get(secfunc);
                             if (prev != null)
                             {
                               // Wir haben es schonmal. Mal sehen, welche Versionsnummer es hat
@@ -222,7 +222,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                             }
 
                             // diesen mechanismus abspeichern
-                            twostepMechanisms.put(secfunc,entry);
+                            tanMethodsBank.put(secfunc,entry);
                         }
                     }
                 }
@@ -312,7 +312,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (globRet == null && segRet == null)
             return;
         
-        final List<String> oldList = new ArrayList<String>(this.allowedTANMethods);
+        final List<String> oldList = new ArrayList<String>(this.tanMethodsUser);
         final Set<String> newSet = new HashSet<String>(); // Damit doppelte nicht doppelt in der Liste landen
         
         if (globRet != null)
@@ -336,9 +336,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         if (newList.size() > 0 && !newList.equals(oldList))
         {
-            this.allowedTANMethods.clear();
-            this.allowedTANMethods.addAll(newList);
-            HBCIUtils.log("autosecfunc: found 3920 in response - updated list of allowed twostepmechs - old: " + oldList + ", new: " + this.allowedTANMethods, HBCIUtils.LOG_DEBUG);
+            this.tanMethodsUser.clear();
+            this.tanMethodsUser.addAll(newList);
+            HBCIUtils.log("autosecfunc: found 3920 in response - updated list of allowed twostepmechs - old: " + oldList + ", new: " + this.tanMethodsUser, HBCIUtils.LOG_DEBUG);
         }
         //
         ////////////////////////////////////////////////////
@@ -436,10 +436,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // HKTAN-Version und Prozessvariante ermitteln - kann NULL sein
         final Properties secmechInfo = this.getCurrentSecMechInfo();
         
-//        // Wir haben keine TAN-Verfahren - dann koennen wir eh noch nichts ermitteln
-//        if (secmechInfo == null || secmechInfo.size() == 0)
-//            return;
-
         final int hktanVersion = secmechInfo != null ? NumberUtil.parseInt(secmechInfo.getProperty("segversion"),segversionDefault) : segversionDefault;
         
         // Erst ab HKTAN 6 noetig. Die Bank unterstuetzt es scheinbar noch nicht
@@ -641,7 +637,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     }
                 } else {
                     // irgendein zweischritt-verfahren gewählt
-                    Properties entry=twostepMechanisms.get(current);
+                    Properties entry=tanMethodsBank.get(current);
                     if (entry==null) {
                         // es gibt keinen info-eintrag für das gewählte verfahren
                         HBCIUtils.log("not supported: twostep-method "+current+" selected, but this is not supported",HBCIUtils.LOG_ERR);
@@ -676,7 +672,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      * neu vom Server abgeholt wird und evtl. neu vom Nutzer abgefragt wird. */
     public void resetSecMechs()
     {
-        this.allowedTANMethods=new ArrayList<String>();
+        this.tanMethodsUser=new ArrayList<String>();
         this.currentTANMethod=null;
         this.currentTANMethodWasAutoSelected=false;
     }
@@ -715,18 +711,18 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
             TanMethod m = TanMethod.ONESTEP;
             // Nur hinzufuegen, wenn wir entweder gar keine erlaubten haben oder es in der Liste der erlaubten drin ist
-            if (this.allowedTANMethods.size() == 0 || this.allowedTANMethods.contains(m.getId()))
+            if (this.tanMethodsUser.size() == 0 || this.tanMethodsUser.contains(m.getId()))
                 options.add(m);
         }
         
         // Die Zweischritt-Verfahren hinzufuegen
-        String[] secfuncs= this.twostepMechanisms.keySet().toArray(new String[this.twostepMechanisms.size()]);
+        String[] secfuncs= this.tanMethodsBank.keySet().toArray(new String[this.tanMethodsBank.size()]);
         Arrays.sort(secfuncs);
         for (String secfunc:secfuncs)
         {
-            final Properties entry = this.twostepMechanisms.get(secfunc);
+            final Properties entry = this.tanMethodsBank.get(secfunc);
             final TanMethod m = new TanMethod(secfunc,entry.getProperty("name"));
-            if (this.allowedTANMethods.contains(secfunc))
+            if (this.tanMethodsUser.size() == 0 || this.tanMethodsUser.contains(secfunc))
             {
                 options.add(m);
             }
@@ -861,12 +857,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public Properties getCurrentSecMechInfo()
     {
-        return twostepMechanisms.get(getCurrentTANMethod(false));
+        return tanMethodsBank.get(getCurrentTANMethod(false));
     }
     
     public Hashtable<String, Properties> getTwostepMechanisms()
     {
-    	return twostepMechanisms;
+    	return tanMethodsBank;
     }
 
     public String getProfileMethod()
@@ -1524,12 +1520,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public List<String> getAllowedTwostepMechanisms() 
     {
-        return this.allowedTANMethods;
+        return this.tanMethodsUser;
     }
     
     public void setAllowedTwostepMechanisms(List<String> l)
     {
-        this.allowedTANMethods=l;
+        this.tanMethodsUser=l;
     }
     
     public int getMaxGVSegsPerMsg()
