@@ -21,7 +21,7 @@ public class GVTANMediaList extends HBCIJobImpl {
     public GVTANMediaList(HBCIHandler handler)
     {
         super(handler,getLowlevelName(),new GVRTANMediaList());
-        addConstraint("mediatype","mediatype","0", LogFilter.FILTER_NONE); // "1" gibts nicht. Siehe FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf "TAN-Medium-Art"
+        addConstraint("mediatype","mediatype","0", LogFilter.FILTER_NONE);
         addConstraint("mediacategory", "mediacategory", "A", LogFilter.FILTER_NONE);
     }
     

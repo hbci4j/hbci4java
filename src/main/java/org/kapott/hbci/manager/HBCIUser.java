@@ -40,6 +40,7 @@ import org.kapott.hbci.dialog.HBCIDialogInit;
 import org.kapott.hbci.dialog.HBCIDialogLockKeys;
 import org.kapott.hbci.dialog.HBCIDialogSync;
 import org.kapott.hbci.dialog.HBCIDialogSync.Mode;
+import org.kapott.hbci.dialog.HBCIDialogTanMedia;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.NeedKeyAckException;
 import org.kapott.hbci.exceptions.ProcessException;
@@ -405,33 +406,77 @@ public final class HBCIUser implements IHandlerData
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_SYSID,null);
             HBCIUtils.log("Rufe neue System-ID ab",HBCIUtils.LOG_INFO);
             
-            // autosecmech
             HBCIUtils.log("checking whether passport is supported (but ignoring result)",HBCIUtils.LOG_DEBUG);
             boolean s=passport.isSupported();
             HBCIUtils.log("passport supported: "+s,HBCIUtils.LOG_DEBUG);
 
             passport.setSigId(new Long(1));
             passport.setSysId("0");
-    
-            // Dialog-Context erzeugen
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
 
-            // Dialog-Synchronisierung senden
-            final HBCIDialogSync sync = new HBCIDialogSync(Mode.SYS_ID);
-            final HBCIMsgStatus ret = sync.execute(ctx);
-            final Properties result = ret.getData();
-    
-            HBCIInstitute inst=new HBCIInstitute(kernel,passport,false);
-            inst.updateBPD(result);
-            updateUPD(result);
-            passport.setSysId(result.getProperty("SyncRes.sysid"));
-            passport.saveChanges();
-    
-            HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_SYSID_DONE,new Object[] {ret,passport.getSysId()});
-            HBCIUtils.log("new sys-id is "+passport.getSysId(),HBCIUtils.LOG_DEBUG);
-            
-            final HBCIDialogEnd end = new HBCIDialogEnd();
-            end.execute(ctx);
+            ////////////////////////////////////////
+            // HKTAB
+            if (HBCIDialogTanMedia.supported(this.passport))
+            {
+                HBCIUtils.log("fetching TAN media names",HBCIUtils.LOG_DEBUG);
+                passport.setPersistentData("hktan","true");
+                try
+                {
+                    final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                    
+                    final HBCIDialogInit init = new HBCIDialogInit()
+                    {
+                        /**
+                         * @see org.kapott.hbci.dialog.AbstractRawHBCIDialogInit#getTanReference(org.kapott.hbci.dialog.DialogContext)
+                         */
+                        @Override
+                        protected String getTanReference(DialogContext ctx)
+                        {
+                            return "HKTAB";
+                        }
+                    };
+                    init.execute(ctx);
+
+                    final HBCIDialogTanMedia tanMedia = new HBCIDialogTanMedia();
+                    tanMedia.execute(ctx);
+                    
+                    final HBCIDialogEnd end = new HBCIDialogEnd();
+                    end.execute(ctx);
+                }
+                catch (Exception e)
+                {
+                    throw new HBCI_Exception("fetching of TAN media names failed",e);
+                }
+                finally
+                {
+                    passport.setPersistentData("hktan",null);
+                }
+            }
+            ////////////////////////////////////////
+
+            ////////////////////////////////////////
+            // Sync
+            {
+                // Dialog-Synchronisierung senden
+                final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                final HBCIDialogSync sync = new HBCIDialogSync(Mode.SYS_ID);
+                final HBCIMsgStatus ret = sync.execute(ctx);
+                final Properties result = ret.getData();
+        
+                HBCIInstitute inst = new HBCIInstitute(kernel,passport,false);
+                inst.updateBPD(result);
+                updateUPD(result);
+                passport.setSysId(result.getProperty("SyncRes.sysid"));
+                passport.saveChanges();
+        
+                HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INIT_SYSID_DONE,new Object[] {ret,passport.getSysId()});
+                HBCIUtils.log("new sys-id is "+passport.getSysId(),HBCIUtils.LOG_DEBUG);
+                
+                final HBCIDialogEnd end = new HBCIDialogEnd();
+                end.execute(ctx);
+
+            }
+            //
+            ////////////////////////////////////////
         }
         catch (Exception e)
         {

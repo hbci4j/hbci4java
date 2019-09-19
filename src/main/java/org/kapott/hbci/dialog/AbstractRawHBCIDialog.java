@@ -130,7 +130,15 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
      */
     protected void checkResult(final DialogContext ctx)
     {
-        
+    }
+    
+    /**
+     * @see org.kapott.hbci.dialog.RawHBCIDialog#getSCARequest(org.kapott.hbci.dialog.DialogContext)
+     */
+    @Override
+    public SCARequest getSCARequest(DialogContext ctx)
+    {
+        return null;
     }
     
     /**
