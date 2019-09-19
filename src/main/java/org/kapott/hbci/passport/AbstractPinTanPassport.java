@@ -684,7 +684,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     }
 
     /**
-     * Liefert das aktuelle TAN-Verfahren per {@link Strategy#DETERMINE}.
+     * Liefert das aktuelle TAN-Verfahren.
+     * Hierbei versucht HBCI4Java das Verfahren erst automatisch zu ermitteln, bevor es den User fragt.
      * @return das TAN-Verfahren.
      */
     private String determineTanMethod()
@@ -750,7 +751,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     }
 
     /**
-     * Liefert das aktuelle TAN-Verfahren per {@link Strategy#ASKUSER}.
+     * Liefert das aktuelle TAN-Verfahren.
      * Fragt hierbei im Zweifelsfall eher den User anstatt es selbst herauszufinden.
      * @return das TAN-Verfahren.
      */
