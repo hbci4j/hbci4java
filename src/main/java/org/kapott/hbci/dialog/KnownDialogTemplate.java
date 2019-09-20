@@ -34,6 +34,11 @@ public enum KnownDialogTemplate
     SYNC("Synch"),
     
     /**
+     * Abruf der TAN-Medien.
+     */
+    TANMEDIA("TanMedia"),
+    
+    /**
      * Abfrage der Bankensignatur.
      */
     FIRSTKEYREQUEST("FirstKeyReq"),

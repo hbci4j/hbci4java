@@ -47,5 +47,4 @@ public abstract class AbstractRawHBCIDialogInit extends AbstractRawHBCIDialog
         k.rawSet("ProcPrep.prodName",HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID));
         k.rawSet("ProcPrep.prodVersion",HBCIUtils.getParam("client.product.version","3"));
     }
-
 }

@@ -10,6 +10,10 @@
 
 package org.kapott.hbci.dialog;
 
+import java.util.Objects;
+
+import org.kapott.hbci.tools.StringUtil;
+
 /**
  * Enthaelt die Liste der bekannten TAN-Prozesse.
  */
@@ -32,11 +36,61 @@ public enum KnownTANProcess
     
     ;
     
+    /**
+     * Prozess-Variante.
+     */
+    public enum Variant
+    {
+        /**
+         * Prozess-Variante 1.
+         */
+        V1("1"),
+        
+        /**
+         * Prozess-Variante 2.
+         */
+        V2("2"),
+        
+        ;
+        
+        private final static Variant DEFAULT = V2;
+        
+        private String code = null;
+        
+        /**
+         * ct.
+         * @param code der Code der Prozess-Variante.
+         */
+        private Variant(String code)
+        {
+            this.code = code;
+        }
+        
+        /**
+         * Liefert die zu verwendende Prozessvariante.
+         * @param code der Code der Variante. Nie NULL sondern hoechstens die Default-Variante.
+         * @return die Prozess-Variante.
+         */
+        public final static Variant determine(String code)
+        {
+            if (!StringUtil.hasText(code))
+                return DEFAULT;
+            
+            for (Variant v:values())
+            {
+                if (Objects.equals(code,v.code))
+                    return v;
+            }
+            
+            return DEFAULT;
+        }
+    }
+    
     private String code = null;
     
     /**
      * ct.
-     * @param code
+     * @param code der Prozess-Schritt.
      */
     private KnownTANProcess(String code)
     {
@@ -63,21 +117,17 @@ public enum KnownTANProcess
     }
     
     /**
-     * Ermittelt den passenden TAN-Prozess fuer den angegebenen Code.
-     * @param code der Code.
-     * @return der TAN-Prozess oder NULL, wenn er nicht gefunden wurde.
+     * Ermittelt den passenden TAN-Prozess fuer die Variante und die Schritt-Nummer.
+     * @param v die Prozess-Variante.
+     * @param step die Schritt-Nummer.
+     * @return der TAN-Prozess. Nie NULL sondern im Zweifel {@link KnownTANProcess#PROCESS2_STEP1}.
      */
-    public static KnownTANProcess determine(String code)
+    public static KnownTANProcess get(Variant v, int step)
     {
-        if (code == null || code.length() == 0)
-            return null;
-        
-        for (KnownTANProcess t:values())
-        {
-            if (t.is(code))
-                return t;
-        }
-        
-        return null;
+        // Hier gibts nur einen
+        if (v == Variant.V1)
+            return PROCESS1;
+
+        return step == 2 ? PROCESS2_STEP2 : PROCESS2_STEP1;
     }
 }

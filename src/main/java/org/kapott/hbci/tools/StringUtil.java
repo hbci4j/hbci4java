@@ -39,6 +39,21 @@ public class StringUtil
         
         return toInsCode(hbciCode) + "S";
     }
+    
+    /**
+     * Prueft, ob im String Text enthalten ist, der kein Whitespace ist.
+     * @param s der zu pruefende Text.
+     * @return true, wenn Text enthalten ist.
+     * Wenn nur Leerzeichen oder andere Whitespaces enthalten sind, liefert die Funktion false.
+     * Ebenso wenn der String NULL ist.
+     */
+    public static boolean hasText(String s)
+    {
+        if (s == null || s.length() == 0)
+            return false;
+        
+        return s.trim().length() > 0;
+    }
 }
 
 

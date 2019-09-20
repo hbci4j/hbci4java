@@ -38,4 +38,11 @@ public interface RawHBCIDialog
      * @param t das Template.
      */
     public void setTemplate(KnownDialogTemplate t);
+    
+    /**
+     * Erlaubt das Customizing des SCA-Requests on-demand.
+     * Kann inline ueberschrieben werden, um hier spezielle Anpassungen vorzunehmen.
+     * @param sca der SCA-Request.
+     */
+    public void customizeSCA(SCARequest sca);
 }
