@@ -96,7 +96,7 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
         final HBCIKernelImpl k = ctx.getKernel();
         
         final Integer version = getSegmentVersion(p,5);
-        k.rawSet("TANMediaList" + version+ ".mediatype","1"); // Wir wollen nur die aktiven TAN-Medien 
+        k.rawSet("TANMediaList" + version+ ".mediatype","0"); // Eigentlich wollen wir nur 1 (also nur die aktiven). Aber die SPK akzeptiert das nicht
         k.rawSet("TANMediaList" + version+ ".mediacategory","A"); // Wir wollen alle Medien-Arten
     }
     
