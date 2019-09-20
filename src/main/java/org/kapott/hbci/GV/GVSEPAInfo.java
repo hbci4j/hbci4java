@@ -29,6 +29,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.status.HBCIMsgStatus;
+import org.kapott.hbci.tools.StringUtil;
 
 public class GVSEPAInfo 
 	extends HBCIJobImpl 
@@ -89,8 +90,11 @@ public class GVSEPAInfo
         				temp_blz.equals(blz) &&
         				temp_number.equals(number))
         		{
-        			upd.setProperty(temp_header+".KTV.iban", iban);
-        			upd.setProperty(temp_header+".KTV.bic", bic);
+        		    if (StringUtil.hasText(iban))
+        		        upd.setProperty(temp_header+".KTV.iban", iban);
+        		    
+        		    if (StringUtil.hasText(bic))
+        		        upd.setProperty(temp_header+".KTV.bic", bic);
         		}
         	}
         }
