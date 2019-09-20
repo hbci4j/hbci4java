@@ -40,9 +40,9 @@ public interface RawHBCIDialog
     public void setTemplate(KnownDialogTemplate t);
     
     /**
-     * Liefert den fuer die Dialog-Initialisierung zu verwendenden SCA-Request fuer das HKTAN.
-     * @param ctx der Dialog-Context.
-     * @return der SCA-Request oder NULL, wenn der Init-Dialog kein HKTAN enthalten soll.
+     * Erlaubt das Customizing des SCA-Requests on-demand.
+     * Kann inline ueberschrieben werden, um hier spezielle Anpassungen vorzunehmen.
+     * @param sca der SCA-Request.
      */
-    public SCARequest getSCARequest(final DialogContext ctx);
+    public void customizeSCA(SCARequest sca);
 }

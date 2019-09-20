@@ -41,6 +41,7 @@ import org.kapott.hbci.dialog.HBCIDialogLockKeys;
 import org.kapott.hbci.dialog.HBCIDialogSync;
 import org.kapott.hbci.dialog.HBCIDialogSync.Mode;
 import org.kapott.hbci.dialog.HBCIDialogTanMedia;
+import org.kapott.hbci.dialog.SCARequest;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.NeedKeyAckException;
 import org.kapott.hbci.exceptions.ProcessException;
@@ -414,46 +415,6 @@ public final class HBCIUser implements IHandlerData
             passport.setSysId("0");
 
             ////////////////////////////////////////
-            // HKTAB
-            if (HBCIDialogTanMedia.supported(this.passport))
-            {
-                HBCIUtils.log("fetching TAN media names",HBCIUtils.LOG_DEBUG);
-                passport.setPersistentData("hktan","true");
-                try
-                {
-                    final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
-                    
-                    final HBCIDialogInit init = new HBCIDialogInit()
-                    {
-                        /**
-                         * @see org.kapott.hbci.dialog.AbstractRawHBCIDialogInit#getTanReference(org.kapott.hbci.dialog.DialogContext)
-                         */
-                        @Override
-                        protected String getTanReference(DialogContext ctx)
-                        {
-                            return "HKTAB";
-                        }
-                    };
-                    init.execute(ctx);
-
-                    final HBCIDialogTanMedia tanMedia = new HBCIDialogTanMedia();
-                    tanMedia.execute(ctx);
-                    
-                    final HBCIDialogEnd end = new HBCIDialogEnd();
-                    end.execute(ctx);
-                }
-                catch (Exception e)
-                {
-                    throw new HBCI_Exception("fetching of TAN media names failed",e);
-                }
-                finally
-                {
-                    passport.setPersistentData("hktan",null);
-                }
-            }
-            ////////////////////////////////////////
-
-            ////////////////////////////////////////
             // Sync
             {
                 // Dialog-Synchronisierung senden
@@ -477,6 +438,40 @@ public final class HBCIUser implements IHandlerData
             }
             //
             ////////////////////////////////////////
+            
+            ////////////////////////////////////////
+            // HKTAB
+            if (HBCIDialogTanMedia.supported(this.passport))
+            {
+                HBCIUtils.log("fetching TAN media names",HBCIUtils.LOG_DEBUG);
+                try
+                {
+                    final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                    final HBCIDialogInit init = new HBCIDialogInit()
+                    {
+                        /**
+                         * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#customizeSCA(org.kapott.hbci.dialog.SCARequest)
+                         */
+                        @Override
+                        public void customizeSCA(SCARequest sca)
+                        {
+                            sca.setTanReference("HKTAB");
+                        }
+                    };
+                    init.execute(ctx);
+
+                    final HBCIDialogTanMedia tanMedia = new HBCIDialogTanMedia();
+                    tanMedia.execute(ctx);
+                    final HBCIDialogEnd end = new HBCIDialogEnd();
+                    end.execute(ctx);
+                }
+                catch (Exception e)
+                {
+                    throw new HBCI_Exception("fetching of TAN media names failed",e);
+                }
+            }
+            ////////////////////////////////////////
+
         }
         catch (Exception e)
         {

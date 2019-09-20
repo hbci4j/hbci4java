@@ -133,12 +133,11 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
     }
     
     /**
-     * @see org.kapott.hbci.dialog.RawHBCIDialog#getSCARequest(org.kapott.hbci.dialog.DialogContext)
+     * @see org.kapott.hbci.dialog.RawHBCIDialog#customizeSCA(org.kapott.hbci.dialog.SCARequest)
      */
     @Override
-    public SCARequest getSCARequest(DialogContext ctx)
+    public void customizeSCA(SCARequest sca)
     {
-        return null;
     }
     
     /**

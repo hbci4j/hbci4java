@@ -18,7 +18,7 @@ public enum Feature
     /**
      * Feature, mit dem die Neueinrichtung eines PIN/TAN-Bankzugangs optimierter ablaeuft. 
      */
-    PINTAN_FASTSETUP(false),
+    PINTAN_FASTSETUP(true),
     
     ;
     

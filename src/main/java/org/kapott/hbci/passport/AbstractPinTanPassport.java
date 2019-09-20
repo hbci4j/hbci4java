@@ -65,6 +65,7 @@ import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.status.HBCIRetVal;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.tools.DigestUtils;
+import org.kapott.hbci.tools.NumberUtil;
 import org.kapott.hbci.tools.ParameterFinder;
 import org.kapott.hbci.tools.ParameterFinder.Query;
 import org.kapott.hbci.tools.StringUtil;
@@ -359,9 +360,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (this.isAnonymous())
             return;
         
-        if (this.getPersistentData("hktan") != null)
-            return;
-
         ////////////////////////////////////////////////////
         // Dialog neu starten, wenn das Verfahren sich geaendert hat
         // aktuelle secmech merken und neue auswählen (basierend auf evtl. gerade neu empfangenen informationen (3920s))
@@ -429,18 +427,14 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.TYPE_TEXT,retData);
         }
     }
-    
+
     /**
      * Prueft, ob die Dialog-Initialisierung um ein HKTAN erweitert werden muss.
      * @param ctx der Kontext.
      */
     private  void checkSCARequest(DialogContext ctx)
     {
-        final RawHBCIDialog init = ctx.getDialogInit();
-        if (init == null)
-            return;
-
-        final SCARequest sca = init.getSCARequest(ctx);
+        final SCARequest sca = this.getSCARequest(ctx);
         if (sca == null)
             return;
         
@@ -476,6 +470,82 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".notlasttan","N");
         k.rawSet(prefix + ".challengeklass",(variant == Variant.V2) ? "" : "99");
         k.rawSet(prefix + ".tanmedia",this.getTanMedia(version));
+    }
+    
+    /**
+     * Erzeugt einen passenden SCA-Request fuer die Dialog-Initialisierung.
+     * @param ctx der Context.
+     * @return der SCA-Request oder NULL, wenn keiner noetig ist.
+     */
+    private SCARequest getSCARequest(DialogContext ctx)
+    {
+        final RawHBCIDialog init = ctx.getDialogInit();
+        if (init == null)
+            return null;
+
+        // Checken, ob es ein Dialog, in dem eine SCA gemacht werden soll
+        if (!KnownDialogTemplate.LIST_SEND_SCA.contains(init.getTemplate()))
+            return null;
+
+        // HKTAN-Version und Prozessvariante ermitteln - kann NULL sein
+        final int segversionDefault = 6;
+        final Properties secmechInfo = this.getCurrentSecMechInfo();
+        
+        final int hktanVersion = secmechInfo != null ? NumberUtil.parseInt(secmechInfo.getProperty("segversion"),segversionDefault) : segversionDefault;
+        
+        // Erst ab HKTAN 6 noetig. Die Bank unterstuetzt es scheinbar noch nicht
+        // Siehe B.4.3.1 - Wenn die Bank HITAN < 6 geschickt hat, dann kann sie keine SCA
+        if (hktanVersion < 6)
+            return null;
+
+        // Laut https://homebanking-hilfe.de/forum/topic.php?p=149751#real149751 akzeptiert die DKB kein Sync mit 999
+        // Daher erstmal nur per Feature-Flag
+        if (Feature.PINTAN_FASTSETUP.isEnabled() && !ctx.isAnonymous())
+        {
+            // Wenn wir ein Einschritt-TAN-Verfahren haben und es die autorisierte Initialisierung ist,
+            // dann senden wir das Init ohne HKTAN. Im anonymen Init haben wir ja schon per HKTAN mitgeteilt, dass
+            // wir SCA koennen. Jetzt gehts uns nur darum, die TAN-Verfahren per 3920 zu kriegen
+            // Ist nach Abstimmung mit einem HBCI-Server-Experten so legitim und wird von allen so gemacht:
+            // Bei Dialog-Init Verfahren 999 nehmen und ohne HKTAN senden
+            //
+            //  Dialog                                   HKTAN?
+            //  -----------------------------------------------
+            //  DialogInitAnon                           ja
+            //  DialogInit mit Einschritt-TAN            nein
+            //  DialogInit mit Zweischritt-TAN           ja
+            if (Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)))
+            {
+                HBCIUtils.log("skipping HKTAN for dialog init, since we are using a one-step tan method",HBCIUtils.LOG_DEBUG);
+                return null;
+            }
+        }
+        
+        // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber
+        // bei PIN/TAN-Management-Geschaeftsvorfaellen mit dem GV des jeweiligen Geschaeftsvorfalls belegt werden.
+        // Daher muessen wir im Payload schauen, ob ein entsprechender Geschaeftsvorfall enthalten ist.
+        // Wird muessen nur nach HKPAE, HKTAB schauen - das sind die einzigen beiden, die wir unterstuetzen
+        String segcode = "HKIDN";
+        HBCIDialog payload = ctx.getDialog();
+        if (payload != null)
+        {
+            final HBCIMessageQueue queue = payload.getMessageQueue();
+            for (String code:Arrays.asList("HKPAE","HKTAB")) // Das sind GVChangePIN und GVTANMediaList
+            {
+                if (queue.findTask(code) != null)
+                {
+                    segcode = code;
+                    break;
+                }
+            }
+        }
+
+        final SCARequest r = new SCARequest();
+        r.setVersion(hktanVersion);
+        r.setVariant(Variant.determine(secmechInfo != null ? secmechInfo.getProperty("process") : null));
+        r.setTanReference(segcode);
+        init.customizeSCA(r);
+
+        return r;
     }
 
     /**
@@ -693,7 +763,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Wenn der User noch keine TAN-Verfahren hat, bleibt und als Option nur 999 - also Einschritt-Verfahren, um an den 3920
         // mit den zulaessigen Verfahren zu kommen. Wir pruefen hier gar nicht erst per "isOneStepAllowed", ob die Bank ein
         // Einschritt-Verfahren anbietet, weil wir gar keine andere Option haben
-        if (this.tanMethodsUser.size() == 0 || this.getPersistentData("hktan") != null)
+        if (this.tanMethodsUser.size() == 0)
             return TanMethod.ONESTEP.getId();
         
         /////////////////////////////////////////

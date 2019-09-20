@@ -122,7 +122,7 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
         final StringBuilder sb = new StringBuilder();
         for (int i=0;i<100;i++)
         {
-            final String header = HBCIUtilsInternal.withCounter("TanMediaRes.TANMediaListRes" + version + ".MediaInfo",i);
+            final String header = HBCIUtilsInternal.withCounter("TANMediaListRes" + version + ".MediaInfo",i);
             
             if (result.getProperty(header + ".mediacategory") == null)
                 break;
