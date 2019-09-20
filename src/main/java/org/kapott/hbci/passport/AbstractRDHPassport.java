@@ -390,7 +390,7 @@ public abstract class AbstractRDHPassport
         
         // Wenn es eine nicht-anonyme Dialog-Initialisierung ist, rufen wir die Schluessel mit ab
         RawHBCIDialog init = ctx.getDialogInit();
-        if (init.getTemplate() != KnownDialogTemplate.INIT)
+        if (init.getTemplate() != KnownDialogTemplate.INIT || ctx.isAnonymous())
             return;
         
         if (!this.needInstKeys())

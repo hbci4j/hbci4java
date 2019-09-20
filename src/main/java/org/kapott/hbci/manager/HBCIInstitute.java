@@ -343,6 +343,7 @@ public final class HBCIInstitute
             
             // Dialog-Context erzeugen
             final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            ctx.setAnonymous(true);
 
             // Dialog-Initialisierung senden
             final HBCIDialogFirstKeyRequest init = new HBCIDialogFirstKeyRequest();

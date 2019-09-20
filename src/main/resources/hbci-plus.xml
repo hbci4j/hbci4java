@@ -7610,6 +7610,8 @@
             &MsgSigTailInst;
         </MSGdef>
 
+        <!-- Das ist zwar auch eine Dialog-Initialisierung. Da es die aber nur bei Schluesseldateien
+             und nicht bei PIN/TAN gibt, wuerde ein HKTAN hier gar keinen Sinn machen -->
         <MSGdef id="FirstKeyReq" dontsign="1" dontcrypt="1">
             <SEG type="MsgHeadUser" name="MsgHead"/>
             <SEG type="Idn"/>
@@ -7617,8 +7619,6 @@
             <SEG type="KeyReq" minnum="2" maxnum="2"/>
             <SEG type="MsgTailUser" name="MsgTail"/>
 
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
             <value path="Idn.customerid">9999999999</value>
             <value path="Idn.sysid">0</value>
             <value path="Idn.sysStatus">0</value>
@@ -7628,7 +7628,6 @@
             <value path="KeyReq_2.KeyName.userid">999</value>
             <value path="KeyReq_2.KeyName.keynum">999</value>
             <value path="KeyReq_2.KeyName.keyversion">999</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="FirstKeyReqRes" dontcrypt="1">
             &MsgSigHeadInst;
