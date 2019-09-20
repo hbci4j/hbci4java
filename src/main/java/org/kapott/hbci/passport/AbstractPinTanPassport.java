@@ -487,10 +487,32 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (!KnownDialogTemplate.LIST_SEND_SCA.contains(init.getTemplate()))
             return null;
 
+        if (Feature.PINTAN_FASTSETUP.isEnabled())
+        {
+            // Wenn wir ein Einschritt-TAN-Verfahren haben und es die autorisierte Initialisierung ist,
+            // dann senden wir das Init ohne HKTAN. Im anonymen Init haben wir ja schon per HKTAN mitgeteilt, dass
+            // wir SCA koennen. Jetzt gehts uns nur darum, die TAN-Verfahren per 3920 zu kriegen
+            // Ist nach Abstimmung mit einem HBCI-Server-Experten so legitim und wird von allen so gemacht:
+            // Bei Dialog-Init Verfahren 999 nehmen und ohne HKTAN senden
+            // Laut https://homebanking-hilfe.de/forum/topic.php?p=149751#real149751 akzeptiert die DKB kein Sync mit 999
+            //
+            //  Dialog                                   HKTAN weglassen?
+            //  ---------------------------------------------------------
+            //  DialogInitAnon                           nein
+            //  DialogInit mit Einschritt-TAN            ja
+            //  DialogInit mit Zweischritt-TAN           nein
+            //  Sync                                     nein
+            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)) && init.getTemplate() == KnownDialogTemplate.INIT)
+            {
+                HBCIUtils.log("skipping HKTAN for dialog init, since we are using a one-step tan method",HBCIUtils.LOG_DEBUG);
+                return null;
+            }
+        }
+
         // HKTAN-Version und Prozessvariante ermitteln - kann NULL sein
         final int segversionDefault = 6;
         final Properties secmechInfo = this.getCurrentSecMechInfo();
-        
+
         final int hktanVersion = secmechInfo != null ? NumberUtil.parseInt(secmechInfo.getProperty("segversion"),segversionDefault) : segversionDefault;
         
         // Erst ab HKTAN 6 noetig. Die Bank unterstuetzt es scheinbar noch nicht
@@ -498,28 +520,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (hktanVersion < 6)
             return null;
 
-        // Laut https://homebanking-hilfe.de/forum/topic.php?p=149751#real149751 akzeptiert die DKB kein Sync mit 999
-        // Daher erstmal nur per Feature-Flag
-        if (Feature.PINTAN_FASTSETUP.isEnabled() && !ctx.isAnonymous())
-        {
-            // Wenn wir ein Einschritt-TAN-Verfahren haben und es die autorisierte Initialisierung ist,
-            // dann senden wir das Init ohne HKTAN. Im anonymen Init haben wir ja schon per HKTAN mitgeteilt, dass
-            // wir SCA koennen. Jetzt gehts uns nur darum, die TAN-Verfahren per 3920 zu kriegen
-            // Ist nach Abstimmung mit einem HBCI-Server-Experten so legitim und wird von allen so gemacht:
-            // Bei Dialog-Init Verfahren 999 nehmen und ohne HKTAN senden
-            //
-            //  Dialog                                   HKTAN?
-            //  -----------------------------------------------
-            //  DialogInitAnon                           ja
-            //  DialogInit mit Einschritt-TAN            nein
-            //  DialogInit mit Zweischritt-TAN           ja
-            if (Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)))
-            {
-                HBCIUtils.log("skipping HKTAN for dialog init, since we are using a one-step tan method",HBCIUtils.LOG_DEBUG);
-                return null;
-            }
-        }
-        
         // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber
         // bei PIN/TAN-Management-Geschaeftsvorfaellen mit dem GV des jeweiligen Geschaeftsvorfalls belegt werden.
         // Daher muessen wir im Payload schauen, ob ein entsprechender Geschaeftsvorfall enthalten ist.
