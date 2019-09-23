@@ -303,7 +303,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     private void check3920(DialogContext ctx)
     {
         // In einem anonymen Dialog koennen keine 3920 enthalten sein, da die User-spezifisch sind
-        if (Feature.PINTAN_FASTSETUP.isEnabled() && ctx.isAnonymous())
+        if (ctx.isAnonymous())
             return;
         
         HBCIMsgStatus status = ctx.getMsgStatus();
