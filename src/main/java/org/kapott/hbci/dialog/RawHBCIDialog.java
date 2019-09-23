@@ -10,6 +10,8 @@
 
 package org.kapott.hbci.dialog;
 
+import java.util.Properties;
+
 import org.kapott.hbci.status.HBCIMsgStatus;
 
 /**
@@ -40,9 +42,10 @@ public interface RawHBCIDialog
     public void setTemplate(KnownDialogTemplate t);
     
     /**
-     * Erlaubt das Customizing des SCA-Requests on-demand.
-     * Kann inline ueberschrieben werden, um hier spezielle Anpassungen vorzunehmen.
-     * @param sca der SCA-Request.
+     * Erzeugt einen SCA-Request.
+     * @param secmechInfo die TAN-Verfahren-Parameter.
+     * @param hktanVersion die HKTAN-Version.
+     * @return der SCA-Request.
      */
-    public void customizeSCA(SCARequest sca);
+    public SCARequest createSCARequest(Properties secmechInfo, int hktanVersion);
 }

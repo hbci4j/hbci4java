@@ -469,7 +469,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".orderref",(step == 2) ? (String) this.getPersistentData(KEY_PD_ORDERREF) : "");
         k.rawSet(prefix + ".notlasttan","N");
         k.rawSet(prefix + ".challengeklass",(variant == Variant.V2) ? "" : "99");
-        k.rawSet(prefix + ".tanmedia",this.getTanMedia(version));
+        k.rawSet(prefix + ".tanmedia",sca.getTanMedia());
     }
     
     /**
@@ -520,31 +520,32 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (hktanVersion < 6)
             return null;
 
-        // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber
-        // bei PIN/TAN-Management-Geschaeftsvorfaellen mit dem GV des jeweiligen Geschaeftsvorfalls belegt werden.
-        // Daher muessen wir im Payload schauen, ob ein entsprechender Geschaeftsvorfall enthalten ist.
-        // Wird muessen nur nach HKPAE, HKTAB schauen - das sind die einzigen beiden, die wir unterstuetzen
-        String segcode = "HKIDN";
-        HBCIDialog payload = ctx.getDialog();
-        if (payload != null)
+        final SCARequest r = init.createSCARequest(secmechInfo,hktanVersion);
+        if (r.getTanReference() == null)
         {
-            final HBCIMessageQueue queue = payload.getMessageQueue();
-            for (String code:Arrays.asList("HKPAE","HKTAB")) // Das sind GVChangePIN und GVTANMediaList
+            // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber
+            // bei PIN/TAN-Management-Geschaeftsvorfaellen mit dem GV des jeweiligen Geschaeftsvorfalls belegt werden.
+            // Daher muessen wir im Payload schauen, ob ein entsprechender Geschaeftsvorfall enthalten ist.
+            // Wird muessen nur nach HKPAE, HKTAB schauen - das sind die einzigen beiden, die wir unterstuetzen
+            String segcode = "HKIDN";
+            HBCIDialog payload = ctx.getDialog();
+            if (payload != null)
             {
-                if (queue.findTask(code) != null)
+                final HBCIMessageQueue queue = payload.getMessageQueue();
+                for (String code:Arrays.asList("HKPAE","HKTAB")) // Das sind GVChangePIN und GVTANMediaList
                 {
-                    segcode = code;
-                    break;
+                    if (queue.findTask(code) != null)
+                    {
+                        segcode = code;
+                        break;
+                    }
                 }
             }
+            r.setTanReference(segcode);
         }
-
-        final SCARequest r = new SCARequest();
-        r.setVersion(hktanVersion);
-        r.setVariant(Variant.determine(secmechInfo != null ? secmechInfo.getProperty("process") : null));
-        r.setTanReference(segcode);
-        init.customizeSCA(r);
-
+        if (r.getTanMedia() == null)
+            r.setTanMedia(this.getTanMedia(hktanVersion));
+        
         return r;
     }
 
@@ -1589,43 +1590,33 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     {
         // Gibts erst ab hhd1.3, siehe
         // FinTS_3.0_Security_Sicherheitsverfahren_PINTAN_Rel_20101027_final_version.pdf, Kapitel B.4.3.1.1.1
-        // Zitat: Ist in der BPD als Anzahl unterstützter aktiver TAN-Medien ein Wert > 1
-        //        angegeben und ist der BPD-Wert für Bezeichnung des TAN-Mediums erforderlich = 2,
-        //        so muss der Kunde z. B. im Falle des mobileTAN-Verfahrens
-        //        hier die Bezeichnung seines für diesen Auftrag zu verwendenden TAN-
-        //        Mediums angeben.
-        // Ausserdem: "Nur bei TAN-Prozess=1, 3, 4". Das muess aber der Aufrufer pruefen. Ist mir
-        // hier zu kompliziert
         HBCIUtils.log("HKTAN version: " + segVersion,HBCIUtils.LOG_DEBUG);
         if (segVersion < 3)
             return "";
 
-        Properties  secmechInfo = getCurrentSecMechInfo();
-        
-        // Anzahl aktiver TAN-Medien ermitteln
-        String needed = secmechInfo != null ? secmechInfo.getProperty("needtanmedia","") : "";
+        final Properties  secmechInfo = this.getCurrentSecMechInfo();
+
+        // Brauchen wir ein TAN-Medium?
+        final String needed = secmechInfo != null ? secmechInfo.getProperty("needtanmedia","") : "";
         HBCIUtils.log("needtanmedia: " + needed,HBCIUtils.LOG_DEBUG);
     
-        // Ich hab Mails von Usern erhalten, bei denen die Angabe des TAN-Mediums auch
-        // dann noetig war, wenn nur eine Handy-Nummer hinterlegt war. Daher loggen wir
-        // "num" nur, bringen die Abfrage jedoch schon bei num<2 - insofern needed=2.
-        
-        String result = "";
-        final Properties upd = this.getUPD();
-        final boolean tn = needed.equals("2");
-        if (tn)// && upd != null && upd.size() > 0)
+        final boolean tn = Objects.equals(needed,"2");
+        if (tn)
         {
             HBCIUtils.log("we have to add the tan media",HBCIUtils.LOG_DEBUG);
     
-            StringBuffer retData=new StringBuffer();
+            final StringBuffer retData = new StringBuffer();
+            
+            // Namen der TAN-Medien als Auswahl anbieten, falls vorhanden
+            final Properties upd = this.getUPD();
             if (upd != null)
                 retData.append(upd.getProperty(HBCIUser.UPD_KEY_TANMEDIA,""));
+            
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.TYPE_TEXT,retData);
-            result = retData.toString();
+            final String result = retData.toString();
+            if (StringUtil.hasText(result))
+                return result;
         }
-
-        if (result != null && result.length() > 0)
-            return result;
         
         // Seit HKTAN 6: Wenn die Angabe eines TAN-Mediennamens laut BPD erforderlich ist, wir aber gar keinen Namen haben,
         // dann "noref" eintragen.

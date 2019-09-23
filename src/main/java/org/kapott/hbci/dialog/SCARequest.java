@@ -20,6 +20,7 @@ public class SCARequest
     private int version;
     private String tanReference;
     private Variant variant;
+    private String tanMedia;
     
     /**
      * Liefert die Prozess-Variante.
@@ -73,5 +74,23 @@ public class SCARequest
     public void setTanReference(String tanReference)
     {
         this.tanReference = tanReference;
+    }
+    
+    /**
+     * Liefert die TAN-Medienbezeichnung.
+     * @return die TAN-Medienbezeichnung.
+     */
+    public String getTanMedia()
+    {
+        return tanMedia;
+    }
+    
+    /**
+     * Speichert die TAN-Medienbezeichnung.
+     * @param tanMedia die TAN-Medienbezeichnung.
+     */
+    public void setTanMedia(String tanMedia)
+    {
+        this.tanMedia = tanMedia;
     }
 }

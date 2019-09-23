@@ -10,8 +10,10 @@
 
 package org.kapott.hbci.dialog;
 
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.kapott.hbci.dialog.KnownTANProcess.Variant;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -133,11 +135,15 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
     }
     
     /**
-     * @see org.kapott.hbci.dialog.RawHBCIDialog#customizeSCA(org.kapott.hbci.dialog.SCARequest)
+     * @see org.kapott.hbci.dialog.RawHBCIDialog#createSCARequest(java.util.Properties, int)
      */
     @Override
-    public void customizeSCA(SCARequest sca)
+    public SCARequest createSCARequest(Properties secmechInfo, int hktanVersion)
     {
+        SCARequest r = new SCARequest();
+        r.setVersion(hktanVersion);
+        r.setVariant(Variant.determine(secmechInfo != null ? secmechInfo.getProperty("process") : null));
+        return r;
     }
     
     /**

@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
@@ -450,12 +451,17 @@ public final class HBCIUser implements IHandlerData
                     final HBCIDialogInit init = new HBCIDialogInit()
                     {
                         /**
-                         * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#customizeSCA(org.kapott.hbci.dialog.SCARequest)
+                         * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#createSCARequest(java.util.Properties, int)
                          */
                         @Override
-                        public void customizeSCA(SCARequest sca)
+                        public SCARequest createSCARequest(Properties secmechInfo, int hktanVersion)
                         {
-                            sca.setTanReference("HKTAB");
+                            // Anpassen des SCA-Requests fuer das Abfragen der TAN-Medien per HKTAB
+                            SCARequest r = super.createSCARequest(secmechInfo, hktanVersion);
+                            r.setTanReference("HKTAB");
+                            final String needed = secmechInfo != null ? secmechInfo.getProperty("needtanmedia","") : "";
+                            r.setTanMedia(Objects.equals(needed,"2") ? "noref" : "");
+                            return r;
                         }
                     };
                     init.execute(ctx);
