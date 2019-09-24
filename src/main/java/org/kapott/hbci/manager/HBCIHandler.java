@@ -157,7 +157,7 @@ public final class HBCIHandler
           return;
         }
         
-        final Properties upd = this.passport.getUPD();
+        Properties upd = this.passport.getUPD();
         
         // Wenn wir schon UPD haben, checken wir, ob wir die Daten erst kuerzlich abgerufen haben
         if (upd != null && upd.containsKey(HBCIUser.UPD_KEY_METAINFO))
@@ -233,7 +233,12 @@ public final class HBCIHandler
         // Wir markieren das immer als erledigt - egal, ob es geklappt hat oder nicht
         // Dafür wiederholen wir es zyklisch immer mal wieder
         HBCIUtils.log("meta info fetched",HBCIUtils.LOG_DEBUG);
-        passport.getUPD().setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString());
+        if (upd == null)
+        {
+            upd = new Properties();
+            this.passport.setUPD(upd);
+        }
+        upd.setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString());
         passport.saveChanges();
     }
 
