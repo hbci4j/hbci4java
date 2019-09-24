@@ -391,7 +391,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     }
                     else
                     {
-                        FlickerCode flicker = FlickerCode.tryParse(challenge,hhduc);
+                        FlickerCode flicker = FlickerCode.tryParse(hhd,challenge,hhduc);
                         if (flicker != null)
                         {
                             // Bei chipTAN liefern wir den bereits geparsten und gerenderten Flickercode

@@ -7,12 +7,14 @@
 
 package org.kapott.hbci4java.secmech;
 
+import java.util.Properties;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.FlickerCode.HHDVersion;
-import org.kapott.hbci4java.AbstractTest;
 import org.kapott.hbci.manager.FlickerRenderer;
+import org.kapott.hbci4java.AbstractTest;
 
 /**
  * Testet die Flicker-Codes.
@@ -331,6 +333,25 @@ public class FlickerTest extends AbstractTest
     // In Flicker-Format wandeln
     String rendered = code.render();
     Assert.assertEquals(rendered,"23840120932160564445313235303031303531373036343834383938393044312C303005");
+  }
+
+  /**
+   * Unit-Test fuer den Fall https://homebanking-hilfe.de/forum/topic.php?p=150121#real150121
+   * @throws Exception
+   */
+  @Test
+  public void test10() throws Exception
+  {
+    Properties props = new Properties();
+    props.setProperty("id","HHD1.3.2OPT");
+    props.setProperty("name","chipTAN optisch");
+    props.setProperty("secfunc","911");
+    props.setProperty("zkamethod_name","HHDOPT1");
+    props.setProperty("zkamethod_version","1.3.2");
+    org.kapott.hbci.manager.HHDVersion hhd = org.kapott.hbci.manager.HHDVersion.find(props);
+    FlickerCode code = FlickerCode.tryParse(hhd,null,"2908881904551000000039990515,00");
+    String rendered = code.render();
+    Assert.assertEquals(rendered,"1204881904550500000039991531352C30308A");
   }
 
 
