@@ -487,7 +487,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (!KnownDialogTemplate.LIST_SEND_SCA.contains(init.getTemplate()))
             return null;
 
-        if (Feature.PINTAN_FASTSETUP.isEnabled())
+        if (Feature.PINTAN_INIT_SKIPONESTEPSCA.isEnabled())
         {
             // Wenn wir ein Einschritt-TAN-Verfahren haben und es die autorisierte Initialisierung ist,
             // dann senden wir das Init ohne HKTAN. Im anonymen Init haben wir ja schon per HKTAN mitgeteilt, dass
@@ -745,10 +745,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (this.tanMethod != null && !recheck)
             return this.tanMethod;
 
-        boolean fast = Feature.PINTAN_FASTSETUP.isEnabled();
-        HBCIUtils.log("(re)checking selected pintan method using " + (fast ? "fast-setup" : "regular") + " strategy", HBCIUtils.LOG_DEBUG);
+        boolean auto = Feature.PINTAN_INIT_AUTOMETHOD.isEnabled();
+        HBCIUtils.log("(re)checking selected pintan method using " + (auto ? "auto-determine" : "ask") + " strategy", HBCIUtils.LOG_DEBUG);
 
-        if (fast)
+        if (auto)
             return this.determineTanMethod();
         
         return this.askForTanMethod();

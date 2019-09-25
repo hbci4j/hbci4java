@@ -47,7 +47,7 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
         if (p == null || !(p instanceof AbstractPinTanPassport))
             return false;
         
-        if (!Feature.PINTAN_FASTSETUP.isEnabled())
+        if (!Feature.PINTAN_INIT_FETCHMEDIANAMES.isEnabled())
             return false;
 
         return getSegmentVersion(p,null) != null;

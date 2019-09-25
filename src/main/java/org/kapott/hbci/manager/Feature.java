@@ -16,9 +16,20 @@ package org.kapott.hbci.manager;
 public enum Feature
 {
     /**
-     * Feature, mit dem die Neueinrichtung eines PIN/TAN-Bankzugangs optimierter ablaeuft. 
+     * Feature, mit dem festgelegt werden kann, ob die personalisierte Dialog-Initialisierung ohne HKTAN gesendet werden soll, wenn als TAN-Verfahren 999 verwendet wird. 
      */
-    PINTAN_FASTSETUP(false),
+    PINTAN_INIT_SKIPONESTEPSCA(false),
+    
+    /**
+     * Feature, mit dem festgelegt werden kann, ob der Abruf der TAN-Medien direkt bei der Einrichung des Passports erfolgen soll.
+     */
+    PINTAN_INIT_FETCHMEDIANAMES(false),
+    
+    /**
+     * Feature, mit dem festgelegt werden kann, ob HBCI4Java versuchen soll, das TAN-Verfahren automatisch zu ermitteln, wenn es noch keine per 3920 erhalten hat.
+     * Leider geht das bei einigen Banken (wie Deutsche Bank) nicht, da die keine personalisierte Dialog-Initialisierung mit TAN-Verfahren 999 erlauben.
+     */
+    PINTAN_INIT_AUTOMETHOD(false),
     
     ;
     
