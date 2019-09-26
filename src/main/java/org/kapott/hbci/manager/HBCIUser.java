@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -578,7 +580,26 @@ public final class HBCIUser implements IHandlerData
             
             p.putAll(protectedKeys);
         }
-        
+
+        // Wenn die UPD-Keys keine BIC und IBAN mehr enthalten, verwende
+        // die bekannten einfach weiter, solange die Kontonummer identisch ist.
+        if (upd != null && upd.size() > 0) {
+            final Pattern pattern = Pattern.compile("(KInfo(.*?)\\.KTV)\\.(bic|iban)");
+            for (final Object okey : upd.keySet()) {
+                final String key = okey.toString();
+                final Matcher m = pattern.matcher(key);
+                if (m.matches() && !result.contains("UPD." + key)) {
+                    final String kinfo = m.group(1);
+                    if (Objects.equals(result.getProperty("UPD." + kinfo + ".KIK.country"), upd.getProperty(kinfo + ".KIK.country"))
+                            && Objects.equals(result.getProperty("UPD." + kinfo + ".KIK.blz"), upd.getProperty(kinfo + ".KIK.blz"))
+                            && Objects.equals(result.getProperty("UPD." + kinfo + ".number"), upd.getProperty(kinfo + ".number"))) {
+                        HBCIUtils.log(key + " is missing, using the previous UPD's value", HBCIUtils.LOG_INFO);
+                        p.put(okey, upd.getProperty(key));
+                    }
+                }
+            }
+        }
+
         // Wir aktualisieren unabhaengig davon, ob sich die Versionsnummer erhoeht hat oder nicht,
         // da nicht alle Banken die Versionsnummern erhoehen, wenn es Aenderungen gibt. Manche bleiben
         // einfach pauschal immer bei Version 0. Daher aktualisieren wir immer dann, wenn wir neue
