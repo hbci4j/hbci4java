@@ -74,11 +74,10 @@ public class UmsatzAbrufPinTan
     // Wir setzen die Kernel-Parameter zur Laufzeit. Wir koennten sie alternativ
     // auch oben in "props" setzen.
     HBCIUtils.setParam("client.passport.default","PinTan"); // Legt als Verfahren PIN/TAN fest.
-    HBCIUtils.setParam("client.passport.PinTan.filename",passportFile.getAbsolutePath());
-    HBCIUtils.setParam("client.passport.PinTan.init","1");
+    HBCIUtils.setParam("client.passport.PinTan.init","1"); // Stellt sicher, dass der Passport initialisiert wird
 
     // Erzeugen des Passport-Objektes.
-    HBCIPassport passport = AbstractHBCIPassport.getInstance();
+    HBCIPassport passport = AbstractHBCIPassport.getInstance(passportFile);
     
     // Konfigurieren des Passport-Objektes.
     // Das kann alternativ auch alles ueber den Callback unten geschehen
