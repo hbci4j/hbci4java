@@ -175,6 +175,10 @@ public class HBCIBatch
                     retData.replace(0,retData.length(),answers.getProperty("secmech"));
                     break;
 
+                case NEED_PT_TANMEDIA:
+                    retData.replace(0,retData.length(),answers.getProperty("tanmedia"));
+                    break;
+
                 case NEED_PT_PIN:
                     retData.replace(0,retData.length(),answers.getProperty("pin"));
                     break;
