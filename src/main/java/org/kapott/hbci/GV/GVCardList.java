@@ -48,7 +48,16 @@ public class GVCardList
        addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
        addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
    }
-   
+
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#redoAllowed()
+     */
+    @Override
+    protected boolean redoAllowed()
+    {
+        return true;
+    }
+
    public void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
    {
        Properties result=msgstatus.getData();

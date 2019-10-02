@@ -46,6 +46,15 @@ public final class GVInfoList
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
     }
 
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#redoAllowed()
+     */
+    @Override
+    protected boolean redoAllowed()
+    {
+        return true;
+    }
+    
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         Properties result=msgstatus.getData();

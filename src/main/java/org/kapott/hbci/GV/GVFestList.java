@@ -61,6 +61,15 @@ public class GVFestList
         // TODO: maxentries fehlen
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#redoAllowed()
+     */
+    @Override
+    protected boolean redoAllowed()
+    {
+        return true;
+    }
+    
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         Properties result=msgstatus.getData();

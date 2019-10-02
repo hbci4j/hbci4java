@@ -32,6 +32,15 @@ public class GVFestListAll
         return "FestList";
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#redoAllowed()
+     */
+    @Override
+    protected boolean redoAllowed()
+    {
+        return true;
+    }
+    
     public GVFestListAll(HBCIHandler handler)
     {
         super(getLowlevelName(),handler);

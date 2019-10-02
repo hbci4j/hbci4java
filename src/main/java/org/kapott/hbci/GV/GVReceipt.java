@@ -27,6 +27,15 @@ public class GVReceipt extends HBCIJobImpl
       super(handler, getLowlevelName(), new HBCIJobResultImpl());
       addConstraint("receipt","receipt","", LogFilter.FILTER_NONE);
     }
+
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#redoAllowed()
+     */
+    @Override
+    protected boolean redoAllowed()
+    {
+        return true;
+    }
     
     /**
      * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)

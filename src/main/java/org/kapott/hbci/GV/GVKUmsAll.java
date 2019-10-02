@@ -106,6 +106,18 @@ public class GVKUmsAll extends HBCIJobImpl
         addConstraint("dummy","allaccounts","N", LogFilter.FILTER_NONE);
     }
 
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#redoAllowed()
+     */
+    @Override
+    protected boolean redoAllowed()
+    {
+        return true;
+    }
+    
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
+     */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         Properties result=msgstatus.getData();

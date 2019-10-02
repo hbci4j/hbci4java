@@ -811,11 +811,24 @@ public abstract class HBCIJobImpl
      */
     public HBCIJobImpl redo()
     {
+        if (!this.redoAllowed())
+            return null;
+        
         return (this.getContinueOffset() != null) ? this : null;
     }
     
     /**
-     * Gibt (sofern vorhanden) den offset-Wert des letzten HBCI-Rückgabecodes 3040 zurück.
+     * Wir erlauben per Default erstmal kein Redo bei einem 3040-Code. Es sei denn, im Job ist explizit uebeschrieben.
+     * Siehe https://homebanking-hilfe.de/forum/topic.php?p=150614#real150614
+     * @return true, wenn redo erlaubt ist.
+     */
+    protected boolean redoAllowed()
+    {
+        return false;
+    }
+    
+    /**
+     * Gibt (sofern vorhanden) den Wiederaufsetzpunkt des letzten HBCI-Rückgabecodes 3040 zurück.
      * @return der Offset-Wert oder NULL.
      */
     private String getContinueOffset()
