@@ -825,7 +825,7 @@ public abstract class HBCIJobImpl
     }
     
     /**
-     * Liefert den Rueckgabecode 3040 (fuer "Weitere Daten folgen"), insofern vorhanden. 
+     * Liefert den Rueckgabecode 3040 (fuer "Weitere Daten folgen"), insofern vorhanden und mit einem Parameter versehen.
      * @param loop die Nummer des Durchlaufs, beginnend bei 0.
      * @return der Rueckgabewert, insofern vorhanden. Sonst NULL.
      */
@@ -836,8 +836,8 @@ public abstract class HBCIJobImpl
         for (int i=0;i<num;i++)
         {
             HBCIRetVal retval = jobResult.getRetVal(i);
-            
-            if (KnownReturncode.W3040.is(retval.code) && retval.params.length != 0 && (--loop) == 0)
+            String[] p = retval.params;
+            if (KnownReturncode.W3040.is(retval.code) && p != null && p.length > 0 && p[0] != null && p[0].length() > 0 && (--loop) == 0)
                 return retval;
         }
         
