@@ -521,6 +521,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             return null;
 
         final SCARequest r = init.createSCARequest(secmechInfo,hktanVersion);
+        if (r == null)
+          return null;
+        
         if (r.getTanReference() == null)
         {
             // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber

@@ -18,18 +18,18 @@ public enum Feature
     /**
      * Feature, mit dem festgelegt werden kann, ob die personalisierte Dialog-Initialisierung ohne HKTAN gesendet werden soll, wenn als TAN-Verfahren 999 verwendet wird. 
      */
-    PINTAN_INIT_SKIPONESTEPSCA(false),
+    PINTAN_INIT_SKIPONESTEPSCA(true),
     
     /**
      * Feature, mit dem festgelegt werden kann, ob der Abruf der TAN-Medien direkt bei der Einrichung des Passports erfolgen soll.
      */
-    PINTAN_INIT_FETCHMEDIANAMES(false),
+    PINTAN_INIT_FETCHMEDIANAMES(true),
     
     /**
      * Feature, mit dem festgelegt werden kann, ob HBCI4Java versuchen soll, das TAN-Verfahren automatisch zu ermitteln, wenn es noch keine per 3920 erhalten hat.
      * Leider geht das bei einigen Banken (wie Deutsche Bank) nicht, da die keine personalisierte Dialog-Initialisierung mit TAN-Verfahren 999 erlauben.
      */
-    PINTAN_INIT_AUTOMETHOD(false),
+    PINTAN_INIT_AUTOMETHOD(true),
     
     ;
     

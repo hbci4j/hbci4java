@@ -43,8 +43,7 @@ import org.kapott.hbci.dialog.HBCIDialogInit;
 import org.kapott.hbci.dialog.HBCIDialogLockKeys;
 import org.kapott.hbci.dialog.HBCIDialogSync;
 import org.kapott.hbci.dialog.HBCIDialogSync.Mode;
-import org.kapott.hbci.dialog.HBCIDialogTanMedia;
-import org.kapott.hbci.dialog.SCARequest;
+import org.kapott.hbci.dialog.HBCIProcessTanMedia;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.NeedKeyAckException;
 import org.kapott.hbci.exceptions.ProcessException;
@@ -443,43 +442,13 @@ public final class HBCIUser implements IHandlerData
             ////////////////////////////////////////
             
             ////////////////////////////////////////
-            // HKTAB
-            if (HBCIDialogTanMedia.supported(this.passport))
-            {
-                HBCIUtils.log("fetching TAN media names",HBCIUtils.LOG_DEBUG);
-                try
-                {
-                    final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
-                    final HBCIDialogInit init = new HBCIDialogInit()
-                    {
-                        /**
-                         * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#createSCARequest(java.util.Properties, int)
-                         */
-                        @Override
-                        public SCARequest createSCARequest(Properties secmechInfo, int hktanVersion)
-                        {
-                            // Anpassen des SCA-Requests fuer das Abfragen der TAN-Medien per HKTAB
-                            SCARequest r = super.createSCARequest(secmechInfo, hktanVersion);
-                            r.setTanReference("HKTAB");
-                            final String needed = secmechInfo != null ? secmechInfo.getProperty("needtanmedia","") : "";
-                            r.setTanMedia(Objects.equals(needed,"2") ? "noref" : "");
-                            return r;
-                        }
-                    };
-                    init.execute(ctx);
-
-                    final HBCIDialogTanMedia tanMedia = new HBCIDialogTanMedia();
-                    tanMedia.execute(ctx);
-                    final HBCIDialogEnd end = new HBCIDialogEnd();
-                    end.execute(ctx);
-                }
-                catch (Exception e)
-                {
-                    throw new HBCI_Exception("fetching of TAN media names failed",e);
-                }
-            }
+            // TAN-Medienbezeichnung abrufen
+            
+            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            HBCIProcessTanMedia p = new HBCIProcessTanMedia();
+            p.execute(ctx);
+            //
             ////////////////////////////////////////
-
         }
         catch (Exception e)
         {
