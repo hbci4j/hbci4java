@@ -54,6 +54,11 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
     @Override
     protected void checkResult(DialogContext ctx)
     {
+      final HBCIPassportInternal p = ctx.getPassport();
+      final Properties upd = p.getUPD();
+      
+      try
+      {
         super.checkResult(ctx);
 
         final HBCIMsgStatus ret = ctx.getMsgStatus();
@@ -64,9 +69,6 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
         if (result == null)
             return;
 
-        final HBCIPassportInternal p = ctx.getPassport();
-        final Properties upd = p.getUPD();
-        
         // Wenn wir noch keine UPD haben, koennen wir uns die Auswertung schenken. Wir
         // wissen dann eh nicht, wo wir die Daten einsortieren sollen.
         if (upd == null)
@@ -133,11 +135,18 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
             }
           }
         }
-
         final String name = (count == 1 ? "Konto" : "Konten");
         HBCIUtils.log("IBAN/BIC für " + count + " " + name + " empfangen", HBCIUtils.LOG_INFO);
-        p.setUPD(upd); // Aktualisierte UPD uebernehmen
-        upd.setProperty(HBCIUser.UPD_KEY_FETCH_SEPAINFO,new Date().toString()); // Wir vermerken auch gleich noch, dass der Abruf damit schon erledigt ist
-        p.saveChanges(); // Sicherstellen, dass die Aenderungen sofort gespeichert sind
+      }
+      finally
+      {
+        // Egal, wie das Abrufen der SEPA-Infos ausgegangen ist, wir vermerken es als erledigt,
+        // damit es nicht immer wieder wiederholt wird.
+        if (p != null && upd != null)
+        {
+          upd.setProperty(HBCIUser.UPD_KEY_FETCH_SEPAINFO,new Date().toString());
+          p.saveChanges(); // Sicherstellen, dass die Aenderungen sofort gespeichert sind
+        }
+      }
     }
 }

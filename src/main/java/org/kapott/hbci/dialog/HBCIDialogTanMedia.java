@@ -120,6 +120,11 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
     @Override
     protected void checkResult(DialogContext ctx)
     {
+      final HBCIPassportInternal p = ctx.getPassport();
+      Properties upd = null;
+      
+      try
+      {
         super.checkResult(ctx);
 
         final HBCIMsgStatus ret = ctx.getMsgStatus();
@@ -130,7 +135,6 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
         if (result == null)
             return;
 
-        final HBCIPassportInternal p = ctx.getPassport();
         final Integer version = getSegmentVersion(p,5);
 
         final StringBuilder sb = new StringBuilder();
@@ -161,7 +165,7 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
             return;
         
         HBCIUtils.log("TAN-Medienbezeichnungen empfangen: " + names, HBCIUtils.LOG_INFO);
-        Properties upd = p.getUPD();
+        upd = p.getUPD();
         if (upd == null)
         {
             // Fuer den Fall, dass wir das zu einem Zeitpunkt aufgerufen haben, wo wir noch gar keine UPD haben
@@ -169,7 +173,16 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
             p.setUPD(upd);
         }
         upd.setProperty(HBCIUser.UPD_KEY_TANMEDIA,names);
-        upd.setProperty(HBCIUser.UPD_KEY_FETCH_TANMEDIA,new Date().toString()); // Wir vermerken auch gleich noch, dass der Abruf damit schon erledigt ist
-        p.saveChanges(); // Sicherstellen, dass die Aenderungen sofort gespeichert sind
+      }
+      finally
+      {
+        // Egal, wie das Abrufen der SEPA-Infos ausgegangen ist, wir vermerken es als erledigt,
+        // damit es nicht immer wieder wiederholt wird.
+        if (p != null && upd != null)
+        {
+          upd.setProperty(HBCIUser.UPD_KEY_FETCH_TANMEDIA,new Date().toString());
+          p.saveChanges(); // Sicherstellen, dass die Aenderungen sofort gespeichert sind
+        }
+      }
     }
 }
