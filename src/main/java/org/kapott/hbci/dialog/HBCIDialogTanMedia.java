@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
 
-import org.kapott.hbci.manager.Feature;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUser;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -36,6 +35,24 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
     {
         super(KnownDialogTemplate.TANMEDIA);
     }
+
+    /**
+     * Prueft, ob der Dialog noetig ist.
+     * @param p der Passport.
+     * @return true, wenn er noetig ist.
+     */
+    public static boolean required(HBCIPassportInternal p)
+    {
+        // Checken, ob er ueberhaupt moeglich ist
+        if (!supported(p))
+            return false;
+        
+        final Properties upd = p.getUPD();
+        if (upd == null)
+            return true;
+        
+        return !upd.containsKey(HBCIUser.UPD_KEY_FETCH_TANMEDIA);
+    }
     
     /**
      * Prueft, ob der Dialog moeglich ist.
@@ -47,9 +64,6 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
         if (p == null || !(p instanceof AbstractPinTanPassport))
             return false;
         
-        if (!Feature.PINTAN_INIT_FETCHMEDIANAMES.isEnabled())
-            return false;
-
         return getSegmentVersion(p,null) != null;
     }
     
@@ -155,6 +169,7 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
             p.setUPD(upd);
         }
         upd.setProperty(HBCIUser.UPD_KEY_TANMEDIA,names);
-        upd.setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString()); // Wir vermerken auch gleich noch, dass der Abruf damit schon erledigt ist
+        upd.setProperty(HBCIUser.UPD_KEY_FETCH_TANMEDIA,new Date().toString()); // Wir vermerken auch gleich noch, dass der Abruf damit schon erledigt ist
+        p.saveChanges(); // Sicherstellen, dass die Aenderungen sofort gespeichert sind
     }
 }

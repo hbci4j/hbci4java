@@ -11,6 +11,7 @@
 package org.kapott.hbci.dialog;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.kapott.hbci.manager.HBCIUser;
@@ -31,6 +32,20 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
     public HBCIDialogSepaInfo()
     {
         super(KnownDialogTemplate.SEPAINFO);
+    }
+    
+    /**
+     * Prueft, ob der Dialog noetig ist.
+     * @param p der Passport.
+     * @return true, wenn er noetig ist.
+     */
+    public static boolean required(HBCIPassportInternal p)
+    {
+        final Properties upd = p.getUPD();
+        if (upd == null)
+            return true;
+        
+        return !upd.containsKey(HBCIUser.UPD_KEY_FETCH_SEPAINFO);
     }
     
     /**
@@ -60,58 +75,69 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
           return;
         }
 
+        int count = 0;
+        
         for (int i=0;i<500;i++)
         {
-          final String header = HBCIUtilsInternal.withCounter("SEPAInfoRes1.Acc", i);
-          String cansepa = result.getProperty(header + ".sepa");
+          final String header  = HBCIUtilsInternal.withCounter("SEPAInfoRes1.Acc", i);
+          final String cansepa = result.getProperty(header + ".sepa");
           
           // Ende
-          if (cansepa == null)
+          if (!StringUtil.hasText(cansepa))
             break;
-          
+
+          // Konto kann kein Sepa
           if (cansepa.equals("N"))
             continue;
           
-          final String iban = result.getProperty(header + ".iban");
-          final String bic = result.getProperty(header + ".bic");
-          
-          // normale konto-informationen extrahieren, um dieses konto
-          // in den upd suchen zu koennen
-          final String country = result.getProperty(header+".KIK.country");
-          final String blz = result.getProperty(header+".KIK.blz");
-          final String number = result.getProperty(header+".number");
-          
+          final String iban    = result.getProperty(header + ".iban");
+          final String bic     = result.getProperty(header + ".bic");
+          final String country = result.getProperty(header + ".KIK.country");
+          final String blz     = result.getProperty(header + ".KIK.blz");
+          final String number  = result.getProperty(header + ".number");
+
+          // keine IBAN erhalten
+          if (!StringUtil.hasText(iban))
+            continue;
+
           HBCIUtils.log("found BIC/IBAN = " + bic + "/" + iban + " for account " + country + "/" + blz + "/" + number,HBCIUtils.LOG_DEBUG);
           
-          // konto in den UPD suchen und UPD-Informationen aktualisieren
+          // Konto in den UPD suchen und UPD-Informationen aktualisieren
           for (int j=0;j<500;j++)
           {
-            String h = HBCIUtilsInternal.withCounter("KInfo",j);
-            String n = upd.getProperty(h+".KTV.number");
-            
+            final String h = HBCIUtilsInternal.withCounter("KInfo",j);
+            final String n = upd.getProperty(h + ".KTV.number");
+            final String c = upd.getProperty(h + ".KTV.KIK.country");
+            final String b = upd.getProperty(h + ".KTV.KIK.blz");
+
             // Ende
-            if (n == null)
+            if (!StringUtil.hasText(n))
               break;
-            
-            String temp_country=upd.getProperty(h+".KTV.KIK.country");
-            String temp_blz=upd.getProperty(h+".KTV.KIK.blz");
-            
-            if (temp_country.equals(country) && temp_blz.equals(blz) && n.equals(number))
+
+            // Land, BLZ und Konto stimmen ueberein - wir uebernehmen IBAN und BIC in das Konto
+            if (Objects.equals(country,c) && Objects.equals(blz,b) && Objects.equals(number,n))
             {
-                if (StringUtil.hasText(iban))
-                    upd.setProperty(h+".KTV.iban", iban);
-                
-                if (StringUtil.hasText(bic))
-                    upd.setProperty(h+".KTV.bic", bic);
+              count++;
+
+              HBCIUtils.log("updating BIC/IBAN = " + bic + "/" + iban + " for account " + country + "/" + blz + "/" + number,HBCIUtils.LOG_DEBUG);
+
+              // uebernehmen wir nur, wenn wir eine haben
+              if (StringUtil.hasText(iban))
+              upd.setProperty(h + ".KTV.iban", iban);
+              
+              // uebernehmen wir nur, wenn wir eine haben
+              if (StringUtil.hasText(bic))
+                upd.setProperty(h + ".KTV.bic", bic);
+              
+              break;
             }
           }
         }
 
-        
-        HBCIUtils.log("SEPA-Konto-Informationen empfangen", HBCIUtils.LOG_INFO);
-        if (upd != null)
-          p.setUPD(upd);
-///        upd.setProperty(HBCIUser.UPD_KEY_TANMEDIA,names);
-        upd.setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString()); // Wir vermerken auch gleich noch, dass der Abruf damit schon erledigt ist
+        final String name = (count == 1 ? "Konto" : "Konten");
+        HBCIUtils.log("IBAN/BIC für " + count + " " + name + " empfangen", HBCIUtils.LOG_INFO);
+        p.setUPD(upd); // Aktualisierte UPD uebernehmen
+        upd.setProperty(HBCIUser.UPD_KEY_FETCH_SEPAINFO,new Date().toString()); // Wir vermerken auch gleich noch, dass der Abruf damit schon erledigt ist
+        p.saveChanges(); // Sicherstellen, dass die Aenderungen sofort gespeichert sind
     }
 }

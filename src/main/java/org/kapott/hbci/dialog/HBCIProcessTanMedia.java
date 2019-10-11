@@ -22,6 +22,17 @@ import org.kapott.hbci.status.HBCIMsgStatus;
  */
 public class HBCIProcessTanMedia implements HBCIProcess
 {
+  private boolean force = false;
+  
+  /**
+   * ct.
+   * @param force true, wenn der Abruf der TAN-Medien forciert werden soll, auch wenn er eigentlich nicht noetig ist.
+   */
+  public HBCIProcessTanMedia(boolean force)
+  {
+    this.force = force;
+  }
+  
   /**
    * @see org.kapott.hbci.dialog.HBCIProcess#execute(org.kapott.hbci.dialog.DialogContext)
    */
@@ -29,6 +40,9 @@ public class HBCIProcessTanMedia implements HBCIProcess
   public HBCIMsgStatus execute(final DialogContext ctx)
   {
     if (!HBCIDialogTanMedia.supported(ctx.getPassport()))
+      return null;
+    
+    if (!this.force && !HBCIDialogTanMedia.required(ctx.getPassport()))
       return null;
     
     boolean skip = Feature.PINTAN_INIT_SKIPONESTEPSCA.isEnabled();
@@ -54,11 +68,12 @@ public class HBCIProcessTanMedia implements HBCIProcess
         }
         catch (Exception e2)
         {
+          // Wir werfen das nicht hoch. Wenn es fehlschlaegt, dann haben wir halt keine TAN-Medien. Davon geht die Welt nicht unter
           HBCIUtils.log("fetching of TAN media names failed: " + e.getMessage(),HBCIUtils.LOG_INFO);
           HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
         }
       }
-      
+
       return null;
     }
   }

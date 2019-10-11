@@ -23,7 +23,6 @@ package org.kapott.hbci.manager;
 
 import java.lang.reflect.Constructor;
 import java.security.KeyPair;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -138,110 +137,11 @@ public final class HBCIHandler
             }
 
             dialogs=new Hashtable<String, HBCIDialog>();
-            
-            updateMetaInfo();
-
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_CREATE_HANDLE"),e);
         }
     }
     
-    /**
-     * Aktualisiert die Meta-Informationen.
-     */
-    public void updateMetaInfo()
-    {
-        if (this.passport.getBPD() == null)
-        {
-          HBCIUtils.log("have no bpd, skip fetching of meta info", HBCIUtils.LOG_DEBUG);
-          return;
-        }
-        
-        Properties upd = this.passport.getUPD();
-        
-        // Wenn wir schon UPD haben, checken wir, ob wir die Daten erst kuerzlich abgerufen haben
-        if (upd != null && upd.containsKey(HBCIUser.UPD_KEY_METAINFO))
-        {
-            HBCIUtils.log("meta info already fetched", HBCIUtils.LOG_DEBUG);
-            return;
-        }
-
-        final Properties lowlevel = this.getSupportedLowlevelJobs();
-        
-        //////////////////////////////////////////////////////////////////////////////////
-        // 1. Abruf der TAN-Medien
-        // Seit SCA muessen wir den Abruf in einem dedizierten Dialog machen, weil
-        // wir in der Dialoginitialisierung im HKTAN ja eine Referenz zu HKTAB mitschicken.
-        // Daher darf nach der Dialog-Initialisierung nichts anderes gesendet werden
-        // als der HKTAB.
-        // Daher machen wir zwei getrennte Dialoge.
-        try
-        {
-            // TAN-Medien-Liste macht natuerlich nur bei PIN/TAN Sinn.
-            if (lowlevel.getProperty("TANMediaList") != null && (this.passport instanceof AbstractPinTanPassport))
-            {
-                HBCIUtils.log("Aktualisiere TAN-Medien", HBCIUtils.LOG_INFO);
-                final HBCIJob job = this.newJob("TANMediaList");
-                job.addToQueue();
-                final HBCIExecStatus status = this.execute();
-                if (status.isOK())
-                    HBCIUtils.log("successfully fetched tan media list", HBCIUtils.LOG_DEBUG);
-                else
-                    HBCIUtils.log("error while fetching tan media info: " + status.toString(), HBCIUtils.LOG_ERR);
-            }
-            else
-            {
-                HBCIUtils.log("fetching of tan media list not supported by institute", HBCIUtils.LOG_DEBUG);
-            }
-        }
-        catch (Exception e)
-        {
-            // Den Fehler tolerieren wir. Dann muss der User die Medienbezeichnung eben selbst eingeben
-            HBCIUtils.log(e);
-        }
-        //
-        //////////////////////////////////////////////////////////////////////////////////
-        
-        //////////////////////////////////////////////////////////////////////////////////
-        // Abruf der SEPA-Infos - nur wenn wir schon UPDs haben - dort tragen wir ja die Kontodaten dann ein
-        try
-        {
-            if (lowlevel.getProperty("SEPAInfo") != null && upd != null)
-            {
-                HBCIUtils.log("Aktualisiere SEPA-Informationen", HBCIUtils.LOG_INFO);
-                final HBCIJob job = this.newJob("SEPAInfo");
-                job.addToQueue();
-                final HBCIExecStatus status = this.execute();
-                if (status.isOK())
-                    HBCIUtils.log("successfully fetched sepa info", HBCIUtils.LOG_DEBUG);
-                else
-                    HBCIUtils.log("error while fetching sepa info: " + status.toString(), HBCIUtils.LOG_ERR);
-            }
-            else
-            {
-                HBCIUtils.log("fetching of sepa info not supported by institute", HBCIUtils.LOG_DEBUG);
-            }
-        }
-        catch (Exception e)
-        {
-            // Fehler tolerieren
-            HBCIUtils.log(e);
-        }
-        //
-        //////////////////////////////////////////////////////////////////////////////////
-
-        // Wir markieren das immer als erledigt - egal, ob es geklappt hat oder nicht
-        // Dafür wiederholen wir es zyklisch immer mal wieder
-        HBCIUtils.log("meta info fetched",HBCIUtils.LOG_DEBUG);
-        if (upd == null)
-        {
-            upd = new Properties();
-            this.passport.setUPD(upd);
-        }
-        upd.setProperty(HBCIUser.UPD_KEY_METAINFO,new Date().toString());
-        passport.saveChanges();
-    }
-
     /**
      * Macht die anonyme Initialisierung und ruft die BPD ab.
      */

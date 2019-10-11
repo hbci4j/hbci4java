@@ -43,6 +43,8 @@ import org.kapott.hbci.dialog.HBCIDialogInit;
 import org.kapott.hbci.dialog.HBCIDialogLockKeys;
 import org.kapott.hbci.dialog.HBCIDialogSync;
 import org.kapott.hbci.dialog.HBCIDialogSync.Mode;
+import org.kapott.hbci.dialog.HBCIProcess;
+import org.kapott.hbci.dialog.HBCIProcessSepaInfo;
 import org.kapott.hbci.dialog.HBCIProcessTanMedia;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.NeedKeyAckException;
@@ -51,15 +53,29 @@ import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
 
-/* @brief Instances of this class represent a certain user in combination with
-    a certain institute. */
+/**
+ * Kapselt die authentifizierten Initialisierungsdialoge. Also im Wesentlichen alles, was mit den UPD zu tun hat.
+ */
 public final class HBCIUser implements IHandlerData
 {
     public final static String UPD_KEY_HBCIVERSION = "_hbciversion";
-    public final static String UPD_KEY_TANMEDIA = "tanmedia.names";
-    public final static String UPD_KEY_METAINFO = "_fetchedMetaInfo";
     
-    private final static List<String> UPD_PROTECT_KEYS = Arrays.asList(UPD_KEY_METAINFO,UPD_KEY_TANMEDIA);
+    /**
+     * In dem UPD-Property sind die TAN-Medienbezeichnungen gespeichert
+     */
+    public final static String UPD_KEY_TANMEDIA = "tanmedia.names";
+    
+    /**
+     * In dem UPD-Property ist gespeichert, wann wir die SEPA-Infos (IBAN, BIC) abgerufen haben
+     */
+    public final static String UPD_KEY_FETCH_SEPAINFO = "_fetchedSepaInfo";
+    
+    /**
+     * In dem UPD-Property ist gespeichert, wann wir die TAN-Medienbezeichnungen abgerufen haben
+     */
+    public final static String UPD_KEY_FETCH_TANMEDIA = "_fetchedTanMedia";
+    
+    private final static List<String> UPD_PROTECT_KEYS = Arrays.asList(UPD_KEY_FETCH_TANMEDIA,UPD_KEY_FETCH_SEPAINFO,UPD_KEY_TANMEDIA);
 
     private HBCIPassportInternal passport;
     private HBCIKernelImpl       kernel;
@@ -440,15 +456,6 @@ public final class HBCIUser implements IHandlerData
             }
             //
             ////////////////////////////////////////
-            
-            ////////////////////////////////////////
-            // TAN-Medienbezeichnung abrufen
-            
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
-            HBCIProcessTanMedia p = new HBCIProcessTanMedia();
-            p.execute(ctx);
-            //
-            ////////////////////////////////////////
         }
         catch (Exception e)
         {
@@ -568,7 +575,7 @@ public final class HBCIUser implements IHandlerData
                 }
             }
         }
-
+        
         // Wir aktualisieren unabhaengig davon, ob sich die Versionsnummer erhoeht hat oder nicht,
         // da nicht alle Banken die Versionsnummern erhoehen, wenn es Aenderungen gibt. Manche bleiben
         // einfach pauschal immer bei Version 0. Daher aktualisieren wir immer dann, wenn wir neue
@@ -636,35 +643,63 @@ public final class HBCIUser implements IHandlerData
         }
     }
 
-    private void updateUserData()
+    /**
+     * Fuehrt eine Neu-Synchronisierung durch.
+     * @param force true, wenn die Neu-Synchronisierung forciert werden soll.
+     */
+    public void sync(boolean force)
     {
-        if (passport.getSysStatus().equals("1")) {
+        if (passport.getSysStatus().equals("1"))
+        {
             if (passport.getSysId().equals("0"))
-                fetchSysId();
+                this.fetchSysId();
             if (passport.getSigId().longValue()==-1)
-                fetchSigId();
+                this.fetchSigId();
         }
         
-        Properties upd=passport.getUPD();
-        Properties bpd=passport.getBPD();
-        String     hbciVersionOfUPD=(upd!=null)?upd.getProperty(UPD_KEY_HBCIVERSION):null;
+        Properties upd = passport.getUPD();
+        Properties bpd = passport.getBPD();
+        String hbciVersion = (upd != null) ? upd.getProperty(UPD_KEY_HBCIVERSION) : null;
 
-        // Wir haben noch keine BPD. Offensichtlich unterstuetzt die Bank
-        // das Abrufen von BPDs ueber einen anonymen Dialog nicht. Also machen
-        // wir das jetzt hier mit einem nicht-anonymen Dialog gleich mit
-        if (bpd == null || passport.getUPD() == null || hbciVersionOfUPD==null || !hbciVersionOfUPD.equals(kernel.getHBCIVersion())) 
+        ////////////////////////////////////////
+        // TAN-Medienbezeichnung abrufen - machen wir noch vor den UPD. Weil wir dafuer ja ggf. bereits das TAN-Verfahren brauchen (wir rufen dort ja auch KInfo ab)
+        {
+            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            HBCIProcess p = new HBCIProcessTanMedia(force);
+            p.execute(ctx);
+        }
+        //
+        ////////////////////////////////////////
+
+        ////////////////////////////////////////
+        // UPD abrufen, falls noetig
+        if (force || bpd == null || passport.getUPD() == null || hbciVersion==null || !hbciVersion.equals(kernel.getHBCIVersion())) 
         {
             fetchUPD();
         }
+        //
+        ////////////////////////////////////////
+
+        ////////////////////////////////////////
+        // Zum Schluss noch die SEPA-Infos abrufen
+        {
+            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            HBCIProcess p = new HBCIProcessSepaInfo(force);
+            p.execute(ctx);
+        }
+        //
+        ////////////////////////////////////////
     }
 
+    /**
+     * Registriert den User.
+     */
     public void register()
     {
-        if (passport.needUserKeys() && !passport.hasMySigKey()) {
+        if (passport.needUserKeys() && !passport.hasMySigKey())
             generateNewKeys();
-        }
-        updateUserData();
-        passport.setPersistentData("_registered_user", Boolean.TRUE);
+        
+        this.sync(false);
     }
     
     public void lockKeys()
