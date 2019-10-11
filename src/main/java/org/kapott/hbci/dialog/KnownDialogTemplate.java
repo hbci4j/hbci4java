@@ -39,6 +39,11 @@ public enum KnownDialogTemplate
     TANMEDIA("TanMedia"),
     
     /**
+     * Abruf der SEPA-Infos.
+     */
+    SEPAINFO("SepaInfo"),
+    
+    /**
      * Abfrage der Bankensignatur.
      */
     FIRSTKEYREQUEST("FirstKeyReq"),

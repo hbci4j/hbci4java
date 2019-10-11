@@ -8110,6 +8110,23 @@
             &MsgSigTailInst;
         </MSGdef>
 
+        <MSGdef id="SepaInfo">
+            &MsgSigHeadUser;
+            <SEG type="SEPAInfo1" minnum="0"/>
+            <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            &MsgSigTailUser;
+        </MSGdef>
+        <MSGdef id="SepaInfoRes">
+            &MsgSigHeadInst;
+            <SEG type="RetGlob"/>
+            <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            <SEG type="SEPAInfoRes1" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            &MsgSigTailInst;
+        </MSGdef>
+
         <MSGdef id="Synch">
             <!-- HNHBK+HNSHK --> &MsgSigHeadUser;
             <!-- HKIDN --> <SEG type="Idn"/>
