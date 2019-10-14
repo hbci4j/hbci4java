@@ -372,7 +372,21 @@ public final class HBCIInstitute
     {
         fetchBPD();
         fetchKeys();
-        passport.setPersistentData("_registered_institute", Boolean.TRUE);
+    }
+    
+    /**
+    * @see org.kapott.hbci.manager.IHandlerData#sync(boolean)
+    */
+    @Override
+    public void sync(boolean force)
+    {
+      if (force)
+      {
+        Properties bpd = this.passport.getBPD();
+        if (bpd != null)
+          bpd.remove(BPD_KEY_LASTUPDATE);
+      }
+      this.register();
     }
     
     public MsgGen getMsgGen()

@@ -169,6 +169,18 @@ public final class HBCIHandler
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_REG_USER"),ex);
         }
     }
+
+    /**
+     * @see org.kapott.hbci.manager.IHandlerData#sync(boolean)
+     */
+    public void sync(boolean force)
+    {
+      HBCIInstitute inst = new HBCIInstitute(kernel,passport,false);
+      inst.sync(force);
+      
+      HBCIUser user = new HBCIUser(kernel,passport,false);
+      user.sync(force);
+    }
     
     /** <p>Schließen des Handlers. Diese Methode sollte immer dann aufgerufen werden,
         wenn die entsprechende HBCI-Verbindung nicht mehr benötigt wird. </p><p>

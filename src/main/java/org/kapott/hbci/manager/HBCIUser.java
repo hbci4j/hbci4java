@@ -559,6 +559,8 @@ public final class HBCIUser implements IHandlerData
 
         // Wenn die UPD-Keys keine BIC und IBAN mehr enthalten, verwende
         // die bekannten einfach weiter, solange die Kontonummer identisch ist.
+        // Manche Banken schicken in den UPDs scheinbar die Konto-Daten nicht mehr immer mit. Daher merken wird uns die vorherigen
+        // Werte, wenn keine neuen uebertragen wurden
         if (upd != null && upd.size() > 0) {
             final Pattern pattern = Pattern.compile("(KInfo(.*?)\\.KTV)\\.(bic|iban)");
             for (final Object okey : upd.keySet()) {
@@ -569,7 +571,7 @@ public final class HBCIUser implements IHandlerData
                     if (Objects.equals(result.getProperty("UPD." + kinfo + ".KIK.country"), upd.getProperty(kinfo + ".KIK.country"))
                             && Objects.equals(result.getProperty("UPD." + kinfo + ".KIK.blz"), upd.getProperty(kinfo + ".KIK.blz"))
                             && Objects.equals(result.getProperty("UPD." + kinfo + ".number"), upd.getProperty(kinfo + ".number"))) {
-                        HBCIUtils.log(key + " is missing, using the previous UPD's value", HBCIUtils.LOG_INFO);
+                        HBCIUtils.log(key + " is missing, using the previous UPD's value", HBCIUtils.LOG_DEBUG);
                         p.put(okey, upd.getProperty(key));
                     }
                 }
@@ -644,8 +646,7 @@ public final class HBCIUser implements IHandlerData
     }
 
     /**
-     * Fuehrt eine Neu-Synchronisierung durch.
-     * @param force true, wenn die Neu-Synchronisierung forciert werden soll.
+     * @see org.kapott.hbci.manager.IHandlerData#sync(boolean)
      */
     public void sync(boolean force)
     {

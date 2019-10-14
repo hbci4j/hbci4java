@@ -32,13 +32,14 @@ import org.kapott.hbci.passport.HBCIPassport;
 // Im Moment ist bei allen Implementierungen dieses Interfaces getMsgGen()
 // implementiert, indem this.kernel.getMsgGen() zurückgegeben wird - aber
 // das muss nicht so sein!
-// 
-// TODO: das sieht aus wie ein typisches DesignPattern - das evtl. mal
-// irgendwie verallgemeinern (double-linked-parent-child-connection) und überall
-// wo nötig einsetzen (evtl. inklusive asserts oder automatischer Setter)
-
 public interface IHandlerData 
 {
     public HBCIPassport getPassport();
     public MsgGen       getMsgGen();
+    
+    /**
+     * Fuehrt eine Neu-Synchronisierung durch.
+     * @param force true, wenn die Neu-Synchronisierung forciert werden soll.
+     */
+    public void sync(boolean force);
 }
