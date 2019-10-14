@@ -6552,6 +6552,8 @@
             &MsgSigTailInst;
         </MSGdef>
 
+        <!-- Das ist zwar auch eine Dialog-Initialisierung. Da es die aber nur bei Schluesseldateien
+             und nicht bei PIN/TAN gibt, wuerde ein HKTAN hier gar keinen Sinn machen -->
         <MSGdef id="FirstKeyReq" dontsign="1" dontcrypt="1">
             <SEG type="MsgHeadUser" name="MsgHead"/>
             <SEG type="Idn"/>
@@ -6559,8 +6561,6 @@
             <SEG type="KeyReq" minnum="2" maxnum="2"/>
             <SEG type="MsgTailUser" name="MsgTail"/>
 
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
             <value path="Idn.customerid">9999999999</value>
             <value path="Idn.sysid">0</value>
             <value path="Idn.sysStatus">0</value>
@@ -6570,7 +6570,6 @@
             <value path="KeyReq_2.KeyName.userid">999</value>
             <value path="KeyReq_2.KeyName.keynum">999</value>
             <value path="KeyReq_2.KeyName.keyversion">999</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="FirstKeyReqRes" dontcrypt="1">
             &MsgSigHeadInst;
@@ -6588,13 +6587,6 @@
             <SEG type="Idn"/>
             <SEG type="ProcPrep"/>
             <SEG type="MsgTailUser" name="MsgTail"/>
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="Idn.customerid">9999999999</value>
-            <value path="Idn.sysid">0</value>
-            <value path="Idn.sysStatus">0</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="DialogInitAnonRes" dontsign="1" dontcrypt="1">
             &MsgSigHeadInst;
@@ -6612,10 +6604,6 @@
             <SEG type="ProcPrep"/>
             <SEG type="KeyReq" minnum="0" maxnum="2"/>
             &MsgSigTailUser;
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="MsgTail.msgnum">1</value>
         </MSGdef>
         <MSGdef id="DialogInitRes">
             &MsgSigHeadInst;
@@ -6624,6 +6612,21 @@
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
             <SEG type="SendPubKey" minnum="0" maxnum="2"/>
+            <SEG type="KIMsg" minnum="0" maxnum="0"/>
+            &MsgSigTailInst;
+        </MSGdef>
+
+
+        <MSGdef id="SepaInfo">
+            &MsgSigHeadUser;
+            <SEG type="SEPAInfo1" minnum="0"/>
+            &MsgSigTailUser;
+        </MSGdef>
+        <MSGdef id="SepaInfoRes">
+            &MsgSigHeadInst;
+            <SEG type="RetGlob"/>
+            <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            <SEG type="SEPAInfoRes1" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
@@ -6652,6 +6655,18 @@
             &MsgSigTailInst;
         </MSGdef>
 
+        <MSGdef id="ChangeKeys">
+            &MsgSigHeadUser;
+            <SEG type="KeyChange" minnum="2" maxnum="2"/>
+            &MsgSigTailUser;
+        </MSGdef>
+        <MSGdef id="ChangeKeysRes">
+            &MsgSigHeadInst;
+            <SEG type="RetGlob"/>
+            <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            &MsgSigTailInst;
+        </MSGdef>
+
         <MSGdef id="LockKeys">
             &MsgSigHeadUser;
             <SEG type="KeyLock"/>
@@ -6662,6 +6677,24 @@
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SEG type="KeyLockAck"/>
+            &MsgSigTailInst;
+        </MSGdef>
+
+        <MSGdef id="SendKeys">
+            &MsgSigHeadUser;
+            <SEG type="Idn"/>
+            <SEG type="KeyChange" minnum="2" maxnum="2"/>
+            &MsgSigTailUser;
+
+            <value path="MsgHead.dialogid">0</value>
+            <value path="MsgHead.msgnum">1</value>
+            <value path="Idn.sysStatus">1</value>
+            <value path="MsgTail.msgnum">1</value>
+        </MSGdef>
+        <MSGdef id="SendKeysRes" dontcrypt="1">
+            &MsgSigHeadInst;
+            <SEG type="RetGlob"/>
+            <SEG type="RetSeg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -6682,36 +6715,6 @@
             <SEG type="SendPubKey" minnum="0" maxnum="2"/>
             <SEG type="SyncRes" minnum="0"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
-            &MsgSigTailInst;
-        </MSGdef>
-
-        <MSGdef id="ChangeKeys">
-            &MsgSigHeadUser;
-            <SEG type="KeyChange" minnum="2" maxnum="2"/>
-            &MsgSigTailUser;
-        </MSGdef>
-        <MSGdef id="ChangeKeysRes">
-            &MsgSigHeadInst;
-            <SEG type="RetGlob"/>
-            <SEG type="RetSeg" minnum="0" maxnum="0"/>
-            &MsgSigTailInst;
-        </MSGdef>
-
-        <MSGdef id="SendKeys">
-            &MsgSigHeadUser;
-            <SEG type="Idn"/>
-            <SEG type="KeyChange" minnum="2" maxnum="2"/>
-            &MsgSigTailUser;
-
-            <value path="MsgHead.dialogid">0</value>
-            <value path="MsgHead.msgnum">1</value>
-            <value path="Idn.sysStatus">1</value>
-            <value path="MsgTail.msgnum">1</value>
-        </MSGdef>
-        <MSGdef id="SendKeysRes" dontcrypt="1">
-            &MsgSigHeadInst;
-            <SEG type="RetGlob"/>
-            <SEG type="RetSeg" minnum="0" maxnum="0"/>
             &MsgSigTailInst;
         </MSGdef>
 
