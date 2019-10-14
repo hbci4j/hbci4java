@@ -19,6 +19,7 @@ import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
+import org.kapott.hbci.tools.StringUtil;
 
 /**
  * Abstrakte Basis-Klasse fuer "rohe" HBCI-Dialoge.
@@ -172,5 +173,38 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
     protected String getActualTemplate(final DialogContext ctx)
     {
         return this.getTemplate().getName();
+    }
+    
+    /**
+     * Liefert die hoechste bei der Bank verfuegbare Segment-Version fuer das HKTAB.
+     * @param p der Passport.
+     * @param gvName der Name des Geschaeftsvorfalls.
+     * @param defaultVersion die Default-Version, wenn keine gefunden wurde.
+     * @return die Segment-Version oder NULL, wenn keine brauchbare Version unterstuetzt wird
+     */
+    protected Integer getSegmentVersion(DialogContext ctx, String gvName, Integer defaultVersion)
+    {
+      final HBCIPassportInternal p = ctx.getPassport();
+      final Properties props = p.getParamSegmentNames();
+      final String version = props.getProperty(gvName);
+      
+      if (!StringUtil.hasText(version))
+        return defaultVersion;
+  
+      try
+      {
+        final Integer i = Integer.valueOf(version);
+        if (i == null)
+          return defaultVersion;
+  
+        if (i.intValue() < 2 || i.intValue() > 5)
+          return defaultVersion;
+  
+        return i;
+      } catch (Exception e)
+      {
+        HBCIUtils.log("invalid segment version: " + version, HBCIUtils.LOG_WARN);
+        return defaultVersion;
+      }
     }
 }

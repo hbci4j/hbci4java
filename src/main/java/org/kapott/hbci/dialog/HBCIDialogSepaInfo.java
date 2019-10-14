@@ -26,6 +26,8 @@ import org.kapott.hbci.tools.StringUtil;
  */
 public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
 {
+  private final static String GVNAME = "SEPAInfo";
+
     /**
      * ct.
      */
@@ -36,18 +38,29 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
     
     /**
      * Prueft, ob der Dialog noetig ist.
-     * @param p der Passport.
+     * @param ctx der Context.
      * @return true, wenn er noetig ist.
      */
-    public static boolean required(HBCIPassportInternal p)
+    public boolean required(DialogContext ctx)
     {
-        final Properties upd = p.getUPD();
-        if (upd == null)
-            return true;
-        
-        return !upd.containsKey(HBCIUser.UPD_KEY_FETCH_SEPAINFO);
+      HBCIPassportInternal p = ctx.getPassport();
+      final Properties upd = p.getUPD();
+      if (upd == null)
+        return true;
+      
+      return !upd.containsKey(HBCIUser.UPD_KEY_FETCH_SEPAINFO);
     }
-    
+      
+    /**
+     * Prueft, ob der Dialog moeglich ist.
+     * @param ctx der Context.
+     * @return true, wenn er moeglich ist.
+     */
+    public boolean supported(DialogContext ctx)
+    {
+      return getSegmentVersion(ctx,GVNAME,null) != null;
+    }
+
     /**
      * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#checkResult(org.kapott.hbci.dialog.DialogContext)
      */

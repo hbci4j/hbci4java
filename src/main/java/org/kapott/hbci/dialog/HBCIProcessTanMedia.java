@@ -22,6 +22,7 @@ import org.kapott.hbci.status.HBCIMsgStatus;
  */
 public class HBCIProcessTanMedia implements HBCIProcess
 {
+  private HBCIDialogTanMedia dialog = null;
   private boolean force = false;
   
   /**
@@ -30,6 +31,7 @@ public class HBCIProcessTanMedia implements HBCIProcess
    */
   public HBCIProcessTanMedia(boolean force)
   {
+    this.dialog = new HBCIDialogTanMedia();
     this.force = force;
   }
   
@@ -39,10 +41,10 @@ public class HBCIProcessTanMedia implements HBCIProcess
   @Override
   public HBCIMsgStatus execute(final DialogContext ctx)
   {
-    if (!HBCIDialogTanMedia.supported(ctx.getPassport()))
+    if (!this.dialog.supported(ctx))
       return null;
-    
-    if (!this.force && !HBCIDialogTanMedia.required(ctx.getPassport()))
+
+    if (!this.force && !this.dialog.required(ctx))
       return null;
     
     boolean skip = Feature.PINTAN_INIT_SKIPONESTEPSCA.isEnabled();
@@ -109,8 +111,8 @@ public class HBCIProcessTanMedia implements HBCIProcess
     };
     init.execute(ctx);
 
-    final HBCIDialogTanMedia tanMedia = new HBCIDialogTanMedia();
-    tanMedia.execute(ctx);
+    this.dialog.execute(ctx);
+    
     final HBCIDialogEnd end = new HBCIDialogEnd();
     return end.execute(ctx);
   }

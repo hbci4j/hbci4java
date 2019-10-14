@@ -18,6 +18,7 @@ import org.kapott.hbci.status.HBCIMsgStatus;
  */
 public class HBCIProcessSepaInfo implements HBCIProcess
 {
+  private HBCIDialogSepaInfo dialog = null;
   private boolean force = false;
   
   /**
@@ -26,6 +27,7 @@ public class HBCIProcessSepaInfo implements HBCIProcess
    */
   public HBCIProcessSepaInfo(boolean force)
   {
+    this.dialog = new HBCIDialogSepaInfo();
     this.force = force;
   }
 
@@ -35,7 +37,11 @@ public class HBCIProcessSepaInfo implements HBCIProcess
   @Override
   public HBCIMsgStatus execute(final DialogContext ctx)
   {
-    if (!this.force && !HBCIDialogSepaInfo.required(ctx.getPassport()))
+    if (!this.dialog.supported(ctx))
+      return null;
+    
+    // Weder erzwungen noch noetig
+    if (!this.force && !this.dialog.required(ctx))
       return null;
 
     try
@@ -45,8 +51,8 @@ public class HBCIProcessSepaInfo implements HBCIProcess
       final HBCIDialogInit init = new HBCIDialogInit();
       init.execute(ctx);
 
-      final HBCIDialogSepaInfo sepaInfo = new HBCIDialogSepaInfo();
-      sepaInfo.execute(ctx);
+      this.dialog.execute(ctx);
+      
       final HBCIDialogEnd end = new HBCIDialogEnd();
       return end.execute(ctx);
     }
