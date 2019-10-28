@@ -107,6 +107,9 @@ public class HBCIPassportRDHXFile
                 is = new BufferedInputStream(new FileInputStream(fname));
                 byte[] data = IOUtils.read(is);
                 
+                // Wichtig. File-Handle schliessen. Sonst schlaegt das Speichern fehl. Siehe https://homebanking-hilfe.de/forum/topic.php?p=151578#real151578 sowie die Mail von Simon vom 28.10.2019
+                is.close();
+                
                 this.filecontent=new RDHXFile(data, passphrase);
                 this.entryIdx=0;
                 
@@ -173,6 +176,7 @@ public class HBCIPassportRDHXFile
             }
             finally
             {
+              // Nur zur Sicherheit, falls das Schliessen oben fehlschlug
                 IOUtils.close(is);
             }
         }
