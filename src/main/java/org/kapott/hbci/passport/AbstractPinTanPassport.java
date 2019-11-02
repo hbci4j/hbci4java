@@ -654,54 +654,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      */
     public boolean isSupported()
     {
-        boolean ret=false;
-        Properties bpd=getBPD();
-        
-        if (bpd!=null && bpd.size()!=0) {
-            // loop through bpd and search for PinTanPar segment
-            for (Enumeration e=bpd.propertyNames();e.hasMoreElements();) {
-                String key=(String)e.nextElement();
-                
-                if (key.startsWith("Params")) {
-                    int posi=key.indexOf(".");
-                    if (key.substring(posi+1).startsWith("PinTanPar")) {
-                        ret=true;
-                        break;
-                    }
-                }
-            }
-            
-            if (ret) {
-                // prüfen, ob gewähltes sicherheitsverfahren unterstützt wird
-                // autosecmech: hier wird ein flag uebergeben, das anzeigt, dass getCurrentTANMethod()
-                // hier evtl. automatisch ermittelte secmechs neu verifzieren soll
-                String current=getCurrentTANMethod(true);
-                
-                if (current.equals(TanMethod.ONESTEP.getId())) {
-                    // einschrittverfahren gewählt
-                    if (!isOneStepAllowed()) {
-                        HBCIUtils.log("not supported: onestep method not allowed by BPD",HBCIUtils.LOG_ERR);
-                        ret=false;
-                    } else {
-                        HBCIUtils.log("supported: pintan-onestep",HBCIUtils.LOG_DEBUG);
-                    }
-                } else {
-                    // irgendein zweischritt-verfahren gewählt
-                    Properties entry=tanMethodsBank.get(current);
-                    if (entry==null) {
-                        // es gibt keinen info-eintrag für das gewählte verfahren
-                        HBCIUtils.log("not supported: twostep-method "+current+" selected, but this is not supported",HBCIUtils.LOG_ERR);
-                        ret=false;
-                    } else {
-                        HBCIUtils.log("selected twostep-method "+current+" ("+entry.getProperty("name")+") is supported",HBCIUtils.LOG_DEBUG);
-                    }
-                }
-            }
-        } else {
-            ret=true;
-        }
-        
-        return ret;
+      final Properties bpd = this.getBPD();
+      if (bpd == null)
+        return true;
+      
+      Properties props = ParameterFinder.findAll(bpd,ParameterFinder.Query.BPD_PINTAN);
+      return props.size() > 0;
     }
     
     /**
