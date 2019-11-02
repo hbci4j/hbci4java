@@ -39,11 +39,6 @@ public class ParameterFinder
     public static class Query
     {
         /**
-         * Informationen zur Verfuegbarkeit von PIN/TAN in den BPD.
-         */
-        public final static Query BPD_PINTAN = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.secfunc",false);
-
-        /**
          * Informationen zur Verfuegbarkeit von Einschritt-Verfahren in den BPD.
          */
         public final static Query BPD_PINTAN_CAN1STEP = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.can1step",false);

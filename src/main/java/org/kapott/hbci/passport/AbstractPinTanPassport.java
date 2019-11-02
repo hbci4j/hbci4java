@@ -657,9 +657,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
       final Properties bpd = this.getBPD();
       if (bpd == null)
         return true;
-      
-      Properties props = ParameterFinder.findAll(bpd,ParameterFinder.Query.BPD_PINTAN);
-      return props.size() > 0;
+
+      // Wir triggern hier nur einmal die Auswahl des TAN-Verfahrens
+      this.getCurrentTANMethod(true);
+      return true;
     }
     
     /**
