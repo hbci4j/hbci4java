@@ -74,8 +74,8 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
     HBCIPassportInternal p = ctx != null ? ctx.getPassport() : null;
     if (p == null || !(p instanceof AbstractPinTanPassport))
       return false;
-      
-    return getSegmentVersion(ctx,GVNAME,null) != null;
+
+    return getSegmentVersion(ctx,GVNAME,0) >= 2;
   }
     
   /**

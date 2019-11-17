@@ -187,8 +187,8 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
     }
     
     /**
-     * Liefert die hoechste bei der Bank verfuegbare Segment-Version fuer das HKTAB.
-     * @param p der Passport.
+     * Liefert die hoechste bei der Bank verfuegbare Segment-Version.
+     * @param ctx der Kontext.
      * @param gvName der Name des Geschaeftsvorfalls.
      * @param defaultVersion die Default-Version, wenn keine gefunden wurde.
      * @return die Segment-Version oder NULL, wenn keine brauchbare Version unterstuetzt wird
@@ -204,14 +204,7 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
   
       try
       {
-        final Integer i = Integer.valueOf(version);
-        if (i == null)
-          return defaultVersion;
-  
-        if (i.intValue() < 2 || i.intValue() > 5)
-          return defaultVersion;
-  
-        return i;
+        return Integer.valueOf(version);
       } catch (Exception e)
       {
         HBCIUtils.log("invalid segment version: " + version, HBCIUtils.LOG_WARN);
