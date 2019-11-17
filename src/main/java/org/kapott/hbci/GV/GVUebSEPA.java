@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.GV;
 
+import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.sepa.SepaVersion;
@@ -76,7 +77,18 @@ public class GVUebSEPA extends AbstractSEPAGV
      */
     public GVUebSEPA(HBCIHandler handler, String name)
     {
-        super(handler, name);
+        this(handler, getLowlevelName(), new HBCIJobResultImpl());
+    }
+
+    /**
+     * ct.
+     * @param handler
+     * @param name
+     * @param jobResult
+     */
+    public GVUebSEPA(HBCIHandler handler, String name, HBCIJobResultImpl jobResult)
+    {
+        super(handler, name, jobResult);
 
         addConstraint("src.bic",  "My.bic",  null, LogFilter.FILTER_MOST);
         addConstraint("src.iban", "My.iban", null, LogFilter.FILTER_IDS);
