@@ -89,7 +89,10 @@ public class HBCICallbackIOStreams
     protected String readLine() throws IOException
     {
         BufferedReader r = this.getInStream();
-        return r != null ? r.readLine() : "";
+        if (r == null)
+          return "";
+        final String s = r.readLine();
+        return s != null ? s : "";
     }
     
     /** Schreiben von Logging-Ausgaben in einen <code>PrintStream</code>. Diese Methode implementiert die Logging-Schnittstelle
