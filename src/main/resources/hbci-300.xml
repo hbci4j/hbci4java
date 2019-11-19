@@ -6259,6 +6259,58 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
 
+        <!-- BEGIN SEPA-Instant aka 'SEPA-Instant Payment Zahlung' -->
+        <!-- Request -->
+        <SEGdef id="InstUebSEPA1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+
+            <value path="SegHead.code">HKIPZ</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <!-- Response -->
+        <SEGdef id="InstUebSEPARes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="ccode" type="Code" maxsize="1" minnum="0"/>
+            <DE name="orderstatus" type="Code" maxsize="1" minnum="0"/>
+
+            <valids path="ccode">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            <valids path="orderstatus">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+                <validvalue>5</validvalue>
+                <validvalue>6</validvalue>
+                <validvalue>7</validvalue>
+                <validvalue>8</validvalue>
+                <validvalue>9</validvalue>
+            </valids>
+
+            <value path="SegHead.code">HIIPZ</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <!-- BPD -->
+        <SEGdef id="InstUebSEPAPar1">
+            &GVP2;
+            <DEG type="ParUmbSepa" name="ParUmbSepa"/>
+            &SecClassValids;
+
+            <value path="SegHead.code">HIIPZS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- END SEPA-Instant aka 'SEPA-Instant Payment Zahlung' -->
+
         <!-- BEGIN SEPA-Umbuchung aka 'SEPA-Überweisung auf ein Empfängerkonto' -->
         <!-- Request -->
         <SEGdef id="UmbSEPA1">
@@ -7569,6 +7621,7 @@
             <SEG type="InfoList2" minnum="0"/>
             <SEG type="InfoList3" minnum="0"/>
             <SEG type="InfoList4" minnum="0"/>
+            <SEG type="InstUebSEPA1" minnum="0"/>
             <SEG type="Kontoauszug1" minnum="0"/>
             <SEG type="Kontoauszug2" minnum="0"/>
             <SEG type="Kontoauszug3" minnum="0"/>
@@ -7729,6 +7782,7 @@
             <SEG type="InfoListRes2" minnum="0"/>
             <SEG type="InfoListRes3" minnum="0"/>
             <SEG type="InfoListRes4" minnum="0"/>
+            <SEG type="InstUebSEPARes1" minnum="0"/>
             <SEG type="KontoauszugRes1" minnum="0"/>
             <SEG type="KontoauszugRes2" minnum="0"/>
             <SEG type="KontoauszugRes3" minnum="0"/>
@@ -7867,6 +7921,7 @@
             <SEG type="InfoListPar2" minnum="0"/>
             <SEG type="InfoListPar3" minnum="0"/>
             <SEG type="InfoListPar4" minnum="0"/>
+            <SEG type="InstUebSEPAPar1" minnum="0"/>
             <SEG type="KontoauszugPar1" minnum="0"/>
             <SEG type="KontoauszugPar2" minnum="0"/>
             <SEG type="KontoauszugPar3" minnum="0"/>
