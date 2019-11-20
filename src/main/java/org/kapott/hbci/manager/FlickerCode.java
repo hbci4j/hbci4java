@@ -277,8 +277,7 @@ public class FlickerCode
         catch (Exception e)
         {
           // Die HHD-Version war explizit angegeben, liess sich damit aber nicht parsen? Sehr verdaechtig
-          HBCIUtils.log("unable to parse code " + code + " as " + hhd,HBCIUtils.LOG_WARN);
-          HBCIUtils.log(e);
+          HBCIUtils.log("unable to parse code " + code + " as " + hhd + ": " + HBCIUtils.exception2String(e),HBCIUtils.LOG_DEBUG);
         }
     }
     
