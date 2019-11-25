@@ -767,6 +767,15 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
           }
           else
           {
+            // Sonderfall HBCI4Java Testserver. Der liefert gar keine TAN-Verfahren
+            if (bankList.size() == 0)
+            {
+              final TanMethod m = TanMethod.ONESTEP;
+              HBCIUtils.log("no tan method available for bank, using: " + m,HBCIUtils.LOG_DEBUG);
+              // Wir speichern das TAN-Verfahren nicht, das kann unmoeglich das finale Verfahren sein.
+              return m.getId();
+            }
+            
             // Das ist sicher die Postbank. Wir haben noch kein Verfahren per 3920 erhalten, die Bank erlaubt
             // aber nicht, diese per Einschritt-Verfahren abzurufen. Also muessen wir den User bitten, die Auswahl
             // aus der in den BPD verfuegbaren Verfahren zu treffen. Auch wenn diese Liste dann Eintraege enthaelt,
