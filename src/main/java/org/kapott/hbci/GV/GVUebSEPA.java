@@ -77,7 +77,7 @@ public class GVUebSEPA extends AbstractSEPAGV
      */
     public GVUebSEPA(HBCIHandler handler, String name)
     {
-        this(handler, getLowlevelName(), new HBCIJobResultImpl());
+        this(handler, name, new HBCIJobResultImpl());
     }
 
     /**
