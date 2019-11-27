@@ -64,7 +64,7 @@ import org.kapott.hbci.security.Sig;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.status.HBCIRetVal;
 import org.kapott.hbci.structures.Konto;
-import org.kapott.hbci.tools.DigestUtils;
+import org.kapott.hbci.tools.CryptUtils;
 import org.kapott.hbci.tools.NumberUtil;
 import org.kapott.hbci.tools.ParameterFinder;
 import org.kapott.hbci.tools.ParameterFinder.Query;
@@ -1391,9 +1391,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         final String s = ParameterFinder.getValue(bpd,Query.BPD_PINTAN_ORDERHASHMODE.withParameters((segVersion != null ? segVersion : "")),null);
         
         if ("1".equals(s))
-            return DigestUtils.ALG_RIPE_MD160;
+            return CryptUtils.HASH_ALG_RIPE_MD160;
         if ("2".equals(s))
-            return DigestUtils.ALG_SHA1;
+            return CryptUtils.HASH_ALG_SHA1;
                     
         throw new HBCI_Exception("unknown orderhash mode " + s);
     }
@@ -1514,7 +1514,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         seg.validate();
                         final String segdata = seg.toString(0);
                         HBCIUtils.log("calculating hash for jobsegment: " + segdata,HBCIUtils.LOG_DEBUG2);
-                        hktan.setParam("orderhash",DigestUtils.hash(segdata,this.getOrderHashMode()));
+                        hktan.setParam("orderhash",CryptUtils.hash(segdata,this.getOrderHashMode()));
                     }
                     finally
                     {

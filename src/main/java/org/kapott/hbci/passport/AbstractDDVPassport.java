@@ -116,7 +116,7 @@ public abstract class AbstractDDVPassport
 
     public String getCryptFunction()
     {
-        return Crypt.SECFUNC_ENC_3DES;
+        return Crypt.SECFUNC_ENC;
     }
 
     public String getCryptAlg()

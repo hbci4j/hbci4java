@@ -42,10 +42,11 @@ import org.w3c.dom.Node;
 
 public final class Crypt
 {
-    public final static String SECFUNC_ENC_3DES="4";
+    public final static String SECFUNC_ENC="4";
     public final static String SECFUNC_ENC_PLAIN="998";
     
     public final static String ENCALG_2K3DES="13";
+    public final static String ENCALG_AES256="14";
 
     public final static String ENCMODE_CBC="2";
     public final static String ENCMODE_PKCS1="18";

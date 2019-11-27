@@ -765,6 +765,7 @@
             <valids path="method">
                 <validvalue>DDV</validvalue>
                 <validvalue>RDH</validvalue>
+                <validvalue>RAH</validvalue>
                 <validvalue>PIN</validvalue>
             </valids>
             <valids path="version">
