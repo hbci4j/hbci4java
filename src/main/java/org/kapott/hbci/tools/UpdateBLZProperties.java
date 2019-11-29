@@ -95,14 +95,14 @@ public class UpdateBLZProperties
 					continue; // die Zeile haben wir schon
 				}
 
-				String url = values.get(23).trim();
+				String url = values.get(24).trim();
 				if (url.length() == 0)
 				{
 					continue; // keine URL gefunden
 				}
 
 				lookup.put(blz, url);
-				versions.put(blz, values.get(24).trim());
+				versions.put(blz, values.get(25).trim());
 			}
 			//
 			//////////////////////////////////////////////////////////////////////////
