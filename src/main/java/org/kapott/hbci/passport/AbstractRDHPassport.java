@@ -47,8 +47,7 @@ import org.kapott.hbci.security.Sig;
 import org.kapott.hbci.tools.CryptUtils;
 
 
-public abstract class AbstractRDHPassport 
-	extends AbstractHBCIPassport 
+public abstract class AbstractRDHPassport extends AbstractHBCIPassport implements InitLetterPassport 
 {
     protected AbstractRDHPassport(Object init)
     {
@@ -276,6 +275,9 @@ public abstract class AbstractRDHPassport
         return ret;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.InitLetterPassport#getSignatureParamSpec()
+     */
     public SignatureParamSpec getSignatureParamSpec()
     {
         int    profile=Integer.parseInt(getProfileVersion());

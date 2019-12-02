@@ -106,7 +106,7 @@ public class CryptUtils
     {
       final String provider = HASH_OWN_PROVIDER.contains(alg) ? CryptAlgs4JavaProvider.NAME : null;
       HBCIUtils.log("using " + alg + "/" + provider + " for generating hash of " + data.length + " bytes", HBCIUtils.LOG_DEBUG);
-      MessageDigest digest = MessageDigest.getInstance(alg,provider);
+      MessageDigest digest = provider != null ? MessageDigest.getInstance(alg,provider) : MessageDigest.getInstance(alg);
       digest.update(data);
       return digest.digest();
     }
@@ -134,11 +134,12 @@ public class CryptUtils
   {
     try
     {
-      final String provider = SIGN_OWN_PROVIDER.contains(signAlg) ? CryptAlgs4JavaProvider.NAME : null;
-      HBCIUtils.log("using " + signAlg + "+" + hashAlg + "/" + provider + " for verifying signature of " + data.length + " bytes", HBCIUtils.LOG_DEBUG);
+      final String signProvider = SIGN_OWN_PROVIDER.contains(signAlg) ? CryptAlgs4JavaProvider.NAME : null;
+      final String hashProvider = HASH_OWN_PROVIDER.contains(hashAlg) ? CryptAlgs4JavaProvider.NAME : null;
+      HBCIUtils.log("using " + signAlg + "+" + hashAlg + "/" + signProvider + "/" + hashProvider + " for verifying signature of " + data.length + " bytes", HBCIUtils.LOG_DEBUG);
 
-      final Signature sig = Signature.getInstance(signAlg, provider);
-      final SignatureParamSpec spec = new SignatureParamSpec(hashAlg, provider);
+      final Signature sig = signProvider != null ? Signature.getInstance(signAlg, signProvider) : Signature.getInstance(signAlg);
+      final SignatureParamSpec spec = new SignatureParamSpec(hashAlg, hashProvider);
       sig.setParameter(spec);
 
       sig.initVerify(key);
@@ -168,11 +169,12 @@ public class CryptUtils
   {
     try
     {
-      final String provider = SIGN_OWN_PROVIDER.contains(signAlg) ? CryptAlgs4JavaProvider.NAME : null;
-      HBCIUtils.log("using " + signAlg + "+" + hashAlg + "/" + provider + " for generating signature of " + data.length + " bytes", HBCIUtils.LOG_DEBUG);
+      final String signProvider = SIGN_OWN_PROVIDER.contains(signAlg) ? CryptAlgs4JavaProvider.NAME : null;
+      final String hashProvider = HASH_OWN_PROVIDER.contains(hashAlg) ? CryptAlgs4JavaProvider.NAME : null;
+      HBCIUtils.log("using " + signAlg + "+" + hashAlg + "/" + signProvider + "/" + hashProvider + " for generating signature of " + data.length + " bytes", HBCIUtils.LOG_DEBUG);
 
-      final Signature sig = Signature.getInstance(signAlg, provider);
-      final SignatureParamSpec spec = new SignatureParamSpec(hashAlg, provider);
+      final Signature sig = signProvider != null ? Signature.getInstance(signAlg, signProvider) : Signature.getInstance(signAlg);
+      final SignatureParamSpec spec = new SignatureParamSpec(hashAlg, hashProvider);
       sig.setParameter(spec);
 
       sig.initSign(key);

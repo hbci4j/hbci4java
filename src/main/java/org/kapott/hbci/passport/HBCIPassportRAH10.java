@@ -10,8 +10,11 @@ package org.kapott.hbci.passport;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
@@ -21,7 +24,10 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.crypto.dsig.spec.ExcC14NParameterSpec;
 
+import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
+import org.kapott.cryptalgs.SignatureParamSpec;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
@@ -37,7 +43,7 @@ import org.kapott.hbci.tools.CryptUtils;
 /**
  * Implementierung des Passports fuer RAH10-Schluesseldateien.
  */
-public class HBCIPassportRAH10 extends AbstractHBCIPassport
+public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLetterPassport
 {
     private final static String PROFILE_NAME    = "RAH";
     private final static String PROFILE_VERSION = "10";
@@ -112,6 +118,9 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport
     {
         try
         {
+          if (this.data == null)
+            this.data = new PassportData();
+          
             // Vorm Speichern die ggf. in der Basis-Klasse geaenderten Daten uebernehmen
             this.data.country     = this.getCountry();
             this.data.blz         = this.getBLZ();
@@ -634,6 +643,84 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport
     catch (Exception ex)
     {
       throw new HBCI_Exception(ex);
+    }
+  }
+  
+  /**
+   * @see org.kapott.hbci.passport.AbstractHBCIPassport#generateNewUserKeys()
+   */
+  @Override
+  public HBCIKey[][] generateNewUserKeys()
+  {
+    // Kopiert von AbstractRDHSWPassport
+    HBCIKey[] newSigKey = new HBCIKey[2];
+    HBCIKey[] newEncKey = new HBCIKey[2];
+    try
+    {
+      HBCIUtils.log("Erzeuge neue Benutzerschlüssel", HBCIUtils.LOG_INFO);
+
+      final String profileVersion = this.getProfileVersion();
+
+      final String num = this.hasMySigKey() ? this.getMyPublicSigKey().num : profileVersion;
+      String version = hasMySigKey() ? getMyPublicSigKey().version : "0";
+      version = Integer.toString(Integer.parseInt(version) + 1);
+
+      int keySize = 4096;
+
+      HBCIKey k = this.getInstSigKey();
+      if (k == null)
+        k = getInstEncKey();
+      if (k != null)
+      {
+        RSAPublicKey pkey = (RSAPublicKey) k.key;
+        keySize = pkey.getModulus().bitLength();
+      }
+
+      final String blz = this.getBLZ();
+      final String country = this.getCountry();
+      final String userid = this.getUserId();
+      
+      for (int i=0;i<2;++i)
+      {
+        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
+        keygen.initialize(keySize);
+        KeyPair pair = keygen.generateKeyPair();
+
+        if (i == 0)
+        {
+          newSigKey[0] = new HBCIKey(country, blz, userid, num, version, pair.getPublic());
+          newSigKey[1] = new HBCIKey(country, blz, userid, num, version, pair.getPrivate());
+        } else
+        {
+          newEncKey[0] = new HBCIKey(country, blz, userid, num, version, pair.getPublic());
+          newEncKey[1] = new HBCIKey(country, blz, userid, num, version, pair.getPrivate());
+        }
+      }
+    } catch (Exception ex)
+    {
+      throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_GENKEYS_ERR"), ex);
+    }
+    
+    final HBCIKey[][] ret = new HBCIKey[2][];
+    ret[0]=newSigKey;
+    ret[1]=newEncKey;
+    
+    return ret;
+  }
+  
+  /**
+   * @see org.kapott.hbci.passport.InitLetterPassport#getSignatureParamSpec()
+   */
+  @Override
+  public SignatureParamSpec getSignatureParamSpec()
+  {
+    try
+    {
+      return new SignatureParamSpec(CryptUtils.HASH_ALG_SHA256,null);
+    }
+    catch (Exception e)
+    {
+      throw new HBCI_Exception(e);
     }
   }
 

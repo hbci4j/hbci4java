@@ -148,7 +148,7 @@ public class INILetter
             
             // hash-verfahren hängt von rdh-profil ab
             MessageDigest      dig;
-            SignatureParamSpec hashSpec=((AbstractRDHPassport)(passport)).getSignatureParamSpec();
+            SignatureParamSpec hashSpec=((InitLetterPassport)(passport)).getSignatureParamSpec();
             String             provider=hashSpec.getProvider();
             if (provider!=null) {
                 dig=MessageDigest.getInstance(hashSpec.getHashAlg(), provider);

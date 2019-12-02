@@ -646,6 +646,7 @@
             </valids>
             <valids path="alg">
                 <validvalue>13</validvalue>
+                <validvalue>14</validvalue> <!-- AES-256 -->
             </valids>
             <valids path="keytype">
                 <validvalue>5</validvalue>
