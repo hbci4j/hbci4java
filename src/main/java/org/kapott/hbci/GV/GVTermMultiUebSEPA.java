@@ -21,16 +21,13 @@
 
 package org.kapott.hbci.GV;
 
+import java.util.Enumeration;
+import java.util.Properties;
+
 import org.kapott.hbci.GV_Result.GVRTermUeb;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.passport.HBCIPassportInternal;
-import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.status.HBCIMsgStatus;
-
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Properties;
 
 /**
  * Job-Implementierung fuer terminierte SEPA-Sammelueberweisungen.
