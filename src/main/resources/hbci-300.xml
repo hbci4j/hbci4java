@@ -1386,6 +1386,14 @@
 	    	<DE name="cansingletransfer" type="JN" />
 		</DEGdef>
         
+        <DEGdef id="ParTermSammelUebSEPA">
+            <DE name="minVorlZeit" type="Num" maxsize="4"/>
+            <DE name="maxVorlZeit" type="Num" maxsize="4"/>
+            <DE name="maxnum" type="Num" maxsize="7" />
+            <DE name="needtotal" type="JN" />
+            <DE name="cansingletransfer" type="JN" />
+        </DEGdef>
+
         <DEGdef id="ParSEPAInfo">
             <DE name="cansingleaccquery" type="JN"/>
             <DE name="cannationalacc" type="JN"/>
@@ -4913,6 +4921,34 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
         
+        <SEGdef id="TermSammelUebSEPA1">
+            <DEG type="SegHeadUser" name="SegHead" />
+            <DEG type="KTVInt" name="My" />
+            <DEG type="BTG" name="Total" minnum="0" />
+            <DE type="JN" name="singletransfers" minnum="0" />
+            <DE type="AN" name="sepadescr" maxsize="256" />
+            <DE type="Bin" name="sepapain" maxsize="0" />
+
+            <value path="SegHead.code">HKCME</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermSammelUebSEPARes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+
+            <value path="SegHead.code">HICME</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermSammelUebSEPAPar1">
+            &GVP2;
+            <DEG type="ParTermSammelUebSEPA"/>
+
+            &SecClassValids;
+
+            <value path="SegHead.code">HICMES</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
         <SEGdef id="SammelLastSEPA1"> <!-- 3.0 -->
             <DEG type="SegHeadUser" name="SegHead" />
 	        <DEG type="KTVInt" name="My" />
@@ -7666,6 +7702,7 @@
             <SEG type="SammelUeb6" minnum="0"/>
             <SEG type="SammelUebEil1" minnum="0"/>
             <SEG type="SammelUebSEPA1" minnum="0"/>
+            <SEG type="TermSammelUebSEPA1" minnum="0"/>
             <SEG type="SammelLastSEPA1" minnum="0"/>
             <SEG type="SammelLastCOR1SEPA1" minnum="0"/>
             <SEG type="SammelLastB2BSEPA1" minnum="0"/>
@@ -7827,6 +7864,7 @@
             <SEG type="TermSammelLastListRes3" minnum="0"/>
             <SEG type="TermSammelUebRes3" minnum="0"/>
             <SEG type="TermSammelUebListRes3" minnum="0"/>
+            <SEG type="TermSammelUebSEPARes1" minnum="0"/>
             <SEG type="TermUebRes2" minnum="0"/>
             <SEG type="TermUebRes3" minnum="0"/>
             <SEG type="TermUebRes4" minnum="0"/>
@@ -7993,6 +8031,7 @@
             <SEG type="TermSammelUebPar3" minnum="0"/>
             <SEG type="TermSammelUebDelPar3" minnum="0"/>
             <SEG type="TermSammelUebListPar3" minnum="0"/>
+            <SEG type="TermSammelUebSEPAPar1" minnum="0"/>
             <SEG type="TermUebPar2" minnum="0"/>
             <SEG type="TermUebPar3" minnum="0"/>
             <SEG type="TermUebPar4" minnum="0"/>

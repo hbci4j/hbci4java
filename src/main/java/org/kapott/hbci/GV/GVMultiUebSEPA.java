@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.GV;
 
+import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
 
@@ -63,13 +64,24 @@ public class GVMultiUebSEPA extends GVUebSEPA
      */
     public GVMultiUebSEPA(HBCIHandler handler, String name)
     {
-        super(handler, name);
+        this(handler, name, new HBCIJobResultImpl());
+    }
+
+    /**
+     * ct.
+     * @param handler
+     * @param name
+     * @param jobResult
+     */
+    public GVMultiUebSEPA(HBCIHandler handler, String name, HBCIJobResultImpl jobResult)
+    {
+        super(handler, name, jobResult);
 
         addConstraint("batchbook", "sepa.batchbook", "", LogFilter.FILTER_NONE);
         addConstraint("Total.value", "Total.value", null, LogFilter.FILTER_MOST);
         addConstraint("Total.curr", "Total.curr", null, LogFilter.FILTER_NONE);
     }
-    
+
     /**
      * @see org.kapott.hbci.GV.HBCIJobImpl#getChallengeParam(java.lang.String)
      */
