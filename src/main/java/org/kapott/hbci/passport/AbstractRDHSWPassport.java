@@ -43,6 +43,7 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.tools.CryptUtils;
 
 public abstract class AbstractRDHSWPassport 
 	extends AbstractRDHPassport 
@@ -295,7 +296,7 @@ public abstract class AbstractRDHSWPassport
     private byte[] encryptMessage(byte[] plainMsg,SecretKey msgkey)
     {
         try {
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/NoPadding") : Cipher.getInstance("DESede/CBC/NoPadding", provider);
             byte[] iv=new byte[8];
             Arrays.fill(iv,(byte)(0));
@@ -313,7 +314,7 @@ public abstract class AbstractRDHSWPassport
         try {
             // schluessel als byte-array abspeichern
 
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory factory = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(msgkey,DESedeKeySpec.class));
             byte[] plainKey=spec.getKey(); // plainKey ist der DESede-Key
@@ -388,7 +389,7 @@ public abstract class AbstractRDHSWPassport
             System.arraycopy(plainKey,plainKey.length-16,realPlainKey,16,8);
 
             DESedeKeySpec spec=new DESedeKeySpec(realPlainKey);
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             SecretKey key=fac.generateSecret(spec);
 

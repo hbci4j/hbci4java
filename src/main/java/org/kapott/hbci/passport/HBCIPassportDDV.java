@@ -625,7 +625,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
             System.arraycopy(msgkeys[0],posi,longKey,16,8);
 
             DESedeKeySpec spec=new DESedeKeySpec(longKey);
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             SecretKey key=fac.generateSecret(spec);
 
@@ -662,7 +662,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
             System.arraycopy(plainKey,posi,longKey,16,8);
 
             DESedeKeySpec spec=new DESedeKeySpec(longKey);
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             SecretKey key=fac.generateSecret(spec);
 

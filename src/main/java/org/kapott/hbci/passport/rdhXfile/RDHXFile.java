@@ -41,6 +41,7 @@ import org.kapott.hbci.exceptions.InvalidPassphraseException;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.rdhXfile.HBCIAccount.UserKeys;
+import org.kapott.hbci.tools.CryptUtils;
 
 public class RDHXFile
 {
@@ -121,7 +122,7 @@ public class RDHXFile
                 FileHeader       fileHeader=(FileHeader)getField(FileHeader.class);
                 String           algname=(fileHeader.getProfileVersion()==2)?"HmacSHA1":"HmacSHA256";
         	byte[]           derivedKey=deriveKey(24, algname);
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory keyfac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
         	DESedeKeySpec    desKeyspec=new DESedeKeySpec(derivedKey);
         	SecretKey        key=keyfac.generateSecret(desKeyspec);
@@ -223,7 +224,7 @@ public class RDHXFile
                 FileHeader       fileHeader=(FileHeader)getField(FileHeader.class);
                 String           algname=(fileHeader.getProfileVersion()==2)?"HmacSHA1":"HmacSHA256";
                 byte[]           derivedKey=deriveKey(24, algname);
-            	String provider = HBCIUtils.getParam("kernel.security.provider");
+            	final String provider = CryptUtils.getSecurityProvider();
             	SecretKeyFactory keyfac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
                 DESedeKeySpec    desKeyspec=new DESedeKeySpec(derivedKey);
                 SecretKey        key=keyfac.generateSecret(desKeyspec);

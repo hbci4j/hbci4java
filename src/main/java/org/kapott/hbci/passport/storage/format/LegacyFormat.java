@@ -28,6 +28,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.storage.PassportData;
 import org.kapott.hbci.passport.storage.format.legacy.Converter;
+import org.kapott.hbci.tools.CryptUtils;
 import org.kapott.hbci.tools.IOUtils;
 
 /**
@@ -155,7 +156,7 @@ public class LegacyFormat extends AbstractFormat
     private SecretKey getPassportKey(final HBCIPassport passport, final boolean forSaving) throws GeneralSecurityException
     {
         char[] pw = this.getPassword(passport,forSaving);
-        final String provider = this.getSecurityProvider();
+        final String provider = CryptUtils.getSecurityProvider();
         final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(CIPHER_ALG,provider) : SecretKeyFactory.getInstance(CIPHER_ALG);
         final PBEKeySpec keyspec = new PBEKeySpec(pw);
         final SecretKey passportKey = fac.generateSecret(keyspec);

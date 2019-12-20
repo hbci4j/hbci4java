@@ -346,7 +346,7 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
         try {
             KeyGenerator generator=KeyGenerator.getInstance("DESede");
             SecretKey key=generator.generateKey();
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory factory = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(key,DESedeKeySpec.class));
             byte[] bytes=spec.getKey();

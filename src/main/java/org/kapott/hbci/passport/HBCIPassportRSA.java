@@ -29,6 +29,7 @@ import org.kapott.hbci.smartcardio.RSABankData;
 import org.kapott.hbci.smartcardio.RSACardService;
 import org.kapott.hbci.smartcardio.RSAKeyData;
 import org.kapott.hbci.smartcardio.SmartCardService;
+import org.kapott.hbci.tools.CryptUtils;
 import org.kapott.hbci.tools.IOUtils;
 
 /**
@@ -611,7 +612,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
      */
     private byte[] encryptMessage(byte[] plainMsg, SecretKey msgkey) {
         try {
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/NoPadding") : Cipher.getInstance("DESede/CBC/NoPadding", provider);
             byte[] iv = new byte[8];
             Arrays.fill(iv, (byte) 0);
@@ -632,7 +633,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
     private byte[] encryptKey(SecretKey msgkey) {
         try {
             // schluessel als byte-array abspeichern
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory factory = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             DESedeKeySpec spec=(DESedeKeySpec)(factory.getKeySpec(msgkey,DESedeKeySpec.class));
             byte[] plainKey=spec.getKey(); // plainKey ist der DESede-Key
@@ -686,7 +687,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             System.arraycopy(plainKey,plainKey.length-16,realPlainKey,16,8);
 
             DESedeKeySpec spec=new DESedeKeySpec(realPlainKey);
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
         	SecretKeyFactory fac = provider==null ? SecretKeyFactory.getInstance("DESede") : SecretKeyFactory.getInstance("DESede", provider);
             SecretKey key=fac.generateSecret(spec);
 

@@ -17,6 +17,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.HBCIPassport;
+import org.kapott.hbci.tools.CryptUtils;
 
 /**
  * Abstrakte Basis-Klasse der Formate.
@@ -24,15 +25,6 @@ import org.kapott.hbci.passport.HBCIPassport;
 public abstract class AbstractFormat implements PassportFormat
 {
     private final static String CACHE_KEY = "__cached_passphrase__";
-    
-    /**
-     * Liefert einen optionalen Security-Provier. 
-     * @return der Security-Provider oder NULL, wenn keiner definiert ist.
-     */
-    String getSecurityProvider()
-    {
-        return HBCIUtils.getParam("kernel.security.provider");
-    }
     
     /**
      * @see org.kapott.hbci.passport.storage.format.PassportFormat#supported()
@@ -58,7 +50,7 @@ public abstract class AbstractFormat implements PassportFormat
      */
     protected Cipher getCipher() throws GeneralSecurityException
     {
-        final String provider = this.getSecurityProvider();
+        final String provider = CryptUtils.getSecurityProvider();
         final String alg      = this.getCipherAlg();
         return provider != null ? Cipher.getInstance(alg,provider) : Cipher.getInstance(alg);
     }

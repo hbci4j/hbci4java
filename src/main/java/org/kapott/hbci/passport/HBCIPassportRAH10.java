@@ -9,7 +9,6 @@ package org.kapott.hbci.passport;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
@@ -21,7 +20,7 @@ import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.kapott.cryptalgs.SignatureParamSpec;
@@ -40,7 +39,7 @@ import org.kapott.hbci.tools.CryptUtils;
 /**
  * Implementierung des Passports fuer RAH10-Schluesseldateien.
  */
-public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLetterPassport
+public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLetterPassport, FileBasedPassport
 {
     private final static String PROFILE_NAME    = "RAH";
     private final static String PROFILE_VERSION = "10";
@@ -108,6 +107,14 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
             this.saveChanges();
     }
     
+    /**
+     * @see org.kapott.hbci.passport.FileBasedPassport#getFilename()
+     */
+    public String getFilename()
+    {
+        return filename;
+    }
+
     /**
      * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
      */
@@ -466,11 +473,6 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
     @Override
     public byte[] sign(byte[] data)
     {
-        // Damit ich hier nicht versehentlich einen unnoetigen Fehler einbaue,
-        // portiere ich es erstmal 1:1 von RDH-10.
-        // Ich weiss nicht, ob die PKCS1-Implementierung in dem eigenen Crypto-Provider
-        // ueberhaupt noch notwendig ist oder inzwischen bereits in Java
-        // enthalten ist.
         PrivateKey key = (PrivateKey) this.getMyPrivateSigKey().key;
         byte[] sig = CryptUtils.sign(data,key,CryptUtils.SIGN_ALG_RSA,CryptUtils.HASH_ALG_SHA256);
         
@@ -497,21 +499,19 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
       try
       {
         // Einmal-Schluessel fuer die Nachricht erzeugen
-        String provider = HBCIUtils.getParam("kernel.security.provider");
+        final String provider = CryptUtils.getSecurityProvider();
         KeyGenerator keygen = provider != null ? KeyGenerator.getInstance(CryptUtils.CRYPT_ALG_AES,provider) : KeyGenerator.getInstance(CryptUtils.CRYPT_ALG_AES);
-        keygen.init(256);
+        keygen.init(32);
         final SecretKey msgKey = keygen.generateKey();
 
+        final byte[][] ret = new byte[2][];
+
         // Nachricht mit dem Einmalschluessel verschluesseln
-        byte[] cryptMsg = encryptMessage(plainMsg,msgKey);
+        ret[0] = encryptKey(msgKey.getEncoded());
         
         // Einmalschluessel mit dem Instituts-Schluessel verschluesseln
-        byte[] cryptKey = encryptKey(msgKey.getEncoded());
-
-        byte[][] ret=new byte[2][];
-        ret[0]=cryptKey;
-        ret[1]=cryptMsg;
-
+        ret[1] = encryptMessage(plainMsg,msgKey);
+        
         return ret;
       }
       catch (HBCI_Exception e)
@@ -530,14 +530,20 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
    * @param msgkey der Secret-Key.
    * @return die verschluesselte Nachricht.
    */
-  private byte[] encryptMessage(byte[] plainMsg,SecretKey msgkey)
+  private byte[] encryptMessage(byte[] plainMsg, SecretKey msgkey)
   {
     try
     {
-      String provider = HBCIUtils.getParam("kernel.security.provider");
+      final String provider = CryptUtils.getSecurityProvider();
       Cipher cipher = provider == null ? Cipher.getInstance(CryptUtils.CRYPT_ALG_AES_CBC) : Cipher.getInstance(CryptUtils.CRYPT_ALG_AES_CBC, provider);
-      cipher.init(Cipher.ENCRYPT_MODE,msgkey);
-      return cipher.doFinal(plainMsg);
+      
+      // IV muss 0 sein, weil wir den ja sonst mit senden muessten
+      final byte[] iv = new byte[16];
+      Arrays.fill(iv,(byte)(0));
+      final IvParameterSpec spec = new IvParameterSpec(iv);
+      cipher.init(Cipher.ENCRYPT_MODE,msgkey,spec);
+      byte[] result = cipher.doFinal(plainMsg);
+      return result;
     }
     catch (HBCI_Exception e)
     {
@@ -558,24 +564,24 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
   {
     try
     {
-      // Das ist quasi 1:1 von AbstractRDHSWPassport uebernommen, da die Verschluesselung
-      // des Session-Key dort identisch ist. Eigentlich faend ich es schoener, das nicht
-      // selbst zu machen sondern vom Provider per "Cipher.getInstance("RSA")" machen zu lassen.
-      // Aber wegen dem ZKA-Padding lass ich den Code mal lieber so - er hat ja bewiesen, dass
-      // er funktoniert
-      int cryptDataSize=getCryptDataSize(getInstEncKey().key);
-      byte[] plainText=new byte[cryptDataSize];
-      Arrays.fill(plainText,(byte)(0));
-      System.arraycopy(plainKey,0,plainText,plainText.length-16,16);
-      BigInteger m=new BigInteger(+1,plainText);
+//      final RSAPublicKey key = (RSAPublicKey) getInstEncKey().key;
+//      final String provider = CryptUtils.getSecurityProvider();
+//      final Cipher cipher = provider == null ? Cipher.getInstance(CryptUtils.CRYPT_ALG_RSA) : Cipher.getInstance(CryptUtils.CRYPT_ALG_RSA, provider);
+//      cipher.init(Cipher.ENCRYPT_MODE,key);
+//      
+//      final byte[] plainText = CryptUtils.padLeft(plainKey,(RSAPublicKey) getInstEncKey().key);
+//      return cipher.doFinal(plainText);
       
-      Key k=getInstEncKey().key;
-      BigInteger c=m.modPow(((RSAPublicKey)(k)).getPublicExponent(),
-                            ((RSAPublicKey)(k)).getModulus());
+      final RSAPublicKey key = (RSAPublicKey) getInstEncKey().key;
+
+      int tSize = CryptUtils.getCryptDataSize(key);
+      final byte[] plainText = CryptUtils.padLeft(plainKey,tSize);
       
-      byte[] result=c.toByteArray();
-      result=checkForCryptDataSize(result, cryptDataSize);
-      return result;
+      final BigInteger m = new BigInteger(+1,plainText);
+      final BigInteger c = m.modPow(key.getPublicExponent(),key.getModulus());
+
+      byte[] result = c.toByteArray();
+      return checkForCryptDataSize(result, tSize);
     }
     catch (HBCI_Exception e)
     {
@@ -587,16 +593,6 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
     }
   }
   
-  private int getCryptDataSize(Key key)
-  {
-    int bits=((RSAPublicKey)key).getModulus().bitLength();
-    int bytes = bits / 8;
-    if (bits % 8 != 0) // Wenns nicht ganz aufging, brauchen wir ein Byte extra
-      bytes++;
-    return bytes;
-  }
-
-  
   /**
    * @see org.kapott.hbci.passport.HBCIPassportInternal#decrypt(byte[], byte[])
    */
@@ -605,33 +601,28 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
   {
     try
     {
-      // Session-Key mit unserem Private-Key entschluesseln
-      // Das ist quasi 1:1 von AbstractRDHSWPassport uebernommen, da die Verschluesselung
-      // des Session-Key dort identisch ist. Eigentlich faend ich es schoener, das nicht
-      // selbst zu machen sondern vom Provider per "Cipher.getInstance("RSA")" machen zu lassen.
-      // Aber wegen dem ZKA-Padding lass ich den Code mal lieber so - er hat ja bewiesen, dass
-      // er funktoniert
-      final Key k = this.getMyPrivateEncKey().key;
-
+      final String provider = CryptUtils.getSecurityProvider();
+      
       HBCIUtils.log("decrypting message key", HBCIUtils.LOG_DEBUG);
-      BigInteger exponent = ((RSAPrivateKey) (k)).getPrivateExponent();
-      BigInteger modulus = ((RSAPrivateKey) (k)).getModulus();
-      BigInteger c = new BigInteger(+1, cryptedKey);
-      final byte[] plainKey = c.modPow(exponent, modulus).toByteArray();
+      final RSAPrivateKey key = (RSAPrivateKey) this.getMyPrivateEncKey().key;
+      
+      BigInteger e = key.getPrivateExponent();
+      BigInteger m = key.getModulus();
+      BigInteger c = new BigInteger(+1,cryptedKey);
+      final byte[] plainKey = c.modPow(e,m).toByteArray();
 
-      byte[] sessionKey = new byte[24];
-      System.arraycopy(plainKey, plainKey.length - 16, sessionKey, 0, 16);
-      System.arraycopy(plainKey, plainKey.length - 16, sessionKey, 16, 8);
-
-      final String provider = HBCIUtils.getParam("kernel.security.provider");
-      SecretKeySpec spec = new SecretKeySpec(sessionKey,CryptUtils.CRYPT_ALG_AES);
-      SecretKeyFactory fac = provider == null ? SecretKeyFactory.getInstance(CryptUtils.CRYPT_ALG_AES) : SecretKeyFactory.getInstance(CryptUtils.CRYPT_ALG_AES, provider);
-      SecretKey key = fac.generateSecret(spec);
-
-      // Nachricht entschluesseln
-      Cipher cipher = provider == null ? Cipher.getInstance(CryptUtils.CRYPT_ALG_AES_CBC) : Cipher.getInstance(CryptUtils.CRYPT_ALG_AES_CBC, provider);
-      cipher.init(Cipher.DECRYPT_MODE, key);
-      return cipher.doFinal(encryptedMsg);
+      HBCIUtils.log("decrypting message", HBCIUtils.LOG_DEBUG);
+      final SecretKey msgKey = new SecretKeySpec(plainKey,CryptUtils.CRYPT_ALG_AES);
+      Cipher cm = provider == null ? Cipher.getInstance(CryptUtils.CRYPT_ALG_AES_CBC) : Cipher.getInstance(CryptUtils.CRYPT_ALG_AES_CBC, provider);
+      
+      // IV muss 0 sein, weil wir den ja sonst mit senden muessten
+      byte[] iv = new byte[16];
+      Arrays.fill(iv,(byte)(0));
+      final IvParameterSpec spec = new IvParameterSpec(iv);
+      
+      cm.init(Cipher.DECRYPT_MODE,msgKey,spec);
+      
+      return cm.doFinal(encryptedMsg);
     }
     catch (HBCI_Exception e)
     {
@@ -679,7 +670,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
       
       for (int i=0;i<2;++i)
       {
-        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
+        KeyPairGenerator keygen = KeyPairGenerator.getInstance(CryptUtils.CRYPT_ALG_RSA);
         keygen.initialize(keySize);
         KeyPair pair = keygen.generateKeyPair();
 

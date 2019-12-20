@@ -42,6 +42,7 @@ import org.kapott.hbci.datatypes.SyntaxCtr;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.tools.CryptUtils;
 
 
 public class HBCIAccount
@@ -289,7 +290,7 @@ public class HBCIAccount
             // TODO: exception
             
             // decrypt encrypted data
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
             Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/PKCS5Padding") : Cipher.getInstance("DESede/CBC/PKCS5Padding", provider);
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(new byte[8]));
             byte[] plaindata=cipher.doFinal(this.encPrivateKey);
@@ -482,7 +483,7 @@ public class HBCIAccount
             plaindata.write(reverseba(this.Aq));
 
             // encrypt encrypted data
-        	String provider = HBCIUtils.getParam("kernel.security.provider");
+        	final String provider = CryptUtils.getSecurityProvider();
             Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/PKCS5Padding") : Cipher.getInstance("DESede/CBC/PKCS5Padding", provider);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(new byte[8]));
             this.encPrivateKey = cipher.doFinal(plaindata.toByteArray());

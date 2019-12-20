@@ -10,18 +10,16 @@
 
 package org.kapott.hbci.passport;
 
-import org.kapott.cryptalgs.SignatureParamSpec;
-
 /**
- * Basis-Interface fuer Passports mit INI-Brief.
+ * Basis-Interface fuer Schluesseldateien.
  */
-public interface InitLetterPassport
+public interface FileBasedPassport
 {
   /**
-   * Liefert die Signatur-Spec.
-   * @return die Signatur-Spec.
+   * Liefert den Dateinamen der Schluesseldatei.
+   * @return der Dateiname der Schluesseldatei.
    */
-  public SignatureParamSpec getSignatureParamSpec();
+  public String getFilename();
 }
 
 

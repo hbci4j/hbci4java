@@ -24,7 +24,7 @@ package org.kapott.hbci.passport;
 /**
  * 
  */
-public abstract class AbstractRDHSWFileBasedPassport  extends AbstractRDHSWPassport 
+public abstract class AbstractRDHSWFileBasedPassport  extends AbstractRDHSWPassport implements FileBasedPassport 
 {
     private String    filename;
     
@@ -33,7 +33,7 @@ public abstract class AbstractRDHSWFileBasedPassport  extends AbstractRDHSWPassp
     }
 
     /**
-     * @return
+     * @see org.kapott.hbci.passport.FileBasedPassport#getFilename()
      */
     public String getFilename() {
         return filename;

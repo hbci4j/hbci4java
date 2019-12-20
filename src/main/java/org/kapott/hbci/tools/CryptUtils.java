@@ -65,9 +65,23 @@ public class CryptUtils
   public final static String CRYPT_ALG_AES = "AES";
 
   /**
-   * Verschluesselungsalgorithmus AES mit CBC-Padding.
+   * Verschluesselungsalgorithmus RSA.
    */
-  public final static String CRYPT_ALG_AES_CBC = "AES/CBC/PKCS5Padding";
+  public final static String CRYPT_ALG_RSA = "RSA";
+
+  /**
+   * Ciphermoduss fuer AES.
+   */
+  public final static String CRYPT_ALG_AES_CBC = "AES/CBC/ISO7816-4Padding";
+  
+  /**
+   * Liefert einen optional als Kernel-Parameter definierten Security-Provier.
+   * @return der Security-Provider oder NULL, wenn keiner definiert ist.
+   */
+  public static String getSecurityProvider()
+  {
+      return HBCIUtils.getParam("kernel.security.provider");
+  }
 
   /**
    * Hasht die Daten.
@@ -107,8 +121,7 @@ public class CryptUtils
       final String provider = HASH_OWN_PROVIDER.contains(alg) ? CryptAlgs4JavaProvider.NAME : null;
       HBCIUtils.log("using " + alg + "/" + provider + " for generating hash of " + data.length + " bytes", HBCIUtils.LOG_DEBUG);
       MessageDigest digest = provider != null ? MessageDigest.getInstance(alg,provider) : MessageDigest.getInstance(alg);
-      digest.update(data);
-      return digest.digest();
+      return digest.digest(data);
     }
     catch (HBCI_Exception he)
     {
@@ -190,21 +203,41 @@ public class CryptUtils
       throw new HBCI_Exception(e);
     }
   }
-
+  
   /**
-   * Fuehrt ein Null-Padding links auf die angegebene Laenge durch.
-   * @param buffer der Buffer.
-   * @param key der Key.
-   * @return der ggf. angepasste Buffer.
+   * Liefert die Anzahl der Bytes fuer den Schluessel.
+   * @param key der Schluessel.
+   * @return die Laenge in Bytes.
    */
-  public static byte[] padLeft(byte[] buffer, RSAPublicKey key)
+  public static int getCryptDataSize(RSAPublicKey key)
   {
     // Macht nichts anderes als getCryptDataSize in AbstractRDHPassport
     final int bits = key.getModulus().bitLength();
     int size = bits / 8;
     if (size % 8 != 0)
       size++;
+    return size;
+  }
 
+  /**
+   * Fuehrt ein Null-Padding links auf die Laenge des Schluessels durch.
+   * @param buffer der Buffer.
+   * @param key der Schluessel.
+   * @return der ggf. angepasste Buffer.
+   */
+  public static byte[] padLeft(byte[] buffer, RSAPublicKey key)
+  {
+    return padLeft(buffer,getCryptDataSize(key));
+  }
+
+  /**
+   * Fuehrt ein Null-Padding links auf die angegebene Laenge  durch.
+   * @param buffer der Buffer.
+   * @param size die Laenge.
+   * @return der ggf. angepasste Buffer.
+   */
+  public static byte[] padLeft(byte[] buffer, int size)
+  {
     if (buffer.length == size)
       return buffer;
 

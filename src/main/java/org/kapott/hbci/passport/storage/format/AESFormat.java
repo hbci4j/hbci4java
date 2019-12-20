@@ -33,6 +33,7 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.storage.PassportData;
+import org.kapott.hbci.tools.CryptUtils;
 import org.kapott.hbci.tools.IOUtils;
 
 /**
@@ -312,7 +313,7 @@ public class AESFormat extends AbstractFormat
     {
         try
         {
-            final String provider = this.getSecurityProvider();
+            final String provider = CryptUtils.getSecurityProvider();
             final SecretKeyFactory fac = provider != null ? SecretKeyFactory.getInstance(KEY_ALG_NAME,provider) : SecretKeyFactory.getInstance(KEY_ALG_NAME);
             final KeySpec spec = new PBEKeySpec(password, salt, CIPHER_ITERATIONS, KEY_SIZE);
             final SecretKey tmp = fac.generateSecret(spec);
