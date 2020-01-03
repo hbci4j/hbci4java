@@ -208,7 +208,7 @@ public class GVTAN2Step extends HBCIJobImpl
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
             // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
             // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
-            if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null)
+            if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null && this.task.redoAllowed())
             {
                 HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                 HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
