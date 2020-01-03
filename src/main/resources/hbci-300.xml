@@ -8179,6 +8179,7 @@
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="SEPAInfoRes1" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
