@@ -683,14 +683,11 @@ public final class HBCIUser implements IHandlerData
 
         ////////////////////////////////////////
         // Zum Schluss noch die SEPA-Infos abrufen
+        if (Feature.SYNC_SEPAINFO.isEnabled())
         {
-          final boolean b = Boolean.valueOf(HBCIUtils.getParam("sepainfo.enabled","true"));
-          if (b)
-          {
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
-            HBCIProcess p = new HBCIProcessSepaInfo(force);
-            p.execute(ctx);
-          }
+          final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+          HBCIProcess p = new HBCIProcessSepaInfo(force);
+          p.execute(ctx);
         }
         //
         ////////////////////////////////////////

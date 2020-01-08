@@ -37,6 +37,14 @@ public enum Feature
      */
     PINTAN_INIT_AUTOMETHOD(true),
     
+    /**
+     * Feature, mit dem festgelegt werden kann, ob HBCI4Java bei der Synchronisierung das HKSPA ausfuehren soll, um die SEPA-Informationen der Konten abzurufen.
+     * Konfigurierbar, weil der bei der Commerzbank nicht funktioniert - dort liefert die Bank eine fuer HBCI4Java nicht lesbare Antwort - und ich weiss leider
+     * noch nicht, warum genau das nicht gelesen werden kann. Daher mache ich es erstmal abschaltbar.
+     * Siehe https://homebanking-hilfe.de/forum/topic.php?p=153155#real153155
+     */
+    SYNC_SEPAINFO(true),
+    
     ;
     
     private boolean enabled = false;
