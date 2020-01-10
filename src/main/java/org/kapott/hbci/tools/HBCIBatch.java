@@ -22,6 +22,7 @@
 package org.kapott.hbci.tools;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -198,7 +199,42 @@ public class HBCIBatch {
             case NEED_PT_PHOTOTAN:
             case NEED_PT_QRTAN:
                 // TODO tan-liste aktivieren
-                retData.replace(0, retData.length(), getAnswer("tan"));
+
+                // Prüfe auf asynchrone TAN Bereitstellung via Datei
+                String value = answers.getProperty("tanfile");
+                if (value != null) {
+                    int rounds = 0;
+                    File tanFile = new File(value);
+                    String tan = null;
+                    while (rounds < 60) {
+                        if (tanFile.exists()) {
+                            try {
+                                BufferedReader brTest = new BufferedReader(new FileReader(tanFile));
+                                tan = brTest.readLine();
+                                if (!tan.isEmpty()) {
+                                    retData.replace(0, retData.length(), tan);
+                                    break;
+                                }
+                                brTest.close();
+                            } catch (FileNotFoundException e) {
+                                throw new HBCI_Exception(e);
+                            } catch (IOException e) {
+                                throw new HBCI_Exception(e);
+                            }
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new HBCI_Exception(e);
+                        }
+                        rounds++;
+                    }
+                    if (tan == null || tan.isEmpty()) {
+                        throw new HBCI_Exception("Tan file not provided in time...");
+                    }
+                } else {
+                    retData.replace(0, retData.length(), getAnswer("tan"));
+                }
                 break;
 
             case NEED_COUNTRY:
