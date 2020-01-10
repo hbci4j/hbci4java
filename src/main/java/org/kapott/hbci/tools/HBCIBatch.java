@@ -154,6 +154,15 @@ public class HBCIBatch {
             }
         }
 
+        // Helfer-Methode, um klarere Fehlermeldungen zu werfen
+        private String getAnswer(String prop) {
+            String value = answers.getProperty(prop);
+            if (value == null) {
+                throw new HBCI_Exception("Missing property '" + prop + "' in answer file!");
+            }
+            return value;
+        }
+
         // modifizierte callback-methode, die daten-anfragen "automatisch"
         // beantwortet
         public synchronized void callback(HBCIPassport passport, int reason, String msg, int datatype,
@@ -166,56 +175,56 @@ public class HBCIBatch {
                 System.out.println(HBCIUtilsInternal.getLocMsg("CALLB_NEED_HARDPIN"));
                 break;
             case NEED_SOFTPIN:
-                retData.replace(0, retData.length(), answers.getProperty("softpin"));
+                retData.replace(0, retData.length(), getAnswer("softpin"));
                 break;
 
             case NEED_PASSPHRASE_LOAD:
             case NEED_PASSPHRASE_SAVE:
-                retData.replace(0, retData.length(), answers.getProperty("passphrase"));
+                retData.replace(0, retData.length(), getAnswer("passphrase"));
                 break;
 
             case NEED_PT_SECMECH:
-                retData.replace(0, retData.length(), answers.getProperty("secmech"));
+                retData.replace(0, retData.length(), getAnswer("secmech"));
                 break;
 
             case NEED_PT_TANMEDIA:
-                retData.replace(0, retData.length(), answers.getProperty("tanmedia"));
+                retData.replace(0, retData.length(), getAnswer("tanmedia"));
                 break;
 
             case NEED_PT_PIN:
-                retData.replace(0, retData.length(), answers.getProperty("pin"));
+                retData.replace(0, retData.length(), getAnswer("pin"));
                 break;
             case NEED_PT_TAN:
             case NEED_PT_PHOTOTAN:
             case NEED_PT_QRTAN:
                 // TODO tan-liste aktivieren
-                retData.replace(0, retData.length(), answers.getProperty("tan"));
+                retData.replace(0, retData.length(), getAnswer("tan"));
                 break;
 
             case NEED_COUNTRY:
-                retData.replace(0, retData.length(), answers.getProperty("country"));
+                retData.replace(0, retData.length(), getAnswer("country"));
                 break;
             case NEED_BLZ:
-                retData.replace(0, retData.length(), answers.getProperty("blz"));
+                retData.replace(0, retData.length(), getAnswer("blz"));
                 break;
             case NEED_HOST:
-                retData.replace(0, retData.length(), answers.getProperty("host"));
+                retData.replace(0, retData.length(), getAnswer("host"));
                 break;
             case NEED_PORT:
-                retData.replace(0, retData.length(), answers.getProperty("port"));
+                retData.replace(0, retData.length(), getAnswer("port"));
                 break;
             case NEED_FILTER:
-                retData.replace(0, retData.length(), answers.getProperty("filter"));
+                retData.replace(0, retData.length(), getAnswer("filter"));
                 break;
             case NEED_USERID:
-                retData.replace(0, retData.length(), answers.getProperty("userid"));
+                retData.replace(0, retData.length(), getAnswer("userid"));
                 break;
             case NEED_CUSTOMERID:
-                retData.replace(0, retData.length(), answers.getProperty("customerid"));
+                retData.replace(0, retData.length(), getAnswer("customerid"));
                 break;
 
             case NEED_SIZENTRY_SELECT:
-                retData.replace(0, retData.length(), answers.getProperty("sizentry"));
+                retData.replace(0, retData.length(), getAnswer("sizentry"));
                 break;
 
             case NEED_NEW_INST_KEYS_ACK:
