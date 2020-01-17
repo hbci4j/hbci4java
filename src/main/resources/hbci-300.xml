@@ -2050,6 +2050,7 @@
                 <validvalue>M</validvalue>
                 <validvalue>S</validvalue>
                 <validvalue>A</validvalue>
+                <validvalue>B</validvalue>
             </valids>
             <valids path="status">
                 <validvalue>1</validvalue>
