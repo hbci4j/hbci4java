@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.JAXB;
 
@@ -32,16 +33,16 @@ import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_05.BalanceType12Code;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_05.CashBalance3;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.AccountIdentification4Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.AccountReport18;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.ActiveOrHistoricCurrencyAndAmount;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_05.BalanceType12Code;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.BankToCustomerAccountReportV05;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.BankTransactionCodeStructure4;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.BranchAndFinancialInstitutionIdentification5;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.CashAccount24;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.CashAccount25;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_05.CashBalance3;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.CreditDebitCode;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.DateAndDateTimeChoice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_05.Document;
@@ -124,7 +125,7 @@ public class ParseCamt05200105 extends AbstractCamtParser
     /**
      * Erzeugt eine einzelne Umsatzbuchung.
      * @param entry der Entry aus der CAMT-Datei.
-     * @param der aktuelle Saldo vor dieser Buchung.
+     * @param currSaldo der aktuelle Saldo vor dieser Buchung.
      * @return die Umsatzbuchung.
      */
     private UmsLine createLine(ReportEntry7 entry, BigDecimal currSaldo)
@@ -158,6 +159,10 @@ public class ParseCamt05200105 extends AbstractCamtParser
         if (ref != null)
         {
             line.id = trim(ref.getPrtry() != null && ref.getPrtry().size() > 0 ? ref.getPrtry().get(0).getRef() : null);
+            // einige Banken verwenden das Account Servicer Reference als eindeutigen Identifier
+            if(line.id==null) {
+                line.id = Optional.ofNullable(entry.getAcctSvcrRef()).orElse(ref.getAcctSvcrRef());
+            }
             line.endToEndId = trim(ref.getEndToEndId());
             line.mandateId = trim(ref.getMndtId());
         }
@@ -295,28 +300,32 @@ public class ParseCamt05200105 extends AbstractCamtParser
 
         ////////////////////////////////////////////////////////////////
         // Start- un End-Saldo ermitteln
-        final long day = 24 * 60 * 60 * 1000L; 
-        for (CashBalance3 bal:report.getBal())
-        {
-            BalanceType12Code code = bal.getTp().getCdOrPrtry().getCd();
-            
-            // Schluss-Saldo vom Vortag
-            if (code == BalanceType12Code.PRCD)
-            {
-                tag.start.value = new Value(this.checkDebit(bal.getAmt().getValue(),bal.getCdtDbtInd()));
-                tag.start.value.setCurr(bal.getAmt().getCcy());
-                
-                //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
-                // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
-                tag.start.timestamp = new Date(SepaUtil.toDate(bal.getDt().getDt()).getTime() + day);
+        final long day = 24 * 60 * 60 * 1000L;
+        if(report.getBal().size()>0){
+            CashBalance3 firstBal = report.getBal().get(0);
+            BalanceType12Code firstCode = firstBal.getTp().getCdOrPrtry().getCd();
+            if(firstCode == BalanceType12Code.PRCD || firstCode == BalanceType12Code.ITBD) {
+                tag.start.value = new Value(this.checkDebit(firstBal.getAmt().getValue(),firstBal.getCdtDbtInd()));
+                tag.start.value.setCurr(firstBal.getAmt().getCcy());
+                if(firstCode == BalanceType12Code.PRCD){
+                    //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
+                    // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
+                    tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime() + day);
+                }else{
+                    // bei einem Zwischensaldo ist der Tag derselbe
+                    tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime());
+                }
             }
-            
-            // End-Saldo
-            else if (code == BalanceType12Code.CLBD)
-            {
-                tag.end.value = new Value(this.checkDebit(bal.getAmt().getValue(),bal.getCdtDbtInd()));
-                tag.end.value.setCurr(bal.getAmt().getCcy());
-                tag.end.timestamp = SepaUtil.toDate(bal.getDt().getDt());
+
+            // Zweiter Balance Eintrag ist ein Schlusssaldo oder auch ein Zwischensaldo
+            if(report.getBal().size()>1){
+                CashBalance3 secondBal = report.getBal().get(1);
+                BalanceType12Code secondCode = secondBal.getTp().getCdOrPrtry().getCd();
+                if(secondCode == BalanceType12Code.CLBD || secondCode == BalanceType12Code.ITBD) {
+                    tag.end.value = new Value(this.checkDebit(secondBal.getAmt().getValue(),secondBal.getCdtDbtInd()));
+                    tag.end.value.setCurr(secondBal.getAmt().getCcy());
+                    tag.end.timestamp = SepaUtil.toDate(secondBal.getDt().getDt());
+                }
             }
         }
         //
