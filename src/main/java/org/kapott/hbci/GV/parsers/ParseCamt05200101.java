@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.JAXB;
 
@@ -32,27 +33,8 @@ import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.AccountIdentification3Choice;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.AccountReport9;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BalanceType8Code;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BankToCustomerAccountReportV01;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BankTransactionCodeStructure1;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BranchAndFinancialInstitutionIdentification3;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CashAccount13;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CashAccount7;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CashBalance1;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CreditDebitCode;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CurrencyAndAmount;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.DateAndDateTimeChoice;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.Document;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.EntryTransaction1;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.FinancialInstitutionIdentification5Choice;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.PartyIdentification8;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.Purpose1Choice;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.ReportEntry1;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.TransactionAgents1;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.TransactionParty1;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.TransactionReferences1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.*;
+
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Saldo;
 import org.kapott.hbci.structures.Value;
@@ -123,7 +105,7 @@ public class ParseCamt05200101 extends AbstractCamtParser
     /**
      * Erzeugt eine einzelne Umsatzbuchung.
      * @param entry der Entry aus der CAMT-Datei.
-     * @param der aktuelle Saldo vor dieser Buchung.
+     * @param currSaldo der aktuelle Saldo vor dieser Buchung.
      * @return die Umsatzbuchung.
      */
     private UmsLine createLine(ReportEntry1 entry, BigDecimal currSaldo)
@@ -149,6 +131,10 @@ public class ParseCamt05200101 extends AbstractCamtParser
         if (ref != null)
         {
             line.id = trim(ref.getPrtry() != null ? ref.getPrtry().getRef() : null);
+            // einige Banken verwenden das Account Servicer Reference als eindeutigen Identifier
+            if(line.id==null) {
+                line.id = Optional.ofNullable(entry.getAcctSvcrRef()).orElse(ref.getAcctSvcrRef());
+            }
             line.endToEndId = trim(ref.getEndToEndId());
             line.mandateId = trim(ref.getMndtId());
         }
@@ -286,29 +272,35 @@ public class ParseCamt05200101 extends AbstractCamtParser
 
         ////////////////////////////////////////////////////////////////
         // Start- un End-Saldo ermitteln
-        final long day = 24 * 60 * 60 * 1000L; 
-        for (CashBalance1 bal:report.getBal())
-        {
-            BalanceType8Code code = bal.getTp().getCd();
-            
-            // Schluss-Saldo vom Vortag.
-            if (code == BalanceType8Code.PRCD)
-            {
-                tag.start.value = new Value(this.checkDebit(bal.getAmt().getValue(),bal.getCdtDbtInd()));
-                tag.start.value.setCurr(bal.getAmt().getCcy());
-                
-                //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
-                // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
-                tag.start.timestamp = new Date(SepaUtil.toDate(bal.getDt().getDt()).getTime() + day);
+        final long day = 24 * 60 * 60 * 1000L;
+        if(report.getBal().size()>0){
+            CashBalance1 firstBal = report.getBal().get(0);
+            BalanceType8Code firstCode = firstBal.getTp().getCd();
+            if(firstCode == BalanceType8Code.PRCD || firstCode == BalanceType8Code.ITBD) {
+                tag.start.value = new Value(this.checkDebit(firstBal.getAmt().getValue(),firstBal.getCdtDbtInd()));
+                tag.start.value.setCurr(firstBal.getAmt().getCcy());
+                if(firstCode == BalanceType8Code.PRCD){
+                    //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
+                    // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
+                    tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime() + day);
+                }else{
+                    // bei einem Zwischensaldo ist der Tag derselbe
+                    tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime());
+                }
             }
-            
-            // End-Saldo
-            else if (code == BalanceType8Code.CLBD)
-            {
-                tag.end.value = new Value(this.checkDebit(bal.getAmt().getValue(),bal.getCdtDbtInd()));
-                tag.end.value.setCurr(bal.getAmt().getCcy());
-                tag.end.timestamp = SepaUtil.toDate(bal.getDt().getDt());
+
+            // Zweiter Balance Eintrag ist ein Schlusssaldo oder auch ein Zwischensaldo
+            if(report.getBal().size()>1){
+                CashBalance1 secondBal = report.getBal().get(1);
+                BalanceType8Code secondCode = secondBal.getTp().getCd();
+                if(secondCode == BalanceType8Code.CLBD || secondCode == BalanceType8Code.ITBD) {
+                    tag.end.value = new Value(this.checkDebit(secondBal.getAmt().getValue(),secondBal.getCdtDbtInd()));
+                    tag.end.value.setCurr(secondBal.getAmt().getCcy());
+                    tag.end.timestamp = SepaUtil.toDate(secondBal.getDt().getDt());
+                }
             }
+
+
         }
         //
         ////////////////////////////////////////////////////////////////
