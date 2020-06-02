@@ -223,10 +223,14 @@ public final class HBCIDialog
                 int taskNum = 0;
                 for (HBCIJobImpl task:tasks)
                 {
-                    if (task.skipped())
-                        continue;
-                    
                     final String name = task.getName();
+
+                    if (task.skipped())
+                    {
+                        HBCIUtils.log("skipping task " + name, HBCIUtils.LOG_DEBUG);
+                        continue;
+                    }
+                    
                     HBCIUtils.log("adding task " + name,HBCIUtils.LOG_DEBUG);
                     HBCIUtilsInternal.getCallback().status(p,HBCICallback.STATUS_SEND_TASK,task);
 
@@ -276,11 +280,17 @@ public final class HBCIDialog
                     // für jeden Task die entsprechenden Rückgabedaten-Klassen füllen
                     for (HBCIJobImpl task:tasks)
                     {
+                        final String name = task.getName();
+
                         if (task.skipped())
+                        {
+                            HBCIUtils.log("skipping results for task " + name, HBCIUtils.LOG_DEBUG);
                             continue;
-                        
+                        }
+
                         try
                         {
+                            HBCIUtils.log("filling results for task " + name, HBCIUtils.LOG_DEBUG);
                             task.fillJobResult(msgstatus,segnum);
                             HBCIUtilsInternal.getCallback().status(p,HBCICallback.STATUS_SEND_TASK_DONE,task);
                         }
@@ -308,8 +318,13 @@ public final class HBCIDialog
                 HBCIMessage newMsg = null;
                 for (HBCIJobImpl task:tasks)
                 {
+                    final String name = task.getName();
+
                     if (task.skipped())
+                    {
+                        HBCIUtils.log("skipping repeat for task " + name, HBCIUtils.LOG_DEBUG);
                         continue;
+                    }
                     
                     HBCIJobImpl redo = task.redo();
                     if (redo != null)
