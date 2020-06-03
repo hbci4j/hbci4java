@@ -206,7 +206,7 @@ public class HBCIBatch {
                     int rounds = 0;
                     File tanFile = new File(value);
                     String tan = null;
-                    while (rounds < 60) {
+                    while (rounds < 120) {
                         if (tanFile.exists()) {
                             try {
                                 BufferedReader brTest = new BufferedReader(new FileReader(tanFile));
