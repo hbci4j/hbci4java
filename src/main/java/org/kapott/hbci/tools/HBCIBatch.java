@@ -213,6 +213,8 @@ public class HBCIBatch {
                                 tan = brTest.readLine();
                                 if (!tan.isEmpty()) {
                                     retData.replace(0, retData.length(), tan);
+                                    //lösche die verwendete TAN, da Folge GVs ggf. neue TANs erfordern
+                                    new FileWriter(tanFile, false).close();
                                     break;
                                 }
                                 brTest.close();
