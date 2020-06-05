@@ -857,8 +857,22 @@ public abstract class HBCIJobImpl
         return null;
     }
 
+    /* füllt das Objekt mit den Rückgabedaten, wenn der GV durch einen TAN Task
+    gewrapped wurde und die GV-spezifischen Daten daraus übernommen werden müssen.
+    Siehe dazu auch HBCIJobImpl::fillJobResult() 
+    */
+    public void fillJobResultFromTanJob(HBCIMsgStatus status,String header,int seg)
+    {
+        Properties result = status.getData();
+        saveBasicValues(result, seg);
+        saveReturnValues(status, seg);
 
-
+        // wichtig um Parameter wie "content" zu füllen
+        extractPlaintextResults(status, header, contentCounter);
+        // der contentCounter wird fuer jedes antwortsegment um 1 erhoeht
+        extractResults(status, header, contentCounter++);
+    }
+    
     /* füllt das Objekt mit den Rückgabedaten. Dazu wird zuerst eine Liste aller
        Segmente erstellt, die Rückgabedaten für diesen Task enthalten. Anschließend
        werden die HBCI-Rückgabewerte (RetSegs) im outStore gespeichert. Danach werden

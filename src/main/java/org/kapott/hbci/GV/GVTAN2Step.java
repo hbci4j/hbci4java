@@ -219,8 +219,8 @@ public class GVTAN2Step extends HBCIJobImpl
             // Muessen wir extra pruefen, weil das hier auch das HITAN sein koennte. Das schauen wir aber nicht an
             if (StringUtil.toInsCode(this.task.getHBCICode()).equals(segCode))
             {
-                HBCIUtils.log("this is a response segment for the original task - storing results in the original job",HBCIUtils.LOG_DEBUG);
-                this.task.extractResults(msgstatus,header,idx);
+                HBCIUtils.log("this is a response segment for the original task (" + this.task.getName() + ") - storing results in the original job",HBCIUtils.LOG_DEBUG);
+                this.task.fillJobResultFromTanJob(msgstatus, header, idx);
             }
             
             // Wir haben hier nichts weiter zu tun
