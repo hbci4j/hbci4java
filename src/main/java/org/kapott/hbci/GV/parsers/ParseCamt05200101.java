@@ -33,8 +33,27 @@ import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.sepa.jaxb.camt_052_001_01.*;
-
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.AccountIdentification3Choice;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.AccountReport9;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BalanceType8Code;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BankToCustomerAccountReportV01;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BankTransactionCodeStructure1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.BranchAndFinancialInstitutionIdentification3;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CashAccount13;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CashAccount7;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CashBalance1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CreditDebitCode;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.CurrencyAndAmount;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.DateAndDateTimeChoice;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.Document;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.EntryTransaction1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.FinancialInstitutionIdentification5Choice;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.PartyIdentification8;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.Purpose1Choice;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.ReportEntry1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.TransactionAgents1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.TransactionParty1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_01.TransactionReferences1;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Saldo;
 import org.kapott.hbci.structures.Value;
@@ -84,7 +103,8 @@ public class ParseCamt05200101 extends AbstractCamtParser
 
             ////////////////////////////////////////////////////////////////////
             // Die einzelnen Buchungen
-            BigDecimal saldo = tag.start != null && tag.start.value != null ? tag.start.value.getBigDecimalValue() : BigDecimal.ZERO;
+            final boolean haveStart = tag.start != null && tag.start.value != null;
+            BigDecimal saldo = haveStart ? tag.start.value.getBigDecimalValue() : BigDecimal.ZERO;
             
             for (ReportEntry1 entry:report.getNtry())
             {
@@ -95,6 +115,24 @@ public class ParseCamt05200101 extends AbstractCamtParser
                     
                     // Saldo fortschreiben
                     saldo = line.saldo.value.getBigDecimalValue();
+                }
+            }
+            //
+            ////////////////////////////////////////////////////////////////////
+
+            ////////////////////////////////////////////////////////////////////
+            // Apo-Bank Sonderbehandlung: Wenn wir keinen Start-Saldo, dafuer aber einen End-Saldo haben,
+            // rechnen wir rueckwaerts von dem
+            final boolean haveEnd = tag.end != null && tag.end.value != null;
+            if (!haveStart && haveEnd)
+            {
+                BigDecimal endSaldo = tag.end.value.getBigDecimalValue();
+                int n = tag.lines.size();
+                while (n > 0)
+                {
+                    UmsLine line = tag.lines.get(--n);
+                    line.saldo.value.setValue(endSaldo);
+                    endSaldo = endSaldo.subtract(line.value.getBigDecimalValue());
                 }
             }
             //

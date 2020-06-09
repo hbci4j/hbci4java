@@ -4733,7 +4733,7 @@
             <value path="SegHead.version">6</value>
         </SEGdef>
 
-        <SEGdef id="SaldoSEPA7"> <!-- 3.0 -->
+        <SEGdef id="Saldo7"> <!-- 3.0 -->
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTVInt" name="KTV"/>
             <DE name="allaccounts" type="JN"/>
@@ -4743,7 +4743,7 @@
             <value path="SegHead.code">HKSAL</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
-        <SEGdef id="SaldoSEPARes7"> 
+        <SEGdef id="SaldoRes7">
             <DEG type="SegHeadInst" name="SegHead"/>
             <DEG type="KTVInt" name="KTV"/>
             <DE name="kontobez" type="AN" maxsize="30"/>
@@ -4760,7 +4760,7 @@
             <value path="SegHead.code">HISAL</value>
             <value path="SegHead.version">7</value>
         </SEGdef>
-        <SEGdef id="SaldoSEPAPar7">
+        <SEGdef id="SaldoPar7">
             &GVP2;
             
             &SecClassValids;
@@ -7692,7 +7692,7 @@
             <SEG type="Saldo4" minnum="0"/>
             <SEG type="Saldo5" minnum="0"/>
             <SEG type="Saldo6" minnum="0"/>
-            <SEG type="SaldoSEPA7" minnum="0"/>
+            <SEG type="Saldo7" minnum="0"/>
             <SEG type="SammelLast3" minnum="0"/>
             <SEG type="SammelLast4" minnum="0"/>
             <SEG type="SammelLast5" minnum="0"/>
@@ -7850,7 +7850,7 @@
             <SEG type="SaldoRes4" minnum="0"/>
             <SEG type="SaldoRes5" minnum="0"/>
             <SEG type="SaldoRes6" minnum="0"/>
-            <SEG type="SaldoSEPARes7" minnum="0"/>
+            <SEG type="SaldoRes7" minnum="0"/>
             <SEG type="SEPAInfoRes1" minnum="0"/>
             <SEG type="StatusRes2" minnum="0"/>
             <SEG type="StatusRes3" minnum="0"/>
@@ -7996,7 +7996,7 @@
             <SEG type="SaldoPar4" minnum="0"/>
             <SEG type="SaldoPar5" minnum="0"/>
             <SEG type="SaldoPar6" minnum="0"/>
-            <SEG type="SaldoSEPAPar7" minnum="0"/>
+            <SEG type="SaldoPar7" minnum="0"/>
             <SEG type="SammelLastPar3" minnum="0"/>
             <SEG type="SammelLastPar4" minnum="0"/>
             <SEG type="SammelLastPar5" minnum="0"/>

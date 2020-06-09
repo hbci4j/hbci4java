@@ -54,7 +54,27 @@ public class GVSaldoReq
         addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
         addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
         addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
-        addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
+
+        int version = 1;
+        try
+        {
+          version = Integer.parseInt(this.getSegVersion());
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log(e);
+        }
+
+        if (version >= 7) // SEPA
+        {
+            addConstraint("my.bic","KTV.bic",  null, LogFilter.FILTER_MOST);
+            addConstraint("my.iban","KTV.iban",null, LogFilter.FILTER_IDS);
+        }
+        else
+        {
+            addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
+        }
+        
         addConstraint("dummyall","allaccounts", "N", LogFilter.FILTER_NONE);
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
     }

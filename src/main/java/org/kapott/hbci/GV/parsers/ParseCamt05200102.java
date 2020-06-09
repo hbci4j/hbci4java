@@ -104,7 +104,8 @@ public class ParseCamt05200102 extends AbstractCamtParser
 
             ////////////////////////////////////////////////////////////////////
             // Die einzelnen Buchungen
-            BigDecimal saldo = tag.start != null && tag.start.value != null ? tag.start.value.getBigDecimalValue() : BigDecimal.ZERO;
+            final boolean haveStart = tag.start != null && tag.start.value != null;
+            BigDecimal saldo = haveStart ? tag.start.value.getBigDecimalValue() : BigDecimal.ZERO;
             
             for (ReportEntry2 entry:report.getNtry())
             {
@@ -115,6 +116,24 @@ public class ParseCamt05200102 extends AbstractCamtParser
                     
                     // Saldo fortschreiben
                     saldo = line.saldo.value.getBigDecimalValue();
+                }
+            }
+            //
+            ////////////////////////////////////////////////////////////////////
+
+            ////////////////////////////////////////////////////////////////////
+            // Apo-Bank Sonderbehandlung: Wenn wir keinen Start-Saldo, dafuer aber einen End-Saldo haben,
+            // rechnen wir rueckwaerts von dem
+            final boolean haveEnd = tag.end != null && tag.end.value != null;
+            if (!haveStart && haveEnd)
+            {
+                BigDecimal endSaldo = tag.end.value.getBigDecimalValue();
+                int n = tag.lines.size();
+                while (n > 0)
+                {
+                    UmsLine line = tag.lines.get(--n);
+                    line.saldo.value.setValue(endSaldo);
+                    endSaldo = endSaldo.subtract(line.value.getBigDecimalValue());
                 }
             }
             //
