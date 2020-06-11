@@ -104,8 +104,7 @@ public class ParseCamt05200102 extends AbstractCamtParser
 
             ////////////////////////////////////////////////////////////////////
             // Die einzelnen Buchungen
-            final boolean haveStart = tag.start != null && tag.start.value != null;
-            BigDecimal saldo = haveStart ? tag.start.value.getBigDecimalValue() : BigDecimal.ZERO;
+            BigDecimal saldo = tag.start.value.getBigDecimalValue();
             
             for (ReportEntry2 entry:report.getNtry())
             {
@@ -124,8 +123,7 @@ public class ParseCamt05200102 extends AbstractCamtParser
             ////////////////////////////////////////////////////////////////////
             // Apo-Bank Sonderbehandlung: Wenn wir keinen Start-Saldo, dafuer aber einen End-Saldo haben,
             // rechnen wir rueckwaerts von dem
-            final boolean haveEnd = tag.end != null && tag.end.value != null;
-            if (!haveStart && haveEnd)
+            if (tag.start.timestamp == null && tag.end.timestamp != null)
             {
                 BigDecimal endSaldo = tag.end.value.getBigDecimalValue();
                 int n = tag.lines.size();
@@ -313,10 +311,13 @@ public class ParseCamt05200102 extends AbstractCamtParser
     private BTag createDay(AccountReport11 report)
     {
         BTag tag = new BTag();
-        tag.start = new Saldo();
-        tag.end = new Saldo();
         tag.starttype = 'F';
         tag.endtype = 'F';
+
+        // Achtung - die folgenden beiden Werte duerfen nicht NULL sein - auch wenn wir keinen Saldo haben.
+        // Der Aufrufer verlaesst sich darauf. Wuerde dort sonst eine NPE ausloesen
+        tag.start = new Saldo();
+        tag.end = new Saldo();
 
         ////////////////////////////////////////////////////////////////
         // Start- un End-Saldo ermitteln
