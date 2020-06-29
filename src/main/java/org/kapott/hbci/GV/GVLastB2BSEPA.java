@@ -5,6 +5,8 @@
 
 package org.kapott.hbci.GV;
 
+import java.util.Objects;
+
 import org.kapott.hbci.GV_Result.AbstractGVRLastSEPA;
 import org.kapott.hbci.GV_Result.GVRLastB2BSEPA;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -51,5 +53,9 @@ public class GVLastB2BSEPA extends AbstractGVLastSEPA
         // TODO: Wobei eigentlich nur "B2B" erlaubt ist, da dieser GV nur die B2B-Lastschrift
         // kapselt. Eigentlich sollte das gar nicht konfigurierbar sein
         addConstraint("type", "sepa.type", "B2B", LogFilter.FILTER_NONE);
+        
+        // Siehe https://homebanking-hilfe.de/forum/topic.php?p=155881#real155881
+        if (Objects.equals(lowlevelName,getLowlevelName())) // Nur bei Einzelauftraegen ausfuehren - GVLastB2BSEPA wird in GVMultiLastB2BSEPA ueberschrieben - und dort wird das Flag ja user-spezifisch gefuellt
+          addConstraint("batchbook", "sepa.batchbook", "0", LogFilter.FILTER_NONE);
     }
 }

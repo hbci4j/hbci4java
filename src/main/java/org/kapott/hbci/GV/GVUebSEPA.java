@@ -21,6 +21,8 @@
 
 package org.kapott.hbci.GV;
 
+import java.util.Objects;
+
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.LogFilter;
@@ -117,6 +119,10 @@ public class GVUebSEPA extends AbstractSEPAGV
         addConstraint("btg.curr",  "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE, true);
         addConstraint("usage",     "sepa.usage",     "",   LogFilter.FILTER_NONE, true);
       
+        // Siehe https://homebanking-hilfe.de/forum/topic.php?p=155881#real155881
+        if (Objects.equals(name,getLowlevelName())) // Nur bei Einzelauftraegen ausfuehren - GVUebSEPA wird in GVMultiUebSEPA ueberschrieben - und dort wird das Flag ja user-spezifisch gefuellt
+          addConstraint("batchbook", "sepa.batchbook", "0", LogFilter.FILTER_NONE);
+        
         //Constraints für die PmtInfId (eindeutige SEPA Message ID) und EndToEndId (eindeutige ID um Transaktion zu identifizieren)
         addConstraint("sepaid",    "sepa.sepaid",      getSEPAMessageId(),      LogFilter.FILTER_NONE);
         addConstraint("pmtinfid",  "sepa.pmtinfid",    getSEPAMessageId(),      LogFilter.FILTER_NONE);

@@ -21,11 +21,13 @@
 
 package org.kapott.hbci.GV;
 
+import java.util.Objects;
+import java.util.Properties;
+
 import org.kapott.hbci.GV_Result.GVRInstUebSEPA;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.status.HBCIMsgStatus;
-
-import java.util.Properties;
 
 /**
  * Job-Implementierung fuer SEPA-Instant Ueberweisungen.
@@ -62,6 +64,10 @@ public class GVInstUebSEPA extends GVUebSEPA {
      */
     public GVInstUebSEPA(HBCIHandler handler, String name) {
         super(handler, name, new GVRInstUebSEPA());
+        
+        // Siehe https://homebanking-hilfe.de/forum/topic.php?p=155881#real155881
+        if (Objects.equals(name,getLowlevelName())) // Nur bei Einzelauftraegen ausfuehren - GVUebSEPA wird in GVMultiUebSEPA ueberschrieben - und dort wird das Flag ja user-spezifisch gefuellt
+          addConstraint("batchbook", "sepa.batchbook", "0", LogFilter.FILTER_NONE);
     }
 
     @Override
