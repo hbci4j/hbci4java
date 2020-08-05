@@ -467,7 +467,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".OrderAccount.KIK.country","");
         k.rawSet(prefix + ".orderhash",(variant == Variant.V2) ? "" : ("B00000000"));
         k.rawSet(prefix + ".orderref",(step == 2) ? (String) this.getPersistentData(KEY_PD_ORDERREF) : "");
-        k.rawSet(prefix + ".notlasttan","N");
+        k.rawSet(prefix + ".notlasttan",(tp == KnownTANProcess.PROCESS1 || tp == KnownTANProcess.PROCESS2_STEP2) ? "N" : ""); // Darf nur bei TAN-Prozess 1 und 2 belegt sein
         k.rawSet(prefix + ".challengeklass",(variant == Variant.V2) ? "" : "99");
         k.rawSet(prefix + ".tanmedia",sca.getTanMedia());
     }

@@ -97,7 +97,7 @@ public class GVTAN2Step extends HBCIJobImpl
         if (version < 6)
             addConstraint("listidx","listidx","", LogFilter.FILTER_NONE);
         
-        addConstraint("notlasttan","notlasttan","N", LogFilter.FILTER_NONE);
+        addConstraint("notlasttan","notlasttan","", LogFilter.FILTER_NONE);
         
         if (version <= 1) // Gabs nur in HKTAN 1
             addConstraint("info","info","", LogFilter.FILTER_NONE);
