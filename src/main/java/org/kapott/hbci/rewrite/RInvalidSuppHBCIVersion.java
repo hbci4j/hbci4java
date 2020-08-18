@@ -80,7 +80,7 @@ public class RInvalidSuppHBCIVersion extends Rewrite
     }
     catch (Exception e)
     {
-      HBCIUtils.log("unable to apply rewriter " + this.getClass().getSimpleName() + " - leaving messag unchanged: " + e.getMessage(), HBCIUtils.LOG_INFO);
+      HBCIUtils.log("unable to apply rewriter " + this.getClass().getSimpleName() + " - leaving message unchanged: " + e.getMessage(), HBCIUtils.LOG_INFO);
       HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
     }
     finally
