@@ -57,14 +57,14 @@ public class DDVCardService1 extends DDVCardService
     byte[] rawData=getKeyInfo(1);
     ret[0]=new DDVKeyData();
     ret[0].num=2;
-    ret[0].version=rawData[rawData.length-1];
+    ret[0].version=this.fixKeyVersion(rawData[rawData.length-1]);
     ret[0].len=0;
     ret[0].alg=0;
     
     rawData=getKeyInfo(2);
     ret[1]=new DDVKeyData();
     ret[1].num=3;
-    ret[1].version=rawData[rawData.length-1];
+    ret[1].version=this.fixKeyVersion(rawData[rawData.length-1]);
     ret[1].len=0;
     ret[1].alg=0;
     

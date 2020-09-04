@@ -24,6 +24,8 @@ package org.kapott.hbci.smartcardio;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.kapott.hbci.manager.HBCIUtils;
+
 
 
 /**
@@ -46,6 +48,30 @@ public abstract class DDVCardService extends HBCICardService
    * @return die Signature,
    */
   protected abstract byte[] calculateSignature(byte[] data_l);
+  
+  /**
+   * Das ist ein Dirty-Hack, der aus einer negativen Schluesselversion pauschal 999 macht.
+   * Hintergrund: Die Schluesselversion (DE "KeyName.keyversion") ist dreistellig numerisch.
+   * Maximalwert daher 999. Beim Lesen der Schluesselversion per CommandAPDU wird fuer
+   * die Version wird jedoch nur ein Byte gelesen. Alles ueber ueber 127 (unsigned -128 bis 127)
+   * flippt daher um. Die Versionsnummer muesste auf der Karte also auf 2 Bytes verteilt werden,
+   * eins reicht nicht aus. Das Problem ist: Ich habe keinerlei Unterlagen, wie die Versionsnummer
+   * konkret in dem Byte-Array gespeichert ist. Daher ersetze ich die Version jetzt als Dirty-Hack
+   * jetzt einfach gegen 999, wenn ein Ueberlauf stattfand. Ich weiss gar nicht, ob die Versionsnummer
+   * bei DDV-Karten ueberhaupt relevant. Und wenn, macht es auch keinen Unterschied - denn "-128" wuerde
+   * ebenfalls zu einem Fehler beim Erzeugen der Nachricht fuehren.
+   * @param i die potentiell negative Schluesselversion.
+   * @return der originale Wert, wenn er groesser als 0 ist oder 999.
+   */
+  protected int fixKeyVersion(int i)
+  {
+    if (i < 0)
+    {
+      HBCIUtils.log("got overflow while reading keyversion, using placeholder 999",HBCIUtils.LOG_INFO);
+      return 999;
+    }
+    return i;
+  }
   
   /**
    * @see org.kapott.hbci.smartcardio.HBCICardService#getCID()
