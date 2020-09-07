@@ -59,7 +59,7 @@ public class DDVCardService0 extends DDVCardService
     byte[] rawData=readRecordBySFI(0x00, 0);
     ret[0]=new DDVKeyData();
     ret[0].num=rawData[0];
-    ret[0].version=this.fixKeyVersion(rawData[4]);
+    ret[0].version=(rawData[4] & 0xFF);
     ret[0].len=rawData[1];
     ret[0].alg=rawData[2];
 
@@ -67,7 +67,7 @@ public class DDVCardService0 extends DDVCardService
     rawData=readRecordBySFI(0x00, 0);
     ret[1]=new DDVKeyData();
     ret[1].num=rawData[0];
-    ret[1].version=this.fixKeyVersion(rawData[3]);
+    ret[1].version=(rawData[3] & 0xFF);
     ret[1].len=rawData[1];
     ret[1].alg=rawData[2];
     
