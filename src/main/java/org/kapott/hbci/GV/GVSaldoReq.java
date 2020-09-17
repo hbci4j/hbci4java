@@ -50,29 +50,32 @@ public class GVSaldoReq
     {
         this(handler,getLowlevelName());
 
-        addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
-        addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
-        addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
-        addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
-
-        int version = 1;
+        
+        boolean sepa = false;
         try
         {
-          version = Integer.parseInt(this.getSegVersion());
+          sepa = Integer.parseInt(this.getSegVersion()) >= 7; 
         }
         catch (Exception e)
         {
           HBCIUtils.log(e);
         }
+        
+        boolean nat = this.canNationalAcc(handler);
 
-        if (version >= 7) // SEPA
+        if (sepa)
         {
-            addConstraint("my.bic","KTV.bic",  null, LogFilter.FILTER_MOST);
-            addConstraint("my.iban","KTV.iban",null, LogFilter.FILTER_IDS);
+          addConstraint("my.bic","KTV.bic",  null, LogFilter.FILTER_MOST);
+          addConstraint("my.iban","KTV.iban",null, LogFilter.FILTER_IDS);
         }
-        else
+
+        if (nat || !sepa)
         {
-            addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
+          addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
+          addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
+          addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
+          addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
+          addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
         }
         
         addConstraint("dummyall","allaccounts", "N", LogFilter.FILTER_NONE);

@@ -22,6 +22,7 @@
 package org.kapott.hbci.GV;
 
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
 
 public final class GVSaldoReqAll
@@ -37,12 +38,35 @@ public final class GVSaldoReqAll
         super(handler,getLowlevelName());
 
         addConstraint("maxentries","maxentries","", LogFilter.FILTER_NONE);
-        addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
-        addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
-        addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
-        addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
-        addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
         addConstraint("dummyall","allaccounts", "J", LogFilter.FILTER_NONE);
+        
+        boolean sepa = false;
+        try
+        {
+          sepa = Integer.parseInt(this.getSegVersion()) >= 7; 
+        }
+        catch (Exception e)
+        {
+          HBCIUtils.log(e);
+        }
+        
+        boolean nat = this.canNationalAcc(handler);
+
+        if (sepa)
+        {
+          addConstraint("my.bic","KTV.bic",  null, LogFilter.FILTER_MOST);
+          addConstraint("my.iban","KTV.iban",null, LogFilter.FILTER_IDS);
+        }
+
+        if (nat || !sepa)
+        {
+          addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
+          addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
+          addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
+          addConstraint("my.subnumber","KTV.subnumber","", LogFilter.FILTER_MOST);
+          addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
+        }
+
     }
     
     public void verifyConstraints()
