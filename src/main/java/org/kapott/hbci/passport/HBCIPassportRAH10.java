@@ -515,7 +515,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
         // Einmal-Schluessel fuer die Nachricht erzeugen
         final String provider = CryptUtils.getSecurityProvider();
         KeyGenerator keygen = provider != null ? KeyGenerator.getInstance(CryptUtils.CRYPT_ALG_AES,provider) : KeyGenerator.getInstance(CryptUtils.CRYPT_ALG_AES);
-        keygen.init(32);
+        keygen.init(256);
         final SecretKey msgKey = keygen.generateKey();
 
         final byte[][] ret = new byte[2][];
