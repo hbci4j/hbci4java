@@ -38,6 +38,13 @@ public enum Feature
     PINTAN_INIT_AUTOMETHOD(true),
     
     /**
+     * Feature, mit dem festgelegt werden kann, ob HBCI4Java im HKTAN der anonymen Dialog-Initialisierung das "notlasttan" belegen soll oder nicht.
+     * Nirgends steht geschrieben, dass das DE dort leer bleiben soll - die Baader Bank hat aber scheinbar ein Problem damit.
+     * Siehe https://homebanking-hilfe.de/forum/topic.php?p=157481#real157481
+     */
+    PINTAN_INITANON_SKIPNOTLASTTAN(false),
+    
+    /**
      * Feature, mit dem festgelegt werden kann, ob HBCI4Java bei der Synchronisierung das HKSPA ausfuehren soll, um die SEPA-Informationen der Konten abzurufen.
      * Konfigurierbar, weil der bei der Commerzbank nicht funktioniert - dort liefert die Bank eine fuer HBCI4Java nicht lesbare Antwort - und ich weiss leider
      * noch nicht, warum genau das nicht gelesen werden kann. Daher mache ich es erstmal abschaltbar.
