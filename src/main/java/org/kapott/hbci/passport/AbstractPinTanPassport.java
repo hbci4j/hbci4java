@@ -456,15 +456,14 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".process",tp.getCode());
 
 
-        final String segcode = sca.getTanReference();
+        String segcode = sca.getTanReference();
+        if (Feature.PINTAN_SEGCODE_STRICT.isEnabled())
+        {
+          if (tp == KnownTANProcess.PROCESS2_STEP2)
+            segcode = "";
+        }
         HBCIUtils.log("creating HKTAN for SCA [process : " + tp + ", order code: " + segcode + "]",HBCIUtils.LOG_DEBUG);
         
-        // Darf nur bei TAN-Prozess 1 und 2 belegt sein
-        String nlt = (tp == KnownTANProcess.PROCESS1 || tp == KnownTANProcess.PROCESS2_STEP2) ? "N" : "";
-        if (ctx.isAnonymous() && Feature.PINTAN_INITANON_SKIPNOTLASTTAN.isEnabled())
-          nlt = "";
-        HBCIUtils.log("determined value for notlasttan [process : " + tp + ", anon: " + ctx.isAnonymous() + ", feature flag: " + Feature.PINTAN_INITANON_SKIPNOTLASTTAN.isEnabled() + ", notlasttan: " + nlt + "]",HBCIUtils.LOG_DEBUG);
-
         k.rawSet(prefix + ".ordersegcode",segcode);
         k.rawSet(prefix + ".OrderAccount.bic","");
         k.rawSet(prefix + ".OrderAccount.iban","");
@@ -474,7 +473,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".OrderAccount.KIK.country","");
         k.rawSet(prefix + ".orderhash",(variant == Variant.V2) ? "" : ("B00000000"));
         k.rawSet(prefix + ".orderref",(step == 2) ? (String) this.getPersistentData(KEY_PD_ORDERREF) : "");
-        k.rawSet(prefix + ".notlasttan",nlt);
+        k.rawSet(prefix + ".notlasttan",(tp == KnownTANProcess.PROCESS1 || tp == KnownTANProcess.PROCESS2_STEP2) ? "N" : ""); // Darf nur bei TAN-Prozess 1 und 2 belegt sein
         k.rawSet(prefix + ".challengeklass",(variant == Variant.V2) ? "" : "99");
         k.rawSet(prefix + ".tanmedia",sca.getTanMedia());
     }

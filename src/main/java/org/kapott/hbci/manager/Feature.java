@@ -38,11 +38,12 @@ public enum Feature
     PINTAN_INIT_AUTOMETHOD(true),
     
     /**
-     * Feature, mit dem festgelegt werden kann, ob HBCI4Java im HKTAN der anonymen Dialog-Initialisierung das "notlasttan" belegen soll oder nicht.
-     * Nirgends steht geschrieben, dass das DE dort leer bleiben soll - die Baader Bank hat aber scheinbar ein Problem damit.
+     * Feature, ob der Segment-Code nur bei TAN-Prozess 1 und 4 mitgesendet wird. In den anderen Faellen ist es teilweise optional.
+     * Der FinTS-Server der Baader Bank prueft das aber ziemlich streng. Und damit wir uns nicht die Kompatibilitaet mit anderen Banken
+     * kaputt machen, habe ich es als optionales Feature umgesetzt - denn alle anderen Banken tolerieren das bisherige Verhalten.
      * Siehe https://homebanking-hilfe.de/forum/topic.php?p=157481#real157481
      */
-    PINTAN_INITANON_SKIPNOTLASTTAN(false),
+    PINTAN_SEGCODE_STRICT(false),
     
     /**
      * Feature, mit dem festgelegt werden kann, ob HBCI4Java bei der Synchronisierung das HKSPA ausfuehren soll, um die SEPA-Informationen der Konten abzurufen.
