@@ -184,6 +184,20 @@ public class GenLastSEPA00800101 extends AbstractSEPAGenerator<Properties>
         drctDbtTxInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentification4());
         drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index)));
 
+        //Payment Information - notwendig bei Sepa Lastschriften in Drittstaaten (CH, UK?)
+        String property = sepaParams.getProperty("dst.address");
+        if (property != null) {
+            drctDbtTxInf.getDbtr().setPstlAdr(new PostalAddress5());
+            // Country Code, zb DE, CH etc. [A-Z]{2,2}
+            drctDbtTxInf.getDbtr().getPstlAdr().setCtry(sepaParams.getProperty("dst.address.country"));
+            // max 2 Zeilen mit Text min 1, max 70 Zeichen
+            for (int i = 0; i < 2; i++) {
+                String addressLine = sepaParams.getProperty("dst.address.line" + i);
+                if (addressLine != null) {
+                    drctDbtTxInf.getDbtr().getPstlAdr().getAdrLine().add(addressLine);
+                }
+            }
+        }
 
         //Payment Information - Credit Transfer Transaction Information - Amount
         drctDbtTxInf.setInstdAmt(new EuroMax9Amount());
