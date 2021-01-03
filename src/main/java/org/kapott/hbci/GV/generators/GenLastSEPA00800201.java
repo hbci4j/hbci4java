@@ -41,6 +41,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentInstructionInformationSD
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentMethod2Code;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PaymentTypeInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PersonIdentificationSDD2;
+import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PostalAddressSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.PurposeSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RemittanceInformationSDDChoice;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.RestrictedIdentificationSDD;
@@ -210,6 +211,20 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
         drctDbtTxInf.getDbtrAgt().setFinInstnId(new FinancialInstitutionIdentificationSDD1());
         drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index)));
 
+        //Payment Information - notwendig bei Sepa Lastschriften in Drittstaaten (CH, UK?)
+        String property = sepaParams.getProperty("dst.addr.country");
+        if (property != null && property.length() > 0) {
+            drctDbtTxInf.getDbtr().setPstlAdr(new PostalAddressSDD());
+            // Country Code, zb DE, CH etc. [A-Z]{2,2}
+            drctDbtTxInf.getDbtr().getPstlAdr().setCtry(sepaParams.getProperty("dst.addr.country"));
+            // max 2 Zeilen mit Text min 1, max 70 Zeichen
+            for (int i = 0; i < 2; i++) {
+                String addressLine = sepaParams.getProperty("dst.addr.line" + i);
+                if (addressLine.length() > 0) {
+                    drctDbtTxInf.getDbtr().getPstlAdr().getAdrLine().add(addressLine);
+                }
+            }
+        }
 
         //Payment Information - Credit Transfer Transaction Information - Amount
         drctDbtTxInf.setInstdAmt(new CurrencyAndAmountSDD());
