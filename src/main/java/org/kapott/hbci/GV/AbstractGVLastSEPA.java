@@ -76,7 +76,10 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
     	addConstraint("dst.bic",         "sepa.dst.bic",   "",    LogFilter.FILTER_MOST, true);
     	addConstraint("dst.iban",        "sepa.dst.iban",  null,  LogFilter.FILTER_IDS,  true);
     	addConstraint("dst.name",        "sepa.dst.name",  null,  LogFilter.FILTER_IDS,  true);
-    	addConstraint("btg.value",       "sepa.btg.value", null,  LogFilter.FILTER_NONE, true);
+        addConstraint("dst.addr.country","sepa.dst.addr.country", "", LogFilter.FILTER_MOST, true);
+        addConstraint("dst.addr.line1",  "sepa.dst.addr.line1",   "", LogFilter.FILTER_MOST, true);
+        addConstraint("dst.addr.line2",  "sepa.dst.addr.line2",   "", LogFilter.FILTER_MOST, true);
+        addConstraint("btg.value",       "sepa.btg.value", null,  LogFilter.FILTER_NONE, true);
     	addConstraint("btg.curr",        "sepa.btg.curr",  "EUR", LogFilter.FILTER_NONE, true);
     	addConstraint("usage",           "sepa.usage",     "",    LogFilter.FILTER_NONE, true);
     
