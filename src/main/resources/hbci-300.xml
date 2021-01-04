@@ -8172,6 +8172,14 @@
             <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            
+            <!-- Degussa sendet unaufgefordert HITAB, obwohl wir gar kein HKTAB gesendet haben -->
+            <SEG type="TANMediaListRes1" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes2" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes3" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes4" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes5" minnum="0" maxnum="1"/>
+            
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
@@ -8264,6 +8272,14 @@
             <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
+            
+            <!-- Degussa sendet unaufgefordert HITAB, obwohl wir gar kein HKTAB gesendet haben -->
+            <SEG type="TANMediaListRes1" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes2" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes3" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes4" minnum="0" maxnum="1"/>
+            <SEG type="TANMediaListRes5" minnum="0" maxnum="1"/>
+            
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
