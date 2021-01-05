@@ -81,7 +81,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
         //Customer Credit Transfer Initiation
         doc.setPain00800101(new Pain00800101());
         doc.getPain00800101().setGrpHdr(new GroupHeaderSDD());
-        
+
         String batch = SepaUtil.getProperty(sepaParams,"batchbook",null);
         if (batch != null)
             doc.getPain00800101().getGrpHdr().setBtchBookg(batch.equals("1"));
@@ -132,7 +132,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
         pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSDD());
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSDDCode.SEPA);
         pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSDD());
-        
+
         String type = sepaParams.getProperty("type");
         try
         {
@@ -142,7 +142,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
         {
             throw new HBCI_Exception("Lastschrift-Art " + type + " wird in der SEPA-Version 008.002.01 Ihrer Bank noch nicht unterstützt",e);
         }
-        
+
         //Payment Information - Credit Transfer Transaction Information
         ArrayList<DirectDebitTransactionInformationSDD> drctDbtTxInfs = (ArrayList<DirectDebitTransactionInformationSDD>) pmtInf.getDrctDbtTxInf();
         if (maxIndex != null)
@@ -212,15 +212,15 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
         drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index)));
 
         //Payment Information - notwendig bei Sepa Lastschriften in Drittstaaten (CH, UK?)
-        String property = sepaParams.getProperty("dst.addr.country");
+        String property = sepaParams.getProperty(SepaUtil.insertIndex("dst.addr.country", index));
         if (property != null && property.length() > 0) {
             drctDbtTxInf.getDbtr().setPstlAdr(new PostalAddressSDD());
             // Country Code, zb DE, CH etc. [A-Z]{2,2}
-            drctDbtTxInf.getDbtr().getPstlAdr().setCtry(sepaParams.getProperty("dst.addr.country"));
+            drctDbtTxInf.getDbtr().getPstlAdr().setCtry(sepaParams.getProperty(SepaUtil.insertIndex("dst.addr.country", index)));
             // max 2 Zeilen mit Text min 1, max 70 Zeichen
-            for (int i = 0; i < 2; i++) {
-                String addressLine = sepaParams.getProperty("dst.addr.line" + i);
-                if (addressLine.length() > 0) {
+            for (int i = 1; i <= 2; i++) {
+                String addressLine = sepaParams.getProperty(SepaUtil.insertIndex("dst.addr.line" + i, index));
+                if (addressLine != null && addressLine.length() > 0) {
                     drctDbtTxInf.getDbtr().getPstlAdr().getAdrLine().add(addressLine);
                 }
             }
@@ -239,7 +239,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
             drctDbtTxInf.setRmtInf(new RemittanceInformationSDDChoice());
             drctDbtTxInf.getRmtInf().setUstrd(usage);
         }
-        
+
         String purposeCode = sepaParams.getProperty(SepaUtil.insertIndex("purposecode", index));
         if (purposeCode != null && purposeCode.length() > 0)
         {
@@ -247,7 +247,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
             p.setCd(purposeCode);
             drctDbtTxInf.setPurp(p);
         }
-        
+
 
         return drctDbtTxInf;
     }
