@@ -130,7 +130,7 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator<Properties>
         pmtInf.getPmtTpInf().setSvcLvl(new ServiceLevelSEPA());
         pmtInf.getPmtTpInf().getSvcLvl().setCd(ServiceLevelSEPACode.SEPA);
         pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrumentSEPA());
-        
+
         String type = sepaParams.getProperty("type");
         try
         {
@@ -212,15 +212,15 @@ public class GenLastSEPA00800202 extends AbstractSEPAGenerator<Properties>
         drctDbtTxInf.getDbtrAgt().getFinInstnId().setBIC(sepaParams.getProperty(SepaUtil.insertIndex("dst.bic", index)));
 
         //Payment Information - notwendig bei Sepa Lastschriften in Drittstaaten (CH, UK?)
-        String property = sepaParams.getProperty("dst.addr.country");
+        String property = sepaParams.getProperty(SepaUtil.insertIndex("dst.addr.country", index));
         if (property != null && property.length() > 0) {
             drctDbtTxInf.getDbtr().setPstlAdr(new PostalAddressSEPA());
             // Country Code, zb DE, CH etc. [A-Z]{2,2}
-            drctDbtTxInf.getDbtr().getPstlAdr().setCtry(sepaParams.getProperty("dst.addr.country"));
+            drctDbtTxInf.getDbtr().getPstlAdr().setCtry(sepaParams.getProperty(SepaUtil.insertIndex("dst.addr.country", index)));
             // max 2 Zeilen mit Text min 1, max 70 Zeichen
-            for (int i = 0; i < 2; i++) {
-                String addressLine = sepaParams.getProperty("dst.addr.line" + i);
-                if (addressLine.length() > 0) {
+            for (int i = 1; i <= 2; i++) {
+                String addressLine = sepaParams.getProperty(SepaUtil.insertIndex("dst.addr.line" + i, index));
+                if (addressLine != null && addressLine.length() > 0) {
                     drctDbtTxInf.getDbtr().getPstlAdr().getAdrLine().add(addressLine);
                 }
             }
