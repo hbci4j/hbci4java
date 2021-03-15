@@ -91,4 +91,21 @@ public class TestMatrixCode extends AbstractTest
     Assert.assertEquals("Matrix-Code-Verfahren nicht erkannt", HHDVersion.MS_1, version);
   }
 
+
+  /**
+   * @throws Exception
+   */
+  @Test
+  public void test006() throws Exception
+  {
+    // Testet die Erkennung des Matrix-Code-Verfahrens aus dem Secmech.
+    Properties props = new Properties();
+    props.put("id", "photoTAN");
+    props.put("name", "photoTAN QRcode");
+    props.put("segversion", "6");
+
+    HHDVersion version = HHDVersion.find(props);
+    Assert.assertEquals("Matrix-Code-Verfahren nicht erkannt", HHDVersion.MS_1, version);
+  }
+
 }

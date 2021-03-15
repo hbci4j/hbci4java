@@ -59,7 +59,7 @@ public enum HHDVersion
      * dass dann nicht Matrix-Code ist.
      * Generell unterstuetzen wir nur server-seitig generierte Matrix-Codes.
      */
-    MS_1(Type.PHOTOTAN,"MS1.*",null,-1,"hhd14"),
+    MS_1(Type.PHOTOTAN,"MS1.*|photoTAN.*",null,-1,"hhd14"),
 
     /**
      * HHD-Version 1.2.
