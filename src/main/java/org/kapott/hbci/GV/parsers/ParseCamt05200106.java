@@ -170,6 +170,11 @@ public class ParseCamt05200106 extends AbstractCamtParser
         // ditto
         EntryTransaction8 tx = txList.get(0);
         
+        // Ist es eine Rueckbuchung?
+        boolean rueckbuchung = tx.getRtrInf() != null && tx.getRtrInf().getRsn() != null && tx.getRtrInf().getRsn().getCd() != null && tx.getRtrInf().getRsn().getCd().length() > 0;
+        if (rueckbuchung) // Bei Rueckbuchung tauschen wir Creditor und Debitor
+          haben = !haben;
+
         ////////////////////////////////////////////////////////////////////////
         // Buchungs-ID
         TransactionReferences3 ref = tx.getRefs();

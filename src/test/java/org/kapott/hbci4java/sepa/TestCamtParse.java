@@ -242,4 +242,48 @@ public class TestCamtParse extends AbstractTest
                 is2.close();
         }
     }
+
+    /**
+     * Testet das Lesen einer Ruecklastschrift.
+     * @throws Exception
+     */
+    @Test
+    public void test005() throws Exception
+    {
+        final String file = "test-camt-ruecklastschrift.xml";
+        InputStream is1 = null;
+        InputStream is2 = null;
+        try
+        {
+            is1 = this.getStream(file);
+            SepaVersion version = SepaVersion.autodetect(is1);
+            ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
+
+            is2 = this.getStream(file);
+            GVRKUms ums = new GVRKUms();
+            parser.parse(is2, ums.getDataPerDay());
+
+            List<BTag> days = ums.getDataPerDay();
+            Assert.assertEquals("Anzahl Buchungstage falsch", 1, days.size());
+
+            BTag day = days.get(0);
+            List<UmsLine> lines = day.lines;
+
+
+            {
+                UmsLine l = lines.get(0);
+                Assert.assertEquals("Gegenkonto IBAN falsch","DES1234567890",l.other.iban);
+                Assert.assertEquals("Gegenkonto BIC falsch","TESTS1234",l.other.bic);
+                Assert.assertEquals("Gegenkonto Name falsch","Sven Schuldner",l.other.name);
+            }
+        }
+        finally
+        {
+            if (is1 != null)
+                is1.close();
+            if (is2 != null)
+                is2.close();
+        }
+    }
+
 }

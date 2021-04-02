@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document
+	xmlns="urn:iso:std:iso:20022:tech:xsd:camt.052.001.02"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:camt.052.001.02 camt.052.001.02.xsd">
+	<BkToCstmrAcctRpt>
+		<GrpHdr>
+			<MsgId>camt52_20210326134456__ONLINEBA</MsgId>
+			<CreDtTm>2021-03-26T13:44:56+01:00</CreDtTm>
+			<MsgPgntn>
+				<PgNb>1</PgNb>
+				<LastPgInd>true</LastPgInd>
+			</MsgPgntn>
+		</GrpHdr>
+		<Rpt>
+			<Id>camt052_ONLINEBA</Id>
+			<ElctrncSeqNb>00000</ElctrncSeqNb>
+			<CreDtTm>2021-03-26T13:44:56+01:00</CreDtTm>
+			<Acct>
+				<Id>
+					<IBAN>DE1234567890</IBAN>
+				</Id>
+				<Ccy>EUR</Ccy>
+				<Svcr>
+					<FinInstnId>
+						<BIC>TEST12345</BIC>
+						<Nm>Testbank</Nm>
+						<Othr>
+							<Id>DE12345</Id>
+							<Issr>UmsStId</Issr>
+						</Othr>
+					</FinInstnId>
+				</Svcr>
+			</Acct>
+			<Bal>
+				<Tp>
+					<CdOrPrtry>
+						<Cd>PRCD</Cd>
+					</CdOrPrtry>
+				</Tp>
+				<Amt Ccy="EUR">100.00</Amt>
+				<CdtDbtInd>CRDT</CdtDbtInd>
+				<Dt>
+					<Dt>2021-03-25</Dt>
+				</Dt>
+			</Bal>
+			<Bal>
+				<Tp>
+					<CdOrPrtry>
+						<Cd>CLBD</Cd>
+					</CdOrPrtry>
+				</Tp>
+				<Amt Ccy="EUR">100.00</Amt>
+				<CdtDbtInd>CRDT</CdtDbtInd>
+				<Dt>
+					<Dt>2021-03-26</Dt>
+				</Dt>
+			</Bal>
+			<Ntry>
+				<Amt Ccy="EUR">53.00</Amt>
+				<CdtDbtInd>DBIT</CdtDbtInd>
+				<Sts>BOOK</Sts>
+				<BookgDt>
+					<Dt>2021-03-26</Dt>
+				</BookgDt>
+				<ValDt>
+					<Dt>2021-03-26</Dt>
+				</ValDt>
+				<AcctSvcrRef>NONREF</AcctSvcrRef>
+				<BkTxCd />
+				<NtryDtls>
+					<TxDtls>
+						<Refs>
+							<MndtId>TEST1234</MndtId>
+							<Prtry>
+								<Tp>FIUMSATZ-ID</Tp>
+								<Ref>2021-03-26-09-12345</Ref>
+							</Prtry>
+						</Refs>
+						<AmtDtls>
+							<InstdAmt>
+								<Amt Ccy="EUR">50.00</Amt>
+							</InstdAmt>
+						</AmtDtls>
+						<BkTxCd>
+							<Prtry>
+								<Cd></Cd>
+								<Issr>DK</Issr>
+							</Prtry>
+						</BkTxCd>
+						<Chrgs>
+							<Amt Ccy="EUR">3.00</Amt>
+							<Pty>
+								<FinInstnId>
+									<BIC>TEST1234</BIC>
+								</FinInstnId>
+							</Pty>
+						</Chrgs>
+						<Chrgs>
+							<Amt Ccy="EUR">0.00</Amt>
+							<Pty>
+								<FinInstnId>
+									<BIC>TEST1234</BIC>
+								</FinInstnId>
+							</Pty>
+						</Chrgs>
+						<RltdPties>
+							<Dbtr>
+								<Nm>Sven Schuldner</Nm>
+							</Dbtr>
+							<DbtrAcct>
+								<Id>
+									<IBAN>DES1234567890</IBAN>
+								</Id>
+							</DbtrAcct>
+							<Cdtr>
+								<Nm>Erwin Einzieher</Nm>
+								<Id>
+									<PrvtId>
+										<Othr>
+											<Id>DEE1234567890</Id>
+										</Othr>
+									</PrvtId>
+								</Id>
+							</Cdtr>
+							<CdtrAcct>
+								<Id>
+									<IBAN>DEE1234567890</IBAN>
+								</Id>
+							</CdtrAcct>
+							<UltmtCdtr>
+								<Nm>Erwin Einzieher</Nm>
+							</UltmtCdtr>
+						</RltdPties>
+						<RltdAgts>
+							<DbtrAgt>
+								<FinInstnId>
+									<BIC>TESTS1234</BIC>
+								</FinInstnId>
+							</DbtrAgt>
+							<CdtrAgt>
+								<FinInstnId>
+									<BIC>TESTE1234</BIC>
+								</FinInstnId>
+							</CdtrAgt>
+						</RltdAgts>
+						<RmtInf>
+							<Ustrd>RUECKLASTSCHRIFT Sonstige Gruende</Ustrd>
+						</RmtInf>
+						<RtrInf>
+							<Orgtr>
+								<Id>
+									<OrgId>
+										<BICOrBEI>TEST1234</BICOrBEI>
+									</OrgId>
+								</Id>
+							</Orgtr>
+							<Rsn>
+								<Cd>MS03</Cd>
+							</Rsn>
+							<AddtlInf>RUECKLASTSCHRIFT Sonstige Gruende</AddtlInf>
+						</RtrInf>
+					</TxDtls>
+				</NtryDtls>
+				<AddtlNtryInf>LS RUECKBELASTUNG</AddtlNtryInf>
+			</Ntry>
+		</Rpt>
+	</BkToCstmrAcctRpt>
+</Document>
