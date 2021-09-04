@@ -47,6 +47,12 @@ public interface HBCIPassportInternal
     public String getSysId();
     public String getCID();
     public String getSysStatus();
+
+    /*
+      Besondere Behandlung für Postbank
+     */
+    default boolean isSpecialTreatmentForPostbank() { return false; }
+
     public String getProfileMethod();
     public String getProfileVersion();
 

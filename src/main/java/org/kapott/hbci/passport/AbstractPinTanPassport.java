@@ -508,7 +508,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             //  DialogInit mit Einschritt-TAN            ja
             //  DialogInit mit Zweischritt-TAN           nein
             //  Sync                                     nein
-            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)) && init.getTemplate() == KnownDialogTemplate.INIT)
+            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)) && (init.getTemplate() == KnownDialogTemplate.INIT || (this.isSpecialTreatmentForPostbank() && init.getTemplate() == KnownDialogTemplate.SYNC)))
             {
                 HBCIUtils.log("skipping HKTAN for dialog init, since we are using a one-step tan method",HBCIUtils.LOG_DEBUG);
                 return null;
@@ -556,6 +556,14 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             r.setTanMedia(this.getTanMedia(hktanVersion));
         
         return r;
+    }
+
+    /*
+      Besondere Behandlung für Postbank
+     */
+    @Override
+    public boolean isSpecialTreatmentForPostbank() {
+        return getHost().equals("hbci.postbank.de/banking/hbci.do");
     }
 
     /**
@@ -732,10 +740,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Wenn der User noch keine TAN-Verfahren hat, bleibt und als Option nur 999 - also Einschritt-Verfahren, um an den 3920
         // mit den zulaessigen Verfahren zu kommen. Wir pruefen hier gar nicht erst per "isOneStepAllowed", ob die Bank ein
         // Einschritt-Verfahren anbietet, weil wir gar keine andere Option haben
-        // Update 2019-11-02: Geht bei der Postbank leider nicht. Die erlauben kein Einschritt-Vefahren und wollen daher
-        // tatsaechlich bereits beim Abruf der verfuegbaren TAN-Verfahren ein Zweischritt-Verfahren haben. Siehe 
-        // https://homebanking-hilfe.de/forum/topic.php?p=151725#real151725
-        if (this.tanMethodsUser.size() == 0 && this.isOneStepAllowed())
+        if (this.tanMethodsUser.size() == 0)
             return TanMethod.ONESTEP.getId();
         
         /////////////////////////////////////////
@@ -764,35 +769,12 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         if (userList.size() == 0)
         {
-          if (this.isOneStepAllowed())
-          {
             final TanMethod m = TanMethod.ONESTEP;
             HBCIUtils.log("no tan method available for user, using: " + m,HBCIUtils.LOG_DEBUG);
             // Wir speichern das TAN-Verfahren nicht, das kann unmoeglich das finale Verfahren sein.
             return m.getId();
-          }
-          else
-          {
-            // Sonderfall HBCI4Java Testserver. Der liefert gar keine TAN-Verfahren
-            if (bankList.size() == 0)
-            {
-              final TanMethod m = TanMethod.ONESTEP;
-              HBCIUtils.log("no tan method available for bank, using: " + m,HBCIUtils.LOG_DEBUG);
-              // Wir speichern das TAN-Verfahren nicht, das kann unmoeglich das finale Verfahren sein.
-              return m.getId();
-            }
-            
-            // Das ist sicher die Postbank. Wir haben noch kein Verfahren per 3920 erhalten, die Bank erlaubt
-            // aber nicht, diese per Einschritt-Verfahren abzurufen. Also muessen wir den User bitten, die Auswahl
-            // aus der in den BPD verfuegbaren Verfahren zu treffen. Auch wenn diese Liste dann Eintraege enthaelt,
-            // die fuer den User u.U. gar nicht verfuegbar sind.
-            HBCIUtils.log("have no methods for user and institute doesn't allow one step method - asking user. available methods on institute: " + bankList,HBCIUtils.LOG_DEBUG);
-            this.setCurrentTANMethod(this.chooseTANMethod(bankList));
-            HBCIUtils.log("selected pintan method by user: " + tanMethod, HBCIUtils.LOG_INFO);
-            return this.tanMethod;
-          }
         }
-        
+
         if (userList.size() == 1)
         {
             final TanMethod m = userList.get(0);

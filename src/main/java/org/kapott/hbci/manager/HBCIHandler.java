@@ -159,8 +159,13 @@ public final class HBCIHandler
             this.passport.setParentHandlerData(this);
 
             if (!lazyInit) {
-                registerInstitute();
-                registerUser();
+                if (this.passport.isSpecialTreatmentForPostbank()) {
+                    registerUser();
+                    registerInstitute();
+                } else {
+                    registerInstitute();
+                    registerUser();
+                }
             }
 
             if (!passport.getHBCIVersion().equals(hbciversion)) {
@@ -201,8 +206,13 @@ public final class HBCIHandler
             try {
                 HBCIUtils.log("hbci thread: starting init()",HBCIUtils.LOG_DEBUG);
 
-                registerInstitute();
-                registerUser();
+                if (passport.isSpecialTreatmentForPostbank()) {
+                    registerUser();
+                    registerInstitute();
+                } else {
+                    registerInstitute();
+                    registerUser();
+                }
                 sync_main.setData("execStatus",null);
             } catch (Exception e) {
                 // im fehlerfall muss sicherheitshalber ein noch
