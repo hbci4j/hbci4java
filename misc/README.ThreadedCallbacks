@@ -218,6 +218,42 @@ HBCI-Dialoge nun tatsächlich beendet sind oder ob ein weiterer Callback statt-
 gefunden hat, der synchron behandelt werden muss.
 
 
+Um eventuelle TAN-Abfragen innerhalb der Initialisierung des hbci-Objektes
+(z.B. bei Abfrage der UPD-Daten) ähnlich zu behandeln, kann das hbci-Objekt
+durch einen dritten Kontruktor-Parameter lazyInit zunächst ohne UPD-Abfrage
+initialisiert werden, und anschließend durch initThreaded() analog wie bei
+executeThreaded() gekapselt werden.
+
+Die entsprechende Funktionsweise im Pseudo-Code, ohne Fehlerbehandlung:
+
+------------------------------------------------------------------------------
+  handle = new HBCIHandler(HBCIVersion.HBCI_300.getId(), passport, true);
+
+  HBCIExecThreadedStatus status = handle.initThreaded();
+
+  if (status.isCallback()) {
+      // die Ausführung des HBCI-Dialoges ist noch nicht beendet, sondern
+      // es muss ein synchroner Callback beantwortet werden.
+      //
+      // siehe oben
+  } else {
+      // status.isFinished()==true
+      //
+      // handle normal kann verwenden werden.
+  }
+
+------------------------------------------------------------------------------
+
+  // zur Behandlung des Callbacks
+  //
+  // übermittelte TAN an den kernel übergeben und dialog fortsetzen
+  tan = request.extract("tan")
+  hbci.continueThreaded(tan)
+
+  // an dieser stelle weiter wie oben nach "hbci.executeThreaded()"
+
+------------------------------------------------------------------------------
+
 Theoretisch könnte man diesen Mechanismus generell aktivieren, so dass weder
 die Kapselung des normalen Callback-Objekts in HBCICallbackThreaded() noch die
 Verwendung von hbci.executeThreaded() notwendig wäre, so dass einzig und allein
@@ -288,3 +324,4 @@ Rückgabedaten, die der main-Thread vom HBCI-Thread erhält und an die Anwendung
 zurückliefert, kann die Anwendung entscheiden, ob ein weiteres 
 hbci.continueThreaded() notwendig ist oder ob der HBCI-Dialog regulär beendet 
 ist.
+
