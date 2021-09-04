@@ -113,10 +113,40 @@ public final class HBCIHandler
                erzeugt worden sein */
     public HBCIHandler(String hbciversion,HBCIPassport passport)
     {
+        this(hbciversion,passport,false);
+    }
+
+    /** Anlegen eines neuen HBCI-Handler-Objektes. Beim Anlegen wird
+        überprüft, ob für die angegebene HBCI-Version eine entsprechende
+        Spezifikation verfügbar ist. Außerdem wird das übergebene
+        Passport überprüft. Dabei werden - falls nicht vorhanden und falls
+        @param lazyInit nicht auf true gesetzt ist - die BPD und die UPD
+        vom Kreditinstitut geholt. Bei Passports, die asymmetrische 
+        Verschlüsselungsverfahren benutzen (RDH), wird zusätzlich überprüft, 
+        ob alle benötigten Schlüssel vorhanden sind. Gegebenenfalls werden 
+        diese aktualisiert.
+        @param hbciversion zu benutzende HBCI-Version. gültige Werte sind:
+            <ul>
+              <li><code>null</code> - es wird <em>die</em> HBCI-Version benutzt, die bei der
+                  letzten Verwendung dieses Passports benutzt wurde</li>
+              <li>"<code>201</code>" für HBCI 2.01</li>
+              <li>"<code>210</code>" für HBCI 2.1</li>
+              <li>"<code>220</code>" für HBCI 2.2</li>
+              <li>"<code>plus</code>" für HBCI+</li>
+              <li>"<code>300</code>" für FinTS 3.0</li>
+            </ul>
+        @param passport das zu benutzende Passport. Dieses muss vorher mit
+               {@link org.kapott.hbci.passport.AbstractHBCIPassport#getInstance()}
+               erzeugt worden sein
+        @param lazyInit auf true setzen, um den UPD nachgelagert per
+               {@link #initThreaded()} zu laden (zum Handling der eventuellen
+               TAN-Abfrage) */
+    public HBCIHandler(String hbciversion,HBCIPassport passport,boolean lazyInit)
+    {
         try {
             if (passport==null)
                 throw new InvalidArgumentException(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSPORT_NULL"));
-            
+
             if (hbciversion==null) {
                 hbciversion=passport.getHBCIVersion();
             }
@@ -124,13 +154,15 @@ public final class HBCIHandler
                 throw new InvalidArgumentException(HBCIUtilsInternal.getLocMsg("EXCMSG_NO_HBCIVERSION"));
 
             this.kernel=new HBCIKernelImpl(this,hbciversion);
-            
+
             this.passport=(HBCIPassportInternal)passport;
             this.passport.setParentHandlerData(this);
 
-            registerInstitute();
-            registerUser();
-            
+            if (!lazyInit) {
+                registerInstitute();
+                registerUser();
+            }
+
             if (!passport.getHBCIVersion().equals(hbciversion)) {
                 this.passport.setHBCIVersion(hbciversion);
                 this.passport.saveChanges();
@@ -141,7 +173,85 @@ public final class HBCIHandler
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CANT_CREATE_HANDLE"),e);
         }
     }
-    
+
+    /** <p>Führt die Abfrage von BPD und UPD aus, die normalerweise in
+        {@link #HBCIHandler(String, HBCIPassport)} bzw.
+        {@link #HBCIHandler(String, HBCIPassport, boolean)} mit lazyInit=false
+        durchgeführt wird, allerdings können Callbacks hier auch synchron
+        behandelt werden. Bei einem Aufruf von <code>initThreaded()</code>
+        wird der eigentliche HBCI-Dialog in einem separaten Thread geführt.
+        Bei evtl. auftretenden Callbacks wird geprüft, ob diese synchron oder
+        asynchron zu behandeln sind. Im asynchronen Fall wird der Callback wie
+        gewohnt durch Aufruf der <code>callback()</code>-Methode des 
+        registrierten "normalen" Callback-Objektes behandelt. Soll ein Callback
+        synchron behandelt werden, terminiert diese Methode.</p>
+        <p>Das zurückgegebene Status-Objekt zeigt an, ob diese Methode terminierte,
+        weil ein synchron zu behandelnder Callback aufgetreten ist oder weil die
+        Ausführung aller HBCI-Dialoge abgeschlossen ist.</p>
+        <p>Mehr Informationen dazu in der Datei 
+        <code>README.ThreadedCallbacks</code>.</p>*/
+    public HBCIExecThreadedStatus initThreaded()
+    {
+        HBCIUtils.log("main thread: starting new threaded init",HBCIUtils.LOG_DEBUG);
+
+        final ThreadSyncer sync_main=new ThreadSyncer("sync_main");
+        passport.setPersistentData("thread_syncer_main",sync_main);
+
+        new Thread() { public void run() {
+            try {
+                HBCIUtils.log("hbci thread: starting init()",HBCIUtils.LOG_DEBUG);
+
+                registerInstitute();
+                registerUser();
+                sync_main.setData("execStatus",null);
+            } catch (Exception e) {
+                // im fehlerfall muss sicherheitshalber ein noch
+                // im sync-objekt enthaltenes altes execStatus-objekt entfernt
+                // werden
+                sync_main.setData("execStatus",null);
+            } finally {
+                // die existenz von "thread_syncer" im passport entscheidet
+                // in CallbackThreaded darüber, ob der threaded callback mechanimus
+                // verwendet werden soll oder das standard-callback.
+                // der threaded mechanismus wird allerdings *nur* für hbci.init() und
+                // hbci.execute() verwendet, deshalb muss das thread_syncer-Objekt
+                // wieder entfernt werden, wenn hbci.init() beendet ist.
+                passport.setPersistentData("thread_syncer_main",null);
+
+                // egal, wie der hbci-thread beendet wird (fehlerhaft oder nicht),
+                // am ende muss auf jeden fall ein evtl. noch wartender main-thread
+                // wieder aufgeweckt werden (das kann entweder executeThreaded()
+                // oder continueThreaded() sein)
+                HBCIUtils.log("hbci thread: awaking main thread with hbci result data",HBCIUtils.LOG_DEBUG);
+                sync_main.setData("callbackData",null);
+                sync_main.stopWaiting();
+
+                HBCIUtils.log("hbci thread: thread finished",HBCIUtils.LOG_DEBUG);
+            }
+        }}.start();
+
+        // für dieses wait() brauche ich kein timeout, weil der hbci-thread auf
+        // jeden fall ein notify() macht, sobald er beendet wird oder sobald der
+        // hbci-thread callback-daten braucht. die sichere beendigung des
+        // hbci-threads wiederum wird dadurch abgesichert, dass die waits() aus
+        // dem hbci-thread (warten auf callback-daten) mit timeouts versehen sind
+        HBCIUtils.log("main thread: waiting for hbci result or callback data from hbci thread",HBCIUtils.LOG_DEBUG);
+        sync_main.startWaiting(Integer.parseInt(HBCIUtils.getParam("kernel.threaded.maxwaittime","300")), "no response from hbci thread - timeout");
+
+        HBCIExecThreadedStatus threadStatus=new HBCIExecThreadedStatus();
+        threadStatus.setCallbackData((Hashtable<String, Object>)sync_main.getData("callbackData"));
+        threadStatus.setExecStatus((HBCIExecStatus)sync_main.getData("execStatus"));
+
+        HBCIUtils.log(
+                "main thread: received answer from hbci thread, returning status "+
+                        "(isCallback="+threadStatus.isCallback()+
+                        ", isFinished="+threadStatus.isFinished()+")",
+                HBCIUtils.LOG_DEBUG);
+
+        return threadStatus;
+    }
+
+
     /**
      * Macht die anonyme Initialisierung und ruft die BPD ab.
      */
