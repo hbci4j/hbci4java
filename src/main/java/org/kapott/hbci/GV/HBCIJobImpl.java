@@ -1050,7 +1050,7 @@ public abstract class HBCIJobImpl
                 HBCIUtilsInternal.getCallback().callback(getMainPassport(),
                                                  HBCICallback.HAVE_CRC_ERROR,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_HAVE_CRC_ERROR"),
-                                                 HBCICallback.ResponseType.TYPE_TEXT,
+                                                 HBCICallback.ResponseType.TEXT,
                                                  sb);
 
                 int idx=sb.indexOf("|");
@@ -1093,7 +1093,7 @@ public abstract class HBCIJobImpl
     			HBCIUtilsInternal.getCallback().callback(getMainPassport(),
     					HBCICallback.HAVE_IBAN_ERROR,
     					HBCIUtilsInternal.getLocMsg("CALLB_HAVE_IBAN_ERROR"),
-    					HBCICallback.ResponseType.TYPE_TEXT,
+    					HBCICallback.ResponseType.TEXT,
     					sb);
 
     			iban=sb.toString();

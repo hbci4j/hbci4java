@@ -109,11 +109,11 @@ public interface HBCICallback
         <p>Beim Auftreten dieses Callbacks muss die Anwendung also die gerade empfangenen Schlüsseldaten der
         Bank (öffentlicher Signier-/Chiffrierschlüssel) geeignet anzeigen (Exponent, Modulus, Hash-Wert) und
         den Anwender auffordern, diese Daten mit denen aus dem INI-Brief zu vergleichen. Dieser Callback
-        erwartet als Rückgabedaten einen Boolean-Wert (siehe {@link ResponseType#TYPE_BOOLEAN}). Sind die Daten
+        erwartet als Rückgabedaten einen Boolean-Wert (siehe {@link ResponseType#BOOLEAN}). Sind die Daten
         in Ordnung, so muss die Callback-Methode einen leeren String in dem Rückgabedaten-StringBuffer
         zurückgeben, ansonsten füllt sie den StringBuffer mit einem beliebigen nichtleeren String (siehe dazu
         {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String, ResponseType,StringBuffer)} und
-        die Beschreibung des Rückgabe-Datentyps {@link ResponseType#TYPE_BOOLEAN})).</p>
+        die Beschreibung des Rückgabe-Datentyps {@link ResponseType#BOOLEAN})).</p>
         <p>Da im Moment keine dokumentierten Methoden zur Verfügung stehen, um aus einem Passport die
         entsprechenden Schlüsseldaten zum Anzeigen zu extrahieren, wird folgendes Vorgehen empfohlen:
         die Anwendung erzeugt eine HBCICallback-Klasse, die von einer der bereits vorhandenen 
@@ -200,7 +200,7 @@ public interface HBCICallback
         im <code>retData</code> Rückgabedaten-Objekt ein leerer String zurückgegeben wird, oder er kann
         erzwingen, dass <em>HBCI4Java</em> tatsächlich abbricht, indem ein nicht-leerer String im
         <code>retData</code>-Objekt zurückgegen wird. Siehe dazu auch die Beschreibung des
-        Rückgabe-Datentyps {@link ResponseType#TYPE_BOOLEAN}.</p>
+        Rückgabe-Datentyps {@link ResponseType#BOOLEAN}.</p>
         <p>Das Ignorieren eines Fehlers kann dazu führen, dass <em>HBCI4Java</em> später trotzdem eine
         Exception erzeugt, z.B. weil der Fehler in einem bestimmten Submodul doch nicht einfach ignoriert
         werden kann, oder es kann auch dazu führen, dass Aufträge von der Bank nicht angenommen werden usw.
@@ -361,11 +361,11 @@ public interface HBCICallback
     enum ResponseType
     {
         /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
-        TYPE_NONE,
+        NONE,
         /** erwarteter Datentyp der Antwort: geheimer Text (bei Eingabe nicht anzeigen) */
-        TYPE_SECRET,
+        SECRET,
         /** erwarteter Datentyp der Antwort: "normaler" Text */
-        TYPE_TEXT,
+        TEXT,
         /**
          * <p>erwarteter Datentyp der Antwort: ja/nein, true/false, weiter/abbrechen
          * oder ähnlich. Da das Rückgabedatenobjekt immer ein <code>StringBuffer</code> ist, wird hier folgende Kodierung
@@ -378,7 +378,7 @@ public interface HBCICallback
          * <p>Siehe dazu auch die Hinweise in der Paketbeschreibung zum Paket
          * <code>org.kapott.hbci.callback</code>.</p>
          */
-        TYPE_BOOLEAN
+        BOOLEAN
     }
     
     /** Kernel-Status: Erzeuge Auftrag zum Versenden. Als Zusatzinformation 

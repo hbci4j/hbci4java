@@ -97,7 +97,7 @@ public class HBCIPassportSIZRDHFile
                     HBCIUtilsInternal.getCallback().callback(this,
                                                      HBCICallback.NEED_PASSPHRASE_LOAD,
                                                      HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                                     HBCICallback.ResponseType.TYPE_SECRET,
+                                                     HBCICallback.ResponseType.SECRET,
                                                      retData);
                     LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                     setPassphrase(retData.toString());
@@ -158,7 +158,7 @@ public class HBCIPassportSIZRDHFile
         HBCIUtilsInternal.getCallback().callback(this,
                                          HBCICallback.NEED_SIZENTRY_SELECT,
                                          "*** select one of the following entries",
-                                         HBCICallback.ResponseType.TYPE_TEXT,
+                                         HBCICallback.ResponseType.TEXT,
                                          sb);
         return Integer.parseInt(sb.toString());
     }

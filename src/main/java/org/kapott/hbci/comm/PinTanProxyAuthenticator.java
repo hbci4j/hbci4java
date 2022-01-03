@@ -55,7 +55,7 @@ extends Authenticator
                     passport,
                     HBCICallback.NEED_PROXY_USER,
                     HBCIUtilsInternal.getLocMsg("CALLB_PROXY_USERNAME"),
-                    HBCICallback.ResponseType.TYPE_TEXT,
+                    HBCICallback.ResponseType.TEXT,
                     retData);
             user=retData.toString();
             LogFilter.getInstance().addSecretData(user,"X",LogFilter.FILTER_IDS);
@@ -69,7 +69,7 @@ extends Authenticator
                     passport,
                     HBCICallback.NEED_PROXY_PASS,
                     HBCIUtilsInternal.getLocMsg("CALLB_PROXY_PASSWD"),
-                    HBCICallback.ResponseType.TYPE_SECRET,
+                    HBCICallback.ResponseType.SECRET,
                     retData);
             pass=retData.toString();
             LogFilter.getInstance().addSecretData(pass,"X",LogFilter.FILTER_SECRETS);

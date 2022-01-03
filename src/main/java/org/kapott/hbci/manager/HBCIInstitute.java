@@ -159,7 +159,7 @@ public final class HBCIInstitute
         HBCIUtilsInternal.getCallback().callback(passport,
                                          HBCICallback.NEED_NEW_INST_KEYS_ACK,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_INST_KEYS"),
-                                         HBCICallback.ResponseType.TYPE_BOOLEAN,
+                                         HBCICallback.ResponseType.BOOLEAN,
                                          answer);
 
         if (answer.length()>0) {

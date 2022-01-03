@@ -58,7 +58,7 @@ public abstract class Comm
         this.filter=parentPassport.getCommFilter();
         
         HBCIUtilsInternal.getCallback().callback(parentPassport,HBCICallback.NEED_CONNECTION,
-                HBCIUtilsInternal.getLocMsg("CALLB_NEED_CONN"),HBCICallback.ResponseType.TYPE_NONE,new StringBuffer());
+                HBCIUtilsInternal.getLocMsg("CALLB_NEED_CONN"),HBCICallback.ResponseType.NONE,new StringBuffer());
     }
 
     public MSG pingpong(String msgName, MSG msg)
@@ -147,6 +147,6 @@ public abstract class Comm
     {
         closeConnection();
         HBCIUtilsInternal.getCallback().callback(getParentPassport(),HBCICallback.CLOSE_CONNECTION,
-                HBCIUtilsInternal.getLocMsg("CALLB_CLOSE_CONN"),HBCICallback.ResponseType.TYPE_NONE,new StringBuffer());
+                HBCIUtilsInternal.getLocMsg("CALLB_CLOSE_CONN"),HBCICallback.ResponseType.NONE,new StringBuffer());
     }
 }

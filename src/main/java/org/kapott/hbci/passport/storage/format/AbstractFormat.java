@@ -104,7 +104,7 @@ public abstract class AbstractFormat implements PassportFormat
         HBCIUtilsInternal.getCallback().callback(passport,
                                          forSaving ? HBCICallback.NEED_PASSPHRASE_SAVE : HBCICallback.NEED_PASSPHRASE_LOAD,
                                          forSaving ? HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW") : HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                         HBCICallback.ResponseType.TYPE_SECRET,
+                                         HBCICallback.ResponseType.SECRET,
                                          passphrase);
         if (passphrase.length() == 0)
             throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSZERO"));

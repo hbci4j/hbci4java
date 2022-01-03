@@ -263,7 +263,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                 HBCIUtilsInternal.getCallback().callback(this,
                                                  HBCICallback.NEED_PT_PIN,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTPIN"),
-                                                 HBCICallback.ResponseType.TYPE_SECRET,
+                                                 HBCICallback.ResponseType.SECRET,
                                                  s);
                 if (s.length()==0) {
                     throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PINZERO"));
@@ -307,7 +307,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                                 HBCIUtilsInternal.getCallback().callback(this,
                                                 HBCICallback.NEED_PT_TAN,
                                                 HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTTAN"),
-                                                HBCICallback.ResponseType.TYPE_TEXT,
+                                                HBCICallback.ResponseType.TEXT,
                                                 s);
                             }
                             catch (HBCI_Exception e)
@@ -400,7 +400,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     }
 
                     // Callback durchfuehren
-                    HBCIUtilsInternal.getCallback().callback(this,callback,msg,HBCICallback.ResponseType.TYPE_TEXT,payload);
+                    HBCIUtilsInternal.getCallback().callback(this,callback,msg,HBCICallback.ResponseType.TEXT,payload);
 
                     setPersistentData("externalid",null); // External-ID aus Passport entfernen
                     if (payload == null || payload.length()==0) {

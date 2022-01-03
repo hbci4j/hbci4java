@@ -144,7 +144,7 @@ public class HBCIUtilsInternal
             getCallback().callback(passport,
                                    HBCICallback.HAVE_ERROR,
                                    msg,
-                                   HBCICallback.ResponseType.TYPE_BOOLEAN,
+                                   HBCICallback.ResponseType.BOOLEAN,
                                    sb);
             if (sb.length()==0) {
                 HBCIUtils.log(msg,HBCIUtils.LOG_ERR);
