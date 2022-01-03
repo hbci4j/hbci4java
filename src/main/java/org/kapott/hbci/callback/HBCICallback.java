@@ -40,7 +40,8 @@ import org.kapott.hbci.passport.HBCIPassport;
     Methode dieses Passwort direkt zurückgeben, ohne den Anwender erneut danach zu fragen. </p>*/ 
 public interface HBCICallback
 {
-    enum Reason {
+  enum Reason
+  {
     /** Ursache des Callback-Aufrufes: Chipkarte benötigt (im Chipkartenterminal). Dieser Callback
         tritt auf, wenn der HBCI-Kernel auf das Einlegen der HBCI-Chipkarte in den Chipkartenleser
         wartet. Als Reaktion auf diesen Callback darf nur eine entsprechende Aufforderung o.ä.
@@ -358,30 +359,32 @@ public interface HBCICallback
     /** <p>Ursache des Callbacks: Dialogantwort 3072 der GAD - UserID und CustomerID werden ausgetauscht */
     /** <p>im Parameter retData stehen die neuen Daten im Format UserID|CustomerID drin */
     USERID_CHANGED
-    }
+  }
 
-    enum ResponseType
-    {
-        /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
-        NONE,
-        /** erwarteter Datentyp der Antwort: geheimer Text (bei Eingabe nicht anzeigen) */
-        SECRET,
-        /** erwarteter Datentyp der Antwort: "normaler" Text */
-        TEXT,
-        /**
-         * <p>erwarteter Datentyp der Antwort: ja/nein, true/false, weiter/abbrechen
-         * oder ähnlich. Da das Rückgabedatenobjekt immer ein <code>StringBuffer</code> ist, wird hier folgende Kodierung
-         * verwendet: die beiden möglichen Werte für die Antwort (true/false, ja/nein, weiter/abbrechen, usw.) werden
-         * dadurch unterschieden, dass für den einen Wert ein <em>leerer</em> String zurückgegeben wird, für den anderen
-         * Wert ein <em>nicht leerer</em> beliebiger String. Einige Callback-Reasons können auch den Inhalt des nicht-leeren
-         * Strings auswerten. Eine genaue Beschreibung der jeweilis möglichen Rückgabedaten befinden sich in der
-         * Beschreibung der Callback-Reasons (<code>HAVE_*</code> bzw. <code>NEED_*</code>), bei denen Boolean-Daten als
-         * Rückgabewerte benötigt werden.</p>
-         * <p>Siehe dazu auch die Hinweise in der Paketbeschreibung zum Paket
-         * <code>org.kapott.hbci.callback</code>.</p>
-         */
-        BOOLEAN
-    }
+  enum ResponseType
+  {
+    /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
+    NONE,
+    /** erwarteter Datentyp der Antwort: geheimer Text (bei Eingabe nicht anzeigen) */
+    SECRET,
+    /** erwarteter Datentyp der Antwort: "normaler" Text */
+    TEXT,
+    /** <p>erwarteter Datentyp der Antwort: ja/nein, true/false, weiter/abbrechen
+        oder ähnlich. Da das
+        Rückgabedatenobjekt immer ein <code>StringBuffer</code> ist, wird hier
+        folgende Kodierung verwendet: die beiden möglichen Werte für die
+        Antwort (true/false, ja/nein, weiter/abbrechen, usw.) werden dadurch
+        unterschieden, dass für den einen Wert ein <em>leerer</em> String
+        zurückgegeben wird, für den anderen Wert ein <em>nicht leerer</em>
+        beliebiger String. Einige Callback-Reasons können auch den Inhalt
+        des nicht-leeren Strings auswerten. Eine genaue Beschreibung der jeweils
+        möglichen Rückgabedaten befinden sich in der Beschreibung der
+        Callback-Reasons (<code>HAVE_*</code> bzw. <code>NEED_*</code>), bei
+        denen Boolean-Daten als Rückgabewerte benötigt werden.</p>
+        <p>Siehe dazu auch die Hinweise in der Paketbeschreibung zum Paket
+        {@link org.kapott.hbci.callback}.</p> */
+    BOOLEAN
+  }
     
     /** Kernel-Status: Erzeuge Auftrag zum Versenden. Als Zusatzinformation 
         wird bei diesem Callback das <code>HBCIJob</code>-Objekt des 
