@@ -71,11 +71,41 @@
 				<artifactId>maven-jaxb22-plugin</artifactId>
 				<version>${maven-jaxb2-plugin.version}</version>
 				<executions>
-        
           <!--
             CAMT: Offizieller Download der Schema-Datei von https://www.iso20022.org/payments_messages.page
             Vorherige Versionen von https://www.iso20022.org/message_archive.page#sixth_b2c
+
+            CAMT.052 = Bank-to-Customer Cash Management
+            PAIN.001-008 = Payments Initiation
           -->
+					<execution>
+						<id>camt.052.001.09</id>
+						<!-- 31 May 2020 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>camt.052.001.09.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_09</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/camt_052_001_09/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>camt.052.001.08</id>
+						<!-- 19 February 2019 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>camt.052.001.08.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_08</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/camt_052_001_08/*.java</produces>
+						</configuration>
+					</execution>
           <execution>
             <id>camt.052.001.07</id>
             <goals>
@@ -167,11 +197,65 @@
               <produces>org/kapott/hbci/sepa/jaxb/camt_052_001_01/*.java</produces>
             </configuration>
           </execution>
-          
+
           <!--
-            PAIN: Offizieller Download der Schema-Dateien und vorherigen Versionen
+            PAIN: ehemalige Seite für Download der Schema-Dateien und vorherigen Versionen
             von http://www.ebics.de/spezifikation/dfue-abkommen-anlage-3-formatstandards/
+            Seit 2022 von https://www.iso20022.org/payments_messages.page
+
+            Für SEPA-Formatversionen (für Überweisungen und Lastschriften sowie Payment Status Report), die
+            von Zahlungsdienstleistern in Deutschland in der Regel noch unterstützt werden, siehe
+            https://www.ebics.de/de/datenformate/format-lifecycle
+            V3.0 (ab 20.11.2016): 001.001.03, 008.001.02, 002.001.03 (GBIC_1)
+            V3.1 (ab 19.11.2017): 001.001.03, 008.001.02, 002.001.03 (GBIC_2)
+            V3.2 (ab 18.11.2018): -
+            V3.3 (ab 17.11.2019): 001.001.03, 008.001.02, 002.001.03 (GBIC_3)
+            V3.4 (ab 22.11.2020): -
+            V3.5 (ab 21.11.2021): 001.001.09
+            V3.6 (ab xx.11.2022): -
+            V3.7 (ab xx.11.2023): 001.001.09, 008.001.08, 002.001.10
           -->
+					<execution>
+						<id>pain.001.001.11</id>
+						<!-- 20 May 2021 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.001.001.11.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_001_001_11</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_001_001_11/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pain.001.001.09</id>
+						<!-- 01 January 2019 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.001.001.09.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_001_001_09</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_001_001_09/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pain.001.001.03</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.001.001.03.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_001_001_03</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_001_001_03/*.java</produces>
+						</configuration>
+					</execution>
 					<execution>
 						<id>pain.001.001.02</id>
 						<goals>
@@ -225,19 +309,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>pain.001.001.03</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes>
-								<include>pain.001.001.03.xsd</include>
-							</schemaIncludes>
-							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_001_001_03</generatePackage>
-							<produces>org/kapott/hbci/sepa/jaxb/pain_001_001_03/*.java</produces>
-						</configuration>
-					</execution>
-					<execution>
 						<id>pain.002.002.02</id>
 						<goals>
 							<goal>generate</goal>
@@ -264,7 +335,36 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>pain.002.001.12</id>
+						<!-- 20 May 2021 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.002.001.12.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_12</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_002_001_12/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pain.002.001.10</id>
+						<!-- 01 January 2019 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.002.001.10.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_10</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_002_001_10/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
 						<id>pain.002.001.03</id>
+						<!-- 01 March 2009 -->
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -277,7 +377,50 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>pain.008.001.10</id>
+						<!-- 20 May 2021 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.008.001.10.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_008_001_10</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_008_001_10/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pain.008.001.08</id>
+						<!-- 01 January 2019 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.008.001.08.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_008_001_08</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_008_001_08/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pain.008.001.02</id>
+						<!-- 01 March 2009 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>pain.008.001.02.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_008_001_02</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/pain_008_001_02/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
 						<id>pain.008.001.01</id>
+						<!-- 01 September 2006 -->
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -326,19 +469,6 @@
 							</schemaIncludes>
 							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_008_003_02</generatePackage>
 							<produces>org/kapott/hbci/sepa/jaxb/pain_008_003_02/*.java</produces>
-						</configuration>
-					</execution>
-					<execution>
-						<id>pain.008.001.02</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes>
-								<include>pain.008.001.02.xsd</include>
-							</schemaIncludes>
-							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_008_001_02</generatePackage>
-							<produces>org/kapott/hbci/sepa/jaxb/pain_008_001_02/*.java</produces>
 						</configuration>
 					</execution>
 				</executions>
