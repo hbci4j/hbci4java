@@ -87,7 +87,7 @@ public abstract class AbstractHBCICallback
     
     /** Standard-Verhalten - gibt für alle Callbacks <code>false</code> (= asynchrone
      * Callback-Behandlung) zurück.*/
-    public boolean useThreadedCallback(HBCIPassport passport, int reason, String msg,
+    public boolean useThreadedCallback(HBCIPassport passport, Reason reason, String msg,
                                        ResponseType datatype, StringBuffer retData)
     {
         return false;

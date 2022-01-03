@@ -138,7 +138,7 @@ public final class HBCICallbackNative
     /** Externe, von der Anwendung zu implementierende Methode. Es muss von der
      * nativen Anwendung eine Methode mit dieser Signatur erzeugt und via JNI
      * registriert werden. */
-    public native void nativeCallback(HBCIPassport passport,int reason,String msg,ResponseType datatype,StringBuffer retData);
+    public native void nativeCallback(HBCIPassport passport,Reason reason,String msg,ResponseType datatype,StringBuffer retData);
 
     /** Externe, von der Anwendung zu implementierende Methode. Es muss von der
      * nativen Anwendung eine Methode mit dieser Signatur erzeugt und via JNI
@@ -151,7 +151,7 @@ public final class HBCICallbackNative
         nativeLog(msg,level,date,trace);
     }
 
-    public void callback(HBCIPassport passport,int reason,final String msg,ResponseType datatype,StringBuffer retData)
+    public void callback(HBCIPassport passport,Reason reason,final String msg,ResponseType datatype,StringBuffer retData)
     {
         nativeCallback(passport,reason,msg,datatype,retData);
     }

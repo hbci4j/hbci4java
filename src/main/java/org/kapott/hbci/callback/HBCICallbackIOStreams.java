@@ -114,7 +114,7 @@ public class HBCICallbackIOStreams
     entsprechende Aufforderung ausgegeben. Bei Callbacks, die eine Eingabe vom
     Nutzer erwarten, wird die entsprechende Eingabeaufforderung ausgegeben und die
     Eingabe vom <code>inStream</code> gelesen.*/
-    public void callback(HBCIPassport passport, int reason, String msg, ResponseType datatype, StringBuffer retData)
+    public void callback(HBCIPassport passport, Reason reason, String msg, ResponseType datatype, StringBuffer retData)
     {
         getOutStream().println(HBCIUtilsInternal.getLocMsg("CALLB_PASS_IDENT",passport.getClientData("init")));
         
@@ -131,7 +131,7 @@ public class HBCICallbackIOStreams
                     getOutStream().flush();
                     
                     st=this.readLine();
-                    if (reason==NEED_PASSPHRASE_SAVE) {
+                    if (reason==Reason.NEED_PASSPHRASE_SAVE) {
                         getOutStream().print(msg+" (again): ");
                         getOutStream().flush();
                         
@@ -186,9 +186,9 @@ public class HBCICallbackIOStreams
                     if (st.length()==0)
                         st=retData.toString();
                     
-                    if (reason==NEED_BLZ) {
+                    if (reason==Reason.NEED_BLZ) {
                     	logfilter.addSecretData(st,"X",LogFilter.FILTER_MOST);
-                    } else if (reason==NEED_USERID || reason==NEED_CUSTOMERID || reason==NEED_PROXY_USER) {
+                    } else if (reason==Reason.NEED_USERID || reason==Reason.NEED_CUSTOMERID || reason==Reason.NEED_PROXY_USER) {
                     	logfilter.addSecretData(st,"X",LogFilter.FILTER_IDS);
                     }
                     
@@ -345,7 +345,7 @@ public class HBCICallbackIOStreams
                     break;
     
                 default:
-                    throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
+                    throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN", reason));
             }
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_ERR"),e);

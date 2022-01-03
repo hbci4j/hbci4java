@@ -262,7 +262,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                 StringBuffer s=new StringBuffer();
 
                 HBCIUtilsInternal.getCallback().callback(this,
-                                                 HBCICallback.NEED_PT_PIN,
+                                                 HBCICallback.Reason.NEED_PT_PIN,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTPIN"),
                                                  ResponseType.SECRET,
                                                  s);
@@ -306,7 +306,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                             try
                             {
                                 HBCIUtilsInternal.getCallback().callback(this,
-                                                HBCICallback.NEED_PT_TAN,
+                                                HBCICallback.Reason.NEED_PT_TAN,
                                                 HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTTAN"),
                                                 ResponseType.TEXT,
                                                 s);
@@ -371,7 +371,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     final StringBuffer payload = new StringBuffer();
                     final String msg = secmechInfo.getProperty("name")+"\n"+secmechInfo.getProperty("inputinfo")+"\n\n"+challenge;
 
-                    int callback = HBCICallback.NEED_PT_TAN;
+                    HBCICallback.Reason callback = HBCICallback.Reason.NEED_PT_TAN;
 
                     // Um sicherzustellen, dass wird keinen falschen Callback ausloesen, weil wir die HHD-Version
                     // eventuell falsch erkannt haben, versuchen wir bei PhotoTAN und QR-Code zusaetzlich, die Daten
@@ -381,14 +381,14 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                         // Bei PhotoTAN haengen wir ungeparst das HHDuc an. Das kann dann auf
                         // Anwendungsseite per MatrixCode geparst werden
                         payload.append(hhduc);
-                        callback = HBCICallback.NEED_PT_PHOTOTAN;
+                        callback = HBCICallback.Reason.NEED_PT_PHOTOTAN;
                     }
                     else if (hhd.getType() == Type.QRCODE && (QRCode.tryParse(hhduc,msg) != null))
                     {
                         // Bei QR-Code haengen wir ungeparst das HHDuc an. Das kann dann auf
                         // Anwendungsseite per QRCode geparst werden
                         payload.append(hhduc);
-                        callback = HBCICallback.NEED_PT_QRTAN;
+                        callback = HBCICallback.Reason.NEED_PT_QRTAN;
                     }
                     else
                     {

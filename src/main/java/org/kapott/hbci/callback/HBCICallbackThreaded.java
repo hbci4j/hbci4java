@@ -39,7 +39,7 @@ import org.kapott.hbci.passport.HBCIPassportInternal;
  * dafür, dass {@link org.kapott.hbci.manager.HBCIHandler#executeThreaded() hbci.executeThreaded()}
  * terminiert.</p>
  * <p>Mehr Informationen sind in der Datei <code>README.ThreadedCallbacks</code>
- * sowie unter {@link HBCICallback#useThreadedCallback(HBCIPassport, int, String, ResponseType, StringBuffer)}
+ * sowie unter {@link HBCICallback#useThreadedCallback(HBCIPassport, Reason, String, ResponseType, StringBuffer)}
  * zu finden.</p> */
 public final class HBCICallbackThreaded 
     extends AbstractHBCICallback
@@ -69,7 +69,7 @@ public final class HBCICallbackThreaded
      * von dieser Methode behandelt, in dem der entsprechende Aufruf von
      * {@link org.kapott.hbci.manager.HBCIHandler#executeThreaded()} terminiert
      * und Callback-Info-Daten zurückgibt. */
-    public void callback(HBCIPassport passport,int reason,String msg,
+    public void callback(HBCIPassport passport,Reason reason,String msg,
                          ResponseType datatype,StringBuffer retData)
     {
         HBCIUtils.log("hbci thread: threaded callback received", HBCIUtils.LOG_DEBUG);
@@ -94,7 +94,7 @@ public final class HBCICallbackThreaded
                 Hashtable<String, Object> callbackData=new Hashtable<String, Object>();
                 callbackData.put("method","callback");
                 callbackData.put("passport",passport);
-                callbackData.put("reason",new Integer(reason));
+                callbackData.put("reason", reason);
                 callbackData.put("msg",msg);
                 callbackData.put("dataType",datatype);
                 callbackData.put("retData",retData);

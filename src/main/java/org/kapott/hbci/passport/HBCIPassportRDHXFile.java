@@ -97,7 +97,7 @@ public class HBCIPassportRDHXFile
                 if (this.passphrase==null) {
                     StringBuffer retData=new StringBuffer();
                     HBCIUtilsInternal.getCallback().callback(this,
-                            HBCICallback.NEED_PASSPHRASE_LOAD,
+                            HBCICallback.Reason.NEED_PASSPHRASE_LOAD,
                             HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                             ResponseType.SECRET,
                             retData);
@@ -130,7 +130,7 @@ public class HBCIPassportRDHXFile
                     
                     HBCIUtilsInternal.getCallback().callback(
                         this,
-                        HBCICallback.NEED_SIZENTRY_SELECT,
+                        HBCICallback.Reason.NEED_SIZENTRY_SELECT,
                         "*** select one of the following entries",
                         ResponseType.TEXT,
                         possibilities);
@@ -189,7 +189,7 @@ public class HBCIPassportRDHXFile
             if (this.passphrase == null) {
                 StringBuffer retData = new StringBuffer();
                 HBCIUtilsInternal.getCallback().callback(this,
-                        HBCICallback.NEED_PASSPHRASE_SAVE,
+                        HBCICallback.Reason.NEED_PASSPHRASE_SAVE,
                         HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                         ResponseType.SECRET, retData);
                 // TODO: passwort-bedingungen nach spez. prüfen

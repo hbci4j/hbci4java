@@ -103,7 +103,7 @@ public abstract class AbstractFormat implements PassportFormat
         
         StringBuffer passphrase = new StringBuffer();
         HBCIUtilsInternal.getCallback().callback(passport,
-                                         forSaving ? HBCICallback.NEED_PASSPHRASE_SAVE : HBCICallback.NEED_PASSPHRASE_LOAD,
+                                         forSaving ? HBCICallback.Reason.NEED_PASSPHRASE_SAVE : HBCICallback.Reason.NEED_PASSPHRASE_LOAD,
                                          forSaving ? HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW") : HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                                          ResponseType.SECRET,
                                          passphrase);

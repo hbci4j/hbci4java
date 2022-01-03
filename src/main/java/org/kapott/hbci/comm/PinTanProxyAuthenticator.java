@@ -54,7 +54,7 @@ extends Authenticator
             StringBuffer retData=new StringBuffer();
             callback.callback(
                     passport,
-                    HBCICallback.NEED_PROXY_USER,
+                    HBCICallback.Reason.NEED_PROXY_USER,
                     HBCIUtilsInternal.getLocMsg("CALLB_PROXY_USERNAME"),
                     ResponseType.TEXT,
                     retData);
@@ -68,7 +68,7 @@ extends Authenticator
             StringBuffer retData=new StringBuffer();
             callback.callback(
                     passport,
-                    HBCICallback.NEED_PROXY_PASS,
+                    HBCICallback.Reason.NEED_PROXY_PASS,
                     HBCIUtilsInternal.getLocMsg("CALLB_PROXY_PASSWD"),
                     ResponseType.SECRET,
                     retData);

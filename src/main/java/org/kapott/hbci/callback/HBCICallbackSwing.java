@@ -103,7 +103,7 @@ public class HBCICallbackSwing
         passports=new Hashtable<HBCIPassport, Hashtable<String, Object>>();
     }
     
-    public void callback(final HBCIPassport passport,int reason,String msg,int datatype,StringBuffer retData)
+    public void callback(final HBCIPassport passport,Reason reason,String msg,int datatype,StringBuffer retData)
     {
         if (msg==null)
             msg="";
@@ -117,7 +117,7 @@ public class HBCICallbackSwing
             currentData.put("msgcounter",new Integer(0));
             passports.put(passport,currentData);
         }
-        currentData.put("reason",new Integer(reason));
+        currentData.put("reason", reason);
         currentData.put("msg",msg);
         
         if (retData!=null)
@@ -239,7 +239,7 @@ public class HBCICallbackSwing
                     break;
 
                 default:
-                    throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
+                    throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN", reason));
             }
         } catch (Exception e) {
             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_ERR"),e);
@@ -290,7 +290,7 @@ public class HBCICallbackSwing
             mainbox.add(Box.createVerticalStrut(8));
             
             JPasswordField tempinput=null;
-            if (((Integer)currentData.get("reason")).intValue()==NEED_PASSPHRASE_SAVE) {
+            if (currentData.get("reason")==Reason.NEED_PASSPHRASE_SAVE) {
                 tempinput=new JPasswordField(10);
                 mainbox.add(tempinput);
                 mainbox.add(Box.createVerticalStrut(8));

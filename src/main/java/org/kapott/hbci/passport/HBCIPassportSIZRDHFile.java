@@ -96,7 +96,7 @@ public class HBCIPassportSIZRDHFile
                 if (passphrase==null) {
                     StringBuffer retData=new StringBuffer();
                     HBCIUtilsInternal.getCallback().callback(this,
-                                                     HBCICallback.NEED_PASSPHRASE_LOAD,
+                                                     HBCICallback.Reason.NEED_PASSPHRASE_LOAD,
                                                      HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                                                      ResponseType.SECRET,
                                                      retData);
@@ -157,7 +157,7 @@ public class HBCIPassportSIZRDHFile
     {
         StringBuffer sb=new StringBuffer(possibilities);
         HBCIUtilsInternal.getCallback().callback(this,
-                                         HBCICallback.NEED_SIZENTRY_SELECT,
+                                         HBCICallback.Reason.NEED_SIZENTRY_SELECT,
                                          "*** select one of the following entries",
                                          ResponseType.TEXT,
                                          sb);

@@ -158,7 +158,7 @@ public final class HBCIInstitute
     {
         StringBuffer answer=new StringBuffer();
         HBCIUtilsInternal.getCallback().callback(passport,
-                                         HBCICallback.NEED_NEW_INST_KEYS_ACK,
+                                         HBCICallback.Reason.NEED_NEW_INST_KEYS_ACK,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_INST_KEYS"),
                                          ResponseType.BOOLEAN,
                                          answer);

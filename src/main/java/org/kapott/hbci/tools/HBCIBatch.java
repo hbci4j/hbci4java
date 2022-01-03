@@ -166,7 +166,7 @@ public class HBCIBatch {
 
         // modifizierte callback-methode, die daten-anfragen "automatisch"
         // beantwortet
-        public synchronized void callback(HBCIPassport passport, int reason, String msg, int datatype,
+        public synchronized void callback(HBCIPassport passport, Reason reason, String msg, ResponseType datatype,
                 StringBuffer retData) {
             switch (reason) {
             case NEED_CHIPCARD:

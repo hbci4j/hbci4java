@@ -1049,7 +1049,7 @@ public abstract class HBCIJobImpl
             	// wenn beim validieren ein fehler auftrat, nach neuen daten fragen
                 StringBuffer sb=new StringBuffer(blz).append("|").append(number);
                 HBCIUtilsInternal.getCallback().callback(getMainPassport(),
-                                                 HBCICallback.HAVE_CRC_ERROR,
+                                                 HBCICallback.Reason.HAVE_CRC_ERROR,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_HAVE_CRC_ERROR"),
                                                  ResponseType.TEXT,
                                                  sb);
@@ -1092,7 +1092,7 @@ public abstract class HBCIJobImpl
     		if (!crcok) {
     			StringBuffer sb=new StringBuffer(iban);
     			HBCIUtilsInternal.getCallback().callback(getMainPassport(),
-    					HBCICallback.HAVE_IBAN_ERROR,
+    					HBCICallback.Reason.HAVE_IBAN_ERROR,
     					HBCIUtilsInternal.getLocMsg("CALLB_HAVE_IBAN_ERROR"),
     					ResponseType.TEXT,
     					sb);

@@ -21,7 +21,7 @@ import org.kapott.hbci.passport.HBCIPassport;
 public class HBCICallbackUnsupported implements HBCICallback {
 
     @Override
-    public void callback(HBCIPassport passport, int reason, String msg, ResponseType datatype, StringBuffer retData)
+    public void callback(HBCIPassport passport, Reason reason, String msg, ResponseType datatype, StringBuffer retData)
     {
         throw new UnsupportedOperationException("Unexpected HBCI callback");
     }
@@ -45,7 +45,7 @@ public class HBCICallbackUnsupported implements HBCICallback {
     }
 
     @Override
-    public boolean useThreadedCallback(HBCIPassport passport, int reason, String msg, ResponseType datatype, StringBuffer retData)
+    public boolean useThreadedCallback(HBCIPassport passport, Reason reason, String msg, ResponseType datatype, StringBuffer retData)
     {
         throw new UnsupportedOperationException("Unexpected HBCI callback");
     }

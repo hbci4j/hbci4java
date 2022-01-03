@@ -40,6 +40,7 @@ import org.kapott.hbci.passport.HBCIPassport;
     Methode dieses Passwort direkt zurückgeben, ohne den Anwender erneut danach zu fragen. </p>*/ 
 public interface HBCICallback
 {
+    enum Reason {
     /** Ursache des Callback-Aufrufes: Chipkarte benötigt (im Chipkartenterminal). Dieser Callback
         tritt auf, wenn der HBCI-Kernel auf das Einlegen der HBCI-Chipkarte in den Chipkartenleser
         wartet. Als Reaktion auf diesen Callback darf nur eine entsprechende Aufforderung o.ä.
@@ -47,14 +48,14 @@ public interface HBCICallback
         "Warten" auf die Chipkarte sowie das Erkennen, dass eine Chipkarte eingelegt wurde,
         wird von <em>HBCI4Java</em> übernommen. Ist das Einlegen der Chipkarte abgeschlossen, so wird ein
         weiterer Callback mit dem Code <code>HAVE_CHIPCARD</code> erzeugt.*/
-    public final static int NEED_CHIPCARD=2;
+    NEED_CHIPCARD,
     /** Ursache des Callback-Aufrufes: PIN-Eingabe am Chipkartenterminal erwartet. Dieser Callback
         zeigt an, dass der Anwender jetzt die HBCI-PIN am Chipkartenterminal eingeben muss. Hier
         gilt das gleiche wie beim Code <code>NEED_CHIPCARD</code>: Die Callback-Methode darf hier
         nur eine entsprechende Meldung o.ä. anzeigen und muss dann sofort zurückkehren -- <em>HBCI4Java</em> erledigt die
         eigentliche Entgegennahme der PIN. Wurde die PIN eingegeben (oder die Eingabe abgebrochen),
         so wird ein weiterer Callback-Aufruf mit dem Code <code>HAVE_HARDPIN</code> erzeugt. */
-    public final static int NEED_HARDPIN=3;
+    NEED_HARDPIN,
     /** Ursache des Callback-Aufrufes: PIN-Eingabe über Computer-Tastatur benötigt. Alternativ zum
         Callback <code>NEED_HARDPIN</code> kann dieser Callback auftreten, wenn die direkte PIN-Eingabe
         am Chipkartenterminal nicht möglich oder deaktiviert ist. In diesem Fall muss die PIN
@@ -62,25 +63,25 @@ public interface HBCICallback
         ein, welche über diesen Callback-Aufruf an den HBCI-Kernel übergeben wird. Der Kernel
         übermittelt die PIN anschließend zur Verifikation an die Chipkarte. In diesem Falle gibt es
         keinen weiteren Callback-Aufruf, wenn die PIN-Verifikation abgeschlossen ist! */
-    public final static int NEED_SOFTPIN=4;
+    NEED_SOFTPIN,
     /** Ursache des Callback-Aufrufes: PIN-Eingabe über Chipkartenterminal abgeschlossen. Dieser Callback
         tritt auf, wenn die direkte PIN-Eingabe am Chipkartenleser abgeschlossen (oder abgebrochen) ist.
         Dieser Aufruf kann dazu genutzt werden, evtl. angezeigte Meldungsfenster ("Bitte jetzt PIN eingeben")
         wieder zu schließen. */ 
-    public final static int HAVE_HARDPIN=5;
+    HAVE_HARDPIN,
     /** Ursache des Callback-Aufrufes: Chipkarte wurde in Chipkartenterminal eingelegt. Dieser Callback
         tritt auf, wenn das Einlegen der Chipkarte in den Chipkartenleser abgeschlossen (oder abgebrochen) ist.
         Dieser Aufruf kann dazu genutzt werden, evtl. angezeigte Meldungsfenster ("Bitte jetzt Karte einlegen einlegen")
         wieder zu schließen. */
-    public final static int HAVE_CHIPCARD=6;
+    HAVE_CHIPCARD,
     /** Ursache des Callback-Aufrufes: Länderkennzeichen der Bankverbindung benötigt. Der Kernel benötigt
         für ein neu zu erstellendes Passport-Medium das Länderkennzeichen der Bank, für die dieses
         Passport benutzt werden soll. Da es sich i.d.R. um deutsche Banken handelt, kann die Callback-Routine
         hier immer "DE" zurückgeben, anstatt tatsächlich auf eine Nutzereingabe zu warten. */
-    public final static int NEED_COUNTRY=7;
+    NEED_COUNTRY,
     /** Ursache des Callback-Aufrufes: Bankleitzahl der Bank benötigt. Für ein neu zu erstellendes Passport-Medium
         wird die Bankleitzahl der Bank benötigt, für die dieses Passport verwendet werden soll. */
-    public final static int NEED_BLZ=8;
+    NEED_BLZ,
     /** Ursache des Callback-Aufrufes: Netzwerkadresse des HBCI-Servers benötigt. Es wird die Hostadresse
         benötigt, unter welcher der HBCI-Server der Bank zu erreichen ist. Dieses Callback tritt nur auf,
         wenn der Kernel ein neues Passport-Medium erzeugt. Bei RDH- bzw. DDV-Passports wird hier eine
@@ -88,16 +89,16 @@ public interface HBCICallback
         erwartet, unter der der HBCI-PIN/TAN-Handler auf entsprechende HTTPS-Requests reagiert. Dabei
         muss das Prefix "<code>https://</code>" weggelassen werden (also beispielsweise 
         "<code>www.hbci-kernel.de/pintan/PinTanServlet</code>").*/
-    public final static int NEED_HOST=9;
+    NEED_HOST,
     /** Ursache des Callback-Aufrufes: TCP-Port, auf dem der HBCI-Server arbeitet (3000), benötigt. Dieser
         Callback tritt nur auf, wenn ein neues Passport-Medium vom Kernel erzeugt wird. Da die TCP-Portnummer
         für HBCI-Server immer "3000" ist, kann dieser Wert direkt von der Callback-Methode zurückgegeben
         werden, anstatt auf eine Nutzereingabe zu warten. */
-    public final static int NEED_PORT=10;
+    NEED_PORT,
     /** Ursache des Callback-Aufrufes: Nutzerkennung für HBCI-Zugang benötigt. Wird beim Anlegen eines neuen
         Passport-Mediums und manchmal beim erstmaligen Benutzen einer DDV-Chipkarte erzeugt, wenn auf der
         Chipkarte die Benutzerkennung noch nicht gespeichert ist. */
-    public final static int NEED_USERID=11;
+    NEED_USERID,
     /** Ursache des Callback-Aufrufes: Bestätigung für neue Instituts-Schlüssel benötigt (INI-Brief-Vergleich).
         Dieser Callback tritt nur bei Verwendung des RDH-Verfahrens auf. Bei einer Dialoginitialisierung
         versucht <em>HBCI4Java</em>, die öffentlichen Schlüssel des Kreditinstitutes zu aktualisieren. Werden
@@ -112,7 +113,7 @@ public interface HBCICallback
         erwartet als Rückgabedaten einen Boolean-Wert (siehe {@link ResponseType#BOOLEAN}). Sind die Daten
         in Ordnung, so muss die Callback-Methode einen leeren String in dem Rückgabedaten-StringBuffer
         zurückgeben, ansonsten füllt sie den StringBuffer mit einem beliebigen nichtleeren String (siehe dazu
-        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String, ResponseType,StringBuffer)} und
+        {@link #callback(org.kapott.hbci.passport.HBCIPassport,Reason,String,ResponseType,StringBuffer)} und
         die Beschreibung des Rückgabe-Datentyps {@link ResponseType#BOOLEAN})).</p>
         <p>Da im Moment keine dokumentierten Methoden zur Verfügung stehen, um aus einem Passport die
         entsprechenden Schlüsseldaten zum Anzeigen zu extrahieren, wird folgendes Vorgehen empfohlen:
@@ -122,7 +123,7 @@ public interface HBCICallback
         auf, so kann die Anwendung mit <code>super.callback(...)</code> die bereits implementierte
         Version des entsprechenden Handlers aufrufen. In diesen Default-Implementationen werden zur Zeit
         nicht dokumentierte Passport-Funktionen benutzt, um die Schlüsseldaten zu extrahieren.</p>*/
-    public final static int NEED_NEW_INST_KEYS_ACK=12;
+    NEED_NEW_INST_KEYS_ACK,
     /** Ursache des Callback-Aufrufes: neue Nutzerschlüssel generiert (INI-Brief erforderlich). Dieser Callback
         tritt nur bei Verwendung von RDH-Passports auf. Wird ein RDH-Passport neu erstellt, so werden für
         den Bankkunden neue Schlüssel für die Signierung und Verschlüsselung der HBCI-Nachrichten erzeugt.
@@ -141,30 +142,30 @@ public interface HBCICallback
         Wird ein HBCI-Dialog begonnen, obwohl die Bank die neuen Schlüssel noch nicht aktiviert hat,
         wird der HBCI-Server mit einer entsprechenden Fehlermeldung beim Initialisieren des HBCI-Dialoges
         antworten.</p>*/
-    public final static int HAVE_NEW_MY_KEYS=13;
+    HAVE_NEW_MY_KEYS,
     /** Ursache des Callback-Aufrufes: Institutsnachricht erhalten. Tritt dieser Callback auf, so enthält
         der <code>msg</code>-Parameter der <code>callback</code>-Methode (siehe
-        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,ResponseType,StringBuffer)} einen
+        {@link #callback(org.kapott.hbci.passport.HBCIPassport,Reason,String,ResponseType,StringBuffer)} einen
         String, den die Bank als Kreditinstitutsnachricht an den Kunden gesandt hat. Diese Nachricht sollte
         dem Anwender i.d.R. angezeigt werden. <em>HBCI4Java</em> erwartet auf diesen Callback keine Antwortdaten. */
-    public final static int HAVE_INST_MSG=14;
+    HAVE_INST_MSG,
     /** Ursache des Callback-Aufrufes: Chipkarte soll aus Chipkartenterminal entfernt werden. Dieser Callback
         wird zur Zeit noch nicht benutzt. */
-    public final static int NEED_REMOVE_CHIPCARD=15;
+    NEED_REMOVE_CHIPCARD,
     /** Ursache des Callback-Aufrufes: PIN für PIN/TAN-Verfahren benötigt. Dieser Callback tritt nur bei
         Verwendung von PIN/TAN-Passports auf. Benötigt <em>HBCI4Java</em> die PIN, um die digitale Signatur zu
         erzeugen, wird sie über diesen Callback abgefragt. */
-    public final static int NEED_PT_PIN=16;
+    NEED_PT_PIN,
     /** Ursache des Callback-Aufrufes: eine TAN für PIN/TAN-Verfahren benötigt. Dieser Callback tritt nur bei
         Verwendung von PIN/TAN-Passports auf. Benötigt <em>HBCI4Java</em> eine TAN, um eine digitale Signatur zu
         erzeugen, wird sie über diesen Callback abgefragt. */
-    public final static int NEED_PT_TAN=17;
+    NEED_PT_TAN,
     /** Ursache des Callback-Aufrufes: Kunden-ID für HBCI-Zugang benötigt. Dieser Callback tritt nur beim
         Erzeugen eines neuen Passports auf. <em>HBCI4Java</em> benötigt die Kunden-ID, die das Kreditinstitut
         dem Bankkunden zugewiesen hat (steht meist in dem Brief mit den Zugangsdaten). Hat eine Bank einem
         Kunden keine separate Kunden-ID zugewiesen, so muss an dieser Stelle die Benutzer-Kennung (User-ID)
         zurückgegeben werden. */
-    public final static int NEED_CUSTOMERID=18;
+    NEED_CUSTOMERID,
     /** <p>Ursache des Callback-Aufrufes: Fehler beim Verifizieren einer Kontonummer mit Hilfe
         des jeweiligen Prüfzifferverfahrens. Tritt dieser Callback auf, so hat <em>HBCI4Java</em>
         festgestellt, dass eine verwendete Kontonummer den Prüfziffercheck der dazugehörigen Bank nicht
@@ -188,7 +189,7 @@ public interface HBCICallback
         Prüfzifferfehler, der dabei entdeckt wird, wird dieser Callback erzeugt.<br/>
         Tritt beim Überprüfen einer IBAN ein Fehler auf, wird statt dessen
         {@link #HAVE_IBAN_ERROR} als Callback-Reason verwendet. */
-    public final static int HAVE_CRC_ERROR=19;
+    HAVE_CRC_ERROR,
     /** <p>Ursache des Callback-Aufrufes: Es ist ein Fehler aufgetreten, der auf Wunsch 
         des Anwenders ignoriert werden kann. Durch Setzen bestimmter Kernel-Parameter 
         (siehe {@link org.kapott.hbci.manager.HBCIUtils#setParam(String,String)}) kann
@@ -205,21 +206,21 @@ public interface HBCICallback
         Exception erzeugt, z.B. weil der Fehler in einem bestimmten Submodul doch nicht einfach ignoriert
         werden kann, oder es kann auch dazu führen, dass Aufträge von der Bank nicht angenommen werden usw.
         Es wird aber in jedem Fall eine entsprechende Fehlermeldung erzeugt.</p> */
-    public final static int HAVE_ERROR=20;
+    HAVE_ERROR,
     
     /** Ursache des Callback-Aufrufes: Passwort für das Einlesen der Schlüsseldatei
         benötigt. Dieser Callback tritt beim Laden eines Passport-Files auf, um nach dem 
         Passwort für die Entschlüsselung zu fragen. 
         ACHTUNG: Die folgenden Zeichen duerfen NICHT im Passwort enthalten sein: ß´°§üÜöäÖÄ
         */
-    public final static int NEED_PASSPHRASE_LOAD=21;
+    NEED_PASSPHRASE_LOAD,
     /** Ursache des Callback-Aufrufes: Passwort für das Erzeugen der Schlüsseldatei
         benötigt. Dieser Callback tritt beim Erzeugen eines neuen Passport-Files bzw. beim
         Ändern der Passphrase für eine Schlüsseldatei auf, um nach dem 
         Passwort für die Verschlüsselung zu fragen.
         ACHTUNG: Die folgenden Zeichen duerfen NICHT im Passwort enthalten sein: ß´°§üÜöäÖÄ
          */
-    public final static int NEED_PASSPHRASE_SAVE=22;
+    NEED_PASSPHRASE_SAVE,
     /** <p>Ursache des Callback-Aufrufes: Auswahl eines Eintrages aus einer SIZ-RDH-Datei
         benötigt. Dieser Callback tritt nur bei Verwendung der Passport-Variante
         SIZRDHFile auf. In einer SIZ-RDH-Schlüsseldatei können mehrere HBCI-Zugangsdatensätze
@@ -241,7 +242,7 @@ public interface HBCICallback
         Der Anwender muss sich also zwischen den Datensätzen "09950003;Kunde-001",
         "01234567;Kunde8" und "8765432;7364634564564" entscheiden. Je nach Auswahl
         muss in <code>retData</code> dann jeweils "0", "1" oder "4" zurückgegeben werden.</p>*/
-    public final static int NEED_SIZENTRY_SELECT=23;
+    NEED_SIZENTRY_SELECT,
     /** <p>Ursache des Callback-Aufrufes: es wird eine Netz-Verbindung zum HBCI-Server benötigt.
         Dieser Callback wird erzeugt, bevor <em>HBCI4Java</em> eine Verbindung zum HBCI-Server
         aufbaut. Bei Client-Anwendungen, die mit einer Dialup-Verbindung zum Internet arbeiten,
@@ -259,14 +260,14 @@ public interface HBCICallback
         <code>NEED_CONNECTION</code>/<code>CLOSE_CONNECTION</code> aufgerufen. Evtl.
         sollte der Callback-Handler der Anwendung in diesem Fall also entsprechende
         Maßnahmen treffen.</p> */
-    public final static int NEED_CONNECTION=24;
+    NEED_CONNECTION,
     /** Ursache des Callback-Aufrufes: die Netzwerk-Verbindung zum HBCI-Server wird nicht länger
         benötigt. Dieser Callback wird aufgerufen, sobald <em>HBCI4Java</em> die Kommunikation
         mit dem HBCI-Server vorläufig beendet hat. Dieser Callback kann zusammen mit dem
         Callback {@link #NEED_CONNECTION} benutzt werden, um für Clients mit Dialup-Verbindungen
         die Online-Zeiten zu optimieren. Bei diesem Callback werden keine Rückgabedaten
         erwartet */
-    public final static int CLOSE_CONNECTION=25;
+    CLOSE_CONNECTION,
     /** <p>Ursache des Callback-Aufrufes: es wird die Bezeichnung des zu verwendenden
         Datenfilters benötigt. Mögliche Filterbezeichnungen sind "<code>None</code>"
         (kein Filter) und "<code>Base64</code>" (Daten BASE64-kodieren). Die
@@ -278,7 +279,7 @@ public interface HBCICallback
         Wenn bei dessen Verwendung aber keine Antwortdaten von der Bank empfangen
         werden, dann sollte die andere Variante (<code>None</code>) ausprobiert 
         werden.</p> */
-    public final static int NEED_FILTER=26;
+    NEED_FILTER,
     
     /** <p>Ursache des Callbacks: bei Verwendung von HBCI-PIN/TAN muss eines der
      * unterstützten Verfahren ausgewählt werden. Seit FinTS-3.0 gibt es mehrere
@@ -293,7 +294,7 @@ public interface HBCICallback
      * PIN/TAN-Verfahren. Die Callback-Methode muss die ID des vom Anwender
      * ausgewählten PIN/TAN-Verfahrens anschließend in <code>retData</code>
      * zurückgeben.</p> */
-    public final static int NEED_PT_SECMECH=27;
+    NEED_PT_SECMECH,
     
     /** Ursache des Callbacks: es wird ein Nutzername für die Authentifizierung
      * am Proxy-Server benötigt. Wird für die HTTPS-Verbindungen bei HBCI-PIN/TAN 
@@ -301,7 +302,7 @@ public interface HBCICallback
      * Authentifizierung, so wird über diesen Callback nach dem Nutzernamen
      * gefragt, falls dieser nicht schon durch den Kernel-Parameter
      * <code>client.passport.PinTan.proxyuser</code> gesetzt wurde */
-    public final static int NEED_PROXY_USER=28;
+    NEED_PROXY_USER,
 
     /** Ursache des Callbacks: es wird ein Passwort für die Authentifizierung
      * am Proxy-Server benötigt. Wird für die HTTPS-Verbindungen bei HBCI-PIN/TAN 
@@ -309,7 +310,7 @@ public interface HBCICallback
      * Authentifizierung, so wird über diesen Callback nach dem Passwort
      * gefragt, falls dieses nicht schon durch den Kernel-Parameter
      * <code>client.passport.PinTan.proxypass</code> gesetzt wurde */
-    public final static int NEED_PROXY_PASS=29;
+    NEED_PROXY_PASS,
     
     /** Ursache des Callbacks: beim Überprüfen einer IBAN ist ein Fehler aufgetreten.
      * in <code>retData</code> wird die fehlerhafte IBAN übergeben. Der Nutzer
@@ -320,19 +321,19 @@ public interface HBCICallback
      * wird der Callback erneut erzeugt. Das geht so lange, bis entweder der
      * Prüfsummencheck erfolgreich war oder bis die IBAN vom Nutzer nicht verändert
      * wird. Siehe dazu auch {@link #HAVE_CRC_ERROR}. */
-    public final static int HAVE_IBAN_ERROR=30;
+    HAVE_IBAN_ERROR,
     
     /** 
      * @deprecated
      **/
-    public final static int NEED_INFOPOINT_ACK=31;
+    NEED_INFOPOINT_ACK,
     
     /** <p>Ursache des Callbacks: bei Verwendung von HBCI-PIN/TAN muss
      * die Bezeichnung des TAN-Mediums eingegeben werden. Bei smsTAN ist
      * das z.Bsp. der Alias-Name des Mobiltelefons, wie er bei der Bank
      * hinterlegt wurde. Dieser Name wird verwendet, damit die SMS mit
      * der TAN an mehrere Mobiltelefone schicken kann. */
-    public final static int NEED_PT_TANMEDIA=32;
+    NEED_PT_TANMEDIA,
 
     /**
      * Ursache des Callback-Aufrufes: eine Photo-TAN für PIN/TAN-Verfahren benötigt. Dieser
@@ -341,7 +342,7 @@ public interface HBCICallback
      * des Bildes inclusive Angaben zum Bildformat. HBCI4Java enthaelt eine Klasse "MatrixCode",
      * mit dem diese Daten dann gelesen werden koennen.
      **/
-    public final static int NEED_PT_PHOTOTAN=33;
+    NEED_PT_PHOTOTAN,
 
     /**
      * Ursache des Callback-Aufrufes: eine QR-Code-TAN für PIN/TAN-Verfahren benötigt. Dieser
@@ -349,14 +350,15 @@ public interface HBCICallback
      * Im Callback wird im StringBuffer der Wert aus dem HHDuc uebergeben. Das sind die Roh-Daten
      * des Bildes. HBCI4Java enthaelt eine Klasse "QRCode", mit dem diese Daten dann gelesen werden koennen.
      **/
-    public final static int NEED_PT_QRTAN=34;
+    NEED_PT_QRTAN,
 
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
-    public final static int WRONG_PIN=40;
+    WRONG_PIN,
     
     /** <p>Ursache des Callbacks: Dialogantwort 3072 der GAD - UserID und CustomerID werden ausgetauscht */
     /** <p>im Parameter retData stehen die neuen Daten im Format UserID|CustomerID drin */
-    public final static int USERID_CHANGED=41;
+    USERID_CHANGED
+    }
 
     enum ResponseType
     {
@@ -598,7 +600,7 @@ public interface HBCICallback
         ablegen (keinen neuen StringBuffer erzeugen, sondern den Inhalt von <code>retData</code>
         überschreiben!). Bei einigen Callbacks übergibt <em>HBCI4Java</em> einen vorgeschlagenen
         default-Wert für die Nutzereingabe im <em>retData</em>-Objekt. Diese Tatsache ist
-        besonders bei der Auswertung des Callbacks {@link #HAVE_CRC_ERROR} zu beachten!
+        besonders bei der Auswertung des Callbacks {@link Reason#HAVE_CRC_ERROR} zu beachten!
         @param passport enthält das Passport-Objekt, bei dessen Benutzung der
         Callback erzeugt wurde. Falls also in einer Anwendung mehrere
         Passport-Objekte gleichzeitig benutzt werden, so kann anhand
@@ -627,13 +629,13 @@ public interface HBCICallback
         abgelegt werden. Beim Aufruf der Callback-Methode von <em>HBCI4Java</em> wird dieser
         StringBuffer u.U. mit einem vorgeschlagenen default-Wert für die Nutzereingabe
         gefüllt. */
-    public void callback(HBCIPassport passport,int reason,String msg,ResponseType datatype,StringBuffer retData);
+    public void callback(HBCIPassport passport,Reason reason,String msg,ResponseType datatype,StringBuffer retData);
     
     /** Wird vom HBCI-Kernel aufgerufen, um einen bestimmten Status der
         Abarbeitung bekanntzugeben.
         @param passport gibt an, welches Passport (und damit welches HBCIHandle)
         benutzt wurde, als der Callback erzeugt wurde (siehe auch
-        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,ResponseType,StringBuffer)}).
+        {@link #callback(org.kapott.hbci.passport.HBCIPassport,Reason,String,ResponseType,StringBuffer)}).
         @param statusTag gibt an, welche Stufe der Abarbeitung gerade erreicht
         wurde (alle oben beschriebenen Konstanten, die mit <code>STATUS_</code>
         beginnen)
@@ -658,11 +660,11 @@ public interface HBCICallback
      * dass sie für alle Callbacks, die synchron behandelt werden sollen,
      * <code>true</code> zurückgibt.</p>
      * <p>Die übergebenen Parameter entsprechen denen der Methode
-     * {@link #callback(HBCIPassport,int,String,ResponseType,StringBuffer)}. Der
+     * {@link #callback(HBCIPassport,Reason,String,ResponseType,StringBuffer)}. Der
      * Rückgabewert gibt ab, ob dieser Callback synchron (<code>true</code>) oder
      * asynchron (<code>false</code>) behandelt werden soll.</p>
      * <p>Mehr Informationen dazu in der Datei <code>README.ThreadedCallbacks</code>.</p> */
-    public boolean useThreadedCallback(HBCIPassport passport,int reason,
+    public boolean useThreadedCallback(HBCIPassport passport,Reason reason,
                                        String msg,ResponseType datatype,
                                        StringBuffer retData);
 }

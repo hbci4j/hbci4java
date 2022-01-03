@@ -58,7 +58,7 @@ public abstract class Comm
         this.parentPassport=parentPassport;
         this.filter=parentPassport.getCommFilter();
         
-        HBCIUtilsInternal.getCallback().callback(parentPassport,HBCICallback.NEED_CONNECTION,
+        HBCIUtilsInternal.getCallback().callback(parentPassport,HBCICallback.Reason.NEED_CONNECTION,
                 HBCIUtilsInternal.getLocMsg("CALLB_NEED_CONN"),ResponseType.NONE,new StringBuffer());
     }
 
@@ -147,7 +147,7 @@ public abstract class Comm
     public void close()
     {
         closeConnection();
-        HBCIUtilsInternal.getCallback().callback(getParentPassport(),HBCICallback.CLOSE_CONNECTION,
+        HBCIUtilsInternal.getCallback().callback(getParentPassport(),HBCICallback.Reason.CLOSE_CONNECTION,
                 HBCIUtilsInternal.getLocMsg("CALLB_CLOSE_CONN"),ResponseType.NONE,new StringBuffer());
     }
 }

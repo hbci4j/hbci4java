@@ -91,7 +91,7 @@ public abstract class AbstractHBCIPassport
         if (needBLZ && 
             (getBLZ()==null || getBLZ().length()==0)) {
             StringBuffer sb=new StringBuffer();
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_BLZ,HBCIUtilsInternal.getLocMsg("BLZ"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_BLZ,HBCIUtilsInternal.getLocMsg("BLZ"),ResponseType.TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("BLZ")));
             setBLZ(sb.toString());
@@ -101,7 +101,7 @@ public abstract class AbstractHBCIPassport
         if (needCountry &&
             (getCountry()==null || getCountry().length()==0)) {
             StringBuffer sb=new StringBuffer("DE");
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_COUNTRY,HBCIUtilsInternal.getLocMsg("COUNTRY"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_COUNTRY,HBCIUtilsInternal.getLocMsg("COUNTRY"),ResponseType.TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("COUNTRY")));
             setCountry(sb.toString());
@@ -122,7 +122,7 @@ public abstract class AbstractHBCIPassport
                 sb=new StringBuffer(HBCIUtils.getHBCIHostForBLZ(getBLZ()));
             }
             
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_HOST,HBCIUtilsInternal.getLocMsg("HOST"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_HOST,HBCIUtilsInternal.getLocMsg("HOST"),ResponseType.TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("HOST")));
             setHost(sb.toString());
@@ -132,7 +132,7 @@ public abstract class AbstractHBCIPassport
         if (needPort && 
             (getPort()==null || getPort().intValue()==0)) {
             StringBuffer sb=new StringBuffer((this instanceof AbstractPinTanPassport) ? "443" : "3000");
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PORT,HBCIUtilsInternal.getLocMsg("PORT"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_PORT,HBCIUtilsInternal.getLocMsg("PORT"),ResponseType.TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("PORT")));
             setPort(new Integer(sb.toString()));
@@ -142,7 +142,7 @@ public abstract class AbstractHBCIPassport
         if (needFilter &&
                 (getFilterType()==null || getFilterType().length()==0)) {
             StringBuffer sb=new StringBuffer("Base64");
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_FILTER,HBCIUtilsInternal.getLocMsg("FILTER"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_FILTER,HBCIUtilsInternal.getLocMsg("FILTER"),ResponseType.TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("FILTER")));
             setFilterType(sb.toString());
@@ -152,7 +152,7 @@ public abstract class AbstractHBCIPassport
         if (needUserId &&
             (getUserId()==null || getUserId().length()==0)) {
             StringBuffer sb=new StringBuffer();
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_USERID,HBCIUtilsInternal.getLocMsg("USERID"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_USERID,HBCIUtilsInternal.getLocMsg("USERID"),ResponseType.TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("USERID")));
             setUserId(sb.toString());
@@ -162,7 +162,7 @@ public abstract class AbstractHBCIPassport
         if (needCustomerId &&
             (getStoredCustomerId()==null || getStoredCustomerId().length()==0)) {
             StringBuffer sb=new StringBuffer(getCustomerId());
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CUSTOMERID,HBCIUtilsInternal.getLocMsg("CUSTOMERID"),ResponseType.TEXT,sb);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_CUSTOMERID,HBCIUtilsInternal.getLocMsg("CUSTOMERID"),ResponseType.TEXT,sb);
             setCustomerId(sb.toString());
             dataChanged=true;
         }

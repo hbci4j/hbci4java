@@ -144,7 +144,7 @@ public final class HBCIDialog
                         break;
                     }
                     HBCIUtilsInternal.getCallback().callback(mainPassport,
-                                                     HBCICallback.HAVE_INST_MSG,
+                                                     HBCICallback.Reason.HAVE_INST_MSG,
                                                      msg.toString(),
                                                      ResponseType.NONE,
                                                      new StringBuffer());

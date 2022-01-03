@@ -36,7 +36,7 @@ import org.kapott.hbci.status.HBCIExecStatus;
  */
 public abstract class AbstractTestGV
 {
-    private final Map<Integer,String> callbackValues = new HashMap<Integer,String>();
+    private final Map<HBCICallback.Reason,String> callbackValues = new HashMap<>();
     private Properties  params          = null;
     private HBCIPassportPinTan passport = null;
     private HBCIHandler handler         = null;
@@ -89,22 +89,22 @@ public abstract class AbstractTestGV
         }
       
         // Presets fuer den Callback
-        this.callbackValues.put(HBCICallback.NEED_COUNTRY,          params.getProperty("country",System.getProperty("country","DE")));
-        this.callbackValues.put(HBCICallback.NEED_CUSTOMERID,       params.getProperty("customerid",System.getProperty("customerid","")));
-        this.callbackValues.put(HBCICallback.NEED_USERID,           params.getProperty("userid",System.getProperty("userid","")));
-        this.callbackValues.put(HBCICallback.NEED_PT_PIN,           params.getProperty("pin",System.getProperty("pin","")));
-        this.callbackValues.put(HBCICallback.NEED_PT_SECMECH,       params.getProperty("secmech",System.getProperty("secmech","")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_COUNTRY,          params.getProperty("country",System.getProperty("country","DE")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_CUSTOMERID,       params.getProperty("customerid",System.getProperty("customerid","")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_USERID,           params.getProperty("userid",System.getProperty("userid","")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_PT_PIN,           params.getProperty("pin",System.getProperty("pin","")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_PT_SECMECH,       params.getProperty("secmech",System.getProperty("secmech","")));
 
         // Das Passport-Passwort
-        this.callbackValues.put(HBCICallback.NEED_PASSPHRASE_LOAD,  params.getProperty("password",System.getProperty("password","")));
-        this.callbackValues.put(HBCICallback.NEED_PASSPHRASE_SAVE,  params.getProperty("password",System.getProperty("password","")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_PASSPHRASE_LOAD,  params.getProperty("password",System.getProperty("password","")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_PASSPHRASE_SAVE,  params.getProperty("password",System.getProperty("password","")));
 
         final String blz = params.getProperty("blz",System.getProperty("blz"));
-        this.callbackValues.put(HBCICallback.NEED_BLZ,              blz);
-        this.callbackValues.put(HBCICallback.NEED_PORT,             params.getProperty("port",System.getProperty("port","443")));
-        this.callbackValues.put(HBCICallback.NEED_FILTER,           params.getProperty("filter",System.getProperty("filter","Base64")));
-        this.callbackValues.put(HBCICallback.NEED_CONNECTION,       "");
-        this.callbackValues.put(HBCICallback.CLOSE_CONNECTION,      "");
+        this.callbackValues.put(HBCICallback.Reason.NEED_BLZ,              blz);
+        this.callbackValues.put(HBCICallback.Reason.NEED_PORT,             params.getProperty("port",System.getProperty("port","443")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_FILTER,           params.getProperty("filter",System.getProperty("filter","Base64")));
+        this.callbackValues.put(HBCICallback.Reason.NEED_CONNECTION,       "");
+        this.callbackValues.put(HBCICallback.Reason.CLOSE_CONNECTION,      "");
 
               
         // Initialisierungsparameter fuer HBCI4Java selbst
@@ -128,10 +128,10 @@ public abstract class AbstractTestGV
         final HBCICallback callback = new HBCICallbackIOStreams(out,new BufferedReader(new InputStreamReader(System.in)))
         {
             /**
-             * @see org.kapott.hbci.callback.HBCICallbackIOStreams#callback(org.kapott.hbci.passport.HBCIPassport, int, java.lang.String, int, java.lang.StringBuffer)
+             * @see org.kapott.hbci.callback.HBCICallbackIOStreams#callback(org.kapott.hbci.passport.HBCIPassport, Reason, java.lang.String, ResponseType, java.lang.StringBuffer)
              */
             @Override
-            public void callback(HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData) {
+            public void callback(HBCIPassport passport, Reason reason, String msg, ResponseType datatype, StringBuffer retData) {
                 
                 // haben wir einen vordefinierten Wert?
                 String value = callbackValues.get(reason);
@@ -173,7 +173,7 @@ public abstract class AbstractTestGV
             if (bank != null)
                 host = bank.getPinTanAddress();
         }
-        this.callbackValues.put(HBCICallback.NEED_HOST,host);
+        this.callbackValues.put(HBCICallback.Reason.NEED_HOST,host);
         //
         ////////////////////////////////////////////////////////////////////////
 

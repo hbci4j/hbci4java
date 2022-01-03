@@ -143,7 +143,7 @@ public class HBCIUtilsInternal
         } else if (paramValue.equals("callback")) {
             StringBuffer sb=new StringBuffer();
             getCallback().callback(passport,
-                                   HBCICallback.HAVE_ERROR,
+                                   HBCICallback.Reason.HAVE_ERROR,
                                    msg,
                                    ResponseType.BOOLEAN,
                                    sb);

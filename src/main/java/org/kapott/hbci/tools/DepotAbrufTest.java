@@ -115,9 +115,9 @@ public final class DepotAbrufTest
     private static class MyHBCICallback
         extends HBCICallbackConsole
     {
-        public void callback(HBCIPassport passport,int reason,String msg,ResponseType dataType,StringBuffer retData)
+        public void callback(HBCIPassport passport,Reason reason,String msg,ResponseType dataType,StringBuffer retData)
         {
-            if (reason == HBCICallback.CLOSE_CONNECTION || reason == HBCICallback.NEED_CONNECTION)
+            if (reason == HBCICallback.Reason.CLOSE_CONNECTION || reason == HBCICallback.Reason.NEED_CONNECTION)
                 return;
             
             System.out.println("Callback für folgendes Passport: "+passport.getClientData("init").toString() + ", reason=" + reason);

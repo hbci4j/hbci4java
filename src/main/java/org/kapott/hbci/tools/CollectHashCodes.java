@@ -41,7 +41,7 @@ public class CollectHashCodes
     private static class MyCallback 
         extends HBCICallbackConsole
     {
-        public void callback(HBCIPassport passport,int reason,String msg,
+        public void callback(HBCIPassport passport,Reason reason,String msg,
                              int datatype,StringBuffer retData)
         {
             Properties data=(Properties)passport.getClientData("init");

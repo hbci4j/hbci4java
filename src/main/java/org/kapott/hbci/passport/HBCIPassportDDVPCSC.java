@@ -74,10 +74,10 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
 
         try
         {
-          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
+          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
           HBCIUtils.log("initializing javax.smartcardio",HBCIUtils.LOG_DEBUG);
           this.initCT();
-          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",ResponseType.NONE,null);
+          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.HAVE_CHIPCARD,"",ResponseType.NONE,null);
           
           this.ctReadBankData();
           

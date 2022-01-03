@@ -363,7 +363,7 @@ public final class HBCIUser implements IHandlerData
     {
         // TODO: hier überprüfen, ob tatsächlich ein INI-brief benötigt wird
         HBCIUtilsInternal.getCallback().callback(passport,
-                                         HBCICallback.HAVE_NEW_MY_KEYS,
+                                         HBCICallback.Reason.HAVE_NEW_MY_KEYS,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_USER_KEYS"),
                                          ResponseType.NONE,
                                          new StringBuffer());
