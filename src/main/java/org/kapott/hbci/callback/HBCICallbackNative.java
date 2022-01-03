@@ -143,7 +143,7 @@ public final class HBCICallbackNative
     /** Externe, von der Anwendung zu implementierende Methode. Es muss von der
      * nativen Anwendung eine Methode mit dieser Signatur erzeugt und via JNI
      * registriert werden. */
-    public native void nativeStatus(HBCIPassport passport,int statusTag,Object[] o);
+    public native void nativeStatus(HBCIPassport passport,Status statusTag,Object[] o);
 
     /** Ruft {@link #nativeLog(String, int, Date, StackTraceElement)} auf. */
     public synchronized void log(String msg,int level,Date date,StackTraceElement trace)
@@ -156,8 +156,8 @@ public final class HBCICallbackNative
         nativeCallback(passport,reason,msg,datatype,retData);
     }
     
-    /** Ruft {@link #nativeStatus(HBCIPassport, int, Object[])} auf. */
-    public synchronized void status(HBCIPassport passport,int statusTag,Object[] o)
+    /** Ruft {@link #nativeStatus(HBCIPassport, Status, Object[])} auf. */
+    public synchronized void status(HBCIPassport passport,Status statusTag,Object[] o)
     {
         nativeStatus(passport,statusTag,o);
     }

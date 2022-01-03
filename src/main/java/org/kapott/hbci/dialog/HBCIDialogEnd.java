@@ -105,7 +105,7 @@ public class HBCIDialogEnd extends AbstractRawHBCIDialog
 
         final HBCIMsgStatus ret = ctx.getMsgStatus();
         
-        HBCIUtilsInternal.getCallback().status(ctx.getPassport(),HBCICallback.STATUS_DIALOG_END_DONE,ret);
+        HBCIUtilsInternal.getCallback().status(ctx.getPassport(),HBCICallback.Status.STATUS_DIALOG_END_DONE,ret);
 
         if (ret.isOK())
             return;

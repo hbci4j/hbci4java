@@ -80,7 +80,7 @@ public abstract class AbstractHBCICallback
         return ret.toString();
     }
 
-    public synchronized final void status(HBCIPassport passport,int statusTag,Object o)
+    public synchronized final void status(HBCIPassport passport,Status statusTag,Object o)
     {
         status(passport,statusTag,new Object[] {o});
     }

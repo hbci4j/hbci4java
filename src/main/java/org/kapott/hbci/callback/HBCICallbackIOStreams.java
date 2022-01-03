@@ -355,7 +355,7 @@ public class HBCICallbackIOStreams
     /** Wird diese Methode von <em>HBCI4Java</em> aufgerufen, so wird der aktuelle
     Bearbeitungsschritt (mit evtl. vorhandenen zusätzlichen Informationen)
     auf <code>outStream</code> ausgegeben. */
-    public synchronized void status(HBCIPassport passport, int statusTag, Object[] o) {
+    public synchronized void status(HBCIPassport passport, Status statusTag, Object[] o) {
         switch (statusTag) {
             case STATUS_INST_BPD_INIT:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_INST_DATA"));
@@ -460,7 +460,7 @@ public class HBCICallbackIOStreams
                 break;
 
             default:
-                throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("STATUS_INVALID",Integer.toString(statusTag)));
+                throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("STATUS_INVALID", statusTag));
         }
     }
 }

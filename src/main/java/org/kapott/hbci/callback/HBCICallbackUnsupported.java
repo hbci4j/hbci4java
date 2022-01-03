@@ -27,13 +27,13 @@ public class HBCICallbackUnsupported implements HBCICallback {
     }
 
     @Override
-    public void status(HBCIPassport passport, int statusTag, Object o)
+    public void status(HBCIPassport passport, Status statusTag, Object o)
     {
         throw new UnsupportedOperationException("Unexpected HBCI callback");
     }
 
     @Override
-    public void status(HBCIPassport passport, int statusTag, Object[] o)
+    public void status(HBCIPassport passport, Status statusTag, Object[] o)
     {
         throw new UnsupportedOperationException("Unexpected HBCI callback");
     }

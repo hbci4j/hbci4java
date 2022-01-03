@@ -398,11 +398,8 @@ public class UmsatzAbrufPinTan
       }
     }
 
-    /**
-     * @see org.kapott.hbci.callback.HBCICallback#status(org.kapott.hbci.passport.HBCIPassport, int, java.lang.Object[])
-     */
     @Override
-    public void status(HBCIPassport passport, int statusTag, Object[] o)
+    public void status(HBCIPassport passport, Status statusTag, Object[] o)
     {
       // So aehnlich wie log(String,int,Date,StackTraceElement) jedoch fuer Status-Meldungen.
     }

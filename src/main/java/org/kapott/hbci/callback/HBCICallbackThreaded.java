@@ -135,7 +135,7 @@ public final class HBCICallbackThreaded
     }
 
     /** Aufruf wird an das "normale" Callback-Objekt weitergereicht. */
-    public void status(HBCIPassport passport,int statusTag,Object[] o)
+    public void status(HBCIPassport passport,Status statusTag,Object[] o)
     {
         // TODO das hier evtl. auch in den threaded-workflow aufnehmen?
         realCallback.status(passport,statusTag,o);

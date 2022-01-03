@@ -106,7 +106,7 @@ public final class HBCIDialog
             HBCIUtils.log("passport supported: "+s,HBCIUtils.LOG_DEBUG);
             
             HBCIUtils.log(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_INIT"),HBCIUtils.LOG_INFO);
-            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT,null);
+            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.Status.STATUS_DIALOG_INIT,null);
     
             // Dialog-Context erzeugen
             final DialogContext ctx = DialogContext.create(kernel,mainPassport);
@@ -152,7 +152,7 @@ public final class HBCIDialog
                 }
             }
 
-            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT_DONE,new Object[] {ret,dialogid});
+            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.Status.STATUS_DIALOG_INIT_DONE,new Object[] {ret,dialogid});
         }
         catch (Exception e)
         {
@@ -234,7 +234,7 @@ public final class HBCIDialog
                     }
                     
                     HBCIUtils.log("adding task " + name,HBCIUtils.LOG_DEBUG);
-                    HBCIUtilsInternal.getCallback().status(p,HBCICallback.STATUS_SEND_TASK,task);
+                    HBCIUtilsInternal.getCallback().status(p,HBCICallback.Status.STATUS_SEND_TASK,task);
 
                     // Uebernimmt den aktuellen loop-Wert in die Lowlevel-Parameter
                     task.applyOffset();
@@ -294,7 +294,7 @@ public final class HBCIDialog
                         {
                             HBCIUtils.log("filling results for task " + name, HBCIUtils.LOG_DEBUG);
                             task.fillJobResult(msgstatus,segnum);
-                            HBCIUtilsInternal.getCallback().status(p,HBCICallback.STATUS_SEND_TASK_DONE,task);
+                            HBCIUtilsInternal.getCallback().status(p,HBCICallback.Status.STATUS_SEND_TASK_DONE,task);
                         }
                         catch (Exception e)
                         {
@@ -412,7 +412,7 @@ public final class HBCIDialog
         
         try {
             HBCIUtils.log(HBCIUtilsInternal.getLocMsg("LOG_DIALOG_END"),HBCIUtils.LOG_INFO);
-            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_END,null);
+            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.Status.STATUS_DIALOG_END,null);
     
             kernel.rawNewMsg("DialogEnd"+anonSuffix);
             kernel.rawSet("DialogEndS.dialogid", dialogid);
@@ -424,7 +424,7 @@ public final class HBCIDialog
                                !isAnon && HBCIKernelImpl.CRYPTIT,
                                !isAnon && HBCIKernelImpl.NEED_CRYPT);
 
-            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_END_DONE,ret);
+            HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.Status.STATUS_DIALOG_END_DONE,ret);
         } catch (Exception e) {
             ret.addException(e);
         }
