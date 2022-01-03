@@ -357,105 +357,105 @@ public class HBCICallbackIOStreams
     auf <code>outStream</code> ausgegeben. */
     public synchronized void status(HBCIPassport passport, Status statusTag, Object[] o) {
         switch (statusTag) {
-            case STATUS_INST_BPD_INIT:
+            case INST_BPD_INIT:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_INST_DATA"));
                 break;
-            case STATUS_INST_BPD_INIT_DONE:
+            case INST_BPD_INIT_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_INST_DATA_DONE",passport.getBPDVersion()));
                 break;
-            case STATUS_INST_GET_KEYS:
+            case INST_GET_KEYS:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_INST_KEYS"));
                 break;
-            case STATUS_INST_GET_KEYS_DONE:
+            case INST_GET_KEYS_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_INST_KEYS_DONE"));
                 break;
-            case STATUS_SEND_KEYS:
+            case SEND_KEYS:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_SEND_MY_KEYS"));
                 break;
-            case STATUS_SEND_KEYS_DONE:
+            case SEND_KEYS_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_SEND_MY_KEYS_DONE"));
                 getOutStream().println("status: "+((HBCIMsgStatus)o[0]).toString());
                 break;
-            case STATUS_INIT_SYSID:
+            case INIT_SYSID:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_SYSID"));
                 break;
-            case STATUS_INIT_SYSID_DONE:
+            case INIT_SYSID_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_SYSID_DONE",o[1].toString()));
                 getOutStream().println("status: "+((HBCIMsgStatus)o[0]).toString());
                 break;
-            case STATUS_INIT_SIGID:
+            case INIT_SIGID:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_SIGID"));
                 break;
-            case STATUS_INIT_SIGID_DONE:
+            case INIT_SIGID_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_SIGID_DONE",o[1].toString()));
                 getOutStream().println("status: "+((HBCIMsgStatus)o[0]).toString());
                 break;
-            case STATUS_INIT_UPD:
+            case INIT_UPD:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_USER_DATA"));
                 break;
-            case STATUS_INIT_UPD_DONE:
+            case INIT_UPD_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_REC_USER_DATA_DONE",passport.getUPDVersion()));
                 break;
-            case STATUS_LOCK_KEYS:
+            case LOCK_KEYS:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_USR_LOCK"));
                 break;
-            case STATUS_LOCK_KEYS_DONE:
+            case LOCK_KEYS_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_USR_LOCK_DONE"));
                 getOutStream().println("status: "+((HBCIMsgStatus)o[0]).toString());
                 break;
-            case STATUS_DIALOG_INIT:
+            case DIALOG_INIT:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_INIT"));
                 break;
-            case STATUS_DIALOG_INIT_DONE:
+            case DIALOG_INIT_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_INIT_DONE",o[1]));
                 getOutStream().println("status: "+((HBCIMsgStatus)o[0]).toString());
                 break;
-            case STATUS_SEND_TASK:
+            case SEND_TASK:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_NEW_JOB",((HBCIJob)o[0]).getName()));
                 break;
-            case STATUS_SEND_TASK_DONE:
+            case SEND_TASK_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_JOB_DONE",((HBCIJob)o[0]).getName()));
                 break;
-            case STATUS_DIALOG_END:
+            case DIALOG_END:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_END"));
                 break;
-            case STATUS_DIALOG_END_DONE:
+            case DIALOG_END_DONE:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_END_DONE"));
                 getOutStream().println("status: "+((HBCIMsgStatus)o[0]).toString());
                 break;
-            case STATUS_MSG_CREATE:
+            case MSG_CREATE:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_CREATE",o[0].toString()));
                 break;
-            case STATUS_MSG_SIGN:
+            case MSG_SIGN:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_SIGN"));
                 break;
-            case STATUS_MSG_CRYPT:
+            case MSG_CRYPT:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_CRYPT"));
                 break;
-            case STATUS_MSG_SEND:
+            case MSG_SEND:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_SEND"));
                 break;
-            case STATUS_MSG_RECV:
+            case MSG_RECV:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_RECV"));
                 break;
-            case STATUS_MSG_PARSE:
+            case MSG_PARSE:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_PARSE",o[0].toString()+")"));
                 break;
-            case STATUS_MSG_DECRYPT:
+            case MSG_DECRYPT:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_DECRYPT"));
                 break;
-            case STATUS_MSG_VERIFY:
+            case MSG_VERIFY:
                 getOutStream().println("  "+HBCIUtilsInternal.getLocMsg("STATUS_MSG_VERIFY"));
                 break;
-            case STATUS_MSG_RAW_SEND:
+            case MSG_RAW_SEND:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_SEND",o[0].toString()));
                 break;
 
-            case STATUS_MSG_RAW_RECV:
+            case MSG_RAW_RECV:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_RECV",o[0].toString()));
                 break;
 
-            case STATUS_MSG_RAW_RECV_ENCRYPTED:
+            case MSG_RAW_RECV_ENCRYPTED:
                 getOutStream().println(HBCIUtilsInternal.getLocMsg("STATUS_MSG_RAW_RECV_ENCRYPTED",o[0].toString()));
                 break;
 
