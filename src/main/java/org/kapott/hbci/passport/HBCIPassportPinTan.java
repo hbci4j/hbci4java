@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.FlickerCode;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -263,7 +264,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                 HBCIUtilsInternal.getCallback().callback(this,
                                                  HBCICallback.NEED_PT_PIN,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTPIN"),
-                                                 HBCICallback.ResponseType.SECRET,
+                                                 ResponseType.SECRET,
                                                  s);
                 if (s.length()==0) {
                     throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PINZERO"));
@@ -307,7 +308,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                                 HBCIUtilsInternal.getCallback().callback(this,
                                                 HBCICallback.NEED_PT_TAN,
                                                 HBCIUtilsInternal.getLocMsg("CALLB_NEED_PTTAN"),
-                                                HBCICallback.ResponseType.TEXT,
+                                                ResponseType.TEXT,
                                                 s);
                             }
                             catch (HBCI_Exception e)
@@ -400,7 +401,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     }
 
                     // Callback durchfuehren
-                    HBCIUtilsInternal.getCallback().callback(this,callback,msg,HBCICallback.ResponseType.TEXT,payload);
+                    HBCIUtilsInternal.getCallback().callback(this,callback,msg,ResponseType.TEXT,payload);
 
                     setPersistentData("externalid",null); // External-ID aus Passport entfernen
                     if (payload == null || payload.length()==0) {

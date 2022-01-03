@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.HBCIDialogEnd;
@@ -159,7 +160,7 @@ public final class HBCIInstitute
         HBCIUtilsInternal.getCallback().callback(passport,
                                          HBCICallback.NEED_NEW_INST_KEYS_ACK,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_INST_KEYS"),
-                                         HBCICallback.ResponseType.BOOLEAN,
+                                         ResponseType.BOOLEAN,
                                          answer);
 
         if (answer.length()>0) {

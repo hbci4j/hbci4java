@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.HBCIDialogEnd;
@@ -364,7 +365,7 @@ public final class HBCIUser implements IHandlerData
         HBCIUtilsInternal.getCallback().callback(passport,
                                          HBCICallback.HAVE_NEW_MY_KEYS,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_USER_KEYS"),
-                                         HBCICallback.ResponseType.NONE,
+                                         ResponseType.NONE,
                                          new StringBuffer());
         throw new NeedKeyAckException();
     }

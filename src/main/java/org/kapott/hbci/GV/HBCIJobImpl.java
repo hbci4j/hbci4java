@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
@@ -1050,7 +1051,7 @@ public abstract class HBCIJobImpl
                 HBCIUtilsInternal.getCallback().callback(getMainPassport(),
                                                  HBCICallback.HAVE_CRC_ERROR,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_HAVE_CRC_ERROR"),
-                                                 HBCICallback.ResponseType.TEXT,
+                                                 ResponseType.TEXT,
                                                  sb);
 
                 int idx=sb.indexOf("|");
@@ -1093,7 +1094,7 @@ public abstract class HBCIJobImpl
     			HBCIUtilsInternal.getCallback().callback(getMainPassport(),
     					HBCICallback.HAVE_IBAN_ERROR,
     					HBCIUtilsInternal.getLocMsg("CALLB_HAVE_IBAN_ERROR"),
-    					HBCICallback.ResponseType.TEXT,
+    					ResponseType.TEXT,
     					sb);
 
     			iban=sb.toString();

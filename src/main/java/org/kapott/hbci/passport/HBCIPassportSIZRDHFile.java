@@ -24,6 +24,7 @@ package org.kapott.hbci.passport;
 import java.io.File;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -97,7 +98,7 @@ public class HBCIPassportSIZRDHFile
                     HBCIUtilsInternal.getCallback().callback(this,
                                                      HBCICallback.NEED_PASSPHRASE_LOAD,
                                                      HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                                     HBCICallback.ResponseType.SECRET,
+                                                     ResponseType.SECRET,
                                                      retData);
                     LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                     setPassphrase(retData.toString());
@@ -158,7 +159,7 @@ public class HBCIPassportSIZRDHFile
         HBCIUtilsInternal.getCallback().callback(this,
                                          HBCICallback.NEED_SIZENTRY_SELECT,
                                          "*** select one of the following entries",
-                                         HBCICallback.ResponseType.TEXT,
+                                         ResponseType.TEXT,
                                          sb);
         return Integer.parseInt(sb.toString());
     }

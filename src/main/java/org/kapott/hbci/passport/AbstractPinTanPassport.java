@@ -34,6 +34,7 @@ import java.util.Set;
 import org.kapott.hbci.GV.GVTAN2Step;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.DialogEvent;
@@ -292,7 +293,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         this.clearPIN();
         
         // Aufrufer informieren, dass falsche PIN eingegeben wurde (um evtl. PIN aus Puffer zu löschen, etc.) 
-        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.WRONG_PIN,"*** invalid PIN entered",HBCICallback.ResponseType.TEXT,new StringBuffer());
+        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.WRONG_PIN,"*** invalid PIN entered",ResponseType.TEXT,new StringBuffer());
     }
     
     /**
@@ -424,7 +425,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             // Aufrufer informieren, dass UserID und CustomerID geändert wurde
             StringBuffer retData=new StringBuffer();
             retData.append(newUserId+"|"+newCustomerId);
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.ResponseType.TEXT,retData);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",ResponseType.TEXT,retData);
         }
     }
 
@@ -965,7 +966,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             retData.append(entry.getId()).append(":").append(entry.getName());
         }
         
-        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_SECMECH,"*** Select a pintan method from the list",HBCICallback.ResponseType.TEXT,retData);
+        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_SECMECH,"*** Select a pintan method from the list",ResponseType.TEXT,retData);
         
         // Pruefen, ob das gewaehlte Verfahren einem aus der Liste entspricht
         final String selected = retData.toString();
@@ -1606,7 +1607,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             if (upd != null)
                 retData.append(upd.getProperty(HBCIUser.UPD_KEY_TANMEDIA,""));
             
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.ResponseType.TEXT,retData);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",ResponseType.TEXT,retData);
             final String result = retData.toString();
             if (StringUtil.hasText(result))
                 return result;

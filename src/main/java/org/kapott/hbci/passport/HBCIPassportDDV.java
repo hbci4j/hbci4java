@@ -34,6 +34,7 @@ import java.util.Arrays;
 
 import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -138,9 +139,9 @@ public class HBCIPassportDDV extends AbstractDDVPassport
         HBCIUtils.log("using chipcard terminal with port "+comport+" and terminal number "+ctnumber,HBCIUtils.LOG_DEBUG);
         try
         {
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),HBCICallback.ResponseType.NONE,null);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
             initCT();
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",HBCICallback.ResponseType.NONE,null);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.HAVE_CHIPCARD,"",ResponseType.NONE,null);
             
             this.ctReadBankData();
 
@@ -484,7 +485,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
                         HBCIUtilsInternal.getCallback().callback(this,
                                                          HBCICallback.NEED_SOFTPIN,
                                                          HBCIUtilsInternal.getLocMsg("CALLB_NEED_SOFTPIN"),
-                                                         HBCICallback.ResponseType.SECRET,
+                                                         ResponseType.SECRET,
                                                          temppin);
                         if (temppin.length()==0)
                             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PINZERO"));
@@ -497,7 +498,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
                     HBCIUtilsInternal.getCallback().callback(this,
                                                      HBCICallback.NEED_HARDPIN,
                                                      HBCIUtilsInternal.getLocMsg("CALLB_NEED_HARDPIN"),
-                                                     HBCICallback.ResponseType.NONE,
+                                                     ResponseType.NONE,
                                                      null);
                 }
 
@@ -512,7 +513,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
                         HBCIUtilsInternal.getCallback().callback(this,
                                                          HBCICallback.HAVE_HARDPIN,
                                                          null,
-                                                         HBCICallback.ResponseType.NONE,
+                                                         ResponseType.NONE,
                                                          null);
                     }
                 }

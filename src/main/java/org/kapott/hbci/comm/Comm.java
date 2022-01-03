@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.CanNotParseMessageException;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.ParseErrorException;
@@ -58,7 +59,7 @@ public abstract class Comm
         this.filter=parentPassport.getCommFilter();
         
         HBCIUtilsInternal.getCallback().callback(parentPassport,HBCICallback.NEED_CONNECTION,
-                HBCIUtilsInternal.getLocMsg("CALLB_NEED_CONN"),HBCICallback.ResponseType.NONE,new StringBuffer());
+                HBCIUtilsInternal.getLocMsg("CALLB_NEED_CONN"),ResponseType.NONE,new StringBuffer());
     }
 
     public MSG pingpong(String msgName, MSG msg)
@@ -147,6 +148,6 @@ public abstract class Comm
     {
         closeConnection();
         HBCIUtilsInternal.getCallback().callback(getParentPassport(),HBCICallback.CLOSE_CONNECTION,
-                HBCIUtilsInternal.getLocMsg("CALLB_CLOSE_CONN"),HBCICallback.ResponseType.NONE,new StringBuffer());
+                HBCIUtilsInternal.getLocMsg("CALLB_CLOSE_CONN"),ResponseType.NONE,new StringBuffer());
     }
 }

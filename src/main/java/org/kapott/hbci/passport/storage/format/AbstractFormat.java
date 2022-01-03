@@ -25,6 +25,7 @@ import javax.crypto.Cipher;
 import java.security.GeneralSecurityException;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -104,7 +105,7 @@ public abstract class AbstractFormat implements PassportFormat
         HBCIUtilsInternal.getCallback().callback(passport,
                                          forSaving ? HBCICallback.NEED_PASSPHRASE_SAVE : HBCICallback.NEED_PASSPHRASE_LOAD,
                                          forSaving ? HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW") : HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                                         HBCICallback.ResponseType.SECRET,
+                                         ResponseType.SECRET,
                                          passphrase);
         if (passphrase.length() == 0)
             throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_PASSZERO"));

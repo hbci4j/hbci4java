@@ -28,6 +28,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.DialogEvent;
 import org.kapott.hbci.dialog.HBCIDialogInit;
@@ -145,7 +146,7 @@ public final class HBCIDialog
                     HBCIUtilsInternal.getCallback().callback(mainPassport,
                                                      HBCICallback.HAVE_INST_MSG,
                                                      msg.toString(),
-                                                     HBCICallback.ResponseType.NONE,
+                                                     ResponseType.NONE,
                                                      new StringBuffer());
                 }
             }

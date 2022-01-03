@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -98,7 +99,7 @@ public class HBCIPassportRDHXFile
                     HBCIUtilsInternal.getCallback().callback(this,
                             HBCICallback.NEED_PASSPHRASE_LOAD,
                             HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                            HBCICallback.ResponseType.SECRET,
+                            ResponseType.SECRET,
                             retData);
                     LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                     setPassphrase(retData.toString().getBytes());
@@ -131,7 +132,7 @@ public class HBCIPassportRDHXFile
                         this,
                         HBCICallback.NEED_SIZENTRY_SELECT,
                         "*** select one of the following entries",
-                        HBCICallback.ResponseType.TEXT,
+                        ResponseType.TEXT,
                         possibilities);
                      
                     this.entryIdx=Integer.parseInt(possibilities.toString());
@@ -190,7 +191,7 @@ public class HBCIPassportRDHXFile
                 HBCIUtilsInternal.getCallback().callback(this,
                         HBCICallback.NEED_PASSPHRASE_SAVE,
                         HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
-                        HBCICallback.ResponseType.SECRET, retData);
+                        ResponseType.SECRET, retData);
                 // TODO: passwort-bedingungen nach spez. prüfen
                 LogFilter.getInstance().addSecretData(retData.toString(),"X",LogFilter.FILTER_SECRETS);
                 setPassphrase(retData.toString().getBytes());
