@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
-import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.exceptions.HBCI_Exception;
@@ -1049,7 +1049,7 @@ public abstract class HBCIJobImpl
             	// wenn beim validieren ein fehler auftrat, nach neuen daten fragen
                 StringBuffer sb=new StringBuffer(blz).append("|").append(number);
                 HBCIUtilsInternal.getCallback().callback(getMainPassport(),
-                                                 HBCICallback.Reason.HAVE_CRC_ERROR,
+                                                 Reason.HAVE_CRC_ERROR,
                                                  HBCIUtilsInternal.getLocMsg("CALLB_HAVE_CRC_ERROR"),
                                                  ResponseType.TEXT,
                                                  sb);
@@ -1092,7 +1092,7 @@ public abstract class HBCIJobImpl
     		if (!crcok) {
     			StringBuffer sb=new StringBuffer(iban);
     			HBCIUtilsInternal.getCallback().callback(getMainPassport(),
-    					HBCICallback.Reason.HAVE_IBAN_ERROR,
+    					Reason.HAVE_IBAN_ERROR,
     					HBCIUtilsInternal.getLocMsg("CALLB_HAVE_IBAN_ERROR"),
     					ResponseType.TEXT,
     					sb);

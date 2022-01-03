@@ -33,7 +33,7 @@ import java.security.NoSuchProviderException;
 import java.util.Arrays;
 
 import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
-import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIKey;
@@ -139,9 +139,9 @@ public class HBCIPassportDDV extends AbstractDDVPassport
         HBCIUtils.log("using chipcard terminal with port "+comport+" and terminal number "+ctnumber,HBCIUtils.LOG_DEBUG);
         try
         {
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
+            HBCIUtilsInternal.getCallback().callback(this,Reason.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
             initCT();
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.HAVE_CHIPCARD,"",ResponseType.NONE,null);
+            HBCIUtilsInternal.getCallback().callback(this,Reason.HAVE_CHIPCARD,"",ResponseType.NONE,null);
             
             this.ctReadBankData();
 
@@ -483,7 +483,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
                     if (pin==null || pin.length()==0) {
                         StringBuffer temppin=new StringBuffer();
                         HBCIUtilsInternal.getCallback().callback(this,
-                                                         HBCICallback.Reason.NEED_SOFTPIN,
+                                                         Reason.NEED_SOFTPIN,
                                                          HBCIUtilsInternal.getLocMsg("CALLB_NEED_SOFTPIN"),
                                                          ResponseType.SECRET,
                                                          temppin);
@@ -496,7 +496,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
                     setSoftPin(pin.getBytes("ISO-8859-1"));
                 } else {
                     HBCIUtilsInternal.getCallback().callback(this,
-                                                     HBCICallback.Reason.NEED_HARDPIN,
+                                                     Reason.NEED_HARDPIN,
                                                      HBCIUtilsInternal.getLocMsg("CALLB_NEED_HARDPIN"),
                                                      ResponseType.NONE,
                                                      null);
@@ -511,7 +511,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
                 } finally {
                     if (useSoftPin!=1) {
                         HBCIUtilsInternal.getCallback().callback(this,
-                                                         HBCICallback.Reason.HAVE_HARDPIN,
+                                                         Reason.HAVE_HARDPIN,
                                                          null,
                                                          ResponseType.NONE,
                                                          null);

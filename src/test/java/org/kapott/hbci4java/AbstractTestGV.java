@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallbackIOStreams;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -36,7 +37,7 @@ import org.kapott.hbci.status.HBCIExecStatus;
  */
 public abstract class AbstractTestGV
 {
-    private final Map<HBCICallback.Reason,String> callbackValues = new HashMap<>();
+    private final Map<Reason,String> callbackValues = new HashMap<>();
     private Properties  params          = null;
     private HBCIPassportPinTan passport = null;
     private HBCIHandler handler         = null;
@@ -89,22 +90,22 @@ public abstract class AbstractTestGV
         }
       
         // Presets fuer den Callback
-        this.callbackValues.put(HBCICallback.Reason.NEED_COUNTRY,          params.getProperty("country",System.getProperty("country","DE")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_CUSTOMERID,       params.getProperty("customerid",System.getProperty("customerid","")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_USERID,           params.getProperty("userid",System.getProperty("userid","")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_PT_PIN,           params.getProperty("pin",System.getProperty("pin","")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_PT_SECMECH,       params.getProperty("secmech",System.getProperty("secmech","")));
+        this.callbackValues.put(Reason.NEED_COUNTRY,         params.getProperty("country", System.getProperty("country", "DE")));
+        this.callbackValues.put(Reason.NEED_CUSTOMERID,      params.getProperty("customerid", System.getProperty("customerid", "")));
+        this.callbackValues.put(Reason.NEED_USERID,          params.getProperty("userid", System.getProperty("userid", "")));
+        this.callbackValues.put(Reason.NEED_PT_PIN,          params.getProperty("pin", System.getProperty("pin", "")));
+        this.callbackValues.put(Reason.NEED_PT_SECMECH,      params.getProperty("secmech", System.getProperty("secmech", "")));
 
         // Das Passport-Passwort
-        this.callbackValues.put(HBCICallback.Reason.NEED_PASSPHRASE_LOAD,  params.getProperty("password",System.getProperty("password","")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_PASSPHRASE_SAVE,  params.getProperty("password",System.getProperty("password","")));
+        this.callbackValues.put(Reason.NEED_PASSPHRASE_LOAD, params.getProperty("password", System.getProperty("password", "")));
+        this.callbackValues.put(Reason.NEED_PASSPHRASE_SAVE, params.getProperty("password", System.getProperty("password", "")));
 
         final String blz = params.getProperty("blz",System.getProperty("blz"));
-        this.callbackValues.put(HBCICallback.Reason.NEED_BLZ,              blz);
-        this.callbackValues.put(HBCICallback.Reason.NEED_PORT,             params.getProperty("port",System.getProperty("port","443")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_FILTER,           params.getProperty("filter",System.getProperty("filter","Base64")));
-        this.callbackValues.put(HBCICallback.Reason.NEED_CONNECTION,       "");
-        this.callbackValues.put(HBCICallback.Reason.CLOSE_CONNECTION,      "");
+        this.callbackValues.put(Reason.NEED_BLZ,             blz);
+        this.callbackValues.put(Reason.NEED_PORT,            params.getProperty("port", System.getProperty("port", "443")));
+        this.callbackValues.put(Reason.NEED_FILTER,          params.getProperty("filter", System.getProperty("filter", "Base64")));
+        this.callbackValues.put(Reason.NEED_CONNECTION,      "");
+        this.callbackValues.put(Reason.CLOSE_CONNECTION,     "");
 
               
         // Initialisierungsparameter fuer HBCI4Java selbst
@@ -173,7 +174,7 @@ public abstract class AbstractTestGV
             if (bank != null)
                 host = bank.getPinTanAddress();
         }
-        this.callbackValues.put(HBCICallback.Reason.NEED_HOST,host);
+        this.callbackValues.put(Reason.NEED_HOST, host);
         //
         ////////////////////////////////////////////////////////////////////////
 

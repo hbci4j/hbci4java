@@ -23,7 +23,7 @@ package org.kapott.hbci.passport;
 
 import java.io.File;
 
-import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.datatypes.SyntaxCtr;
 import org.kapott.hbci.exceptions.HBCI_Exception;
@@ -74,10 +74,10 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
 
         try
         {
-          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
+          HBCIUtilsInternal.getCallback().callback(this,Reason.NEED_CHIPCARD,HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"),ResponseType.NONE,null);
           HBCIUtils.log("initializing javax.smartcardio",HBCIUtils.LOG_DEBUG);
           this.initCT();
-          HBCIUtilsInternal.getCallback().callback(this,HBCICallback.Reason.HAVE_CHIPCARD,"",ResponseType.NONE,null);
+          HBCIUtilsInternal.getCallback().callback(this,Reason.HAVE_CHIPCARD,"",ResponseType.NONE,null);
           
           this.ctReadBankData();
           

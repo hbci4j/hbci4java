@@ -25,6 +25,7 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -54,7 +55,7 @@ extends Authenticator
             StringBuffer retData=new StringBuffer();
             callback.callback(
                     passport,
-                    HBCICallback.Reason.NEED_PROXY_USER,
+                    Reason.NEED_PROXY_USER,
                     HBCIUtilsInternal.getLocMsg("CALLB_PROXY_USERNAME"),
                     ResponseType.TEXT,
                     retData);
@@ -68,7 +69,7 @@ extends Authenticator
             StringBuffer retData=new StringBuffer();
             callback.callback(
                     passport,
-                    HBCICallback.Reason.NEED_PROXY_PASS,
+                    Reason.NEED_PROXY_PASS,
                     HBCIUtilsInternal.getLocMsg("CALLB_PROXY_PASSWD"),
                     ResponseType.SECRET,
                     retData);

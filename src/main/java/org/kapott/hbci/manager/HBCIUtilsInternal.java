@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.passport.HBCIPassport;
 
@@ -143,7 +144,7 @@ public class HBCIUtilsInternal
         } else if (paramValue.equals("callback")) {
             StringBuffer sb=new StringBuffer();
             getCallback().callback(passport,
-                                   HBCICallback.Reason.HAVE_ERROR,
+                                   Reason.HAVE_ERROR,
                                    msg,
                                    ResponseType.BOOLEAN,
                                    sb);

@@ -193,9 +193,6 @@ public class UmsatzAbrufPinTan
    */
   private static class MyHBCICallback extends AbstractHBCICallback
   {
-    /**
-     * @see org.kapott.hbci.callback.HBCICallback#log(java.lang.String, int, java.util.Date, java.lang.StackTraceElement)
-     */
     @Override
     public void log(String msg, int level, Date date, StackTraceElement trace)
     {
@@ -203,9 +200,6 @@ public class UmsatzAbrufPinTan
       // System.out.println(msg);
     }
 
-    /**
-     * @see org.kapott.hbci.callback.HBCICallback#callback(org.kapott.hbci.passport.HBCIPassport, Reason, java.lang.String, ResponseType, java.lang.StringBuffer)
-     */
     @Override
     public void callback(HBCIPassport passport, Reason reason, String msg, ResponseType datatype, StringBuffer retData)
     {

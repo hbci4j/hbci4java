@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
@@ -363,7 +364,7 @@ public final class HBCIUser implements IHandlerData
     {
         // TODO: hier überprüfen, ob tatsächlich ein INI-brief benötigt wird
         HBCIUtilsInternal.getCallback().callback(passport,
-                                         HBCICallback.Reason.HAVE_NEW_MY_KEYS,
+                                         Reason.HAVE_NEW_MY_KEYS,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_USER_KEYS"),
                                          ResponseType.NONE,
                                          new StringBuffer());

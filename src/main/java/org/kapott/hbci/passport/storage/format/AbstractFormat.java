@@ -24,7 +24,7 @@ package org.kapott.hbci.passport.storage.format;
 import javax.crypto.Cipher;
 import java.security.GeneralSecurityException;
 
-import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -103,7 +103,7 @@ public abstract class AbstractFormat implements PassportFormat
         
         StringBuffer passphrase = new StringBuffer();
         HBCIUtilsInternal.getCallback().callback(passport,
-                                         forSaving ? HBCICallback.Reason.NEED_PASSPHRASE_SAVE : HBCICallback.Reason.NEED_PASSPHRASE_LOAD,
+                                         forSaving ? Reason.NEED_PASSPHRASE_SAVE : Reason.NEED_PASSPHRASE_LOAD,
                                          forSaving ? HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS_NEW") : HBCIUtilsInternal.getLocMsg("CALLB_NEED_PASS"),
                                          ResponseType.SECRET,
                                          passphrase);
