@@ -145,7 +145,7 @@ public final class HBCIDialog
                     HBCIUtilsInternal.getCallback().callback(mainPassport,
                                                      HBCICallback.HAVE_INST_MSG,
                                                      msg.toString(),
-                                                     HBCICallback.TYPE_NONE,
+                                                     HBCICallback.ResponseType.TYPE_NONE,
                                                      new StringBuffer());
                 }
             }

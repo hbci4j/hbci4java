@@ -3,17 +3,16 @@
  */
 package org.kapott.hbci.passport;
 
-import java.io.File;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.Arrays;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.util.Arrays;
 
 import org.kapott.cryptalgs.SignatureParamSpec;
 import org.kapott.hbci.callback.HBCICallback;
@@ -97,10 +96,10 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             ////////////////////////////////////////////////////////////////////////
             // init card
             HBCIUtils.log("initializing javax.smartcardio", HBCIUtils.LOG_DEBUG);
-            HBCIUtilsInternal.getCallback().callback(this, HBCICallback.NEED_CHIPCARD, HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"), HBCICallback.TYPE_NONE, null);
+            HBCIUtilsInternal.getCallback().callback(this, HBCICallback.NEED_CHIPCARD, HBCIUtilsInternal.getLocMsg("CALLB_NEED_CHIPCARD"), HBCICallback.ResponseType.TYPE_NONE, null);
             
             initCT();
-            HBCIUtilsInternal.getCallback().callback(this, HBCICallback.HAVE_CHIPCARD, "", HBCICallback.TYPE_NONE, null);
+            HBCIUtilsInternal.getCallback().callback(this, HBCICallback.HAVE_CHIPCARD, "", HBCICallback.ResponseType.TYPE_NONE, null);
             //
             ////////////////////////////////////////////////////////////////////////
             
@@ -902,7 +901,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
                         HBCIUtilsInternal.getCallback().callback(this,
                                                          HBCICallback.NEED_SOFTPIN,
                                                          HBCIUtilsInternal.getLocMsg("CALLB_NEED_SOFTPIN"),
-                                                         HBCICallback.TYPE_SECRET,
+                                                         HBCICallback.ResponseType.TYPE_SECRET,
                                                          temppin);
                         if (temppin.length() == 0)
                             throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_PINZERO"));
@@ -915,7 +914,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
                     HBCIUtilsInternal.getCallback().callback(this,
                                                      HBCICallback.NEED_HARDPIN,
                                                      HBCIUtilsInternal.getLocMsg("CALLB_NEED_HARDPIN"),
-                                                     HBCICallback.TYPE_NONE,
+                                                     HBCICallback.ResponseType.TYPE_NONE,
                                                      null);
                 }
 
@@ -930,7 +929,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
                         HBCIUtilsInternal.getCallback().callback(this,
                                                          HBCICallback.HAVE_HARDPIN,
                                                          null,
-                                                         HBCICallback.TYPE_NONE,
+                                                         HBCICallback.ResponseType.TYPE_NONE,
                                                          null);
                     }
                 }

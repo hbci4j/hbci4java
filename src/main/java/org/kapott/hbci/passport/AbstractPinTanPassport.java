@@ -292,7 +292,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         this.clearPIN();
         
         // Aufrufer informieren, dass falsche PIN eingegeben wurde (um evtl. PIN aus Puffer zu löschen, etc.) 
-        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.WRONG_PIN,"*** invalid PIN entered",HBCICallback.TYPE_TEXT,new StringBuffer());
+        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.WRONG_PIN,"*** invalid PIN entered",HBCICallback.ResponseType.TYPE_TEXT,new StringBuffer());
     }
     
     /**
@@ -424,7 +424,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             // Aufrufer informieren, dass UserID und CustomerID geändert wurde
             StringBuffer retData=new StringBuffer();
             retData.append(newUserId+"|"+newCustomerId);
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.TYPE_TEXT,retData);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.USERID_CHANGED,"*** User ID changed",HBCICallback.ResponseType.TYPE_TEXT,retData);
         }
     }
 
@@ -965,7 +965,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             retData.append(entry.getId()).append(":").append(entry.getName());
         }
         
-        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_SECMECH,"*** Select a pintan method from the list",HBCICallback.TYPE_TEXT,retData);
+        HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_SECMECH,"*** Select a pintan method from the list",HBCICallback.ResponseType.TYPE_TEXT,retData);
         
         // Pruefen, ob das gewaehlte Verfahren einem aus der Liste entspricht
         final String selected = retData.toString();
@@ -1606,7 +1606,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             if (upd != null)
                 retData.append(upd.getProperty(HBCIUser.UPD_KEY_TANMEDIA,""));
             
-            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.TYPE_TEXT,retData);
+            HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PT_TANMEDIA,"*** Enter the name of your TAN media",HBCICallback.ResponseType.TYPE_TEXT,retData);
             final String result = retData.toString();
             if (StringUtil.hasText(result))
                 return result;

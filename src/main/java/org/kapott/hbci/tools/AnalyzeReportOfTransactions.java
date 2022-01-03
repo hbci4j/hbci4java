@@ -96,7 +96,7 @@ public final class AnalyzeReportOfTransactions
     private static class MyHBCICallback
         extends HBCICallbackConsole
     {
-        public void callback(HBCIPassport passport,int reason,String msg,int dataType,StringBuffer retData)
+        public void callback(HBCIPassport passport,int reason,String msg,ResponseType dataType,StringBuffer retData)
         {
             System.out.println("Callback für folgendes Passport: "+passport.getClientData("init").toString());
             super.callback(passport,reason,msg,dataType,retData);

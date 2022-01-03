@@ -204,10 +204,10 @@ public class UmsatzAbrufPinTan
     }
 
     /**
-     * @see org.kapott.hbci.callback.HBCICallback#callback(org.kapott.hbci.passport.HBCIPassport, int, java.lang.String, int, java.lang.StringBuffer)
+     * @see org.kapott.hbci.callback.HBCICallback#callback(org.kapott.hbci.passport.HBCIPassport, int, java.lang.String, ResponseType, java.lang.StringBuffer)
      */
     @Override
-    public void callback(HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
+    public void callback(HBCIPassport passport, int reason, String msg, ResponseType datatype, StringBuffer retData)
     {
       // Diese Funktion ist wichtig. Ueber die fragt HBCI4Java die benoetigten Daten von uns ab.
       switch (reason)

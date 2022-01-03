@@ -109,11 +109,11 @@ public interface HBCICallback
         <p>Beim Auftreten dieses Callbacks muss die Anwendung also die gerade empfangenen Schlüsseldaten der
         Bank (öffentlicher Signier-/Chiffrierschlüssel) geeignet anzeigen (Exponent, Modulus, Hash-Wert) und
         den Anwender auffordern, diese Daten mit denen aus dem INI-Brief zu vergleichen. Dieser Callback
-        erwartet als Rückgabedaten einen Boolean-Wert (siehe {@link #TYPE_BOOLEAN}). Sind die Daten
+        erwartet als Rückgabedaten einen Boolean-Wert (siehe {@link ResponseType#TYPE_BOOLEAN}). Sind die Daten
         in Ordnung, so muss die Callback-Methode einen leeren String in dem Rückgabedaten-StringBuffer
         zurückgeben, ansonsten füllt sie den StringBuffer mit einem beliebigen nichtleeren String (siehe dazu
-        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,int,StringBuffer)} und
-        die Beschreibung des Rückgabe-Datentyps {@link #TYPE_BOOLEAN})).</p>
+        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String, ResponseType,StringBuffer)} und
+        die Beschreibung des Rückgabe-Datentyps {@link ResponseType#TYPE_BOOLEAN})).</p>
         <p>Da im Moment keine dokumentierten Methoden zur Verfügung stehen, um aus einem Passport die
         entsprechenden Schlüsseldaten zum Anzeigen zu extrahieren, wird folgendes Vorgehen empfohlen:
         die Anwendung erzeugt eine HBCICallback-Klasse, die von einer der bereits vorhandenen 
@@ -144,7 +144,7 @@ public interface HBCICallback
     public final static int HAVE_NEW_MY_KEYS=13;
     /** Ursache des Callback-Aufrufes: Institutsnachricht erhalten. Tritt dieser Callback auf, so enthält
         der <code>msg</code>-Parameter der <code>callback</code>-Methode (siehe
-        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,int,StringBuffer)} einen
+        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,ResponseType,StringBuffer)} einen
         String, den die Bank als Kreditinstitutsnachricht an den Kunden gesandt hat. Diese Nachricht sollte
         dem Anwender i.d.R. angezeigt werden. <em>HBCI4Java</em> erwartet auf diesen Callback keine Antwortdaten. */
     public final static int HAVE_INST_MSG=14;
@@ -200,7 +200,7 @@ public interface HBCICallback
         im <code>retData</code> Rückgabedaten-Objekt ein leerer String zurückgegeben wird, oder er kann
         erzwingen, dass <em>HBCI4Java</em> tatsächlich abbricht, indem ein nicht-leerer String im
         <code>retData</code>-Objekt zurückgegen wird. Siehe dazu auch die Beschreibung des
-        Rückgabe-Datentyps {@link #TYPE_BOOLEAN}.</p>
+        Rückgabe-Datentyps {@link ResponseType#TYPE_BOOLEAN}.</p>
         <p>Das Ignorieren eines Fehlers kann dazu führen, dass <em>HBCI4Java</em> später trotzdem eine
         Exception erzeugt, z.B. weil der Fehler in einem bestimmten Submodul doch nicht einfach ignoriert
         werden kann, oder es kann auch dazu führen, dass Aufträge von der Bank nicht angenommen werden usw.
@@ -358,27 +358,28 @@ public interface HBCICallback
     /** <p>im Parameter retData stehen die neuen Daten im Format UserID|CustomerID drin */
     public final static int USERID_CHANGED=41;
 
-    /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
-    public final static int TYPE_NONE=0;
-    /** erwarteter Datentyp der Antwort: geheimer Text (bei Eingabe nicht anzeigen) */
-    public final static int TYPE_SECRET=1;
-    /** erwarteter Datentyp der Antwort: "normaler" Text */
-    public final static int TYPE_TEXT=2;
-    /** <p>erwarteter Datentyp der Antwort: ja/nein, true/false, weiter/abbrechen
-        oder ähnlich. Da das 
-        Rückgabedatenobjekt immer ein <code>StringBuffer</code> ist, wird hier
-        folgende Kodierung verwendet: die beiden möglichen Werte für die
-        Antwort (true/false, ja/nein, weiter/abbrechen, usw.) werden dadurch
-        unterschieden, dass für den einen Wert ein <em>leerer</em> String 
-        zurückgegeben wird, für den anderen Wert ein <em>nicht leerer</em>
-        beliebiger String. Einige Callback-Reasons können auch den Inhalt
-        des nicht-leeren Strings auswerten. Eine genaue Beschreibung der jeweilis
-        möglichen Rückgabedaten befinden sich in der Beschreibung der 
-        Callback-Reasons (<code>HAVE_*</code> bzw. <code>NEED_*</code>), bei 
-        denen Boolean-Daten als Rückgabewerte benötigt werden.</p>
-        <p>Siehe dazu auch die Hinweise in der Paketbeschreibung zum Paket
-        <code>org.kapott.hbci.callback</code>.</p> */     
-    public final static int TYPE_BOOLEAN=3;
+    enum ResponseType
+    {
+        /** erwarteter Datentyp der Antwort: keiner (keine Antwortdaten erwartet) */
+        TYPE_NONE,
+        /** erwarteter Datentyp der Antwort: geheimer Text (bei Eingabe nicht anzeigen) */
+        TYPE_SECRET,
+        /** erwarteter Datentyp der Antwort: "normaler" Text */
+        TYPE_TEXT,
+        /**
+         * <p>erwarteter Datentyp der Antwort: ja/nein, true/false, weiter/abbrechen
+         * oder ähnlich. Da das Rückgabedatenobjekt immer ein <code>StringBuffer</code> ist, wird hier folgende Kodierung
+         * verwendet: die beiden möglichen Werte für die Antwort (true/false, ja/nein, weiter/abbrechen, usw.) werden
+         * dadurch unterschieden, dass für den einen Wert ein <em>leerer</em> String zurückgegeben wird, für den anderen
+         * Wert ein <em>nicht leerer</em> beliebiger String. Einige Callback-Reasons können auch den Inhalt des nicht-leeren
+         * Strings auswerten. Eine genaue Beschreibung der jeweilis möglichen Rückgabedaten befinden sich in der
+         * Beschreibung der Callback-Reasons (<code>HAVE_*</code> bzw. <code>NEED_*</code>), bei denen Boolean-Daten als
+         * Rückgabewerte benötigt werden.</p>
+         * <p>Siehe dazu auch die Hinweise in der Paketbeschreibung zum Paket
+         * <code>org.kapott.hbci.callback</code>.</p>
+         */
+        TYPE_BOOLEAN
+    }
     
     /** Kernel-Status: Erzeuge Auftrag zum Versenden. Als Zusatzinformation 
         wird bei diesem Callback das <code>HBCIJob</code>-Objekt des 
@@ -626,13 +627,13 @@ public interface HBCICallback
         abgelegt werden. Beim Aufruf der Callback-Methode von <em>HBCI4Java</em> wird dieser
         StringBuffer u.U. mit einem vorgeschlagenen default-Wert für die Nutzereingabe
         gefüllt. */
-    public void callback(HBCIPassport passport,int reason,String msg,int datatype,StringBuffer retData);
+    public void callback(HBCIPassport passport,int reason,String msg,ResponseType datatype,StringBuffer retData);
     
     /** Wird vom HBCI-Kernel aufgerufen, um einen bestimmten Status der
         Abarbeitung bekanntzugeben.
         @param passport gibt an, welches Passport (und damit welches HBCIHandle)
         benutzt wurde, als der Callback erzeugt wurde (siehe auch
-        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,int,StringBuffer)}).
+        {@link #callback(org.kapott.hbci.passport.HBCIPassport,int,String,ResponseType,StringBuffer)}).
         @param statusTag gibt an, welche Stufe der Abarbeitung gerade erreicht
         wurde (alle oben beschriebenen Konstanten, die mit <code>STATUS_</code>
         beginnen)
@@ -657,12 +658,12 @@ public interface HBCICallback
      * dass sie für alle Callbacks, die synchron behandelt werden sollen,
      * <code>true</code> zurückgibt.</p>
      * <p>Die übergebenen Parameter entsprechen denen der Methode
-     * {@link #callback(HBCIPassport, int, String, int, StringBuffer)}. Der 
+     * {@link #callback(HBCIPassport,int,String,ResponseType,StringBuffer)}. Der
      * Rückgabewert gibt ab, ob dieser Callback synchron (<code>true</code>) oder
      * asynchron (<code>false</code>) behandelt werden soll.</p>
      * <p>Mehr Informationen dazu in der Datei <code>README.ThreadedCallbacks</code>.</p> */
     public boolean useThreadedCallback(HBCIPassport passport,int reason,
-                                       String msg,int datatype,
+                                       String msg,ResponseType datatype,
                                        StringBuffer retData);
 }
 

@@ -364,7 +364,7 @@ public final class HBCIUser implements IHandlerData
         HBCIUtilsInternal.getCallback().callback(passport,
                                          HBCICallback.HAVE_NEW_MY_KEYS,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_USER_KEYS"),
-                                         HBCICallback.TYPE_NONE,
+                                         HBCICallback.ResponseType.TYPE_NONE,
                                          new StringBuffer());
         throw new NeedKeyAckException();
     }

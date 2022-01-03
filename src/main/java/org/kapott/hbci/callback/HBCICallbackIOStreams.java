@@ -114,7 +114,7 @@ public class HBCICallbackIOStreams
     entsprechende Aufforderung ausgegeben. Bei Callbacks, die eine Eingabe vom
     Nutzer erwarten, wird die entsprechende Eingabeaufforderung ausgegeben und die
     Eingabe vom <code>inStream</code> gelesen.*/
-    public void callback(HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData) 
+    public void callback(HBCIPassport passport, int reason, String msg, ResponseType datatype, StringBuffer retData)
     {
         getOutStream().println(HBCIUtilsInternal.getLocMsg("CALLB_PASS_IDENT",passport.getClientData("init")));
         
