@@ -25,9 +25,9 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallback.Reason;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
+import org.kapott.hbci.callback.HBCICallback.Status;
 import org.kapott.hbci.exceptions.CanNotParseMessageException;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.ParseErrorException;
@@ -69,14 +69,14 @@ public abstract class Comm
         MsgGen       gen=handler.getMsgGen();
         
         // ausgehende nachricht versenden
-        HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.Status.MSG_SEND,null);
-        HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.Status.MSG_RAW_SEND,msg.toString(0));
+        HBCIUtilsInternal.getCallback().status(getParentPassport(),Status.MSG_SEND,null);
+        HBCIUtilsInternal.getCallback().status(getParentPassport(),Status.MSG_RAW_SEND,msg.toString(0));
         ping(msg);
 
         // nachricht empfangen
-        HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.Status.MSG_RECV,null);
+        HBCIUtilsInternal.getCallback().status(getParentPassport(),Status.MSG_RECV,null);
         String st = pong(gen).toString();
-        HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.Status.MSG_RAW_RECV_ENCRYPTED,st);
+        HBCIUtilsInternal.getCallback().status(getParentPassport(),Status.MSG_RAW_RECV_ENCRYPTED,st);
 
         HBCIUtils.log("received message: "+st,HBCIUtils.LOG_DEBUG2);
         MSG retmsg=null;
@@ -104,7 +104,7 @@ public abstract class Comm
             }
             
             // versuche, nachricht als verschlüsselte nachricht zu parsen
-            HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.Status.MSG_PARSE,"CryptedRes");
+            HBCIUtilsInternal.getCallback().status(getParentPassport(),Status.MSG_PARSE,"CryptedRes");
             try {
                 HBCIUtils.log("trying to parse message as crypted message",HBCIUtils.LOG_DEBUG);
                 retmsg = MSGFactory.getInstance().createMSG("CryptedRes",st,st.length(),gen,MSG.DONT_CHECK_SEQ);
@@ -119,7 +119,7 @@ public abstract class Comm
                 }
                 
                 // versuch, nachricht als unverschlüsselte msg zu parsen
-                HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.Status.MSG_PARSE,msgName+"Res");
+                HBCIUtilsInternal.getCallback().status(getParentPassport(),Status.MSG_PARSE,msgName+"Res");
                 retmsg = MSGFactory.getInstance().createMSG(msgName+"Res",st,st.length(),gen);
             }
         } catch (Exception ex) {

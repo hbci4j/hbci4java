@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallback.Status;
 import org.kapott.hbci.exceptions.ProcessException;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -105,7 +105,7 @@ public class HBCIDialogEnd extends AbstractRawHBCIDialog
 
         final HBCIMsgStatus ret = ctx.getMsgStatus();
         
-        HBCIUtilsInternal.getCallback().status(ctx.getPassport(),HBCICallback.Status.DIALOG_END_DONE,ret);
+        HBCIUtilsInternal.getCallback().status(ctx.getPassport(),Status.DIALOG_END_DONE,ret);
 
         if (ret.isOK())
             return;

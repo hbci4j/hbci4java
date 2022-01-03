@@ -33,6 +33,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallback.ResponseType;
+import org.kapott.hbci.callback.HBCICallback.Status;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.HBCIDialogEnd;
@@ -95,7 +96,7 @@ public final class HBCIInstitute
             p.setProperty(BPD_KEY_LASTUPDATE,String.valueOf(System.currentTimeMillis()));
             passport.setBPD(p);
             HBCIUtils.log("installed new BPD with version "+passport.getBPDVersion(),HBCIUtils.LOG_DEBUG);
-            HBCIUtilsInternal.getCallback().status(passport,HBCICallback.Status.INST_BPD_INIT_DONE,passport.getBPD());
+            HBCIUtilsInternal.getCallback().status(passport,Status.INST_BPD_INIT_DONE,passport.getBPD());
         }
     }
 
@@ -149,7 +150,7 @@ public final class HBCIInstitute
         }
         
         if (foundChanges) {
-            HBCIUtilsInternal.getCallback().status(passport,HBCICallback.Status.INST_GET_KEYS_DONE,null);
+            HBCIUtilsInternal.getCallback().status(passport,Status.INST_GET_KEYS_DONE,null);
             acknowledgeNewKeys();
         }
     }
@@ -265,7 +266,7 @@ public final class HBCIInstitute
                     passport.saveChanges();
                 }
                 
-                HBCIUtilsInternal.getCallback().status(passport,HBCICallback.Status.INST_BPD_INIT,null);
+                HBCIUtilsInternal.getCallback().status(passport,Status.INST_BPD_INIT,null);
                 HBCIUtils.log("Aktualisiere Bankparameter (BPD)",HBCIUtils.LOG_INFO);
                 
                 // Dialog-Context erzeugen
@@ -339,7 +340,7 @@ public final class HBCIInstitute
         // *immer* true zurückgibt
             
         try {
-            HBCIUtilsInternal.getCallback().status(passport,HBCICallback.Status.INST_GET_KEYS,null);
+            HBCIUtilsInternal.getCallback().status(passport,Status.INST_GET_KEYS,null);
             HBCIUtils.log("Rufe Institutsschlüssel ab",HBCIUtils.LOG_INFO);
             
             // Dialog-Context erzeugen
