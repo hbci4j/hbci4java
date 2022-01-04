@@ -89,6 +89,10 @@ Du benötigst:
 
 Klicke im Menu von Eclipse auf "File->Import..." und wähle "Maven->Existing Maven Projects". Folge den Anweisungen des Assistenten. Klicke anschließend mit der rechten Maustaste im "Package Explorer" oder "Navigator" auf das Projekt und wähle im Contextmenu "Maven->Update Project...".
 
+Falls danach noch Compile-Fehler auftreten, ggf. die JAXB-Sourcen einmal manuell aus den XML-Schema-Dateien generieren:
+
+    $> mvn generate-sources
+
 
 ## Unit-Tests
 Im Ordner "src/main/test/" befinden sich einige JUnit-Tests. Einige davon erfordern jedoch das Vorhandensein spezieller Testumgebungen (Vorhandensein von Bankzugängen oder Chipkartenleser). Diese Tests werden im Zuge der Erstellung von Deployment-Artefakten nur dann ausgeführt, wenn die entsprechenden System-Properties "test.online=true" und "test.chipcard=true" aktiv sind. Die Tests zur Ausführung von HBCI-Geschäftsvorfällen benötigen jedoch weitere Daten (Empfängerkonto, Betrag, Verwendungszweck, usw.). Wenn du diese Tests ausführen möchtest, schaue dir den Quellcode der entsprechenden Tests an.
