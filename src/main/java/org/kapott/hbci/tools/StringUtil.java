@@ -21,6 +21,8 @@
 
 package org.kapott.hbci.tools;
 
+import java.util.List;
+
 /**
  * Verschiedene String-Hilfsklassen.
  */
@@ -64,6 +66,31 @@ public class StringUtil
             return false;
         
         return s.trim().length() > 0;
+    }
+    
+    /**
+     * Verbindet die Strings in der Liste mit dem Trennzeichen.
+     * @param values die Werte.
+     * @param sep das Trennzeichen.
+     * @return der verbundene String.
+     */
+    public static String join(List<String> values, String sep)
+    {
+      if (values == null)
+        return null;
+      
+      final StringBuilder sb = new StringBuilder();
+      boolean first = true;
+      for (String s:values)
+      {
+        if (!first && sep != null)
+        {
+          sb.append(sep);
+        }
+        first = false;
+        sb.append(s);
+      }
+      return sb.toString();
     }
 }
 
