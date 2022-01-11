@@ -16,6 +16,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_08.DirectDebitTransactionInformati
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.Document;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.GenericPersonIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.PaymentInstruction29;
+import org.kapott.hbci.sepa.jaxb.pain_008_001_08.PaymentTypeInformation29;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.PersonIdentificationSchemeName1Choice;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.Purpose2Choice;
 import org.kapott.hbci.tools.StringUtil;
@@ -104,8 +105,12 @@ public class ParsePain00800108 extends AbstractSepaParser<List<Properties>>
                     put(prop,Names.MANDDATEOFSIG, SepaUtil.format(mandDate,null));
                 }
 
-                put(prop,Names.SEQUENCETYPE,pmtInf.getPmtTpInf().getSeqTp().value());
-                put(prop,Names.LAST_TYPE,pmtInf.getPmtTpInf().getLclInstrm().getCd());
+                final PaymentTypeInformation29 pti = pmtInf.getPmtTpInf();
+                if (pti != null)
+                {
+                  put(prop,Names.SEQUENCETYPE,pti.getSeqTp() != null ? pti.getSeqTp().value() : "FRST");
+                  put(prop,Names.LAST_TYPE,pti.getLclInstrm() != null ? pti.getLclInstrm().getCd() : "CORE");
+                }
 
                 sepaResults.add(prop);
             }

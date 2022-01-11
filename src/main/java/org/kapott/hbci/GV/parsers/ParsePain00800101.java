@@ -13,6 +13,7 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_01.Document;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.EuroMax9Amount;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.Pain00800101;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_01.PaymentInstructionInformation5;
+import org.kapott.hbci.sepa.jaxb.pain_008_001_01.PaymentTypeInformation8;
 
 /**
  * Parser-Implementierung fuer Pain 008.001.01.
@@ -72,7 +73,9 @@ public class ParsePain00800101 extends AbstractSepaParser<List<Properties>>
                 put(prop,Names.MANDDATEOFSIG, SepaUtil.format(mandDate,null));
             }
 
-            put(prop,Names.SEQUENCETYPE,pmtInf.getPmtTpInf().getSeqTp().value());
+            final PaymentTypeInformation8 pti = pmtInf.getPmtTpInf();
+            if (pti != null)
+              put(prop,Names.SEQUENCETYPE,pti.getSeqTp() != null ? pti.getSeqTp().value() : "FRST");
 
             // CORE/COR1/B2B gibts in 008.001.01 noch nicht
             
