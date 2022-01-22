@@ -326,7 +326,7 @@ public final class HBCIHandler
     
     /* gibt ein Dialog-Objekt für eine bestimmte Kunden-ID zurück. Existiert für
      * die Kunden-ID noch kein Dialog-Objekt, so wird eines erzeugt */
-    private HBCIDialog getDialogFor(String customerId)
+    private HBCIDialog getOrCreateDialogFor(String customerId)
     {
         HBCIDialog dialog=dialogs.get(customerId);
         if (dialog==null) {
@@ -350,7 +350,7 @@ public final class HBCIHandler
     public void newMsg(String customerId)
     {
         HBCIUtils.log("have to create new message for dialog for customer "+customerId,HBCIUtils.LOG_DEBUG);
-        getDialogFor(fixUnspecifiedCustomerId(customerId)).newMsg();
+        getOrCreateDialogFor(fixUnspecifiedCustomerId(customerId)).newMsg();
     }
     
     /** Erzwingen einer neuen Nachricht im Dialog für die aktuelle Kunden-ID.
@@ -430,7 +430,7 @@ public final class HBCIHandler
         
         HBCIDialog dialog = null;
         try {
-            dialog = getDialogFor(customerId);
+            dialog = getOrCreateDialogFor(customerId);
             dialog.addTask((HBCIJobImpl)job);
         } finally {
             // wenn beim hinzufügen des jobs ein fehler auftrat, und wenn der
@@ -475,7 +475,7 @@ public final class HBCIHandler
     {
         customerId=fixUnspecifiedCustomerId(customerId);
         HBCIUtils.log("creating empty dialog for customerid "+customerId,HBCIUtils.LOG_DEBUG);
-        getDialogFor(customerId);
+        getOrCreateDialogFor(customerId);
     }
     
     /** Entspricht {@link #createEmptyDialog(String) createEmptyDialog(null)} */
@@ -522,7 +522,7 @@ public final class HBCIHandler
                 passport.setCustomerId(customerid);
                 
                 try {
-                    HBCIDialog dialog=getDialogFor(customerid);
+                    HBCIDialog dialog= getOrCreateDialogFor(customerid);
                     HBCIDialogStatus dialogStatus=dialog.doIt();
                     ret.addDialogStatus(customerid,dialogStatus);
                 } catch (Exception e) {
@@ -1038,7 +1038,7 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
         reset();
         
         String customerId=passport.getCustomerId();
-        getDialogFor(customerId);
+        getOrCreateDialogFor(customerId);
         HBCIDialogStatus result=execute().getDialogStatus(customerId);
         return result;
     }
