@@ -107,7 +107,7 @@ public final class HBCIDialog
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT,null);
     
             // Dialog-Context erzeugen
-            final DialogContext ctx = DialogContext.create(kernel,mainPassport);
+            final DialogContext ctx = new DialogContext(kernel,mainPassport);
             ctx.setDialog(this);
             ctx.setAnonymous(this.isAnon);
             
@@ -174,7 +174,7 @@ public final class HBCIDialog
         final HBCIKernelImpl k = (HBCIKernelImpl) h.getKernel();
         final HBCIPassportInternal p = (HBCIPassportInternal) h.getPassport();
         
-        final DialogContext ctx = DialogContext.create(k,p);
+        final DialogContext ctx = new DialogContext(k,p);
         ctx.setDialog(this);
         ctx.setAnonymous(this.isAnon);
 
