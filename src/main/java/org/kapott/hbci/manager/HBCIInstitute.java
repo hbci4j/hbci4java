@@ -21,15 +21,19 @@
 
 package org.kapott.hbci.manager;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Objects;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -112,30 +116,13 @@ public final class HBCIInstitute
                 if (keyType==null)
                     continue;
 
-                String keyCountry=result.getProperty(head+".KeyName.KIK.country");
-                String keyBLZ=result.getProperty(head+".KeyName.KIK.blz");
-                String keyUserId=result.getProperty(head+".KeyName.userid");
-                String keyNum=result.getProperty(head+".KeyName.keynum");
-                String keyVersion=result.getProperty(head+".KeyName.keyversion");
-
-                HBCIUtils.log("found key "+
-                        keyCountry+"_"+keyBLZ+"_"+keyUserId+"_"+keyType+"_"+
-                        keyNum+"_"+keyVersion,
-                        HBCIUtils.LOG_DEBUG);
-
-                byte[] keyExponent=result.getProperty(head+".PubKey.exponent").getBytes(Comm.ENCODING);
-                byte[] keyModulus=result.getProperty(head+".PubKey.modulus").getBytes(Comm.ENCODING);
-
-                KeyFactory fac=KeyFactory.getInstance("RSA");
-                KeySpec spec=new RSAPublicKeySpec(new BigInteger(+1,keyModulus),
-                                                  new BigInteger(+1,keyExponent));
-                Key key=fac.generatePublic(spec);
-
-                if (keyType.equals("S")) {
-                    passport.setInstSigKey(new HBCIKey(keyCountry,keyBLZ,keyUserId,keyNum,keyVersion,key));
-                    foundChanges=true;
-                } else if (keyType.equals("V")) {
-                    passport.setInstEncKey(new HBCIKey(keyCountry,keyBLZ,keyUserId,keyNum,keyVersion,key));
+                if (keyType.equals("S") || keyType.equals("V")) {
+                    final HBCIKey hbciKey = getHbciKey(result, head, keyType);
+                    if (keyType.equals("S")) {
+                        passport.setInstSigKey(hbciKey);
+                    } else if (keyType.equals("V")) {
+                        passport.setInstEncKey(hbciKey);
+                    }
                     foundChanges=true;
                 }
             }
@@ -152,7 +139,35 @@ public final class HBCIInstitute
             acknowledgeNewKeys();
         }
     }
-    
+
+    private static HBCIKey getHbciKey(final Properties result, final String head, final String type)
+                    throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeySpecException
+    {
+        Objects.requireNonNull(result);
+        Objects.requireNonNull(head);
+        Objects.requireNonNull(type);
+
+        String country = result.getProperty(head + ".KeyName.KIK.country");
+        String blz = result.getProperty(head + ".KeyName.KIK.blz");
+        String userId = result.getProperty(head + ".KeyName.userid");
+        String keyNum = result.getProperty(head + ".KeyName.keynum");
+        String keyVersion = result.getProperty(head + ".KeyName.keyversion");
+
+        HBCIUtils.log("found key "+
+                          country+"_"+blz+"_"+userId+"_"+type+"_"+
+                          keyNum+"_"+keyVersion,
+                      HBCIUtils.LOG_DEBUG);
+
+        byte[] keyExponent = result.getProperty(head + ".PubKey.exponent").getBytes(Comm.ENCODING);
+        byte[] keyModulus = result.getProperty(head + ".PubKey.modulus").getBytes(Comm.ENCODING);
+
+        KeyFactory fac = KeyFactory.getInstance("RSA");
+        KeySpec spec = new RSAPublicKeySpec(new BigInteger(+1, keyModulus), new BigInteger(+1, keyExponent));
+        Key key = fac.generatePublic(spec);
+
+        return new HBCIKey(country, blz, userId, keyNum, keyVersion, key);
+    }
+
     private void acknowledgeNewKeys()
     {
         StringBuffer answer=new StringBuffer();
