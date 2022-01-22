@@ -296,7 +296,7 @@ public class UmsatzAbrufPinTan
               // den bankspezifischen Text mit den Instruktionen fuer den User.
               // Der Text aus "msg" sollte daher im Dialog dem User angezeigt
               // werden. Da Sparkassen den eigentlichen Bild u.U. auch in msg verpacken,
-              // sollte zur Anzeige nicht der originale Text verwendet werden sondern
+              // sollte zur Anzeige nicht der originale Text verwendet werden, sondern
               // der von QRCode - dort ist dann die ggf. enthaltene Base64-codierte QR-Grafik entfernt
               // msg = code.getMessage();
               String tan = null;

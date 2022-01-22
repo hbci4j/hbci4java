@@ -79,7 +79,7 @@ public enum KnownTANProcess
         
         /**
          * Liefert die zu verwendende Prozessvariante.
-         * @param code der Code der Variante. Nie NULL sondern hoechstens die Default-Variante.
+         * @param code der Code der Variante. Nie NULL, sondern hoechstens die Default-Variante.
          * @return die Prozess-Variante.
          */
         public final static Variant determine(String code)
@@ -131,7 +131,7 @@ public enum KnownTANProcess
      * Ermittelt den passenden TAN-Prozess fuer die Variante und die Schritt-Nummer.
      * @param v die Prozess-Variante.
      * @param step die Schritt-Nummer.
-     * @return der TAN-Prozess. Nie NULL sondern im Zweifel {@link KnownTANProcess#PROCESS2_STEP1}.
+     * @return der TAN-Prozess. Nie NULL, sondern im Zweifel {@link KnownTANProcess#PROCESS2_STEP1}.
      */
     public static KnownTANProcess get(Variant v, int step)
     {

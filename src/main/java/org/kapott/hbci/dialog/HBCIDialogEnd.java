@@ -49,7 +49,7 @@ public class HBCIDialogEnd extends AbstractRawHBCIDialog
         SIG_ID,
         
         /**
-         * Fehler werden nicht geworfen sondern nur geloggt.
+         * Fehler werden nicht geworfen, sondern nur geloggt.
          * Muss nur explizit angegeben werden, wenn es kein anonymer Dialog ist oder das Werfen per "client.errors.ignoreDialogEndErrors" abgeschaltet ist.
          */
         ACCEPT_ERROR,

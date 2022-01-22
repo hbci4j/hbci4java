@@ -476,7 +476,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
     {
         // Bei RDH/RAH wird doppelt gehasht.
         // Die Signatur selbst wird bereits auf einem Hash der Daten durchgefuehrt.
-        // Die Spec schreibt aber vor, dass nicht die Daten signiert werden sondern
+        // Die Spec schreibt aber vor, dass nicht die Daten signiert werden, sondern
         // der Hash. Also doppelt
         return CryptUtils.hash(data,CryptUtils.HASH_ALG_SHA256);
     }

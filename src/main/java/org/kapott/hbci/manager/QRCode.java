@@ -126,7 +126,7 @@ public class QRCode
             // Dann alles abschneiden bis zum Beginn von "CHLGUC"
             code = code.substring(t1Start);
 
-            // Wir haben eigentlich nicht nur "CHLGUC" sondern "CHLGUCXXXX"
+            // Wir haben eigentlich nicht nur "CHLGUC", sondern "CHLGUCXXXX"
             // Wobei die 4 Zahlen die Laenge des Codes angeben. Wir schneiden einfach alles ab.
             code = code.substring(10);
             
@@ -150,7 +150,7 @@ public class QRCode
 
         int t1Start = msg.indexOf("CHLGTEXT");
         
-        // Wir haben eigentlich nicht nur "CHLGTEXT" sondern "CHLGTEXTXXXX"
+        // Wir haben eigentlich nicht nur "CHLGTEXT", sondern "CHLGTEXTXXXX"
         // Wobei die 4 Zahlen die Laenge des Textes angeben. Wir schneiden einfach alles bis dahin ab.
         this.text = msg.substring(t1Start+12);
         //

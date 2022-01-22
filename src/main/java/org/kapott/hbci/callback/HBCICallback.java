@@ -555,7 +555,7 @@ public interface HBCICallback
      * Wie STATUS_MSG_RAW_RECV - jedoch noch vor der Entschluesselung der Daten.
      * Abhaengig vom HBCI-Verfahren kann die Nachricht aber auch hier bereits entschluesselt
      * sein. Naemlich bei HBCI-Verfahren, bei denen die Verschluesselung nicht auf
-     * im HBCI-Protokoll selbst stattfindet sondern auf dem Transport-Protokoll.
+     * im HBCI-Protokoll selbst stattfindet, sondern auf dem Transport-Protokoll.
      * Konkret ist das PIN/TAN. Bei Schluesseldatei und Chipkarte hingegen ist die
      * Message zu diesem Zeitpunkt hier noch verschluesselt.
      */

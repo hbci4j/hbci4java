@@ -202,11 +202,11 @@ public class GVTAN2Step extends HBCIJobImpl
 
         ///////////////////////////////////////////////////////////////////////
         // Die folgenden Sonderbehandlungen sind nur bei Prozess-Variante 2 in Schritt 2 noetig,
-        // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
+        // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind, sondern das HKTAN Step2
         if (this.process == KnownTANProcess.PROCESS2_STEP2 && this.task != null)
         {
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
-            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
+            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN, sondern auf den eigentlichen GV
             // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
             if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null && this.task.redoAllowed())
             {

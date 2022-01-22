@@ -89,8 +89,8 @@ public class ParameterFinder
      * Sucht in props nach allen Schluesseln im genannten Pfad und liefert sie zurueck.
      * @param props die Properties, in denen gesucht werden soll.
      * @param query das Query.
-     * @return Liefert die gefundenen Properties. Niemals NULL sondern hoechstens leere Properties.
-     * Als Schluessel wird jeweils nicht der gesamte Pfad verwendet sondern nur der Teil hinter dem letzten Punkt.
+     * @return Liefert die gefundenen Properties. Niemals NULL, sondern hoechstens leere Properties.
+     * Als Schluessel wird jeweils nicht der gesamte Pfad verwendet, sondern nur der Teil hinter dem letzten Punkt.
      */
     public static Properties find(Properties props, Query query)
     {
@@ -102,8 +102,8 @@ public class ParameterFinder
      * @param props die Properties, in denen gesucht werden soll.
      * @param path der Pfad. Es koennen Wildcards verwendet werden.
      * Etwa so: Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.*secfunc")
-     * @return Liefert die gefundenen Properties. Niemals NULL sondern hoechstens leere Properties.
-     * Als Schluessel wird jeweils nicht der gesamte Pfad verwendet sondern nur der Teil hinter dem letzten Punkt.
+     * @return Liefert die gefundenen Properties. Niemals NULL, sondern hoechstens leere Properties.
+     * Als Schluessel wird jeweils nicht der gesamte Pfad verwendet, sondern nur der Teil hinter dem letzten Punkt.
      */
     public static Properties find(Properties props, String path)
     {
@@ -157,7 +157,7 @@ public class ParameterFinder
      * wenn man ueber grosse Bereiche sucht und die Namen des letzen Elements im Baum gleich lauten koennen.
      * @param props die Properties, in denen gesucht werden soll.
      * @param query das Query.
-     * @return Liefert die gefundenen Properties. Niemals NULL sondern hoechstens leere Properties.
+     * @return Liefert die gefundenen Properties. Niemals NULL, sondern hoechstens leere Properties.
      */
     public static Properties findAll(Properties props, Query query)
     {
@@ -171,7 +171,7 @@ public class ParameterFinder
      * @param props die Properties, in denen gesucht werden soll.
      * @param path der Pfad. Es koennen Wildcards verwendet werden.
      * Etwa so: Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.*secfunc")
-     * @return Liefert die gefundenen Properties. Niemals NULL sondern hoechstens leere Properties.
+     * @return Liefert die gefundenen Properties. Niemals NULL, sondern hoechstens leere Properties.
      */
     public static Properties findAll(Properties props, String path)
     {

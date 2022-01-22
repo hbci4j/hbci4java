@@ -193,7 +193,7 @@ public class SepaUtil
     
     /**
      * Liefert den Wert des Properties oder den Default-Wert.
-     * Der Default-Wert wird nicht nur bei NULL verwendet sondern auch bei Leerstring.
+     * Der Default-Wert wird nicht nur bei NULL verwendet, sondern auch bei Leerstring.
      * @param props die Properties.
      * @param name der Name des Properties.
      * @param defaultValue der Default-Wert.
