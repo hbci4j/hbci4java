@@ -540,7 +540,7 @@ public final class HBCIUser implements IHandlerData
         ///////////////////////////////////////////////////////////////////
         // Die UPD-Keys sicher, die nicht direkt von der Bank kommen, sondern
         // von uns. Eigentlich sollten die nicht direkt in den UPD-Properties
-        // gespeichert, sondern separat. Dazu muesste ich aber die Datenstruktur
+        // gespeichert werden, sondern separat. Dazu muesste ich aber die Datenstruktur
         // von PassportData erweitern und das auch bei allen anderen Passports
         // nachziehen sowie eine Migration einbauen. Dafuer lohnt sich das nicht.
         final Map<String,String> protectedKeys = new HashMap<String,String>();
