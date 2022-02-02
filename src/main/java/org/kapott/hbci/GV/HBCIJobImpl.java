@@ -1310,13 +1310,10 @@ public abstract class HBCIJobImpl
             return false; // Ne, noch nicht. Dann lassen wir das erstmal weg
         }
         
-        
         // SEPAInfo laden und darüber iterieren
         Properties props = handler.getLowlevelJobRestrictions("SEPAInfo");
         String value = props.getProperty("cannationalacc");
         HBCIUtils.log("cannationalacc=" + value,HBCIUtils.LOG_DEBUG);
         return value != null && value.equalsIgnoreCase("J");
     }
-    
-
 }
