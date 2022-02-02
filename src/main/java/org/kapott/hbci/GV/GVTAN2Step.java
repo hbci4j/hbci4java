@@ -129,9 +129,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
-     */
+    @Override
     public void setParam(String paramName, String value)
     {
         if (paramName.equals("orderhash")) {
@@ -158,7 +156,8 @@ public class GVTAN2Step extends HBCIJobImpl
     {
         this.task = task;
     }
-    
+
+    @Override
     protected void saveReturnValues(HBCIMsgStatus status, int sref)
     {
         super.saveReturnValues(status, sref);
@@ -171,18 +170,12 @@ public class GVTAN2Step extends HBCIJobImpl
         }
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#redo()
-     */
     @Override
     public HBCIJobImpl redo()
     {
         return this.redo;
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#haveTan()
-     */
     @Override
     public boolean haveTan()
     {
@@ -191,9 +184,6 @@ public class GVTAN2Step extends HBCIJobImpl
         return true;
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
-     */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
         final Properties result = msgstatus.getData();
