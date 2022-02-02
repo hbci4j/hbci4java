@@ -237,7 +237,7 @@ public class GVTAN2Step extends HBCIJobImpl
             return;
         }
 
-        // Daten fuer die TAN-Abfrage einsammeln
+        //region: Daten fuer die TAN-Abfrage einsammeln
         
         // Prozess-Variante 1:
         final String challenge = result.getProperty(header+".challenge");
@@ -266,5 +266,6 @@ public class GVTAN2Step extends HBCIJobImpl
             HBCIUtils.log("found orderref '" + orderref + "' in HITAN",HBCIUtils.LOG_DEBUG);
             this.step2.setParam("orderref",orderref);
         }
+        //endregion
     }
 }
