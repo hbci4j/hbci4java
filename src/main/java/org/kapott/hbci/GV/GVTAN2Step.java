@@ -203,7 +203,7 @@ public class GVTAN2Step extends HBCIJobImpl
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
             // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
             // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
-            if (toInsCode(this.getHBCICode()).equals(segCode) && W3040.isIn(msgstatus.segStatus.getWarnings()) && this.task.redoAllowed())
+            if (segCode.equals(toInsCode(this.getHBCICode())) && W3040.isIn(msgstatus.segStatus.getWarnings()) && this.task.redoAllowed())
             {
                 HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                 HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
@@ -212,7 +212,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
             // Das ist das Response auf den eigentlichen GV - an den Task durchreichen
             // Muessen wir extra pruefen, weil das hier auch das HITAN sein koennte. Das schauen wir aber nicht an
-            if (toInsCode(this.task.getHBCICode()).equals(segCode))
+            if (segCode.equals(toInsCode(this.task.getHBCICode())))
             {
                 HBCIUtils.log("this is a response segment for the original task (" + this.task.getName() + ") - storing results in the original job",HBCIUtils.LOG_DEBUG);
                 this.task.fillJobResultFromTanJob(msgstatus, header, idx);
