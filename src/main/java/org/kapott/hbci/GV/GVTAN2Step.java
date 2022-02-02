@@ -195,14 +195,13 @@ public class GVTAN2Step extends HBCIJobImpl
         final String segCode = result.getProperty(header+".SegHead.code"); // HITAN oder das HI** des GV
         HBCIUtils.log("found HKTAN response with segcode " + segCode,HBCIUtils.LOG_DEBUG);
 
-        ///////////////////////////////////////////////////////////////////////
         // Die folgenden Sonderbehandlungen sind nur bei Prozess-Variante 2 in Schritt 2 noetig,
         // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
         if (this.process == PROCESS2_STEP2 && this.task != null)
         {
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
-            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
-            // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
+            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN, sondern auf den eigentlichen GV.
+            // In dem Fall muessen wir uns den eigentlichen Task für die erneute Ausfuehrung merken.
             if (segCode.equals(toInsCode(this.getHBCICode())) && W3040.isIn(msgstatus.segStatus.getWarnings()) && this.task.redoAllowed())
             {
                 HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
@@ -210,24 +209,20 @@ public class GVTAN2Step extends HBCIJobImpl
                 this.redo = this.task;
             }
 
-            // Das ist das Response auf den eigentlichen GV - an den Task durchreichen
+            // Es ist die Antwort auf den eigentlichen GV -> an den Task durchreichen
             // Muessen wir extra pruefen, weil das hier auch das HITAN sein koennte. Das schauen wir aber nicht an
             if (segCode.equals(toInsCode(this.task.getHBCICode())))
             {
                 HBCIUtils.log("this is a response segment for the original task (" + this.task.getName() + ") - storing results in the original job",HBCIUtils.LOG_DEBUG);
                 this.task.fillJobResultFromTanJob(msgstatus, header, idx);
             }
-            
-            // Wir haben hier nichts weiter zu tun
+
             return;
         }
-        //
-        ///////////////////////////////////////////////////////////////////////
 
         this.redo = null;
         final HBCIPassportInternal p = this.getMainPassport();
-        
-        ///////////////////////////////////////////////////////////////////////
+
         // SCA-Ausnahme checken. Wenn wir in der Auswertung des ersten HKTAN sind, pruefen wir, ob die Bank einen 3076 geschickt
         // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
         if ((this.process == PROCESS1 || this.process == PROCESS2_STEP1) && (W3076.isIn(msgstatus.segStatus.getWarnings()) || W3076.isIn(msgstatus.globStatus.getWarnings())))
@@ -241,10 +236,7 @@ public class GVTAN2Step extends HBCIJobImpl
             }
             return;
         }
-        //
-        ///////////////////////////////////////////////////////////////////////
 
-        ///////////////////////////////////////////////////////////////////////
         // Daten fuer die TAN-Abfrage einsammeln
         
         // Prozess-Variante 1:
@@ -274,7 +266,5 @@ public class GVTAN2Step extends HBCIJobImpl
             HBCIUtils.log("found orderref '" + orderref + "' in HITAN",HBCIUtils.LOG_DEBUG);
             this.step2.setParam("orderref",orderref);
         }
-        //
-        ///////////////////////////////////////////////////////////////////////
     }
 }
