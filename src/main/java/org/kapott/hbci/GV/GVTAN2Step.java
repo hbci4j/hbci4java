@@ -205,7 +205,8 @@ public class GVTAN2Step extends HBCIJobImpl
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
             // Das 3040 bezieht sich dann aber nicht auf unser HKTAN, sondern auf den eigentlichen GV.
             // In dem Fall muessen wir uns den eigentlichen Task für die erneute Ausfuehrung merken.
-            if (segCode.equals(toInsCode(this.getHBCICode())) && W3040.isIn(segS.getWarnings()) && this.task.redoAllowed())
+            if (W3040.isIn(segS.getWarnings()) &&
+                segCode.equals(toInsCode(this.getHBCICode())) && this.task.redoAllowed())
             {
                 HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                 HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
@@ -228,7 +229,8 @@ public class GVTAN2Step extends HBCIJobImpl
 
         // SCA-Ausnahme checken. Wenn wir in der Auswertung des ersten HKTAN sind, pruefen wir, ob die Bank einen 3076 geschickt
         // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
-        if ((this.process == PROCESS1 || this.process == PROCESS2_STEP1) && (W3076.isIn(segS.getWarnings()) || W3076.isIn(globS.getWarnings())))
+        if ((this.process == PROCESS1 || this.process == PROCESS2_STEP1) &&
+            (W3076.isIn(segS.getWarnings()) || W3076.isIn(globS.getWarnings())))
         {
             HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint
