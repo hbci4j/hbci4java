@@ -1020,8 +1020,7 @@ public abstract class HBCIJobImpl
         return passports.getMainPassport();
     }
     
-    private void _checkAccountCRC(String frontendname,
-    							  String blz,String number)
+    private void _checkAccountCRC(String frontendname, String blz,String number)
     {
         // pruefsummenberechnung nur wenn blz/kontonummer angegeben sind
         if (blz==null || number==null) {
