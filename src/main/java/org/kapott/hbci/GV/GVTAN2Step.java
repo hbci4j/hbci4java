@@ -264,10 +264,10 @@ public class GVTAN2Step extends HBCIJobImpl
         // Die Auftragsreferenz aus dem ersten HITAN bei Prozessvariante 2. Die muessen wir bei dem HKTAN#2 mitschicken, damit die Bank
         // weiss, auf welchen Auftrag sich die TAN bezieht
         final String orderref = result.getProperty(header+".orderref");
-        if (step2 != null && orderref != null)
+        if (this.step2 != null && orderref != null)
         {
             HBCIUtils.log("found orderref '" + orderref + "' in HITAN",HBCIUtils.LOG_DEBUG);
-            step2.setParam("orderref",orderref);
+            this.step2.setParam("orderref",orderref);
         }
         //
         ///////////////////////////////////////////////////////////////////////
