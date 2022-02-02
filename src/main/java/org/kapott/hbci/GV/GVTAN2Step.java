@@ -62,8 +62,8 @@ public class GVTAN2Step extends HBCIJobImpl
     }
     
     /**
-     * Speichert den Prozess-Schritt des HKTAN.
-     * @param p der Prozess-Schritt.
+     * Speichert den Prozessschritt des HKTAN.
+     * @param p der Prozessschritt.
      */
     public void setProcess(KnownTANProcess p)
     {
@@ -146,7 +146,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
     /**
      * Speichert die Referenz auf das zweite HKTAN im ersten HKTAN.
-     * Wird fuer Prozess-Variante 2 benoetigt.
+     * Wird fuer Prozessvariante 2 benoetigt.
      * @param step2 die Referenz auf den ersten HKTAN.
      */
     public void setStep2(GVTAN2Step step2)
@@ -198,7 +198,7 @@ public class GVTAN2Step extends HBCIJobImpl
         final String segCode = result.getProperty(header+".SegHead.code"); // HITAN oder das HI** des GV
         HBCIUtils.log("found HKTAN response with segcode " + segCode,HBCIUtils.LOG_DEBUG);
 
-        // Die folgenden Sonderbehandlungen sind nur bei Prozess-Variante 2 in Schritt 2 noetig,
+        // Die folgenden Sonderbehandlungen sind nur bei Prozessvariante 2 in Schritt 2 noetig,
         // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
         if (this.process == PROCESS2_STEP2 && this.task != null)
         {
@@ -236,7 +236,7 @@ public class GVTAN2Step extends HBCIJobImpl
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint
             if (this.step2 != null)
             {
-                // Bewirkt, dass das zweite HKTAN bei Prozess-Variante 2 nicht mehr gesendet wird
+                // Bewirkt, dass das zweite HKTAN bei Prozessvariante 2 nicht mehr gesendet wird
                 this.step2.skip();
             }
             return;
@@ -244,7 +244,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
         //region: Daten fuer die TAN-Abfrage einsammeln
         
-        // Prozess-Variante 1:
+        // Prozessvariante 1:
         final String challenge = result.getProperty(header+".challenge");
         if (challenge != null)
         {
