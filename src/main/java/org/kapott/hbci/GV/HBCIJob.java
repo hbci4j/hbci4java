@@ -191,7 +191,7 @@ public interface HBCIJob
 
     public void setParam(String paramName, Integer index, Date date);
 
-    /** Setzen eines Job-Parameters, bei dem ein Integer-Wert Da als Wert erwartet wird. Diese Methode
+    /** Setzen eines Job-Parameters, bei dem ein Integer-Wert als Wert erwartet wird. Diese Methode
      dient nur als Wrapper für {@link #setParam(String,String)}.
      @param paramName Name des zu setzenden Job-Parameters
      @param i Integer-Wert, der als Wert gesetzt werden soll */
@@ -212,7 +212,7 @@ public interface HBCIJob
     public void setParam(String paramName,String value);
 
     /** <p>Setzen eines Job-Parameters. Für alle Highlevel-Jobs ist in der Package-Beschreibung zum
-     Package <code>org.kapott.hbci.GV</code> eine Auflistung aller Jobs und deren Parameter zu finden.
+     Package {@link org.kapott.hbci.GV} eine Auflistung aller Jobs und deren Parameter zu finden.
      Für alle Lowlevel-Jobs kann eine Liste aller Parameter entweder mit dem Tool
      {@link org.kapott.hbci.tools.ShowLowlevelGVs} oder zur Laufzeit durch Aufruf
      der Methode {@link org.kapott.hbci.manager.HBCIHandler#getLowlevelJobParameterNames(String)} 

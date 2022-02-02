@@ -857,7 +857,7 @@ public abstract class HBCIJobImpl
         return null;
     }
 
-    /* füllt das Objekt mit den Rückgabedaten, wenn der GV durch einen TAN Task
+    /** füllt das Objekt mit den Rückgabedaten, wenn der GV durch einen TAN Task
     gewrapped wurde und die GV-spezifischen Daten daraus übernommen werden müssen.
     Siehe dazu auch HBCIJobImpl::fillJobResult() 
     */
@@ -873,7 +873,7 @@ public abstract class HBCIJobImpl
         extractResults(status, header, contentCounter++);
     }
     
-    /* füllt das Objekt mit den Rückgabedaten. Dazu wird zuerst eine Liste aller
+    /** füllt das Objekt mit den Rückgabedaten. Dazu wird zuerst eine Liste aller
        Segmente erstellt, die Rückgabedaten für diesen Task enthalten. Anschließend
        werden die HBCI-Rückgabewerte (RetSegs) im outStore gespeichert. Danach werden
        die GV-spezifischen Daten im outStore abgelegt */
@@ -939,7 +939,7 @@ public abstract class HBCIJobImpl
         }
     }
     
-    /* wenn wenigstens ein HBCI-Rückgabewert für den aktuellen GV gefunden wurde,
+    /** wenn wenigstens ein HBCI-Rückgabewert für den aktuellen GV gefunden wurde,
        so werden im outStore zusätzlich die entsprechenden Dialog-Parameter
        gespeichert (Property @c basic.*) */
     private void saveBasicValues(Properties result,int ref)
@@ -962,7 +962,7 @@ public abstract class HBCIJobImpl
         }
     }
 
-    /*
+    /**
      * speichert die HBCI-Rückgabewerte für diesen GV im outStore ab. Dazu
      * werden alle RetSegs durchgesehen; diejenigen, die den aktuellen GV
      * betreffen, werden im @c data Property unter dem namen @c ret_i.*
@@ -990,7 +990,7 @@ public abstract class HBCIJobImpl
         jobResult.globStatus=status.globStatus;
     }
 
-    /* diese Methode wird i.d.R. durch abgeleitete GV-Klassen überschrieben, um die
+    /** diese Methode wird i.d.R. durch abgeleitete GV-Klassen überschrieben, um die
        Rückgabedaten in einem passenden Format abzuspeichern. Diese default-Implementation
        tut nichts */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
