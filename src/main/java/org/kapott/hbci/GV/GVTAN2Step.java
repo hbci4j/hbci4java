@@ -36,6 +36,9 @@ import org.kapott.hbci.tools.StringUtil;
 
 import static org.kapott.hbci.dialog.KnownReturncode.W3040;
 import static org.kapott.hbci.dialog.KnownReturncode.W3076;
+import static org.kapott.hbci.dialog.KnownTANProcess.PROCESS1;
+import static org.kapott.hbci.dialog.KnownTANProcess.PROCESS2_STEP1;
+import static org.kapott.hbci.dialog.KnownTANProcess.PROCESS2_STEP2;
 
 /**
  * @author stefan.palme
@@ -195,7 +198,7 @@ public class GVTAN2Step extends HBCIJobImpl
         ///////////////////////////////////////////////////////////////////////
         // Die folgenden Sonderbehandlungen sind nur bei Prozess-Variante 2 in Schritt 2 noetig,
         // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
-        if (this.process == KnownTANProcess.PROCESS2_STEP2 && this.task != null)
+        if (this.process == PROCESS2_STEP2 && this.task != null)
         {
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
             // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
@@ -227,7 +230,7 @@ public class GVTAN2Step extends HBCIJobImpl
         ///////////////////////////////////////////////////////////////////////
         // SCA-Ausnahme checken. Wenn wir in der Auswertung des ersten HKTAN sind, pruefen wir, ob die Bank einen 3076 geschickt
         // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
-        if ((this.process == KnownTANProcess.PROCESS1 || this.process == KnownTANProcess.PROCESS2_STEP1) && (W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null || W3076.searchReturnValue(msgstatus.globStatus.getWarnings()) != null))
+        if ((this.process == PROCESS1 || this.process == PROCESS2_STEP1) && (W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null || W3076.searchReturnValue(msgstatus.globStatus.getWarnings()) != null))
         {
             HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint
