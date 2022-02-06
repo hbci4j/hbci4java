@@ -1546,6 +1546,19 @@
             </valids>
         </DEGdef>
 
+        <DEGdef id="ParTAN2Step7">
+            <DE name="can1step" type="JN"/>
+            <DE name="canmultitangvs" type="JN"/>
+            <DE name="orderhashmode" type="Code" maxsize="1"/>
+            <DEG type="TAN2StepParams7" name="TAN2StepParams" maxnum="98"/>
+
+            <valids path="orderhashmode">
+                <validvalue>0</validvalue> <!-- 0: Auftrags-Hashwert nicht unterstützt -->
+                <validvalue>1</validvalue> <!-- RIPEMD-160 -->
+                <validvalue>2</validvalue> <!-- SHA-1 -->
+            </valids>
+        </DEGdef>
+
         <DEGdef id="ParTemplateD">
             <DE name="dummy" type="AN" minsize="0" maxsize="999" minnum="2" maxnum="999"/>
         </DEGdef>
@@ -1898,6 +1911,85 @@
             <valids path="tanformat">
                 <validvalue>1</validvalue>
                 <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>
+
+        <DEGdef id="TAN2StepParams7"> <!-- FinTS3.0 Security v10.07.2020 S.173 -->
+            <DE name="secfunc" type="Code" maxsize="3"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="id" type="ID"/>
+            <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" /> <!-- umbenannt "{ZKA -> DK} TAN Verfahren" -->
+            <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
+            <DE name="name" type="AN" maxsize="30"/>
+            <DE name="maxlentan2step" type="Num" maxsize="2"/> <!-- leer bei DK TAN "Decoupled" -->
+            <DE name="tanformat" type="Code" maxsize="1"/> <!-- leer bei DK TAN "Decoupled" -->
+            <DE name="inputinfo" type="AN" maxsize="30"/>
+            <DE name="maxleninput2step" type="Num" maxsize="4"/>
+            <DE name="canmultitan" type="JN"/>
+            <DE name="cantandelay" type="Code" maxsize="1"/>
+            <DE name="canstorno" type="JN"/>
+            <DE name="needsmsaccount" type="Code" maxsize="1"/>
+            <DE name="needorderaccount" type="Code" maxsize="1"/>
+            <DE name="needchallengeklass" type="JN"/>
+            <DE name="ischallengestructured" type="JN"/>
+            <DE name="initmode" type="Code"/>
+            <DE name="needtanmedia" type="Code"/>
+            <DE name="need_hhducresponse" type="JN"/>
+            <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
+
+            <!-- region neue Parameter (nur bei DK TAN "Decoupled*" relevant) -->
+            <!-- Maximale Anzahl Statusabfragen -->
+            <!-- Gibt die maximale Anzahl der Statusabfragen mit TAN-Prozess=S
+                 beim Decoupled-Verfahren an. Wird haeufiger abgefragt, so kann
+                 dies vom Kreditinstitut analog einer TAN-Fehleingabe gewertet
+                 werden. Ist das Feld mit 0 belegt, koennen unendlich viele
+                 Abfragen getaetigt werden. -->
+            <DE name="decoupled_max_status_requests" type="Num" maxsize="3" minnum="0"/>
+            <!-- Wartezeit (in Sekunden) vor erster Statusabfrage -->
+            <DE name="decoupled_time_before_first_status_request" type="Num" maxsize="3" minnum="0"/>
+            <!-- Wartezeit (in Sekunden) vor naechster Statusabfrage -->
+            <DE name="decoupled_time_before_next_status_request" type="Num" maxsize="3" minnum="0"/>
+            <!-- Manuelle Bestaetigung moeglich -->
+            <!-- Hiermit wird mitgeteilt, ob der Kunde in Verbindung mit zeit-
+                 gesteuerten automatisierten Abfragen durch das Kundenprodukt
+                 waehrend der Wartezeit im Kundenprodukt auch manuell bestaetigen
+                 kann, dass er kurz zuvor eine Sicherheitsfreigabe auf einem
+                 anderen Geraet erteilt hat. -->
+            <DE name="decoupled_manual_ack_allowed" type="JN"/>
+            <!-- Automatisierte Statusabfragen erlaubt -->
+            <!-- Hiermit wird festgelegt, ob das Kundenprodukt automatisierten
+                 Statusabfragen im Decoupled-Verfahren ermoeglicht oder, ob der
+                 Kunde die Freigabe des Auftrags auf seinem anderen Geraet
+                 manuell im Kundenprodukt bestaetigen soll. -->
+            <DE name="decoupled_auto_status_request_allowed" type="JN"/>
+            <!-- endregion -->
+
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <valids path="zkamethod_name"> <!-- siehe S. 123 -->
+                <validvalue>HHD</validvalue> <!-- [HHD], [HHD-Belegung] -->
+                <validvalue>HHDUC</validvalue> <!-- [HHD], [HHD-Belegung] -->
+                <validvalue>HHDOPT1</validvalue> <!-- [HHD], [HHD-Belegung], [HHD-Erweiterung] -->
+                <validvalue>mobileTAN</validvalue>
+                <!-- neu mit Version 7 -->
+                <validvalue>App</validvalue> <!-- App-basierte TAN-Verfahren -->
+                <validvalue>Decoupled</validvalue> <!-- Decoupled-Verfahren -->
+                <validvalue>DecoupledPush</validvalue> <!-- Decoupled-Verfahren mit Push-Infrastruktur -->
+            </valids>
+            <valids path="tanformat">
+                <validvalue>1</validvalue> <!-- numerisch -->
+                <validvalue>2</validvalue> <!-- alphanumerisch -->
+            </valids>
+            <valids path="needsmsaccount">
+                <validvalue>0</validvalue> <!-- SMS-Abbuchungskonto darf nicht angegeben werden -->
+                <validvalue>1</validvalue> <!-- ... kann angegeben werden -->
+                <validvalue>2</validvalue> <!-- ... muss angegeben werden -->
+            </valids>
+            <valids path="needorderaccount"> <!-- Wert "1" nicht erlaubt -->
+                <validvalue>0</validvalue> <!-- Auftraggeberkonto darf nicht angegeben werden -->
+                <validvalue>2</validvalue> <!-- Auftraggeberkonto muss angegeben werden, wenn im Geschaeftsvorfall enthalten -->
             </valids>
         </DEGdef>
 
@@ -5468,6 +5560,70 @@
             <value path="SegHead.version">6</value>
         </SEGdef>
         <!--  END HKTAN 6 -->
+
+
+        <!--  BEGIN HKTAN 7 (FinTS3.0 Security v10.07.2020 Kapitel B.5.2) -->
+        <SEGdef id="TAN2Step7" needsRequestTag="1"> <!-- S.64 -->
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="ordersegcode" type="AN" maxsize="6" minnum="0"/>
+            <DEG name="OrderAccount" type="KTVInt" minnum="0" />
+            <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+            <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            <DE name="notlasttan" type="JN" minnum="0"/>
+            <DE name="storno" type="JN" minnum="0"/>
+            <DEG name="SMSAccount" type="KTV3" minnum="0" />
+            <DE name="challengeklass" type="Num" maxsize="2" minnum="0"/>
+            <DEG name="ChallengeKlassParams" type="ChallengeKlassParams" minnum="0" />
+            <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+            <DEG name="HHDUCAnswer" type="HHDUCAnswer" minnum="0" />
+
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+                <!-- TAN-Prozess=S kann nur nach dem ersten Schritt auftreten.
+                     Er dient im Decoupled-Verfahren der Statusabfrage der vom
+                     Kunden zu taetigenden Sicherheitsfreigabe auf einem
+                     anderen Geraet mittels HKTAN. (S. 160) -->
+                <validvalue>S</validvalue>
+            </valids>
+
+            <value path="SegHead.code">HKTAN</value>
+            <value path="SegHead.version">7</value>
+        </SEGdef>
+        <SEGdef id="TAN2StepRes7"> <!-- S. 67 -->
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+            <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            <DE name="challenge" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="challenge_hhd_uc" type="Bin" maxsize="0" minnum="0" />
+            <DEG type="ChallengeValidity" minnum="0"/>
+            <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+                <validvalue>S</validvalue>
+            </valids>
+
+            <value path="SegHead.code">HITAN</value>
+            <value path="SegHead.version">7</value>
+        </SEGdef>
+        <SEGdef id="TAN2StepPar7"> <!-- S. 69 -->
+            &GVP2;
+            <DEG type="ParTAN2Step7" name="ParTAN2Step"/>
+
+            &SecClassValids;
+
+            <value path="SegHead.code">HITANS</value>
+            <value path="SegHead.version">7</value>
+        </SEGdef>
+        <!--  END HKTAN 7 -->
 
 
         <!--  macemmi 2012-02-20 BEGIN HKTAB -->
