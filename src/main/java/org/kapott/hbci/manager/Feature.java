@@ -53,6 +53,12 @@ public enum Feature
      */
     SYNC_SEPAINFO(true),
     
+    /**
+     * Feature, mit dem festgelegt werden kann, ob bei der Dialoginitialisierung die Registierung des Instituts mit der des Users getauscht werden soll.
+     * Laut https://github.com/hbci4j/hbci4java/pull/67 kann man damit auch bei der Postbank eine personalisierte Liste der TAN-Verfahren erhalten
+     */
+    INIT_FLIP_USER_INST(false)
+    
     ;
     
     private boolean enabled = false;

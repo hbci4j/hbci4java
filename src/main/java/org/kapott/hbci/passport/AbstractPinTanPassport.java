@@ -508,9 +508,13 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             //  DialogInit mit Einschritt-TAN            ja
             //  DialogInit mit Zweischritt-TAN           nein
             //  Sync                                     nein
-            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)) && init.getTemplate() == KnownDialogTemplate.INIT)
+            //  Sync mit aktiviertem Init-Flip           ja
+          
+            final KnownDialogTemplate tpl = init.getTemplate();
+            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)) && 
+                (tpl == KnownDialogTemplate.INIT || (Feature.INIT_FLIP_USER_INST.isEnabled() && tpl == KnownDialogTemplate.SYNC)))
             {
-                HBCIUtils.log("skipping HKTAN for dialog init, since we are using a one-step tan method",HBCIUtils.LOG_DEBUG);
+                HBCIUtils.log("skipping HKTAN for dialog init",HBCIUtils.LOG_DEBUG);
                 return null;
             }
         }
