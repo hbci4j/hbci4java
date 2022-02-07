@@ -7873,6 +7873,7 @@
             <SEG type="TAN2Step4" minnum="0"/>
             <SEG type="TAN2Step5" minnum="0"/>
             <SEG type="TAN2Step6" minnum="0"/>
+            <SEG type="TAN2Step7" minnum="0"/>
             <SEG type="TANListList1" minnum="0"/>
             <SEG type="TANMediaList1" minnum="0"/>
             <SEG type="TANMediaList2" minnum="0"/>
@@ -8064,6 +8065,7 @@
             <SEG type="TAN2StepRes4" minnum="0"/>
             <SEG type="TAN2StepRes5" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0"/>
+            <SEG type="TAN2StepRes7" minnum="0"/>
         </SFdef>
         
         <SFdef id="Params">
@@ -8176,6 +8178,7 @@
             <SEG type="TAN2StepPar4" minnum="0"/>
             <SEG type="TAN2StepPar5" minnum="0"/>
             <SEG type="TAN2StepPar6" minnum="0"/>
+            <SEG type="TAN2StepPar7" minnum="0"/>
             <SEG type="TANListListPar1" minnum="0"/>
             <SEG type="TANMediaListPar1" minnum="0"/>
             <SEG type="TANMediaListPar2" minnum="0"/>
@@ -8295,22 +8298,28 @@
             <!-- HNHBK --> <SEG type="MsgHeadUser" name="MsgHead"/>
             <!-- HKIDN --> <SEG type="Idn"/>
             <!-- HKVVB --> <SEG type="ProcPrep"/>
-            <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/> <!-- Ja, auch bei der anonymen Initialisierung darf HKTAN6 gesendet werden -->
+            
+            <!-- Ja, auch bei der anonymen Initialisierung darf HKTAN gesendet werden -->
+            <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <!-- HKTAN --> <SEG type="TAN2Step7" minnum="0" maxnum="1"/>
             <!-- HNHBS --> <SEG type="MsgTailUser" name="MsgTail"/>
         </MSGdef>
         
         <MSGdef id="DialogInitAnonRes" dontsign="1" dontcrypt="1">
             &MsgSigHeadInst;
             
-            <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
+            <!-- Das TAN2StepRes steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8319,6 +8328,7 @@
             <!-- HKIDN --> <SEG type="Idn"/>
             <!-- HKVVB --> <SEG type="ProcPrep"/>
             <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <!-- HKTAN --> <SEG type="TAN2Step7" minnum="0" maxnum="1"/>
             <!-- HKISA --> <SEG type="KeyReq" minnum="0" maxnum="3"/>
             <!-- HNSHA+HNHBS --> &MsgSigTailUser;
         </MSGdef>
@@ -8337,13 +8347,17 @@
             <SEG type="TANMediaListRes5" minnum="0" maxnum="1"/>
             
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="SEPAInfoRes1" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
@@ -8355,6 +8369,7 @@
             <SEG type="TANMediaList4" minnum="0"/>
             <SEG type="TANMediaList5" minnum="0"/>
             <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2Step7" minnum="0" maxnum="1"/>
             &MsgSigTailUser;
         </MSGdef>
         <MSGdef id="TanMediaRes">
@@ -8362,13 +8377,16 @@
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="TANMediaListRes2" minnum="0"/>
             <SEG type="TANMediaListRes3" minnum="0"/>
             <SEG type="TANMediaListRes4" minnum="0"/>
             <SEG type="TANMediaListRes5" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8376,6 +8394,7 @@
             &MsgSigHeadUser;
             <SEG type="SEPAInfo1" minnum="0"/>
             <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2Step7" minnum="0" maxnum="1"/>
             &MsgSigTailUser;
         </MSGdef>
         <MSGdef id="SepaInfoRes">
@@ -8384,8 +8403,10 @@
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SEG type="SEPAInfoRes1" minnum="0" maxnum="1"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8394,6 +8415,7 @@
             <!-- HKIDN --> <SEG type="Idn"/>
             <!-- HKVVB --> <SEG type="ProcPrep"/>
             <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <!-- HKTAN --> <SEG type="TAN2Step7" minnum="0" maxnum="1"/>
             <!-- HKISA --> <SEG type="KeyReq" minnum="0" maxnum="3"/>
             <!-- HKSYN --> <SEG type="Sync"/>
             <!-- HNSHA+HNHBS --> &MsgSigTailUser;
@@ -8401,19 +8423,23 @@
         <MSGdef id="SynchRes">
             &MsgSigHeadInst;
             
-            <!-- Das TAN2StepRes6 steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
+            <!-- Das TAN2StepRes steht hier mehrfach, weil die Banken das nicht einheitlich an der selben Stelle senden -->
             <SEG type="RetGlob"/>
             <SEG type="RetSeg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
             <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
@@ -8437,15 +8463,19 @@
             <SEG type="TANMediaListRes5" minnum="0" maxnum="1"/>
             
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SF type="BPD" minnum="0"/>
             <SF type="UPD" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="SendPubKey" minnum="0" maxnum="3"/>
             <SEG type="SyncRes3" name="SyncRes" minnum="0"/>
             <SEG type="SyncRes4" name="SyncRes" minnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
+            <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
