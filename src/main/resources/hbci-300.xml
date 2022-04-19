@@ -1184,7 +1184,24 @@
             <DE name="cantermdel" type="JN"/>
             <DE name="orderdata_required" type="JN"/>
         </DEGdef>
-        
+
+        <DEGdef id="ParDauerLastSEPAList">
+            <DE name="maxentries_allowed" type="JN"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+
+        <DEGdef id="ParDauerLastSEPANew">
+            <DE name="allowed_types" type="AN" maxsize="64"/>
+            <DE name="minpretime" type="Num" maxsize="4"/>
+            <DE name="maxpretime" type="Num" maxsize="4"/>
+            <DE name="turnusmonths" type="Dig" maxsize="24"/>
+            <DE name="dayspermonth" type="Dig" maxsize="64"/>
+            <DE name="turnusweeks" type="Dig" maxsize="104" minnum="0"/>
+            <DE name="daysperweek" type="Dig" maxsize="7" minnum="0"/>
+            <DE name="allowed_purposecodes" type="AN" maxsize="4096" minnum="0" maxnum="1"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+
         <DEGdef id="ParDauerEdit">
             <DE name="numtermchanges" type="Num" maxsize="1"/>
             <DE name="minpretime" type="Num" maxsize="4"/>
@@ -6695,7 +6712,69 @@
             <value path="SegHead.code">HICDBS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
-        
+
+        <SEGdef id="DauerLastSEPAList1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="1" maxnum="99"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">HKDDB</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="DauerLastSEPAListRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DEG type="DauerDetails"/>
+            <DEG type="Aussetzung3" name="Aussetzung" minnum="0"/>
+            <DE name="canchange" type="JN" minnum="0"/>
+            <DE name="canskip" type="JN" minnum="0"/>
+            <DE name="candel" type="JN" minnum="0"/>
+
+            <value path="SegHead.code">HIDDB</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="DauerLastSEPAListPar1">
+            &GVP2;
+            <DEG type="ParDauerLastSEPAList" />
+
+            &SecClassValids;
+
+            <value path="SegHead.code">HIDDBS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="DauerLastSEPANew1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DEG type="DauerDetails"/>
+
+            <value path="SegHead.code">HKDDE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="DauerLastSEPANewRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+
+            <value path="SegHead.code">HIDDE</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="DauerLastSEPANewPar1">
+            &GVP2;
+            <DEG type="ParDauerLastSEPANew" />
+
+            &SecClassValids;
+
+            <value path="SegHead.code">HIDDES</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
         
         <SEGdef id="Umb1"> <!-- 2.2 -->
             &SingleInlandUser3;
@@ -7638,6 +7717,8 @@
             <SEG type="DauerList4" minnum="0"/>
             <SEG type="DauerList5" minnum="0"/>
             <SEG type="DauerSEPAList1" minnum="0"/>
+            <SEG type="DauerLastSEPAList1" minnum="0"/>
+            <SEG type="DauerLastSEPANew1" minnum="0"/>
             <SEG type="DauerNew2" minnum="0"/>
             <SEG type="DauerNew3" minnum="0"/>
             <SEG type="DauerNew4" minnum="0"/>
@@ -7801,6 +7882,8 @@
             <SEG type="DauerListRes4" minnum="0"/>
             <SEG type="DauerListRes5" minnum="0"/>
             <SEG type="DauerSEPAListRes1" minnum="0"/>
+            <SEG type="DauerLastSEPAListRes1" minnum="0"/>
+            <SEG type="DauerLastSEPANewRes1" minnum="0"/>
             <SEG type="DauerNewRes2" minnum="0"/>
             <SEG type="DauerNewRes3" minnum="0"/>
             <SEG type="DauerNewRes4" minnum="0"/>
@@ -7940,6 +8023,8 @@
             <SEG type="DauerListPar4" minnum="0"/>
             <SEG type="DauerListPar5" minnum="0"/>
             <SEG type="DauerSEPAListPar1" minnum="0"/>
+            <SEG type="DauerLastSEPAListPar1" minnum="0"/>
+            <SEG type="DauerLastSEPANewPar1" minnum="0"/>
             <SEG type="DauerNewPar2" minnum="0"/>
             <SEG type="DauerNewPar3" minnum="0"/>
             <SEG type="DauerNewPar4" minnum="0"/>
