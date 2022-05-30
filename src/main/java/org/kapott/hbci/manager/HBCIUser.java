@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +53,8 @@ import org.kapott.hbci.exceptions.ProcessException;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
+import org.kapott.hbci.structures.Konto;
+import org.kapott.hbci.tools.StringUtil;
 
 /**
  * Kapselt die authentifizierten Initialisierungsdialoge. Also im Wesentlichen alles, was mit den UPD zu tun hat.
@@ -562,17 +565,28 @@ public final class HBCIUser implements IHandlerData
         // Manche Banken schicken in den UPDs scheinbar die Konto-Daten nicht mehr immer mit. Daher merken wird uns die vorherigen
         // Werte, wenn keine neuen uebertragen wurden
         if (upd != null && upd.size() > 0) {
-            final Pattern pattern = Pattern.compile("(KInfo(.*?)\\.KTV)\\.(bic|iban)");
-            for (final Object okey : upd.keySet()) {
+            Konto[] konten = passport.getAccounts();
+            final Pattern pattern = Pattern.compile("UPD\\.(KInfo(.*?)\\.KTV)\\.number");
+            for (final Object okey : result.keySet()) {
                 final String key = okey.toString();
                 final Matcher m = pattern.matcher(key);
-                if (m.matches() && !result.contains("UPD." + key)) {
+                if (m.matches()) {
                     final String kinfo = m.group(1);
-                    if (Objects.equals(result.getProperty("UPD." + kinfo + ".KIK.country"), upd.getProperty(kinfo + ".KIK.country"))
-                            && Objects.equals(result.getProperty("UPD." + kinfo + ".KIK.blz"), upd.getProperty(kinfo + ".KIK.blz"))
-                            && Objects.equals(result.getProperty("UPD." + kinfo + ".number"), upd.getProperty(kinfo + ".number"))) {
-                        HBCIUtils.log(key + " is missing, using the previous UPD's value", HBCIUtils.LOG_DEBUG);
-                        p.put(okey, upd.getProperty(key));
+                    if (!p.contains(kinfo + ".bic") || !p.contains(kinfo + ".iban")) {
+                        Optional<Konto> matchingKonto = Arrays.asList(konten).stream()
+                                .filter(konto ->
+                                    Objects.equals(konto.number, result.get(okey)) &&
+                                    Objects.equals(konto.blz, result.get("UPD." + kinfo + ".KIK.blz")) &&
+                                    Objects.equals(konto.country, result.get("UPD." + kinfo + ".KIK.country")))
+                                .findAny();
+                        matchingKonto.ifPresent(konto -> {
+                            if (StringUtil.hasText(konto.iban) && StringUtil.hasText(konto.bic)) {
+                                HBCIUtils.log(kinfo + ".iban / .bic is missing, using the previous UPD's value",
+                                        HBCIUtils.LOG_DEBUG);
+                                p.put(kinfo + ".bic", konto.bic);
+                                p.put(kinfo + ".iban", konto.iban);
+                            }
+                        });
                     }
                 }
             }
