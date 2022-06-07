@@ -149,7 +149,10 @@ public class HBCIDialogSepaInfo extends AbstractRawHBCIDialog
 
               // uebernehmen wir nur, wenn wir eine haben
               if (StringUtil.hasText(iban))
-              upd.setProperty(h + ".KTV.iban", iban);
+              {
+                upd.setProperty(h + ".KTV.iban", iban);
+                upd.setProperty(h + ".iban", iban);
+              }
               
               // uebernehmen wir nur, wenn wir eine haben
               if (StringUtil.hasText(bic))

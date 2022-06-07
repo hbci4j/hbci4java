@@ -246,7 +246,13 @@ public abstract class AbstractHBCIPassport
                 entry.name=upd.getProperty(header+".name1");
                 entry.name2=upd.getProperty(header+".name2");
                 entry.bic=upd.getProperty(header+".KTV.bic");
+                
+                // Seit HIUPD Version 6 gibt es die IBAN zweimal - einmal im DEG KTV und dann nochmal
+                // direkt im HIUPD. Die Banken befüllen das unterschiedlich. Wir checken daher beide Stellen.
                 entry.iban=upd.getProperty(header+".KTV.iban");
+                if (entry.iban == null || entry.iban.length() == 0)
+                  entry.iban=upd.getProperty(header+".iban");
+                
                 entry.acctype=upd.getProperty(header+".acctype");
                 
                 String st;

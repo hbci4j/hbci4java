@@ -103,7 +103,10 @@ public class GVSEPAInfo
         				temp_number.equals(number))
         		{
         		    if (StringUtil.hasText(iban))
-        		        upd.setProperty(temp_header+".KTV.iban", iban);
+        		    {
+                  upd.setProperty(temp_header+".KTV.iban", iban);
+                  upd.setProperty(temp_header+".iban", iban);
+        		    }
         		    
         		    if (StringUtil.hasText(bic))
         		        upd.setProperty(temp_header+".KTV.bic", bic);
