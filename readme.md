@@ -1,8 +1,8 @@
 ## Vorab
 
-Dies ist ein aktuell gepflegter Fork von [HBCI4Java](http://hbci4java.kapott.org/),
-welcher u.a. in [Hibiscus](http://www.willuhn.de/products/hibiscus) und
-[Pecunia-Banking](http://www.pecuniabanking.de/) zum Einsatz kommt.
+Dies ist die offizielle Quelle von [HBCI4Java,
+welches u.a. in [Hibiscus](http://www.willuhn.de/products/hibiscus)
+zum Einsatz kommt.
 
 ## Kontakt
 
