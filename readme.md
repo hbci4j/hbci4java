@@ -1,6 +1,6 @@
 ## Vorab
 
-Dies ist die offizielle Quelle von [HBCI4Java,
+Dies ist die offizielle Quelle von HBCI4Java,
 welches u.a. in [Hibiscus](http://www.willuhn.de/products/hibiscus)
 zum Einsatz kommt.
 
