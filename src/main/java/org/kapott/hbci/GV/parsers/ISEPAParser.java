@@ -37,6 +37,7 @@ public interface ISEPAParser<T>
         MANDDATEOFSIG("manddateofsig"),
         SEQUENCETYPE("sequencetype"),
         TARGETDATE("targetdate"),
+        BATCHBOOK("batchbook"),
         
         ;
         

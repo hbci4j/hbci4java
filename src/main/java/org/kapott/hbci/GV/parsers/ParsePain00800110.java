@@ -51,6 +51,7 @@ public class ParsePain00800110 extends AbstractSepaParser<List<Properties>>
                 put(prop,Names.SRC_NAME, pain.getGrpHdr().getInitgPty().getNm());            
                 put(prop,Names.SRC_IBAN, pmtInf.getCdtrAcct().getId().getIBAN());
                 put(prop,Names.SRC_BIC, pmtInf.getCdtrAgt().getFinInstnId().getBICFI());
+                put(prop,Names.BATCHBOOK, pmtInf.isBtchBookg() != null ? pmtInf.isBtchBookg().toString() : null);
                 
                 put(prop,Names.DST_NAME, tx.getDbtr().getNm());
                 put(prop,Names.DST_IBAN, tx.getDbtrAcct().getId().getIBAN());
