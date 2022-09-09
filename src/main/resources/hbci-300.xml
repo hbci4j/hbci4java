@@ -2137,7 +2137,7 @@
         <DEGdef id="TANMediaInfo5">
             <DE name="mediacategory" type="AN" maxsize="1"/>
             <DE name="status" type="Code" maxsize="1"/>
-            <DE name="secfunc" type="Code" maxsize="3"/>
+            <DE name="secfunc" type="Code" maxsize="3" minnum="0"/>
             <DE name="cardnumber" type="ID" minnum="0"/>
             <DE name="cardseqnumber" type="ID" minnum="0"/>
             <DE name="cardtype" type="Num" maxsize="2" minnum="0"/>
