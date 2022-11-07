@@ -315,7 +315,7 @@ public class ParseCamt05200101 extends AbstractCamtParser
         if(report.getBal().size()>0){
             CashBalance1 firstBal = report.getBal().get(0);
             BalanceType8Code firstCode = firstBal.getTp().getCd();
-            if(firstCode == BalanceType8Code.PRCD || firstCode == BalanceType8Code.ITBD) {
+            if(firstCode == BalanceType8Code.PRCD || firstCode == BalanceType8Code.ITBD || firstCode == BalanceType8Code.OPBD) {
                 tag.start.value = new Value(this.checkDebit(firstBal.getAmt().getValue(),firstBal.getCdtDbtInd()));
                 tag.start.value.setCurr(firstBal.getAmt().getCcy());
                 if(firstCode == BalanceType8Code.PRCD){

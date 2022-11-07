@@ -338,10 +338,10 @@ public class ParseCamt05200108 extends AbstractCamtParser
         if(report.getBal().size()>0){
             CashBalance8 firstBal = report.getBal().get(0);
             String firstCode = firstBal.getTp().getCdOrPrtry().getCd();
-            if(firstCode.equalsIgnoreCase("PRCD") || firstCode.equalsIgnoreCase("ITBD")) {
+            if(firstCode.equalsIgnoreCase("PRCD") || firstCode.equalsIgnoreCase("ITBD") || firstCode.equalsIgnoreCase("OPBD")) {
                 tag.start.value = new Value(this.checkDebit(firstBal.getAmt().getValue(),firstBal.getCdtDbtInd()));
                 tag.start.value.setCurr(firstBal.getAmt().getCcy());
-                if(firstCode.equalsIgnoreCase("PRCD") ){
+                if(firstCode.equalsIgnoreCase("PRCD")) {
                     //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
                     // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
                     tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime() + day);
