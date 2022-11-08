@@ -1938,8 +1938,8 @@
             <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" /> <!-- umbenannt "{ZKA -> DK} TAN Verfahren" -->
             <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
             <DE name="name" type="AN" maxsize="30"/>
-            <DE name="maxlentan2step" type="Num" maxsize="2"/> <!-- leer bei DK TAN "Decoupled" -->
-            <DE name="tanformat" type="Code" maxsize="1"/> <!-- leer bei DK TAN "Decoupled" -->
+            <DE name="maxlentan2step" type="Num" maxsize="2" minnum="0"/> <!-- leer bei DK TAN "Decoupled" -->
+            <DE name="tanformat" type="Code" maxsize="1" minnum="0"/> <!-- leer bei DK TAN "Decoupled" -->
             <DE name="inputinfo" type="AN" maxsize="30"/>
             <DE name="maxleninput2step" type="Num" maxsize="4"/>
             <DE name="canmultitan" type="JN"/>
