@@ -99,9 +99,28 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
             this.askForMissingData(true,true,true,true,false,true,true);
             this.saveChanges();
         }
-        
-        this.data = PassportStorage.load(this,new File(filename));
-        
+
+        init(PassportStorage.load(this, new File(filename)));
+
+        // Falls in der existierenden Datei auch noch Daten fehlen
+        if (this.askForMissingData(true,true,true,true,false,true,true))
+            this.saveChanges();
+    }
+
+    protected HBCIPassportRAH10(Object initObject, PassportData data)
+    {
+        super(initObject);
+        this.setParamHeader(PARAM_PREFIX);
+
+        this.setFilterType("None");
+        this.setPort(new Integer(3000));
+
+        init(data);
+    }
+
+    private void init(PassportData data) {
+        this.data = data;
+
         // Wir uebernehmen nur die Daten in die Basis-Klasse, die dort vorgehalten werden.
         // Den Rest nehmen wir direkt aus PassportData
         this.setBLZ(data.blz);
@@ -115,10 +134,6 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
         this.setHBCIVersion(data.hbciVersion);
         this.setBPD(data.bpd);
         this.setUPD(data.upd);
-        
-        // Falls in der existierenden Datei auch noch Daten fehlen
-        if (this.askForMissingData(true,true,true,true,false,true,true))
-            this.saveChanges();
     }
     
     /**
@@ -129,6 +144,25 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
         return filename;
     }
 
+    protected PassportData getUpdatedData() {
+        if (this.data == null)
+            this.data = new PassportData();
+
+        // Vorm Speichern die ggf. in der Basis-Klasse geaenderten Daten uebernehmen
+        this.data.country     = this.getCountry();
+        this.data.blz         = this.getBLZ();
+        this.data.host        = this.getHost();
+        this.data.port        = this.getPort();
+        this.data.userId      = this.getUserId();
+        this.data.customerId  = this.getCustomerId();
+        this.data.sysId       = this.getSysId();
+        this.data.sigId       = this.getSigId();
+        this.data.hbciVersion = this.getHBCIVersion();
+        this.data.bpd         = this.getBPD();
+        this.data.upd         = this.getUPD();
+        return this.data;
+    }
+
     /**
      * @see org.kapott.hbci.passport.HBCIPassport#saveChanges()
      */
@@ -136,23 +170,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
     {
         try
         {
-          if (this.data == null)
-            this.data = new PassportData();
-          
-            // Vorm Speichern die ggf. in der Basis-Klasse geaenderten Daten uebernehmen
-            this.data.country     = this.getCountry();
-            this.data.blz         = this.getBLZ();
-            this.data.host        = this.getHost();
-            this.data.port        = this.getPort();
-            this.data.userId      = this.getUserId();
-            this.data.customerId  = this.getCustomerId();
-            this.data.sysId       = this.getSysId();
-            this.data.sigId       = this.getSigId();
-            this.data.hbciVersion = this.getHBCIVersion();
-            this.data.bpd         = this.getBPD();
-            this.data.upd         = this.getUPD();
-
-            PassportStorage.save(this,data,new File(this.filename));
+            PassportStorage.save(this, getUpdatedData(),new File(this.filename));
         }
         catch (HBCI_Exception he)
         {
