@@ -623,7 +623,10 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
       BigInteger e = key.getPrivateExponent();
       BigInteger m = key.getModulus();
       BigInteger c = new BigInteger(+1,cryptedKey);
-      final byte[] plainKey = c.modPow(e,m).toByteArray();
+      byte[] plainKey = c.modPow(e,m).toByteArray();
+      if (plainKey.length > 32) {
+        plainKey = Arrays.copyOfRange(plainKey, plainKey.length-32, plainKey.length);
+      }
 
       HBCIUtils.log("decrypting message", HBCIUtils.LOG_DEBUG);
       final SecretKey msgKey = new SecretKeySpec(plainKey,CryptUtils.CRYPT_ALG_AES);
@@ -636,7 +639,11 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
       
       cm.init(Cipher.DECRYPT_MODE,msgKey,spec);
       
-      return cm.doFinal(encryptedMsg);
+      byte[] decrypt = cm.doFinal(encryptedMsg);
+      byte[] res = new byte[decrypt.length + 1];
+      System.arraycopy(decrypt, 0, res, 0, decrypt.length);
+      res[res.length-1] = '\001';
+      return res;
     }
     catch (HBCI_Exception e)
     {
