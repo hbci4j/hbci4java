@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;

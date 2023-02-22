@@ -6,9 +6,6 @@ import java.io.OutputStream;
 import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -17,10 +14,14 @@ import javax.xml.validation.SchemaFactory;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.sepa.SepaVersion;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.Marshaller;
+
 /**
  * Abstrakte Basis-Implementierung der SEPA-Generatoren.
  * @param <T> Die konkrete Struktur, aus der die Daten gelesen werden.
- * 
+ *
  * WICHTIG: Diese Klasse sowie die Ableitungen sollten auch ohne initialisiertes HBCI-System
  * funktionieren, um das XML ohne HBCI-Handler erstellen zu koennen. Daher sollte auf die
  * Verwendung von "HBCIUtils" & Co verzichtet werden. Das ist auch der Grund, warum hier
@@ -38,17 +39,19 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
      * @param validate true, wenn das erzeugte XML gegen das PAIN-Schema validiert werden soll.
      * @throws Exception
      */
-    protected void marshal(JAXBElement e, OutputStream os, boolean validate) throws Exception
+    protected void marshal(final JAXBElement e, final OutputStream os, final boolean validate) throws Exception
     {
         JAXBContext jaxbContext = JAXBContext.newInstance(e.getDeclaredType());
         Marshaller marshaller = jaxbContext.createMarshaller();
-        
+
         // Wir verwenden hier hart UTF-8. Siehe http://www.onlinebanking-forum.de/forum/topic.php?p=107420#real107420
         marshaller.setProperty(Marshaller.JAXB_ENCODING, ENCODING);
 
         // Siehe https://groups.google.com/d/msg/hbci4java/RYHCai_TzHM/72Bx51B9bXUJ
         if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))
+        {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        }
 
         SepaVersion version = this.getSepaVersion();
         if (version != null)
@@ -77,11 +80,15 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
                         // Fallback auf File-Objekt
                         File f = new File(file);
                         if (f.isFile() && f.canRead())
+                        {
                             source = new StreamSource(f);
+                        }
                     }
 
                     if (source == null)
+                    {
                         throw new HBCI_Exception("schema validation activated against " + file + " - but schema file could not be found");
+                    }
 
                     LOG.fine("activating schema validation against " + file);
                     SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -93,7 +100,7 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
 
         marshaller.marshal(e, os);
     }
-    
+
     /**
      * @see org.kapott.hbci.GV.generators.ISEPAGenerator#getSepaVersion()
      */
