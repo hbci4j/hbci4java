@@ -118,7 +118,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
         init(data);
     }
 
-    private void init(PassportData data) {
+    protected void init(PassportData data) {
         this.data = data;
 
         // Wir uebernehmen nur die Daten in die Basis-Klasse, die dort vorgehalten werden.
