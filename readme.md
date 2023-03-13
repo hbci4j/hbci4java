@@ -14,6 +14,7 @@ zugehörige Mailingliste.
 
 ## Entstehung
 
+
 Das Projekt entstand 2010 als Fork von http://hbci4java.kapott.org, da dessen Weiterentwicklung eingestellt wurde.
 
 Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
