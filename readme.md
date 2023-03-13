@@ -1,8 +1,11 @@
 ## Vorab
 
-Dies ist die offizielle Quelle von HBCI4Java,
-welches u.a. in [Hibiscus](http://www.willuhn.de/products/hibiscus)
-zum Einsatz kommt.
+Dies ist die offizielle Quelle von HBCI4Java, welches u.a. in [Hibiscus](http://www.willuhn.de/products/hibiscus) zum Einsatz kommt.
+
+## Versionshinweis
+
+- Version 3.x von HBCI4Java verwendet Java EE (javax.*).
+- Version 4.x von HBCI4Java verwendet Jakarta EE (jakarta.*).
 
 ## Kontakt
 
