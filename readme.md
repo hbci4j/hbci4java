@@ -23,7 +23,8 @@ Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 - Support für alle aktuellen SEPA-PAIN-Versionen
 - Unterstützung von PC/SC-Kartenlesern via javax.smartcardio API
 - Eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
-- Die Unterstützung der neuen TAN-Verfahren (smsTAN, photoTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
+- Unterstützung der neuen TAN-Verfahren (smsTAN, photoTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
+- Unterstützung von RAH10-Schlüsseldateien
 
 ## Lizenz
 
