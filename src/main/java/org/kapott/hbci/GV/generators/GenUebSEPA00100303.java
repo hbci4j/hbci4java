@@ -11,7 +11,6 @@ import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyAndAmountSEPA;
-import org.kapott.hbci.sepa.jaxb.pain_001_003_03.ActiveOrHistoricCurrencyCodeEUR;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.AmountTypeSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.BranchAndFinancialInstitutionIdentificationSEPA1;
 import org.kapott.hbci.sepa.jaxb.pain_001_003_03.BranchAndFinancialInstitutionIdentificationSEPA3;
@@ -184,7 +183,7 @@ public class GenUebSEPA00100303 extends AbstractSEPAGenerator<Properties>
         cdtTrxTxInf.getAmt().setInstdAmt(new ActiveOrHistoricCurrencyAndAmountSEPA());
         cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(SepaUtil.insertIndex("btg.value", index))));
 
-        cdtTrxTxInf.getAmt().getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR);
+      cdtTrxTxInf.getAmt().getInstdAmt().setCcy(sepaParams.getProperty(SepaUtil.insertIndex("btg.curr", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Usage
         String usage = sepaParams.getProperty(SepaUtil.insertIndex("usage", index));

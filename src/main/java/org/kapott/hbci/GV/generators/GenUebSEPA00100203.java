@@ -10,7 +10,6 @@ import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.AccountIdentificationSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ActiveOrHistoricCurrencyAndAmountSEPA;
-import org.kapott.hbci.sepa.jaxb.pain_001_002_03.ActiveOrHistoricCurrencyCodeEUR;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.AmountTypeSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.BranchAndFinancialInstitutionIdentificationSEPA1;
 import org.kapott.hbci.sepa.jaxb.pain_001_002_03.CashAccountSEPA1;
@@ -167,7 +166,7 @@ public class GenUebSEPA00100203 extends AbstractSEPAGenerator<Properties>
         cdtTrxTxInf.setAmt(new AmountTypeSEPA());
         cdtTrxTxInf.getAmt().setInstdAmt(new ActiveOrHistoricCurrencyAndAmountSEPA());
         cdtTrxTxInf.getAmt().getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(SepaUtil.insertIndex("btg.value", index))));
-        cdtTrxTxInf.getAmt().getInstdAmt().setCcy(ActiveOrHistoricCurrencyCodeEUR.EUR); //FIXME: Schema sagt es gibt nur eur aber besser wäre bestimmt getSEPAParam("btg.curr")
+      cdtTrxTxInf.getAmt().getInstdAmt().setCcy(sepaParams.getProperty(SepaUtil.insertIndex("btg.curr", index))); //FIXME: Schema sagt es gibt nur eur aber besser wäre bestimmt getSEPAParam("btg.curr")
 
         //Payment Information - Credit Transfer Transaction Information - Usage
         String usage = sepaParams.getProperty(SepaUtil.insertIndex("usage", index));

@@ -101,7 +101,7 @@
 	<xs:complexType name="CurrencyAndAmountSEPA">
 		<xs:simpleContent>
 			<xs:extension base="CurrencyAndAmount_SimpleTypeSEPA">
-				<xs:attribute name="Ccy" type="CurrencyCodeEUR" use="required"/>
+				<xs:attribute name="Ccy" type="CurrencyCodeGLB" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -110,11 +110,11 @@
 			<xs:pattern value="[A-Z]{3,3}"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="CurrencyCodeEUR">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="EUR"/>
-		</xs:restriction>
-	</xs:simpleType>
+  <xs:simpleType name="CurrencyCodeGLB">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{3,3}"/>
+    </xs:restriction>
+  </xs:simpleType>
 	<xs:complexType name="DateAndPlaceOfBirth">
 		<xs:sequence>
 			<xs:element name="BirthDt" type="ISODate"/>

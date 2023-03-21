@@ -17,7 +17,6 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_01.CashAccountSDD1;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.CashAccountSDD2;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.ChargeBearerTypeSDDCode;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.CurrencyAndAmountSDD;
-import org.kapott.hbci.sepa.jaxb.pain_008_002_01.CurrencyCodeSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.DirectDebitTransactionInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.DirectDebitTransactionSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_01.Document;
@@ -230,7 +229,7 @@ public class GenLastSEPA00800201 extends AbstractSEPAGenerator<Properties>
         drctDbtTxInf.setInstdAmt(new CurrencyAndAmountSDD());
         drctDbtTxInf.getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(SepaUtil.insertIndex("btg.value", index))));
 
-        drctDbtTxInf.getInstdAmt().setCcy(CurrencyCodeSDD.EUR);
+      drctDbtTxInf.getInstdAmt().setCcy(sepaParams.getProperty(SepaUtil.insertIndex("btg.curr", index)));
 
         //Payment Information - Credit Transfer Transaction Information - Usage
         String usage = sepaParams.getProperty(SepaUtil.insertIndex("usage", index));
