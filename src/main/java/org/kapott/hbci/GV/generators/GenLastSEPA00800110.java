@@ -232,7 +232,12 @@ public class GenLastSEPA00800110 extends AbstractSEPAGenerator<Properties>
     drctDbtTxInf.setInstdAmt(new ActiveOrHistoricCurrencyAndAmount());
     drctDbtTxInf.getInstdAmt().setValue(new BigDecimal(sepaParams.getProperty(SepaUtil.insertIndex("btg.value", index))));
 
-    drctDbtTxInf.getInstdAmt().setCcy(sepaParams.getProperty(SepaUtil.insertIndex("btg.curr", index)));
+    String currencyCode = sepaParams.getProperty(SepaUtil.insertIndex("btg.curr", index));
+    if(currencyCode != null && currencyCode.length() > 0) {
+      drctDbtTxInf.getInstdAmt().setCcy(currencyCode);
+    } else {
+      drctDbtTxInf.getInstdAmt().setCcy("EUR");
+    }
 
     // Payment Information - Credit Transfer Transaction Information - Usage
     String usage = sepaParams.getProperty(SepaUtil.insertIndex("usage", index));
