@@ -119,7 +119,7 @@ If the receiving bank validates the check digit and if this validation fails, th
 	</xs:simpleType>
 	<xs:simpleType name="CurrencyCodeSDD">
 		<xs:restriction base="xs:string">
-          <xs:pattern value="[A-Z]{3,3}"/>
+			<xs:enumeration value="EUR"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="DateAndPlaceOfBirth">

@@ -19,15 +19,15 @@
 	<xs:complexType name="ActiveOrHistoricCurrencyAndAmountSEPA">
 		<xs:simpleContent>
 			<xs:extension base="ActiveOrHistoricCurrencyAndAmount_SimpleTypeSEPA">
-				<xs:attribute name="Ccy" type="ActiveOrHistoricCurrencyCodeGLB" use="required"/>
+				<xs:attribute name="Ccy" type="ActiveOrHistoricCurrencyCodeEUR" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-  <xs:simpleType name="ActiveOrHistoricCurrencyCodeGLB">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="[A-Z]{3,3}"/>
-    </xs:restriction>
-  </xs:simpleType>
+	<xs:simpleType name="ActiveOrHistoricCurrencyCodeEUR">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EUR"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="ActiveOrHistoricCurrencyCode">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="[A-Z]{3,3}"/>

@@ -117,7 +117,7 @@ If the receiving bank validates the check digit and if this validation fails, th
 	<xs:complexType name="CurrencyAndAmountSCT">
 		<xs:simpleContent>
 			<xs:extension base="CurrencyAndAmount_SimpleTypeSCT">
-				<xs:attribute name="Ccy" type="CurrencyCodeGLB" use="required"/>
+				<xs:attribute name="Ccy" type="CurrencyCodeSCT" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -126,11 +126,6 @@ If the receiving bank validates the check digit and if this validation fails, th
 			<xs:pattern value="[A-Z]{3,3}"/>
 		</xs:restriction>
 	</xs:simpleType>
-  <xs:simpleType name="CurrencyCodeGLB">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="[A-Z]{3,3}"/>
-    </xs:restriction>
-  </xs:simpleType>
 	<xs:simpleType name="CurrencyCodeSCT">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="EUR"/>
