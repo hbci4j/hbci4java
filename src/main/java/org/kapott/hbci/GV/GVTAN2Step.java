@@ -25,7 +25,6 @@ package org.kapott.hbci.GV;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
-import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.dialog.KnownTANProcess;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -33,7 +32,14 @@ import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
-import org.kapott.hbci.tools.StringUtil;
+import org.kapott.hbci.status.HBCIStatus;
+
+import static org.kapott.hbci.dialog.KnownReturncode.W3040;
+import static org.kapott.hbci.dialog.KnownReturncode.W3076;
+import static org.kapott.hbci.dialog.KnownTANProcess.PROCESS1;
+import static org.kapott.hbci.dialog.KnownTANProcess.PROCESS2_STEP1;
+import static org.kapott.hbci.dialog.KnownTANProcess.PROCESS2_STEP2;
+import static org.kapott.hbci.tools.StringUtil.toInsCode;
 
 /**
  * @author stefan.palme
@@ -56,8 +62,8 @@ public class GVTAN2Step extends HBCIJobImpl
     }
     
     /**
-     * Speichert den Prozess-Schritt des HKTAN.
-     * @param p der Prozess-Schritt.
+     * Speichert den Prozessschritt des HKTAN.
+     * @param p der Prozessschritt.
      */
     public void setProcess(KnownTANProcess p)
     {
@@ -129,9 +135,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
-     */
+    @Override
     public void setParam(String paramName, String value)
     {
         if (paramName.equals("orderhash")) {
@@ -142,7 +146,7 @@ public class GVTAN2Step extends HBCIJobImpl
 
     /**
      * Speichert die Referenz auf das zweite HKTAN im ersten HKTAN.
-     * Wird fuer Prozess-Variante 2 benoetigt.
+     * Wird fuer Prozessvariante 2 benoetigt.
      * @param step2 die Referenz auf den ersten HKTAN.
      */
     public void setStep2(GVTAN2Step step2)
@@ -158,7 +162,8 @@ public class GVTAN2Step extends HBCIJobImpl
     {
         this.task = task;
     }
-    
+
+    @Override
     protected void saveReturnValues(HBCIMsgStatus status, int sref)
     {
         super.saveReturnValues(status, sref);
@@ -171,18 +176,12 @@ public class GVTAN2Step extends HBCIJobImpl
         }
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#redo()
-     */
     @Override
     public HBCIJobImpl redo()
     {
         return this.redo;
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#haveTan()
-     */
     @Override
     public boolean haveTan()
     {
@@ -191,68 +190,61 @@ public class GVTAN2Step extends HBCIJobImpl
         return true;
     }
     
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#extractResults(org.kapott.hbci.status.HBCIMsgStatus, java.lang.String, int)
-     */
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
+        final HBCIStatus segS = msgstatus.segStatus;
+        final HBCIStatus globS = msgstatus.globStatus;
         final Properties result = msgstatus.getData();
         final String segCode = result.getProperty(header+".SegHead.code"); // HITAN oder das HI** des GV
         HBCIUtils.log("found HKTAN response with segcode " + segCode,HBCIUtils.LOG_DEBUG);
 
-        ///////////////////////////////////////////////////////////////////////
-        // Die folgenden Sonderbehandlungen sind nur bei Prozess-Variante 2 in Schritt 2 noetig,
+        // Die folgenden Sonderbehandlungen sind nur bei Prozessvariante 2 in Schritt 2 noetig,
         // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
-        if (this.process == KnownTANProcess.PROCESS2_STEP2 && this.task != null)
+        if (this.process == PROCESS2_STEP2 && this.task != null)
         {
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
-            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
-            // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
-            if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null && this.task.redoAllowed())
+            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN, sondern auf den eigentlichen GV.
+            // In dem Fall muessen wir uns den eigentlichen Task für die erneute Ausfuehrung merken.
+            if (W3040.isIn(segS.getWarnings()) &&
+                segCode.equals(toInsCode(this.getHBCICode())) && this.task.redoAllowed())
             {
                 HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                 HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
                 this.redo = this.task;
             }
 
-            // Das ist das Response auf den eigentlichen GV - an den Task durchreichen
+            // Es ist die Antwort auf den eigentlichen GV -> an den Task durchreichen
             // Muessen wir extra pruefen, weil das hier auch das HITAN sein koennte. Das schauen wir aber nicht an
-            if (StringUtil.toInsCode(this.task.getHBCICode()).equals(segCode))
+            if (segCode.equals(toInsCode(this.task.getHBCICode())))
             {
                 HBCIUtils.log("this is a response segment for the original task (" + this.task.getName() + ") - storing results in the original job",HBCIUtils.LOG_DEBUG);
                 this.task.fillJobResultFromTanJob(msgstatus, header, idx);
             }
-            
-            // Wir haben hier nichts weiter zu tun
+
             return;
         }
-        //
-        ///////////////////////////////////////////////////////////////////////
 
         this.redo = null;
         final HBCIPassportInternal p = this.getMainPassport();
-        
-        ///////////////////////////////////////////////////////////////////////
+
         // SCA-Ausnahme checken. Wenn wir in der Auswertung des ersten HKTAN sind, pruefen wir, ob die Bank einen 3076 geschickt
         // hat. Wenn das der Fall ist, koennen wir das zweite HKTAN weglassen und muessen auch beim User keine TAN erfragen
-        if ((this.process == KnownTANProcess.PROCESS1 || this.process == KnownTANProcess.PROCESS2_STEP1) && (KnownReturncode.W3076.searchReturnValue(msgstatus.segStatus.getWarnings()) != null || KnownReturncode.W3076.searchReturnValue(msgstatus.globStatus.getWarnings()) != null))
+        if ((this.process == PROCESS1 || this.process == PROCESS2_STEP1) &&
+            (W3076.isIn(segS.getWarnings()) || W3076.isIn(globS.getWarnings())))
         {
             HBCIUtils.log("found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_SCA,"true"); // Bewirkt, dass die TAN-Abfrage nicht erscheint
             if (this.step2 != null)
             {
-                // Bewirkt, dass das zweite HKTAN bei Prozess-Variante 2 nicht mehr gesendet wird
+                // Bewirkt, dass das zweite HKTAN bei Prozessvariante 2 nicht mehr gesendet wird
                 this.step2.skip();
             }
             return;
         }
-        //
-        ///////////////////////////////////////////////////////////////////////
 
-        ///////////////////////////////////////////////////////////////////////
-        // Daten fuer die TAN-Abfrage einsammeln
+        //region: Daten fuer die TAN-Abfrage einsammeln
         
-        // Prozess-Variante 1:
+        // Prozessvariante 1:
         final String challenge = result.getProperty(header+".challenge");
         if (challenge != null)
         {
@@ -274,12 +266,11 @@ public class GVTAN2Step extends HBCIJobImpl
         // Die Auftragsreferenz aus dem ersten HITAN bei Prozessvariante 2. Die muessen wir bei dem HKTAN#2 mitschicken, damit die Bank
         // weiss, auf welchen Auftrag sich die TAN bezieht
         final String orderref = result.getProperty(header+".orderref");
-        if (step2 != null && orderref != null)
+        if (this.step2 != null && orderref != null)
         {
             HBCIUtils.log("found orderref '" + orderref + "' in HITAN",HBCIUtils.LOG_DEBUG);
-            step2.setParam("orderref",orderref);
+            this.step2.setParam("orderref",orderref);
         }
-        //
-        ///////////////////////////////////////////////////////////////////////
+        //endregion
     }
 }

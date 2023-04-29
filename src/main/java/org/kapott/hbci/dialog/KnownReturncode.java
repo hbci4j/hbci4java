@@ -149,6 +149,11 @@ public enum KnownReturncode
         return null;
     }
 
+    public boolean isIn(HBCIRetVal[] rets)
+    {
+        return null != searchReturnValue(rets);
+    }
+
     /**
      * Sucht nach dem angegebenen Status-Code in den Rueckmeldungen und liefert den Code zurueck.
      * @param rets die Rueckmeldungen.
