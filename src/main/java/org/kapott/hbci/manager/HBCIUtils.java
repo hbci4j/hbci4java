@@ -1533,18 +1533,22 @@ public final class HBCIUtils
 		}
 	}
 
-	/**
-	 * Ausgabe der Meldungen einer Exception-Kette mit dem Level
-	 * <code>LOG_ERR</code>.
-	 *
-	 * @param e
-	 *            die Exception, deren <code>getMessage()</code>-Meldungen
-	 *            geloggt werden sollen
-	 */
-	public static synchronized void log ( Exception e )
-	{
-		log(e, LOG_ERR);
-	}
+  /**
+   * Ausgabe der Meldungen einer Exception-Kette mit dem Level
+   * <code>LOG_ERR</code>.
+   *
+   * @param exceptions die Exception, deren <code>getMessage()</code>-Meldungen geloggt werden sollen.
+   */
+  public static synchronized void log(Exception... exceptions)
+  {
+    if (exceptions == null)
+      return;
+    
+    for (Exception e:exceptions)
+    {
+      log(e, LOG_ERR);
+    }
+  }
 
 	/**
 	 * Gibt den StackTrace einer Exception zurück.

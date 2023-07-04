@@ -238,6 +238,7 @@ public final class HBCIUser implements IHandlerData
                         passport.clearMyDigKey();
                         passport.saveChanges();
                     } else {
+                        HBCIUtils.log(ret.getExceptions());
                         HBCIUtils.log("keys have not been thrown away",HBCIUtils.LOG_WARN);
                     }
         
