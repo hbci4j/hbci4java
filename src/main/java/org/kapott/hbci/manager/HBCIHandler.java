@@ -160,7 +160,8 @@ public final class HBCIHandler
 
             if (!lazyInit) {
               
-              if (Feature.INIT_FLIP_USER_INST.isEnabled())
+              // Das macht nur bei PIN/TAN Sinn
+              if ((passport instanceof AbstractPinTanPassport) && Feature.INIT_FLIP_USER_INST.isEnabled())
               {
                 registerUser();
                 registerInstitute();
