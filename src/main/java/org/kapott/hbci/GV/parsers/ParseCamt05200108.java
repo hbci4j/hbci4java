@@ -152,10 +152,63 @@ public class ParseCamt05200108 extends AbstractCamtParser
         line.isCamt = true;
         line.other = new Konto();
         
-        List<EntryDetails9> details = entry.getNtryDtls();
-        if (details.size() == 0)
-            return null;
+        ////////////////////////////////////////////////////////////////////////
+        // Betrag
+        ActiveOrHistoricCurrencyAndAmount amt = entry.getAmt();
+        BigDecimal bd = amt.getValue() != null ? amt.getValue() : BigDecimal.ZERO;
+        line.value = new Value(this.checkDebit(bd,entry.getCdtDbtInd()));
+        line.value.setCurr(amt.getCcy());
+        //
+        ////////////////////////////////////////////////////////////////////////
         
+        ////////////////////////////////////////////////////////////////////////
+        // Storno-Kennzeichen
+        // Laut Spezifikation kehrt sich bei Stornobuchungen im Gegensatz zu MT940
+        // nicht das Vorzeichen um. Der Betrag bleibt also gleich
+        line.isStorno = entry.isRvslInd() != null ? entry.isRvslInd().booleanValue() : false;
+        //
+        ////////////////////////////////////////////////////////////////////////
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // Buchungs- und Valuta-Datum
+        DateAndDateTime2Choice bdate = entry.getBookgDt();
+        line.bdate = bdate != null ? SepaUtil.toDate(bdate.getDt()) : null;
+        
+        DateAndDateTime2Choice vdate = entry.getValDt();
+        line.valuta = vdate != null ? SepaUtil.toDate(vdate.getDt()) : null;
+        
+        // Wenn einer von beiden Werten fehlt, uebernehmen wir dort den jeweils anderen
+        if (line.bdate == null) line.bdate = line.valuta;
+        if (line.valuta == null) line.valuta = line.bdate;
+        //
+        ////////////////////////////////////////////////////////////////////////
+        
+        ////////////////////////////////////////////////////////////////////////
+        // Saldo
+        line.saldo = new Saldo();
+        line.saldo.value = new Value(currSaldo.add(line.value.getBigDecimalValue()));
+        line.saldo.value.setCurr(line.value.getCurr());
+        line.saldo.timestamp = line.bdate;
+        //
+        ////////////////////////////////////////////////////////////////////////
+        
+        ////////////////////////////////////////////////////////////////////////
+        // Art und Kundenreferenz
+        line.text = trim(entry.getAddtlNtryInf());
+        line.customerref = trim(entry.getAcctSvcrRef());
+        //
+        ////////////////////////////////////////////////////////////////////////
+
+        
+        final List<EntryDetails9> details = entry.getNtryDtls();
+        if (details.size() == 0)
+        {
+          // Wir packen in dem Fall den Info-Text noch zusätzlich in den Verwendungszweck
+          line.usage.add(trim(entry.getAddtlNtryInf()));
+          return line;
+        }
+
         // Das Schema sieht zwar mehrere Detail-Elemente vor, ich wuesste
         // aber ohnehin nicht, wie man das sinnvoll mappen koennte 
         EntryDetails9 detail = details.get(0);
@@ -166,7 +219,7 @@ public class ParseCamt05200108 extends AbstractCamtParser
         
         // Checken, ob es Soll- oder Habenbuchung ist
         boolean haben = entry.getCdtDbtInd() != null && entry.getCdtDbtInd() == CreditDebitCode.CRDT;
-        
+
         // ditto
         EntryTransaction10 tx = txList.get(0);
 
@@ -231,54 +284,6 @@ public class ParseCamt05200108 extends AbstractCamtParser
         //
         ////////////////////////////////////////////////////////////////////////
 
-        ////////////////////////////////////////////////////////////////////////
-        // Betrag
-        ActiveOrHistoricCurrencyAndAmount amt = entry.getAmt();
-        BigDecimal bd = amt.getValue() != null ? amt.getValue() : BigDecimal.ZERO;
-        line.value = new Value(this.checkDebit(bd,entry.getCdtDbtInd()));
-        line.value.setCurr(amt.getCcy());
-        //
-        ////////////////////////////////////////////////////////////////////////
-        
-        ////////////////////////////////////////////////////////////////////////
-        // Storno-Kennzeichen
-        // Laut Spezifikation kehrt sich bei Stornobuchungen im Gegensatz zu MT940
-        // nicht das Vorzeichen um. Der Betrag bleibt also gleich
-        line.isStorno = entry.isRvslInd() != null ? entry.isRvslInd().booleanValue() : false;
-        //
-        ////////////////////////////////////////////////////////////////////////
-
-
-        ////////////////////////////////////////////////////////////////////////
-        // Buchungs- und Valuta-Datum
-        DateAndDateTime2Choice bdate = entry.getBookgDt();
-        line.bdate = bdate != null ? SepaUtil.toDate(bdate.getDt()) : null;
-        
-        DateAndDateTime2Choice vdate = entry.getValDt();
-        line.valuta = vdate != null ? SepaUtil.toDate(vdate.getDt()) : null;
-        
-        // Wenn einer von beiden Werten fehlt, uebernehmen wir dort den jeweils anderen
-        if (line.bdate == null) line.bdate = line.valuta;
-        if (line.valuta == null) line.valuta = line.bdate;
-        //
-        ////////////////////////////////////////////////////////////////////////
-        
-        ////////////////////////////////////////////////////////////////////////
-        // Saldo
-        line.saldo = new Saldo();
-        line.saldo.value = new Value(currSaldo.add(line.value.getBigDecimalValue()));
-        line.saldo.value.setCurr(line.value.getCurr());
-        line.saldo.timestamp = line.bdate;
-        //
-        ////////////////////////////////////////////////////////////////////////
-        
-        ////////////////////////////////////////////////////////////////////////
-        // Art und Kundenreferenz
-        line.text = trim(entry.getAddtlNtryInf());
-        line.customerref = trim(entry.getAcctSvcrRef());
-        //
-        ////////////////////////////////////////////////////////////////////////
-        
         ////////////////////////////////////////////////////////////////////////
         // Primanota, GV-Code und GV-Code-Ergaenzung
         // Ich weiss nicht, ob das bei allen Banken so codiert ist.
