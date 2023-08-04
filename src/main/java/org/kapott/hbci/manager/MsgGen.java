@@ -75,7 +75,9 @@ public final class MsgGen
     public MsgGen(InputStream syntaxFileStream)
     {
         try {
-            DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
+            // Siehe https://github.com/hbci4j/hbci4java/issues/31 - in Android wird das System-Property nicht ausgewertet
+            final String impl = System.getProperty("javax.xml.parsers.DocumentBuilderFactory");
+            final DocumentBuilderFactory dbf = impl != null ? DocumentBuilderFactory.newInstance(impl,null) : DocumentBuilderFactory.newInstance();
 
             dbf.setIgnoringComments(true);
             dbf.setValidating(true);
