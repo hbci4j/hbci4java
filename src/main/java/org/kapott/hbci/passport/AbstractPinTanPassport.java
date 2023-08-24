@@ -312,40 +312,20 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
         ////////////////////////////////////////////////////
         // TAN-Verfahren ermitteln und uebernehmen
-        HBCIRetVal[] glob = status.globStatus != null ? status.globStatus.getWarnings() : null;
-        HBCIRetVal[] seg  = status.segStatus != null ? status.segStatus.getWarnings() : null;
-
-        if (glob == null && seg == null)
-            return;
-
-        HBCIUtils.log("autosecfunc: search for 3920 in response to detect allowed twostep secmechs", HBCIUtils.LOG_DEBUG);
-
-        List<HBCIRetVal> globRet = KnownReturncode.W3920.searchReturnValues(glob);
-        List<HBCIRetVal> segRet  = KnownReturncode.W3920.searchReturnValues(seg);
-
-        if (globRet == null && segRet == null)
-            return;
+        final List<HBCIRetVal> recvList = KnownReturncode.W3920.searchReturnValues(status);
         
+        if (recvList == null || recvList.isEmpty())
+            return;
+
+        HBCIUtils.log("autosecfunc: found " + recvList.size() + " 3920s in response, detect allowed twostep secmechs", HBCIUtils.LOG_DEBUG);
+
         final List<String> oldList = new ArrayList<String>(this.tanMethodsUser);
         final Set<String> newSet = new HashSet<String>(); // Damit doppelte nicht doppelt in der Liste landen
-        
-        if (globRet != null)
+        for (HBCIRetVal r:recvList)
         {
-            for (HBCIRetVal r:globRet)
-            {
-                if (r.params != null)
-                    newSet.addAll(Arrays.asList(r.params));
-            }
+          if (r.params != null)
+            newSet.addAll(Arrays.asList(r.params));
         }
-        if (segRet != null)
-        {
-            for (HBCIRetVal r:segRet)
-            {
-                if (r.params != null)
-                    newSet.addAll(Arrays.asList(r.params));
-            }
-        }
-        
         final List<String> newList = new ArrayList<String>(newSet);
 
         if (newList.size() > 0 && !newList.equals(oldList))

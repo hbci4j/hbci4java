@@ -33,6 +33,7 @@ import org.kapott.hbci.dialog.DialogEvent;
 import org.kapott.hbci.dialog.HBCIDialogInit;
 import org.kapott.hbci.dialog.HBCIMessage;
 import org.kapott.hbci.dialog.HBCIMessageQueue;
+import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.passport.HBCIPassportList;
@@ -100,7 +101,7 @@ public final class HBCIDialog
             
             // autosecmech
             HBCIUtils.log("checking whether passport is supported (but ignoring result)",HBCIUtils.LOG_DEBUG);
-            boolean s=mainPassport.isSupported();
+            boolean s = mainPassport.isSupported();
             HBCIUtils.log("passport supported: "+s,HBCIUtils.LOG_DEBUG);
             
             HBCIUtils.log(HBCIUtilsInternal.getLocMsg("STATUS_DIALOG_INIT"),HBCIUtils.LOG_INFO);
@@ -149,8 +150,24 @@ public final class HBCIDialog
                                                      new StringBuffer());
                 }
             }
-
             HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_DIALOG_INIT_DONE,new Object[] {ret,dialogid});
+            
+            if (!KnownReturncode.E9391.searchReturnValues(ret).isEmpty())
+            {
+              try
+              {
+                HBCIUtils.log("found 9391 code in response, performing new sync", HBCIUtils.LOG_INFO);
+                final HBCIUser user = new HBCIUser(kernel,mainPassport,false);
+                user.fetchSysId();
+              }
+              catch (Exception e)
+              {
+                // Wir werfen das nicht hoch. Wenn es fehlschlaegt, ist der Abruf der neuen System-ID halt fehlgeschlagen.
+                // Davon geht die Welt nicht unter. Im Zweifel muss der User halt manuell eine Synchronisierung durchführen.
+                HBCIUtils.log("failed: " + e.getMessage(),HBCIUtils.LOG_INFO);
+                HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
+              }
+            }
         }
         catch (Exception e)
         {

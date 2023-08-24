@@ -433,7 +433,9 @@ public final class HBCIUser implements IHandlerData
             boolean s=passport.isSupported();
             HBCIUtils.log("passport supported: "+s,HBCIUtils.LOG_DEBUG);
 
-            passport.setSigId(new Long(1));
+            // 2023-08-24: Ich glaube, es ist falsch, hier pauschal die Sig-ID zurückzusetzen.
+            // Das sollte aus meiner Sicht nur gemacht werden, wenn Mode.SIG_ID verwendet wird. Also bei "fetchSigId".
+            // passport.setSigId(new Long(1));
             passport.setSysId("0");
 
             ////////////////////////////////////////
