@@ -261,8 +261,8 @@ public class ParseCamt05200103 extends AbstractCamtParser
             Party11Choice id2 = name != null ? name.getId() : null;
             PersonIdentification5 prvtId = id2 != null ? id2.getPrvtId() : null;
             List<GenericPersonIdentification1> othr = prvtId != null ? prvtId.getOthr() : null;
-			GenericPersonIdentification1 genericPersonIdentification1 = (othr != null && !othr.isEmpty())? othr.get(0) : null;
-			line.other.creditorid = trim(genericPersonIdentification1 != null ? genericPersonIdentification1.getId() : null);
+            GenericPersonIdentification1 genericPersonIdentification1 = (othr != null && !othr.isEmpty())? othr.get(0) : null;
+            line.other.creditorid = trim(genericPersonIdentification1 != null ? genericPersonIdentification1.getId() : null);
 
             // Abweichender Name, falls vorhanden
             name = haben ? other.getUltmtDbtr() : other.getUltmtCdtr();
