@@ -285,5 +285,95 @@ public class TestCamtParse extends AbstractTest
                 is2.close();
         }
     }
+    
+    /**
+     * Testet das Lesen einer CAMT-Datei 052.001.08 mit einer Lastschrift.
+     * @throws Exception
+     */
+    @Test
+    public void test006() throws Exception
+    {
+        final String file = "test-camt-parse-05200108.xml";
+        InputStream is1 = null;
+        InputStream is2 = null;
+        try
+        {
+            is1 = this.getStream(file);
+            SepaVersion version = SepaVersion.autodetect(is1);
+            ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(version);
+
+            is2 = this.getStream(file);
+            GVRKUms ums = new GVRKUms();
+            parser.parse(is2, ums.getDataPerDay());
+
+            List<BTag> days = ums.getDataPerDayUnbooked();
+            Assert.assertEquals("Anzahl Tage ungebuchte Umsaetze falsch", 0, days.size());
+
+            days = ums.getDataPerDay();
+            Assert.assertEquals("Anzahl Buchungstage falsch", 1, days.size());
+
+            BTag day = days.get(0);
+            List<UmsLine> lines = day.lines;
+            Assert.assertEquals("Anzahl Buchungen falsch", 1, lines.size());
+
+            Assert.assertTrue("Startsaldo falsch", new BigDecimal("100").compareTo(day.start.value.getBigDecimalValue()) == 0);
+            Assert.assertTrue("Endsaldo falsch", new BigDecimal("66").compareTo(day.end.value.getBigDecimalValue()) == 0);
+            Assert.assertEquals("Startdatum falsch", DF.parse("2023-11-08"), day.start.timestamp);
+            Assert.assertEquals("Enddatum falsch", DF.parse("2023-11-10"), day.end.timestamp);
+            Assert.assertEquals("Startsaldo Waehrung falsch", "EUR",day.start.value.getCurr());
+            Assert.assertEquals("Endsaldo Waehrung falsch", "EUR",day.end.value.getCurr());
+
+            Assert.assertNotNull("Konto fehlt",day.my);
+            Assert.assertEquals("IBAN falsch","DE12345678901234567890",day.my.iban);
+            Assert.assertEquals("BIC falsch","ABCDEFG1ABC",day.my.bic);
+            Assert.assertEquals("Waehrung falsch","EUR",day.my.curr);
+            
+            Assert.assertEquals("Starttyp falsch",'F',day.starttype);
+            Assert.assertEquals("Endtyp falsch",'F',day.endtype);
+
+            {
+                UmsLine l = lines.get(0);
+                Assert.assertNull("additional falsch",l.additional);
+                Assert.assertEquals("addkey falsch","992",l.addkey);
+                Assert.assertEquals("Buchungsdatum falsch",DF.parseObject("2023-11-10"),l.bdate);
+                Assert.assertNull("charge_value falsch",l.charge_value);
+                Assert.assertEquals("customerref falsch","2023-11-10-00.06.42.329883",l.customerref);
+                Assert.assertEquals("gvcode falsch","105",l.gvcode);
+                Assert.assertEquals("id falsch","2023-11-10-00.06.42.329883",l.id);
+                Assert.assertNull("instref falsch",l.instref);
+                Assert.assertTrue("Buchung nicht als CAMT-Buchung markiert",l.isCamt);
+                Assert.assertTrue("Buchung nicht als SEPA-Buchung markiert",l.isSepa);
+                Assert.assertFalse("Buchung ist kein Storno",l.isStorno);
+                Assert.assertNull("orig_value falsch",l.orig_value);
+                Assert.assertNotNull("Gegenkonto fehlt",l.other);
+                Assert.assertEquals("Gegenkonto IBAN falsch","DE12345678901234567892",l.other.iban);
+                Assert.assertEquals("Gegenkonto BIC falsch","ABCDEFG1CBA",l.other.bic);
+                Assert.assertEquals("Gegenkonto Name falsch","Beispiel AG",l.other.name);
+                Assert.assertEquals("Gegenkonto GläubigerID falsch", "DE46ZZZ00000012345", l.other.creditorid);
+                Assert.assertEquals("primanota falsch","9200",l.primanota);
+                Assert.assertNull("purposecode falsch",l.purposecode);
+                Assert.assertNotNull("Saldo fehlt",l.saldo);
+                Assert.assertTrue("Saldo falsch", new BigDecimal("66").compareTo(l.saldo.value.getBigDecimalValue()) == 0);
+                Assert.assertEquals("Saldodatum falsch", DF.parse("2023-11-10"), l.saldo.timestamp);
+                Assert.assertEquals("Saldo-Waehrung falsch", "EUR",l.saldo.value.getCurr());
+                Assert.assertEquals("Text falsch","FOLGELASTSCHRIFT",l.text);
+                Assert.assertNotNull("Verwendungszweck fehlt",l.usage);
+                Assert.assertEquals("Anzahl Verwendungszwecke falsch",1,l.usage.size());
+                Assert.assertEquals("Verwendungszweck falsch","Verwendungszweck",l.usage.get(0));
+                Assert.assertNotNull("Betrag fehlt",l.value);
+                Assert.assertTrue("Betrag falsch", new BigDecimal("-34").compareTo(l.value.getBigDecimalValue()) == 0);
+                Assert.assertEquals("Betrag-Waehrung falsch", "EUR",l.value.getCurr());
+                Assert.assertEquals("Valuta falsch",DF.parse("2023-11-10"),l.valuta);
+            }
+        }
+        finally
+        {
+            if (is1 != null)
+                is1.close();
+            if (is2 != null)
+                is2.close();
+        }
+    }
+
 
 }
