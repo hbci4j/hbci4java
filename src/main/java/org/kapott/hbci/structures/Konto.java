@@ -80,6 +80,8 @@ public class Konto
     public String bic;
     /** IBAN des Kontos */
     public String iban;
+    /** CreditorID des Fremd-Kontos (optional) */
+    public String creditorid;
     
     /** Anlegen eines neuen Konto-Objektes. Die Währung wird auf <code>EUR</code> voreingestellt */
     public Konto()

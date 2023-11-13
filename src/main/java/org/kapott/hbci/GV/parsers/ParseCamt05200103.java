@@ -49,7 +49,10 @@ import org.kapott.hbci.sepa.jaxb.camt_052_001_03.Document;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.EntryDetails2;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.EntryTransaction3;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.FinancialInstitutionIdentification8;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_03.GenericPersonIdentification1;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_03.Party11Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.PartyIdentification43;
+import org.kapott.hbci.sepa.jaxb.camt_052_001_03.PersonIdentification5;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.Purpose2Choice;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.ReportEntry3;
 import org.kapott.hbci.sepa.jaxb.camt_052_001_03.TransactionAgents3;
@@ -253,6 +256,13 @@ public class ParseCamt05200103 extends AbstractCamtParser
             
             PartyIdentification43 name = haben ? other.getDbtr() : other.getCdtr();
             line.other.name = trim(name != null ? name.getNm() : null);
+
+            //GläubigerID
+            Party11Choice id2 = name != null ? name.getId() : null;
+            PersonIdentification5 prvtId = id2 != null ? id2.getPrvtId() : null;
+            List<GenericPersonIdentification1> othr = prvtId != null ? prvtId.getOthr() : null;
+            GenericPersonIdentification1 genericPersonIdentification1 = (othr != null && !othr.isEmpty())? othr.get(0) : null;
+            line.other.creditorid = trim(genericPersonIdentification1 != null ? genericPersonIdentification1.getId() : null);
 
             // Abweichender Name, falls vorhanden
             name = haben ? other.getUltmtDbtr() : other.getUltmtCdtr();
