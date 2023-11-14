@@ -79,7 +79,7 @@ public class GVKUmsAll extends HBCIJobImpl
         // Dennoch kann es sein, dass die nationale Bankverbindung auch bei der
         // SEPA-Variante noch mitgeschickt wird, wenn die Bank das zulaesst.
         // (Es scheint auch Banken zu geben, die das in dem Fall nicht nur
-        // zulassen sondern erwarten).
+        // zulassen, sondern erwarten).
         boolean nat = this.canNationalAcc(handler);
 
         if (sepa)

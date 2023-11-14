@@ -165,7 +165,7 @@ public class FlickerTest extends AbstractTest
   public void test4() throws Exception
   {
     // Code von http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=60532
-    // Stammt nicht aus dem "Challenge HHDuc" sondern aus dem Freitext
+    // Stammt nicht aus dem "Challenge HHDuc", sondern aus dem Freitext
     // des TAN-Dialoges
     // Das zwischen "CHLGUC$4zahlen" und "CHLGTEXT" ist der Flickercode.
     // Das $4zahlen gibt IMHO an, wie lang der danach folgende Flicker-Code ist
@@ -252,7 +252,7 @@ public class FlickerTest extends AbstractTest
   }
   
   /**
-   * Das ist ein "echter" HHD-1.3-Code, der nicht im Challenge-Freitext sondern
+   * Das ist ein "echter" HHD-1.3-Code, der nicht im Challenge-Freitext, sondern
    * tatsaechlich im Challenge HHDuc uebertragen wurde. Erkennbar daran, dass
    * das LC nur 2 Zeichen lang ist. Stammt von der Postbank.
    * @throws Exception

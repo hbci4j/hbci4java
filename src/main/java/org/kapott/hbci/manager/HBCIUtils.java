@@ -1216,7 +1216,7 @@ public final class HBCIUtils
 	 *            im Ort der Bank oder in deren Namen enthalten sein. Oder die
 	 *            BLZ oder BIC beginnt mit diesem Text.
 	 * @return die Liste der Bank-Informationen. Die Ergebnis-Liste ist nach BLZ
-	 *         sortiert. Die Funktion liefert niemals NULL sondern hoechstens
+	 *         sortiert. Die Funktion liefert niemals NULL, sondern hoechstens
 	 *         eine leere Liste.
 	 */
 	public static List<BankInfo> searchBankInfo ( String query )

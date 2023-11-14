@@ -43,7 +43,7 @@ public class IOUtils
      * sie wirklich verschwunden ist, bevor tmpFile auf den Namen von origFile umbenannt wird.
      * Wichtig ist, dass zum Zeitpunkt des Aufrufes dieser Methode alle Streams auf die
      * Dateien bereits geschlossen wurden. Die Schreibvorgaenge auf die Dateien muessen also
-     * abgeschlossen sein. Heisst: "os.close()" nicht erst im finally-Block machen sondern
+     * abgeschlossen sein. Heisst: "os.close()" nicht erst im finally-Block machen, sondern
      * VOR dem Aufruf dieser Methode.
      * @param origFile die originale zu ersetzende Datei.
      * @param tmpFile die neue Datei, welche die originale ersetzen soll.

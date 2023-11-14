@@ -202,7 +202,7 @@ public class BankInfo
     /**
      * Parst die BankInfo-Daten aus einer Zeile der blz.properties.
      * @param text der Text (Value) aus der blz.properties.
-     * @return das BankInfo-Objekt. Niemals NULL sondern hoechstens ein leeres Objekt.
+     * @return das BankInfo-Objekt. Niemals NULL, sondern hoechstens ein leeres Objekt.
      */
     static BankInfo parse(String text)
     {

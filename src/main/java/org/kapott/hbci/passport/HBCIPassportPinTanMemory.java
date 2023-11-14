@@ -22,7 +22,7 @@
 package org.kapott.hbci.passport;
 
 /**
- * Implementierung eines PIN/TAN-Passport, welcher keine Daten im Dateisystem ablegt
+ * Implementierung eines PIN/TAN-Passport, welcher keine Daten im Dateisystem ablegt,
  * sondern alle Daten im Speicher haelt.
  */
 public class HBCIPassportPinTanMemory extends HBCIPassportPinTan

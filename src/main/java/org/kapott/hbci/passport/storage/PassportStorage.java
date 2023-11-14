@@ -107,7 +107,7 @@ public class PassportStorage
             // Wir laden die Datei erstmal komplett in den Speicher, damit wir die Formate durchprobieren koennen
             byte[] data = IOUtils.read(is);
             
-            // Wenn die Datei leer ist, brauchen wir sie nicht einlesen sondern liefern einfach ein leeres
+            // Wenn die Datei leer ist, brauchen wir sie nicht einlesen, sondern liefern einfach ein leeres
             // PassportData-Objekt. Dann werfen wir naemlich keinen Fehler beim Laden, wenn das Schreiben einer
             // Passport-Datei mal fehlschlug und sie als leere Datei erzeugt wurde. Stattdessen erstellen wir
             // einfach einen neuen Passport.

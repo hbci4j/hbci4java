@@ -102,7 +102,7 @@ public class FlickerCode
   /**
    * Die Anzahl der Bytes, in der die Laenge des Challenge bei HHD 1.4 steht.
    * Bei HHD 1.3 war das noch 2 Zeichen lang.
-   * Wenn der Flicker-Code nicht in "Challenge HHDuc" uebertragen wurde
+   * Wenn der Flicker-Code nicht in "Challenge HHDuc" uebertragen wurde,
    * sondern direkt im Freitext-Challenge, koennen wir das Problem umgehen,
    * indem wir in clean() einfach eine "0" vorn anhaengen.
    * Wenn er aber tatsaechlich im "Challenge HHDuc" steht, kann man dem
@@ -354,7 +354,7 @@ public class FlickerCode
   /**
    * Entfernt das CHLGUC0026....CHLGTEXT aus dem Code, falls vorhanden.
    * Das sind HHD 1.3-Codes, die nicht im "Challenge HHDuc" uebertragen
-   * wurden sondern direkt im Challenge-Freitext,
+   * wurden, sondern direkt im Challenge-Freitext,
    * @param code
    * @return
    */
@@ -375,7 +375,7 @@ public class FlickerCode
     // Dann alles abschneiden bis zum Beginn von "CHLGUC"
     code = code.substring(t1Start);
 
-    // Wir haben eigentlich nicht nur "CHLGUC" sondern "CHLGUC0026"
+    // Wir haben eigentlich nicht nur "CHLGUC", sondern "CHLGUC0026"
     // Wobei die 4 Zahlen sicher variieren koennen. Wir schneiden einfach alles ab.
     code = code.substring(10);
     
@@ -768,7 +768,7 @@ public class FlickerCode
    * Selbstverstaendlich sind hier so einige Sachen anders codiert als im DE.
    * Waer ja auch zu einfach sonst.
    * Die Laengen-Angabe ist anders codiert (hex statt dec). Und nach der
-   * Laenge kommen nicht sofort die Nutzdaten sondern erst noch die Control-Bytes.
+   * Laenge kommen nicht sofort die Nutzdaten, sondern erst noch die Control-Bytes.
    */
   public class Startcode extends DE
   {

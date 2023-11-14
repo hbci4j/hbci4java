@@ -844,7 +844,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (options.size() == 0)
         {
             // wir lassen das hier mal noch auf true stehen, weil das bestimmt noch nicht final war. Schliesslich basierte die
-            // Auswahl des Verfahrens nicht auf den fuer den User freigeschalteten Verfahren sondern nur den allgemein von der
+            // Auswahl des Verfahrens nicht auf den fuer den User freigeschalteten Verfahren, sondern nur den allgemein von der
             // Bank unterstuetzten
             this.tanMethodAutoSelected = true;
             
