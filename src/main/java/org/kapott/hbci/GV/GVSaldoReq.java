@@ -50,17 +50,17 @@ public class GVSaldoReq
     {
         this(handler,getLowlevelName());
 
-        
-        boolean sepa = false;
+        int version = -1;
         try
         {
-          sepa = Integer.parseInt(this.getSegVersion()) >= 7; 
+          version = Integer.parseInt(this.getSegVersion());
         }
         catch (Exception e)
         {
           HBCIUtils.log(e);
         }
-        
+
+        boolean sepa = version >= 7;
         boolean nat = this.canNationalAcc(handler);
 
         if (sepa)
@@ -69,9 +69,12 @@ public class GVSaldoReq
           addConstraint("my.iban","KTV.iban",null, LogFilter.FILTER_IDS);
         }
 
+        // Die DE mit der Währung wurde in HKSAL5 entfernt
+        if (version < 5)
+          addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
+
         if (nat || !sepa)
         {
-          addConstraint("my.curr","curr","EUR", LogFilter.FILTER_NONE);
           addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
           addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
           addConstraint("my.number","KTV.number",null, LogFilter.FILTER_IDS);
