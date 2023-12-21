@@ -389,6 +389,11 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                         payload.append(hhduc);
                         callback = HBCICallback.NEED_PT_QRTAN;
                     }
+                    else if (hhd.getType() == Type.DECOUPLED)
+                    {
+                        callback = HBCICallback.NEED_PT_DECOUPLED;
+                        setPersistentData(KEY_PD_DECOUPLED,"true");
+                    }
                     else
                     {
                         FlickerCode flicker = FlickerCode.tryParse(hhd,challenge,hhduc);
@@ -403,9 +408,15 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     HBCIUtilsInternal.getCallback().callback(this,callback,msg,HBCICallback.TYPE_TEXT,payload);
 
                     setPersistentData("externalid",null); // External-ID aus Passport entfernen
-                    if (payload == null || payload.length()==0) {
+
+                    // Beim Decoupled-Verfahren erhalten wir keine TAN. Daher müssen wir hier auch nichts signieren.
+                    // Wir ignorieren die Antwort aus dem Callback komplett
+                    if (callback == HBCICallback.NEED_PT_DECOUPLED)
+                      return (getPIN()).getBytes("ISO-8859-1");
+                    
+                    if (payload == null || payload.length()==0)
                         throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_TANZERO"));
-                    }
+                    
                     tan=payload.toString();
                 }
             }

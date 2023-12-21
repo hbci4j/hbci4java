@@ -44,7 +44,13 @@ public enum KnownTANProcess
      * Prozess-Variante 2, Schritt 2.
      */
     PROCESS2_STEP2("2"),
-    
+
+    /**
+     * Prozess-Variante 2, Schritt S.
+     * Das ist das Abfragen des Auftragsstatus bei Decoupled-Verfahren.
+     */
+    PROCESS2_STEPS("S"),
+
     ;
     
     /**
@@ -133,12 +139,18 @@ public enum KnownTANProcess
      * @param step die Schritt-Nummer.
      * @return der TAN-Prozess. Nie NULL sondern im Zweifel {@link KnownTANProcess#PROCESS2_STEP1}.
      */
-    public static KnownTANProcess get(Variant v, int step)
+    public static KnownTANProcess get(Variant v, String step)
     {
         // Hier gibts nur einen
         if (v == Variant.V1)
             return PROCESS1;
 
-        return step == 2 ? PROCESS2_STEP2 : PROCESS2_STEP1;
+        if (Objects.equals(step,"1"))
+          return PROCESS2_STEP1;
+        
+        if (Objects.equals(step,"S"))
+          return PROCESS2_STEPS;
+
+        return PROCESS2_STEP2;
     }
 }

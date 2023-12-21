@@ -351,6 +351,11 @@ public interface HBCICallback
      **/
     public final static int NEED_PT_QRTAN=34;
 
+    /**
+     * Ursache des Callback-Aufrufes: PushTAN 2.0 nötig.
+     **/
+    public final static int NEED_PT_DECOUPLED=35;
+
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
     public final static int WRONG_PIN=40;
     

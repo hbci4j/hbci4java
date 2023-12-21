@@ -66,7 +66,12 @@ public enum HHDVersion
      * Fallback.
      */
     HHD_1_2(Type.CHIPTAN,null,null,-1,"hhd12"),
-    
+
+    /**
+     * Push-TAN 2.0 (Decoupled)
+     */
+    DECOUPLED(Type.DECOUPLED,"Decouple.*"),
+
     ;
     
     /**
@@ -87,15 +92,33 @@ public enum HHDVersion
         /**
          * QR-Code.
          */
-        QRCODE
+        QRCODE,
+        
+        /**
+         * Push-TAN 2.0 (Decoupled)
+         */
+        DECOUPLED
+
     }
-    
+
     private Type type = null;
+    private String nameMatch = null;
     private String idMatch = null;
     private String versionStart = null;
     private int segVersion = 0;
     private String challengeVersion = null;
-    
+
+    /**
+     * ct.
+     * @param type die Art des TAN-Verfahrens.
+     * @param nameMatch Pattern für DK-Verfahrensbezeichnung.
+     */
+    private HHDVersion(Type type, String nameMatch)
+    {
+      this.type = type;
+      this.nameMatch = nameMatch;
+    }
+
     /**
      * ct.
      * @param type die Art des TAN-Verfahrens.
@@ -141,6 +164,25 @@ public enum HHDVersion
     public static HHDVersion find(Properties secmech)
     {
       HBCIUtils.log("trying to determine HHD version for secmech: " + secmech,HBCIUtils.LOG_DEBUG);
+
+      // DK-TAN-Verfahren
+      String name = secmech.getProperty("zkamethod_name","");
+      if (name != null && name.length() > 0)
+      {
+        HBCIUtils.log("  DK name: " + name,HBCIUtils.LOG_DEBUG);
+        for (HHDVersion v:values())
+        {
+            String s = v.nameMatch;
+            if (s == null)
+                continue;
+            if (name.matches(s))
+            {
+                HBCIUtils.log("  identified as " + v,HBCIUtils.LOG_DEBUG);
+                return v;
+            }
+        }
+      }
+      
       // Das ist die "Technische Kennung"
       // Siehe "Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf"
       // Der Name ist standardisiert, wenn er mit "HHD1...." beginnt, ist

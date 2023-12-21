@@ -125,6 +125,17 @@ public class TestHHDVersion extends AbstractTest
             testdata.add(t);
         }
 
+        {
+            TestData t = new TestData(HHDVersion.DECOUPLED);
+            t.props.put("zkamethod_name","Decoupled");
+            testdata.add(t);
+        }
+        {
+          TestData t = new TestData(HHDVersion.DECOUPLED);
+          t.props.put("zkamethod_name","DecoupledPush");
+          testdata.add(t);
+      }
+
     }
     
     

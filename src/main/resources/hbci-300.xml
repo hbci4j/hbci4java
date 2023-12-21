@@ -5615,6 +5615,8 @@
             <DE name="process" type="Code" maxsize="1"/>
             <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
             <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+            
+            <!-- Hier kann "nochallenge" drin stehen. Dann ignorieren. Sonst dem User anzeigen. Kann Infos von der Bank enthalten. -->
             <DE name="challenge" type="AN" maxsize="2048" minnum="0"/>
             <DE name="challenge_hhd_uc" type="Bin" maxsize="0" minnum="0" />
             <DEG type="ChallengeValidity" minnum="0"/>
