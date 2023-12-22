@@ -344,9 +344,14 @@ public final class Sig
                             if (pos!=-1)
                             {
                                 String pin = pintan.substring(0,pos);
-                                String tan = pintan.substring(pos+1);
                                 msg.propagateValue(sigtail.getPath()+".UserSig.pin",pin,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
-                                msg.propagateValue(sigtail.getPath()+".UserSig.tan",tan,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
+
+                                // TAN nur senden, wenn vorhanden. Andernfalls lassen wir das DE komplett weg
+                                if (pos<pintan.length()-1)
+                                {
+                                  String tan = pintan.substring(pos+1);
+                                  msg.propagateValue(sigtail.getPath()+".UserSig.tan",tan,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
+                                }
                             }
                         }
                         else
