@@ -163,6 +163,12 @@ public class HBCICallbackIOStreams
                     logfilter.addSecretData(secret,"X",LogFilter.FILTER_SECRETS);
                     retData.replace(0,retData.length(),secret);
                     break;
+                    
+                case NEED_PT_DECOUPLED:
+                  getOutStream().print(msg+": ");
+                  getOutStream().flush();
+                  this.readLine();
+                  break;
     
                 case HAVE_HARDPIN:
                     HBCIUtils.log("end of entering hardpin",HBCIUtils.LOG_DEBUG);
