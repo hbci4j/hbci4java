@@ -412,7 +412,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     // Beim Decoupled-Verfahren erhalten wir keine TAN. Daher müssen wir hier auch nichts signieren.
                     // Wir ignorieren die Antwort aus dem Callback komplett
                     if (callback == HBCICallback.NEED_PT_DECOUPLED)
-                      return (getPIN()).getBytes("ISO-8859-1");
+                      return (getPIN()+"|").getBytes("ISO-8859-1");
                     
                     if (payload == null || payload.length()==0)
                         throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_TANZERO"));

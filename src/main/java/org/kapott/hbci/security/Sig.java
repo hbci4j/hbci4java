@@ -335,29 +335,23 @@ public final class Sig
                         byte[] hashresult=passport.hash(hashdata.getBytes(Comm.ENCODING));
                         byte[] signature=passport.sign(hashresult);
 
-                        if (passport.needUserSig()) {
+                        if (passport.needUserSig())
+                        {
                             String pintan=new String(signature,Comm.ENCODING);
                             int pos=pintan.indexOf("|");
-                            
-                            if (pos!=-1) {
-                                // wenn überhaupt eine signatur existiert
-                                // (wird für server benötigt)
-                                String pin=pintan.substring(0,pos);
-                                msg.propagateValue(sigtail.getPath()+".UserSig.pin",pin,
-                                        SyntaxElement.DONT_TRY_TO_CREATE,
-                                        SyntaxElement.DONT_ALLOW_OVERWRITE);
-                                
-                                if (pos<pintan.length()-1) {
-                                    String tan=pintan.substring(pos+1);
-                                    msg.propagateValue(sigtail.getPath()+".UserSig.tan",tan,
-                                            SyntaxElement.DONT_TRY_TO_CREATE,
-                                            SyntaxElement.DONT_ALLOW_OVERWRITE);
-                                }
+
+                            // PIN/TAN-Signatur
+                            if (pos!=-1)
+                            {
+                                String pin = pintan.substring(0,pos);
+                                String tan = pintan.substring(pos+1);
+                                msg.propagateValue(sigtail.getPath()+".UserSig.pin",pin,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
+                                msg.propagateValue(sigtail.getPath()+".UserSig.tan",tan,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
                             }
-                        } else { // normale signatur
-                            msg.propagateValue(sigtail.getPath()+".sig","B"+new String(signature,Comm.ENCODING),
-                                    SyntaxElement.DONT_TRY_TO_CREATE,
-                                    SyntaxElement.DONT_ALLOW_OVERWRITE);
+                        }
+                        else
+                        {
+                            msg.propagateValue(sigtail.getPath()+".sig","B"+new String(signature,Comm.ENCODING),SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
                         }
                         
                         msg.validate();
