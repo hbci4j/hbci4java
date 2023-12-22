@@ -139,18 +139,12 @@ public enum KnownTANProcess
      * @param step die Schritt-Nummer.
      * @return der TAN-Prozess. Nie NULL sondern im Zweifel {@link KnownTANProcess#PROCESS2_STEP1}.
      */
-    public static KnownTANProcess get(Variant v, String step)
+    public static KnownTANProcess get(Variant v, int step)
     {
         // Hier gibts nur einen
         if (v == Variant.V1)
             return PROCESS1;
 
-        if (Objects.equals(step,"1"))
-          return PROCESS2_STEP1;
-        
-        if (Objects.equals(step,"S"))
-          return PROCESS2_STEPS;
-
-        return PROCESS2_STEP2;
+        return step == 2 ? PROCESS2_STEP2 : PROCESS2_STEP1;
     }
 }

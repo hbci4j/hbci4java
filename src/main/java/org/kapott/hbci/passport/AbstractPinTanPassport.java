@@ -56,6 +56,8 @@ import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUser;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.HHDVersion;
+import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.TanMethod;
 import org.kapott.hbci.protocol.SEG;
 import org.kapott.hbci.protocol.factory.SEGFactory;
@@ -423,19 +425,20 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         if (sca == null)
             return;
         
-        String step = (String) ctx.getMeta().get(CACHE_KEY_SCA_STEP);
+        Integer step = (Integer) ctx.getMeta().get(CACHE_KEY_SCA_STEP);
 
         // Wir haben noch kein HKTAN gesendet. Dann senden wir jetzt Schritt 1
-        if (step == null || step.length() == 0)
+        if (step == null)
         {
-          step = "1";
+          step = 1;
           ctx.getMeta().put(CACHE_KEY_SCA_STEP,step);
         }
 
         final Variant variant = sca.getVariant();
-        KnownTANProcess tp = KnownTANProcess.get(variant,step);
+        KnownTANProcess tp = KnownTANProcess.get(variant,step.intValue());
 
-        // OK, wir verwenden das Decoupled Verfahren
+        // Checken, ob wir Decoupled verwenden. In dem Fall
+        // TAN-Prozess von "2" auf "S" ändern
         if (tp == KnownTANProcess.PROCESS2_STEP2)
         {
           final String dec = (String) ctx.getPassport().getPersistentData(KEY_PD_DECOUPLED);
@@ -458,7 +461,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         String segcode = sca.getTanReference();
         if (Feature.PINTAN_SEGCODE_STRICT.isEnabled())
         {
-          if (tp == KnownTANProcess.PROCESS2_STEP2 || tp == KnownTANProcess.PROCESS2_STEPS)
+          if (step == 2)
             segcode = "";
         }
         HBCIUtils.log("creating HKTAN for SCA [process : " + tp + ", order code: " + segcode + ", step: " + step + "]",HBCIUtils.LOG_DEBUG);
@@ -471,8 +474,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         k.rawSet(prefix + ".OrderAccount.KIK.blz","");
         k.rawSet(prefix + ".OrderAccount.KIK.country","");
         k.rawSet(prefix + ".orderhash",(variant == Variant.V2) ? "" : ("B00000000"));
-        k.rawSet(prefix + ".orderref",(tp == KnownTANProcess.PROCESS2_STEP2 || tp == KnownTANProcess.PROCESS2_STEPS) ? (String) this.getPersistentData(KEY_PD_ORDERREF) : "");
-        k.rawSet(prefix + ".notlasttan",(tp == KnownTANProcess.PROCESS1 || tp == KnownTANProcess.PROCESS2_STEP2 || tp == KnownTANProcess.PROCESS2_STEPS) ? "N" : ""); // Darf nur bei TAN-Prozess 1, 2 und S belegt sein
+        k.rawSet(prefix + ".orderref",(step == 2) ? (String) this.getPersistentData(KEY_PD_ORDERREF) : "");
+        k.rawSet(prefix + ".notlasttan",(tp == KnownTANProcess.PROCESS1 || step == 2) ? "N" : ""); // Darf nur bei TAN-Prozess 1, 2 und S belegt sein
         k.rawSet(prefix + ".challengeklass",(variant == Variant.V2) ? "" : "99");
         k.rawSet(prefix + ".tanmedia",sca.getTanMedia());
     }
@@ -586,10 +589,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             return;
         }
 
-        String scaStep = (String) ctx.getMeta().get(CACHE_KEY_SCA_STEP);
+        Integer scaStep = (Integer) ctx.getMeta().get(CACHE_KEY_SCA_STEP);
         
         // Wenn wir keinen SCA-Request gesendet haben, brauchen wir auch nicht nach dem Response suchen
-        if (scaStep == null || scaStep.length() == 0)
+        if (scaStep == null)
             return;
 
         // Ohne Status brauchen wir es gar nicht erst versuchen
@@ -606,7 +609,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         }
         
         // Schritt 1: Wir haben eine HKTAN-Anfrage gesendet. Mal schauen, ob die Bank tatsaechlich eine TAN will
-        if (scaStep.equals("1"))
+        if (scaStep.intValue() == 1)
         {
             HBCIUtils.log("HKTAN step 1 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_DEBUG);
 
@@ -631,7 +634,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             /////////////////////////////////////////////////////
             // Dialog-Init wiederholen, um den zweiten HKTAN-Schritt durchzufuehren
             // OK, wir senden jetzt das finale HKTAN. Die Message darf nichts anderes enthalten. Daher aendern wir das Template.
-            ctx.getMeta().put(CACHE_KEY_SCA_STEP,"2");
+            ctx.getMeta().put(CACHE_KEY_SCA_STEP,2);
             ctx.getDialogInit().setTemplate(KnownDialogTemplate.INIT_SCA);
             ctx.setRepeat(true);
             //
@@ -640,7 +643,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             return;
         }
         
-        if (scaStep.equals("2") || scaStep.equals("S"))
+        if (scaStep.intValue() == 2)
         {
             ctx.getMeta().remove(CACHE_KEY_SCA_STEP); // Geschafft
             HBCIUtils.log("HKTAN step 2 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_DEBUG);
@@ -1551,10 +1554,20 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     
                     // Neue Nachricht fuer das zweite HKTAN
                     HBCIUtils.log("process variant 2: creating new msg with HKTAN(p=2,orderref=DELAYED)",HBCIUtils.LOG_DEBUG);
-                    
+
+                    // Decoupled Verfahren - Sonderbehandlung bei TAN-Prozess 2
+                    KnownTANProcess proc = KnownTANProcess.PROCESS2_STEP2;
+                    final HHDVersion hhd = HHDVersion.find(secmechInfo);
+                    HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
+                    if (hhd.getType() == Type.DECOUPLED)
+                    {
+                      HBCIUtils.log("using decoupled hktan for step 2",HBCIUtils.LOG_INFO);
+                      proc = KnownTANProcess.PROCESS2_STEPS;
+                    }
+
                     // HKTAN-job für das Einreichen der TAN erzeugen
                     final GVTAN2Step hktan2 = (GVTAN2Step) handler.newJob("TAN2Step");
-                    hktan2.setProcess(KnownTANProcess.PROCESS2_STEP2);
+                    hktan2.setProcess(proc);
                     hktan2.setExternalId(task.getExternalId()); // externe ID auch an HKTAN2 durchreichen
                     hktan2.setSegVersion(segversion);
                     hktan2.setParam("notlasttan","N");

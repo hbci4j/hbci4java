@@ -203,7 +203,7 @@ public class GVTAN2Step extends HBCIJobImpl
         ///////////////////////////////////////////////////////////////////////
         // Die folgenden Sonderbehandlungen sind nur bei Prozess-Variante 2 in Schritt 2 noetig,
         // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
-        if (this.process == KnownTANProcess.PROCESS2_STEP2 && this.task != null)
+        if ((this.process == KnownTANProcess.PROCESS2_STEP2 || this.process == KnownTANProcess.PROCESS2_STEPS) && this.task != null)
         {
             // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
             // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
@@ -252,7 +252,6 @@ public class GVTAN2Step extends HBCIJobImpl
         ///////////////////////////////////////////////////////////////////////
         // Daten fuer die TAN-Abfrage einsammeln
         
-        // Prozess-Variante 1:
         final String challenge = result.getProperty(header+".challenge");
         if (challenge != null)
         {
