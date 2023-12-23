@@ -79,6 +79,34 @@
             PAIN.001-008 = Payments Initiation
           -->
 					<execution>
+						<id>camt.052.001.11</id>
+						<!-- February 2023 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>camt.052.001.11.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_11</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/camt_052_001_11/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
+						<id>camt.052.001.10</id>
+						<!-- February 2022 -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>camt.052.001.10.xsd</include>
+							</schemaIncludes>
+							<generatePackage>org.kapott.hbci.sepa.jaxb.camt_052_001_10</generatePackage>
+							<produces>org/kapott/hbci/sepa/jaxb/camt_052_001_10/*.java</produces>
+						</configuration>
+					</execution>
+					<execution>
 						<id>camt.052.001.09</id>
 						<!-- 31 May 2020 -->
 						<goals>

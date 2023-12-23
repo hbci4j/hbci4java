@@ -85,6 +85,8 @@ public class SepaVersion implements Comparable<SepaVersion>
     @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_07 = new SepaVersion(SupportType.PARSE,7,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.07","camt.052.001.07.xsd",true);
     @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_08 = new SepaVersion(SupportType.PARSE,8,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.08","camt.052.001.08.xsd",true);
     @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_09 = new SepaVersion(SupportType.PARSE,9,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.09","camt.052.001.09.xsd",true);
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_10 = new SepaVersion(SupportType.PARSE,10,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.10","camt.052.001.10.xsd",true);
+    @SuppressWarnings("javadoc") public static SepaVersion CAMT_052_001_11 = new SepaVersion(SupportType.PARSE,11,"urn:iso:std:iso:20022:tech:xsd:camt.052.001.11","camt.052.001.11.xsd",true);
 
     private SupportType support = null;
     private String urn          = null;
