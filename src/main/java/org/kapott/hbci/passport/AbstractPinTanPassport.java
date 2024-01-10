@@ -1561,7 +1561,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
                     if (hhd.getType() == Type.DECOUPLED)
                     {
-                      HBCIUtils.log("using decoupled hktan for step 2",HBCIUtils.LOG_INFO);
+                      HBCIUtils.log("using decoupled hktan for step 2",HBCIUtils.LOG_DEBUG);
                       proc = KnownTANProcess.PROCESS2_STEPS;
                     }
 
