@@ -82,7 +82,7 @@ HBCIExecStatus status=handle.execute();
 handle.close();
 </pre> */
 public final class HBCIHandler
-	implements IHandlerData
+	implements IHandlerData, AutoCloseable
 {
     public final static int REFRESH_BPD=1;
     public final static int REFRESH_UPD=2;
