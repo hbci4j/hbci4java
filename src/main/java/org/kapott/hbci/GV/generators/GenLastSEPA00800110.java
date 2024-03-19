@@ -160,6 +160,7 @@ public class GenLastSEPA00800110 extends AbstractSEPAGenerator<Properties>
     creditor.setId(sepaParams.getProperty(SepaUtil.insertIndex("creditorid", index)));
     final PersonIdentificationSchemeName1Choice schema = new PersonIdentificationSchemeName1Choice();
     schema.setPrtry("SEPA");
+    creditor.setSchmeNm(schema);
     drctDbtTxInf.getDrctDbtTx().getCdtrSchmeId().getId().getPrvtId().getOthr().add(creditor);
 
     drctDbtTxInf.getDrctDbtTx().setMndtRltdInf(new MandateRelatedInformation15());
