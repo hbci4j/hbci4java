@@ -8531,8 +8531,9 @@
         </MSGdef>
 
         <MSGdef id="DialogInitSCA">
-            &MsgSigHeadUser;
-            <SEG type="TAN2Step6"/>
+            <!-- HNHBK+HNSHK --> &MsgSigHeadUser;
+            <!-- HKTAN --> <SEG type="TAN2Step6" minnum="0" maxnum="1"/>
+            <!-- HKTAN --> <SEG type="TAN2Step7" minnum="0" maxnum="1"/>
             &MsgSigTailUser;
         </MSGdef>
         <MSGdef id="DialogInitSCARes">
@@ -8563,6 +8564,7 @@
             <SEG type="KIMsg" minnum="0" maxnum="0"/>
             <SEG type="TAN2StepRes6" minnum="0" maxnum="1"/>
             <SEG type="TAN2StepRes7" minnum="0" maxnum="1"/>
+            <SEG type="SEPAInfoRes1" minnum="0" maxnum="1"/>
             &MsgSigTailInst;
         </MSGdef>
 
