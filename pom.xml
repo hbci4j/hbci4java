@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.hbci4j</groupId>
 	<artifactId>hbci4j-core</artifactId>
-	<version>3.1.77</version>
+	<version>3.1.78-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	<description>HBCI4j - Home Banking Computer Interface for Java</description>
@@ -31,7 +31,7 @@
 		<url>scm:git:git@github.com:hbci4j/hbci4java.git</url>
 		<connection>scm:git:git@github.com:hbci4j/hbci4java.git</connection>
 		<developerConnection>scm:git:git@github.com:hbci4j/hbci4java.git</developerConnection>
-		<tag>hbci4j-core-3.1.77</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
