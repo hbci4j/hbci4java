@@ -419,11 +419,16 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      * Prueft, ob die Dialog-Initialisierung um ein HKTAN erweitert werden muss.
      * @param ctx der Kontext.
      */
-    private  void checkSCARequest(DialogContext ctx)
+    private void checkSCARequest(DialogContext ctx)
     {
+        HBCIUtils.log("check SCA request",HBCIUtils.LOG_DEBUG);
+
         final SCARequest sca = this.getSCARequest(ctx);
         if (sca == null)
-            return;
+        {
+          HBCIUtils.log("no SCA request for this context, skipping check",HBCIUtils.LOG_DEBUG);
+          return;
+        }
         
         Integer step = (Integer) ctx.getMeta().get(CACHE_KEY_SCA_STEP);
 
@@ -487,13 +492,21 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      */
     private SCARequest getSCARequest(DialogContext ctx)
     {
+        HBCIUtils.log("create new SCA request",HBCIUtils.LOG_DEBUG);
+        
         final RawHBCIDialog init = ctx.getDialogInit();
         if (init == null)
-            return null;
+        {
+          HBCIUtils.log("have no dialog init, skip SCA request creation",HBCIUtils.LOG_DEBUG);
+          return null;
+        }
 
         // Checken, ob es ein Dialog, in dem eine SCA gemacht werden soll
         if (!KnownDialogTemplate.LIST_SEND_SCA.contains(init.getTemplate()))
-            return null;
+        {
+          HBCIUtils.log("dialog (" + init.getTemplate() + ") not in list of SCA dialogs, skip SCA request creation",HBCIUtils.LOG_DEBUG);
+          return null;
+        }
 
         if (Feature.PINTAN_INIT_SKIPONESTEPSCA.isEnabled())
         {
@@ -513,10 +526,11 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             //  Sync mit aktiviertem Init-Flip           ja
           
             final KnownDialogTemplate tpl = init.getTemplate();
-            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),this.getCurrentTANMethod(false)) && 
+            final String currentTanMethod = this.getCurrentTANMethod(false);
+            if (!ctx.isAnonymous() && Objects.equals(TanMethod.ONESTEP.getId(),currentTanMethod) && 
                 (tpl == KnownDialogTemplate.INIT || (Feature.INIT_FLIP_USER_INST.isEnabled() && tpl == KnownDialogTemplate.SYNC)))
             {
-                HBCIUtils.log("skipping HKTAN for dialog init",HBCIUtils.LOG_DEBUG);
+                HBCIUtils.log("skipping HKTAN for dialog init [anon: " + ctx.isAnonymous() + ", current tan method: " + currentTanMethod + ", tpl: " + tpl + "]",HBCIUtils.LOG_DEBUG);
                 return null;
             }
         }
@@ -530,11 +544,17 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         // Erst ab HKTAN 6 noetig. Die Bank unterstuetzt es scheinbar noch nicht
         // Siehe B.4.3.1 - Wenn die Bank HITAN < 6 geschickt hat, dann kann sie keine SCA
         if (hktanVersion < 6)
-            return null;
+        {
+          HBCIUtils.log("HKTAN version < 6, skip SCA request creation",HBCIUtils.LOG_DEBUG);
+          return null;
+        }
 
         final SCARequest r = init.createSCARequest(secmechInfo,hktanVersion);
         if (r == null)
+        {
+          HBCIUtils.log("have no SCA request, skip SCA request creation",HBCIUtils.LOG_DEBUG);
           return null;
+        }
         
         if (r.getTanReference() == null)
         {
@@ -573,13 +593,21 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      */
     private void checkSCAResponse(DialogContext ctx)
     {
+        HBCIUtils.log("check SCA response",HBCIUtils.LOG_DEBUG);
+        
         final RawHBCIDialog init = ctx.getDialogInit();
         if (init == null)
-            return;
+        {
+          HBCIUtils.log("no init dialog, skip SCA response analysis",HBCIUtils.LOG_DEBUG);
+          return;
+        }
         
         // Checken, ob es ein Dialog, in dem eine SCA gemacht werden soll
         if (!KnownDialogTemplate.LIST_SEND_SCA.contains(init.getTemplate()))
-            return;
+        {
+          HBCIUtils.log("dialog (" + init.getTemplate() + ") not in list of SCA dialogs, skip SCA response analysis",HBCIUtils.LOG_DEBUG);
+          return;
+        }
 
         // Wenn wir noch in der anonymen Dialog-Initialisierung sind, interessiert uns das nicht.
         if (ctx.isAnonymous() || this.isAnonymous())
@@ -593,12 +621,18 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         // Wenn wir keinen SCA-Request gesendet haben, brauchen wir auch nicht nach dem Response suchen
         if (scaStep == null)
-            return;
+        {
+          HBCIUtils.log("no sca request sent, skip SCA response analysis",HBCIUtils.LOG_DEBUG);
+          return;
+        }
 
         // Ohne Status brauchen wir es gar nicht erst versuchen
         final HBCIMsgStatus status = ctx.getMsgStatus();
         if (status == null)
-            return;
+        {
+          HBCIUtils.log("no message status received, skip SCA response analysis",HBCIUtils.LOG_DEBUG);
+          return;
+        }
 
         // Bank hat uns eine Ausnahme erteilt - wir brauchen keine TAN
         if (status.segStatus != null && (KnownReturncode.W3076.searchReturnValue(status.segStatus.getWarnings()) != null || KnownReturncode.W3076.searchReturnValue(status.globStatus.getWarnings()) != null))
@@ -615,7 +649,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
             Properties props = ParameterFinder.find(status.getData(),"TAN2StepRes*.");
             if (props == null || props.size() == 0)
-                return; // Wir haben kein HITAN
+            {
+              HBCIUtils.log("no hitan reponse data found",HBCIUtils.LOG_DEBUG);
+              return; // Wir haben kein HITAN
+            }
 
             // HITAN erhalten - Daten uebernehmen
             HBCIUtils.log("SCA HITAN response found, triggering TAN request",HBCIUtils.LOG_DEBUG);
