@@ -77,7 +77,7 @@ public enum HHDVersion
     /**
      * Die Default-Version.
      */
-    public final static HHDVersion DEFAULT = DECOUPLED;
+    public final static HHDVersion DEFAULT = HHD_1_2;
     
     /**
      * Definiert die Art des TAN-Verfahrens.
@@ -173,7 +173,7 @@ public enum HHDVersion
       if (secmech == null)
       {
         HBCIUtils.log("have no secmech data, fallback to default: " + DEFAULT,HBCIUtils.LOG_WARN);
-        return DECOUPLED;
+        return DEFAULT;
       }
       
       // DK-TAN-Verfahren

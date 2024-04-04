@@ -441,13 +441,24 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
           // Checken, ob wir Decoupled verwenden. In dem Fall
           // TAN-Prozess von "2" auf "S" ändern
-          final HHDVersion hhd = HHDVersion.find(getCurrentSecMechInfo());
+          final Properties secmechInfo = this.getCurrentSecMechInfo();
+          final HHDVersion hhd = HHDVersion.find(secmechInfo);
+          final String segversion = secmechInfo != null ? secmechInfo.getProperty("segversion") : null;
           HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
 
           if (hhd != null && hhd.getType() == Type.DECOUPLED)
           {
-            HBCIUtils.log("switching TAN process from " + tp + " to " + KnownTANProcess.PROCESS2_STEPS,HBCIUtils.LOG_DEBUG);
-            tp = KnownTANProcess.PROCESS2_STEPS;
+            Integer i = null;
+            try
+            {
+              i = Integer.parseInt(segversion);
+            }
+            catch (Exception e) {}
+            if (i != null && i.intValue() >= 7)
+            {
+              HBCIUtils.log("switching TAN process from " + tp + " to " + KnownTANProcess.PROCESS2_STEPS,HBCIUtils.LOG_DEBUG);
+              tp = KnownTANProcess.PROCESS2_STEPS;
+            }
           }
         }
         
@@ -1595,8 +1606,17 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
                     if (hhd.getType() == Type.DECOUPLED)
                     {
-                      HBCIUtils.log("using decoupled hktan for step 2",HBCIUtils.LOG_DEBUG);
-                      proc = KnownTANProcess.PROCESS2_STEPS;
+                      Integer i = null;
+                      try
+                      {
+                        i = Integer.parseInt(segversion);
+                      }
+                      catch (Exception e) {}
+                      if (i != null && i.intValue() >= 7)
+                      {
+                        HBCIUtils.log("using decoupled hktan for step 2",HBCIUtils.LOG_DEBUG);
+                        proc = KnownTANProcess.PROCESS2_STEPS;
+                      }
                     }
 
                     // HKTAN-job für das Einreichen der TAN erzeugen
