@@ -73,6 +73,11 @@ public enum HHDVersion
     DECOUPLED(Type.DECOUPLED,"Decouple.*"),
 
     ;
+  
+    /**
+     * Die Default-Version.
+     */
+    public final static HHDVersion DEFAULT = DECOUPLED;
     
     /**
      * Definiert die Art des TAN-Verfahrens.
@@ -165,6 +170,12 @@ public enum HHDVersion
     {
       HBCIUtils.log("trying to determine HHD version for secmech: " + secmech,HBCIUtils.LOG_DEBUG);
 
+      if (secmech == null)
+      {
+        HBCIUtils.log("have no secmech data, fallback to default: " + DEFAULT,HBCIUtils.LOG_WARN);
+        return DECOUPLED;
+      }
+      
       // DK-TAN-Verfahren
       String name = secmech.getProperty("zkamethod_name","");
       if (name != null && name.length() > 0)
@@ -245,9 +256,8 @@ public enum HHDVersion
       }
       
       // Default:
-      HHDVersion v = HHD_1_2;
-      HBCIUtils.log("  identified as " + v,HBCIUtils.LOG_DEBUG);
-      return v;
+      HBCIUtils.log("  no HHD version detected, default to " + DEFAULT,HBCIUtils.LOG_DEBUG);
+      return DEFAULT;
     }
 
 }
