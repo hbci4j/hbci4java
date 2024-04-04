@@ -392,7 +392,6 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     else if (hhd.getType() == Type.DECOUPLED)
                     {
                         callback = HBCICallback.NEED_PT_DECOUPLED;
-                        setPersistentData(KEY_PD_DECOUPLED,"true");
                     }
                     else
                     {

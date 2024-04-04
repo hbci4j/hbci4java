@@ -102,11 +102,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
      */
     public final static String KEY_PD_ORDERREF = "__pintan_orderref___";
 
-    /**
-     * Hier speichern wir zwischen, ob es sich um ein Decoupled-Verfahren handelt
-     */
-    public final static String KEY_PD_DECOUPLED = "__pintan_decoupled__";
-
     private String certfile;
     private boolean checkCert;
 
@@ -442,15 +437,17 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         final Variant variant = sca.getVariant();
         KnownTANProcess tp = KnownTANProcess.get(variant,step.intValue());
 
-        // Checken, ob wir Decoupled verwenden. In dem Fall
-        // TAN-Prozess von "2" auf "S" ändern
         if (tp == KnownTANProcess.PROCESS2_STEP2)
         {
-          final String dec = (String) ctx.getPassport().getPersistentData(KEY_PD_DECOUPLED);
-          if (dec != null && dec.length() > 0)
+          // Checken, ob wir Decoupled verwenden. In dem Fall
+          // TAN-Prozess von "2" auf "S" ändern
+          final HHDVersion hhd = HHDVersion.find(getCurrentSecMechInfo());
+          HBCIUtils.log("detected HHD version: " + hhd,HBCIUtils.LOG_DEBUG);
+
+          if (hhd != null && hhd.getType() == Type.DECOUPLED)
           {
+            HBCIUtils.log("switching TAN process from " + tp + " to " + KnownTANProcess.PROCESS2_STEPS,HBCIUtils.LOG_DEBUG);
             tp = KnownTANProcess.PROCESS2_STEPS;
-            ctx.getPassport().setPersistentData(KEY_PD_DECOUPLED,null);
           }
         }
         
