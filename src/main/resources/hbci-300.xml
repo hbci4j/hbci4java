@@ -1187,7 +1187,7 @@
 
         <DEGdef id="ParDauerLastSEPAList">
             <DE name="maxentries_allowed" type="JN"/>
-            <DE name="sepadescr" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
 
         <DEGdef id="ParDauerLastSEPANew">
@@ -1199,7 +1199,7 @@
             <DE name="turnusweeks" type="Dig" maxsize="104" minnum="0"/>
             <DE name="daysperweek" type="Dig" maxsize="7" minnum="0"/>
             <DE name="allowed_purposecodes" type="AN" maxsize="4096" minnum="0" maxnum="1"/>
-            <DE name="sepadescr" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
 
         <DEGdef id="ParDauerEdit">
