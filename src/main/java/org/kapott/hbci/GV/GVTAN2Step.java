@@ -25,10 +25,13 @@ package org.kapott.hbci.GV;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
+import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.dialog.KnownTANProcess;
+import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
@@ -49,6 +52,9 @@ public class GVTAN2Step extends HBCIJobImpl
     private HBCIJobImpl task;
     
     private HBCIJobImpl redo;
+
+    // Die bisherige Anzahl von Decoupled Status refresh requests.
+    private int decoupledRefreshes = 0;
     
     public static String getLowlevelName()
     {
@@ -205,14 +211,50 @@ public class GVTAN2Step extends HBCIJobImpl
         // weil wir dort ein Response auf einen GV erhalten, wir selbst aber gar nicht der GV sind sondern das HKTAN Step2
         if ((this.process == KnownTANProcess.PROCESS2_STEP2 || this.process == KnownTANProcess.PROCESS2_STEPS) && this.task != null)
         {
-            // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
-            // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
-            // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
-            if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode) && KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null && this.task.redoAllowed())
-            {
-                HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
-                HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
-                this.redo = this.task;
+            if (StringUtil.toInsCode(this.getHBCICode()).equals(segCode)) {
+                if (KnownReturncode.W3040.searchReturnValue(msgstatus.segStatus.getWarnings()) != null && this.task.redoAllowed()) {
+                    // Pruefen, ob die Bank eventuell ein 3040 gesendet hat - sie also noch weitere Daten braucht.
+                    // Das 3040 bezieht sich dann aber nicht auf unser HKTAN sondern auf den eigentlichen GV
+                    // In dem Fall muessen wir dem eigentlichen Task mitteilen, dass er erneut ausgefuehrt werden soll.
+                    HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
+                    HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
+                    this.redo = this.task;
+                } else if (KnownReturncode.W3956.searchReturnValue(msgstatus.segStatus.getWarnings()) != null) {
+                    // Beim Decoupled Verfahren kann die Bank ein 3956 senden, wenn der Nutzer den Prozess noch nicht bestätigt hat.
+                    // In diesem Fall muss dieser task wiederholt werden, um erneut zu prüfen, ob die Bestätigung erfolgt ist.
+                    // Wir benachrichtigen die Applikation mit einem entsprechenden Callback und warten eine mögliche Mindestzeit.
+                    HBCIUtils.log("found status code 3956, need to repeat task " + this.getHBCICode(),HBCIUtils.LOG_DEBUG);
+                    AbstractPinTanPassport pinTanPassport = (AbstractPinTanPassport) getMainPassport();
+                    if (pinTanPassport.getDecoupledMaxRefreshes() != null && this.decoupledRefreshes >= pinTanPassport.getDecoupledMaxRefreshes()) {
+                        throw new HBCI_Exception("*** the maximum number of decoupled refreshes has been reached.");
+                    }
+                    Integer timeBeforeDecoupledRefresh = this.decoupledRefreshes == 0
+                            ? pinTanPassport.getMinimumTimeBeforeFirstDecoupledRefresh()
+                            : pinTanPassport.getMinimumTimeBeforeNextDecoupledRefresh();
+                    long callbackDurationMs = System.currentTimeMillis();
+                    HBCIUtilsInternal.getCallback().callback(
+                            getMainPassport(),
+                            HBCICallback.NEED_PT_DECOUPLED_RETRY,
+                            "*** decoupled SCA still required",
+                            HBCICallback.TYPE_TEXT,
+                            new StringBuffer(String.valueOf(timeBeforeDecoupledRefresh != null ? timeBeforeDecoupledRefresh : 0)));
+                    callbackDurationMs = System.currentTimeMillis() - callbackDurationMs;
+                    if (timeBeforeDecoupledRefresh != null && callbackDurationMs < timeBeforeDecoupledRefresh * 1000) {
+                        long sleepMs = timeBeforeDecoupledRefresh * 1000 - callbackDurationMs;
+                        HBCIUtils.log(String.format(
+                                "The pause before the next decoupled request was too short. Sleeping for %dms to reach the required delay.", sleepMs
+                        ),HBCIUtils.LOG_INFO);
+                        try {
+                            Thread.sleep(sleepMs);
+                        } catch (InterruptedException e) {
+                            throw new HBCI_Exception("*** Decoupled refresh sleep was interrupted.");
+                        }
+                    }
+                    this.decoupledRefreshes++;
+                    this.redo = this;
+                } else {
+                    this.redo = null;
+                }
             }
 
             // Das ist das Response auf den eigentlichen GV - an den Task durchreichen
@@ -222,7 +264,7 @@ public class GVTAN2Step extends HBCIJobImpl
                 HBCIUtils.log("this is a response segment for the original task (" + this.task.getName() + ") - storing results in the original job",HBCIUtils.LOG_DEBUG);
                 this.task.fillJobResultFromTanJob(msgstatus, header, idx);
             }
-            
+
             // Wir haben hier nichts weiter zu tun
             return;
         }

@@ -352,9 +352,20 @@ public interface HBCICallback
     public final static int NEED_PT_QRTAN=34;
 
     /**
-     * Ursache des Callback-Aufrufes: PushTAN 2.0 nötig.
+     * Ursache des Callback-Aufrufes: Das Decoupled Verfahren wird verwendet und eine Statusabfrage muss
+     * durchgeführt werden, um zu prüfen, ob der Kunde den Prozess bestätigt hat.
      **/
     public final static int NEED_PT_DECOUPLED=35;
+
+    /**
+     * Ursache des Callback-Aufrufes: Das Decoupled Verfahren wird verwendet und eine <em>weitere</em> Statusabfrage
+     * muss durchgeführt werden, um zu prüfen, ob der Kunde den Prozess bestätigt hat.
+     * Kann nur nach <code>NEED_PT_DECOUPLED</code> auftreten, wenn der Kunde den Prozess immer noch nicht bestätigt hat.
+     * In <code>retData</code> steht die minimale Wartezeit vor der Statusabfrage in Sekunden.
+     * Sollte der callback vor Ablauf dieser Zeit returned werden, pausiert <em>HBCI4Java</em> den Thread
+     * für die restliche Zeit.
+     **/
+    public final static int NEED_PT_DECOUPLED_RETRY=36;
 
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
     public final static int WRONG_PIN=40;

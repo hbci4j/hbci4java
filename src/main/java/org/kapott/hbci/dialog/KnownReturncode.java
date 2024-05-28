@@ -51,6 +51,11 @@ public enum KnownReturncode
      * Die Liste der zugelassenen Zweischritt-Verfahren.
      */
     W3920("3920"),
+
+    /**
+     * Starke Kundenauthentifizierung noch ausstehend (DECOUPLED Verfahren).
+     */
+    W3956("3956"),
     
     /**
      * Signatur falsch (generisch)

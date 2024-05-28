@@ -26,14 +26,18 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.passport.HBCIPassport;
+import org.kapott.hbci.tools.ParameterFinder;
 
 public class HBCIUtilsInternal
 {
@@ -258,6 +262,35 @@ public class HBCIUtilsInternal
     	}
     	
     	return ret;
+    }
+
+    /**
+     * Hilfs-methode um eine numerische property anhand einer Query zu finden.
+     * @param properties Die Properties.
+     * @param query Die Query, um die property zu finden.
+     * @param useMinimum Ob im Falle von mehreren Werten das Minimum oder Maximum returned werden soll.
+     * @return Die property als integer, oder null, falls nicht gefunden.
+     */
+    public static Integer getIntegerProperty(Properties properties, ParameterFinder.Query query, boolean useMinimum) {
+        List<Integer> values = ParameterFinder.findAll(properties, query).values()
+                .stream()
+                .map(value -> {
+                    try {
+                        return Integer.parseInt(value.toString());
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (values.isEmpty()) {
+            return null;
+        }
+        if (useMinimum) {
+            return values.stream().min(Integer::compareTo).orElse(null);
+        } else {
+            return values.stream().max(Integer::compareTo).orElse(null);
+        }
     }
     
 }
