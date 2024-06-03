@@ -732,6 +732,39 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
       
       return ParameterFinder.findAll(bpd,ParameterFinder.Query.BPD_PINTAN_CAN1STEP).containsValue("J");
     }
+
+    /**
+     * Für das Decoupled Verfahren, liefert die minimale Zeit vor dem ersten refresh.
+     * @return Die minimale Zeit vor dem ersten Decoupled refresh.
+     */
+    public Integer getMinimumTimeBeforeFirstDecoupledRefresh() {
+        final Properties bpd = this.getBPD();
+        if (bpd == null)
+            return null;
+        return HBCIUtilsInternal.getIntegerProperty(bpd, Query.BPD_DECOUPLED_TIME_BEFORE_FIRST_STATUS_REQUEST, false);
+    }
+
+    /**
+     * Für das Decoupled Verfahren, liefert die minimale Zeit vor weiteren refreshes.
+     * @return Die minimale Zeit vor weiteren Decoupled refreshes.
+     */
+    public Integer getMinimumTimeBeforeNextDecoupledRefresh() {
+        final Properties bpd = this.getBPD();
+        if (bpd == null)
+            return null;
+        return HBCIUtilsInternal.getIntegerProperty(bpd, Query.BPD_DECOUPLED_TIME_BEFORE_NEXT_STATUS_REQUEST, false);
+    }
+
+    /**
+     * Für das Decoupled Verfahren, liefert die maximale Anzahl von refreshes.
+     * @return Die maximale Anzahl von Decoupled refreshes.
+     */
+    public Integer getDecoupledMaxRefreshes() {
+        final Properties bpd = this.getBPD();
+        if (bpd == null)
+            return null;
+        return HBCIUtilsInternal.getIntegerProperty(bpd, Query.BPD_DECOUPLED_MAX_STATUS_REQUESTS, true);
+    }
     
     /** Kann vor <code>new HBCIHandler()</code> aufgerufen werden, um zu
      * erzwingen, dass die Liste der unterstützten PIN/TAN-Sicherheitsverfahren
