@@ -54,9 +54,9 @@ public class ParameterFinder
          *  2. Minimale Zeit vor weiteren refreshes (Sekunden).
          *  3. Maximale Anzahl von refreshes.
          */
-        public final static Query BPD_DECOUPLED_TIME_BEFORE_FIRST_STATUS_REQUEST = new Query("Params_*.TAN2StepPar7.ParTAN2Step*.TAN2StepParams_*.decoupled_time_before_first_status_request",false);
-        public final static Query BPD_DECOUPLED_TIME_BEFORE_NEXT_STATUS_REQUEST = new Query("Params_*.TAN2StepPar7.ParTAN2Step*.TAN2StepParams_*.decoupled_time_before_next_status_request",false);
-        public final static Query BPD_DECOUPLED_MAX_STATUS_REQUESTS = new Query("Params_*.TAN2StepPar7.ParTAN2Step*.TAN2StepParams_*.decoupled_max_status_requests",false);
+        public final static Query BPD_DECOUPLED_TIME_BEFORE_FIRST_STATUS_REQUEST = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams_*.decoupled_time_before_first_status_request",false);
+        public final static Query BPD_DECOUPLED_TIME_BEFORE_NEXT_STATUS_REQUEST = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams_*.decoupled_time_before_next_status_request",false);
+        public final static Query BPD_DECOUPLED_MAX_STATUS_REQUESTS = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams_*.decoupled_max_status_requests",false);
 
         private String query = null;
         private boolean paramsSet = false;
