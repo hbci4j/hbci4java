@@ -1,4 +1,4 @@
-package org.kapott.hbci4java.ddv;
+package org.kapott.hbci4java.passport.ddv;
 
 import java.io.File;
 import java.util.Properties;
@@ -55,13 +55,15 @@ public class PCSCTest extends AbstractTest
   @Test
   public void testFetchSaldo() throws Exception
   {
-    HBCIHandler handler = new HBCIHandler("210",passport);
-    HBCIJob job = handler.newJob("SaldoReq");
-    
-    // wir nehmen wir die Saldo-Abfrage einfach das erste verfuegbare Konto
-    job.setParam("my",passport.getAccounts()[0]);
-    job.addToQueue();
-    handler.execute();
+    try(HBCIHandler handler = new HBCIHandler("210",passport))
+    {
+      HBCIJob job = handler.newJob("SaldoReq");
+      
+      // wir nehmen wir die Saldo-Abfrage einfach das erste verfuegbare Konto
+      job.setParam("my",passport.getAccounts()[0]);
+      job.addToQueue();
+      handler.execute();
+    }
   }
   
   /**
