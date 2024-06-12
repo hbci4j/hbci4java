@@ -37,6 +37,7 @@ import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.DialogEvent;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
+import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -107,25 +108,41 @@ public abstract class AbstractHBCIPassport
             dataChanged=true;
         }
 
-        if (needHost &&
-            (getHost()==null || getHost().length()==0)) 
+        if (needHost && (getHost() == null || getHost().isEmpty()))
         {
-            StringBuffer sb;
+            final StringBuffer sb = new StringBuffer();
+            final BankInfo bank = HBCIUtils.getBankInfo(getBLZ());
             
-            if (this instanceof AbstractPinTanPassport) {
-                sb=new StringBuffer(HBCIUtils.getPinTanURLForBLZ(getBLZ()));
-                if (sb.indexOf("https://")==0) {
-                    sb.delete(0,8);
-                }
-            } else {
-                sb=new StringBuffer(HBCIUtils.getHBCIHostForBLZ(getBLZ()));
+            if (bank != null)
+            {
+              if (this instanceof AbstractPinTanPassport)
+              {
+                final String url = bank.getPinTanAddress();
+                if (url != null)
+                  sb.append(url);
+              }
+              else
+              {
+                final String url = bank.getRdhAddress();
+                if (url != null)
+                  sb.append(url);
+              }
             }
             
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_HOST,HBCIUtilsInternal.getLocMsg("HOST"),HBCICallback.TYPE_TEXT,sb);
-            if (sb.length()==0)
-                throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("HOST")));
-            setHost(sb.toString());
-            dataChanged=true;
+
+            // Whitespaces entfernen
+            String host = sb.toString().replaceAll("\\s","");
+
+            // "https://" entfernen, falls vorhanden
+            if (host.startsWith("https://"))
+              host.replace("https://","");
+            
+            if (host.isEmpty())
+              throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("HOST")));
+
+            setHost(host);
+            dataChanged = true;
         }
 
         if (needPort && 
