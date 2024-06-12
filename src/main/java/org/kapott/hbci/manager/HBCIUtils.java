@@ -2487,7 +2487,7 @@ public final class HBCIUtils
 	 */
 	public static String version ( )
 	{
-		return VERSION;
+		return VERSION != null ? VERSION : "DEV";
 	}
 
 	/**
