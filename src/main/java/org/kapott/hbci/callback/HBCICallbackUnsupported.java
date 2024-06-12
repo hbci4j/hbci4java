@@ -23,31 +23,31 @@ public class HBCICallbackUnsupported implements HBCICallback {
     @Override
     public void callback(HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
     {
-        throw new UnsupportedOperationException("Unexpected HBCI callback");
+        throw new UnsupportedOperationException("Unexpected HBCI callback [reason: " + reason + ", msg: " + msg + "]");
     }
 
     @Override
     public void status(HBCIPassport passport, int statusTag, Object o)
     {
-        throw new UnsupportedOperationException("Unexpected HBCI callback");
+        throw new UnsupportedOperationException("Unexpected HBCI status [status: " + statusTag  + "]");
     }
 
     @Override
     public void status(HBCIPassport passport, int statusTag, Object[] o)
     {
-        throw new UnsupportedOperationException("Unexpected HBCI callback");
+      throw new UnsupportedOperationException("Unexpected HBCI status [status: " + statusTag  + "]");
     }
 
     @Override
     public void log(String msg, int level, Date date, StackTraceElement trace)
     {
-        throw new UnsupportedOperationException("Unexpected HBCI callback");
+      throw new UnsupportedOperationException("Unexpected HBCI log message [level: " + level + ", msg: " + msg + "]");
     }
 
     @Override
     public boolean useThreadedCallback(HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
     {
-        throw new UnsupportedOperationException("Unexpected HBCI callback");
+      throw new UnsupportedOperationException("Unexpected HBCI threaded callback [reason: " + reason + ", msg: " + msg + "]");
     }
 
 }
