@@ -183,6 +183,14 @@ public class GVTAN2Step extends HBCIJobImpl
     @Override
     public HBCIJobImpl redo()
     {
+        // Falls der redo job 'this' ist, wird ein redo für das Decoupled Verfahren durchgeführt, welcher jeweils
+        // nur ein mal pro 3956 status wiederholt werden soll. Um unendliche Wiederholungen zu vermeiden setzen wir
+        // also redo=null.
+        if (this.redo == this) {
+            HBCIJobImpl redo = this.redo;
+            this.redo = null;
+            return redo;
+        }
         return this.redo;
     }
     
