@@ -46,6 +46,11 @@ public enum Feature
     PINTAN_SEGCODE_STRICT(false),
     
     /**
+     * Feature, mit dem festgelegt werden kann, ob HBCI4Java die automatischen Refresh-Abfragen bei PushTAN Decoupled durchführen soll.
+     */
+    PINTAN_DECOUPLED_REFRESH(true),
+    
+    /**
      * Feature, mit dem festgelegt werden kann, ob HBCI4Java bei der Synchronisierung das HKSPA ausfuehren soll, um die SEPA-Informationen der Konten abzurufen.
      * Konfigurierbar, weil der bei der Commerzbank nicht funktioniert - dort liefert die Bank eine fuer HBCI4Java nicht lesbare Antwort - und ich weiss leider
      * noch nicht, warum genau das nicht gelesen werden kann. Daher mache ich es erstmal abschaltbar.
@@ -57,7 +62,7 @@ public enum Feature
      * Feature, mit dem festgelegt werden kann, ob bei der Dialoginitialisierung die Registierung des Instituts mit der des Users getauscht werden soll.
      * Laut https://github.com/hbci4j/hbci4java/pull/67 kann man damit auch bei der Postbank eine personalisierte Liste der TAN-Verfahren erhalten
      */
-    INIT_FLIP_USER_INST(true)
+    INIT_FLIP_USER_INST(true),
     
     ;
     

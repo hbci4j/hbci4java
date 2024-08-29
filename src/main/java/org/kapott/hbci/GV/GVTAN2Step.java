@@ -29,6 +29,7 @@ import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.dialog.KnownTANProcess;
 import org.kapott.hbci.exceptions.HBCI_Exception;
+import org.kapott.hbci.manager.Feature;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -186,7 +187,8 @@ public class GVTAN2Step extends HBCIJobImpl
         // Falls der redo job 'this' ist, wird ein redo für das Decoupled Verfahren durchgeführt, welcher jeweils
         // nur ein mal pro 3956 status wiederholt werden soll. Um unendliche Wiederholungen zu vermeiden setzen wir
         // also redo=null.
-        if (this.redo == this) {
+        if (this.redo == this)
+        {
             HBCIJobImpl redo = this.redo;
             this.redo = null;
             return redo;
@@ -227,7 +229,7 @@ public class GVTAN2Step extends HBCIJobImpl
                     HBCIUtils.log("found status code 3040, need to repeat task " + this.task.getHBCICode(),HBCIUtils.LOG_DEBUG);
                     HBCIUtils.log("Weitere Daten folgen",HBCIUtils.LOG_INFO);
                     this.redo = this.task;
-                } else if (KnownReturncode.W3956.searchReturnValue(msgstatus.segStatus.getWarnings()) != null) {
+                } else if (Feature.PINTAN_DECOUPLED_REFRESH.isEnabled() && KnownReturncode.W3956.searchReturnValue(msgstatus.segStatus.getWarnings()) != null) {
                     // Beim Decoupled Verfahren kann die Bank ein 3956 senden, wenn der Nutzer den Prozess noch nicht bestätigt hat.
                     // In diesem Fall muss dieser task wiederholt werden, um erneut zu prüfen, ob die Bestätigung erfolgt ist.
                     // Wir benachrichtigen die Applikation mit einem entsprechenden Callback und warten eine mögliche Mindestzeit.
