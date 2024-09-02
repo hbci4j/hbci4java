@@ -44,6 +44,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -679,7 +680,11 @@ import org.kapott.hbci.swift.Swift;
 public final class HBCIUtils
 {
   /**
-   * Die offizielle HBCI-Produktregistrierung von HBCI4Java - siehe http://hbci-zka.de/register/register_faq.htm
+   * Die HBCI-Produktregistrierung von HBCI4Java für Test-Zwecke.
+   * !!!!!! ACTHUNG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   * Beantrage unter http://hbci-zka.de/register/register_faq.htm bitte eine eigene
+   * Registrierung. Die hier genannte ist nur für Test-Zwecke gedacht und kann jederzeit
+   * von der Deutschen Kreditwirtschaft gesperrt werden
    */
   public final static String PRODUCT_ID = "36792786FA12F235F04647689";
   
@@ -835,6 +840,25 @@ public final class HBCIUtils
 		{
 			initThread(props, callback);
 			HBCIUtils.log("hbci4java " + version(), HBCIUtils.LOG_INFO);
+			
+			if (Objects.equals(HBCIUtils.getParam("client.product.name",HBCIUtils.PRODUCT_ID),HBCIUtils.PRODUCT_ID))
+			{
+	      HBCIUtils.log("*************************************************************************", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** WARNING                                                             **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** HBCI4Java is currently using a product registration that should     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** ONLY be used for internal testing, not for production purpose!!     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** Please go to https://www.hbci-zka.de/register/prod_register.htm     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** and create your own registration (it's free)                        **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** After receiving your registration, add this line to your code:      **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** HBCIUtils.setParam(\"client.product.name\",\"<your registration\");     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** This test registration can be invalidated at any time!!             **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("*************************************************************************", HBCIUtils.LOG_WARN);
+			}
 
 			refreshBLZList(HBCIUtils.class.getClassLoader());
 
