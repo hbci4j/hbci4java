@@ -408,11 +408,15 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
 
                     setPersistentData("externalid",null); // External-ID aus Passport entfernen
 
-                    // Beim Decoupled-Verfahren erhalten wir keine TAN. Daher müssen wir hier auch nichts signieren.
-                    // Wir ignorieren die Antwort aus dem Callback komplett
-                    if (callback == HBCICallback.NEED_PT_DECOUPLED)
-                      return (getPIN()+"|").getBytes("ISO-8859-1");
-                    
+                    if (callback == HBCICallback.NEED_PT_DECOUPLED) {
+                        // Beim start des Decoupled-Verfahrens wird die Anzahl der refreshes auf 0 gesetzt, falls durch
+                        // einen vorherigen decoupled prozess bereits refreshes durchgeführt wurden.
+                        this.decoupledRefreshes = 0;
+                        // Beim Decoupled-Verfahren erhalten wir keine TAN. Daher müssen wir hier auch nichts signieren.
+                        // Wir ignorieren die Antwort aus dem Callback komplett
+                        return (getPIN()+"|").getBytes("ISO-8859-1");
+                    }
+
                     if (payload == null || payload.length()==0)
                         throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_TANZERO"));
                     

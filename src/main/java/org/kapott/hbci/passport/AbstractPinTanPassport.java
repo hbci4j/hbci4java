@@ -65,6 +65,7 @@ import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.status.HBCIRetVal;
+import org.kapott.hbci.status.HBCIStatus;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.tools.CryptUtils;
 import org.kapott.hbci.tools.NumberUtil;
@@ -124,6 +125,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     private Hashtable<String,Properties> tanMethodsBank;
 
     private String pin;
+
+    // Die bisherige Anzahl von decoupled status refresh requests
+    protected int decoupledRefreshes = 0;
     
     /**
      * ct.
@@ -690,12 +694,68 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         if (scaStep.intValue() == 2)
         {
+            if (this.shouldPerformDecoupledRefresh(status.segStatus)) {
+                HBCIUtils.log("Decoupled refresh required for dialog initialization. Repeating dialog",HBCIUtils.LOG_DEBUG);
+                ctx.getMeta().put(CACHE_KEY_SCA_STEP,2);
+                ctx.getDialogInit().setTemplate(KnownDialogTemplate.INIT_SCA);
+                ctx.setRepeat(true);
+                return;
+            }
             ctx.getMeta().remove(CACHE_KEY_SCA_STEP); // Geschafft
             HBCIUtils.log("HKTAN step 2 for SCA sent, checking for HITAN response [step: " + scaStep + "]",HBCIUtils.LOG_DEBUG);
             Properties props = ParameterFinder.find(status.getData(),"TAN2StepRes*.");
             if (props.size() > 0)
                 HBCIUtils.log("final SCA HITAN response found",HBCIUtils.LOG_DEBUG);
         }
+    }
+
+    /**
+     * Beim Decoupled Verfahren kann die Bank ein 3956 senden, wenn der Nutzer den Prozess noch nicht bestätigt hat.
+     * In diesem Fall muss die Nachricht wiederholt werden, um erneut zu prüfen, ob die Bestätigung erfolgt ist.
+     * Wir benachrichtigen die Applikation mit einem entsprechenden Callback und warten eine mögliche Mindestzeit.
+     * Ein refresh kann entweder durch die Dialoginitialisierung in {@link #checkSCAResponse},
+     * oder von konkreten Geschäftsvorfällen in {@link GVTAN2Step#extractResults(HBCIMsgStatus, String, int)}
+     * ausgelöst werden.
+     * @param segStatus Der segStatus, wo ein möglicher 3956 response code zu finden ist.
+     * @return true, wenn ein 3956 code gefunden wurde, und ein refresh durchgeführt werden soll.
+     */
+    public boolean shouldPerformDecoupledRefresh(HBCIStatus segStatus) {
+        if (segStatus == null || (KnownReturncode.W3956.searchReturnValue(segStatus.getWarnings()) == null)) {
+            return false;
+        }
+        if (!Feature.PINTAN_DECOUPLED_REFRESH.isEnabled()) {
+            HBCIUtils.log("found status code 3956, but PINTAN_DECOUPLED_REFRESH is disabled, so no refresh will be performed", HBCIUtils.LOG_DEBUG);
+            return false;
+        }
+
+        HBCIUtils.log("found status code 3956, calling decoupled callback", HBCIUtils.LOG_DEBUG);
+        if (this.getDecoupledMaxRefreshes() != null && this.decoupledRefreshes >= this.getDecoupledMaxRefreshes()) {
+            throw new HBCI_Exception("*** the maximum number of decoupled refreshes has been reached.");
+        }
+        Integer timeBeforeDecoupledRefresh = this.decoupledRefreshes == 0
+            ? this.getMinimumTimeBeforeFirstDecoupledRefresh()
+            : this.getMinimumTimeBeforeNextDecoupledRefresh();
+        long callbackDurationMs = System.currentTimeMillis();
+        HBCIUtilsInternal.getCallback().callback(
+            this,
+            HBCICallback.NEED_PT_DECOUPLED_RETRY,
+            "*** decoupled SCA still required",
+            HBCICallback.TYPE_TEXT,
+            new StringBuffer(String.valueOf(timeBeforeDecoupledRefresh != null ? timeBeforeDecoupledRefresh : 0)));
+        callbackDurationMs = System.currentTimeMillis() - callbackDurationMs;
+        if (timeBeforeDecoupledRefresh != null && callbackDurationMs < timeBeforeDecoupledRefresh * 1000) {
+            long sleepMs = timeBeforeDecoupledRefresh * 1000 - callbackDurationMs;
+            HBCIUtils.log(String.format(
+                "The pause before the next decoupled request was too short. Sleeping for %dms to reach the required delay.", sleepMs
+            ), HBCIUtils.LOG_INFO);
+            try {
+                Thread.sleep(sleepMs);
+            } catch (InterruptedException e) {
+                throw new HBCI_Exception("*** Decoupled refresh sleep was interrupted.");
+            }
+        }
+        this.decoupledRefreshes++;
+        return true;
     }
     
     /**
