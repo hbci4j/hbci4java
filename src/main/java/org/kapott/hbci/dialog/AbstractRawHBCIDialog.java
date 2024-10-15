@@ -69,7 +69,9 @@ public abstract class AbstractRawHBCIDialog implements RawHBCIDialog
             ctx.setRepeat(false);
             
             // Checken, ob ein Neustart noch moeglich ist:
-            if (this.executions.get() > 2 && (!Feature.PINTAN_DECOUPLED_REFRESH.isEnabled() || KnownReturncode.W3956.searchReturnValue(ctx.getMsgStatus().segStatus.getWarnings()) == null))
+            if (this.executions.get() > 2 &&
+                    (!Feature.PINTAN_DECOUPLED_REFRESH.isEnabled() ||
+                            (ctx.getMsgStatus() != null && ctx.getMsgStatus().segStatus != null && KnownReturncode.W3956.searchReturnValue(ctx.getMsgStatus().segStatus.getWarnings()) == null)))
             {
                 HBCIUtils.log("dialog loop detected for " + this.getTemplate() + ", id " + ctx.getDialogId() + ", message number: " + ctx.getMsgNum() + ", execution count: " + this.executions.get(),HBCIUtils.LOG_ERR);
                 throw new HBCI_Exception("dialog loop detected for " + this.getTemplate());
