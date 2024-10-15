@@ -853,7 +853,7 @@ public final class HBCIUtils
         HBCIUtils.log("** and create your own registration (it's free)                        **", HBCIUtils.LOG_WARN);
         HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
         HBCIUtils.log("** After receiving your registration, add this line to your code:      **", HBCIUtils.LOG_WARN);
-        HBCIUtils.log("** HBCIUtils.setParam(\"client.product.name\",\"<your registration\");     **", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** HBCIUtils.setParam(\"client.product.name\",\"<your registration>\");    **", HBCIUtils.LOG_WARN);
         HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
         HBCIUtils.log("** This test registration can be invalidated at any time!!             **", HBCIUtils.LOG_WARN);
         HBCIUtils.log("**                                                                     **", HBCIUtils.LOG_WARN);
