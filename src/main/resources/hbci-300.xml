@@ -1972,28 +1972,18 @@
                  waehrend der Wartezeit im Kundenprodukt auch manuell bestaetigen
                  kann, dass er kurz zuvor eine Sicherheitsfreigabe auf einem
                  anderen Geraet erteilt hat. -->
-            <DE name="decoupled_manual_ack_allowed" type="JN"/>
+            <DE name="decoupled_manual_ack_allowed" type="JN" minnum="0"/>
             <!-- Automatisierte Statusabfragen erlaubt -->
             <!-- Hiermit wird festgelegt, ob das Kundenprodukt automatisierten
                  Statusabfragen im Decoupled-Verfahren ermoeglicht oder, ob der
                  Kunde die Freigabe des Auftrags auf seinem anderen Geraet
                  manuell im Kundenprodukt bestaetigen soll. -->
-            <DE name="decoupled_auto_status_request_allowed" type="JN"/>
+            <DE name="decoupled_auto_status_request_allowed" type="JN" minnum="0"/>
             <!-- endregion -->
 
             <valids path="process">
                 <validvalue>1</validvalue>
                 <validvalue>2</validvalue>
-            </valids>
-            <valids path="zkamethod_name"> <!-- siehe S. 123 -->
-                <validvalue>HHD</validvalue> <!-- [HHD], [HHD-Belegung] -->
-                <validvalue>HHDUC</validvalue> <!-- [HHD], [HHD-Belegung] -->
-                <validvalue>HHDOPT1</validvalue> <!-- [HHD], [HHD-Belegung], [HHD-Erweiterung] -->
-                <validvalue>mobileTAN</validvalue>
-                <!-- neu mit Version 7 -->
-                <validvalue>App</validvalue> <!-- App-basierte TAN-Verfahren -->
-                <validvalue>Decoupled</validvalue> <!-- Decoupled-Verfahren -->
-                <validvalue>DecoupledPush</validvalue> <!-- Decoupled-Verfahren mit Push-Infrastruktur -->
             </valids>
             <valids path="tanformat">
                 <validvalue>1</validvalue> <!-- numerisch -->
