@@ -253,7 +253,21 @@ extends HBCIJobImpl
                                 System.out.println("Unbekannter 98A: " + st);
                             }
                         }
+                        
+                        i=0;
+                        while (true) {
+                            st=Swift.getTagValue(oneinstrument_header,"98C",i++);
+                            if (st==null)
+                                break;
+                            String qualifier = st.substring(1,5);
 
+                            if ("PRIC".equals(qualifier)) {
+                                instrument.preisdatum = date_only_format.parse(st.substring(7, 15));
+                            } else {
+                                System.out.println("Unbekannter 98C: " + st);
+                            }
+                        }
+                        
                         i=0;
                         while (true) {
                             st=Swift.getTagValue(oneinstrument_header,"90A",i++);
