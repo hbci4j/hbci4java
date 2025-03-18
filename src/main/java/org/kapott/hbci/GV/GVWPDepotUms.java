@@ -441,6 +441,22 @@ extends HBCIJobImpl
                                         }
                                     }
                                     
+                                    tagidx=0;
+                                    while (true) {
+                                        String t98c = Swift.getTagValue(onedetail, "98C", tagidx++);
+                                        if (t98c == null)
+                                            break;
+                                        if (t98c.startsWith(":ESET")) {
+                                            String datum = t98c.substring(7,15);
+                                            transaction.datum = date_only_format.parse(datum);
+                                        } else if (t98c.startsWith(":SETT")) {
+                                            String datum = t98c.substring(7,15);
+                                            transaction.datum_valuta = date_only_format.parse(datum);
+                                        } else {
+                                            System.out.println("Unbekannter 98C: " + t98c);
+                                        }
+                                    }                                    
+                                    
                                     String move = Swift.getTagValue(onedetail, "25D", 0);
                                     if (move != null) 
                                         if (move.startsWith(":MOVE")) {
