@@ -233,6 +233,11 @@ public class ParseCamt05200109 extends AbstractCamtParser
                 // Ursprungsbetrag bei Rückbuchungen
                 line.orig_value = new Value(tx.getAmtDtls().getInstdAmt().getAmt().getValue(), tx.getAmtDtls().getInstdAmt().getAmt().getCcy());
             }
+
+            if (tx.getRtrInf().getAddtlInf() != null) {
+                // Grund für Rückbuchung
+                line.additional = String.join(",", trim(tx.getRtrInf().getAddtlInf()));
+            }
         }
         
         ////////////////////////////////////////////////////////////////////////
