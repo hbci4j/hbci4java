@@ -227,8 +227,13 @@ public class ParseCamt05200105 extends AbstractCamtParser
 
         // Ist es eine Rueckbuchung?
         boolean rueckbuchung = tx.getRtrInf() != null && tx.getRtrInf().getRsn() != null && tx.getRtrInf().getRsn().getCd() != null && tx.getRtrInf().getRsn().getCd().length() > 0;
-        if (rueckbuchung) // Bei Rueckbuchung tauschen wir Creditor und Debitor
-          haben = !haben;
+        if (rueckbuchung) { // Bei Rueckbuchung tauschen wir Creditor und Debitor
+            haben = !haben;
+            if (tx.getAmtDtls() != null && tx.getAmtDtls().getInstdAmt() != null && tx.getAmtDtls().getInstdAmt().getAmt() != null) {
+                // Ursprungsbetrag bei Rückbuchungen
+                line.orig_value = new Value(tx.getAmtDtls().getInstdAmt().getAmt().getValue(), tx.getAmtDtls().getInstdAmt().getAmt().getCcy());
+            }
+        }
         
         ////////////////////////////////////////////////////////////////////////
         // Buchungs-ID
