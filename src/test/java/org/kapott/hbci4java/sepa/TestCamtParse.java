@@ -275,6 +275,9 @@ public class TestCamtParse extends AbstractTest
                 Assert.assertEquals("Gegenkonto IBAN falsch","DES1234567890",l.other.iban);
                 Assert.assertEquals("Gegenkonto BIC falsch","TESTS1234",l.other.bic);
                 Assert.assertEquals("Gegenkonto Name falsch","Sven Schuldner",l.other.name);
+                Assert.assertNotNull("orig_value ist null", l.orig_value);
+                Assert.assertEquals("orig_value ist falsch", 0, new BigDecimal("50").compareTo(l.orig_value.getBigDecimalValue()));
+                Assert.assertEquals("Grund für Rückbuchung falsch", "RUECKLASTSCHRIFT Sonstige Gruende", l.additional);
             }
         }
         finally
