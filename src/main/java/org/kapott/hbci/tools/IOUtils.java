@@ -152,20 +152,23 @@ public class IOUtils
     /**
      * Schliesst das Closeable, ohne eine Exception zu werfen.
      * Auch dann nicht, wenn c NULL ist.
-     * @param c das Closeable.
+     * @param list ein oder mehrere Closeables.
      */
-    public static void close(Closeable c)
+    public static void close(Closeable... list)
     {
-        if (c == null)
+        if (list == null || list.length == 0)
             return;
         
-        try
+        for (Closeable c:list)
         {
-            c.close();
-        }
-        catch (Exception e)
-        {
-            HBCIUtils.log(e, HBCIUtils.LOG_DEBUG);
+          try
+          {
+              c.close();
+          }
+          catch (Exception e)
+          {
+              HBCIUtils.log(e, HBCIUtils.LOG_DEBUG);
+          }
         }
     }
     
