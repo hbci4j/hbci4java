@@ -1660,6 +1660,27 @@
             <DE name="key" type="Dig" minsize="2" maxsize="2" maxnum="99"/>
         </DEGdef>
         
+        <DEGdef id="ParVoPCheck1">
+            <DE name="maxcountoptin" type="Num" maxsize="7" minnum="1" maxnum="1" />
+            <DE name="infotextformatted" type="JN" minnum="1" maxnum="1" />
+            <DE name="reportdelivery" type="Code" minnum="1" maxnum="1" />
+            <DE name="multiallowed" type="JN" minnum="1" maxnum="1" />
+            <DE name="entrycountallowed" type="JN" minnum="1" maxnum="1" />
+            <DE name="suppreports" type="AN" maxsize="1024" minnum="1" maxnum="1" />
+            
+            <!-- Segmentkennung HK... des Zahlungsauftrages, fuer den das gilt -->
+            <DE name="code" type="AN" maxsize="6" minnum="1" maxnum="1" />
+            
+            <!-- Wenn per pain.002 Teillieferungen gemacht werden, wird damit festgelegt,
+                 ob mit jeder Nachricht immer nur die neu hinzugekommenen (schrittweise) 
+                 uebertragen werden oder ob mit jedem Update die bereits gelieferten nochmal
+                 enthalten sind -->
+            <valids path="reportdelivery">
+                <validvalue>S</validvalue> <!-- schrittweise -->
+                <validvalue>V</validvalue> <!-- vollstaendig -->
+            </valids>
+        </DEGdef>
+
         <DEGdef id="ParVormerkposten">
           <DE name="canmaxentries" type="JN"/>
           <DE name="canallaccounts" type="JN"/>
@@ -2183,6 +2204,37 @@
             <DE name="usage" type="DTAUS" maxsize="27" minnum="0" maxnum="99"/>
         </DEGdef>
         
+        <DEGdef id="VoPSuppReports1">
+            <DE name="descriptor" type="AN" maxsize="256" minnum="1" maxnum="99"/>
+        </DEGdef>
+        
+        <DEGdef id="VoPCheckResult1">
+            <DE name="iban" type="AN" maxsize="34" minnum="1" maxnum="1"/>
+            <DE name="ibanaddon" type="AN" maxsize="140" minnum="0" maxnum="1"/>
+            
+            <!-- M: "Anderes Identifikationmerkmal" nicht belegt und "VOP Pruefergebnis" = RVMC / N: sonst -->
+            <DE name="differentname" type="AN" maxsize="140" minnum="0" maxnum="1"/>
+
+            <!-- O: "Abweichender Empfaengername" nicht belegt / N: sonst -->
+            <DE name="otheridentifier" type="AN" maxsize="256" minnum="0" maxnum="1"/>
+
+            <DE name="result" type="Code" maxsize="4" minnum="1" maxnum="1"/>
+            
+            <!-- O: "VOP Pruefergebnis" = RVNA / N: sonst -->
+            <DE name="reason" type="AN" maxsize="256" minnum="0" maxnum="1"/>
+
+            <valids path="result">
+                <validvalue>RCVC</validvalue> <!-- Match -->
+                <validvalue>RVNM</validvalue> <!-- No Match -->
+                <validvalue>RVMC</validvalue> <!-- Close Match -->
+                <validvalue>RVNA</validvalue> <!-- Not Applicable -->
+                <validvalue>PDNG</validvalue> <!-- Pending -->
+            </valids>
+
+        </DEGdef>
+        
+                
+        
         <DEGdef id="WPBInfo1"> <!-- 2.1 -->
             <DE name="boerse" type="AN" minsize="4" maxsize="4"/>
             <DE name="curr" type="Cur"/>
@@ -2333,6 +2385,7 @@
         <DEGdef id="WPZinsTermine">
             <DE name="termin" type="Dig" minsize="4" maxsize="4" maxnum="99"/>
         </DEGdef>
+        
     </DEGs>
 
     <SEGs>
@@ -5633,7 +5686,74 @@
             <value path="SegHead.version">7</value>
         </SEGdef>
         <!--  END HKTAN 7 -->
+        
 
+
+        
+        
+        <!--  BEGIN VoP -->
+        <SEGdef id="VoPCheck1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+
+            <!-- Gewuenschtes Format des Payment Status Reports (unterstuetzte Formate sind in den BPD -->
+            <DEG name="suppreports" type="VoPSuppReports1" />
+            
+            <!-- M: "Aufsetzpunkt" belegt und vom Institut wurde eine Polling-ID geliefert wurde / N: sonst  -->
+            <DE name="pollingid" type="Bin" minnum="0" />
+            
+            <!-- groesser 0 O: "Eingabe Anzahl Eintraege erlaubt" (BPD) = "J" / N: sonst -->
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0" />
+
+            <!-- M: vom Institut wurde ein Aufsetzpunkt rueckgemeldet / N: sonst -->
+            <DE name="offset" type="AN" maxsize="35" minnum="0" />
+
+            <value path="SegHead.code">HKVPP</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="VoPCheckRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            
+            <!-- vopid und vopidvalidto sind bei Teillieferungen erst in der letzten Nachricht gefuellt -->
+            <!-- M: "Payment Status Report" bzw. "Ergebnis der VOP Pruefung Einzeltransaktion" ist vollstaendig an Kunden uebermittelt / N: sonst -->
+            <DE name="vopid" type="Bin" maxsize="256" minnum="0" />
+
+            <!-- O: "VOP-ID" belegt / N: sonst -->
+            <DEG name="vopidvalidto" type="Timestamp" minnum="0" />
+
+            <DE name="pollingid" type="Bin" minnum="0" />
+
+            <!-- M: "Payment Status Report" belegt / N: sonst -->
+            <DE name="reportdesc" type="AN" maxsize="256" minnum="0" />
+
+            <!-- O: "Ergebnis VOP-Pruefung Einzeltransaktion" nicht belegt / N: sonst -->
+            <DE name="report" type="Bin" minnum="0" />
+            
+            <!-- O: "Payment Status Report" nicht belegt / N: sonst -->
+            <DEG name="result" type="VoPCheckResult1" minnum="0" />
+            
+            <!-- Aufklaerungstext trotz Abweichung -->
+            <DE name="infotext" type="AN" maxsize="65535" minnum="0" />
+
+            <!-- Wartezeit vor der nächsten Abfrage - Angabe in Sekunden -->
+            <DE name="infotext" type="Num" maxsize="1" minnum="0" />
+
+            <value path="SegHead.code">HIVPP</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="VoPCheckPar1">
+            &GVP2;
+            <DEG type="ParVoPCheck1" name="ParVoPCheck"/>
+
+            &SecClassValids;
+
+            <value path="SegHead.code">HIVPPS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+
+        <!--  END VoP -->
 
         <!--  macemmi 2012-02-20 BEGIN HKTAB -->
         <!--  Version 1 -->
@@ -7987,6 +8107,7 @@
             <SEG type="UmbSEPA1" minnum="0"/>
             <SEG type="Umb1" minnum="0"/>
             <SEG type="Umb2" minnum="0"/>
+            <SEG type="VoPCheck1" minnum="0"/>
             <SEG type="Vormerkposten1" minnum="0"/>
             <SEG type="WPDepotList2" minnum="0"/>
             <SEG type="WPDepotList3" minnum="0"/>
@@ -8111,6 +8232,7 @@
             <SEG type="TermUebSEPAListRes1" minnum="0"/>
             <SEG type="TermUebSEPAEditRes1" minnum="0"/>
             <SEG type="UebGarRes1" minnum="0"/>
+            <SEG type="VoPCheckRes1" minnum="0"/>
             <SEG type="VormerkpostenRes1" minnum="0"/>
             <SEG type="WPDepotListRes2" minnum="0"/>
             <SEG type="WPDepotListRes3" minnum="0"/>
@@ -8297,6 +8419,7 @@
             <SEG type="UmbSEPAPar1" minnum="0"/>
             <SEG type="UmbPar1" minnum="0"/>
             <SEG type="UmbPar2" minnum="0"/>
+            <SEG type="VoPCheckPar1" minnum="0"/>
             <SEG type="VormerkpostenPar1" minnum="0"/>
             <SEG type="WPDepotListPar2" minnum="0"/>
             <SEG type="WPDepotListPar3" minnum="0"/>
