@@ -64,6 +64,11 @@ public enum Feature
      */
     INIT_FLIP_USER_INST(true),
     
+    /**
+     * Feature zur Aktivierung/Deaktivierung von Verification of Payee
+     */
+    VOP(false),
+    
     ;
     
     private boolean enabled = false;

@@ -25,10 +25,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1318,5 +1321,59 @@ public abstract class HBCIJobImpl
         return value != null && value.equalsIgnoreCase("J");
     }
     
+    /**
+     * Liefert true, wenn fuer den Auftrag ein VoP erforderlich ist.
+     * @param handler der Handler.
+     * @return die VoP-Parameter für den Geschäftsvorfall oder NULL, wenn keine vorliegen.
+     */
+    public Map<String,String> getVoPParameters(HBCIHandler handler)
+    {
+      final HBCIPassport passport = handler.getPassport();
+      final Properties bpd = passport.getBPD();
+      
+      if (bpd == null)
+        return null;
+
+      final Map result = new HashMap<>();
+      final String code = this.getHBCICode();
+      
+      for (Enumeration e = bpd.propertyNames();e.hasMoreElements();)
+      {
+        final String key = (String) e.nextElement();
+
+        // Keine BPD
+        if (!key.startsWith("Params"))
+          continue;
+      
+        // BPD aber nicht von VoPCheckPar
+        if (!key.substring(key.indexOf(".")+1).startsWith("VoPCheckPar"))
+          continue;
+
+        // Das sind die eigentlichen Parameter.
+        if (key.indexOf(".ParVoPCheck") == -1)
+          continue;
+
+        // OK, jetzt haben wir sowas wie "Params_11.VoPCheckPar1.ParVoPCheck1.[maxcountoptin/.../segcode]
+        // Wir wollen nur die haben, wo unser segcode drin steht
+        final int lastdot = key.lastIndexOf(".");
+        final String prefix = key.substring(0,lastdot);
+        final String segcode = bpd.getProperty(prefix + ".segcode");
+        if (!Objects.equals(segcode,code))
+          continue;
+        
+        // Jetzt sind wir im richtigen Bereich.
+        // Wir verwenden als Keys nur die eigentlichen Parameternamen.
+        result.put(key.substring(lastdot+1),bpd.getProperty(key));
+      }
+      
+      // In der Map steht jetzt sowas wie:
+      // maxcountoptin: 1
+      // infotextformatted: J
+      // reportdelivery: S
+      // multiallowed: N
+      // segcode: HKCCS
+      
+      return result;
+    }
 
 }

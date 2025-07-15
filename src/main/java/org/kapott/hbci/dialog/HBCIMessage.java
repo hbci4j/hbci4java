@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kapott.hbci.GV.HBCIJobImpl;
+import org.kapott.hbci.manager.HBCIUtils;
 
 /**
  * Kapselt die fachlichen Jobs in einr HBCI-Nachricht an die Bank.
@@ -68,6 +69,23 @@ public class HBCIMessage
               return task;
         }
         return null;
+    }
+    
+    /**
+     * Fügt einen Job vor dem angegebenen Task hinzu.
+     * @param task der Task.
+     * @param toInsert der vorher einzufuegende Task.
+     */
+    public void prepend(HBCIJobImpl task, HBCIJobImpl toInsert)
+    {
+      final int pos = this.tasks.indexOf(task);
+      if (pos < 0)
+      {
+        HBCIUtils.log("task " + task.getJobName() + " not found, cannot prepend " + toInsert.getJobName(),HBCIUtils.LOG_WARN);
+        return;
+      }
+      
+      this.tasks.add(pos,toInsert);
     }
 
     /**

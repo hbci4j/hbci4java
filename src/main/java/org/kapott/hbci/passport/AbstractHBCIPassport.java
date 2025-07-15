@@ -28,16 +28,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.kapott.hbci.GV.GVVoP;
+import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.comm.Filter;
 import org.kapott.hbci.dialog.DialogContext;
 import org.kapott.hbci.dialog.DialogEvent;
+import org.kapott.hbci.dialog.HBCIMessage;
+import org.kapott.hbci.dialog.HBCIMessageQueue;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.BankInfo;
+import org.kapott.hbci.manager.Feature;
+import org.kapott.hbci.manager.HBCIDialog;
+import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIKey;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -991,7 +1000,81 @@ public abstract class AbstractHBCIPassport
     @Override
     public void onDialogEvent(DialogEvent event, DialogContext ctx)
     {
-        // Default-Implementierung macht nichts.
+      if (event == DialogEvent.JOBS_CREATED)
+          this.patchMessagesForVoP(ctx);
+    }
+    
+    /**
+     * Patcht das VoP bei Bedarf in die Nachricht.
+     * @param dialog der Dialog.
+     * @param ret der aktuelle Dialog-Status.
+     */
+    private void patchMessagesForVoP(DialogContext ctx)
+    {
+        if (!Feature.VOP.isEnabled())
+            return;
+      
+        final HBCIDialog dialog = ctx.getDialog();
+        if (dialog == null)
+            return;
+        
+        final HBCIMessageQueue queue = dialog.getMessageQueue();
+        if (queue == null)
+            return;
+        
+        final HBCIHandler handler = (HBCIHandler) this.getParentHandlerData();
+
+        for (HBCIMessage message:queue.getMessages())
+        {
+            for (HBCIJobImpl task:message.getTasks())
+            {
+                final Map<String,String> bpd = task.getVoPParameters(handler);
+                if (bpd == null || bpd.isEmpty())
+                    continue;
+
+                final String segcode = task.getHBCICode();
+                HBCIUtils.log("patch VoP into message for: " + segcode,HBCIUtils.LOG_DEBUG);
+
+                final GVVoP vop = (GVVoP) handler.newJob("VoP");
+                vop.setParam("suppreports.descriptor",this.getSupportedVoPReport(bpd));
+
+                // VOP *vor* dem eigentlichen Auftrag einreihen
+                message.prepend(task,vop);
+            }
+        }
+    }
+    
+    /**
+     * Liefert den Identifier des pain.002-Formats, welches laut BPD verwendet werden soll.
+     * @param props die Properties mit den VVoP BPDs.
+     * @return der Identifier fuer das pain.002-Format.
+     */
+    private String getSupportedVoPReport(Map<String,String> bpd)
+    {
+      // Kannste dir nicht ausdenken: Die erlauben tatsaechlich, fuer jeden Geschaeftsvorfall
+      // eigene pain-Formate zu definieren.
+      for (Entry<String,String> e:bpd.entrySet())
+      {
+        final String key = e.getKey();
+        
+        if (!key.contains("suppreports"))
+            continue;
+
+        if (!key.endsWith("descriptor"))
+          continue;
+
+        final String urn = e.getValue();
+        
+        // TODO: Wir nehmen derzeit einfach den ersten Treffer
+        // Keine Ahnung, ob es irgendwann wirklich unterschiedliche pain.002 Versionen geben wird
+        // Und wenn ja, wofuer eigentlich.
+        return urn;
+      }
+      
+      // TODO: Hier eine Default-Version verwenden?
+      HBCIUtils.log("unable to determine pain.002 version for VoP - using default version",HBCIUtils.LOG_WARN);
+      return "";
+
     }
 
     /**

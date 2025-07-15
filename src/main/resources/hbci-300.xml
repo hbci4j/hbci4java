@@ -1430,7 +1430,7 @@
             <DE name="maxVorlZeitFNALRCUR" type="Num" maxsize="4"/>
             <DE name="minVorlZeitFRSTOOFF" type="Num" maxsize="4"/>
             <DE name="maxVorlZeitFRSTOOFF" type="Num" maxsize="4"/>
-			<DE name="PurposeCodes" type="AN" maxsize="4096" minnum="0" maxnum="1"/>
+			      <DE name="PurposeCodes" type="AN" maxsize="4096" minnum="0" maxnum="1"/>
             <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
 
@@ -1669,7 +1669,7 @@
             <DE name="suppreports" type="AN" maxsize="1024" minnum="1" maxnum="1" />
             
             <!-- Segmentkennung HK... des Zahlungsauftrages, fuer den das gilt -->
-            <DE name="code" type="AN" maxsize="6" minnum="1" maxnum="1" />
+            <DE name="segcode" type="AN" maxsize="6" minnum="1" />
             
             <!-- Wenn per pain.002 Teillieferungen gemacht werden, wird damit festgelegt,
                  ob mit jeder Nachricht immer nur die neu hinzugekommenen (schrittweise) 
