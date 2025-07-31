@@ -1660,7 +1660,7 @@
             <DE name="key" type="Dig" minsize="2" maxsize="2" maxnum="99"/>
         </DEGdef>
         
-        <DEGdef id="ParVoPCheck1">
+        <DEGdef id="ParVoPCheck">
             <DE name="maxcountoptin" type="Num" maxsize="7" minnum="1" maxnum="1" />
             <DE name="infotextformatted" type="JN" minnum="1" maxnum="1" />
             <DE name="reportdelivery" type="Code" minnum="1" maxnum="1" />
@@ -5743,8 +5743,8 @@
         </SEGdef>
 
         <SEGdef id="VoPCheckPar1">
-            &GVP2;
-            <DEG type="ParVoPCheck1" name="ParVoPCheck"/>
+            &GVP;
+            <DEG type="ParVoPCheck" />
 
             &SecClassValids;
 
