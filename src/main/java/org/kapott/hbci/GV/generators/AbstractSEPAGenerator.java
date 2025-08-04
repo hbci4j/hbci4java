@@ -39,7 +39,7 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
      * @param validate true, wenn das erzeugte XML gegen das PAIN-Schema validiert werden soll.
      * @throws Exception
      */
-    protected void marshal(final JAXBElement e, final OutputStream os, final boolean validate) throws Exception
+    protected void marshal(JAXBElement e, OutputStream os, boolean validate) throws Exception
     {
         JAXBContext jaxbContext = JAXBContext.newInstance(e.getDeclaredType());
         Marshaller marshaller = jaxbContext.createMarshaller();
@@ -49,9 +49,7 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
 
         // Siehe https://groups.google.com/d/msg/hbci4java/RYHCai_TzHM/72Bx51B9bXUJ
         if (System.getProperty("sepa.pain.formatted","false").equalsIgnoreCase("true"))
-        {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        }
 
         SepaVersion version = this.getSepaVersion();
         if (version != null)
@@ -80,15 +78,11 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
                         // Fallback auf File-Objekt
                         File f = new File(file);
                         if (f.isFile() && f.canRead())
-                        {
                             source = new StreamSource(f);
-                        }
                     }
 
                     if (source == null)
-                    {
                         throw new HBCI_Exception("schema validation activated against " + file + " - but schema file could not be found");
-                    }
 
                     LOG.fine("activating schema validation against " + file);
                     SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
