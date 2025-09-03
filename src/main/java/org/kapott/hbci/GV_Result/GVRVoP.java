@@ -26,4 +26,14 @@ package org.kapott.hbci.GV_Result;
  */
 public class GVRVoP extends HBCIJobResultImpl
 {
+  /*
+    pain.002 parsen 
+  
+    Quelle: https://homebanking-hilfe.de/forum/topic.php?p=178922#real178922
+  
+    Zitat:
+      In OrgnlPmtInfAndSts hast du wohl unter TxInfAndSts dann die verschiedenen Antworten pro Status.
+      Bspw: für die Close Matches unter <TxSts>RVMC</TxSts> den neuen Namen in <StsRsnInf><AddtlInf>neuer Name</AddtlInf></StsRsnInf>
+      und dahinter unter OrgnlTxRef -> Cdtr -> Pty -> Nm den alten falschen Namen und die zugehörige IBAN in CdtrACCT -> Id -> IBAN.
+  */
 }
