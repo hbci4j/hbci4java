@@ -40,7 +40,7 @@ Bis 02.05.2016 unterlag HBCI4Java der GPLv2 - wurde mit https://github.com/willu
 
 Du kannst die aktuellste Version von HBCI4Java in Maven Central finden:
 
-https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.hbci4j%22%20AND%20a%3A%22hbci4j-core%22
+https://central.sonatype.com/artifact/com.github.hbci4j/hbci4j-core
 
 
 *Maven*
