@@ -62,9 +62,6 @@ public class SepaVersion implements Comparable<SepaVersion>
     @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_001_09 = new SepaVersion(SupportType.GENERATE,9,"urn:iso:std:iso:20022:tech:xsd:pain.001.001.09","pain.001.001.09.xsd",true);
     @SuppressWarnings("javadoc") public static SepaVersion PAIN_001_001_11 = new SepaVersion(SupportType.GENERATE,11,"urn:iso:std:iso:20022:tech:xsd:pain.001.001.11","pain.001.001.11.xsd",true);
     
-    @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_002_02 = new SepaVersion(SupportType.PARSE,1,"urn:swift:xsd:$pain.002.002.02",                "pain.002.002.02.xsd",true);
-    @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_003_03 = new SepaVersion(SupportType.PARSE,2,"urn:iso:std:iso:20022:tech:xsd:pain.002.003.03","pain.002.003.03.xsd",true);
-    @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_001_03 = new SepaVersion(SupportType.PARSE,3,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03","pain.002.001.03.xsd",true);
     @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_001_10 = new SepaVersion(SupportType.PARSE,10,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.10","pain.002.001.10.xsd",true);
     @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_001_11 = new SepaVersion(SupportType.PARSE,11,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.11","pain.002.001.11.xsd",true);
     @SuppressWarnings("javadoc") public static SepaVersion PAIN_002_001_12 = new SepaVersion(SupportType.PARSE,12,"urn:iso:std:iso:20022:tech:xsd:pain.002.001.12","pain.002.001.12.xsd",true);

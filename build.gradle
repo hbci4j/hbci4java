@@ -88,7 +88,6 @@ jaxb {
     pain00200112 { schema = file(new File(xsdDir,'/pain.002.001.12.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_12' }
     pain00200113 { schema = file(new File(xsdDir,'/pain.002.001.13.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_13' }
     pain00200114 { schema = file(new File(xsdDir,'/pain.002.001.14.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_14' }
-    pain00200202 { schema = file(new File(xsdDir,'/pain.002.002.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_002_02' }
     
     pain00800101 { schema = file(new File(xsdDir,'/pain.008.001.01.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_001_01' }
     pain00800102 { schema = file(new File(xsdDir,'/pain.008.001.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_001_02' }

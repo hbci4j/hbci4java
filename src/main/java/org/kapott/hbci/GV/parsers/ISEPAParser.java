@@ -39,6 +39,8 @@ public interface ISEPAParser<T>
         TARGETDATE("targetdate"),
         BATCHBOOK("batchbook"),
         
+        VOP_STATUS("vop.status"),
+        
         ;
         
         private String value = null;
