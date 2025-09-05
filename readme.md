@@ -9,12 +9,12 @@ Dies ist die offizielle Quelle von HBCI4Java, welches u.a. in [Hibiscus](http://
 
 ## Kontakt
 
-Unter https://groups.google.com/forum/?hl=de#!forum/hbci4java findet ihr die
+Unter <https://groups.google.com/forum/?hl=de#!forum/hbci4java> findet ihr die
 zugehörige Mailingliste.
 
 ## Entstehung
 
-Das Projekt entstand 2010 als Fork von http://hbci4java.kapott.org, da dessen Weiterentwicklung eingestellt wurde.
+Das Projekt entstand 2010 als Fork von <http://hbci4java.kapott.org>, da dessen Weiterentwicklung eingestellt wurde.
 
 Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 
@@ -31,16 +31,16 @@ Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 
 ## Lizenz
 
-LGPL 2.1 - GNU Lesser General Public License, version 2.1 (http://www.gnu.org/licenses/old-licenses/lgpl-2.1)
+LGPL 2.1 - GNU Lesser General Public License, version 2.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1>
 
 *Hinweis*
-Bis 02.05.2016 unterlag HBCI4Java der GPLv2 - wurde mit https://github.com/willuhn/hbci4java/issues/36 aber auf LGPL 2.1 geändert.
+Bis 02.05.2016 unterlag HBCI4Java der GPLv2 - wurde mit <https://github.com/willuhn/hbci4java/issues/36> aber auf LGPL 2.1 geändert.
 
 ## Download
 
 Du kannst die aktuellste Version von HBCI4Java in Maven Central finden:
 
-https://central.sonatype.com/artifact/com.github.hbci4j/hbci4j-core
+<https://central.sonatype.com/artifact/com.github.hbci4j/hbci4j-core/versions>
 
 
 *Maven*
@@ -66,9 +66,9 @@ dependencies {
 
 Du benötigst:
 
-- GIT (https://git-scm.com/)
-- Java SDK 17 oder höher (https://adoptium.net/)
-- Gradle 8 oder höher (https://gradle.org/)
+- GIT <https://git-scm.com/>
+- Java SDK 17 oder höher <https://adoptium.net/>
+- Gradle 8 oder höher <https://gradle.org/>
 
 Öffne ein Terminal-Fenster und checke den Quellcode per GIT aus:
 
@@ -121,5 +121,5 @@ Du kannst die Tests starten per:
 
 ## Beispiel-Code
 
-Unter https://github.com/hbci4j/hbci4java/blob/master/src/main/java/org/kapott/hbci/examples/UmsatzAbrufPinTan.java findest du Beispiel-Code zum Abrufen des Saldos und der Umsätze eines Kontos per PIN/TAN-Verfahren.
+Unter <https://github.com/hbci4j/hbci4java/blob/master/src/main/java/org/kapott/hbci/examples/UmsatzAbrufPinTan.java> findest du Beispiel-Code zum Abrufen des Saldos und der Umsätze eines Kontos per PIN/TAN-Verfahren.
  
