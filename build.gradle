@@ -1,0 +1,183 @@
+plugins {
+  id 'java'
+  id 'eclipse'
+  id 'java-library-distribution'
+  id 'com.intershop.gradle.jaxb' version '7.0.2'
+  id 'maven-publish'
+  id 'signing'
+}
+
+repositories {
+  mavenCentral()
+}
+
+configurations {
+  jaxb
+}
+
+eclipse {
+  classpath {
+    downloadSources = true
+  }
+}
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+  withSourcesJar()
+  withJavadocJar()
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+test {
+  testLogging.showStandardStreams=false
+  
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+}
+
+jar.doFirst {
+  manifest {
+    attributes(
+      "Implementation-Version": archiveVersion,
+      "Specification-Version": archiveVersion
+    )
+  }
+}
+
+tasks.withType(Javadoc).configureEach {
+  failOnError = false
+  options.addStringOption('Xdoclint:none', '-quiet')
+  options.encoding = 'UTF-8'
+  options.charSet = 'UTF-8'
+}
+
+tasks.named('sourcesJar') {
+  // Kann sich der User selbst generieren
+  exclude 'org/kapott/hbci/sepa/jaxb/**'
+}
+
+def xsdDir  = file('src/main/resources')
+def jaxbOut = file("$buildDir/generated/jaxb")
+def jaxbPackage = 'org.kapott.hbci.sepa.jaxb.'
+jaxb {
+  javaGen {
+    camt05200101 { schema = file(new File(xsdDir,'/camt.052.001.01.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_01' }
+    camt05200102 { schema = file(new File(xsdDir,'/camt.052.001.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_02' }
+    camt05200103 { schema = file(new File(xsdDir,'/camt.052.001.03.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_03' }
+    camt05200104 { schema = file(new File(xsdDir,'/camt.052.001.04.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_04' }
+    camt05200105 { schema = file(new File(xsdDir,'/camt.052.001.05.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_05' }
+    camt05200106 { schema = file(new File(xsdDir,'/camt.052.001.06.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_06' }
+    camt05200107 { schema = file(new File(xsdDir,'/camt.052.001.07.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_07' }
+    camt05200108 { schema = file(new File(xsdDir,'/camt.052.001.08.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_08' }
+    camt05200109 { schema = file(new File(xsdDir,'/camt.052.001.09.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_09' }
+    
+    pain00100102 { schema = file(new File(xsdDir,'/pain.001.001.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_001_02' }
+    pain00100103 { schema = file(new File(xsdDir,'/pain.001.001.03.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_001_03' }
+    pain00100109 { schema = file(new File(xsdDir,'/pain.001.001.09.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_001_09' }
+    pain00100111 { schema = file(new File(xsdDir,'/pain.001.001.11.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_001_11' }
+    pain00100202 { schema = file(new File(xsdDir,'/pain.001.002.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_002_02' }
+    pain00100203 { schema = file(new File(xsdDir,'/pain.001.002.03.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_002_03' }
+    pain00100303 { schema = file(new File(xsdDir,'/pain.001.003.03.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_001_003_03' }
+
+    pain00200110 { schema = file(new File(xsdDir,'/pain.002.001.10.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_10' }
+    pain00200111 { schema = file(new File(xsdDir,'/pain.002.001.11.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_11' }
+    pain00200112 { schema = file(new File(xsdDir,'/pain.002.001.12.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_12' }
+    pain00200113 { schema = file(new File(xsdDir,'/pain.002.001.13.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_13' }
+    pain00200114 { schema = file(new File(xsdDir,'/pain.002.001.14.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_001_14' }
+    pain00200202 { schema = file(new File(xsdDir,'/pain.002.002.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_002_002_02' }
+    
+    pain00800101 { schema = file(new File(xsdDir,'/pain.008.001.01.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_001_01' }
+    pain00800102 { schema = file(new File(xsdDir,'/pain.008.001.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_001_02' }
+    pain00800108 { schema = file(new File(xsdDir,'/pain.008.001.08.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_001_08' }
+    pain00800110 { schema = file(new File(xsdDir,'/pain.008.001.10.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_001_10' }
+    pain00800201 { schema = file(new File(xsdDir,'/pain.008.002.01.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_002_01' }
+    pain00800202 { schema = file(new File(xsdDir,'/pain.008.002.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_002_02' }
+    pain00800302 { schema = file(new File(xsdDir,'/pain.008.003.02.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'pain_008_003_02' }
+  }
+}
+sourceSets.main.java.srcDirs += 'build/generated/jaxb'
+compileJava.dependsOn 'jaxb'
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      
+      from components.java
+
+      pom {
+        groupId     = 'com.github.hbci4j'
+        artifactId  = 'hbci4j-core'
+        description = 'HBCI4j - Home Banking Computer Interface for Java'
+        version     = project.version
+        url         = 'https://github.com/hbci4j/hbci4java'
+
+        licenses {
+          license {
+            name = 'GNU Lesser General Public License'
+            url  = 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1'
+          }
+        }
+
+        developers {
+          developer {
+            name = 'Olaf Willuhn'
+            email = 'github@willuhn.de'
+          }
+          developer {
+            name = 'Janning Vygen'
+            email = 'vygen@kicktipp.de'
+          }
+        }
+        scm {
+          url                 = 'https://github.com/hbci4j/hbci4java'
+          connection          = 'scm:git:git://github.com/hbci4j/hbci4java.git'
+          developerConnection = 'scm:git:ssh://git@github.com/hbci4j/hbci4java.git'
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      name = 'sonatype'
+      url  = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+      credentials {
+        /*
+          Entweder als Umgebungsvariablen SONATYPE_USERNAME/SONATYPE_PASSWORD oder
+          in ~/.gradle/gradle.properties mit den folgenden beiden Zeilen:
+         
+          sonatypeUsername=....
+          sonatypePassword=...
+        
+        */
+        username = project.findProperty('sonatypeUsername') ?: System.getenv('SONATYPE_USERNAME')
+        password = project.findProperty('sonatypePassword') ?: System.getenv('SONATYPE_PASSWORD')
+      }
+    }
+  }
+}
+
+tasks.withType(PublishToMavenRepository).configureEach {
+    dependsOn tasks.test
+}
+tasks.withType(PublishToMavenLocal).configureEach {
+    dependsOn tasks.test
+}
+
+signing {
+  useGpgCmd()
+  sign publishing.publications.mavenJava
+}
+
+
+dependencies {
+  
+  implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+  implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+  
+  testImplementation 'junit:junit:4.+'
+}

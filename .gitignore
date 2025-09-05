@@ -5,3 +5,5 @@ target
 /bin/
 .idea
 *.iml
+/.gradle/
+/build/

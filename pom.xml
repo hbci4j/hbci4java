@@ -3,14 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.hbci4j</groupId>
 	<artifactId>hbci4j-core</artifactId>
-	<version>3.1.92-SNAPSHOT</version>
+	<version>4.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	<description>HBCI4j - Home Banking Computer Interface for Java</description>
 	<url>https://github.com/hbci4j/hbci4java</url>
-	<prerequisites>
-		<maven>3.3.9</maven>
-	</prerequisites>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License</name>
@@ -40,7 +37,7 @@
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 		<maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
@@ -51,7 +48,7 @@
 		<maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
 		<maven-site-plugin.version>3.10.0</maven-site-plugin.version>
 
-		<maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
+		<maven-jaxb2-plugin.version>0.15.1</maven-jaxb2-plugin.version>
 		<jaxb.packageName>org.kapott</jaxb.packageName>
 	</properties>
 	<distributionManagement>
@@ -67,9 +64,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb22-plugin</artifactId>
-				<version>${maven-jaxb2-plugin.version}</version>
+		        <groupId>com.helger.maven</groupId>
+		        <artifactId>jaxb40-maven-plugin</artifactId>
+		        <version>0.16.1</version>
 				<executions>
           <!--
             CAMT: Offizieller Download der Schema-Datei von https://www.iso20022.org/payments_messages.page
@@ -308,35 +305,35 @@
 							<produces>org/kapott/hbci/sepa/jaxb/pain_001_003_03/*.java</produces>
 						</configuration>
 					</execution>
-					<execution>
-						<id>pain.002.002.02</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes>
-								<include>pain.002.002.02.xsd</include>
-							</schemaIncludes>
-							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_002_02</generatePackage>
-							<produces>org/kapott/hbci/sepa/jaxb/pain_002_002_02/*.java</produces>
-						</configuration>
-					</execution>
-					<execution>
-						<id>pain.002.003.03</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes>
-								<include>pain.002.003.03.xsd</include>
-							</schemaIncludes>
-							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_003_03</generatePackage>
-							<produces>org/kapott/hbci/sepa/jaxb/pain_002_003_03/*.java</produces>
-						</configuration>
-					</execution>
+					
+          <execution>
+            <id>pain.002.001.10</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>pain.002.001.10.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_10</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/pain_002_001_10/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>pain.002.001.11</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>pain.002.001.11.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_11</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/pain_002_001_11/*.java</produces>
+            </configuration>
+          </execution>
 					<execution>
 						<id>pain.002.001.12</id>
-						<!-- 20 May 2021 -->
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -348,34 +345,33 @@
 							<produces>org/kapott/hbci/sepa/jaxb/pain_002_001_12/*.java</produces>
 						</configuration>
 					</execution>
-					<execution>
-						<id>pain.002.001.10</id>
-						<!-- 01 January 2019 -->
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes>
-								<include>pain.002.001.10.xsd</include>
-							</schemaIncludes>
-							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_10</generatePackage>
-							<produces>org/kapott/hbci/sepa/jaxb/pain_002_001_10/*.java</produces>
-						</configuration>
-					</execution>
-					<execution>
-						<id>pain.002.001.03</id>
-						<!-- 01 March 2009 -->
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes>
-								<include>pain.002.001.03.xsd</include>
-							</schemaIncludes>
-							<generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_03</generatePackage>
-							<produces>org/kapott/hbci/sepa/jaxb/pain_002_001_03/*.java</produces>
-						</configuration>
-					</execution>
+          <execution>
+            <id>pain.002.001.13</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>pain.002.001.13.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_13</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/pain_002_001_13/*.java</produces>
+            </configuration>
+          </execution>
+          <execution>
+            <id>pain.002.001.14</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>pain.002.001.14.xsd</include>
+              </schemaIncludes>
+              <generatePackage>org.kapott.hbci.sepa.jaxb.pain_002_001_14</generatePackage>
+              <produces>org/kapott/hbci/sepa/jaxb/pain_002_001_14/*.java</produces>
+            </configuration>
+          </execution>
+					
 					<execution>
 						<id>pain.008.001.10</id>
 						<!-- 20 May 2021 -->
@@ -612,14 +608,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.3.1</version>
+		    <groupId>jakarta.xml.bind</groupId>
+		    <artifactId>jakarta.xml.bind-api</artifactId>
+		    <version>4.0.0</version>
 		</dependency>
     <dependency>
         <groupId>org.glassfish.jaxb</groupId>
         <artifactId>jaxb-runtime</artifactId>
-        <version>2.3.1</version>
+		    <version>4.0.2</version>
     </dependency>
 	</dependencies>
 </project>

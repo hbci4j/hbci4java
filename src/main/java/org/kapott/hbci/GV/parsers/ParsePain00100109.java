@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXB;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kapott.hbci.GV.SepaUtil;
@@ -17,6 +16,8 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_09.PaymentIdentification6;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.PaymentInstruction30;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.Purpose2Choice;
 import org.kapott.hbci.tools.StringUtil;
+
+import jakarta.xml.bind.JAXB;
 
 
 /**

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
-import javax.xml.bind.JAXB;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kapott.hbci.GV.SepaUtil;
@@ -20,6 +19,8 @@ import org.kapott.hbci.sepa.jaxb.pain_008_001_08.PaymentTypeInformation29;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.PersonIdentificationSchemeName1Choice;
 import org.kapott.hbci.sepa.jaxb.pain_008_001_08.Purpose2Choice;
 import org.kapott.hbci.tools.StringUtil;
+
+import jakarta.xml.bind.JAXB;
 
 /**
  * Parser-Implementierung fuer Pain 008.001.08.

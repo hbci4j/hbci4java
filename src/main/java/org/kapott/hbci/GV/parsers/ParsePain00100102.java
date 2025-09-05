@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXB;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kapott.hbci.GV.SepaUtil;
@@ -14,6 +13,8 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_02.EuroMax9Amount;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.Pain00100102;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_02.PaymentInstructionInformation4;
+
+import jakarta.xml.bind.JAXB;
 
 
 /**

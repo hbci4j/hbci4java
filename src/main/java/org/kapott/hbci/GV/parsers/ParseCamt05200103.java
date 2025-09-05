@@ -27,8 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.xml.bind.JAXB;
-
 import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
@@ -61,6 +59,8 @@ import org.kapott.hbci.sepa.jaxb.camt_052_001_03.TransactionReferences3;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Saldo;
 import org.kapott.hbci.structures.Value;
+
+import jakarta.xml.bind.JAXB;
 
 /**
  * Parser zum Lesen von Umsaetzen im CAMT.052 Format in Version 001.03.

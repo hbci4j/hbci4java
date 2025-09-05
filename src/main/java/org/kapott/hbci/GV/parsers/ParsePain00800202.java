@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXB;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kapott.hbci.GV.SepaUtil;
@@ -15,6 +14,8 @@ import org.kapott.hbci.sepa.jaxb.pain_008_002_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_02.PaymentInstructionInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_02.PaymentTypeInformationSDD;
 import org.kapott.hbci.sepa.jaxb.pain_008_002_02.PurposeSEPA;
+
+import jakarta.xml.bind.JAXB;
 
 /**
  * Parser-Implementierung fuer Pain 008.002.02.

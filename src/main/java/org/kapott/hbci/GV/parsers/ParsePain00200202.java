@@ -4,12 +4,12 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXB;
-
 import org.kapott.hbci.sepa.jaxb.pain_002_002_02.Document;
 import org.kapott.hbci.sepa.jaxb.pain_002_002_02.OriginalTransactionReferenceSEPA;
 import org.kapott.hbci.sepa.jaxb.pain_002_002_02.Pain00200102;
 import org.kapott.hbci.sepa.jaxb.pain_002_002_02.PaymentTransactionInformationSEPA;
+
+import jakarta.xml.bind.JAXB;
 
 
 /**
