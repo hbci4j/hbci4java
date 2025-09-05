@@ -1,0 +1,3 @@
+// Kann leider nicht in gradle.properties angegeben werden,
+// weil die Info bekannt sein muss, bevor das Projekt geladen wird
+rootProject.name = 'hbci4j-core'

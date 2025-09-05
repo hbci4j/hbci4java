@@ -4,8 +4,8 @@ Dies ist die offizielle Quelle von HBCI4Java, welches u.a. in [Hibiscus](http://
 
 ## Versionshinweis
 
-- Version 3.x von HBCI4Java verwendet Java EE (javax.*).
-- Version 4.x von HBCI4Java verwendet Jakarta EE (jakarta.*).
+- Version 4.x von HBCI4Java verwendet Jakarta EE (jakarta.*)
+- Version 3.x von HBCI4Java verwendet Java EE (javax.*) - veraltet
 
 ## Kontakt
 
@@ -67,8 +67,8 @@ dependencies {
 Du benötigst:
 
 - GIT (https://git-scm.com/)
-- Java SDK 8 oder höher (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-- Apache Maven 3.3.9 oder höher (https://maven.apache.org/)
+- Java SDK 17 oder höher (https://adoptium.net/)
+- Gradle 8 oder höher (https://gradle.org/)
 
 Öffne ein Terminal-Fenster und checke den Quellcode per GIT aus:
 
@@ -80,26 +80,38 @@ Wechsle in den Ordner "hbci4java":
 
 Erzeuge die JAR-Datei per:
 
-    $> mvn package
+    $> gradle jar
   
-Im Ordner "target" wird die Datei "hbci4j-core-${version}.jar" erzeugt.
+Im Ordner "build/libs" wird die Datei "hbci4j-core-${version}.jar" erzeugt.
 
-## Import in Eclipse
+## In Eclipse einrichten
 
-Du benötigst:
+Öffne ein Terminal-Fenster und checke den Quellcode per GIT aus:
 
-- Eine Eclipse-Version mit Maven-Support, z.Bsp.: "Eclipse IDE for Java EE Developers" (http://www.eclipse.org/downloads/eclipse-packages/) 
-- Den ausgecheckten Quellcode von HBCI4Java per GIT (siehe oben)
+    $> git clone https://github.com/hbci4j/hbci4java.git
+    
+Wechsle in den Ordner "hbci4java":
 
-Klicke im Menu von Eclipse auf "File->Import..." und wähle "Maven->Existing Maven Projects". Folge den Anweisungen des Assistenten. Klicke anschließend mit der rechten Maustaste im "Package Explorer" oder "Navigator" auf das Projekt und wähle im Contextmenu "Maven->Update Project...".
+    $> cd hbci4java
 
-Falls danach noch Compile-Fehler auftreten, ggf. die JAXB-Sourcen einmal manuell aus den XML-Schema-Dateien generieren:
+Erzeuge die JAR-Datei per:
 
-    $> mvn generate-sources
+    $> gradle jaxb
+    $> gradle eclipse
+    
+Hierbei wird die Eclipse Projekt-Konfiguration sowie Java-Code im Ordner "build/generated/jaxb" für die PAIN/CAMT XML-Dateien erzeugt.
 
+- Starte Eclipse.
+- Wähle in der View "GIT Repositories" oben den Button "Add an existing local GIT repository to this view".
+- Klicke mit der rechten Maustaste auf das importierte Repository und wähle "Import Projects...".
+- Folge den Anweisungen des Assistenten.
 
 ## Unit-Tests
 Im Ordner "src/main/test/" befinden sich einige JUnit-Tests. Einige davon erfordern jedoch das Vorhandensein spezieller Testumgebungen (Vorhandensein von Bankzugängen oder Chipkartenleser). Diese Tests werden im Zuge der Erstellung von Deployment-Artefakten nur dann ausgeführt, wenn die entsprechenden System-Properties "test.online=true" und "test.chipcard=true" aktiv sind. Die Tests zur Ausführung von HBCI-Geschäftsvorfällen benötigen jedoch weitere Daten (Empfängerkonto, Betrag, Verwendungszweck, usw.). Wenn du diese Tests ausführen möchtest, schaue dir den Quellcode der entsprechenden Tests an.
+
+Du kannst die Tests starten per:
+
+    $> gradle test
 
 ## Beispiel-Code
 

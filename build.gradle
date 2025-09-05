@@ -109,10 +109,10 @@ publishing {
       from components.java
 
       pom {
-        groupId     = 'com.github.hbci4j'
-        artifactId  = 'hbci4j-core'
-        description = 'HBCI4j - Home Banking Computer Interface for Java'
+        groupId     = project.groupId
+        artifactId  = project.name
         version     = project.version
+        description = 'HBCI4j - Home Banking Computer Interface for Java'
         url         = 'https://github.com/hbci4j/hbci4java'
 
         licenses {
@@ -168,7 +168,9 @@ publishing {
 
 tasks.withType(PublishToMavenRepository).configureEach {
     dependsOn tasks.test
+    dependsOn tasks.tag
 }
+
 tasks.withType(PublishToMavenLocal).configureEach {
     dependsOn tasks.test
 }
@@ -178,6 +180,19 @@ signing {
   sign publishing.publications.mavenJava
 }
 
+task tag {
+  doLast {
+    def tagName = "${project.name}-${project.version}"
+    println "Creating GIT tag: ${tagName}"
+
+    exec {
+      commandLine 'git', 'tag', tagName
+    }
+    exec {
+      commandLine 'git', 'push', 'origin', tagName
+    }
+  }
+}
 
 dependencies {
   

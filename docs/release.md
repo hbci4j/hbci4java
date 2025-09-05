@@ -1,52 +1,28 @@
----
-title: Anleitung zum Release Prozess
----
+## Release erstellen
 
 Um ein Release zu erstellen, benötigt man zunächst die entsprechende Berechtigung, um ein Artifact auf Maven Central hochzuladen. Die Berechtigung für com.github.hbci4j haben zurzeit Olaf und Janning.
 
-## Berechtigung für OSSRH
+## Berechtigung für Maven Central
 
-Lege in der Datei `~/.m2/settings.xml` einen zusätzlichen Eintrag für den Server `ossrh` an:
+1. Melde dich auf <https://central.sonatype.com/> an und erstelle ggf. einen Account
+ Wechsle auf <https://central.sonatype.com/account> und klicke dort auf "Generate User Token", falls du noch keinen Token generiert hast
+2. Erstelle/Öffne die Datei `~/.gradle/gradle.properties` in einem Editor und trage folgendes ein:
 
-    <settings>
-      <servers>
-        <server>
-          <id>ossrh</id>
-          <username>jira-username</username>
-          <password>***PASSWORD***</password>
-        </server>
-      </servers>
-    </settings>
+    sonatypeUsername=<der Username des User Tokens>
+    sonatypePassword=<das Passwort des User Tokens>
 
 ## GPG
 
-Das Jar muss vor dem Upload signiert werden. Falls das Kommando nicht `gpg` ist oder man den Release Prozess automatisieren möchte, kann man die `settings.xml` um folgenden Eintrag ergänzen: 
+Die Artefakte werden vor dem Upload signiert. Stelle sicher, dass GnuPG korrekt konfiguriert ist.
 
-    <settings>
-      <profiles>
-        <profile>
-          <id>ossrh</id>
-          <activation>
-            <activeByDefault>true</activeByDefault>
-          </activation>
-          <properties>
-            <gpg.executable>gpg2</gpg.executable>
-            <gpg.passphrase>the_pass_phrase</gpg.passphrase>
-          </properties>
-        </profile>
-      </profiles> 
-    </settings>
-
-Eine komplette Anleitung zum GPG Prozess findet man hier:
-- http://central.sonatype.org/pages/working-with-pgp-signatures.html
+Unter <https://central.sonatype.org/publish/requirements/gpg/#generating-a-key-pair> findest du hierzu weitere Informationen.
 
 ## Release
 
-Wenn alles eingerichtet ist, erstellt man wie folgt eine neue Version mit automatischem Upload nach Maven Central
+1. Lade eine aktuelle Gradle-Version von <https://gradle.org/> herunter und installiere sie.
+2. Gib im Projektordner in `gradle.properties` die gewünschte Versionsnummer ein.
+3. Stelle sicher, dass alle Änderungen eingecheckt und in das Repository gepusht wurden, da beim Release automatisch ein GIT-Tag erzeugt wird.
+4. Mit dem folgenden Kommando wird das Release erzeugt und auf Maven Central veröffentlicht:
 
-    mvn release:prepare
-    mvn release:perform
-
-Was diese Schritte im Detail machen, erklären die beiden folgenden Seite:
-- http://maven.apache.org/maven-release/maven-release-plugin/examples/prepare-release.html
-- http://maven.apache.org/maven-release/maven-release-plugin/examples/perform-release.html
+    $> gradle clean
+    $> gradle publish
