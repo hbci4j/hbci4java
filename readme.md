@@ -84,6 +84,12 @@ Erzeuge die JAR-Datei per:
   
 Im Ordner "build/libs" wird die Datei "hbci4j-core-${version}.jar" erzeugt.
 
+Alternativ:
+
+    $> gradle distZip
+  
+Hier wird im Ordner "build/distributions" die Datei "hbci4j-core-${version}.zip" erzeugt, welche auch die nötigen Abhängigkeiten mit enthält.
+
 ## In Eclipse einrichten
 
 Öffne ein Terminal-Fenster und checke den Quellcode per GIT aus:

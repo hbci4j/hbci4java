@@ -22,6 +22,19 @@ public class ParsePain00200202 extends AbstractSepaParser<List<Properties>>
      */
     public void parse(InputStream xml, List<Properties> sepaResults)
     {
+      /*
+        pain.002 parsen 
+      
+        Quelle: https://homebanking-hilfe.de/forum/topic.php?p=178922#real178922
+      
+        Zitat:
+          In OrgnlPmtInfAndSts hast du wohl unter TxInfAndSts dann die verschiedenen Antworten pro Status.
+          Bspw: für die Close Matches unter <TxSts>RVMC</TxSts> den neuen Namen in <StsRsnInf><AddtlInf>neuer Name</AddtlInf></StsRsnInf>
+          und dahinter unter OrgnlTxRef -> Cdtr -> Pty -> Nm den alten falschen Namen und die zugehörige IBAN in CdtrACCT -> Id -> IBAN.
+          
+        Ausserdem in https://www.ebics.de/de/datenformate in Anlage_3_Datenformate_V3.9.pdf - Kapitel 2.2.6
+      */
+
         Document doc = JAXB.unmarshal(xml, Document.class);
         Pain00200102 pain = doc.getPain00200102();
         
