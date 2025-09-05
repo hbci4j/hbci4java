@@ -180,19 +180,19 @@ signing {
   sign publishing.publications.mavenJava
 }
 
-task tag {
-  doLast {
-    def tagName = "${project.name}-${project.version}"
-    println "Creating GIT tag: ${tagName}"
-
-    exec {
-      commandLine 'git', 'tag', tagName
-    }
-    exec {
-      commandLine 'git', 'push', 'origin', tagName
-    }
-  }
+def tagName = "${project.name}-${project.version}"
+task createTag(type:Exec) {
+  workingDir project.rootDir
+  commandLine 'git', 'tag', tagName
 }
+task pushTag(type:Exec) {
+  workingDir project.rootDir
+  commandLine 'git', 'push', 'origin', tagName
+}
+tasks.register('tag') {
+    dependsOn 'createTag', 'pushTag'
+}
+
 
 dependencies {
   
