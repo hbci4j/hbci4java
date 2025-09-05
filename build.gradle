@@ -143,8 +143,13 @@ publishing {
 
   repositories {
     maven {
-      name = 'sonatype'
-      url  = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    
+      // Siehe
+      // - https://central.sonatype.org/publish/publish-portal-gradle/
+      // - https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/#getting-started-for-maven-api-like-plugins
+      name = 'ossrh-staging-api'
+      url = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+      
       credentials {
         /*
           Entweder als Umgebungsvariablen SONATYPE_USERNAME/SONATYPE_PASSWORD oder
