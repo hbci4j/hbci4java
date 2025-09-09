@@ -61,9 +61,13 @@ import org.kapott.hbci.structures.Value;
     zusätzliche Hilfsmethoden zur Verfügung gestellt.</p><p>
     Aus einer HBCI-Anwendung heraus ist hier nur eine einzige Methode interessant,
     um eine Instanz eines bestimmtes Passports zu erzeugen</p> */
-public abstract class AbstractHBCIPassport
-    implements HBCIPassportInternal,Serializable
+public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Serializable
 {
+  /**
+   * Key, mit dem wir das Ergebnis der VoP-Prüfung in persistentData zwischenspeichern.
+   */
+  public final static String KEY_VOP_RESULT = "__pintan_vop_result___";
+
     private String     paramHeader;
 
     private Properties bpd;     
@@ -84,12 +88,26 @@ public abstract class AbstractHBCIPassport
 
     private IHandlerData parentHandlerData;
     
+    /**
+     * ct.
+     * @param init
+     */
     public AbstractHBCIPassport(Object init)
     {
         persistentData=new Hashtable<String, Object>();
         setClientData("init",init);
     }
 
+    /**
+     * @param needCountry
+     * @param needBLZ
+     * @param needHost
+     * @param needPort
+     * @param needFilter
+     * @param needUserId
+     * @param needCustomerId
+     * @return
+     */
     protected boolean askForMissingData(boolean needCountry,boolean needBLZ,
                                         boolean needHost,boolean needPort,
                                         boolean needFilter,

@@ -366,6 +366,22 @@ public interface HBCICallback
      * für die restliche Zeit.
      **/
     public final static int NEED_PT_DECOUPLED_RETRY=36;
+    
+    /**
+     * Dieser Callback wird ausgelöst, wenn für VoP die Ergebnis-Daten vorliegen und der User entscheiden muss,
+     * ob der Auftrag trotz Namensabweichung beim Empfängerkonto ausgeführt werden soll.
+     * Die Ergebnis-Daten der Prüfung finden sich unter:
+     * 
+     * <pre>
+     * List<VoPResult> results = (List<VoPResult>) passport.getPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT);
+     * </pre>
+     * 
+     * Der Callback erwartet im Stringbuffer mit den Ergebnisdaten (retData) ein "true", wenn der Auftrag durchgeführt
+     * werden soll oder ein "false", wenn die Ausführung abgebrochen werden soll. Alternativ kann der Aufrufer auch eine
+     * Exception werfen, um den Vorgang abzubrechen. Ob die ggf. abweichenden Namen im Adressbuch der Anwendung aktualisiert
+     * werden oder nicht, ist Sache der Anwendung.
+     */
+    public final static int HAVE_VOP_RESULT = 37;
 
     /** <p>Ursache des Callbacks: falsche PIN eingegeben */
     public final static int WRONG_PIN=40;

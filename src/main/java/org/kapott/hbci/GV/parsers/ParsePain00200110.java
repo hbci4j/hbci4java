@@ -2,8 +2,9 @@ package org.kapott.hbci.GV.parsers;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
+import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
+import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.AccountIdentification4Choice;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.CashAccount38;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.CustomerPaymentStatusReportV10;
@@ -19,12 +20,12 @@ import jakarta.xml.bind.JAXB;
 /**
  * Parser-Implementierung fuer Pain 002.001.10.
  */
-public class ParsePain00200110 extends AbstractSepaParser<List<Properties>>
+public class ParsePain00200110 extends AbstractSepaParser<List<VoPResult>>
 {
   /**
    * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.lang.Object)
    */
-  public void parse(InputStream xml, List<Properties> sepaResults)
+  public void parse(InputStream xml, List<VoPResult> sepaResults)
   {
     /*
       pain.002 parsen 
@@ -49,9 +50,9 @@ public class ParsePain00200110 extends AbstractSepaParser<List<Properties>>
     {
       for (PaymentTransaction105 tx:pi.getTxInfAndSts())
       {
-        final Properties prop = new Properties();
-        put(prop,Names.VOP_STATUS, tx.getTxSts());
-        put(prop,Names.DST_NAME, this.getName(tx.getStsRsnInf()));
+        final VoPResult r = new VoPResult();
+        r.setStatus(VoPStatus.byCode(tx.getTxSts()));
+        r.setName(this.getName(tx.getStsRsnInf()));
         
         // Ursprüngliche IBAN herausfinden
         final OriginalTransactionReference28 ref = tx.getOrgnlTxRef();
@@ -59,9 +60,9 @@ public class ParsePain00200110 extends AbstractSepaParser<List<Properties>>
         final AccountIdentification4Choice id = account != null ? account.getId() : null;
         
         if (id != null)
-          put(prop,Names.DST_IBAN, id.getIBAN());
+          r.setIban(id.getIBAN());
         
-        sepaResults.add(prop);
+        sepaResults.add(r);
       }
     }
   }

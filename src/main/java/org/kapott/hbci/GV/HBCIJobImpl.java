@@ -36,7 +36,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.kapott.hbci.GV_Result.HBCIJobResult;
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.dialog.KnownReturncode;
@@ -60,8 +59,8 @@ import org.kapott.hbci.status.HBCIRetVal;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Value;
 
-public abstract class HBCIJobImpl 
-    implements HBCIJob
+public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
+    implements HBCIJob<T>
 {
     private String name;              /* Job-Name mit Versionsnummer */
     private String jobName;           /* Job-Name ohne Versionsnummer */
@@ -72,7 +71,7 @@ public abstract class HBCIJobImpl
 	private String segVersion;        /* Segment-Version */
     private Properties llParams;       /* Eingabeparameter für diesen GV (Saldo.KTV.number) */
     private HBCIPassportList passports;
-    protected HBCIJobResultImpl jobResult;         /* Objekt mit Rückgabedaten für diesen GV */
+    protected T jobResult;         /* Objekt mit Rückgabedaten für diesen GV */
     private HBCIHandler parentHandler;
     private int idx;                  /* idx gibt an, der wievielte task innerhalb der aktuellen message
                                          dieser GV ist */
@@ -98,7 +97,7 @@ public abstract class HBCIJobImpl
     
     private HashSet<String> indexedConstraints;
     
-    protected HBCIJobImpl(HBCIHandler parentHandler,String jobnameLL,HBCIJobResultImpl jobResult)
+    protected HBCIJobImpl(HBCIHandler parentHandler,String jobnameLL,T jobResult)
     {
         findSpecNameForGV(jobnameLL,parentHandler);
         this.llParams=new Properties();
@@ -1013,7 +1012,7 @@ public abstract class HBCIJobImpl
         }
     }
 
-    public HBCIJobResult getJobResult()
+    public T getJobResult()
     {
         return jobResult;
     }

@@ -51,8 +51,10 @@ import org.kapott.hbci.structures.Value;
  Jobs abhängig (z.B. gibt es eine Klasse, die Ergebnisdaten für Kontoauszüge enthält, eine
  Klasse für Saldenabfragen usw.). Eine Beschreibung der einzelnen Klassen für Result-Objekte findet
  sich im Package <code>org.kapott.hbci.GV_Result</code>. Eine Beschreibung, welcher Job welche Klasse
- zurückgibt, befindet sich in der Package-Dokumentation zu diesem Package (<code>org.kapott.hbci.GV</code>).</p> */
-public interface HBCIJob
+ zurückgibt, befindet sich in der Package-Dokumentation zu diesem Package (<code>org.kapott.hbci.GV</code>).</p> 
+ * @param <T> der Typ des Rückmelde-Ergebnisses.
+ **/
+public interface HBCIJob<T extends HBCIJobResult>
 {
     /** Gibt den internen Namen für diesen Job zurück.
      * @return Job-Name, wie er intern von <em>HBCI4Java</em> verwendet wird. */
@@ -279,7 +281,7 @@ public interface HBCIJob
     /** Gibt ein Objekt mit den Rückgabedaten für diesen Job zurück. Das zurückgegebene Objekt enthält
      erst <em>nach</em> der Ausführung des Jobs gültige Daten.
      @return ein Objekt mit den Rückgabedaten und Statusinformationen zu diesem Job */
-    public HBCIJobResult getJobResult();
+    public T getJobResult();
 
     /** Hinzufügen eines Passports, welches für eine zusätzliche Signatur für
      *  diesen Auftrag benutzt wird. <code>role</code> gibt dabei die Rolle an,

@@ -5736,7 +5736,7 @@
             <DE name="infotext" type="AN" maxsize="65535" minnum="0" />
 
             <!-- Wartezeit vor der nächsten Abfrage - Angabe in Sekunden -->
-            <DE name="infotext" type="Num" maxsize="1" minnum="0" />
+            <DE name="wait" type="Num" maxsize="1" minnum="0" />
 
             <value path="SegHead.code">HIVPP</value>
             <value path="SegHead.version">1</value>
