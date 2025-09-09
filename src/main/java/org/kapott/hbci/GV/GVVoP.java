@@ -142,7 +142,6 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       // Wir kriegen entweder ein XML vom Typ pain.002.001.*, wenn es ein Sammelauftrag war
       final String desc = data.getProperty(header + ".reportdesc"); // Ich nehme an, das ist die Schema-Kennung
       final String xml  = data.getProperty(header + ".report");
-      
       if (StringUtil.hasText(desc) && StringUtil.hasText(xml))
       {
         HBCIUtils.log("got VoP multiple result [desc: " + desc + "]",HBCIUtils.LOG_INFO);
@@ -152,13 +151,13 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
           final SepaVersion version = SepaVersion.choose(null,xml);
           ISEPAParser<List<VoPResult>> parser = SEPAParserFactory.get(version);
           
-          HBCIUtils.log("  parsing pain.002 data: " + xml,HBCIUtils.LOG_DEBUG2);
+          HBCIUtils.log("parsing pain.002 data: " + xml,HBCIUtils.LOG_DEBUG2);
           parser.parse(new ByteArrayInputStream(xml.getBytes(Comm.ENCODING)),vop.getResults());
-          HBCIUtils.log("  parsed pain data, entries: " + vop.getResults().size(),HBCIUtils.LOG_DEBUG);
+          HBCIUtils.log("parsed pain data, entries: " + vop.getResults().size(),HBCIUtils.LOG_DEBUG);
         }
         catch (Exception e)
         {
-          HBCIUtils.log("  unable to parse pain.002 data: " + e.getMessage(),HBCIUtils.LOG_ERR);
+          HBCIUtils.log("unable to parse pain.002 data: " + e.getMessage(),HBCIUtils.LOG_ERR);
           throw new HBCI_Exception("Error while parsing pain VoP document",e);
         }
       }
@@ -167,18 +166,11 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         HBCIUtils.log("got VoP single result",HBCIUtils.LOG_INFO);
         
         // oder alternativ das Prüfergebnis einer Einzelprüfung
-        final String iban   = data.getProperty(header + ".result.iban"); // Die IBAN des Empfängers
-        final String name   = data.getProperty(header + ".result.differentname"); // der korrigierte Name des Empfängers
-        final String result = data.getProperty(header + ".result.result"); // Status-Code
-        final String reason = data.getProperty(header + ".result.reason"); // Falls Status "Not Applicable" ist: Ein Hinweis-Text
-        // final String addon  = data.getProperty(header + ".result.ibanaddon"); // Hier kann ggf. eine Unterkontonummer stehen. Keine Ahnung, wofür ich das verwenden soll
-        // final String other  = data.getProperty(header + ".result.otheridentifier"); // "Anderes Identifikationsmerkmal" - keine Ahnung, wofür die Bank das verwenden könnte
-        
         final VoPResult r = new VoPResult();
-        r.setIban(iban);
-        r.setName(name);
-        r.setStatus(VoPStatus.byCode(result));
-        r.setText(reason);
+        r.setIban(data.getProperty(header + ".result.iban")); // Die IBAN des Empfängers
+        r.setName(data.getProperty(header + ".result.differentname")); // der korrigierte Name des Empfängers
+        r.setStatus(VoPStatus.byCode(data.getProperty(header + ".result.result"))); // der Status-Code
+        r.setText(data.getProperty(header + ".result.reason")); // Falls Status "Not Applicable" ist: Ein Hinweis-Text
         vop.getResults().add(r);
       }
     }
