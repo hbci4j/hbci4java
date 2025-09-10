@@ -412,7 +412,7 @@ public class AccountCRCAlgs
         return number[9] == crc;
     }
 
-    /** @author AN */
+    
     public static boolean alg_41(int[] blz, int[] number) 
     {
         int sum;
@@ -425,7 +425,7 @@ public class AccountCRCAlgs
         return number[9] == crc;
     }
    
-    /** @author AN */
+    
     public static boolean alg_42(int[] blz, int[] number) 
     {
         int sum = addProducts(number, 1, 8, new int[] { 9, 8, 7, 6, 5, 4, 3, 2 }, false);
@@ -435,7 +435,7 @@ public class AccountCRCAlgs
         return number[9] == crc;
     }
     
-    /** @author AN */
+    
     public static boolean alg_43(int[] blz, int[] number) 
     {
         int sum = addProducts(number, 0, 8, new int[] { 9, 8, 7, 6, 5, 4, 3, 2,1 }, false);
@@ -443,7 +443,7 @@ public class AccountCRCAlgs
         return number[9] == crc;
     }
     
-    /** @author AN */
+    
     public static boolean alg_51(int[] blz, int[] number) 
     {
         boolean ok;
@@ -502,7 +502,7 @@ public class AccountCRCAlgs
         return ok;
     }
 
-    /** @author AN */
+    
     // TODO: more tests
     public static boolean alg_52(int[] blz, int[] number) 
     {
@@ -569,7 +569,7 @@ public class AccountCRCAlgs
         return ok;
     }
 
-    /** @author AN */
+    
     // TODO: more tests
     public static boolean alg_53(int[] blz, int[] number) 
     {
@@ -633,7 +633,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_55(int[] blz, int[] number) 
     {
         int sum = addProducts(number, 0, 8, new int[] { 8, 7, 8, 7, 6, 5, 4, 3, 2 }, false);
@@ -644,7 +644,7 @@ public class AccountCRCAlgs
     }
 
 
-    /** @author AN */
+    
     public static boolean alg_56(int[] blz, int[] number) 
     {
         int sum=addProducts(number, 0, 8, new int[] { 4, 3, 2, 7, 6, 5, 4, 3, 2 }, false);
@@ -724,7 +724,7 @@ public class AccountCRCAlgs
     }
 
 
-    /** @author AN */
+    
     public static boolean alg_60(int[] blz, int[] number) 
     {
         int sum=addProducts(number,2,8,new int[] {2,1,2,1,2,1,2}, true);
@@ -781,7 +781,7 @@ public class AccountCRCAlgs
     }
 
 
-    /** @author AN */
+    
     // TODO: more tests
     public static boolean alg_68(int[] blz, int[] number) 
     {
@@ -880,7 +880,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     // TODO: more tests
     public static boolean alg_74(int[] blz, int[] number) 
     {
@@ -937,7 +937,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_78(int[] blz, int[] number) 
     {
         if (number[0] + number[1]==0 && number[2]!=0) {
@@ -950,7 +950,7 @@ public class AccountCRCAlgs
     }
     
 
-    /** @author AN */
+    
     public static boolean alg_81(int[] blz, int[] number) 
     {
         if (number[2] == 9) {
@@ -960,7 +960,7 @@ public class AccountCRCAlgs
     }
     
 
-    /** @author AN */
+    
     public static boolean alg_82(int[] blz, int[] number) 
     {
         if (number[2] == 9 && number[3] == 9) {
@@ -970,7 +970,7 @@ public class AccountCRCAlgs
     }
 
 
-    /** @author AN */
+    
     public static boolean alg_85(int[] blz, int[] number) 
     {
         // Ausnahme
@@ -1003,7 +1003,7 @@ public class AccountCRCAlgs
     }
     
 
-    /** @author AN */
+    
     public static boolean alg_86(int[] blz, int[] number) 
     {
         // Ausnahme
@@ -1023,7 +1023,7 @@ public class AccountCRCAlgs
     }
     
     
-    /** @author AN */
+    
     // TODO: more tests
     public static boolean alg_87(int[] blz, int[] number)
     {
@@ -1162,7 +1162,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_90(int[] blz, int[] number) 
     {
         // Sachkonten: Methode F
@@ -1249,7 +1249,7 @@ public class AccountCRCAlgs
     }
     
     
-    /** @author AN */
+    
     public static boolean alg_92(int[] blz, int[] number) 
     {
         int sum = addProducts(number, 3, 8, new int[] { 1, 7, 3, 1, 7, 3 }, false);
@@ -1313,7 +1313,7 @@ public class AccountCRCAlgs
     }
     
     
-    /** @author AN */
+    
     public static boolean alg_A0(int[] blz, int[] number) 
     {
         // Ausnahme
@@ -1333,7 +1333,7 @@ public class AccountCRCAlgs
     }
 
 
-    /** @author AN */
+    
     public static boolean alg_A1(int[] blz, int[] number) 
     {
         if (number[0]!=0 || (number[0]==0 && number[1]==0 && number[2]!=0)){
@@ -1345,7 +1345,7 @@ public class AccountCRCAlgs
     }
     
     
-    /** @author AN */
+    
     public static boolean alg_A2(int[] blz, int[] number)
     {
         // Variante 1
@@ -1356,7 +1356,7 @@ public class AccountCRCAlgs
         return alg_04(blz,number);
     }
 
-    /** @author AN */
+    
     public static boolean alg_A3(int[] blz, int[] number)
     {
         // Variante 1
@@ -1368,7 +1368,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_A5(int[] blz, int[] number)
     {
         // Variante 1
@@ -1383,7 +1383,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_A6(int[] blz, int[] number)
     {
         if (number[1]==8) {
@@ -1393,7 +1393,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_A7(int[] blz, int[] number)
     {
         // Variante 1
@@ -1405,7 +1405,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_A8(int[] blz, int[] number)
     {
         // Ausnahmen Sachkonto
@@ -1427,7 +1427,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_A9(int[] blz, int[] number)
     {
         // Variante 1
@@ -1439,7 +1439,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_B1(int[] blz, int[] number)
     {
         // Variante 1
@@ -1451,7 +1451,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_B3(int[] blz, int[] number)
     {
         if (number[0]!=9) {
@@ -1461,7 +1461,7 @@ public class AccountCRCAlgs
     }
     
 
-    /** @author AN */
+    
     public static boolean alg_B5(int[] blz, int[] number)
     {
         // Variante 1
@@ -1473,7 +1473,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */ 
+     
     public static boolean alg_B6(int[] blz, int[] number)
     {
         // Variante 1
@@ -1503,7 +1503,7 @@ public class AccountCRCAlgs
     }
     
 
-    /** @author AN */
+    
     public static boolean alg_C0(int[] blz, int[] number)
     {
         boolean ok = false;
@@ -1520,7 +1520,7 @@ public class AccountCRCAlgs
     }
 
     
-    /** @author AN */
+    
     public static boolean alg_C1(int[] blz, int[] number)
     {
         // Variante 1
@@ -1534,9 +1534,7 @@ public class AccountCRCAlgs
         int crc = (10-sum%11)%10;
         return number[9]==crc;
     }
-
     
-    /** @author AN */
     public static boolean alg_C7(int[] blz, int[] number)
     {
         // Variante 1

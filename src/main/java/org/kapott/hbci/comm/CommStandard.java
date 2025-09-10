@@ -37,9 +37,9 @@ import org.kapott.hbci.protocol.MSG;
 public final class CommStandard
     extends Comm
 {
-    Socket s;                /**< @internal @brief The socket for communicating with the server. */
-    OutputStream o;          /**< @internal @brief The outputstream to write HBCI-messages to. */
-    InputStream i;           /**< @internal @brief The inputstream to read HBCI-messages from. */
+    Socket s;                /** The socket for communicating with the server. */
+    OutputStream o;          /** The outputstream to write HBCI-messages to. */
+    InputStream i;           /** The inputstream to read HBCI-messages from. */
 
     public CommStandard(HBCIPassportInternal parentPassport)
     {

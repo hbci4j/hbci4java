@@ -69,15 +69,16 @@ public class FlickerRenderer
    * Er wird von HBCI4Java ueber den Callback NEED_PT_TA uebergeben.
    * 
    * Etwa so:
-   * 
+   * <pre>
    * case HBCICallback.NEED_PT_TAN:
    *   String flicker = retData.toString();
-   *   if (flicker != null && flicker.length() > 0)
+   *   if (flicker != null &amp;&amp; flicker.length() > 0)
    *   {
    *     MyFlickerRenderer = new FlickerRenderer(flicker) {
    *       // hier paint() ueberschreiben
    *     };
    *   }
+   * </pre>
    */
   public FlickerRenderer(String code)
   {

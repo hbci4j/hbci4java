@@ -12,15 +12,15 @@ import org.kapott.hbci.passport.HBCIPassport;
  * Basis-Klasse für Implementierungen von {@link Runnable}, die typische Aufgaben mit einem {@link HBCIPassport}
  * ausführen sollen.
  *
- * <p>Implementierungen müssen die Methode {@link #execute()} ergänzen.</p>
+ * <p>Implementierungen müssen die Methode execute() ergänzen.</p>
  *
  * <p>Bei Ausführung einer solchen {@link Runnable} passiert folgendes:</p>
  *
  * <ol>
- * <li>{@link HBCIUtils.initThread(properties, callback)} wird mit den Parametern aus dem Constructor aufgerufen.</li>
+ * <li>{@link HBCIUtils#initThread(Properties, HBCICallback)} wird mit den Parametern aus dem Constructor aufgerufen.</li>
  * <li>Das Passport wird von der {@link HBCIPassportFactory} abgefragt und darüber wird der {@link HBCIHandler} erzeugt.</li>
- * <li>{@link #execute()} wird aufgerufen.</li>
- *     {@link HBCIPassport} und {@link HBCIHandler} sind über die Variablen <code>passport</code> bzw. <code>handler</code> verfügbar.</li>
+ * <li>execute() wird aufgerufen.</li>
+ * <li>{@link HBCIPassport} und {@link HBCIHandler} sind über die Variablen <code>passport</code> bzw. <code>handler</code> verfügbar.</li>
  * <li>Abschließend werden Handler und Passport geschlossen, sowie {@link HBCIUtils#doneThread()} aufgerufen.</li>
  * </ol>
  *
@@ -36,6 +36,12 @@ public abstract class HBCIRunnable implements Runnable
     protected HBCIPassport passport = null;
     protected HBCIHandler handler = null;
 
+    /**
+     * ct.
+     * @param properties
+     * @param callback
+     * @param passportFactory
+     */
     public HBCIRunnable(Properties properties, HBCICallback callback, HBCIPassportFactory passportFactory)
     {
         this.properties = properties;
@@ -77,6 +83,9 @@ public abstract class HBCIRunnable implements Runnable
         }
     }
 
+    /**
+     * @throws Exception
+     */
     protected abstract void execute() throws Exception;
 
     private void done()

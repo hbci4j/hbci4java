@@ -24,7 +24,7 @@ import jakarta.xml.bind.Marshaller;
  * 
  * WICHTIG: Diese Klasse sowie die Ableitungen sollten auch ohne initialisiertes HBCI-System
  * funktionieren, um das XML ohne HBCI-Handler erstellen zu koennen. Daher sollte auf die
- * Verwendung von "HBCIUtils" & Co verzichtet werden. Das ist auch der Grund, warum hier
+ * Verwendung von "HBCIUtils" verzichtet werden. Das ist auch der Grund, warum hier
  * das Java-Logging verwendet wird und nicht das HBCI4Java-eigene.
  */
 public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
@@ -34,7 +34,6 @@ public abstract class AbstractSEPAGenerator<T> implements ISEPAGenerator<T>
     /**
      * Schreibt die Bean mittels JAXB in den Strean.
      * @param e das zu schreibende JAXBElement mit der Bean.
-     * @param type der Typ der Bean.
      * @param os der OutputStream, in den das XML geschrieben wird.
      * @param validate true, wenn das erzeugte XML gegen das PAIN-Schema validiert werden soll.
      * @throws Exception

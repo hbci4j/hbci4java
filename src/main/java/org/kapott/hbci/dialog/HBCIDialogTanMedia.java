@@ -79,7 +79,7 @@ public class HBCIDialogTanMedia extends AbstractRawHBCIDialog
   }
     
   /**
-   * @see org.kapott.hbci.dialog.AbstractHBCIDialogInit#applyData(org.kapott.hbci.dialog.DialogContext)
+   * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#applyData(org.kapott.hbci.dialog.DialogContext)
    */
   @Override
   protected void applyData(DialogContext ctx)

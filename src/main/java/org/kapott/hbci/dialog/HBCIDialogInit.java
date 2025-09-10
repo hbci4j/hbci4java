@@ -38,7 +38,7 @@ public class HBCIDialogInit extends AbstractRawHBCIDialogInit
     }
     
     /**
-     * @see org.kapott.hbci.dialog.AbstractHBCIDialogInit#applyData(org.kapott.hbci.dialog.DialogContext)
+     * @see org.kapott.hbci.dialog.AbstractRawHBCIDialogInit#applyData(org.kapott.hbci.dialog.DialogContext)
      */
     @Override
     protected void applyData(DialogContext ctx)
@@ -55,7 +55,7 @@ public class HBCIDialogInit extends AbstractRawHBCIDialogInit
     }
     
     /**
-     * @see org.kapott.hbci.dialog.AbstractHBCIDialogInit#getActualTemplate(org.kapott.hbci.dialog.DialogContext)
+     * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#getActualTemplate(org.kapott.hbci.dialog.DialogContext)
      */
     @Override
     protected String getActualTemplate(DialogContext ctx)

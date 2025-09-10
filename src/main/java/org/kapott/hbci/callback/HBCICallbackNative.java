@@ -72,7 +72,7 @@ int main(int argc,char **argv)
     vm_args.version=JNI_VERSION_1_4;
     vm_args.options=options;
     vm_args.nOptions=1;
-    printf("create: %i\n",JNI_CreateJavaVM(&jvm,(void**)&env,&vm_args));
+    printf("create: %i\n",JNI_CreateJavaVM(&amp;jvm,(void**)&amp;env,&amp;vm_args));
     
     // build array for registering native callback-methods
     methods[0].name="nativeLog";

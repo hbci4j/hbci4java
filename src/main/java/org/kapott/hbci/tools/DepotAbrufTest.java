@@ -49,8 +49,7 @@ import org.kapott.hbci.structures.Konto;
     vorgenommen werden müssen. Es dient eher als Vorlage, wie <em>HBCI4Java</em>
     im konkreten Anwendungsfall eingesetzt werden kann.</p>
     <p>Die Methode {@link #main(String[])} zeigt die Verwendung mit einem einzelnen Haupt-
-    Thread. die Methode {@link #main_multithreaded(String[])} skizziert die Implementierung
-    für Anwendungen mit mehreren Threads.</p>
+    Thread.</p>
     <p>Im Quelltext müssen folgende Stellen angepasst werden:</p>
     <ul>
       <li><p>Beim Aufruf der Methode <code>HBCIUtils.init()</code> wird

@@ -65,7 +65,7 @@ public class HBCIDialogFirstKeyRequest extends AbstractRawHBCIDialogInit
     }
     
     /**
-     * @see org.kapott.hbci.dialog.AbstractHBCIDialogInit#sendData(org.kapott.hbci.dialog.DialogContext)
+     * @see org.kapott.hbci.dialog.AbstractRawHBCIDialog#sendData(org.kapott.hbci.dialog.DialogContext)
      */
     @Override
     protected HBCIMsgStatus sendData(DialogContext ctx)

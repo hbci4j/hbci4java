@@ -57,8 +57,8 @@ import org.w3c.dom.NodeList;
  *      mit "<msgName>." beginnen).*/
 public final class MsgGen
 {
-    private Document syntax;         /**< @internal @brief The representation of the syntax used by this generator */
-    private Hashtable<String, String> clientValues;  /**< @internal @brief A table of properties set by the user to specify the message to be generated */
+    private Document syntax;         /** The representation of the syntax used by this generator */
+    private Hashtable<String, String> clientValues;  /** A table of properties set by the user to specify the message to be generated */
     
     // Wird vom Server-Code benutzt. Wenn ein Dialog reinkommt mit einer HBCI-
     // Version, die schon mal benutzt wurde, dann wird nicht das entsprechende

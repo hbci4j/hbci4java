@@ -108,8 +108,7 @@ import org.kapott.hbci.passport.HBCIPassport;
  * "normale" Ausgabedatei aufgenommen. Statt dessen wird eine zweite Aus-
  * gabedatei erzeugt, die den gleichen Namen wie die "normale" Ausgabedatei plus
  * ein Suffix ".err" hat. In dieser Fehlerdatei wird für jeden fehler- haften
- * Job folgende Struktur geschrieben (String in "<>" wird durch die jeweiligen
- * werte ersetzt):
+ * Job folgende Struktur geschrieben:
  * </p>
  * 
  * <pre>

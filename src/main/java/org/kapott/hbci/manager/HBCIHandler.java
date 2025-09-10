@@ -120,7 +120,7 @@ public final class HBCIHandler
         überprüft, ob für die angegebene HBCI-Version eine entsprechende
         Spezifikation verfügbar ist. Außerdem wird das übergebene
         Passport überprüft. Dabei werden - falls nicht vorhanden und falls
-        @param lazyInit nicht auf true gesetzt ist - die BPD und die UPD
+        "lazyInit" nicht auf true gesetzt ist - die BPD und die UPD
         vom Kreditinstitut geholt. Bei Passports, die asymmetrische 
         Verschlüsselungsverfahren benutzen (RDH), wird zusätzlich überprüft, 
         ob alle benötigten Schlüssel vorhanden sind. Gegebenenfalls werden 

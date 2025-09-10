@@ -12,7 +12,7 @@ import org.kapott.hbci.sepa.SepaVersion;
  * 
  * WICHTIG: Diese Klasse sowie die Ableitungen sollten auch ohne initialisiertes HBCI-System
  * funktionieren, um das XML ohne HBCI-Handler erstellen zu koennen. Daher sollte auf die
- * Verwendung von "HBCIUtils" & Co verzichtet werden. Das ist auch der Grund, warum hier
+ * Verwendung von "HBCIUtils" verzichtet werden. Das ist auch der Grund, warum hier
  * das Java-Logging verwendet wird und nicht das HBCI4Java-eigene.
  */
 public class SEPAGeneratorFactory

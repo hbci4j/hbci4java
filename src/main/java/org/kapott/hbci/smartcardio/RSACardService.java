@@ -129,7 +129,7 @@ public class RSACardService extends HBCICardService
 //    }
     
     /**
-     * @see org.kapott.hbci.smartcardio.SmartCardService#verifySoftPIN(int, byte[])
+     * @see org.kapott.hbci.smartcardio.HBCICardService#verifySoftPIN(int, byte[])
      */
     @Override
     public void verifySoftPIN(int pwdId, byte[] softPin) {
