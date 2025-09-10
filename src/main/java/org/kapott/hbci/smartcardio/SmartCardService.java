@@ -330,7 +330,7 @@ public abstract class SmartCardService
       byte[] response = this.smartCard.transmitControlCommand(IOCTL_GET_FEATURE_REQUEST, new byte[0]);
       for (int i = 0; i < response.length; i += 6)
       {
-        Integer ioctl = new Integer((0xff & response[i + 2]) << 24)
+        Integer ioctl = Integer.valueOf((0xff & response[i + 2]) << 24)
                                  | ((0xff & response[i + 3]) << 16)
                                  | ((0xff & response[i + 4]) << 8)
                                  | (0xff & response[i + 5]);

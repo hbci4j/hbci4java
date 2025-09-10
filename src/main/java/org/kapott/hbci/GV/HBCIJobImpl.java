@@ -75,7 +75,6 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     private HBCIHandler parentHandler;
     private int idx;                  /* idx gibt an, der wievielte task innerhalb der aktuellen message
                                          dieser GV ist */
-    private boolean executed;
     private int contentCounter;       /* Zähler, wie viele Rückgabedaten bereits in outStore eingetragen wurden 
                                            (entspricht der anzahl der antwort-segmente!)*/
     private Hashtable<String, String[][]> constraints;    /* Festlegungen, welche Parameter eine Anwendung setzen muss, wie diese im
@@ -112,7 +111,6 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         this.constraints=new Hashtable<String, String[][]>();
         this.logFilterLevels=new Hashtable<String, Integer>();
         this.indexedConstraints=new HashSet<String>();
-        this.executed=false;
         
         this.parentHandler=parentHandler;
 
@@ -443,7 +441,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         }
         
         if (logFilterLevel>0) {
-        	logFilterLevels.put(frontendName,new Integer(logFilterLevel));
+        	logFilterLevels.put(frontendName,Integer.valueOf(logFilterLevel));
         }
     }
     
@@ -882,7 +880,6 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     public void fillJobResult(HBCIMsgStatus status,int offset)
     {
         try {
-            this.executed = true;
             this.haveTan = false;
             this.skip = false;
             this.loopCount++;
@@ -908,7 +905,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
                         }
                         
                         keyHeaders.put(
-                            new Integer(resnum),
+                            Integer.valueOf(resnum),
                             key.substring(0,key.length()-(".SegHead.ref").length()));
                     }
                 }

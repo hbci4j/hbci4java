@@ -164,7 +164,7 @@ public final class SEG
         int num=Integer.parseInt(getValueOfDE(getPath()+".SegHead.seq"));
         if (num!=value) {
             if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreSegSeqErrors",HBCIUtilsInternal.getLocMsg("EXCMSG_INVSEQNUM",
-                                                                                                   new Object[] {getPath(),new Integer(value),new Integer(num)})))
+                                                                                                   new Object[] {getPath(),Integer.valueOf(value),Integer.valueOf(num)})))
                 throw new InvalidSegSeqException(getPath(),value,num);
         }
         return value+1;

@@ -89,7 +89,7 @@ public class SyntaxDEFactory
             /* anlegen einer neuen instanz der syntaxklasse und initialisieren
              mit dem uebergebenen wert */
             try {
-                ret=(SyntaxDE)(con.newInstance(new Object[]{value, new Integer(minsize), new Integer(maxsize)}));
+                ret=(SyntaxDE)(con.newInstance(new Object[]{value, Integer.valueOf(minsize), Integer.valueOf(maxsize)}));
             } catch (InstantiationException e) {
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
@@ -147,7 +147,7 @@ public class SyntaxDEFactory
             /* anlegen einer neuen instanz der syntaxklasse und initialisieren
              mit dem uebergebenen wert */
             try {
-                ret=(SyntaxDE)(con.newInstance(new Object[]{res, new Integer(minsize), new Integer(maxsize)}));
+                ret=(SyntaxDE)(con.newInstance(new Object[]{res, Integer.valueOf(minsize), Integer.valueOf(maxsize)}));
             } catch (InstantiationException e) {
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {

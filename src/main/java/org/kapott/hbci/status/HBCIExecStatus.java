@@ -99,6 +99,7 @@ public class HBCIExecStatus
         verwendet werden.
         @return Menge aller gespeicherten HBCI-Dialog-Status-Informationen 
         @deprecated sinnlos */
+    @Deprecated
     public List<HBCIDialogStatus> getDialogStatusList()
     {
         Collection<HBCIDialogStatus> values=statusData.values();

@@ -90,7 +90,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
         HBCIUtils.log("loading data from " + filename,HBCIUtils.LOG_DEBUG);
 
         this.setFilterType("None");
-        this.setPort(new Integer(3000));
+        this.setPort(Integer.valueOf(3000));
 
         // Datei neu erstellen, wenn sie noch nicht existiert
         if (!new File(filename).canRead())
@@ -113,7 +113,7 @@ public class HBCIPassportRAH10 extends AbstractHBCIPassport implements InitLette
         this.setParamHeader(PARAM_PREFIX);
 
         this.setFilterType("None");
-        this.setPort(new Integer(3000));
+        this.setPort(Integer.valueOf(3000));
 
         init(data);
     }

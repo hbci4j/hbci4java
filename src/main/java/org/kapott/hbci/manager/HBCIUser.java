@@ -180,7 +180,7 @@ public final class HBCIUser implements IHandlerData
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_SEND_KEYS,null);
 
                 // sigid updated
-                passport.setSigId(new Long(1));
+                passport.setSigId(Long.valueOf(1));
                 
                 // schluessel senden
                 kernel.rawNewMsg("SendKeys");
@@ -344,7 +344,7 @@ public final class HBCIUser implements IHandlerData
                     throw new ProcessException(HBCIUtilsInternal.getLocMsg("EXCMSG_SENDKEYERR"),ret);
                 }
         
-                passport.setSigId(new Long(1));
+                passport.setSigId(Long.valueOf(1));
                 passport.setMyPublicSigKey(sigKey[0]);
                 passport.setMyPrivateSigKey(sigKey[1]);
                 // TODO: setDigKey()
@@ -484,7 +484,7 @@ public final class HBCIUser implements IHandlerData
             boolean s=passport.isSupported();
             HBCIUtils.log("passport supported: "+s,HBCIUtils.LOG_DEBUG);
 
-            passport.setSigId(new Long("9999999999999999"));
+            passport.setSigId(Long.valueOf("9999999999999999"));
     
             // Dialog-Context erzeugen
             final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
@@ -497,7 +497,7 @@ public final class HBCIUser implements IHandlerData
             HBCIInstitute inst=new HBCIInstitute(kernel,passport,false);
             inst.updateBPD(result);
             updateUPD(result);
-            passport.setSigId(new Long(result.getProperty("SyncRes.sigid","1")));
+            passport.setSigId(Long.valueOf(result.getProperty("SyncRes.sigid","1")));
             passport.incSigId();
             passport.saveChanges();
     
@@ -759,7 +759,7 @@ public final class HBCIUser implements IHandlerData
             passport.clearMySigKey();
             passport.clearMyEncKey();
             
-            passport.setSigId(new Long(1));
+            passport.setSigId(Long.valueOf(1));
             passport.saveChanges();
             
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_LOCK_KEYS_DONE,ret);

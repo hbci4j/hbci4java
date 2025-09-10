@@ -130,7 +130,7 @@ public class HBCIPassportDDV extends AbstractDDVPassport
         this.setSoftPin(new byte[0]);
         this.setPINEntered(false);
         this.setEntryIdx(Integer.parseInt(HBCIUtils.getParam(paramHeader+".entryidx","1")));
-        this.setPort(new Integer(3000));
+        this.setPort(Integer.valueOf(3000));
         this.setFilterType("None");
 
         HBCIUtils.log("trying to load native DDV library "+ddvLib,HBCIUtils.LOG_DEBUG);

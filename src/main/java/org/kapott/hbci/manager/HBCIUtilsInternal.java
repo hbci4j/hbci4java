@@ -64,6 +64,7 @@ public class HBCIUtilsInternal
      * @return die Zeile aus der blz.properties
      * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
      */
+    @Deprecated
     public static String getBLZData(String blz)
     {
         return blz!=null?blzs.getProperty(blz,"|||||"):"|||||";
@@ -76,6 +77,7 @@ public class HBCIUtilsInternal
      * @return der Wert oder Leerstring.
      * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
      */
+    @Deprecated
     public static String getNthToken(String st,int idx)
     {
         String[] parts=st.split("\\|");

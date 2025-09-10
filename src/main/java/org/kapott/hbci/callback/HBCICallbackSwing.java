@@ -114,10 +114,10 @@ public class HBCICallbackSwing
             currentData.put("passport",passport);
             currentData.put("dataRequested",Boolean.FALSE);
             currentData.put("proxyRequested",Boolean.FALSE);
-            currentData.put("msgcounter",new Integer(0));
+            currentData.put("msgcounter",Integer.valueOf(0));
             passports.put(passport,currentData);
         }
-        currentData.put("reason",new Integer(reason));
+        currentData.put("reason",Integer.valueOf(reason));
         currentData.put("msg",msg);
         
         if (retData!=null)
@@ -1213,7 +1213,7 @@ public class HBCICallbackSwing
             final int       msgcounter=((Integer)currentData.get("msgcounter")).intValue();
             final String    winname2=winname+"_"+(msgcounter);
             final Container win=createWin(currentData,"HBCI",winname2);
-            currentData.put("msgcounter",new Integer(msgcounter+1));
+            currentData.put("msgcounter",Integer.valueOf(msgcounter+1));
             
             Box framebox=Box.createHorizontalBox();
             win.add(framebox);

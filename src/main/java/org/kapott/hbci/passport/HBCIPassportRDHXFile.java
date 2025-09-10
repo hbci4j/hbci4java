@@ -82,7 +82,7 @@ public class HBCIPassportRDHXFile
             HBCIUtils.log("loading data from file "+getFilename(),HBCIUtils.LOG_DEBUG);
 
             setFilterType("None");
-            setPort(new Integer(3000));
+            setPort(Integer.valueOf(3000));
 
             if (!new File(getFilename()).canRead()) {
                 HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
@@ -148,7 +148,7 @@ public class HBCIPassportRDHXFile
                     setUserId(hbciAccount.getUserId());
                     setCustomerId(hbciAccount.getCustomerId());
                     setSysId(hbciAccount.getSysId());
-                    setSigId(new Long(hbciAccount.getSigId()));
+                    setSigId(Long.valueOf(hbciAccount.getSigId()));
 
                     // setInstKeys()
                     setInstSigKey(filecontent.getBankSigKey(hbciAccount));

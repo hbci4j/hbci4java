@@ -156,6 +156,7 @@ public final class Value
     /** Setzt den Betrag neu.
      * @param value Betrag (1.23)
      * @deprecated */
+    @Deprecated
     public void setValue(double value)
     {
         setValue(Math.round(100.0*value));

@@ -99,7 +99,7 @@ public class HBCIPassportRDHNew extends AbstractRDHSWFileBasedPassport
             HBCIUtils.log("loading data from file "+filename,HBCIUtils.LOG_DEBUG);
 
             setFilterType("None");
-            setPort(new Integer(3000));
+            setPort(Integer.valueOf(3000));
 
             if (!new File(filename).canRead())
             {

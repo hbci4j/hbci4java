@@ -325,6 +325,7 @@ public interface HBCICallback
     /** 
      * @deprecated
      **/
+    @Deprecated
     public final static int NEED_INFOPOINT_ACK=31;
     
     /** <p>Ursache des Callbacks: bei Verwendung von HBCI-PIN/TAN muss
@@ -561,6 +562,7 @@ public interface HBCICallback
     /** 
      * @deprecated
      **/
+    @Deprecated
     public final static int STATUS_SEND_INFOPOINT_DATA=29;
 
     /**

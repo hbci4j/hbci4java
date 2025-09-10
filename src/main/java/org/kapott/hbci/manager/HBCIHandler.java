@@ -468,12 +468,14 @@ public final class HBCIHandler
     }
 
     /** @deprecated use {@link org.kapott.hbci.GV.HBCIJob#addToQueue(String) HBCIJob.addToQueue(String)} instead */
+    @Deprecated
     public void addJob(String customerId,HBCIJob job)
     {
         addJobToDialog(customerId,job);
     }
     
     /** @deprecated use {@link org.kapott.hbci.GV.HBCIJob#addToQueue() HBCIJob.addToQueue()} instead */
+    @Deprecated
     public void addJob(HBCIJob job)
     {
         addJob(null,job);

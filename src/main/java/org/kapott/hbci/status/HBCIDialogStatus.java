@@ -136,6 +136,7 @@ public final class HBCIDialogStatus
         @return <code>true</code>, wenn während der Dialogausführung Exceptions
                  aufgetreten sind, sonst <code>false</code> 
         @deprecated wird nicht benutzt */
+    @Deprecated
     public boolean hasExceptions()
     {
         boolean ret=false;
@@ -165,6 +166,7 @@ public final class HBCIDialogStatus
         @return Array mit Exceptions, die während der Dialogausführung aufgetreten
                  sind
         @deprecated wird nicht benutzt */
+    @Deprecated
     public Exception[] getExceptions()
     {
         List<Exception> ret=new ArrayList<Exception>();

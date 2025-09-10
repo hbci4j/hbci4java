@@ -106,7 +106,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
             
             ////////////////////////////////////////////////////////////////////////
             // init basic bank data
-            setPort(new Integer(3000));
+            setPort(Integer.valueOf(3000));
             setFilterType("None");
             try {
                 readBankData();
@@ -1005,7 +1005,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
     protected void ctReadKeyData() {
         int idx = getEntryIdx() - 1;
         
-        setSigId(new Long(cardService.readSigId(idx)));
+        setSigId(Long.valueOf(cardService.readSigId(idx)));
         
         // readKeyData
         RSAKeyData[] keyData = cardService.readKeyData(idx);

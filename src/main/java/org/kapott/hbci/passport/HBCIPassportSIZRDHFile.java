@@ -83,7 +83,7 @@ public class HBCIPassportSIZRDHFile
             HBCIUtils.log("loading data from file "+filename,HBCIUtils.LOG_DEBUG);
 
             setFilterType("None");
-            setPort(new Integer(3000));
+            setPort(Integer.valueOf(3000));
 
             if (!new File(filename).canRead()) {
                 HBCIUtils.log("have to create new passport file",HBCIUtils.LOG_WARN);
@@ -104,7 +104,7 @@ public class HBCIPassportSIZRDHFile
                 }
 
                 setCountry("DE");
-                setPort(new Integer(3000));
+                setPort(Integer.valueOf(3000));
                 
                 readData(getFilename());
                 

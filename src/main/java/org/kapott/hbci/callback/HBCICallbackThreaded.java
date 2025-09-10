@@ -94,9 +94,9 @@ public final class HBCICallbackThreaded
                 Hashtable<String, Object> callbackData=new Hashtable<String, Object>();
                 callbackData.put("method","callback");
                 callbackData.put("passport",passport);
-                callbackData.put("reason",new Integer(reason));
+                callbackData.put("reason",Integer.valueOf(reason));
                 callbackData.put("msg",msg);
-                callbackData.put("dataType",new Integer(datatype));
+                callbackData.put("dataType",Integer.valueOf(datatype));
                 callbackData.put("retData",retData);
                 
                 sync_main.setData("callbackData",callbackData);

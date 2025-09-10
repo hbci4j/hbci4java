@@ -238,7 +238,7 @@ public class RSACardService extends HBCICardService
         byte[] rawData  = readRecordBySFI(0x00, idx);
         if (rawData == null)
             return 0;
-        return ((((int) rawData[0]) & 0xFF) << 24) | ((((int) rawData[1]) & 0xFF) << 16) | ((((int) rawData[2]) & 0xFF) << 8) | (((int) rawData[3]) & 0xFF);
+        return ((rawData[0] & 0xFF) << 24) | ((rawData[1] & 0xFF) << 16) | ((rawData[2] & 0xFF) << 8) | (rawData[3] & 0xFF);
     }
     
     /**
@@ -388,9 +388,9 @@ public class RSACardService extends HBCICardService
                         }
                         byte len1 = data[pos++];
                         byte len2 = data[pos++];
-                        length = ((((int) len1) & 0xFF) << 8) | (((int) len2) & 0xFF);
+                        length = ((len1 & 0xFF) << 8) | (len2 & 0xFF);
                     } else {
-                        length = ((int) len) & 0xFF;
+                        length = len & 0xFF;
                     }
                     if (data.length < (pos + length)) {
                         pos = Integer.MAX_VALUE;

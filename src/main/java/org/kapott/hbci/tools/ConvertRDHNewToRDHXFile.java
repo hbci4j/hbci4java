@@ -68,7 +68,7 @@ public class ConvertRDHNewToRDHXFile
         ((HBCIPassportRDHXFile)passportNew).setMyPrivateSigKey(((AbstractRDHSWPassport)passportOld).getMyPrivateSigKey());
         ((HBCIPassportRDHXFile)passportNew).setMyPublicEncKey(((AbstractRDHSWPassport)passportOld).getMyPublicEncKey());
         ((HBCIPassportRDHXFile)passportNew).setMyPrivateEncKey(((AbstractRDHSWPassport)passportOld).getMyPrivateEncKey());
-        ((HBCIPassportRDHXFile)passportNew).setProfileVersion(((AbstractRDHSWPassport)passportOld).getProfileVersion());
+        ((HBCIPassportRDHXFile)passportNew).setProfileVersion(passportOld.getProfileVersion());
 
         passportNew.saveChanges();
 

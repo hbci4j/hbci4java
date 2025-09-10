@@ -178,7 +178,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
             HBCIUtilsInternal.getCallback().callback(this,HBCICallback.NEED_PORT,HBCIUtilsInternal.getLocMsg("PORT"),HBCICallback.TYPE_TEXT,sb);
             if (sb.length()==0)
                 throw new InvalidUserDataException(HBCIUtilsInternal.getLocMsg("EXCMSG_EMPTY_X",HBCIUtilsInternal.getLocMsg("PORT")));
-            setPort(new Integer(sb.toString()));
+            setPort(Integer.valueOf(sb.toString()));
             dataChanged=true;
         }
 
@@ -393,7 +393,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
 
     public final Integer getPort()
     {
-        return (port!=null)?port:new Integer(0);
+        return (port!=null)?port:Integer.valueOf(0);
     }
     
     public final String getFilterType()
@@ -627,7 +627,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
 
     public final Long getSigId()
     {
-        return sigid!=null?sigid:new Long(1);
+        return sigid!=null?sigid:Long.valueOf(1);
     }
 
     public final void clearBPD()
@@ -706,7 +706,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
 
     public void incSigId()
     {
-        setSigId(new Long(getSigId().longValue()+1));
+        setSigId(Long.valueOf(getSigId().longValue()+1));
     }
 
     public final boolean onlyBPDGVs()
@@ -913,7 +913,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
     
     public void syncSigId()
     {
-        setSigId(new Long("-1"));
+        setSigId(Long.valueOf("-1"));
     }
     
     public void syncSysId()

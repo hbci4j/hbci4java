@@ -33,7 +33,7 @@ public final class SyntaxNum
     private static String check(String st)
     {
         try {
-            new Long(st);
+          Long.valueOf(st);
             StringBuffer ret=new StringBuffer(st);
 
             // remove heading '0's

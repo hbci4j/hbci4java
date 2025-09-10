@@ -62,10 +62,10 @@ public class LogFilter
 	{
 	    if (secret!=null && secret.length()!=0) {
 	        // liste der secrets im gewählten level holen bzw. erzeugen
-	        List<String[]> secretData= secretDataByLevel.get(new Integer(level));
+	        List<String[]> secretData= secretDataByLevel.get(Integer.valueOf(level));
 	        if (secretData==null) {
 	            secretData=new ArrayList<String[]>();
-	            secretDataByLevel.put(new Integer(level),secretData);
+	            secretDataByLevel.put(Integer.valueOf(level),secretData);
 	        }
 
 	        // duplikats-check für "secret"
@@ -112,7 +112,7 @@ public class LogFilter
 			StringBuffer line2=new StringBuffer(line);
 
 			for (int level=filterLevel; level>0; level--) {
-				List<String[]> secretData= secretDataByLevel.get(new Integer(level));
+				List<String[]> secretData= secretDataByLevel.get(Integer.valueOf(level));
 				if (secretData==null) {
 					continue;
 				}

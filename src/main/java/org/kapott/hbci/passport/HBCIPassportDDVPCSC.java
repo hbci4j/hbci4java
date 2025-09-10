@@ -68,7 +68,7 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
         this.setSoftPin(new byte[0]);
         this.setPINEntered(false);
         this.setEntryIdx(Integer.parseInt(HBCIUtils.getParam(getParamHeader()+".entryidx","1")));
-        this.setPort(new Integer(3000));
+        this.setPort(Integer.valueOf(3000));
         this.setFilterType("None");
 
         try
@@ -147,7 +147,7 @@ public class HBCIPassportDDVPCSC extends HBCIPassportDDV
      */
     protected void ctReadKeyData()
     {
-      this.setSigId(new Long(cardService.readSigId()));
+      this.setSigId(Long.valueOf(cardService.readSigId()));
       
       // readKeyData
       DDVKeyData[] keyData=cardService.readKeyData();
