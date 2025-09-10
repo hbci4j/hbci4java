@@ -100,12 +100,12 @@ Wechsle in den Ordner "hbci4java":
 
     $> cd hbci4java
 
-Erzeuge die JAR-Datei per:
+Führe die folgenden beiden Befehle aus:
 
     $> gradle jaxb
     $> gradle eclipse
     
-Hierbei wird die Eclipse Projekt-Konfiguration sowie Java-Code im Ordner "build/generated/jaxb" für die PAIN/CAMT XML-Dateien erzeugt.
+Hierbei wird der Java-Code für die PAIN/CAMT XML-Dateien im Ordner "build/generated/jaxb" und die Eclipse Projekt-Konfiguration generiert.
 
 - Starte Eclipse.
 - Wähle in der View "GIT Repositories" oben den Button "Add an existing local GIT repository to this view".
