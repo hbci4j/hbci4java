@@ -24,6 +24,7 @@ package org.kapott.hbci.GV;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.parsers.ISEPAParser;
@@ -31,10 +32,14 @@ import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 import org.kapott.hbci.GV_Result.GVRVoP;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
+import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.passport.AbstractPinTanPassport;
+import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.tools.StringUtil;
@@ -132,7 +137,8 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final GVRVoP vop = this.getJobResult();
 
       // Aufkärungstext bei Abweichung
-      vop.setText(data.getProperty(header + ".infotext"));
+      final String infotext = data.getProperty(header + ".infotext");
+      vop.setText(infotext);
 
       // vopid kann leer sein bei Teillieferungen.
       // TODO: Die unterstützen wir im ersten Schritt noch nicht.
@@ -173,5 +179,27 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         r.setText(data.getProperty(header + ".result.reason")); // Falls Status "Not Applicable" ist: Ein Hinweis-Text
         vop.getResults().add(r);
       }
+      
+      final boolean needCallback = vop.getResults().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
+      if (needCallback)
+      {
+        HBCIUtils.log("VoP callback needed",HBCIUtils.LOG_INFO);
+        final HBCIPassportInternal p = this.getMainPassport();
+        try
+        {
+          // VOP-Result im Passport speichern und User fragen, ob der Vorgang fortgesetzt werden kann
+          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,vop);
+          final StringBuffer sb = new StringBuffer();
+          HBCIUtilsInternal.getCallback().callback(p,HBCICallback.HAVE_VOP_RESULT,infotext,HBCICallback.TYPE_BOOLEAN,sb);
+          final String s = sb.toString();
+          if (s != null && s.trim().length() > 0 && !Boolean.parseBoolean(s))
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_VOP_CANCEL"));
+        }
+        finally
+        {
+          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,null);
+        }
+      }
+
     }
 }

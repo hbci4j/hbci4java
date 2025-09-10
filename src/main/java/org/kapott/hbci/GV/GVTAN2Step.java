@@ -25,14 +25,10 @@ package org.kapott.hbci.GV;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
-import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.dialog.KnownTANProcess;
-import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.manager.Feature;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
