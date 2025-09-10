@@ -109,7 +109,7 @@ Hierbei wird der Java-Code für die PAIN/CAMT XML-Dateien im Ordner "build/gener
 
 - Starte Eclipse.
 - Wähle in der View "GIT Repositories" oben den Button "Add an existing local GIT repository to this view".
-- Klicke mit der rechten Maustaste auf das importierte Repository und wähle "Import Projects...".
+- Klicke mit der rechten Maustaste auf das importierte Repository und wähle "Import Projects..." (wenn das nicht funktioniert, öffne den "Project Explorer" und wähle dort im Kontextmenü "Import..." und anschließend unter "General" die Option "Existing Projects into Workspace". Wähle anschließend den Ordner "hbci4java" aus).
 - Folge den Anweisungen des Assistenten.
 
 ## Unit-Tests
