@@ -849,7 +849,7 @@ public final class HBCIUtils
         HBCIUtils.log("** HBCI4Java is currently using a product registration that should     			**", HBCIUtils.LOG_WARN);
         HBCIUtils.log("** ONLY be used for internal testing, not for production purpose!!     			**", HBCIUtils.LOG_WARN);
         HBCIUtils.log("**                                                                     			**", HBCIUtils.LOG_WARN);
-        HBCIUtils.log("** Please go to https://www.fints.org/de/hersteller/produktregistrierungkönnte	**", HBCIUtils.LOG_WARN);
+        HBCIUtils.log("** Please go to https://www.fints.org/de/hersteller/produktregistrierung      	**", HBCIUtils.LOG_WARN);
         HBCIUtils.log("** and create your own registration (it's free)                        			**", HBCIUtils.LOG_WARN);
         HBCIUtils.log("**                                                                     			**", HBCIUtils.LOG_WARN);
         HBCIUtils.log("** After receiving your registration, add this line to your code:      			**", HBCIUtils.LOG_WARN);
