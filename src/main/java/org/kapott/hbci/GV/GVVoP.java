@@ -31,6 +31,7 @@ import org.kapott.hbci.GV.parsers.ISEPAParser;
 import org.kapott.hbci.GV.parsers.SEPAParserFactory;
 import org.kapott.hbci.GV_Result.GVRVoP;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
+import org.kapott.hbci.GV_Result.GVRVoP.VoPResultItem;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -134,11 +135,12 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final String segCode = data.getProperty(header + ".SegHead.code"); // HIVPP oder das HI** des GV
       HBCIUtils.log("found HKVPP response with segcode " + segCode,HBCIUtils.LOG_DEBUG);
       
-      final GVRVoP vop = this.getJobResult();
+      final VoPResult result = new VoPResult();
+      this.getJobResult().setResult(result);
 
       // Aufkärungstext bei Abweichung
       final String infotext = data.getProperty(header + ".infotext");
-      vop.setText(infotext);
+      result.setText(infotext);
 
       // vopid kann leer sein bei Teillieferungen.
       // TODO: Die unterstützen wir im ersten Schritt noch nicht.
@@ -155,11 +157,11 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         try
         {
           final SepaVersion version = SepaVersion.choose(null,xml);
-          ISEPAParser<List<VoPResult>> parser = SEPAParserFactory.get(version);
+          ISEPAParser<List<VoPResultItem>> parser = SEPAParserFactory.get(version);
           
           HBCIUtils.log("parsing pain.002 data: " + xml,HBCIUtils.LOG_DEBUG2);
-          parser.parse(new ByteArrayInputStream(xml.getBytes(Comm.ENCODING)),vop.getResults());
-          HBCIUtils.log("parsed pain data, entries: " + vop.getResults().size(),HBCIUtils.LOG_DEBUG);
+          parser.parse(new ByteArrayInputStream(xml.getBytes(Comm.ENCODING)),result.getItems());
+          HBCIUtils.log("parsed pain data, entries: " + result.getItems().size(),HBCIUtils.LOG_DEBUG);
         }
         catch (Exception e)
         {
@@ -172,15 +174,15 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         HBCIUtils.log("got VoP single result",HBCIUtils.LOG_INFO);
         
         // oder alternativ das Prüfergebnis einer Einzelprüfung
-        final VoPResult r = new VoPResult();
+        final VoPResultItem r = new VoPResultItem();
         r.setIban(data.getProperty(header + ".result.iban")); // Die IBAN des Empfängers
         r.setName(data.getProperty(header + ".result.differentname")); // der korrigierte Name des Empfängers
         r.setStatus(VoPStatus.byCode(data.getProperty(header + ".result.result"))); // der Status-Code
         r.setText(data.getProperty(header + ".result.reason")); // Falls Status "Not Applicable" ist: Ein Hinweis-Text
-        vop.getResults().add(r);
+        result.getItems().add(r);
       }
       
-      final boolean needCallback = vop.getResults().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
+      final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
       if (needCallback)
       {
         HBCIUtils.log("VoP callback needed",HBCIUtils.LOG_INFO);
@@ -188,7 +190,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         try
         {
           // VOP-Result im Passport speichern und User fragen, ob der Vorgang fortgesetzt werden kann
-          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,vop);
+          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,result);
           final StringBuffer sb = new StringBuffer();
           HBCIUtilsInternal.getCallback().callback(p,HBCICallback.HAVE_VOP_RESULT,infotext,HBCICallback.TYPE_BOOLEAN,sb);
           final String s = sb.toString();
@@ -200,6 +202,5 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
           p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,null);
         }
       }
-
     }
 }

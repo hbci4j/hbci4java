@@ -374,7 +374,7 @@ public interface HBCICallback
      * Die Ergebnis-Daten der Prüfung finden sich unter:
      * 
      * <pre>
-     * List<VoPResult> results = (List<VoPResult>) passport.getPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT);
+     * List<VoPResultItem> results = (List<VoPResultItem>) passport.getPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT);
      * </pre>
      * 
      * Der Callback erwartet im Stringbuffer mit den Ergebnisdaten (retData) ein "true", NULL oder "", wenn der Auftrag durchgeführt

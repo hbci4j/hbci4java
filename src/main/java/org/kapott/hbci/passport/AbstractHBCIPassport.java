@@ -34,6 +34,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.GVVoP;
 import org.kapott.hbci.GV.HBCIJobImpl;
+import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.comm.Filter;
@@ -65,6 +66,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
 {
   /**
    * Key, mit dem wir das Ergebnis der VoP-Prüfung in persistentData zwischenspeichern.
+   * Ein Objekt vom Typ {@link VoPResult}.
    */
   public final static String KEY_VOP_RESULT = "__pintan_vop_result___";
 

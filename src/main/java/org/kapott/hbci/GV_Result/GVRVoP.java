@@ -29,40 +29,67 @@ import java.util.List;
  */
 public class GVRVoP extends HBCIJobResultImpl
 {
-  private String text = null;
-  private List<VoPResult> results = new ArrayList<>();
+  private VoPResult result = null;
   
   /**
-   * Liefert den von der Bank gemeldeten Info-Text.
-   * @return der von der Bank gemeldete Info-Text.
+   * Liefert das Ergebnis der Prüfung.
+   * @return das Ergebnis der Prüfung.
    */
-  public String getText()
+  public VoPResult getResult()
   {
-    return text;
+    return this.result;
   }
   
   /**
-   * Speichert den von der Bank gemeldeten Info-Text.
-   * @param text der von der Bank gemeldete Info-Text. 
+   * Speichert das Ergebnis der Prüfung.
+   * @param result das Ergebnis der Prüfung.
    */
-  public void setText(String text)
+  public void setResult(VoPResult result)
   {
-    this.text = text;
+    this.result = result;
   }
   
   /**
-   * Liefert die Ergebnis-Liste.
-   * @return results die Ergebnis-Liste.
+   * Das Gesamt-Ergebnis der Prüfung.
    */
-  public List<VoPResult> getResults()
+  public static class VoPResult
   {
-    return results;
+    private String text = null;
+    private List<VoPResultItem> items = new ArrayList<>();
+    
+    /**
+     * Liefert den von der Bank gemeldeten Info-Text.
+     * @return der von der Bank gemeldete Info-Text.
+     */
+    public String getText()
+    {
+      return text;
+    }
+    
+    /**
+     * Speichert den von der Bank gemeldeten Info-Text.
+     * @param text der von der Bank gemeldete Info-Text. 
+     */
+    public void setText(String text)
+    {
+      this.text = text;
+    }
+    
+    /**
+     * Liefert die Ergebnis-Liste.
+     * @return items die Ergebnis-Liste.
+     */
+    public List<VoPResultItem> getItems()
+    {
+      return items;
+    }
   }
+
   
   /**
    * Prüfergebnis einer einzelnen VOP-Prüfung.
    */
-  public static class VoPResult
+  public static class VoPResultItem
   {
     private VoPStatus status;
     private String name;

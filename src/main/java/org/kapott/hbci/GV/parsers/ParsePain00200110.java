@@ -3,7 +3,7 @@ package org.kapott.hbci.GV.parsers;
 import java.io.InputStream;
 import java.util.List;
 
-import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
+import org.kapott.hbci.GV_Result.GVRVoP.VoPResultItem;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.AccountIdentification4Choice;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.CashAccount38;
@@ -20,12 +20,12 @@ import jakarta.xml.bind.JAXB;
 /**
  * Parser-Implementierung fuer Pain 002.001.10.
  */
-public class ParsePain00200110 extends AbstractSepaParser<List<VoPResult>>
+public class ParsePain00200110 extends AbstractParsePain002
 {
   /**
    * @see org.kapott.hbci.GV.parsers.ISEPAParser#parse(java.io.InputStream, java.lang.Object)
    */
-  public void parse(InputStream xml, List<VoPResult> sepaResults)
+  public void parse(InputStream xml, List<VoPResultItem> sepaResults)
   {
     /*
       pain.002 parsen 
@@ -50,7 +50,7 @@ public class ParsePain00200110 extends AbstractSepaParser<List<VoPResult>>
     {
       for (PaymentTransaction105 tx:pi.getTxInfAndSts())
       {
-        final VoPResult r = new VoPResult();
+        final VoPResultItem r = new VoPResultItem();
         r.setStatus(VoPStatus.byCode(tx.getTxSts()));
         r.setName(this.getName(tx.getStsRsnInf()));
         
@@ -80,20 +80,7 @@ public class ParsePain00200110 extends AbstractSepaParser<List<VoPResult>>
     
     for (StatusReasonInformation12 i:infos)
     {
-      final List<String> names = i.getAddtlInf();
-      if (names == null || names.isEmpty())
-        continue;
-      
-      for (String s:names)
-      {
-        if (s == null || s.isBlank())
-          continue;
-        
-        if (s.startsWith("“") || s.startsWith("\""))
-          s = s.substring(1);
-        
-        sb.append(s);
-      }
+      sb.append(this.getNames(i.getAddtlInf()));
     }
     
     return sb.toString();
