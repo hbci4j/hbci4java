@@ -11,6 +11,8 @@ import org.kapott.hbci.sepa.jaxb.pain_002_001_13.CustomerPaymentStatusReportV13;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_13.Document;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_13.OriginalPaymentInstruction45;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_13.OriginalTransactionReference35;
+import org.kapott.hbci.sepa.jaxb.pain_002_001_13.Party40Choice;
+import org.kapott.hbci.sepa.jaxb.pain_002_001_13.PartyIdentification135;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_13.PaymentTransaction144;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_13.StatusReasonInformation12;
 
@@ -48,6 +50,12 @@ public class ParsePain00200113 extends AbstractParsePain002
         
         if (id != null)
           r.setIban(id.getIBAN());
+        
+        // Ursprünglichen Namen herausfinden
+        final Party40Choice cdtr = ref != null ? ref.getCdtr() : null;
+        final PartyIdentification135 pty = cdtr != null ? cdtr.getPty() : null;
+        if (pty != null)
+          r.setOriginal(pty.getNm());
         
         sepaResults.add(r);
       }

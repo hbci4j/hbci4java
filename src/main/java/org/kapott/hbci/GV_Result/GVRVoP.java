@@ -92,6 +92,7 @@ public class GVRVoP extends HBCIJobResultImpl
   public static class VoPResultItem
   {
     private VoPStatus status;
+    private String original;
     private String name;
     private String iban;
     
@@ -113,6 +114,24 @@ public class GVRVoP extends HBCIJobResultImpl
     public void setStatus(VoPStatus status)
     {
       this.status = status;
+    }
+    
+    /**
+     * Liefert den im Auftrag angegebenen Namen.
+     * @return der im Auftrag angegebene Name.
+     */
+    public String getOriginal()
+    {
+      return original;
+    }
+    
+    /**
+     * Speichert den im Auftrag angegebenen Namen.
+     * @param original der im Auftrag angegebene Name.
+     */
+    public void setOriginal(String original)
+    {
+      this.original = original;
     }
     
     /**
