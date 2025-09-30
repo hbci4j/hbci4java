@@ -6,12 +6,11 @@ import java.util.List;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResultItem;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.AccountIdentification4Choice;
-import org.kapott.hbci.sepa.jaxb.pain_002_001_14.CashAccount40;
+import org.kapott.hbci.sepa.jaxb.pain_002_001_14.ActiveOrHistoricCurrencyAndAmount;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.CustomerPaymentStatusReportV14;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.Document;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.OriginalPaymentInstruction51;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.OriginalTransactionReference42;
-import org.kapott.hbci.sepa.jaxb.pain_002_001_14.Party50Choice;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.PartyIdentification272;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.PaymentTransaction160;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_14.StatusReasonInformation14;
@@ -43,19 +42,26 @@ public class ParsePain00200114 extends AbstractParsePain002
         r.setStatus(VoPStatus.byCode(tx.getTxSts()));
         r.setName(this.getName(tx.getStsRsnInf()));
         
-        // Ursprüngliche IBAN herausfinden
         final OriginalTransactionReference42 ref = tx.getOrgnlTxRef();
-        final CashAccount40 account = ref != null ? ref.getCdtrAcct() : null;
-        final AccountIdentification4Choice id = account != null ? account.getId() : null;
-        
-        if (id != null)
-          r.setIban(id.getIBAN());
-        
-        // Ursprünglichen Namen herausfinden
-        final Party50Choice cdtr = ref != null ? ref.getCdtr() : null;
-        final PartyIdentification272 pty = cdtr != null ? cdtr.getPty() : null;
-        if (pty != null)
-          r.setOriginal(pty.getNm());
+        if (ref != null)
+        {
+          final AccountIdentification4Choice id       = ref.getCdtrAcct() != null ? ref.getCdtrAcct().getId() : null;
+          final List<String> usage                    = ref.getRmtInf() != null   ? ref.getRmtInf().getUstrd() : null;
+          final ActiveOrHistoricCurrencyAndAmount amt = ref.getAmt() != null      ? ref.getAmt().getInstdAmt() : null;
+          final PartyIdentification272 pty            = ref.getCdtr() != null     ? ref.getCdtr().getPty() : null;
+          
+          if (id != null)
+            r.setIban(id.getIBAN());
+          
+          if (usage != null)
+            r.setUsage(this.toString(usage,false));
+          
+          if (amt != null)
+            r.setAmount(amt.getValue());
+          
+          if (pty != null)
+            r.setOriginal(pty.getNm());
+        }
         
         sepaResults.add(r);
       }
@@ -75,7 +81,7 @@ public class ParsePain00200114 extends AbstractParsePain002
     
     for (StatusReasonInformation14 i:infos)
     {
-      sb.append(this.getNames(i.getAddtlInf()));
+      sb.append(this.toString(i.getAddtlInf(),true));
     }
     
     return sb.toString();

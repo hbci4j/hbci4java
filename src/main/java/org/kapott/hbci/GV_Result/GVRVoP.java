@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.GV_Result;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,8 @@ public class GVRVoP extends HBCIJobResultImpl
     private String original;
     private String name;
     private String iban;
+    private String usage;
+    private BigDecimal amount;
     
     private String text;
     
@@ -136,7 +139,7 @@ public class GVRVoP extends HBCIJobResultImpl
     
     /**
      * Liefert den korrigierten Namen, falls vorhanden.
-     * @return name der korrigierte Name, falls vorhanden.
+     * @return der korrigierte Name, falls vorhanden.
      */
     public String getName()
     {
@@ -172,7 +175,7 @@ public class GVRVoP extends HBCIJobResultImpl
     
     /**
      * Ein optionaler erläuternder Hinweis-Text - u.a. nötig bei Status "Not applicable".
-     * @return text
+     * @return der Hinweis-Text.
      */
     public String getText()
     {
@@ -180,11 +183,48 @@ public class GVRVoP extends HBCIJobResultImpl
     }
     
     /**
-     * @param text text
+     * Ein optionaler erläuternder Hinweis-Text.
+     * @param text der Hinweis-Text.
      */
     public void setText(String text)
     {
       this.text = text;
+    }
+    
+    /**
+     * Liefert den Betrag.
+     * @return der Betrag.
+     */
+    public BigDecimal getAmount()
+    {
+      return amount;
+    }
+    
+    /**
+     * Speichert den Betrag.
+     * @param amount der Betrag.
+     */
+    public void setAmount(BigDecimal amount)
+    {
+      this.amount = amount;
+    }
+    
+    /**
+     * Liefert den Verwendungszweck.
+     * @return der Verwendungszweck.
+     */
+    public String getUsage()
+    {
+      return usage;
+    }
+    
+    /**
+     * Speichert den Verwendungszweck.
+     * @param usage der Verwendungszweck.
+     */
+    public void setUsage(String usage)
+    {
+      this.usage = usage;
     }
   }
 
