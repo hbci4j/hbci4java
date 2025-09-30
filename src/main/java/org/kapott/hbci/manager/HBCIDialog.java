@@ -275,7 +275,9 @@ public final class HBCIDialog
                 ////////////////////////////////////////////////////////////////////
                 
                 // Das passiert immer dann, wenn wir in der Message nur ein HKTAN#2 aus Prozess-Variante 2 hatten.
-                // Dieses aufgrund einer 3076-SCA-Ausnahme aber nicht benoetigt wird.
+                // Dieses aufgrund einer 3076-SCA-Ausnahme aber nicht benoetigt wird. Oder auch, wenn keine VoP
+                // notwendig ist und wir das HKVPA zusammen mit dem eigentlichen GV nicht mehr brauchen, weil die
+                // Bank es direkt freigibt.
                 if (taskNum == 0)
                 {
                     HBCIUtils.log("no tasks in message #" + msgCount + ", skipping",HBCIUtils.LOG_DEBUG);

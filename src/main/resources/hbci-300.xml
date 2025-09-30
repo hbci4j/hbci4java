@@ -1661,15 +1661,15 @@
         </DEGdef>
         
         <DEGdef id="ParVoPCheck">
-            <DE name="maxcountoptin" type="Num" maxsize="7" minnum="1" maxnum="1" />
-            <DE name="infotextformatted" type="JN" minnum="1" maxnum="1" />
-            <DE name="reportdelivery" type="Code" minnum="1" maxnum="1" />
-            <DE name="multiallowed" type="JN" minnum="1" maxnum="1" />
-            <DE name="entrycountallowed" type="JN" minnum="1" maxnum="1" />
-            <DE name="suppreports" type="AN" maxsize="1024" minnum="1" maxnum="1" />
+            <DE name="maxcountoptin" type="Num" maxsize="7" />
+            <DE name="infotextformatted" type="JN" />
+            <DE name="reportdelivery" type="Code" />
+            <DE name="multiallowed" type="JN" />
+            <DE name="entrycountallowed" type="JN" />
+            <DE name="suppreports" type="AN" maxsize="1024" />
             
             <!-- Segmentkennung HK... des Zahlungsauftrages, fuer den das gilt -->
-            <DE name="segcode" type="AN" maxsize="6" minnum="1" />
+            <DE name="segcode" type="AN" maxsize="6" maxnum="999" />
             
             <!-- Wenn per pain.002 Teillieferungen gemacht werden, wird damit festgelegt,
                  ob mit jeder Nachricht immer nur die neu hinzugekommenen (schrittweise) 
@@ -5743,11 +5743,9 @@
         </SEGdef>
 
         <SEGdef id="VoPCheckPar1">
-            &GVP;
-            <DEG type="ParVoPCheck" />
-
+            &GVP2;
+            <DEG type="ParVoPCheck" name="ParVoPCheck" />
             &SecClassValids;
-
             <value path="SegHead.code">HIVPPS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>

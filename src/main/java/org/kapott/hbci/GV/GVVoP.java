@@ -35,6 +35,7 @@ import org.kapott.hbci.GV_Result.GVRVoP.VoPResultItem;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
+import org.kapott.hbci.dialog.KnownReturncode;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -96,19 +97,30 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
     protected void extractResults(HBCIMsgStatus msgstatus,String header,int idx)
     {
       final Properties data = msgstatus.getData();
-      final String segCode = data.getProperty(header + ".SegHead.code"); // HIVPP oder das HI** des GV
-      HBCIUtils.log("found HKVPP response with segcode " + segCode,HBCIUtils.LOG_DEBUG);
+      
+      final String segCode = data.getProperty(header+".SegHead.code"); // HITAN oder HIVPP
+      if (!StringUtil.toInsCode(this.getHBCICode()).equals(segCode)) // Das ist nicht unser Response
+      {
+        // TODO VP: Checken, ob der Fall überhaupt eintreten kann
+        HBCIUtils.log("got VoP response for " + segCode + " - not for us",HBCIUtils.LOG_INFO);
+        return;
+      }
+
+      // Wenn die Bank hier mit Status 3091 antwortet, verzichtet sie auf VoP Auth
+      // In dem Fall müssen wir die extra Nachricht wieder entfernen
+      boolean noVoP = KnownReturncode.W3091.searchReturnValue(msgstatus.segStatus.getWarnings()) != null ||
+                      KnownReturncode.W3091.searchReturnValue(msgstatus.globStatus.getWarnings()) != null;
+      
+      if (noVoP)
+      {
+        HBCIUtils.log("got response code 3091 - VoP auth can be skipped",HBCIUtils.LOG_INFO);
+        this.auth.skip();
+        return;
+      }
       
       final VoPResult result = this.parse(data,header);
       this.getJobResult().setResult(result);
 
-      // Wir müssen den Auftrag zusammen mit dem HKVPA NICHT nochmal mitsenden bei PIN/TAN und Match
-      // Laut FinTS_3.0_Messages_Geschaeftsvorfaelle_VOP_1.01_2025_06_27_FV.pdf Seite 14:
-      // "Falls das Ergebnis der VOP-Prüfung Match ist, *KANN* im PIN/TAN Verfahren ggf. auf die Einreichung
-      // des HKVPA seitens des Kreditinstituts verzichtet werden. Dies wird dem Kundenprodukt durch den 
-      // Rückmeldungscode 3091 angezeigt. In diesem Fall ist lediglich die Challenge im HITAN durch einen HKTAN zu beantworten.
-      // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
-      // nur in diesem einen Fall wegzulassen.
       final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
       if (needCallback)
       {
@@ -133,13 +145,13 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final String vopId = result.getVopId();
       if (vopId == null || vopId.length() == 0)
       {
-        // TODO: Das passiert, wenn wir noch kein vollständiges VoP-Ergebnis haben
+        // TODO VOP: Das passiert, wenn wir noch kein vollständiges VoP-Ergebnis haben
         // und pollen müssen. Das unterstützen wir im ersten Schritt noch nicht - müsste
         // noch nachgerüstet werden.
         HBCIUtils.log("have no vop id - polling needed - this is not yet supported",HBCIUtils.LOG_ERR);
         throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_VOP_CANCEL"));
       }
-
+      
       HBCIUtils.log("apply vop-id '" + vopId,HBCIUtils.LOG_INFO);
       this.auth.setParam("vopid",vopId);
     }

@@ -28,14 +28,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.GVVoP;
 import org.kapott.hbci.GV.GVVoPAuth;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
+import org.kapott.hbci.bpd.VoPParameter;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.comm.Filter;
@@ -54,6 +54,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.IHandlerData;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.structures.Limit;
 import org.kapott.hbci.structures.Value;
@@ -1044,70 +1045,71 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
             return;
         
         final HBCIHandler handler = (HBCIHandler) this.getParentHandlerData();
-
+        
+        final HBCIPassport passport = handler.getPassport();
+        final Properties bpd = passport.getBPD();
+        final VoPParameter vopParams = VoPParameter.parse(bpd);
+        
         for (HBCIMessage message:queue.getMessages())
         {
             for (HBCIJobImpl task:message.getTasks())
             {
-                final Map<String,String> bpd = task.getVoPParameters(handler);
-                if (bpd == null || bpd.isEmpty()) // Wir haben keine VoP BPD für den Geschäftsvorfall. Scheint also nicht nötig zu sein.
-                    continue;
-
                 final String segcode = task.getHBCICode();
-                HBCIUtils.log("patch VoP request into message for: " + segcode,HBCIUtils.LOG_INFO);
-
-                final GVVoPAuth auth = (GVVoPAuth) handler.newJob("VoPAuth"); // Die VoP Freigabe
-                auth.setTask(task);
-                auth.setExternalId(task.getExternalId());
                 
-                final GVVoP vop = (GVVoP) handler.newJob("VoP"); // Die VoP Anfrage
-                vop.setAuth(auth);
-                vop.setParam("suppreports.descriptor",this.getSupportedVoPReport(bpd));
-
-                // VOP-Anfrage *vor* dem eigentlichen Auftrag einreihen
-                message.prepend(task,vop);
+                // Checken, ob wir entweder passende BPD-Parameter haben oder bei dem GV das Senden einer
+                // VoP forciert werden soll, selbst wenn es nicht in den BPD steht
+                final boolean forced = HBCIUtils.getParam("vop." + segcode + ".force","false").equals("true");
+                final boolean enabled = vopParams != null && vopParams.getGvCodes().contains(segcode);
                 
-                // VOP-Freigabe hinten als neue Message
+                if (!forced && !enabled)
+                  continue;
+
+                HBCIUtils.log("patch VoP request into message for: " + segcode + " (enabled in BPD: " + enabled + ", forced: " + forced,HBCIUtils.LOG_INFO);
+
+                final GVVoPAuth vop2 = (GVVoPAuth) handler.newJob("VoPAuth"); // Die VoP Freigabe
+                vop2.setTask(task); // Referenz auf den Auftrag speichern
+                
+                final GVVoP vop1 = (GVVoP) handler.newJob("VoP"); // Die VoP Anfrage
+                vop1.setAuth(vop2);
+                vop1.setParam("suppreports.descriptor",this.getVoPFormat(vopParams).getURN());
+
+                // Schritt 1: VOP-Anfrage *vor* dem eigentlichen Auftrag einreihen
+                message.prepend(task,vop1);
+                
+                // Schritt 2: VOP-Freigabe hinten als neue Message - zusammen mit nochmal dem Auftrag
                 HBCIUtils.log("adding new VoPAuth message",HBCIUtils.LOG_INFO);
                 HBCIMessage newMsg = queue.insertAfter(message);
-                newMsg.append(auth);
+                // Wir müssen den Auftrag zusammen mit dem HKVPA NICHT nochmal mitsenden bei PIN/TAN und Match
+                // Laut FinTS_3.0_Messages_Geschaeftsvorfaelle_VOP_1.01_2025_06_27_FV.pdf Seite 14:
+                // "Falls das Ergebnis der VOP-Prüfung Match ist, *KANN* im PIN/TAN Verfahren ggf. auf die Einreichung
+                // des HKVPA seitens des Kreditinstituts verzichtet werden. Dies wird dem Kundenprodukt durch den 
+                // Rückmeldungscode 3091 angezeigt. In diesem Fall ist lediglich die Challenge im HITAN durch einen HKTAN zu beantworten.
+                // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
+                // nur in diesem einen Fall wegzulassen.
+                newMsg.append(task);
+                newMsg.append(vop2);
             }
         }
     }
     
     /**
-     * Liefert den Identifier des pain.002-Formats, welches laut BPD verwendet werden soll.
-     * @param props die Properties mit den VVoP BPDs.
-     * @return der Identifier fuer das pain.002-Format.
+     * Liefert das zu verwendende VoP-Format.
+     * @param params die Parameter.
+     * @return das Format. Niemals NULL sondern hoechstens eine Default-Version.
      */
-    private String getSupportedVoPReport(Map<String,String> bpd)
+    private SepaVersion getVoPFormat(VoPParameter params)
     {
-      // Kannste dir nicht ausdenken: Die erlauben tatsaechlich, fuer jeden Geschaeftsvorfall
-      // eigene pain-Formate zu definieren.
-      for (Entry<String,String> e:bpd.entrySet())
-      {
-        final String key = e.getKey();
-        
-        if (!key.contains("suppreports"))
-            continue;
-
-        if (!key.endsWith("descriptor"))
-          continue;
-
-        final String urn = e.getValue();
-        
-        // TODO: Wir nehmen derzeit einfach den ersten Treffer
-        // Keine Ahnung, ob es irgendwann wirklich unterschiedliche pain.002 Versionen geben wird
-        // Und wenn ja, wofuer eigentlich.
-        return urn;
-      }
+      final SepaVersion def = SepaVersion.PAIN_002_001_10;
+      if (params == null)
+        return def;
       
-      // TODO: Hier eine Default-Version verwenden?
-      HBCIUtils.log("unable to determine pain.002 version for VoP - using default version",HBCIUtils.LOG_WARN);
-      return "";
-
+      final List<SepaVersion> versions = params.getFormats();
+      if (versions == null || versions.isEmpty())
+        return def;
+      
+      return SepaVersion.findGreatest(versions);
     }
-
+    
     /**
      * @see org.kapott.hbci.passport.HBCIPassportInternal#getMaxGVSegsPerMsg()
      */

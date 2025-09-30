@@ -46,11 +46,21 @@ public enum KnownReturncode
      * SCA-Ausnahme.
      */
     W3076("3076"),
-
+    
+    /**
+     * VoP-Ausnahme. Es ist kein VoP-Auth erforderlich
+     */
+    W3091("3091"),
+    
     /**
      * Die Liste der zugelassenen Zweischritt-Verfahren.
      */
     W3920("3920"),
+    
+    /**
+     * VoP-Freigabe kann nicht erteilt werden.
+     */
+    W3945("3945"),
 
     /**
      * Starke Kundenauthentifizierung noch ausstehend (DECOUPLED Verfahren).

@@ -22,24 +22,42 @@
 package org.kapott.hbci.GV;
 
 import org.kapott.hbci.manager.HBCIHandler;
-import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.status.HBCIMsgStatus;
 
 /**
  * Der Geschaeftsvorfall für den VoP-Freigabe.
  */
 public class GVVoPAuth extends HBCIJobImpl
 {
-  private HBCIJobImpl task;
-
+  private HBCIJobImpl task = null;
+  
   /**
    * Liefert den Lowlevel-Namen.
-   * 
    * @return der Lowlevel-Name.
    */
   public static String getLowlevelName()
   {
     return "VoPAuth";
+  }
+  
+  /**
+   * Speichert eine Referenz auf den eigentlichen Geschaeftsvorfall.
+   * @param task
+   */
+  public void setTask(HBCIJobImpl task)
+  {
+      this.task = task;
+  }
+  
+  /**
+   * @see org.kapott.hbci.GV.HBCIJobImpl#skip()
+   */
+  @Override
+  public void skip()
+  {
+    super.skip();
+    
+    // Den Geschäftsvorfall müssen wir dann auch nicht nochmal senden
+    this.task.skip();
   }
 
   /**
@@ -59,30 +77,5 @@ public class GVVoPAuth extends HBCIJobImpl
     if (paramName.equals("vopid"))
       value = "B" + value;
     super.setParam(paramName, value);
-  }
-
-  /**
-   * Speichert eine Referenz auf den eigentlichen Geschaeftsvorfall.
-   * @param task der eigentliche Zahlungsauftrag.
-   */
-  public void setTask(HBCIJobImpl task)
-  {
-    this.task = task;
-  }
-
-  /**
-   * @see org.kapott.hbci.GV.HBCIJobImpl#saveReturnValues(org.kapott.hbci.status.HBCIMsgStatus, int)
-   */
-  protected void saveReturnValues(HBCIMsgStatus status, int sref)
-  {
-    super.saveReturnValues(status, sref);
-
-    // Rueckgabecode an den eigentlichen Auftrag weiterreichen
-    if (this.task != null)
-    {
-      int orig_segnum = Integer.parseInt(task.getJobResult().getSegNum());
-      HBCIUtils.log("storing return values in orig task (segnum=" + orig_segnum + ")", HBCIUtils.LOG_DEBUG);
-      task.saveReturnValues(status, orig_segnum);
-    }
   }
 }
