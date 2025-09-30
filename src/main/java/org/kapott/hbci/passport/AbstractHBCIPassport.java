@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.GVVoP;
+import org.kapott.hbci.GV.GVVoPAuth;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
 import org.kapott.hbci.callback.HBCICallback;
@@ -1049,17 +1050,27 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
             for (HBCIJobImpl task:message.getTasks())
             {
                 final Map<String,String> bpd = task.getVoPParameters(handler);
-                if (bpd == null || bpd.isEmpty())
+                if (bpd == null || bpd.isEmpty()) // Wir haben keine VoP BPD für den Geschäftsvorfall. Scheint also nicht nötig zu sein.
                     continue;
 
                 final String segcode = task.getHBCICode();
-                HBCIUtils.log("patch VoP into message for: " + segcode,HBCIUtils.LOG_DEBUG);
+                HBCIUtils.log("patch VoP request into message for: " + segcode,HBCIUtils.LOG_INFO);
 
-                final GVVoP vop = (GVVoP) handler.newJob("VoP");
+                final GVVoPAuth auth = (GVVoPAuth) handler.newJob("VoPAuth"); // Die VoP Freigabe
+                auth.setTask(task);
+                auth.setExternalId(task.getExternalId());
+                
+                final GVVoP vop = (GVVoP) handler.newJob("VoP"); // Die VoP Anfrage
+                vop.setAuth(auth);
                 vop.setParam("suppreports.descriptor",this.getSupportedVoPReport(bpd));
 
-                // VOP *vor* dem eigentlichen Auftrag einreihen
+                // VOP-Anfrage *vor* dem eigentlichen Auftrag einreihen
                 message.prepend(task,vop);
+                
+                // VOP-Freigabe hinten als neue Message
+                HBCIUtils.log("adding new VoPAuth message",HBCIUtils.LOG_INFO);
+                HBCIMessage newMsg = queue.insertAfter(message);
+                newMsg.append(auth);
             }
         }
     }

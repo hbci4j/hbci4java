@@ -5691,7 +5691,7 @@
 
         
         
-        <!--  BEGIN VoP -->
+        <!--  BEGIN VoP Prüfauftrag -->
         <SEGdef id="VoPCheck1">
             <DEG type="SegHeadUser" name="SegHead"/>
 
@@ -5749,6 +5749,18 @@
             &SecClassValids;
 
             <value path="SegHead.code">HIVPPS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+
+        <!--  BEGIN VoP Prüffreigabe -->
+        <SEGdef id="VoPAuth1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+
+            <!-- Die VoP-ID mit der Freigabe -->
+            <DE name="vopid" type="Bin" maxsize="256" minnum="1" />
+
+            <value path="SegHead.code">HKVPA</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
 
@@ -8108,6 +8120,7 @@
             <SEG type="Umb1" minnum="0"/>
             <SEG type="Umb2" minnum="0"/>
             <SEG type="VoPCheck1" minnum="0"/>
+            <SEG type="VoPAuth1" minnum="0"/>
             <SEG type="Vormerkposten1" minnum="0"/>
             <SEG type="WPDepotList2" minnum="0"/>
             <SEG type="WPDepotList3" minnum="0"/>

@@ -54,6 +54,19 @@ public class StringUtil
     }
     
     /**
+     * Parst aus dem Text fehlertolerant ein Boolean.
+     * @param s der Text.
+     * @return true, wenn s den Wert "true" besitzt.
+     */
+    public static boolean toBoolean(String s)
+    {
+      if (s == null)
+        return false;
+      
+      return Boolean.parseBoolean(s.trim());
+    }
+    
+    /**
      * Prueft, ob im String Text enthalten ist, der kein Whitespace ist.
      * @param s der zu pruefende Text.
      * @return true, wenn Text enthalten ist.

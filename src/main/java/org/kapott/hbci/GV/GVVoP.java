@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * This file is part of HBCI4Java.
- * Copyright (c) 2001-2008 Stefan Palme
+ * Copyright (c) Olaf Willuhn
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,12 +46,12 @@ import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.tools.StringUtil;
 
 /**
- * Die Geschaeftsvorfall-Implementierung fuer VoP.
+ * Der Geschaeftsvorfall für den VoP-Prüfauftrag.
  */
 public class GVVoP extends HBCIJobImpl<GVRVoP>
 {
-    private HBCIJobImpl task;
-    private HBCIJobImpl redo;
+    // Referenz auf den Freigabe-Task.
+    private GVVoPAuth auth;
 
     /**
      * Liefert den Lowlevel-Namen.
@@ -82,48 +82,12 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
     }
 
     /**
-     * Speichert eine Referenz auf den eigentlichen Geschaeftsvorfall.
-     * @param task
+     * Speichert eine Referenz auf den GV mit der Freigabe.
+     * @param auth der GV mit der Freigabe.
      */
-    public void setTask(HBCIJobImpl task)
+    public void setAuth(GVVoPAuth auth)
     {
-        this.task = task;
-    }
-    
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#saveReturnValues(org.kapott.hbci.status.HBCIMsgStatus, int)
-     */
-    protected void saveReturnValues(HBCIMsgStatus status, int sref)
-    {
-        super.saveReturnValues(status, sref);
-        
-        // Rueckgabecode an den eigentlichen Auftrag weiterreichen
-        if (this.task != null)
-        {
-            int orig_segnum=Integer.parseInt(task.getJobResult().getSegNum());
-            HBCIUtils.log("storing return values in orig task (segnum="+orig_segnum+")", HBCIUtils.LOG_DEBUG);
-            task.saveReturnValues(status,orig_segnum);
-        }
-    }
-    
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#redo()
-     */
-    @Override
-    public HBCIJobImpl redo()
-    {
-      // TODO: redo noch klären
-      return this.redo;
-    }
-    
-    /**
-     * @see org.kapott.hbci.GV.HBCIJobImpl#haveTan()
-     */
-    @Override
-    public boolean haveTan()
-    {
-        // VoP kann nie ein HKTAN benoetigen - die wird nur fuer den eigentlichen Auftrag gebraucht.
-        return true;
+        this.auth = auth;
     }
     
     /**
@@ -135,18 +99,65 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final String segCode = data.getProperty(header + ".SegHead.code"); // HIVPP oder das HI** des GV
       HBCIUtils.log("found HKVPP response with segcode " + segCode,HBCIUtils.LOG_DEBUG);
       
-      final VoPResult result = new VoPResult();
+      final VoPResult result = this.parse(data,header);
       this.getJobResult().setResult(result);
 
-      // Aufkärungstext bei Abweichung
-      final String infotext = data.getProperty(header + ".infotext");
-      result.setText(infotext);
-
-      // vopid kann leer sein bei Teillieferungen.
-      // TODO: Die unterstützen wir im ersten Schritt noch nicht.
-      final String vopid     = data.getProperty(header + ".vopid");
-      final String pollingid = data.getProperty(header + ".pollingid");
+      // Wir müssen den Auftrag zusammen mit dem HKVPA NICHT nochmal mitsenden bei PIN/TAN und Match
+      // Laut FinTS_3.0_Messages_Geschaeftsvorfaelle_VOP_1.01_2025_06_27_FV.pdf Seite 14:
+      // "Falls das Ergebnis der VOP-Prüfung Match ist, *KANN* im PIN/TAN Verfahren ggf. auf die Einreichung
+      // des HKVPA seitens des Kreditinstituts verzichtet werden. Dies wird dem Kundenprodukt durch den 
+      // Rückmeldungscode 3091 angezeigt. In diesem Fall ist lediglich die Challenge im HITAN durch einen HKTAN zu beantworten.
+      // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
+      // nur in diesem einen Fall wegzulassen.
+      final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
+      if (needCallback)
+      {
+        HBCIUtils.log("VoP callback needed",HBCIUtils.LOG_INFO);
+        final HBCIPassportInternal p = this.getMainPassport();
+        try
+        {
+          // VOP-Result im Passport speichern und User fragen, ob der Vorgang fortgesetzt werden kann
+          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,result);
+          final StringBuffer sb = new StringBuffer();
+          HBCIUtilsInternal.getCallback().callback(p,HBCICallback.HAVE_VOP_RESULT,result.getText(),HBCICallback.TYPE_BOOLEAN,sb);
+          if (!StringUtil.toBoolean(sb.toString()))
+            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_VOP_CANCEL"));
+        }
+        finally
+        {
+          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,null);
+        }
+      }
       
+      // erhaltene VoP-ID in den GV mit der Freigabe übertragen
+      final String vopId = result.getVopId();
+      if (vopId == null || vopId.length() == 0)
+      {
+        // TODO: Das passiert, wenn wir noch kein vollständiges VoP-Ergebnis haben
+        // und pollen müssen. Das unterstützen wir im ersten Schritt noch nicht - müsste
+        // noch nachgerüstet werden.
+        HBCIUtils.log("have no vop id - polling needed - this is not yet supported",HBCIUtils.LOG_ERR);
+        throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_VOP_CANCEL"));
+      }
+
+      HBCIUtils.log("apply vop-id '" + vopId,HBCIUtils.LOG_INFO);
+      this.auth.setParam("vopid",vopId);
+    }
+    
+    /**
+     * Extrahiert das VoP-Result aus den Daten.
+     * @param data die Daten.
+     * @param header der Header-Prefix.
+     * @return die VoP-Daten.
+     */
+    private VoPResult parse(Properties data, String header)
+    {
+      final VoPResult result = new VoPResult();
+
+      result.setVopId(data.getProperty(header + ".vopid")); // vopid kann leer sein bei Teillieferungen.
+      result.setPollingId(data.getProperty(header + ".pollingid"));
+      result.setText(data.getProperty(header + ".infotext"));
+
       // Wir kriegen entweder ein XML vom Typ pain.002.001.*, wenn es ein Sammelauftrag war
       final String desc = data.getProperty(header + ".reportdesc"); // Ich nehme an, das ist die Schema-Kennung
       final String xml  = data.getProperty(header + ".report");
@@ -182,25 +193,6 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         result.getItems().add(r);
       }
       
-      final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
-      if (needCallback)
-      {
-        HBCIUtils.log("VoP callback needed",HBCIUtils.LOG_INFO);
-        final HBCIPassportInternal p = this.getMainPassport();
-        try
-        {
-          // VOP-Result im Passport speichern und User fragen, ob der Vorgang fortgesetzt werden kann
-          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,result);
-          final StringBuffer sb = new StringBuffer();
-          HBCIUtilsInternal.getCallback().callback(p,HBCICallback.HAVE_VOP_RESULT,infotext,HBCICallback.TYPE_BOOLEAN,sb);
-          final String s = sb.toString();
-          if (s != null && s.trim().length() > 0 && !Boolean.parseBoolean(s))
-            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_VOP_CANCEL"));
-        }
-        finally
-        {
-          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,null);
-        }
-      }
+      return result;
     }
 }

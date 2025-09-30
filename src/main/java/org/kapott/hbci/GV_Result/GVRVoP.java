@@ -55,8 +55,47 @@ public class GVRVoP extends HBCIJobResultImpl
    */
   public static class VoPResult
   {
+    private String vopId = null;
+    private String pollingId = null;
+    
     private String text = null;
     private List<VoPResultItem> items = new ArrayList<>();
+    
+    /**
+     * Liefert die VoP-ID. 
+     * @return die VoP-ID.
+     */
+    public String getVopId()
+    {
+      return vopId;
+    }
+    
+    /**
+     * Speichert die VoP-ID. 
+     * @param vopId  die VoP-ID.
+     */
+    public void setVopId(String vopId)
+    {
+      this.vopId = vopId;
+    }
+    
+    /**
+     * Liefert die Polling-ID. 
+     * @return die Polling-ID.
+     */
+    public String getPollingId()
+    {
+      return pollingId;
+    }
+    
+    /**
+     * Speichert die Polling-ID.
+     * @param pollingId die Polling-ID.
+     */
+    public void setPollingId(String pollingId)
+    {
+      this.pollingId = pollingId;
+    }
     
     /**
      * Liefert den von der Bank gemeldeten Info-Text.
