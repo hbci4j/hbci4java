@@ -90,6 +90,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     private int loopCount = 0;
     private boolean haveTan = false;
     private boolean skip = false;
+    private boolean haveVop = false;
     
     private HashSet<String> indexedConstraints;
     
@@ -121,7 +122,10 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         llParams.setProperty(this.name,"requested");
     }
     
-    /* gibt den segmentcode für diesen job zurück */
+    /**
+     * Liefert die Segment-Kennung des Jobs.
+     * @return die Segment-Kennung oder NULL, wenn sie nicht ermittelbar war.
+     */
     public String getHBCICode()
     {
         StringBuffer ret=null;
@@ -158,7 +162,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
             }
         }
         
-        return ret.toString();
+        return ret != null ? ret.toString() : null;
     }
     
     /* gibt zu einem gegebenen jobnamen des namen dieses jobs in der syntax-spez.
@@ -752,6 +756,23 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         this.haveTan = true;
     }
     
+    /**
+     * Liefert true, wenn fuer den Auftrag die VoP-Prüfung erzeugt wurde.
+     * @return true, wenn fuer den Auftrag ein VoP-Prüfung erzeugt wurde.
+     */
+    public boolean haveVoP()
+    {
+        return this.haveVop;
+    }
+    
+    /**
+     * Vermerkt den Auftrag als "VoP erzeugt".
+     */
+    public void vopApplied()
+    {
+        this.haveVop = true;
+    }
+
     /**
      * Markiert den Auftrag als zu ueberspringend.
      */

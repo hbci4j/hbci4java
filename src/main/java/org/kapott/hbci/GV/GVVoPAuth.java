@@ -21,7 +21,9 @@
 
 package org.kapott.hbci.GV;
 
+import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.LogFilter;
 
 /**
  * Der Geschaeftsvorfall für den VoP-Freigabe.
@@ -30,6 +32,18 @@ public class GVVoPAuth extends HBCIJobImpl
 {
   private HBCIJobImpl task = null;
   
+  /**
+   * ct.
+   * @param handler
+   */
+  public GVVoPAuth(HBCIHandler handler)
+  {
+    super(handler, getLowlevelName(), new HBCIJobResultImpl());
+    
+    addConstraint("vopid","vopid",null,LogFilter.FILTER_NONE);
+
+  }
+
   /**
    * Liefert den Lowlevel-Namen.
    * @return der Lowlevel-Name.
@@ -58,15 +72,6 @@ public class GVVoPAuth extends HBCIJobImpl
     
     // Den Geschäftsvorfall müssen wir dann auch nicht nochmal senden
     this.task.skip();
-  }
-
-  /**
-   * ct.
-   * @param handler
-   */
-  public GVVoPAuth(HBCIHandler handler)
-  {
-    super(handler, getLowlevelName(), null);
   }
 
   /**

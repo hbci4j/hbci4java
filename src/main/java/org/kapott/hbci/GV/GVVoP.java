@@ -40,6 +40,7 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
+import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.sepa.SepaVersion;
@@ -70,6 +71,11 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
     public GVVoP(HBCIHandler handler)
     {
         super(handler,getLowlevelName(),new GVRVoP());
+        
+        addConstraint("suppreports.descriptor","suppreports.descriptor","",LogFilter.FILTER_NONE);
+        addConstraint("pollingid","pollingid",null,LogFilter.FILTER_NONE);
+        addConstraint("maxentries","maxentries",null,LogFilter.FILTER_NONE);
+        addConstraint("offset","offset",null,LogFilter.FILTER_NONE);
     }
     
     /**

@@ -1589,6 +1589,11 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     continue;
                 
                 final String segcode = task.getHBCICode();
+                if (segcode == null)
+                {
+                  HBCIUtils.log("suspect - have no segment code for task " + task.getJobName(),HBCIUtils.LOG_DEBUG);
+                  continue;
+                }
                 
                 // Braucht der Job eine TAN?
                 if (!this.getPinTanInfo(segcode).equals("J"))
