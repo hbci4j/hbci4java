@@ -55,8 +55,6 @@ public final class GVInfoOrder
         addConstraint("fax","Address.fax","", LogFilter.FILTER_IDS);
         addConstraint("email","Address.email","", LogFilter.FILTER_IDS);
         
-        // TODO: country fehlt
-
         for (int i=1;i<10;i++) {
             addConstraint(HBCIUtilsInternal.withCounter("code",i),
                           HBCIUtilsInternal.withCounter("InfoCodes.code",i),

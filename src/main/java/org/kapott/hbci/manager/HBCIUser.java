@@ -133,7 +133,6 @@ public final class HBCIUser implements IHandlerData
         }
     }
 
-    // TODO: dig keys unterstützen
     private void sendAndActivateNewUserKeys(HBCIKey[] sigKey,HBCIKey[] encKey)
     {
         try {
@@ -154,7 +153,6 @@ public final class HBCIUser implements IHandlerData
                 } else if (i==1) {
                     spec=fac.getKeySpec(encKey[0].key,RSAPublicKeySpec.class);
                 } else {
-                    // TODO: dig key senden
                 }
                 
                 byte[] ba=spec.getPublicExponent().toByteArray();
@@ -193,11 +191,11 @@ public final class HBCIUser implements IHandlerData
                 kernel.rawSet("KeyChange.KeyName.KIK.country", country);
                 kernel.rawSet("KeyChange.KeyName.userid", passport.getUserId());
                 kernel.rawSet("KeyChange.KeyName.keynum", sigKey[0].num);
-                kernel.rawSet("KeyChange.KeyName.keytype", "S"); // TODO: keytype "D"
+                kernel.rawSet("KeyChange.KeyName.keytype", "S");
                 kernel.rawSet("KeyChange.KeyName.keyversion", sigKey[0].version);
                 kernel.rawSet("KeyChange.SecProfile.method", passport.getProfileMethod());
                 kernel.rawSet("KeyChange.SecProfile.version", passport.getProfileVersion());
-                kernel.rawSet("KeyChange.PubKey.mode", "16"); // TODO: later real mode
+                kernel.rawSet("KeyChange.PubKey.mode", "16");
                 kernel.rawSet("KeyChange.PubKey.exponent", "B" + exponent[0]);
                 kernel.rawSet("KeyChange.PubKey.modulus", "B" + modulus[0]);
                 kernel.rawSet("KeyChange.PubKey.usage", "6");
@@ -210,18 +208,15 @@ public final class HBCIUser implements IHandlerData
                 kernel.rawSet("KeyChange_2.KeyName.keyversion", encKey[0].version);
                 kernel.rawSet("KeyChange_2.SecProfile.method", passport.getProfileMethod());
                 kernel.rawSet("KeyChange_2.SecProfile.version", passport.getProfileVersion());
-                kernel.rawSet("KeyChange_2.PubKey.mode", "16"); // TODO: later real mode
+                kernel.rawSet("KeyChange_2.PubKey.mode", "16");
                 kernel.rawSet("KeyChange_2.PubKey.exponent", "B" + exponent[1]);
                 kernel.rawSet("KeyChange_2.PubKey.modulus", "B" + modulus[1]);
                 kernel.rawSet("KeyChange_2.PubKey.usage", "5");
-                
-                // TODO: KeyChange_3
                 
                 passport.setMyPublicSigKey(sigKey[0]);
                 passport.setMyPrivateSigKey(sigKey[1]);
                 passport.setMyPublicEncKey(encKey[0]);
                 passport.setMyPrivateEncKey(encKey[1]);
-                // TODO: setMyDigKey
                 passport.saveChanges();
         
                 HBCIMsgStatus ret=kernel.rawDoIt(HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.DONT_NEED_CRYPT);
@@ -291,11 +286,11 @@ public final class HBCIUser implements IHandlerData
                 kernel.rawSet("KeyChange.KeyName.KIK.country", country);
                 kernel.rawSet("KeyChange.KeyName.userid", passport.getUserId());
                 kernel.rawSet("KeyChange.KeyName.keynum", sigKey[0].num);
-                kernel.rawSet("KeyChange.KeyName.keytype", "S"); // TODO: keytype "D"
+                kernel.rawSet("KeyChange.KeyName.keytype", "S");
                 kernel.rawSet("KeyChange.KeyName.keyversion", sigKey[0].version);
                 kernel.rawSet("KeyChange.SecProfile.method", passport.getProfileMethod());
                 kernel.rawSet("KeyChange.SecProfile.version", passport.getProfileVersion());
-                kernel.rawSet("KeyChange.PubKey.mode", "16"); // TODO: later real mode
+                kernel.rawSet("KeyChange.PubKey.mode", "16");
                 kernel.rawSet("KeyChange.PubKey.exponent", "B" + exponent[0]);
                 kernel.rawSet("KeyChange.PubKey.modulus", "B" + modulus[0]);
                 kernel.rawSet("KeyChange.PubKey.usage", "6");
@@ -308,12 +303,10 @@ public final class HBCIUser implements IHandlerData
                 kernel.rawSet("KeyChange_2.KeyName.keyversion", encKey[0].version);
                 kernel.rawSet("KeyChange_2.SecProfile.method", passport.getProfileMethod());
                 kernel.rawSet("KeyChange_2.SecProfile.version", passport.getProfileVersion());
-                kernel.rawSet("KeyChange_2.PubKey.mode", "16"); // TODO: later real mode
+                kernel.rawSet("KeyChange_2.PubKey.mode", "16");
                 kernel.rawSet("KeyChange_2.PubKey.exponent", "B" + exponent[1]);
                 kernel.rawSet("KeyChange_2.PubKey.modulus", "B" + modulus[1]);
                 kernel.rawSet("KeyChange_2.PubKey.usage", "5");
-                
-                // TODO: KeyChange_3
                 
                 HBCIKey[] oldEncKeys=new HBCIKey[2];
                 oldEncKeys[0]=passport.getMyPublicEncKey();
@@ -325,7 +318,7 @@ public final class HBCIUser implements IHandlerData
                 
                 ret=kernel.rawDoIt(HBCIKernelImpl.SIGNIT,HBCIKernelImpl.CRYPTIT,HBCIKernelImpl.NEED_CRYPT);
                 if (!ret.isOK()) {
-                    // TODO: hier muessen am besten beide schluessel im passport
+                    // hier muessen am besten beide schluessel im passport
                     // gesichert werden, damit spaeter ueberprueft werden
                     // kann, welcher der beiden denn nun beim server
                     // gespeichert ist. das ist dann kritisch, wenn eine
@@ -347,7 +340,6 @@ public final class HBCIUser implements IHandlerData
                 passport.setSigId(Long.valueOf(1));
                 passport.setMyPublicSigKey(sigKey[0]);
                 passport.setMyPrivateSigKey(sigKey[1]);
-                // TODO: setDigKey()
                 passport.saveChanges();
         
                 result = ret.getData();
@@ -364,7 +356,6 @@ public final class HBCIUser implements IHandlerData
     
     private void triggerNewKeysEvent()
     {
-        // TODO: hier überprüfen, ob tatsächlich ein INI-brief benötigt wird
         HBCIUtilsInternal.getCallback().callback(passport,
                                          HBCICallback.HAVE_NEW_MY_KEYS,
                                          HBCIUtilsInternal.getLocMsg("CALLB_NEW_USER_KEYS"),
@@ -383,7 +374,6 @@ public final class HBCIUser implements IHandlerData
         }
     }
     
-    // TODO: auch neuen dig-key setzen lassen?
     public void manuallySetNewKeys(KeyPair sigKey,KeyPair encKey)
     {
         if (passport.needUserKeys()) {

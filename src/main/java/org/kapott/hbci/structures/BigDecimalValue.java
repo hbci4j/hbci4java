@@ -46,7 +46,6 @@ public class BigDecimalValue implements Serializable {
     
     @Override
     public String toString() {
-        // TODO : Formatieren
         return value.toPlainString()+" "+curr;
     }
 }

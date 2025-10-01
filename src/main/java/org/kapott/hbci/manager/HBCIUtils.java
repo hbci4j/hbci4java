@@ -782,14 +782,8 @@ public final class HBCIUtils
 					}
 				}
 
-				// TODO: im fehlerfall wird hier nur f==null zurueckgegeben,
-				// so dass man ueber die eigentliche fehlerursache (file not
-				// found,
-				// permission denied) nichts erfaehrt
-
 				/* get an input stream */
-				InputStream f = null;
-				f = cl.getResourceAsStream(configfile);
+				InputStream f = cl.getResourceAsStream(configfile);
 				if (f == null)
 				{
 					throw new InvalidUserDataException("*** can not load config file " + configfile);

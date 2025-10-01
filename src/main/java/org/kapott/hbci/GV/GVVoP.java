@@ -107,7 +107,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final String segCode = data.getProperty(header+".SegHead.code"); // HITAN oder HIVPP
       if (!StringUtil.toInsCode(this.getHBCICode()).equals(segCode)) // Das ist nicht unser Response
       {
-        // TODO VP: Checken, ob der Fall überhaupt eintreten kann
+        // TODO VOP: Checken, ob der Fall überhaupt eintreten kann
         HBCIUtils.log("got VoP response for " + segCode + " - not for us",HBCIUtils.LOG_INFO);
         return;
       }

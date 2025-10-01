@@ -405,7 +405,6 @@ public class RDHXFile
             int keysize=(pversion==2)?20:32;
             HBCIUtils.log("using "+keysize+"-byte-key for MAC calculation", HBCIUtils.LOG_DEBUG);
 
-            // TODO: HmacSHA256 is available only in Java-6++
             String algname=(pversion==2)?"HmacSHA1":"HmacSHA256";
             HBCIUtils.log("MAC algorithm is "+algname, HBCIUtils.LOG_DEBUG);
             

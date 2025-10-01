@@ -1150,7 +1150,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public boolean needInstKeys()
     {
-        // TODO: das abhängig vom thema "bankensignatur für HKTAN" machen
         return false;
     }
     
@@ -1166,9 +1165,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
     public boolean hasInstSigKey()
     {
-        // TODO: hier müsste es eigentlich zwei antworten geben: eine für
-        // das PIN/TAN-verfahren an sich (immer true) und eine für
-        // evtl. bankensignatur-schlüssel für HITAN
         return true;
     }
     
@@ -1189,9 +1185,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public HBCIKey getInstSigKey()
     {
-        // TODO: hier müsste es eigentlich zwei antworten geben: eine für
-        // das PIN/TAN-verfahren an sich (immer null) und eine für
-        // evtl. bankensignatur-schlüssel für HITAN
         return null;
     }
     
@@ -1202,19 +1195,16 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     
     public String getInstSigKeyName()
     {
-        // TODO: evtl. zwei antworten: pin/tan und bankensignatur für HITAN
         return getUserId();
     }
 
     public String getInstSigKeyNum()
     {
-        // TODO: evtl. zwei antworten: pin/tan und bankensignatur für HITAN
         return "0";
     }
 
     public String getInstSigKeyVersion()
     {
-        // TODO: evtl. zwei antworten: pin/tan und bankensignatur für HITAN
         return "0";
     }
 
@@ -1345,7 +1335,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
 
     public void setInstEncKey(HBCIKey key)
     {
-        // TODO: implementieren für bankensignatur bei HITAN
     }
 
     public void setMyPublicDigKey(HBCIKey key)
@@ -1665,7 +1654,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     SEG seg = null;
                     try
                     {
-                        seg = task.createJobSegment(3); // FIXME: hartcodierte Segment-Nummer. Zu dem Zeitpunkt wissen wir sie noch nicht.
+                        seg = task.createJobSegment(3);
                         seg.validate();
                         final String segdata = seg.toString(0);
                         HBCIUtils.log("calculating hash for jobsegment: " + segdata,HBCIUtils.LOG_DEBUG2);

@@ -51,7 +51,6 @@ import org.kapott.hbci.passport.HBCIPassportRDHNew;
     sowie nach einem Passwort für deren Verschlüsselung gefragt. Nach Beendigung
     des Programmes existiert die RDHNew-Passport-Datei, welche ab sofort benutzt
     werden kann.</p> */
-// TODO: ConvertRDHXFilePassport 
 public class ConvertSIZRDHPassport
 {
     public static void main(String[] args) 

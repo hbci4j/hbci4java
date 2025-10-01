@@ -135,7 +135,6 @@ public class GVKUmsAll extends HBCIJobImpl
             umsResult.appendMT942Data(Swift.decodeUmlauts(rawData));
         }
         
-        // TODO: this is for compatibility reasons only
         jobResult.storeResult("notbooked",result.getProperty(header+".notbooked"));
     }
     

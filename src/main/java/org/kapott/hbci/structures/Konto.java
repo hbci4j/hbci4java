@@ -109,7 +109,13 @@ public class Konto
         this(country,blz,number,null);
     }
     
-    // TODO: doku fehlt
+    /**
+     * ct.
+     * @param country
+     * @param blz
+     * @param number
+     * @param subnumber
+     */
     public Konto(String country,String blz,String number,String subnumber)
     {
         this();
@@ -175,7 +181,10 @@ public class Konto
         return HBCIUtils.checkAccountCRC(blz,number);
     }
     
-    // TODO: doku fehlt
+    /**
+     * Prüft die IBAN.
+     * @return das Ergebnis der IBAN-Prüfung.
+     */
     public boolean checkIBAN()
     {
     	return HBCIUtils.checkIBANCRC(iban);
@@ -188,8 +197,6 @@ public class Konto
         if (o instanceof Konto) {
             Konto acc=(Konto)o;
             ret=true;
-            
-            // TODO: wenn this.blz==null und acc.blz!=null ist gibts ne exception
             
             ret&=(this.blz==null && acc.blz==null || this.blz.equals(acc.blz));
             ret&=(this.country==null && acc.country==null || this.country.equals(acc.country));

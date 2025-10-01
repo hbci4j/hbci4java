@@ -203,7 +203,7 @@ public final class SF
         MultipleSyntaxElements ret=null;
 
         if ((segref.getNodeName()).equals("SEG")) {
-            // TODO: this is a hack to speed up parsing of segments
+            // this is a hack to speed up parsing of segments
             // (params, customres); das funktioniert so, dass zunächst aus dem zu parsenden
             // string der nächste seghead.code extrahiert wird (string-operationen); außerdem
             // wird ermittelt, wie der seghead.code *des* segmentes ist (segref), als welches das
@@ -228,8 +228,7 @@ public final class SF
                 /* this is a very ugly hack for the ugly parser code: in certain
                  * cases it may happen that hbci4java takes a HIUPA segment as
                  * a BPD-Params-Template segment. the following code tries to
-                 * avoid this, but the solution is not "general". 
-                 * TODO: we really should replace the ugly message engine soon! */
+                 * avoid this, but the solution is not "general".*/
                 
                 boolean parseNext=true;
                 if (getName().startsWith("Params")) {

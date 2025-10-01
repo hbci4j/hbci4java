@@ -69,8 +69,6 @@ public abstract class AbstractMultiGV
                     DTAUS.Transaction entry = i.next();
                     sum += entry.value.getLongValue();
                 }
-                // TODO: hier wird ziemlich unschön direkt auf
-                // die SyntaxDE-Funktionen zugegriffen
                 String v = HBCIUtils.bigDecimal2String(new BigDecimal(sum).divide(new BigDecimal("100.0")));
                 ret = new SyntaxWrt(v, 1, 0).toString();
             	

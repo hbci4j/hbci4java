@@ -93,7 +93,6 @@ public final class MultipleSEGs
         }
     }
     
-    // TODO: diese Methode gehört zu einem dirty hack (der aber gut funktioniert)
     // Diese Methode wird von SyntaxElement.parse() verwendet, um bei den
     // SFs "Params" und "GVRes" dafür zu sorgen, dass nach jedem gefunden Segment
     // eine neue SF begonnen wird:

@@ -37,7 +37,6 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
-// TODO: implement some SPI interface?
 public class RetailMAC
 {
     private SecretKey       deskey;

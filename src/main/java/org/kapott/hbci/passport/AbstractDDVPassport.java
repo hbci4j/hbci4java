@@ -50,7 +50,6 @@ public abstract class AbstractDDVPassport
     
     public String getProfileVersion()
     {
-        // TODO: es gibt auch DDV-2
         return "1";
     }
 

@@ -255,8 +255,6 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
     public byte[] sign(byte[] data)
     {
         try {
-            // TODO: wenn die eingegebene PIN falsch war, muss die irgendwie
-            // resettet werden, damit wieder danach gefragt wird
             if (getPIN()==null) {
                 StringBuffer s=new StringBuffer();
 
@@ -330,8 +328,6 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                         HBCIUtils.log("the job with the code "+code+" does not need a TAN",HBCIUtils.LOG_DEBUG);
                         
                     } else if (info.length()==0) {
-                        // TODO: ist das hier dann nicht ein A-Segment? In dem Fall
-                        // wäre diese Warnung überflüssig
                         HBCIUtils.log("the job with the code "+code+" seems not to be allowed with PIN/TAN",HBCIUtils.LOG_WARN);
                     }
                 }
@@ -438,7 +434,6 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
      */
     public boolean verify(byte[] data,byte[] sig)
     {
-        // TODO: fuer bankensignaturen fuer HITAN muss dass hier geändert werden
         return true;
     }
 

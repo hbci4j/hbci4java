@@ -189,9 +189,9 @@ public class HBCIAccount
                 os.write(expand(getHost(),50).getBytes());
                 os.write(int2ba((int)getSigId()));
                 
-                // TODO: wenn nutzerschlüssel vorhanden, aber noch nicht 
+                // wenn nutzerschlüssel vorhanden, aber noch nicht 
                 // übermittelt sind: +0x01
-                // TODO: das kann in HBCI4Java eigentlich nicht passieren, weil
+                // Das kann in HBCI4Java eigentlich nicht passieren, weil
                 // Nutzerschlüssel immer erst dann im Passport gespeichert werden,
                 // wenn sie erfolgreich an die Bank übermittelt werden konnten. Umgekehrt
                 // kann es aber passieren, dass mit HBCI4Java eine RDH-2-Datei gelesen
@@ -287,8 +287,6 @@ public class HBCIAccount
         public void decrypt(SecretKey key)
             throws Exception
         {
-            // TODO: exception
-            
             // decrypt encrypted data
         	final String provider = CryptUtils.getSecurityProvider();
             Cipher cipher = provider == null ? Cipher.getInstance("DESede/CBC/PKCS5Padding") : Cipher.getInstance("DESede/CBC/PKCS5Padding", provider);
@@ -464,7 +462,6 @@ public class HBCIAccount
         public void encrypt(SecretKey key)
             throws Exception
         {
-            // TODO: exception
             ByteArrayOutputStream plaindata = new ByteArrayOutputStream();
             
             plaindata.write(int2ba(this.modulus.length));

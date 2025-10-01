@@ -180,7 +180,7 @@ public class RWrongStatusSegOrder
             // segment aus originalnachricht extrahieren
             StringBuffer segmentData=new StringBuffer(origMsg.substring(start,start+len));
             
-            // TODO: hier noch die segnum korrigieren (-->counter)
+            // hier noch die segnum korrigieren (-->counter)
             // korrektur wird nun doch nicht hier vorgenommen, sondern statt
             // muss einfach der Rewriter "WrongSequenceNumbers" nach diesem
             // Rewriter angeordnet werden

@@ -56,9 +56,6 @@ public class GVFestList
         addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);
         addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
         addConstraint("dummy","allaccounts","N", LogFilter.FILTER_NONE);
-        
-        // TODO: kontakt fehlt
-        // TODO: maxentries fehlen
     }
     
     /**

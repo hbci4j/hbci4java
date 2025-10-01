@@ -64,9 +64,6 @@ public final class GVDauerNew
         addConstraint("lastdate","DauerDetails.lastdate","", LogFilter.FILTER_NONE);
         addConstraint("key","key","52", LogFilter.FILTER_NONE);
         
-        // TODO: aussetzung fehlt
-        // TODO: addkey fehlt
-
         Properties parameters=getJobRestrictions();
         int        maxusage=Integer.parseInt(parameters.getProperty("maxusage"));
 

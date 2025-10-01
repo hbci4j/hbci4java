@@ -41,7 +41,6 @@ public class GVRAccInfo
     /** Informationen zu genau einem Konto */
     public static class AccInfo
     {
-        // TODO: doku fehlt
         public static class Address 
         {
             public String name1;
@@ -158,12 +157,8 @@ public class GVRAccInfo
         /** Weitere Informationen (optional) */
         public String  comment;
 
-        // TODO: doku fehlt
         public Address address;
 
-        // TODO public Berechtigter[] berechtigte; 
-        // /* TODO Briefanschrift (optional) */
-        
         public String toString()
         {
             StringBuffer ret=new StringBuffer();
@@ -190,7 +185,6 @@ public class GVRAccInfo
             	ret.append("Anschrift").append(linesep);
             	ret.append(address.toString()).append(linesep);
             }
-            // TODO: Berechtigte
             
             return ret.toString().trim();
         }

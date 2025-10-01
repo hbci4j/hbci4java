@@ -45,13 +45,10 @@ public class GVLastSEPA extends AbstractGVLastSEPA
     {
         super(handler, lowlevelName, result);
 
-    	// Typ der Lastschrift. Moegliche Werte:
-    	// CORE = Basis-Lastschrift (Default)
-    	// COR1 = Basis-Lastschrift mit verkuerzter Vorlaufzeit
-    	// B2B  = Business-2-Business-Lastschrift mit eingeschraenkter Rueckgabe-Moeglichkeit
-        //
-        // TODO: Wobei eigentlich nur "CORE" erlaubt ist, da dieser GV nur die CORE-Lastschrift
-        // kapselt. Eigentlich sollte das gar nicht konfigurierbar sein
+      	// Typ der Lastschrift. Moegliche Werte:
+      	// CORE = Basis-Lastschrift (Default)
+      	// COR1 = Basis-Lastschrift mit verkuerzter Vorlaufzeit
+      	// B2B  = Business-2-Business-Lastschrift mit eingeschraenkter Rueckgabe-Moeglichkeit
         addConstraint("type", "sepa.type", "CORE", LogFilter.FILTER_NONE);
         
         // Siehe https://homebanking-hilfe.de/forum/topic.php?p=155881#real155881

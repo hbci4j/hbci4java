@@ -119,6 +119,6 @@ public class PCSCTest extends AbstractTest
   public static void afterCardClass() throws Exception
   {
     dir = null;
-    // TODO: Verzeichnis und Inhalt muesste mal noch geloescht werden.
+    // Verzeichnis und Inhalt muesste mal noch geloescht werden.
   }
 }

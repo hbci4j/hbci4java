@@ -341,7 +341,6 @@ public final class DepotAbrufTest
     private static class MyGVUms extends GVWPDepotUms {
         public MyGVUms(HBCIHandler handler) {
             super(handler);
-            // TODO Auto-generated constructor stub
         }
 
         public GVRWPDepotUms myExtract(String testdata) {
@@ -367,10 +366,8 @@ public final class DepotAbrufTest
             
             System.out.println(test.myExtract(res.toString()));
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

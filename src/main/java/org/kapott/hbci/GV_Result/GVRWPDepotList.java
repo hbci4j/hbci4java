@@ -171,7 +171,7 @@ public final class GVRWPDepotList
                 </ul>*/ 
             public int        saldo_type;
             /** Gesamtsaldo dieser Gattung. Das Währungsfeld ist in jedem
-                Fall ein leerer String! (TODO). */
+                Fall ein leerer String!. */
             public BigDecimalValue      saldo;
             private ArrayList<SubSaldo> saldi;
             /** Anzahl der aufgelaufenen Tage (optional) */
@@ -180,7 +180,6 @@ public final class GVRWPDepotList
             public BigDecimalValue      depotwert;
             /** Betrag der   Stückzinsen (optional) */
             public BigDecimalValue      stueckzinsbetrag;
-            // TODO: dafuer muessen depotwert2 und stueckzinsbetrag2 eingefuehrt werden
             public String     xchg_cur1;
             public String     xchg_cur2;
             public double     xchg_kurs;
@@ -201,7 +200,6 @@ public final class GVRWPDepotList
             public BigDecimalValue      einstandspreis;
             /** Zinssatz als Prozentangabe bei verzinslichen Papieren (optional) */
             public long       zinssatz;
-            // TODO: das ist noch nicht gemacht
             public int        kontrakttype; 
             public Date       kontraktverfall;
             public int        kontraktversion;
@@ -309,8 +307,6 @@ public final class GVRWPDepotList
         private ArrayList<Gattung> gattungen;
         /** Gesamtwert des Depots (optional!) */
         public  BigDecimalValue     total;
-        
-        /* TODO: Zusatzinformationen aus Feld 72 */
         
         public Entry()
         {

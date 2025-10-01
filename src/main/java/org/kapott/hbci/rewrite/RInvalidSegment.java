@@ -27,7 +27,6 @@ import org.kapott.hbci.manager.MsgGen;
 public class RInvalidSegment
     extends Rewrite
 {
-    // TODO: msgsize muss angepasst werden
     public String incomingClearText(String st,MsgGen gen) 
     {
         StringBuffer sb=new StringBuffer(st);

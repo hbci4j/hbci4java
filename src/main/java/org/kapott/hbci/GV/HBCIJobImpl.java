@@ -426,7 +426,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         String[][] values=(constraints.get(frontendName));
 
         if (values==null) {
-            // wenn es noch keine gibt, ein neues frontend-ding anlegen //FIXME: was ist ein "frontend-ding"?
+            // wenn es noch keine gibt, ein neues frontend-ding anlegen
             values=new String[1][];
             values[0]=value;
         } else {

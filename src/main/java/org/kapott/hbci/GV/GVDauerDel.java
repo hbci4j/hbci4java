@@ -64,16 +64,6 @@ public final class GVDauerDel
         addConstraint("orderid","orderid","", LogFilter.FILTER_NONE);
         addConstraint("lastdate","DauerDetails.lastdate","", LogFilter.FILTER_NONE);
         
-        // TODO: daten fuer aussetzung fehlen
-        // TODO: addkey fehlt
-
-        // Properties parameters=getJobRestrictions();
-        // int        maxusage=Integer.parseInt(parameters.getProperty("maxusage"));
-        //
-        // TODO this is a dirty hack because we need the "maxusage" job restriction
-        // from GVDauerNew here, but we have no chance to access this parameter
-        // from here. The design changes of the next HBCI4Java version may solve
-        // this problem.
         int maxusage=99;
 
         for (int i=0;i<maxusage;i++) {
@@ -94,7 +84,6 @@ public final class GVDauerDel
                     throw new InvalidUserDataException(msg);
             }
             
-            // TODO: minpretime und maxpretime auswerten
         } else if (paramName.equals("orderid")) {
             Properties p=(Properties)getMainPassport().getPersistentData("dauer_"+value);
             if (p!=null && p.size()!=0) {

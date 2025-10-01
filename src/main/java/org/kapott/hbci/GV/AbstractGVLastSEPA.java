@@ -136,7 +136,7 @@ public abstract class AbstractGVLastSEPA extends AbstractSEPAGV
                 p2.setProperty(key.substring(key.indexOf(".")+1),p.getProperty(key));
             }
             
-            // TODO: Fuer den Fall, dass sich die Order-IDs zwischen CORE, COR1 und B2B
+            // Fuer den Fall, dass sich die Order-IDs zwischen CORE, COR1 und B2B
             // ueberschneiden koennen, muessen hier unterschiedliche Keys vergeben werden.
             getMainPassport().setPersistentData("termlast_"+orderid,p2);
         }

@@ -243,8 +243,6 @@ public class PKCS1_15
     
     private static boolean verify(SignatureParamSpec spec, PublicKey pubKey, byte[] msg, byte[] signature)
     {
-        // TODO: check if signature.len == pubKey.getModulus().len
-        
         int modBits=((RSAPublicKey)pubKey).getModulus().bitLength();
         int k=modBits>>3;
         if ((modBits&0x07)!=0) {

@@ -333,10 +333,6 @@ public final class HBCIInstitute
         if (!passport.needInstKeys() || passport.hasInstEncKey())
             return;
         
-        // TODO: hasInstEncKey(): bei Bankensignatur für HKTAN gibt es
-        // hier kollisionen, weil hasInstEncKey() für PINTAN eigentlich
-        // *immer* true zurückgibt
-            
         try {
             HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_INST_GET_KEYS,null);
             HBCIUtils.log("Rufe Institutsschlüssel ab",HBCIUtils.LOG_INFO);

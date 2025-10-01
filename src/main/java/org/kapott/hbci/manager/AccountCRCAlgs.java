@@ -381,8 +381,6 @@ public class AccountCRCAlgs
         return number[9] == crc;
     }
     
-    // TODO: hier weiter 
-
     public static boolean alg_33(int[] blz, int[] number) 
     {
         int sum = addProducts(number,4,8,new int[] {6,5,4,3,2},false);
@@ -502,8 +500,6 @@ public class AccountCRCAlgs
         return ok;
     }
 
-    
-    // TODO: more tests
     public static boolean alg_52(int[] blz, int[] number) 
     {
         boolean ok;
@@ -569,8 +565,6 @@ public class AccountCRCAlgs
         return ok;
     }
 
-    
-    // TODO: more tests
     public static boolean alg_53(int[] blz, int[] number) 
     {
         boolean ok;
@@ -780,9 +774,6 @@ public class AccountCRCAlgs
         return number[7]==crc;
     }
 
-
-    
-    // TODO: more tests
     public static boolean alg_68(int[] blz, int[] number) 
     {
         // 10-stellige
@@ -879,9 +870,6 @@ public class AccountCRCAlgs
         return number[9]==crc;
     }
 
-    
-    
-    // TODO: more tests
     public static boolean alg_74(int[] blz, int[] number) 
     {
         int sum=addProducts(number,0,8,new int[] {2,1,2,1,2,1,2,1,2}, true);
@@ -1022,9 +1010,6 @@ public class AccountCRCAlgs
         return alg_33(blz,number);
     }
     
-    
-    
-    // TODO: more tests
     public static boolean alg_87(int[] blz, int[] number)
     {
         // Ausnahme
@@ -1191,7 +1176,6 @@ public class AccountCRCAlgs
         }
 
         // Methode C
-        /* TODO: einige kontonummern werden laut spez hier ausgeschlossen */
         sum = addProducts(number, 4, 8, new int[] {6, 5, 4, 3, 2}, false);
         crc = 7-sum%7;
         if (crc==7) {
@@ -1542,7 +1526,6 @@ public class AccountCRCAlgs
             return true;
         }
         
-        // TODO check!!
         // in der Beschreibung steht Methode 6 modifiziert, aber es ist nicht
         // klar an welcher Stelle
         // die Tests laufen auch mit der unmodifizierten Methode durch

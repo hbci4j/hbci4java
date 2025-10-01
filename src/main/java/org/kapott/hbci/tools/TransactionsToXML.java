@@ -43,7 +43,6 @@ import org.kapott.hbci.structures.Konto;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: API-Dok.
 public class TransactionsToXML
 {
     public void createTransactionElements(Document doc, Element troot, List<GVRKUms.UmsLine> transactions)

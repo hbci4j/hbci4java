@@ -57,8 +57,6 @@ import org.kapott.hbci.structures.Value;
     Objekt kann mit {@link #addEntry(DTAUS.Transaction)}
     zum Sammelauftrag hinzugefügt werden. Die Methode {@link #toString()} 
     liefert schließlich den so erzeugten Sammelauftrag im DTAUS-Format.</p> */
-// TODO: API ändern (Setter/Getter), damit wir sauber die LogFilter für
-// kritische Daten setzen können
 public class DTAUS 
 {
     /** Daten einer einzelnen Transaktion, die in einen Sammelauftrag
@@ -178,7 +176,6 @@ public class DTAUS
                 int numOfExt=0;
 
                 // erweiterungsteile
-                // TODO: name2 für myAccount und otherAccount vorerst weggelassen
 
                 for (int i=1;i<usage.size();i++) {
                     st=SyntaxDTAUS.check(usage.get(i));
@@ -216,9 +213,7 @@ public class DTAUS
     /** Typ des Sammelauftrages: Sammellastschrift */
     public static final int TYPE_DEBIT=2;
     
-    /** TODO: doku fehlt */
     public static final byte CURR_DM=0x20;  
-    /** TODO: doku fehlt */
     public static final byte CURR_EUR=0x31;
     
     private static final byte ALIGN_LEFT=1;
@@ -280,7 +275,10 @@ public class DTAUS
             throw new InvalidUserDataException("*** invalid currency of this account: "+myAccount.curr);
     }
     
-    /** TODO: doku fehlt */
+    /**
+     * ct.
+     * @param dtaus
+     */
     public DTAUS(String dtaus)
     {
         entries=new ArrayList<Transaction>();
@@ -297,31 +295,41 @@ public class DTAUS
         entries.add(entry);
     }
     
-    /** TODO: doku fehlt */
+    /**
+     * @return
+     */
     public byte getCurr()
     {
         return curr;
     }
 
-    /** TODO: doku fehlt */
+    /**
+     * @return
+     */
     public ArrayList<Transaction> getEntries()
     {
         return entries;
     }
 
-    /** TODO: doku fehlt */
+    /**
+     * @return
+     */
     public Date getExecdate()
     {
         return execdate;
     }
 
-    /** TODO: doku fehlt */
+    /**
+     * @return
+     */
     public Konto getMyAccount()
     {
         return myAccount;
     }
 
-    /** TODO: doku fehlt */
+    /**
+     * @return
+     */
     public int getType()
     {
         return type;
@@ -538,7 +546,6 @@ public class DTAUS
             posi+=27;
             
             // skip währung
-            // TODO: hier konsistenz überprüfen
             posi++;
             
             // skip reserve
@@ -592,8 +599,6 @@ public class DTAUS
         if (x!=entries.size()) {
             throw new HBCI_Exception("*** there were "+entries.size()+" c-sets, but e-set says "+x);
         }
-        
-        // TODO: restliche konsistenzchecks machen
         
         HBCIUtils.log("parsinng of DTAUS data finished", HBCIUtils.LOG_DEBUG);
     }

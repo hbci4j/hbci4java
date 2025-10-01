@@ -122,7 +122,7 @@ public final class Sig
         sighead.propagateValue(sigheadName + ".seccheckref", seccheckref,
                 SyntaxElement.DONT_TRY_TO_CREATE,
                 SyntaxElement.DONT_ALLOW_OVERWRITE);
-        /* TODO: enable this later (when other range types are supported)
+        /* enable this later (when other range types are supported)
              sighead.propagateValue(sigheadName+".range",range,false); */
         sighead.propagateValue(sigheadName + ".role", u_role,
                 SyntaxElement.DONT_TRY_TO_CREATE,
@@ -383,29 +383,6 @@ public final class Sig
         
         u_secfunc=msg.getValueOfDE(sigheadName+".secfunc");
 
-        // TODO: das ist abgeschaltet, weil das Thema "Sicherheitsfunktion, kodiert"
-        // ab FinTS-3 anders behandelt wird - siehe Spez.
-        /*
-        if (u_secfunc.equals("2")) {
-            // DDV
-            u_cid=msg.getValueOfDE(sigheadName+".SecIdnDetails.cid");
-            if (!u_cid.equals(mainPassport.getCID())) {
-                String errmsg=HBCIUtilsInternal.getLocMsg("EXCMSG_CRYPTCIDFAIL");
-                if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreSignErrors",errmsg))
-                    throw new HBCI_Exception(errmsg);
-            }
-        } else {
-            // RDH und PinTan (= 2 und 999)
-            try {
-                // falls noch keine system-id ausgehandelt wurde, so sendet der
-                // hbci-server auch keine... deshalb der try-catch-block
-                u_sysid=msg.getValueOfDE(sigheadName+".SecIdnDetails.sysid");
-            } catch (Exception e) {
-                u_sysid="0";
-            }
-        }
-        */
-
         u_role = msg.getValueOfDE(sigheadName + ".role");
         u_range = msg.getValueOfDE(sigheadName + ".range");
         u_keycountry = msg.getValueOfDE(sigheadName + ".KeyName.KIK.country");
@@ -427,7 +404,6 @@ public final class Sig
         }
 
         if (mainPassport.needUserSig()) {
-            // TODO: bei anderen user-signaturen hier allgemeineren code schreiben
             Hashtable<String,String> values=new Hashtable<String, String>();
             msg.extractValues(values);
             
@@ -448,30 +424,6 @@ public final class Sig
                 throw new HBCI_Exception(errmsg);
         }
         
-        // TODO: dieser test ist erst mal deaktiviert. grund: beim pin/tan-zwei-
-        // schritt-verfahren ist die passport.getSigFunction()==922 (z.B.). 
-        // wenn jedoch zeitgleich HITAN über eine bankensignatur abgesichert
-        // wird, steht in der antwort secfunc=1 (RDH) drin. 
-        /*
-        if (!u_secfunc.equals(mainPassport.getSigFunction())) {
-            String errmsg=HBCIUtilsInternal.getLocMsg("EXCMSG_SIGTYPEFAIL",new String[] {u_secfunc,mainPassport.getSigFunction()});
-            if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreSignErrors",errmsg))
-                throw new HBCI_Exception(errmsg);
-        }
-        */
-        
-        // TODO: hier auch die DEG SecProfile lesen und überprüfen
-        
-        // TODO: diese checks werden vorerst abgeschaltet, damit die pin-tan sigs
-        // ohne probleme funktionieren
-        /*
-        if (!u_sigalg.equals(passport.getSigAlg()))
-            throw new HBCI_Exception(HBCIUtils.getLocMsg("EXCMSG_SIGALGFAIL",new String[] {u_sigalg,passport.getSigAlg()}));
-        if (!u_sigmode.equals(passport.getSigMode()))
-            throw new HBCI_Exception(HBCIUtils.getLocMsg("EXCMSG_SIGMODEFAIL",new String[] {u_sigmode,passport.getSigMode()}));
-        if (!u_hashalg.equals(passport.getHashAlg()))
-            throw new HBCI_Exception(HBCIUtils.getLocMsg("EXCMSG_SIGHASHFAIL",new String[] {u_hashalg,passport.getHashAlg()}));
-        */
     }
 
     private boolean hasSig()
@@ -482,7 +434,6 @@ public final class Sig
         if (seglist instanceof MultipleSEGs) {
             SEG sighead = null;
             try {
-                /* TODO: multiple signatures not supported until now */
                 sighead = (SEG)(seglist.getElements().get(0));
             } catch (IndexOutOfBoundsException e) {
                 ret = false;

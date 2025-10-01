@@ -135,9 +135,7 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
     {
         String ret;
         
-        // TODO: hier auch höhere hbci-versionen berücksichtigen
         if (getHBCIVersion().equals("300")) {
-            // TODO: bei verwendung der digisig hier anderen wert zurückgeben
             ret=Sig.SECFUNC_FINTS_SIG_SIG;
         } else {
             ret=Sig.SECFUNC_HBCI_SIG_RDH;
@@ -168,7 +166,6 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
             ret=Sig.SIGMODE_PSS;
             break;
         default:
-            // TODO das später vom security profile abhängig machen
             // RDH3: ISO9796-(1|2)
             // RDH4: PKCS1
             // RDH5: PKCS1
@@ -205,7 +202,6 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
             ret=Crypt.ENCMODE_CBC;
             break;
         default:
-            // TODO das später vom security profile abhängig machen
             // RDH3: PKCS1
             // RDH4: PKCS1
             // RDH5: PKCS1
@@ -240,7 +236,6 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
             ret=bytes;
             break;
         default:
-            // TODO das später vom security profile abhängig machen
             throw new HBCI_Exception("*** dont know which crypt data size to use for profile rdh-"+profile);
         }
 
@@ -264,7 +259,6 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
             ret=Sig.HASHALG_SHA256_SHA256;
             break;
         default:
-            // TODO das später vom security profile abhängig machen
             // RDH3: RIPE/SHA
             // RDH4: SHA
             // RDH5: SHA
@@ -298,7 +292,6 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
             // hashprovider=null;
             break;
         default:
-            // TODO das später vom security profile abhängig machen
             throw new HBCI_Exception("*** dont know which hash instance to use for profile rdh-"+profile);
         }
 
@@ -327,7 +320,6 @@ public abstract class AbstractRDHPassport extends AbstractHBCIPassport implement
             sigprovider=CryptAlgs4JavaProvider.NAME;
             break;
         default:
-            // TODO das später vom security profile abhängig machen
             throw new HBCI_Exception("*** dont know which signature instance to use for profile rdh-"+profile);
         }
 

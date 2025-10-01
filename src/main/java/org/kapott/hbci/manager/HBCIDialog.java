@@ -522,9 +522,6 @@ public final class HBCIDialog
 
     public void addTask(HBCIJobImpl job)
     {
-        // TODO: hier evtl. auch überprüfen, dass nur jobs mit den gleichen
-        // signatur-anforderungen (anzahl) in einer msg stehen
-        
         try {
             HBCIUtils.log(HBCIUtilsInternal.getLocMsg("EXCMSG_ADDJOB",job.getName()),HBCIUtils.LOG_DEBUG);
             job.verifyConstraints();

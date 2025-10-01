@@ -150,7 +150,7 @@ public final class Crypt
                     setParam("role","1");
                     setParam("alg",passport.getCryptAlg());
                     setParam("mode",passport.getCryptMode());
-                    setParam("compfunc","0"); // TODO: spaeter kompression implementieren
+                    setParam("compfunc","0");
 
                     byte[][] crypteds=passport.encrypt(getPlainString());
 
@@ -275,43 +275,6 @@ public final class Crypt
                             throw new HBCI_Exception(errmsg);
                     }
 
-                    // TODO: diese checks werden vorerst abgeschaltet, damit pin-tan reibungslos geht
-                    /*
-                                     // constraint checking
-                                     String keytype=crypthead.getValueOfDE(msgName+".CryptHead.CryptAlg.keytype");
-                         if (!keytype.equals(passport.getSecMethod56()) && !(passport instanceof HBCIPassportPinTan))
-                        throw new HBCI_Exception(HBCIUtils.getLocMsg("EXCMSG_CRYPTMETHODFAIL",new Object[] {keytype,passport.getSecMethod56()}));
-                                     String mode=crypthead.getValueOfDE(msgName+".CryptHead.CryptAlg.mode");
-                                     if (!mode.equals(passport.getCryptMode()))
-                         throw new HBCI_Exception(HBCIUtils.getLocMsg("EXCMSG_CRYPTMODEFAIL",new Object[] {keytype,passport.getCryptMode()}));
-                     */
-
-                    /* TODO: removed code because no real checks are done here
-                    if (passport.getSysStatus().equals("1")) {
-                        String sysid=null;
-                        try {
-                            // falls noch keine system-id ausgehandelt wurde, so sendet der
-                            // hbci-server auch keine... deshalb der try-catch-block
-                            sysid=crypthead.getValueOfDE(msgName+".CryptHead.SecIdnDetails.sysid");
-                        } catch (Exception e) {
-                            sysid="0";
-                        }
-                        
-                        // TODO: sysid checken (kann eigentlich auch entfallen, weil
-                        // das jeweils auf höherer ebene geschehen sollte!)
-                    } else {
-                        String cid=crypthead.getValueOfDE(msgName+".CryptHead.SecIdnDetails.cid");
-                        if (!cid.equals(passport.getCID())) {
-                            String errmsg=HBCIUtilsInternal.getLocMsg("EXCMSG_CRYPTCIDFAIL");
-                            if (!HBCIUtilsInternal.ignoreError(null,"client.errors.ignoreCryptErrors",errmsg))
-                                throw new HBCI_Exception(errmsg);
-                        }
-                        
-                        // TODO: cid checken
-                    }
-                    */
-
-                    // TODO spaeter kompression implementieren
                     String compfunc=crypthead.getValueOfDE(msgName+".CryptHead.compfunc");
                     if (!compfunc.equals("0")) {
                         String errmsg=HBCIUtilsInternal.getLocMsg("EXCMSG_CRYPTCOMPFUNCFAIL",compfunc);
@@ -319,8 +282,6 @@ public final class Crypt
                             throw new HBCI_Exception(errmsg);
                     }
                     
-                    // TODO: hier auch die DEG SecProfile lesen und überprüfen
-
                     byte[] plainMsg=passport.decrypt(cryptedkey,cryptedstring);
                     int padLength=plainMsg[plainMsg.length-1];
 

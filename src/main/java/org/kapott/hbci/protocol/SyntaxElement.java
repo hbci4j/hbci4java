@@ -58,7 +58,7 @@ public abstract class SyntaxElement
     
     // Wird von einigen Rewriter-Modules beim Parsen verwendet, um im Antwort-String
     // an der richtigen Stelle Daten auszuschneiden oder einzufügen.
-    // TODO: Problem dabei ist nur: sobald auch nur *ein* Rewriter die Antwort-
+    // Problem dabei ist nur: sobald auch nur *ein* Rewriter die Antwort-
     // Message verändert, stimmen von allen anderen SyntaxElementen die
     // Werte für posInMsg nicht mehr (es sei denn, es wird nach dem 
     // Verändern ein neues MSG-Objekt erzeugt).
@@ -86,8 +86,6 @@ public abstract class SyntaxElement
     benutzt */
     protected abstract MultipleSyntaxElements createNewChildContainer(Node ref, Document syntax);
     
-    // TODO: aus konsistenz-gründen auch in MultipleSyntaxElements create und
-    // createAndAdd trennen
     /** beim parsen: haengt an die 'childElements' ein neues Element an. der
      xml-knoten 'ref' gibt an, um welches element es sich dabei handelt; aus
      'res' (der zu parsende String) wird der wert fuer das element ermittelt
@@ -187,9 +185,6 @@ public abstract class SyntaxElement
                         MultipleSyntaxElements child=createAndAppendNewChildContainer(ref, syntax);
                         if (child!=null) {
                             child.setParent(this);
-                            // TODO: überprüfen, ob noch an anderen Stellen Container
-                            // erzeugt werden - diese müssten dann auch die richtige
-                            // syntaxIdx bekommen
                             child.setSyntaxIdx(syntaxIdx);
                             
                             if (getElementTypeName().equals("MSG"))
@@ -201,7 +196,6 @@ public abstract class SyntaxElement
 
                 /* durchlaufen aller "value"-knoten und setzen der
                  werte der entsprechenden de */
-                // TODO: effizienter: das nicht hier machen, sondern später,
                 // Wenn wir das *hier* machen, dann werden ja DOCH wieder
                 // alle "minnum=0"-Segmente
                 // erzeugt, weil für jedes Segment code und version gesetzt
@@ -225,7 +219,6 @@ public abstract class SyntaxElement
                 }
 
                 /* durchlaufen aller "valids"-knoten und speichern der valid-values */
-                // TODO: das hier ebenfalls später machen, siehe "values"
                 NodeList validNodes=((Element)def).getElementsByTagName("valids");
                 len = validNodes.getLength();
                 dottedPath = getPath()+".";
@@ -393,7 +386,6 @@ public abstract class SyntaxElement
                 		if (child!=null) {
                 			child.setParent(this);
 
-                			// TODO: this is a very very dirty hack to fix the problem with the params-template;
                 			// bei der SF "Params", die mit <SF type="Params" maxnum="0"/> referenziert wird, 
                 			// soll nach jedem erfolgreich in die SF aufgenommenen Param-Segment eine neue
                 			// SF begonnen werden, damit das Problem mit dem am Ende der SF stehenden Template-
@@ -490,7 +482,6 @@ public abstract class SyntaxElement
      liste der child-elemente durchlaufen; jedem dieser child-elemente wird der
      wert zum setzen uebergeben; genau _eines_ dieser elemente wird sich dafuer
      zustaendig fuehlen (das DE mit 'path'='destPath') und den wert uebernehmen */
-    // TODO: code splitten
     public boolean propagateValue(String destPath, String value, boolean tryToCreate,boolean allowOverwrite)
     {
         boolean ret = false;

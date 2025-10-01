@@ -199,7 +199,7 @@ public final class HBCIStatus
     {
         int code;
         
-        /* TODO: eine Exception als Fehler einzustufen ist gefaehrlich: wenn
+        /* eine Exception als Fehler einzustufen ist gefaehrlich: wenn
          * ein GV bei einer Bank eingereicht wird und von der Bank erfolgreich
          * verarbeitet wird, beim Entgegennehmen der Antwort-Nachricht jedoch
          * eine Exception auftritt, sieht der Job aus wie "fehlgeschlagen" - 

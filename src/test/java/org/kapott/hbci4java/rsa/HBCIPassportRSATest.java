@@ -45,7 +45,7 @@ public class HBCIPassportRSATest extends AbstractTest {
     @AfterClass
     public static void afterCardClass() throws Exception {
         dir = null;
-        // TODO: Verzeichnis und Inhalt muesste mal noch geloescht werden.
+        // Verzeichnis und Inhalt muesste mal noch geloescht werden.
     }
     
     private HBCIPassportRSA passport = null;

@@ -331,11 +331,7 @@ public class HBCIPassportRSA extends AbstractRDHPassport implements HBCIPassport
         if (result == null) {
             HBCIUtils.log("no RDH profile version explicity specified - starting autodetection", HBCIUtils.LOG_DEBUG);
             
-            /* TODO: do not use the hbci-version stored in the passport, but the
-             * hbci version of the current HBCIHandler associated with this passport.
-             * This will be easy in HBCI4Java-3, but in HBCI4Java-2 this is an
-             * ugly problem - broken by design */
-            if (getHBCIVersion().length() != 0 && !getHBCIVersion().startsWith("3")) { // TODO: support FinTS-4, too
+            if (getHBCIVersion().length() != 0 && !getHBCIVersion().startsWith("3")) {
                 result = "1";
                 setProfileVersion(result);
                 HBCIUtils.log("this is HBCI version '" + getHBCIVersion() + "', which only supports RDH-1", HBCIUtils.LOG_DEBUG);

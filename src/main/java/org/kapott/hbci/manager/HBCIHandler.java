@@ -439,12 +439,6 @@ public final class HBCIHandler
     /** Do NOT use! Use {@link org.kapott.hbci.GV.HBCIJob#addToQueue(String)} instead */
     public void addJobToDialog(String customerId,HBCIJob job)
     {
-        // TODO: nach dem neuen Objekt-Graph kennt der HBCIJob bereits "seinen"
-        // HBCIHandler, so dass ein HBCIHandler.addJob(job) eigentlich
-        // redundant ist und durch HBCIJob.addToQueue() ersetzt werden
-        // könnte. Deswegen muss es hier einen Überprüfung geben, ob
-        // (job.getHBCIHandler() === this) ist.
-        
         customerId=fixUnspecifiedCustomerId(customerId);
         
         HBCIDialog dialog = null;
@@ -729,7 +723,6 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
         erzeugt werden, ein neuer INI-Brief generiert und an die Bank versandt werden.</p>*/
     public void lockKeys()
     {
-        // TODO: die methode hat hier eigentlich nichts zu suchen
         try {
             new HBCIUser(kernel,passport,false).lockKeys();
         } catch (Exception ex) {
@@ -755,7 +748,6 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
         weggeworfen wurden.</p> */
     public void newKeys()
     {
-        // TODO: diese methode verschieben
         try {
             new HBCIUser(kernel,passport,false).generateNewKeys();
         } catch (Exception ex) {
@@ -773,10 +765,8 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
         des Kreditinstitutes kann es nämlich passieren, dass die neuen Schlüssel trotz
         eingegangener Fehlermeldung gespeichert werden, dann wären aber die alten (noch gültigen)
         Schlüssel überschrieben.</p> */
-    // TODO: hier digisig keys mit unterstützen
     public void setKeys(KeyPair sigKey,KeyPair encKey)
     {
-        // TODO: diese methode verschieben
         try {
             new HBCIUser(kernel,passport,false).manuallySetNewKeys(sigKey,encKey);
         } catch (Exception ex) {
@@ -797,8 +787,6 @@ hbciHandle=new HBCIHandle(hbciversion,passport);
      *         der TAN-Überprüfung festgestellt werden kann. */
     public HBCIExecStatus verifyTAN(String customerId)
     {
-        // TODO diese methode ist eine key-management-methode, muss also später
-        // ins passport-objekt verschoben werden
         reset();
         createEmptyDialog(customerId);
         ((AbstractPinTanPassport)passport).activateTANVerifyMode();

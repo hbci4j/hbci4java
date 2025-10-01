@@ -47,7 +47,7 @@ public final class GVRInfoList
               <li>S es handelt sich um ein Schriftdokument, welches bestellt werden kann</li>
               <li>T für Themenüberschrift</li>
             </ul> */
-        public String type; // TODO: das als int-konstante machen
+        public String type;
         
         public String format;
         /** Version dieser Information (optional) */

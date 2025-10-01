@@ -349,8 +349,6 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
         }
         
     	super.verifyConstraints();
-
-    	// TODO: checkIBANCRC
     }
 
     protected void setSEPAParam(String name, String value) {

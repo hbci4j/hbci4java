@@ -76,7 +76,6 @@ public final class GVWPDepotList
     {
         Properties result=msgstatus.getData();
 
-        // TODO es muessen noch die antwortdaten eines 571 geparst werden
         StringBuffer paramName=new StringBuffer(header).append(".data535");
         buffer.append(Swift.decodeUmlauts(result.getProperty(paramName.toString())));
 
@@ -279,7 +278,7 @@ public final class GVWPDepotList
                         
                         if (st_type.equals("FAMT")) { 
                             gattung.saldo_type=GVRWPDepotList.Entry.SALDO_TYPE_WERT;
-                            curr=""; // TODO
+                            curr="";
                         } else if (st_type.equals("UNIT")) {
                             gattung.saldo_type=GVRWPDepotList.Entry.SALDO_TYPE_STCK;
                             curr="";
@@ -377,8 +376,6 @@ public final class GVWPDepotList
                             st=SwiftLegacy.getLineFieldValue(formtext,"2",2);
                             if (st!=null)
                                 gattung.zinssatz=HBCIUtilsInternal.string2Long(st.replace(',','.'), 1000);
-                            
-                            // TODO: zeug fuer kontrakte
                         }
                         
                         int subsaldopos=onegattung.indexOf(":16R:SUBBAL");

@@ -28,7 +28,6 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-// TODO: implement some SPI interface?
 public class PBKDF2
 {
     public static byte[] deriveKey(byte[] salt, long nof_iterations, byte[] pass, int dkLen, String algname)

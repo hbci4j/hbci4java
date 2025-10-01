@@ -470,7 +470,7 @@ public final class HBCIKernelImpl implements HBCIKernel
                     throw new HBCI_Exception(errmsg);
             }
         } catch (Exception e) {
-            // TODO: hack to be able to "disable" HKEND response message analysis
+            // hack to be able to "disable" HKEND response message analysis
             // because some credit institutes are buggy regarding HKEND responses
             String paramName="client.errors.ignoreDialogEndErrors";
             if (currentMsgName.startsWith("DialogEnd") && 

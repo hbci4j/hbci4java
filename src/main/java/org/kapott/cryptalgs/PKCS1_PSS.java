@@ -337,8 +337,6 @@ public class PKCS1_PSS
         System.arraycopy(EM,0,            maskedDB,0, emLen-hLen-1);
         System.arraycopy(EM,emLen-hLen-1, H,0,        hLen);
 
-        // TODO: verify if first X bits of maskedDB are zero
-
         byte[] dbMask = mgf1(spec, H, emLen-hLen-1);
         byte[] DB = xor_os(maskedDB, dbMask);
 
@@ -346,8 +344,6 @@ public class PKCS1_PSS
         int  tooMuchBits=(emLen<<3)-emBits;
         byte mask=(byte)(0xFF>>>tooMuchBits);
         DB[0] &= mask;
-
-        // TODO: another consistency check
 
         byte[] salt = new byte[sLen];
         System.arraycopy(DB,DB.length-sLen, salt,0, sLen);

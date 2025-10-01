@@ -25,7 +25,6 @@ import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIUtils;
 
-// TODO: doku anpassen
 /** <p>Tool zum Verifizieren der Gültigkeit von BLZ/Kontonummer.
     Alle Kontonummern in Deutschland enthalten eine Prüfziffer, anhand
     welcher überprüft werden kann, ob die Kontonummer an sich gültig ist.

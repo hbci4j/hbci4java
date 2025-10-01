@@ -112,7 +112,6 @@ public abstract class AbstractRDHSWPassport
 
     public void setMyDigKey(HBCIKey key)
     {
-        // TODO
     }
     
     public void setMyPublicSigKey(HBCIKey key)
@@ -137,12 +136,10 @@ public abstract class AbstractRDHSWPassport
 
     public void setMyPublicDigKey(HBCIKey key)
     {
-        // TODO
     }
 
     public void setMyPrivateDigKey(HBCIKey key)
     {
-        // TODO
     }
 
     public HBCIKey getMyPublicSigKey()
@@ -167,13 +164,11 @@ public abstract class AbstractRDHSWPassport
 
     public HBCIKey getMyPublicDigKey()
     {
-        // TODO
         return null;
     }
     
     public HBCIKey getMyPrivateDigKey()
     {
-        // TODO
         return null;
     }
     
@@ -458,7 +453,6 @@ public abstract class AbstractRDHSWPassport
             
             int keySize=getKeySizeByProfile();
 
-            // TODO: auch dig key neu generieren?
             for (int i=0;i<2;i++) {
                 KeyPairGenerator keygen=KeyPairGenerator.getInstance("RSA");
                 // die schlüssellänge ist vom sicherheitsprofil abhängig 
@@ -480,7 +474,6 @@ public abstract class AbstractRDHSWPassport
         HBCIKey[][] ret=new HBCIKey[3][];
         ret[0]=newSigKey;
         ret[1]=newEncKey;
-        // TODO: dig keys
         ret[2]=null;
         
         return ret;

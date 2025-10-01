@@ -380,7 +380,6 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
         	ret.blz=getBLZ();
         	ret.country=getCountry();
         	ret.customerid=getCustomerId();
-        	// TODO: very dirty!
         	ret.name=getCustomerId();
         	
         	// an dieser Stelle sind jetzt alle Werte gefüllt, die teilweise

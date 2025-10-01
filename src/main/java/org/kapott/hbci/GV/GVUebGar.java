@@ -30,8 +30,6 @@ import org.kapott.hbci.manager.LogFilter;
 public class GVUebGar
     extends GVUeb
 {
-    // TODO: in doku aufnehmen
-    
     public static String getLowlevelName()
     {
         return "UebGar";
@@ -55,7 +53,6 @@ public class GVUebGar
 
         addConstraint("name2","name2","", LogFilter.FILTER_IDS);
         addConstraint("key","key","51", LogFilter.FILTER_NONE);
-        // TODO: richtige zu verwendende textschluesselergaenzung abklaeren 
         addConstraint("addkey","addkey","100", LogFilter.FILTER_NONE);
 
         Properties parameters=getJobRestrictions();
@@ -66,6 +63,4 @@ public class GVUebGar
             addConstraint(name,"usage."+name,"", LogFilter.FILTER_MOST);
         }
     }
-    
-    // TODO: extract response data
 }

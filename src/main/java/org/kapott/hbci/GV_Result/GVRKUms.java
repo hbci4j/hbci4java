@@ -506,7 +506,7 @@ public class GVRKUms
 
                 // looping to get all "umsaetze"
 
-                // TODO: beim MT942 (btag.start==null) müsste als Initialwert
+                // beim MT942 (btag.start==null) müsste als Initialwert
                 // fuer den Saldo hier eigentlich der Abschluss-Saldo aus den
                 // gebuchten Umsätzen verwendet werden (den habe ich an dieser
                 // Stelle aber nicht so ohne weiteres)
@@ -579,7 +579,7 @@ public class GVRKUms
 
                     line.value=new Value();
 
-                    // TODO: bei einem MT942 wird die waehrung hier automatisch auf EUR
+                    // bei einem MT942 wird die waehrung hier automatisch auf EUR
                     // gesetzt, weil die auto-erkennung (anhand des anfangssaldos) hier nicht
                     // funktioniert, weil es im MT942 keinen anfangssaldo gibt
                     line.value.setCurr((btag.start!=null)?btag.start.value.getCurr():"EUR");
@@ -604,7 +604,7 @@ public class GVRKUms
 
                     line.saldo=new Saldo();
                     line.saldo.timestamp=line.bdate;
-                    // TODO: bei einem MT942 wird die waehrung hier automatisch auf EUR
+                    // bei einem MT942 wird die waehrung hier automatisch auf EUR
                     // gesetzt, weil die auto-erkennung (anhand des anfangssaldos) hier nicht
                     // funktioniert, weil es im MT942 keinen anfangssaldo gibt
                     line.saldo.value=new Value(saldo, (btag.start!=null)?btag.start.value.getCurr():"EUR");

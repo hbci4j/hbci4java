@@ -197,8 +197,6 @@ public class HBCIBatch {
             case NEED_PT_TAN:
             case NEED_PT_PHOTOTAN:
             case NEED_PT_QRTAN:
-                // TODO tan-liste aktivieren
-
                 // Prüfe auf asynchrone TAN Bereitstellung via Datei
                 String value = answers.getProperty("tanfile");
                 if (value != null) {

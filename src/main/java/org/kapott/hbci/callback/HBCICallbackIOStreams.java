@@ -58,7 +58,7 @@ public class HBCICallbackIOStreams
         this.inStream=inStream;
     }
 
-    /** TODO: doc */
+    /** Setzt den Input-Stream. */
     protected void setInStream(BufferedReader in)
     {
         this.inStream=in;
@@ -69,7 +69,7 @@ public class HBCICallbackIOStreams
         return inStream;
     }
 
-    /** TODO: doc */
+    /** Setzt den Output-Stream */
     protected void setOutStream(PrintStream out)
     {
         this.outStream=out;

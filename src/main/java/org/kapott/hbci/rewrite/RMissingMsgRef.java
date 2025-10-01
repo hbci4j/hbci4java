@@ -29,7 +29,6 @@ import org.kapott.hbci.status.HBCIMsgStatus;
 public class RMissingMsgRef
     extends Rewrite
 {
-    // TODO: msgsize muss angepasst werden
     public String incomingCrypted(String st, MsgGen gen) 
     {
         int idx=st.indexOf("'");
