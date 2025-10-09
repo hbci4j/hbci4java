@@ -165,11 +165,28 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         return ret != null ? ret.toString() : null;
     }
     
+    /**
+     * Liefert true, wenn die Prüfung der BPD übersprungen werden soll.
+     * @return true, wenn die Prüfung der BPD übersprungen werden soll.
+     */
+    protected boolean skipBPDCheck()
+    {
+      return false;
+    }
+    
     /* gibt zu einem gegebenen jobnamen des namen dieses jobs in der syntax-spez.
      * zurück (also mit angehängter versionsnummer)
      */
     private void findSpecNameForGV(String jobnameLL,HBCIHandler handler)
     {
+      if (this.skipBPDCheck())
+      {
+        this.jobName    = jobnameLL;
+        this.segVersion = "1";
+        this.name       = jobnameLL + this.segVersion;
+        return;
+      }
+      
         int          maxVersion=0;
         StringBuffer key=new StringBuffer();
         

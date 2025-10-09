@@ -23,7 +23,9 @@ package org.kapott.hbci.GV;
 
 import org.kapott.hbci.GV_Result.HBCIJobResultImpl;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.status.HBCIMsgStatus;
 
 /**
  * Der Geschaeftsvorfall für den VoP-Freigabe.
@@ -82,5 +84,29 @@ public class GVVoPAuth extends HBCIJobImpl
     if (paramName.equals("vopid"))
       value = "B" + value;
     super.setParam(paramName, value);
+  }
+
+  /**
+   * @see org.kapott.hbci.GV.HBCIJobImpl#saveReturnValues(org.kapott.hbci.status.HBCIMsgStatus, int)
+   */
+  protected void saveReturnValues(HBCIMsgStatus status, int sref)
+  {
+      super.saveReturnValues(status, sref);
+      
+      if (this.task != null)
+      {
+          int orig_segnum=Integer.parseInt(task.getJobResult().getSegNum());
+          HBCIUtils.log("storing return values in orig task (segnum="+orig_segnum+")", HBCIUtils.LOG_DEBUG);
+          task.saveReturnValues(status,orig_segnum);
+      }
+  }
+
+  /**
+   * @see org.kapott.hbci.GV.HBCIJobImpl#skipBPDCheck()
+   */
+  @Override
+  protected boolean skipBPDCheck()
+  {
+    return true;
   }
 }

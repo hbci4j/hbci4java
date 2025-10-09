@@ -77,7 +77,16 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         addConstraint("maxentries","maxentries",null,LogFilter.FILTER_NONE);
         addConstraint("offset","offset",null,LogFilter.FILTER_NONE);
     }
-    
+
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#skipBPDCheck()
+     */
+    @Override
+    protected boolean skipBPDCheck()
+    {
+      return true;
+    }
+
     /**
      * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
      */
