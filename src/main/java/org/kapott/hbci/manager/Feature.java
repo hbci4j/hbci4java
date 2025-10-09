@@ -67,7 +67,7 @@ public enum Feature
     /**
      * Feature zur Aktivierung/Deaktivierung von Verification of Payee
      */
-    VOP(false),
+    VOP(true),
     
     ;
     
