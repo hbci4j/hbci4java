@@ -1577,6 +1577,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 if (task.haveTan())
                     continue;
                 
+                //HKVPP brauchen keine TAN, nur HKVPA
+                if(task.haveVoP())
+                  continue; 
+                
                 final String segcode = task.getHBCICode();
                 if (segcode == null)
                 {

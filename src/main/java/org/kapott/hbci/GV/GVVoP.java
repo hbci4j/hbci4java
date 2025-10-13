@@ -226,6 +226,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
     @Override
     protected boolean redoAllowed()
     {
+      
       return true;
     }
 }
