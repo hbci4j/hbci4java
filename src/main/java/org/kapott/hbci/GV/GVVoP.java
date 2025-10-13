@@ -136,6 +136,17 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final VoPResult result = this.parse(data,header);
       this.getJobResult().setResult(result);
 
+      // erhaltene VoP-ID in den GV mit der Freigabe übertragen
+      final String vopId = result.getVopId();
+      
+      //Wenn es noch keine ID gibt, müssen wir pollen, das wird durch die 3040 und redo() automatisch gemacht
+      if (vopId == null || vopId.length() == 0)
+      {
+        // TODO VOP: Hier wird eigentlich eine Wartezeit vorgegeben, wir machen es jedoch direkt nacheinander
+        this.setParam("pollingid", result.getPollingId());
+        return;
+      }
+      
       final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
       if (needCallback)
       {
@@ -154,17 +165,6 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         {
           p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,null);
         }
-      }
-      
-      // erhaltene VoP-ID in den GV mit der Freigabe übertragen
-      final String vopId = result.getVopId();
-      if (vopId == null || vopId.length() == 0)
-      {
-        // TODO VOP: Das passiert, wenn wir noch kein vollständiges VoP-Ergebnis haben
-        // und pollen müssen. Das unterstützen wir im ersten Schritt noch nicht - müsste
-        // noch nachgerüstet werden.
-        HBCIUtils.log("have no vop id - polling needed - this is not yet supported",HBCIUtils.LOG_ERR);
-        throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_VOP_CANCEL"));
       }
       
       HBCIUtils.log("apply vop-id '" + vopId,HBCIUtils.LOG_INFO);
@@ -221,5 +221,11 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       }
       
       return result;
+    }
+    
+    @Override
+    protected boolean redoAllowed()
+    {
+      return true;
     }
 }
