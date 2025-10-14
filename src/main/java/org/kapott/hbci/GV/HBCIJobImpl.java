@@ -90,6 +90,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     private int loopCount = 0;
     private boolean haveTan = false;
     private boolean skip = false;
+    private boolean useResult = true;
     private boolean haveVop = false;
     
     private HashSet<String> indexedConstraints;
@@ -796,6 +797,25 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     public void skip()
     {
         this.skip = true;
+        this.useResult = false;
+    }
+    
+    /**
+     * Speichert, ob das Ergebnis interpretiert werden soll.
+     * @param useResult true, wenn es interpretiert werden soll.
+     */
+    public void setUseResult(boolean useResult)
+    {
+      this.useResult = useResult;
+    }
+    
+    /**
+     * Liefert true, wenn das Ergebnis interpretiert werden soll.
+     * @return true, wenn das Ergebnis interpretiert werden soll.
+     */
+    public boolean useResult()
+    {
+      return useResult;
     }
     
     /**

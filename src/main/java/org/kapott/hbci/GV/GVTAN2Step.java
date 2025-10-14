@@ -190,6 +190,15 @@ public class GVTAN2Step extends HBCIJobImpl
     }
     
     /**
+    * @see org.kapott.hbci.GV.HBCIJobImpl#skipped()
+    */
+    @Override
+    public boolean skipped()
+    {
+      return super.skipped() || (this.task != null && this.task.skipped());
+    }
+    
+    /**
      * @see org.kapott.hbci.GV.HBCIJobImpl#haveTan()
      */
     @Override

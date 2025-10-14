@@ -74,6 +74,9 @@ public class GVVoPAuth extends HBCIJobImpl
     
     // Den Geschäftsvorfall müssen wir dann auch nicht nochmal senden
     this.task.skip();
+    
+    // Das Ergebnis brauchen wir aber dort
+    this.task.setUseResult(true);
   }
 
   /**

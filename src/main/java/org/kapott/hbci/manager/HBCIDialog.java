@@ -301,7 +301,7 @@ public final class HBCIDialog
                     {
                         final String name = task.getName();
 
-                        if (task.skipped())
+                        if (!task.useResult())
                         {
                             HBCIUtils.log("skipping results for task " + name, HBCIUtils.LOG_DEBUG);
                             continue;
