@@ -252,8 +252,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     @Override
     public void onDialogEvent(DialogEvent event, DialogContext ctx)
     {
-        super.onDialogEvent(event, ctx);
-
         if (event == DialogEvent.MSG_CREATED)
         {
             this.checkSCARequest(ctx);
@@ -269,6 +267,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
             this.patchMessagesFor2StepMethods(ctx);
         }
+        
+        super.onDialogEvent(event, ctx);
     }
     
     /**
@@ -1726,18 +1726,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     // Dahinter eine neue Nachricht mit dem einzelnen HKTAN#2
                     
                     // Checken, ob wir schon eine Message mit dem Auftrag zzgl. HKVPP haben. Wenn ja, dann dieses wiederverwenden.
-                    HBCIMessage newMsg = queue.findByTasks(segcode,"HKVPP");
-                    if (newMsg != null)
-                    {
-                      HBCIUtils.log("reusing existing " + segcode + "+HKVPP message for HKTAN(p=2)",HBCIUtils.LOG_DEBUG);
-                    }
-                    else
-                    {
                       // Andernfalls neu erstellen
-                      HBCIUtils.log("adding new message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
-                      newMsg = queue.insertAfter(message);
-                    }
-                    newMsg.append(hktan2);
+                      HBCIMessage newMsg = queue.insertAfter(message);
+                      newMsg.append(hktan2);                    
                 }
             }
         }
