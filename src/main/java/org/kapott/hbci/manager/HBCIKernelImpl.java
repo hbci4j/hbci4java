@@ -95,10 +95,10 @@ public final class HBCIKernelImpl implements HBCIKernel
     
     public void setParentHandlerData(IHandlerData parentHandlerData)
     {
-    	if (this.parentHandlerData!=null) {
-    		throw new HBCI_Exception("*** can not overwrite existing handler object");
-    	}
-    	this.parentHandlerData=parentHandlerData;
+      if (this.parentHandlerData!=null) {
+        throw new HBCI_Exception("*** can not overwrite existing handler object");
+      }
+      this.parentHandlerData=parentHandlerData;
     }
     
     public IHandlerData getParentHandlerData()
@@ -474,7 +474,7 @@ public final class HBCIKernelImpl implements HBCIKernel
             // because some credit institutes are buggy regarding HKEND responses
             String paramName="client.errors.ignoreDialogEndErrors";
             if (currentMsgName.startsWith("DialogEnd") && 
- 	            HBCIUtils.getParam(paramName,"no").equals("yes"))
+              HBCIUtils.getParam(paramName,"no").equals("yes"))
             {
                 HBCIUtils.log(e,HBCIUtils.LOG_WARN);
                 HBCIUtils.log("error while receiving DialogEnd response - "+

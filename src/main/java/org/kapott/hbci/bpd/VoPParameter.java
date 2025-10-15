@@ -85,7 +85,7 @@ public class VoPParameter
     final VoPParameter result = new VoPParameter();
     
     // Es kann sein, dass bei den unterstützten Formaten mehrere mit Semikolon angegeben sind
-    final String formats = ParameterFinder.getValue(bpd,"Params_*.VoPCheckPar1.ParVoPCheck.suppreports",null);
+    final String formats = ParameterFinder.getValue(bpd,"Params*.VoPCheckPar1.ParVoPCheck.suppreports",null);
     if (formats != null)
     {
       for (String s:formats.split(";"))
@@ -97,9 +97,9 @@ public class VoPParameter
       }
     }
     
-    result.infoTextFormatted = Objects.equals("j",ParameterFinder.getValue(bpd,"Params_*.VoPCheckPar1.ParVoPCheck.infotextformatted","n").toLowerCase());
+    result.infoTextFormatted = Objects.equals("j",ParameterFinder.getValue(bpd,"Params*.VoPCheckPar1.ParVoPCheck.infotextformatted","n").toLowerCase());
 
-    final Properties gvList = ParameterFinder.find(bpd,"Params_*.VoPCheckPar1.ParVoPCheck.segcode*");
+    final Properties gvList = ParameterFinder.find(bpd,"Params*.VoPCheckPar1.ParVoPCheck.segcode*");
     // Wir brauchen nur die Werte
     for (Object o:gvList.values())
     {
