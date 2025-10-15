@@ -1682,12 +1682,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     hktan.setProcess(KnownTANProcess.PROCESS2_STEP1);
     
                     // Checken, ob wir schon eine Message HKTAN#2 haben, diese müssen wir überspringen,
-                    //da es nur einmal ein TAN abfrage gibt.
+                    // da es nur einmal ein TAN abfrage gibt.
                     HBCIJobImpl oldHktan = queue.findTask("HKTAN");
-                    if(oldHktan != null )
-                    {
+                    if (oldHktan != null)
                       oldHktan.skip();
-                    }
                     
                     // das HKTAN direkt dahinter - in der selben Nachricht
                     message.append(hktan);
@@ -1732,7 +1730,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     hktan.setStep2(hktan2);
     
                     // Dahinter eine neue Nachricht mit dem einzelnen HKTAN#2
-                    
+                    HBCIUtils.log("adding new message with HKTAN(p=2) after current one",HBCIUtils.LOG_DEBUG);
                     HBCIMessage newMsg = queue.insertAfter(message);
                     newMsg.append(hktan2);                    
                 }
