@@ -103,33 +103,6 @@ public class HBCIMessageQueue
     }
     
     /**
-     * Liefert die Message, welche die Tasks mit den angegebenen HBCI-Codes enthält.
-     * @param codes die Codes. Es müssen alle enthalten sein.
-     * @return die Message oder NULL, wenn sie nicht existiert.
-     */
-    public HBCIMessage findByTasks(String... codes)
-    {
-      if (codes == null || codes.length == 0)
-        return null;
-    
-      for (HBCIMessage msg:this.messages)
-      {
-        int count = 0;
-        for (String code:codes)
-        {
-          HBCIJobImpl task = msg.findTask(code);
-          if (task != null)
-            count++;
-        }
-        
-        if (count == codes.length)
-          return msg;
-      }
-    
-    return null;
-    }
-    
-    /**
      * Liefert die letzte Nachricht.
      * @return die letzte Nachricht.
      */

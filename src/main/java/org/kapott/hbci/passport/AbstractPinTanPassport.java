@@ -252,6 +252,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     @Override
     public void onDialogEvent(DialogEvent event, DialogContext ctx)
     {
+        super.onDialogEvent(event, ctx);
+
         if (event == DialogEvent.MSG_CREATED)
         {
             this.checkSCARequest(ctx);
@@ -267,8 +269,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
             this.patchMessagesFor2StepMethods(ctx);
         }
-        
-        super.onDialogEvent(event, ctx);
     }
     
     /**
@@ -1681,11 +1681,11 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     HBCIUtils.log("process variant 2: adding new task HKTAN(p=4) to current message",HBCIUtils.LOG_DEBUG);
                     hktan.setProcess(KnownTANProcess.PROCESS2_STEP1);
     
-                    // Checken, ob wir schon eine Message HKTAN#2 haben, diese müssen wir überspringen,
-                    // da es nur einmal ein TAN abfrage gibt.
-                    HBCIJobImpl oldHktan = queue.findTask("HKTAN");
-                    if (oldHktan != null)
-                      oldHktan.skip();
+//                    // Checken, ob wir schon eine Message HKTAN#2 haben, diese müssen wir überspringen,
+//                    // da es nur einmal ein TAN abfrage gibt.
+//                    HBCIJobImpl oldHktan = queue.findTask("HKTAN");
+//                    if (oldHktan != null)
+//                      oldHktan.skip();
                     
                     // das HKTAN direkt dahinter - in der selben Nachricht
                     message.append(hktan);

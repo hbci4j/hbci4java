@@ -351,17 +351,8 @@ public final class HBCIDialog
                         // Nachricht bei Bedarf erstellen und an die Queue haengen
                         if (newMsg == null)
                         {
-                          // Wenn wir schon Messages in der Queue haben, reihen wir unsere noch davor ein
-                          if (!queue.getMessages().isEmpty())
-                          {
-                            newMsg = queue.insertBefore(queue.getMessages().get(0));
-                          }
-                          else
-                          {
-                            // Ansonsten eine neue erstellen
-                            newMsg = new HBCIMessage();
-                            queue.append(newMsg);
-                          }
+                          newMsg = new HBCIMessage();
+                          queue.append(newMsg);
                         }
                         
                         // Task hinzufuegen

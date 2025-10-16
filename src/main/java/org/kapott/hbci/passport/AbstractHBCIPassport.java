@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.GVVoP;
-import org.kapott.hbci.GV.GVVoPAuth;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
 import org.kapott.hbci.bpd.VoPParameter;
@@ -1070,30 +1069,14 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
 
                 HBCIUtils.log("patch VoP request into message for: " + segcode + " (enabled in BPD: " + enabled + ", forced: " + forced + ")",HBCIUtils.LOG_INFO);
 
-                final GVVoPAuth vop2 = (GVVoPAuth) handler.newJob("VoPAuth"); // Die VoP Freigabe
-                vop2.setTask(task); // Referenz auf den Auftrag speichern
-                
-                final GVVoP vop1 = (GVVoP) handler.newJob("VoP"); // Die VoP Anfrage
-                vop1.setAuth(vop2);
-                vop1.setParam("suppreports.descriptor",this.getVoPFormat(vopParams).getURN());
+                // VOP-Anfrage erstellen und *vor* dem eigentlichen Auftrag einreihen
+                final GVVoP vop = (GVVoP) handler.newJob("VoP");
+                vop.setDialogContext(ctx);
+                vop.setTask(task);
+                vop.setParam("suppreports.descriptor",this.getVoPFormat(vopParams).getURN());
 
-                // Schritt 1: VOP-Anfrage *vor* dem eigentlichen Auftrag einreihen
                 HBCIUtils.log("insert vop segment before " + segcode,HBCIUtils.LOG_INFO);
-                message.prepend(task,vop1);
-                
-                // Schritt 2: VOP-Freigabe hinten als neue Message - zusammen mit nochmal dem Auftrag
-                HBCIUtils.log("adding new vop-auth message to queue",HBCIUtils.LOG_INFO);
-                HBCIMessage newMsg = queue.insertAfter(message);
-                // Wir müssen den Auftrag zusammen mit dem HKVPA NICHT nochmal mitsenden bei PIN/TAN und Match
-                // Laut FinTS_3.0_Messages_Geschaeftsvorfaelle_VOP_1.01_2025_06_27_FV.pdf Seite 14:
-                // "Falls das Ergebnis der VOP-Prüfung Match ist, *KANN* im PIN/TAN Verfahren ggf. auf die Einreichung
-                // des HKVPA seitens des Kreditinstituts verzichtet werden. Dies wird dem Kundenprodukt durch den 
-                // Rückmeldungscode 3091 angezeigt. In diesem Fall ist lediglich die Challenge im HITAN durch einen HKTAN zu beantworten.
-                // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
-                // nur in diesem einen Fall wegzulassen.
-                task.vopApplied();
-                newMsg.append(task);
-                newMsg.append(vop2);
+                message.prepend(task,vop);
             }
         }
     }
