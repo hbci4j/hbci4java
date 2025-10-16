@@ -1689,6 +1689,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                         HBCIJobImpl t = msg.findTask("HKTAN");
                         if (t instanceof GVTAN2Step && ((GVTAN2Step)t).belongToTask(task))
                         {
+                          HBCIUtils.log("skiping existing HKTAN#2",HBCIUtils.LOG_DEBUG);
                           t.skip();
                           break;
                         }

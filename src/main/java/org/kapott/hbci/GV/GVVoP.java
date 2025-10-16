@@ -207,12 +207,14 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       // Wir suchen hier die Message mit dem HKTAN und fügen es dort mit ein
       HBCIUtils.log("adding new vop-auth message to queue [vop-id: " + vopId + "]",HBCIUtils.LOG_INFO);
       final HBCIMessageQueue queue = this.ctx.getDialog().getMessageQueue();
-      HBCIMessage msg = queue.findByTasks("HKTAN");
-      if (msg == null)
-      {
-        msg = new HBCIMessage();
-        queue.prepend(msg);
-      }
+      final HBCIMessage msg = new HBCIMessage();
+      queue.prepend(msg);
+//      HBCIMessage msg = queue.findByTasks("HKTAN");
+//      if (msg == null)
+//      {
+//        msg = new HBCIMessage();
+//        queue.prepend(msg);
+//      }
       
       // Wir müssen den Auftrag zusammen mit dem HKVPA NICHT nochmal mitsenden bei PIN/TAN und Match
       // Laut FinTS_3.0_Messages_Geschaeftsvorfaelle_VOP_1.01_2025_06_27_FV.pdf Seite 14:
@@ -221,8 +223,8 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       // Rückmeldungscode 3091 angezeigt. In diesem Fall ist lediglich die Challenge im HITAN durch einen HKTAN zu beantworten.
       // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
       // nur in diesem einen Fall wegzulassen.
-      if (msg.findTask(task.getHBCICode()) == null)
-        msg.append(task);
+//      if (msg.findTask(task.getHBCICode()) == null)
+      msg.append(task);
       
       msg.append(auth);
       task.vopApplied();
