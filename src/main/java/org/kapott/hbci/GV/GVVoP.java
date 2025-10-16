@@ -167,7 +167,15 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
           Thread.sleep(2000L);
         }
         catch (InterruptedException e) {}
+        
+        HBCIUtils.log("send vop polling polling message",HBCIUtils.LOG_INFO);
         this.setParam("pollingid", result.getPollingId());
+        // Task als einzelne Polling-Nachricht direkt als nächstes ausführen - noch vor allen anderen Nachrichten
+        final HBCIMessageQueue queue = this.ctx.getDialog().getMessageQueue();
+        final HBCIMessage msg = new HBCIMessage();
+        msg.append(this);
+        queue.prepend(msg);
+
         return;
       }
       
@@ -262,12 +270,5 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       }
       
       return result;
-    }
-    
-    @Override
-    protected boolean redoAllowed()
-    {
-      
-      return true;
     }
 }
