@@ -252,8 +252,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
     @Override
     public void onDialogEvent(DialogEvent event, DialogContext ctx)
     {
-        super.onDialogEvent(event, ctx);
-
         if (event == DialogEvent.MSG_CREATED)
         {
             this.checkSCARequest(ctx);
@@ -269,6 +267,9 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         {
             this.patchMessagesFor2StepMethods(ctx);
         }
+        
+        // Am Ende, damit das VoP Processing erst passiert, nachdem wir die Message für das HKTAN erzeugt haben
+        super.onDialogEvent(event, ctx);
     }
     
     /**
