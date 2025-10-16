@@ -268,7 +268,7 @@ public final class HBCIInstitute
                 HBCIUtils.log("Aktualisiere Bankparameter (BPD)",HBCIUtils.LOG_INFO);
                 
                 // Dialog-Context erzeugen
-                final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                final DialogContext ctx = new DialogContext(this.kernel,this.passport);
                 ctx.setAnonymous(true);
 
                 // Dialog-Initialisierung senden
@@ -338,7 +338,7 @@ public final class HBCIInstitute
             HBCIUtils.log("Rufe Institutsschlüssel ab",HBCIUtils.LOG_INFO);
             
             // Dialog-Context erzeugen
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            final DialogContext ctx = new DialogContext(this.kernel,this.passport);
             ctx.setAnonymous(true);
 
             // Dialog-Initialisierung senden
