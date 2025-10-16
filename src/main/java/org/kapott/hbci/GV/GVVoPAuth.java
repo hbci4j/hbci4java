@@ -65,18 +65,6 @@ public class GVVoPAuth extends HBCIJobImpl
   }
   
   /**
-   * @see org.kapott.hbci.GV.HBCIJobImpl#skip()
-   */
-  @Override
-  public void skip()
-  {
-    super.skip();
-    
-    // Den Geschäftsvorfall müssen wir dann auch nicht nochmal senden
-    this.task.skip();
-  }
-
-  /**
    * @see org.kapott.hbci.GV.HBCIJobImpl#setParam(java.lang.String, java.lang.String)
    */
   public void setParam(String paramName, String value)
