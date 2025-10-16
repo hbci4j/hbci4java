@@ -41,12 +41,12 @@ public class ParameterFinder
         /**
          * Informationen zur Verfuegbarkeit von Einschritt-Verfahren in den BPD.
          */
-        public final static Query BPD_PINTAN_CAN1STEP = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.can1step",false);
+        public final static Query BPD_PINTAN_CAN1STEP = new Query("Params*.TAN2StepPar*.ParTAN2Step*.can1step",false);
 
         /**
          * Information ueber den Order-Hashmode. Ist ein Query, welches einen Parameter benoetigt.
          */
-        public final static Query BPD_PINTAN_ORDERHASHMODE = new Query("Params_*.TAN2StepPar{0}.ParTAN2Step*.orderhashmode",true);
+        public final static Query BPD_PINTAN_ORDERHASHMODE = new Query("Params*.TAN2StepPar{0}.ParTAN2Step*.orderhashmode",true);
 
         /**
          * Die 3 verschiedenen Parameter für status refresh requests beim Decoupled Verfahren:
@@ -54,9 +54,9 @@ public class ParameterFinder
          *  2. Minimale Zeit vor weiteren refreshes (Sekunden).
          *  3. Maximale Anzahl von refreshes.
          */
-        public final static Query BPD_DECOUPLED_TIME_BEFORE_FIRST_STATUS_REQUEST = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams_*.decoupled_time_before_first_status_request",false);
-        public final static Query BPD_DECOUPLED_TIME_BEFORE_NEXT_STATUS_REQUEST = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams_*.decoupled_time_before_next_status_request",false);
-        public final static Query BPD_DECOUPLED_MAX_STATUS_REQUESTS = new Query("Params_*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams_*.decoupled_max_status_requests",false);
+        public final static Query BPD_DECOUPLED_TIME_BEFORE_FIRST_STATUS_REQUEST = new Query("Params*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.decoupled_time_before_first_status_request",false);
+        public final static Query BPD_DECOUPLED_TIME_BEFORE_NEXT_STATUS_REQUEST = new Query("Params*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.decoupled_time_before_next_status_request",false);
+        public final static Query BPD_DECOUPLED_MAX_STATUS_REQUESTS = new Query("Params*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.decoupled_max_status_requests",false);
 
         private String query = null;
         private boolean paramsSet = false;
