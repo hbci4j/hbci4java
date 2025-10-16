@@ -268,6 +268,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             this.patchMessagesFor2StepMethods(ctx);
         }
         
+        // Am Ende, damit das VoP Processing erst passiert, nachdem wir die Message für das HKTAN erzeugt haben
         super.onDialogEvent(event, ctx);
     }
     

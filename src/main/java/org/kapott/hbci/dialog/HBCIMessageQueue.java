@@ -148,6 +148,15 @@ public class HBCIMessageQueue
     }
     
     /**
+     * Fügt eine neue Nachricht am Anfang der Queue hinzu.
+     * @param message die neue Nachricht.
+     */
+    public void prepend(HBCIMessage message)
+    {
+      this.messages.add(0,message);
+    }
+    
+    /**
      * Fuegt vor der angegebenen Nachricht noch eine neue hinzu und liefert sie zurueck.
      * @param message die Nachricht, vor der noch eine neue eingfuegt werden soll.
      * @return die neue Nachricht.

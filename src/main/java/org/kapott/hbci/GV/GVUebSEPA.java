@@ -81,7 +81,7 @@ public class GVUebSEPA extends AbstractSEPAGV
     {
         this(handler, name, new HBCIJobResultImpl());
     }
-
+    
     /**
      * ct.
      * @param handler
