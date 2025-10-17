@@ -1074,6 +1074,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
                 vop.setDialogContext(ctx);
                 vop.setTask(task);
                 vop.setParam("suppreports.descriptor",this.getVoPFormat(vopParams).getURN());
+                task.vopApplied();
 
                 HBCIUtils.log("insert vop segment before " + segcode,HBCIUtils.LOG_INFO);
                 message.prepend(task,vop);

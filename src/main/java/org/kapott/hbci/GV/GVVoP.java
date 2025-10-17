@@ -219,9 +219,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
       // nur in diesem einen Fall wegzulassen.
       msg.append(task);
-      
       msg.append(auth);
-      task.vopApplied();
     }
     
     /**
