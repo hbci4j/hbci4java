@@ -44,7 +44,7 @@ import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
-import org.kapott.hbci.passport.AbstractPinTanPassport;
+import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.status.HBCIMsgStatus;
@@ -135,6 +135,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       final String segCode = data.getProperty(header+".SegHead.code"); // HITAN oder HIVPP
       if (!StringUtil.toInsCode(this.getHBCICode()).equals(segCode)) // Das ist nicht unser Response
       {
+        // TODO: Das kann möglicherweise entfernt werden
         HBCIUtils.log("got VoP response for " + segCode + " - not for us",HBCIUtils.LOG_INFO);
         return;
       }
@@ -187,7 +188,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         try
         {
           // VOP-Result im Passport speichern und User fragen, ob der Vorgang fortgesetzt werden kann
-          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,result);
+          p.setPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT,result);
           final StringBuffer sb = new StringBuffer();
           HBCIUtilsInternal.getCallback().callback(p,HBCICallback.HAVE_VOP_RESULT,result.getText(),HBCICallback.TYPE_BOOLEAN,sb);
           if (!StringUtil.toBoolean(sb.toString()))
@@ -195,7 +196,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         }
         finally
         {
-          p.setPersistentData(AbstractPinTanPassport.KEY_VOP_RESULT,null);
+          p.setPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT,null);
         }
       }
       
