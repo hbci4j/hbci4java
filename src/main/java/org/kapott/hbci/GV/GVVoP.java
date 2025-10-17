@@ -169,7 +169,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         }
         catch (InterruptedException e) {}
         
-        HBCIUtils.log("send vop polling polling message",HBCIUtils.LOG_INFO);
+        HBCIUtils.log("send vop polling message",HBCIUtils.LOG_INFO);
         this.setParam("pollingid", result.getPollingId());
         // Task als einzelne Polling-Nachricht direkt als nächstes ausführen - noch vor allen anderen Nachrichten
         final HBCIMessageQueue queue = this.ctx.getDialog().getMessageQueue();
