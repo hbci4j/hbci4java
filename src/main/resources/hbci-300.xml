@@ -5716,7 +5716,7 @@
             
             <!-- vopid und vopidvalidto sind bei Teillieferungen erst in der letzten Nachricht gefuellt -->
             <!-- M: "Payment Status Report" bzw. "Ergebnis der VOP Pruefung Einzeltransaktion" ist vollstaendig an Kunden uebermittelt / N: sonst -->
-            <DE name="vopid" type="Bin" maxsize="256" minnum="0" />
+            <DE name="vopid" type="Bin" maxsize="1024" minnum="0" />
 
             <!-- O: "VOP-ID" belegt / N: sonst -->
             <DEG name="vopidvalidto" type="Timestamp" minnum="0" />
@@ -5756,7 +5756,7 @@
             <DEG type="SegHeadUser" name="SegHead"/>
 
             <!-- Die VoP-ID mit der Freigabe -->
-            <DE name="vopid" type="Bin" maxsize="256" minnum="1" />
+            <DE name="vopid" type="Bin" maxsize="1024" minnum="1" />
 
             <value path="SegHead.code">HKVPA</value>
             <value path="SegHead.version">1</value>

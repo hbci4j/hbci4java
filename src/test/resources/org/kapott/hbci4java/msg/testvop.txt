@@ -1,0 +1,6 @@
+HNHBK:1:3+000000000861+300+DKB_171JXmQKXn5-OPymQ2B0HWVeNV+2+DKB_171JXmQKXn5-OPymQ2B0HWVeNV:2'
+HIRMG:2:2+3060::Teilweise liegen Warnungen vor.+0010::Nachricht entgegengenommen.'
+HIRMS:3:2:3+3090::Ergebnis Namensabgleich prüfen+0025::Keine Namensabweichung'
+HIRMS:4:2:5+3945::Freigabe erst nach Empfängerabgleich möglich.'
+HIVPP:5:1:3+@364@eFis/qt12y83MSR+vMtlmSSyOuThJo6LkM/3WsG8nM0JXfdPASc7U55yYxEnjSmaFzF+VrS72Rb4c6Dg1iDK+5HnmcK+qQfY/NMmEgrGF8Zu+vN/g4B1qGXJrd9SY8sgvOktIfi63CsGp/uMdIFxVaZhlvaff/5Fu0Rsr/TlOPRJx2GeQ3wNhskhS5PV3UHn0jBZ0vRUbRH6hSUBQPKd+oy//W63zzDYH5TjpJku6cZi/MctZKrjKFZ+aIVveVuH38faP6DvDb3ZFiOaWflg0X1VvW2ZCu4AMHWA1ZGjCki6SosbQar7LXqL3BV22QUOVF9+7Ts+mXDgxb8l5ppbfGgyTjCVTte/FnDk5Cs+pJc=+++++XXXXXXXXXXXXXXXXXXXXXX::::RCVC'
+HNHBS:6:1+2'
