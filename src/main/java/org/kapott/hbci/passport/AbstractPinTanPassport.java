@@ -1613,6 +1613,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 // 2. Auftrag + TAN (HNSHA) einreichen
                 if (process.equals("1"))
                 {
+                    HBCIUtils.log("TAN process variant 1",HBCIUtils.LOG_INFO);
                     HBCIUtils.log("process variant 1: adding new message with HKTAN(p=1,hash=...) before current message",HBCIUtils.LOG_DEBUG);
                     hktan.setProcess(KnownTANProcess.PROCESS1);
                     hktan.setParam("notlasttan","N");
@@ -1679,7 +1680,6 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 // 2. HKTAN mit Referenz zum Auftrag und TAN(HNSHA) einreichen
                 else
                 {
-                  
                     // Durch VoP kann es vorkommen, dass wir für einen Auftrag bereits ein HKTAN#2 für den Auftrag haben
                     // Damit wir nicht nochmal einen erstellen, überspringen wir den alten.
                     // Siehe https://github.com/hbci4j/hbci4java/pull/112#issuecomment-3414386458
@@ -1693,6 +1693,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                       }
                     }
                     
+                    HBCIUtils.log("TAN process variant 2",HBCIUtils.LOG_INFO);
                     HBCIUtils.log("process variant 2: adding new task HKTAN(p=4) to current message",HBCIUtils.LOG_DEBUG);
                     hktan.setProcess(KnownTANProcess.PROCESS2_STEP1);
     
