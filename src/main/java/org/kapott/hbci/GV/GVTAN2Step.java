@@ -159,6 +159,16 @@ public class GVTAN2Step extends HBCIJobImpl
         this.task = task;
     }
     
+    /**
+     * Prüft, od der HKTAN zum angegebenen task gehört
+     * @param task der Task.
+     * @return true, wenn er zu dem Task gehört.
+     */
+    public boolean belongToTask(HBCIJobImpl task)
+    {
+      return task != null && task.equals(this.task);
+    }
+    
     protected void saveReturnValues(HBCIMsgStatus status, int sref)
     {
         super.saveReturnValues(status, sref);
