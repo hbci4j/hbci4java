@@ -245,7 +245,12 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
 
         try
         {
-          final SepaVersion version = SepaVersion.choose(null,xml);
+          SepaVersion version = SepaVersion.choose(desc,xml);
+          if (version == null)
+          {
+            HBCIUtils.log("got unknown sepa descriptor, fallback to pain.002.001.10 [desc: " + desc + "]",HBCIUtils.LOG_WARN);
+            version = SepaVersion.PAIN_002_001_10;
+          }
           ISEPAParser<List<VoPResultItem>> parser = SEPAParserFactory.get(version);
           
           HBCIUtils.log("parsing pain.002 data: " + xml,HBCIUtils.LOG_DEBUG2);
