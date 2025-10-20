@@ -670,7 +670,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             // HITAN erhalten - Daten uebernehmen
             HBCIUtils.log("SCA HITAN response found, triggering TAN request",HBCIUtils.LOG_DEBUG);
             final String challenge = props.getProperty("challenge");
-            if (challenge != null && challenge.length() > 0)
+            if (challenge != null && challenge.length() > 0 && !Objects.equals(challenge,"nochallenge"))
                 this.setPersistentData(KEY_PD_CHALLENGE,challenge);
             
             final String hhdUc = props.getProperty("challenge_hhd_uc");

@@ -22,6 +22,7 @@
 package org.kapott.hbci.GV;
 
 
+import java.util.Objects;
 import java.util.Properties;
 
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
@@ -169,15 +170,27 @@ public class GVTAN2Step extends HBCIJobImpl
       return task != null && task.equals(this.task);
     }
     
+    /**
+     * @see org.kapott.hbci.GV.HBCIJobImpl#saveReturnValues(org.kapott.hbci.status.HBCIMsgStatus, int)
+     */
     protected void saveReturnValues(HBCIMsgStatus status, int sref)
     {
         super.saveReturnValues(status, sref);
         
         if (this.task != null)
         {
-            int orig_segnum=Integer.parseInt(task.getJobResult().getSegNum());
-            HBCIUtils.log("storing return values in orig task (segnum="+orig_segnum+")", HBCIUtils.LOG_DEBUG);
-            task.saveReturnValues(status,orig_segnum);
+          // Die Bank meldet z.B.:
+          // HIRMS:4:2:[3]+0010::Der Auftrag wurde entgegengenommen.'
+          // Das Bezugssegment aus der vorherigen Nachricht ist also 3. Und das war nicht etwa
+          // der eigentliche Auftrag sondern unter HKTAN#2:
+          // HKTAN:[3]:7+S++++..........+N'
+          // Der eigentliche Auftrag (z.B. HKIPZ) ist noch eine Nachricht vorher geschickt worden.
+          // Wir können das Ergebnis also nicht basierend auf der ursprünglichen Segmentnummer
+          // des eigentlichen Auftrages verwenden (das ist schon 2 Nachrichten her und gar nicht mehr gültig).
+          // Stattdessen gilt der Ausführungsstatus des HKTAN#2 auch für den Auftrag mit.
+          int orig_segnum=Integer.parseInt(task.getJobResult().getSegNum());
+          HBCIUtils.log("storing return values in orig task (orig segnum="+orig_segnum+", actual segnum: " + sref + ")", HBCIUtils.LOG_DEBUG);
+          task.saveReturnValues(status,sref);
         }
     }
     
@@ -278,7 +291,7 @@ public class GVTAN2Step extends HBCIJobImpl
         // Daten fuer die TAN-Abfrage einsammeln
         
         final String challenge = result.getProperty(header+".challenge");
-        if (challenge != null)
+        if (challenge != null && !Objects.equals(challenge,"nochallenge"))
         {
             HBCIUtils.log("found challenge '" + challenge + "' in HITAN - saving it temporarily in passport",HBCIUtils.LOG_DEBUG);
             p.setPersistentData(AbstractPinTanPassport.KEY_PD_CHALLENGE,challenge);
