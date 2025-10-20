@@ -347,7 +347,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                 {
                     HBCIUtils.log("will not sign with a TAN, found status code 3076, no SCA required",HBCIUtils.LOG_DEBUG);
                 }
-                else if (challenge==null) // manche Banken senden auch "nochallenge" *facepalm*
+                else if (challenge==null)
                 {
                     // es gibt noch keine challenge
                     HBCIUtils.log("will not sign with a TAN, because there is no challenge",HBCIUtils.LOG_DEBUG);
