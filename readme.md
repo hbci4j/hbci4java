@@ -18,7 +18,7 @@ Das Projekt entstand 2010 als Fork von <http://hbci4java.kapott.org>, da dessen 
 
 Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 
-- Unterstützung für die neuen EU-weiten PSD2-Anforderungen (SCA), die ab Mitte September 2019 für FinTS verpflichtend sind
+- Unterstützung für PSD2 (SCA), welche seit September 2019 für FinTS verpflichtend ist
 - Abruf von Umsätzen im CAMT-Format (HKCAZ)
 - Unterstützung für chipTAN USB
 - Abruf des elektronischen Kontoauszuges (HKEKA und HKEKP)
@@ -27,7 +27,9 @@ Seither wurden umfangreiche neue Features hinzugefügt wie etwa:
 - Unterstützung von PC/SC-Kartenlesern via javax.smartcardio API
 - Eine aktuelle Bankenliste (mit BLZ, Server-Adresse, HBCI-Version,...)
 - Unterstützung der neuen TAN-Verfahren (smsTAN, photoTAN, chipTAN - incl. Implementierung des HHD-Standards mit Flicker-Code)
-- Unterstützung von RAH10-Schlüsseldateien
+- RAH10-Schlüsseldateien
+- PushTAN Decoupled (Direktfreigabe per App)
+- Verification of Payee (VoP)
 
 ## Lizenz
 
