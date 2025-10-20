@@ -257,7 +257,7 @@ public final class HBCIUser implements IHandlerData
                 HBCIUtilsInternal.getCallback().status(passport,HBCICallback.STATUS_DIALOG_INIT,null);
 
                 // Dialog-Context erzeugen
-                final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                final DialogContext ctx = new DialogContext(this.kernel,this.passport);
 
                 // Dialog-Initialisierung senden
                 final HBCIDialogInit init = new HBCIDialogInit();
@@ -432,7 +432,7 @@ public final class HBCIUser implements IHandlerData
             // Sync
             {
                 // Dialog-Synchronisierung senden
-                final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+                final DialogContext ctx = new DialogContext(this.kernel,this.passport);
                 final HBCIDialogSync sync = new HBCIDialogSync(Mode.SYS_ID);
                 final HBCIMsgStatus ret = sync.execute(ctx);
                 final Properties result = ret.getData();
@@ -477,7 +477,7 @@ public final class HBCIUser implements IHandlerData
             passport.setSigId(Long.valueOf("9999999999999999"));
     
             // Dialog-Context erzeugen
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            final DialogContext ctx = new DialogContext(this.kernel,this.passport);
 
             // Dialog-Synchronisierung senden
             final HBCIDialogSync sync = new HBCIDialogSync(Mode.SIG_ID);
@@ -621,7 +621,7 @@ public final class HBCIUser implements IHandlerData
             }
             
             // Dialog-Context erzeugen
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            final DialogContext ctx = new DialogContext(this.kernel,this.passport);
             ctx.setAnonymous(this.isAnon);
 
             // Dialog-Initialisierung senden
@@ -672,7 +672,7 @@ public final class HBCIUser implements IHandlerData
         ////////////////////////////////////////
         // TAN-Medienbezeichnung abrufen - machen wir noch vor den UPD. Weil wir dafuer ja ggf. bereits das TAN-Verfahren brauchen (wir rufen dort ja auch KInfo ab)
         {
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            final DialogContext ctx = new DialogContext(this.kernel,this.passport);
             HBCIProcess p = new HBCIProcessTanMedia(force);
             p.execute(ctx);
         }
@@ -692,7 +692,7 @@ public final class HBCIUser implements IHandlerData
         // Zum Schluss noch die SEPA-Infos abrufen
         if (Feature.SYNC_SEPAINFO.isEnabled())
         {
-          final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+          final DialogContext ctx = new DialogContext(this.kernel,this.passport);
           HBCIProcess p = new HBCIProcessSepaInfo(force);
           p.execute(ctx);
         }
@@ -727,7 +727,7 @@ public final class HBCIUser implements IHandlerData
             HBCIUtils.log("Sperre Benutzerschlüssel",HBCIUtils.LOG_INFO);
             
             // Dialog-Context erzeugen
-            final DialogContext ctx = DialogContext.create(this.kernel,this.passport);
+            final DialogContext ctx = new DialogContext(this.kernel,this.passport);
 
             // Dialog-Initialisierung senden
             final HBCIDialogInit init = new HBCIDialogInit();

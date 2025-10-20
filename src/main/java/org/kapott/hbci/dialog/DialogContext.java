@@ -68,21 +68,12 @@ public class DialogContext
      * @param passport der Passport.
      * @return der neue Context.
      */
-    public static DialogContext create(HBCIKernelImpl kernel, HBCIPassportInternal passport)
+    public DialogContext(HBCIKernelImpl kernel, HBCIPassportInternal passport)
     {
-        DialogContext ctx = new DialogContext();
-        ctx.kernel = kernel;
-        ctx.passport = passport;
-        return ctx;
+        this.kernel = kernel;
+        this.passport = passport;
     }
 
-    /**
-     * ct.
-     */
-    private DialogContext()
-    {
-    }
-    
     /**
      * Liefert den Kernel.
      * @return der Kernel. Kann NULL sein.
