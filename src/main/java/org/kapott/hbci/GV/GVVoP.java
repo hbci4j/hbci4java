@@ -180,6 +180,12 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         return;
       }
       
+      if (result.getItems().isEmpty())
+      {
+        HBCIUtils.log("Got empty VoP result - callback not possible",HBCIUtils.LOG_ERR);
+        throw new HBCI_Exception("Got empty VoP result - callback not possible");
+      }
+      
       final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
       if (needCallback)
       {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResultItem;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
+import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_12.AccountIdentification4Choice;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_12.ActiveOrHistoricCurrencyAndAmount;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_12.CustomerPaymentStatusReportV12;
@@ -14,8 +15,6 @@ import org.kapott.hbci.sepa.jaxb.pain_002_001_12.OriginalTransactionReference35;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_12.PartyIdentification135;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_12.PaymentTransaction129;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_12.StatusReasonInformation12;
-
-import jakarta.xml.bind.JAXB;
 
 
 /**
@@ -28,7 +27,7 @@ public class ParsePain00200112 extends AbstractParsePain002
    */
   public void parse(InputStream xml, List<VoPResultItem> sepaResults)
   {
-    final Document doc = JAXB.unmarshal(xml, Document.class);
+    final Document doc = this.parse(xml,SepaVersion.PAIN_002_001_12,Document.class);
     final CustomerPaymentStatusReportV12 pain = doc.getCstmrPmtStsRpt();
     
     if (pain == null)

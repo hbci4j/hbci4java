@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResultItem;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPStatus;
+import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.AccountIdentification4Choice;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.ActiveOrHistoricCurrencyAndAmount;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.CustomerPaymentStatusReportV10;
@@ -14,8 +15,6 @@ import org.kapott.hbci.sepa.jaxb.pain_002_001_10.OriginalTransactionReference28;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.PartyIdentification135;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.PaymentTransaction105;
 import org.kapott.hbci.sepa.jaxb.pain_002_001_10.StatusReasonInformation12;
-
-import jakarta.xml.bind.JAXB;
 
 
 /**
@@ -41,7 +40,7 @@ public class ParsePain00200110 extends AbstractParsePain002
       Ausserdem in https://www.ebics.de/de/datenformate in Anlage_3_Datenformate_V3.9.pdf - Kapitel 2.2.6
     */
 
-    final Document doc = JAXB.unmarshal(xml, Document.class);
+    final Document doc = this.parse(xml,SepaVersion.PAIN_002_001_10,Document.class);
     final CustomerPaymentStatusReportV10 pain = doc.getCstmrPmtStsRpt();
     
     if (pain == null)

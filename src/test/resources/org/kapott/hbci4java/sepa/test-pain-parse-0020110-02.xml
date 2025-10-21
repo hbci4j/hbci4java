@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document
+  xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.002.001.10 pain.002.001.10.xsd"
+  xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <CstmrPmtStsRpt>
+        <GrpHdr>
+            <MsgId>8fe2133db36b4026ba7d6766583d434e</MsgId>
+            <CreDtTm>2025-10-20T21:33:51.999511</CreDtTm>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>ABCDEFGHIJ</BICFI>
+                </FinInstnId>
+            </DbtrAgt>
+        </GrpHdr>
+        <OrgnlGrpInfAndSts>
+            <OrgnlMsgId>2025-10-20T23:33:49:0045</OrgnlMsgId>
+            <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>
+            <OrgnlNbOfTxs>1</OrgnlNbOfTxs>
+            <OrgnlCtrlSum>100.00</OrgnlCtrlSum>
+            <GrpSts>RVMC</GrpSts>
+            <StsRsnInf>
+                <AddtlInf>RVNM Der Name des Empfaengers und die angegebene IBAN wurde abgeglichen (Empfaengerueberpruefung). Der</AddtlInf>
+                <AddtlInf>RVNM Name des oder der Kontoinhaber(s) zur angegebenen IBAN stimmt nicht ueberein. Beachte: die</AddtlInf>
+                <AddtlInf>RVNM Autorisierung der Ueberweisung kann dazu fuehren, dass das Geld an eine falsche Person ueberwiesen</AddtlInf>
+                <AddtlInf>RVNM wird.</AddtlInf>
+            </StsRsnInf>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>RCVC</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>1</DtldNbOfTxs>
+                <DtldSts>RVNM</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>RVMC</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>RVNA</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>PDNG</DtldSts>
+            </NbOfTxsPerSts>
+        </OrgnlGrpInfAndSts>
+        <OrgnlPmtInfAndSts>
+            <OrgnlPmtInfId>2025-10-20T23:33:49:0045</OrgnlPmtInfId>
+            <OrgnlNbOfTxs>1</OrgnlNbOfTxs>
+            <OrgnlCtrlSum>100.00</OrgnlCtrlSum>
+            <PmtInfSts>RVMC</PmtInfSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>RCVC</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>1</DtldNbOfTxs>
+                <DtldSts>RVNM</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>RVMC</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>RVNA</DtldSts>
+            </NbOfTxsPerSts>
+            <NbOfTxsPerSts>
+                <DtldNbOfTxs>0</DtldNbOfTxs>
+                <DtldSts>PDNG</DtldSts>
+            </NbOfTxsPerSts>
+            <TxInfAndSts>
+                <OrgnlEndToEndId>NOTPROVIDED</OrgnlEndToEndId>
+                <OrgnlUETR>a34743b9-fb22-4ec6-9947-03b7e191584e</OrgnlUETR>
+                <TxSts>RVNM</TxSts>
+                <OrgnlTxRef>
+                    <Cdtr>
+                        <Pty>
+                            <Nm>Max Mustermann</Nm>
+                        </Pty>
+                    </Cdtr>
+                    <CdtrAcct>
+                        <Id>
+                            <IBAN>DE12345678901234567890</IBAN>
+                        </Id>
+                    </CdtrAcct>
+                </OrgnlTxRef>
+            </TxInfAndSts>
+        </OrgnlPmtInfAndSts>
+    </CstmrPmtStsRpt>
+</Document>
