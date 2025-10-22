@@ -682,7 +682,7 @@ public final class HBCIUtils
   /**
    * Die HBCI-Produktregistrierung von HBCI4Java für Test-Zwecke.
    * !!!!!! ACTHUNG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   * Beantrage unter http://hbci-zka.de/register/register_faq.htm bitte eine eigene
+   * Beantrage unter https://www.fints.org/de/hersteller/produktregistrierung bitte eine eigene
    * Registrierung. Die hier genannte ist nur für Test-Zwecke gedacht und kann jederzeit
    * von der Deutschen Kreditwirtschaft gesperrt werden
    */
