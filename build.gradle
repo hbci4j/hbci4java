@@ -2,7 +2,7 @@ plugins {
   id 'java'
   id 'eclipse'
   id 'java-library-distribution'
-  id "com.vanniktech.maven.publish" version "0.34.0"
+  id 'com.vanniktech.maven.publish' version '0.34.0'
   id 'com.intershop.gradle.jaxb' version '7.0.2'
 }
 
@@ -23,7 +23,8 @@ eclipse {
 java {
   sourceCompatibility = JavaVersion.VERSION_17
   withSourcesJar()
-  withJavadocJar()
+  // https://github.com/vanniktech/gradle-maven-publish-plugin/issues/772
+  //  withJavadocJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -59,8 +60,12 @@ tasks.named('sourcesJar') {
   exclude 'org/kapott/hbci/sepa/jaxb/**'
 }
 
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 def xsdDir  = file('src/main/resources')
-def jaxbOut = file("$buildDir/generated/jaxb")
+def jaxbOut = file("${layout.buildDirectory.get()}/generated/jaxb")
 def jaxbPackage = 'org.kapott.hbci.sepa.jaxb.'
 jaxb {
   javaGen {
@@ -100,13 +105,13 @@ jaxb {
 sourceSets.main.java.srcDirs += 'build/generated/jaxb'
 compileJava.dependsOn 'jaxb'
 
-
 mavenPublishing {
     publishToMavenCentral()
     signAllPublications()
     coordinates(project.groupId, project.name, project.version.toString())
 
     pom {
+        name = "HBCI4j"
         description = 'HBCI4j - Home Banking Computer Interface for Java'
         inceptionYear = "2020"
         url         = 'https://github.com/hbci4j/hbci4java'
@@ -136,33 +141,31 @@ mavenPublishing {
       }
     }
 
-tasks.withType(PublishToMavenRepository).configureEach {
-    dependsOn tasks.test
-    dependsOn tasks.tag
-}
-
-tasks.withType(PublishToMavenLocal).configureEach {
-    dependsOn tasks.test
-}
-
-def tagName = "${project.name}-${project.version}"
-task createTag(type:Exec) {
-  workingDir project.rootDir
-  commandLine 'git', 'tag', tagName
-}
-task pushTag(type:Exec) {
-  workingDir project.rootDir
-  commandLine 'git', 'push', 'origin', tagName
-}
-tasks.register('tag') {
-    dependsOn 'createTag', 'pushTag'
-}
+//tasks.withType(PublishToMavenRepository).configureEach {
+//    dependsOn tasks.test
+//    dependsOn tasks.tag
+//}
+//
+//tasks.withType(PublishToMavenLocal).configureEach {
+//    dependsOn tasks.test
+//}
+//
+//def tagName = "${project.name}-${project.version}"
+//task createTag(type:Exec) {
+//  workingDir project.rootDir
+//  commandLine 'git', 'tag', tagName
+//}
+//task pushTag(type:Exec) {
+//  workingDir project.rootDir
+//  commandLine 'git', 'push', 'origin', tagName
+//}
+//tasks.register('tag') {
+//    dependsOn 'createTag', 'pushTag'
+//}
 
 
 dependencies {
-
   implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
   implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
-
   testImplementation 'junit:junit:4.+'
 }
