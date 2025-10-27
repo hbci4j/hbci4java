@@ -107,7 +107,10 @@ sourceSets.main.java.srcDirs += 'build/generated/jaxb'
 compileJava.dependsOn 'jaxb'
 
 mavenPublishing {
-    publishToMavenCentral()
+    // true beduetet, dass das Artifact automatisch veröffentlicht wird.
+    // Wenn man es auf "false setzt, muss man zu "Deployments" im "Maven Central Portal" und dort auf "Publish" klicken.
+    // https://vanniktech.github.io/gradle-maven-publish-plugin/central/#uploading-with-automatic-publishing
+    publishToMavenCentral(true)
     signAllPublications()
     coordinates(project.groupId, project.name, project.version.toString())
 
