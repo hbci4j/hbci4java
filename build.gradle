@@ -146,7 +146,7 @@ mavenPublishing {
     }
 
 tasks.withType(PublishToMavenRepository).configureEach {
-//    dependsOn tasks.test
+    dependsOn tasks.test
     dependsOn tasks.tag
 }
 
