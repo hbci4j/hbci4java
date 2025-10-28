@@ -165,7 +165,9 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
         String st;
         entry.orderid=result.getProperty(header+".orderid");
 
-        entry.firstdate=HBCIUtils.string2DateISO(result.getProperty(header+".DauerDetails.firstdate"));
+        if ((st=result.getProperty(header+".DauerDetails.firstdate"))!=null)
+          entry.firstdate=HBCIUtils.string2DateISO(st);
+        
         entry.timeunit=result.getProperty(header+".DauerDetails.timeunit");
         entry.turnus=Integer.parseInt(result.getProperty(header+".DauerDetails.turnus"));
         entry.execday=Integer.parseInt(result.getProperty(header+".DauerDetails.execday"));

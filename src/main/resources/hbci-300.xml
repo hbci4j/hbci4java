@@ -3336,7 +3336,7 @@
             <DEG type="usage3" name="usage" minnum="0"/>
             <DE name="date" type="Date" minnum="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             
             <value path="SegHead.code">HKDAL</value>
             <value path="SegHead.version">4</value>
@@ -3429,7 +3429,7 @@
 	    <DEG type="usage3" name="usage" minnum="0"/>
 	    <DE name="date" type="Date" minnum="0"/>
 	    <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-	    <DEG type="DauerDetails"/>
+	    <DEG name="DauerDetails" type="DauerDetails"/>
             
             <value path="SegHead.code">HKDAN</value>
             <value path="SegHead.version">5</value>
@@ -3543,7 +3543,7 @@
             <DEG type="usage3" name="usage" minnum="0"/>
             <DE name="date" type="Date" minnum="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             <DEG type="Aussetzung3" name="Aussetzung" minnum="0"/>
             
             <value path="SegHead.code">HIDAB</value>
@@ -3580,7 +3580,7 @@
             <DEG type="usage3" name="usage" minnum="0"/>
             <DE name="date" type="Date" minnum="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             <DEG type="Aussetzung3" name="Aussetzung" minnum="0"/>
             <DE name="canchange" type="JN" minnum="0"/>
             <DE name="canskip" type="JN" minnum="0"/>
@@ -3671,7 +3671,7 @@
 	    <DE name="key" type="Dig" minsize="2" maxsize="2"/>
 	    <DE name="addkey" type="Dig" minsize="3" maxsize="3" minnum="0"/>
 	    <DEG type="usage3" name="usage" minnum="0"/>
-	    <DEG type="DauerDetails"/>
+	    <DEG name="DauerDetails" type="DauerDetails"/>
             
             <value path="SegHead.code">HKDAE</value>
             <value path="SegHead.version">5</value>
@@ -6903,7 +6903,7 @@
             <DEG type="KTVInt" name="My"/>
             <DE name="sepadescr" type="AN" maxsize="256"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             
             <value path="SegHead.code">HKCDE</value>
             <value path="SegHead.version">1</value>
@@ -6931,8 +6931,8 @@
             <DE name="sepadescr" type="AN" maxsize="256"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
             <DE name="date" type="Date" minnum="0"/>
-	    	<DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+	    	    <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             
             <value path="SegHead.code">HKCDN</value>
             <value path="SegHead.version">1</value>
@@ -6962,8 +6962,8 @@
             <DE name="sepadescr" type="AN" maxsize="256"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
             <DE name="date" type="Date" minnum="0"/>
-	    	<DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+	    	    <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             
             <value path="SegHead.code">HKCDL</value>
             <value path="SegHead.version">1</value>
@@ -6986,7 +6986,7 @@
             <DE name="sepapain" type="Bin" maxsize="0"/>
             <DE name="date" type="Date" minnum="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails4"/>
+            <DEG name="DauerDetails" type="DauerDetails4"/>
             
             <value path="SegHead.code">HKCDL</value>
             <value path="SegHead.version">2</value>
@@ -7020,7 +7020,7 @@
             <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             <DEG type="Aussetzung3" name="Aussetzung" minnum="0"/>
             <DE name="canchange" type="JN" minnum="0"/>
             <DE name="canskip" type="JN" minnum="0"/>
@@ -7058,7 +7058,7 @@
             <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails4"/>
+            <DEG name="DauerDetails" type="DauerDetails4"/>
             <DEG type="Aussetzung3" name="Aussetzung" minnum="0"/>
             <DE name="canchange" type="JN" minnum="0"/>
             <DE name="canskip" type="JN" minnum="0"/>
@@ -7099,7 +7099,7 @@
             <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
             <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
             <DEG type="Aussetzung3" name="Aussetzung" minnum="0"/>
             <DE name="canchange" type="JN" minnum="0"/>
             <DE name="canskip" type="JN" minnum="0"/>
@@ -7123,7 +7123,7 @@
             <DEG type="KTVInt" name="My"/>
             <DE name="sepadescr" type="AN" maxsize="256"/>
             <DE name="sepapain" type="Bin" maxsize="0"/>
-            <DEG type="DauerDetails"/>
+            <DEG name="DauerDetails" type="DauerDetails"/>
 
             <value path="SegHead.code">HKDDE</value>
             <value path="SegHead.version">1</value>
