@@ -76,7 +76,14 @@ public class TestParseVoP extends AbstractTest
           Assert.assertTrue(s.endsWith(".suppreports"));
         }
         bpd.setProperty(s.replace("SynchRes.BPD.",""),value);
+        
+        if (Objects.equals(value,"HICDBS"))
+        {
+          // Die BPD müssen für beide Segment-Versionen korrekt erkannt werden
+          Assert.assertTrue(s.contains("DauerSEPAListPar"));
+        }
       }
+      
       
       final VoPParameter params = VoPParameter.parse(bpd);
       Assert.assertNotNull(params);

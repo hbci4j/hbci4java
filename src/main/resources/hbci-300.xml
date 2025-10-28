@@ -1208,6 +1208,16 @@
             <DE name="sepadescr" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
 
+        <DEGdef id="ParDauerSEPAList">
+            <DE name="maxentries_allowed" type="JN"/>
+        </DEGdef>
+
+        <DEGdef id="ParDauerSEPAList2">
+            <DE name="maxentries_allowed" type="JN"/>
+            <DE name="allowed_purposecodes" type="AN" maxsize="4096" minnum="0" />
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+
         <DEGdef id="ParDauerLastSEPAList">
             <DE name="maxentries_allowed" type="JN"/>
             <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
@@ -7031,7 +7041,8 @@
         </SEGdef>
         <SEGdef id="DauerSEPAListPar1">
             &GVP2;
-            <DE name="maxentries_allowed" type="JN"/>
+
+            <DEG name="ParDauerSEPAList" type="ParDauerSEPAList" />
 
             &SecClassValids;
             
@@ -7069,9 +7080,8 @@
         </SEGdef>
         <SEGdef id="DauerSEPAListPar2">
             &GVP2;
-            <DE name="maxentries_allowed" type="JN"/>
-            <DE name="allowed_purposecodes" type="AN" maxsize="4096" minnum="1"/>
-            <DE name="sepadescr" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+
+            <DEG name="ParDauerSEPAList" type="ParDauerSEPAList2" />
 
             &SecClassValids;
             
