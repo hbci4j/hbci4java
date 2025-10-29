@@ -23,6 +23,7 @@ package org.kapott.hbci.GV;
 
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -282,6 +283,157 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         result.getItems().add(r);
       }
       
+      this.completeData(result);
       return result;
+    }
+    
+    /**
+     * Vervollständigt die Daten für die Anzeige des Bestätigungsdialoges basierend auf dem Auftrag.
+     * @param result die Daten für den Bestätigungsdialog.
+     */
+    private void completeData(VoPResult result)
+    {
+      try
+      {
+        if (this.task == null || result == null || result.getItems().isEmpty())
+          return;
+        
+        if (!(this.task instanceof AbstractSEPAGV))
+          return;
+        
+        final AbstractSEPAGV gv = (AbstractSEPAGV) this.task;
+        final Properties sepaParams = gv.sepaParams;
+        if (sepaParams == null || sepaParams.isEmpty())
+          return;
+
+        final Integer maxIndex = SepaUtil.maxIndex(sepaParams);
+
+        for (VoPResultItem r:result.getItems())
+        {
+          // Basierend auf IBAN und optional dem Betrag versuchen wir den zugehörigen Auftrag zu finden
+          final OriginalData data = OriginalData.find(sepaParams,maxIndex,r.getIban(),r.getAmount());
+          if (data != null)
+          {
+            // Gefunden. Daten vervollständigen
+            if (r.getAmount() == null)
+              r.setAmount(data.amount);
+            
+            if (r.getUsage() == null || r.getUsage().isBlank())
+              r.setUsage(data.usage);
+            
+            if (r.getOriginal() == null || r.getOriginal().isBlank())
+              r.setOriginal(data.name);
+          }
+        }
+      }
+      catch (Exception e)
+      {
+        // Ein Fehler bei der Vervollständigung soll nicht zum Abbruch des Auftrages führen
+        HBCIUtils.log("error while auto-completing vop-result with job data",HBCIUtils.LOG_INFO);
+        HBCIUtils.log(e,HBCIUtils.LOG_INFO);
+      }
+    }
+    
+    /**
+     * Die originalen Daten aus dem Auftrag.
+     */
+    private static class OriginalData
+    {
+      private String iban;
+      private String name;
+      private String usage;
+      private BigDecimal amount;
+      
+      /**
+       * Sucht in den Auftragsdaten nach einem mit der gleichen IBAN und optional auch dem Betrag.
+       * @param sepaParams die Properties mit den Auftragsdaten.
+       * @param maxIndex der maximale Index bei Sammelaufträgen.
+       * @param iban die IBAN.
+       * @param amount optional der Betrag.
+       * @return die originalen Daten oder NULL, wenn keine gefunden wurden.
+       */
+      private static OriginalData find(Properties sepaParams, Integer maxIndex, String iban, BigDecimal amount)
+      {
+        // Wenn wir keine IBAN haben, ist die Sache nur dann eindeutig, wenn es kein Sammel-Auftrag ist
+        // Der Fall sollte eigentlich gar nicht existieren - nur zur Sicherheit
+        if (iban == null || iban.isBlank())
+          return maxIndex == null ? create(sepaParams,null) : null;
+        
+        // Sammelauftrag
+        if (maxIndex != null)
+        {
+          for (int i=0;i<= maxIndex;i++)
+          {
+            final OriginalData data = create(sepaParams,i);
+            if (data == null)
+              continue;
+            
+            if (data.check(iban,amount))
+              return data;
+          }
+          
+          // Keinen passenden Auftrag gefunden
+          return null;
+        }
+
+        // Einzelauftrag
+        final OriginalData data = create(sepaParams,null);
+        return data.check(iban,amount) ? data : null;
+      }
+      
+      /**
+       * Prfüft, ob der Auftrag zu den Daten passt.
+       * @param iban die IBAN.
+       * @param amount der optionale Betrag.
+       * @return der Auftrag, wenn der Auftrag passt. Sonst NULL.
+       */
+      private boolean check(String iban, BigDecimal amount)
+      {
+        // Stimmt die IBAN überein?
+        if (!this.compareIban(iban))
+          return false;
+        
+        // Wenn ein Betrag angegeben ist, muss er übereinstimmen.
+        // Da die Bank im VoP-Result den Betrag meist nicht mit gibt,
+        // tolerieren wir die Übereinstimmung in dem Fall auch ohne Betrag
+        if (amount == null)
+          return true;
+        
+        // Ansonsten muss der Betrag passen
+        return this.amount.compareTo(amount) == 0;
+      }
+      
+      /**
+       * Prüft tolerant, ob die IBANs übereinstimmen.
+       * @param iban die zu prüfende IBAN.
+       * @return true, wenn sie mit der IBAN der Daten übereinstimmt.
+       */
+      private boolean compareIban(String iban)
+      {
+        if (iban == null || iban.isBlank())
+          return false;
+        
+        if (this.iban == null || this.iban.isBlank())
+          return false;
+        
+        // Wir entfernen alle Leerzeichen und vergleichen case-insensitiv
+        return this.iban.replace(" ","").equalsIgnoreCase(iban.replace(" ",""));
+      }
+      
+      /**
+       * Erzeugt ein Objekt mit den Original-Daten.
+       * @param sepaParams die Parameter.
+       * @param i der Index.
+       * @return das Objekt oder NULL, wenn es zu einem Fehler kam.
+       */
+      private static OriginalData create(Properties sepaParams, Integer i)
+      {
+        final OriginalData data = new OriginalData();
+        data.iban   = sepaParams.getProperty(SepaUtil.insertIndex("dst.iban", i));
+        data.name   = sepaParams.getProperty(SepaUtil.insertIndex("dst.name", i));
+        data.usage  = sepaParams.getProperty(SepaUtil.insertIndex("usage", i));
+        data.amount = new BigDecimal(sepaParams.getProperty(SepaUtil.insertIndex("btg.value", i)));
+        return data;
+      }
     }
 }
