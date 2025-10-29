@@ -169,11 +169,11 @@ Um die aktuelle Version auf Maven Central zu veröffentlichen, benötigt man
 
 5. Anschließend kann man mit gradle die Veröffentlichung starten:
    ```
-   ./gradlew clean build publishToMavenLocal
+   ./gradlew clean build publishToMavenCentral
    ```
    Es dauert ein paar Minuten, bis die neue Version auf Maven Central verfügbar ist:
    https://repo1.maven.org/maven2/com/github/hbci4j/hbci4j-core/
 
 Bei der nächsten Version natürlich nur noch Schritte 4 und 5 nötig. 
 
-
+Beim Publishing wird auch gleich der aktuelle Stand in Github getaggt.
