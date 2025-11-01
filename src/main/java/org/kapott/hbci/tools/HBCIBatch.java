@@ -257,6 +257,9 @@ public class HBCIBatch {
             case NEED_CUSTOMERID:
                 retData.replace(0, retData.length(), getAnswer("customerid"));
                 break;
+            case HAVE_VOP_RESULT:
+                retData.replace(0, retData.length(), getAnswer("vopresult"));
+                break;
 
             case NEED_SIZENTRY_SELECT:
                 retData.replace(0, retData.length(), getAnswer("sizentry"));
