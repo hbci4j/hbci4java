@@ -59,7 +59,35 @@ public class TestParseVoPResult extends AbstractTest
   {
     this.doTest("test-pain-parse-0020110-02.xml");
   }
-  
+
+  /**
+   * Testet das Lesen einer PAIN.002 Datei mit Namespace.
+   * @throws Exception
+   */
+  @Test
+  public void test003() throws Exception
+  {
+    try (InputStream is = this.getStream("test-pain-parse-0020110-03.xml"))
+    {
+      ISEPAParser<List<VoPResultItem>> parser = SEPAParserFactory.get(SepaVersion.PAIN_002_001_10);
+      final VoPResult result = new VoPResult();
+      parser.parse(is,result.getItems());
+      Assert.assertEquals(1,result.getItems().size());
+      
+      final VoPResultItem item = result.getItems().get(0);
+      Assert.assertEquals("Status falsch",VoPStatus.MATCH,item.getStatus());
+      Assert.assertNull("IBAN falsch",item.getIban());
+      Assert.assertNull("Name falsch",item.getName());
+      Assert.assertNull("Originaler Name falsch",item.getOriginal());
+      Assert.assertNull("Text falsch",item.getText());
+      Assert.assertNull("Usage falsch",item.getUsage());
+      Assert.assertNull("Betrag falsch",item.getAmount());
+
+      final boolean needCallback = result.getItems().stream().filter(r -> !Objects.equals(r.getStatus(),VoPStatus.MATCH)).count() > 0;
+      Assert.assertFalse(needCallback);
+    }
+  }
+
   /**
    * Führt den Test durch.
    * @param file die Testdatei.
@@ -79,7 +107,7 @@ public class TestParseVoPResult extends AbstractTest
       final VoPResultItem item = result.getItems().get(0);
       Assert.assertEquals("Status falsch",VoPStatus.NO_MATCH,item.getStatus());
       Assert.assertEquals("IBAN falsch","DE12345678901234567890",item.getIban());
-      Assert.assertEquals("Max Mustermann","",item.getName());
+      Assert.assertEquals("Name falsch","",item.getName());
       Assert.assertEquals("Originaler Name falsch","Max Mustermann",item.getOriginal());
       Assert.assertNull("Text falsch",item.getText());
       Assert.assertNull("Usage falsch",item.getUsage());

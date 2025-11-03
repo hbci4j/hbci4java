@@ -35,7 +35,17 @@ public class ParsePain00200113 extends AbstractParsePain002
 
     for (OriginalPaymentInstruction45 pi:pain.getOrgnlPmtInfAndSts())
     {
-      for (PaymentTransaction144 tx:pi.getTxInfAndSts())
+      final List<PaymentTransaction144> txList = pi.getTxInfAndSts();
+      if (txList == null || txList.isEmpty())
+      {
+        // Die Hypovereinsbank lässt die TxInfAndSts komplett weg
+        final VoPResultItem r = new VoPResultItem();
+        r.setStatus(VoPStatus.byCode(pi.getPmtInfSts()));
+        sepaResults.add(r);
+        continue;
+      }
+
+      for (PaymentTransaction144 tx:txList)
       {
         final VoPResultItem r = new VoPResultItem();
         r.setStatus(VoPStatus.byCode(tx.getTxSts()));

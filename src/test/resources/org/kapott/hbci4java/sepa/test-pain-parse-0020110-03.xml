@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.10">
+  <CstmrPmtStsRpt>
+    <GrpHdr>
+      <MsgId>dc6f9da5b431-4956-8e23-1bef7d23f948</MsgId>
+      <CreDtTm>2025-11-02T18:33:13.303+01:00</CreDtTm>
+      <DbtrAgt>
+        <FinInstnId>
+          <BICFI>HYVEDEMMXXX</BICFI>
+        </FinInstnId>
+      </DbtrAgt>
+    </GrpHdr>
+    <OrgnlGrpInfAndSts>
+      <OrgnlMsgId>2025-11-02T18:33:03:0287</OrgnlMsgId>
+      <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>
+      <OrgnlNbOfTxs>2</OrgnlNbOfTxs>
+      <OrgnlCtrlSum>488</OrgnlCtrlSum>
+      <GrpSts>RCVC</GrpSts>
+      <StsRsnInf>
+        <AddtlInf>RCVC Der angegebene Empfaengername stimmt mit dem Namen des Kontoinhabers ueberein.</AddtlInf>
+        <AddtlInf>RCVC Hier besteht kein Handlungsbedarf.</AddtlInf>
+      </StsRsnInf>
+      <NbOfTxsPerSts>
+        <DtldNbOfTxs>2</DtldNbOfTxs>
+        <DtldSts>RCVC</DtldSts>
+      </NbOfTxsPerSts>
+    </OrgnlGrpInfAndSts>
+    <OrgnlPmtInfAndSts>
+      <OrgnlPmtInfId>2025-11-02T18:33:03:0287</OrgnlPmtInfId>
+      <OrgnlNbOfTxs>2</OrgnlNbOfTxs>
+      <OrgnlCtrlSum>488</OrgnlCtrlSum>
+      <PmtInfSts>RCVC</PmtInfSts>
+      <NbOfTxsPerSts>
+        <DtldNbOfTxs>2</DtldNbOfTxs>
+        <DtldSts>RCVC</DtldSts>
+      </NbOfTxsPerSts>
+    </OrgnlPmtInfAndSts>
+  </CstmrPmtStsRpt>
+</Document>
