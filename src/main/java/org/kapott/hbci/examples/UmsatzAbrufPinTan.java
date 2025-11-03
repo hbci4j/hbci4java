@@ -366,6 +366,27 @@ public class UmsatzAbrufPinTan
           
           break;
           
+        // PushTAN Decoupled.
+        // Hier muss lediglich ein Warte-Dialog mit einem OK/Fortsetzen-Button angezeigt werden,
+        // bis der User in der App die Zahlung freigegeben hat.
+        case NEED_PT_DECOUPLED:
+          break;
+          
+        // Dieser Callback wird ausgelöst, wenn für VoP die Ergebnis-Daten vorliegen und der User entscheiden muss,
+        // ob der Auftrag trotz Namensabweichung beim Empfängerkonto ausgeführt werden soll.
+        // Die Ergebnis-Daten der Prüfung finden sich unter:
+        //
+        // List<VoPResultItem> results = (List<VoPResultItem>) passport.getPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT);
+        //
+        // Der Callback erwartet im Stringbuffer mit den Ergebnisdaten (retData) ein "true", wenn der Auftrag durchgeführt
+        // werden soll oder ein "false", wenn die Ausführung abgebrochen werden soll. Alternativ kann der Aufrufer auch eine
+        // Exception werfen, um den Vorgang abzubrechen. Ob die ggf. abweichenden Namen im Adressbuch der Anwendung aktualisiert
+        // werden oder nicht, ist Sache der Anwendung.
+        case HAVE_VOP_RESULT:
+          boolean ok = true;
+          retData.replace(0,retData.length(),Boolean.toString(ok));
+          break;
+          
         // Beim Verfahren smsTAN ist es moeglich, mehrere Handynummern mit
         // Aliasnamen bei der Bank zu hinterlegen. Auch wenn nur eine Handy-
         // Nummer bei der Bank hinterlegt ist, kann es durchaus passieren,

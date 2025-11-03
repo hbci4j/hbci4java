@@ -377,7 +377,7 @@ public interface HBCICallback
      * List<VoPResultItem> results = (List<VoPResultItem>) passport.getPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT);
      * </pre>
      * 
-     * Der Callback erwartet im Stringbuffer mit den Ergebnisdaten (retData) ein "true", NULL oder "", wenn der Auftrag durchgeführt
+     * Der Callback erwartet im Stringbuffer mit den Ergebnisdaten (retData) ein "true", wenn der Auftrag durchgeführt
      * werden soll oder ein "false", wenn die Ausführung abgebrochen werden soll. Alternativ kann der Aufrufer auch eine
      * Exception werfen, um den Vorgang abzubrechen. Ob die ggf. abweichenden Namen im Adressbuch der Anwendung aktualisiert
      * werden oder nicht, ist Sache der Anwendung.
