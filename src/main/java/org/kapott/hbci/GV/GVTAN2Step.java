@@ -31,6 +31,7 @@ import org.kapott.hbci.dialog.KnownTANProcess;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.LogFilter;
+import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.status.HBCIMsgStatus;
@@ -298,7 +299,7 @@ public class GVTAN2Step extends HBCIJobImpl
         }
         
         // External-ID des originalen Jobs durchreichen
-        p.setPersistentData("externalid",this.getExternalId());
+        p.setPersistentData(AbstractHBCIPassport.KEY_EXTERNAL_ID,this.getExternalId());
 
         // Challenge HHDuc aus dem Reponse holen und im Passport zwischenspeichern
         String hhdUc = result.getProperty(header + ".challenge_hhd_uc");

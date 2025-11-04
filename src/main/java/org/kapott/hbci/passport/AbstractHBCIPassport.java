@@ -70,6 +70,11 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
    * Ein Objekt vom Typ {@link VoPResult}.
    */
   public final static String KEY_VOP_RESULT = "__pintan_vop_result___";
+  
+  /**
+   * Die externe ID des Auftrages.
+   */
+  public final static String KEY_EXTERNAL_ID = "externalid";
 
     private String     paramHeader;
 

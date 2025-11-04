@@ -402,7 +402,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                     // Callback durchfuehren
                     HBCIUtilsInternal.getCallback().callback(this,callback,msg,HBCICallback.TYPE_TEXT,payload);
 
-                    setPersistentData("externalid",null); // External-ID aus Passport entfernen
+                    setPersistentData(AbstractHBCIPassport.KEY_EXTERNAL_ID,null); // External-ID aus Passport entfernen
 
                     if (callback == HBCICallback.NEED_PT_DECOUPLED) {
                         // Beim start des Decoupled-Verfahrens wird die Anzahl der refreshes auf 0 gesetzt, falls durch
