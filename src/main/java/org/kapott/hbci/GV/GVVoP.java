@@ -196,6 +196,8 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         {
           // VOP-Result im Passport speichern und User fragen, ob der Vorgang fortgesetzt werden kann
           p.setPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT,result);
+          p.setPersistentData(AbstractHBCIPassport.KEY_VOP_TASK_ID,task.getExternalId());
+          
           final StringBuffer sb = new StringBuffer();
           HBCIUtilsInternal.getCallback().callback(p,HBCICallback.HAVE_VOP_RESULT,result.getText(),HBCICallback.TYPE_BOOLEAN,sb);
           if (!StringUtil.toBoolean(sb.toString()))
@@ -204,6 +206,7 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
         finally
         {
           p.setPersistentData(AbstractHBCIPassport.KEY_VOP_RESULT,null);
+          p.setPersistentData(AbstractHBCIPassport.KEY_VOP_TASK_ID,null);
         }
       }
       
