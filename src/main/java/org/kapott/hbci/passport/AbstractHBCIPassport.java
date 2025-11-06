@@ -1111,7 +1111,7 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
     @Override
     public int getMaxGVSegsPerMsg()
     {
-        return 0;
+        return 1;
     }
     
 }

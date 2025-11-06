@@ -1815,6 +1815,10 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         this.tanMethodsUser=l;
     }
     
+    /**
+     * @see org.kapott.hbci.passport.AbstractHBCIPassport#getMaxGVSegsPerMsg()
+     */
+    @Override
     public int getMaxGVSegsPerMsg()
     {
         return 1;
