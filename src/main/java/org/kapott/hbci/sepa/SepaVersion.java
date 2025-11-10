@@ -501,7 +501,18 @@ public class SepaVersion implements Comparable<SepaVersion>
       
       try
       {
-        final SepaVersion versionDesc = haveDesc ? SepaVersion.byURN(sepadesc) : null;
+        SepaVersion versionDesc = null;
+        if (haveDesc)
+        {
+          try
+          {
+            versionDesc = SepaVersion.byURN(sepadesc);
+          }
+          catch (Exception e)
+          {
+            HBCIUtils.log("invalid sepa version given in sepadescr: " + sepadesc,HBCIUtils.LOG_WARN);
+          }
+        }
         final SepaVersion versionData = haveData ? SepaVersion.autodetect(new ByteArrayInputStream(sepadata.getBytes(Comm.ENCODING))) : null;
         
         HBCIUtils.log("sepa version given in sepadescr: " + versionDesc,HBCIUtils.LOG_DEBUG);

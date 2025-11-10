@@ -21,6 +21,7 @@
 
 package org.kapott.hbci4java.sepa;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +31,13 @@ import org.kapott.hbci.GV.generators.GenLastSEPA00800101;
 import org.kapott.hbci.GV.generators.GenUebSEPA00100303;
 import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci.sepa.SepaVersion.Type;
+import org.kapott.hbci.tools.IOUtils;
+import org.kapott.hbci4java.AbstractTest;
 
 /**
  * Tests fuer den SEPA-Version Parser 
  */
-public class TestSepaVersion
+public class TestSepaVersion extends AbstractTest
 {
     /**
      * Testet simples Parsen einer PAIN-Version.
@@ -228,6 +231,26 @@ public class TestSepaVersion
         Assert.assertNotNull(highest);
         Assert.assertEquals(SepaVersion.CAMT_052_001_07,highest);
     }
+
+    /**
+     * Testet eine falsch formatierte URN - aber korrekte Daten
+     * @throws Exception
+     */
+    @Test
+    public void test014() throws Exception
+    {
+        String sepaData = null;
+        try (InputStream is = this.getStream("test-pain-parse-00100109.xml"))
+        {
+          sepaData = new String(IOUtils.read(is));
+        }
+
+        SepaVersion v = SepaVersion.choose("001.001.09",sepaData);
+        Assert.assertEquals(Type.PAIN_001,v.getType());
+        Assert.assertEquals(1,v.getMajor());
+        Assert.assertEquals(9,v.getMinor());
+    }
+
 }
 
 
