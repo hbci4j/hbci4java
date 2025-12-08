@@ -105,7 +105,6 @@ client.passport.RDHNew.init=1
 client.passport.SIZRDHFile.filename=./passports/secret.key
 
 # the filename of the shared library to access siz rdh keyfiles
-# (download from http://hbci4java.kapott.org#download)
 client.passport.SIZRDHFile.libname=/usr/lib/libhbci4java-sizrdh.so
 
 # always set this to 1, all other possible settings are only used

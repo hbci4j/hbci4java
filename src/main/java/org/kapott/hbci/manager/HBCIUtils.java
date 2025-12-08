@@ -328,10 +328,7 @@ import org.kapott.hbci.swift.Swift;
  * SIZRDHFile-Passports)
  * <p>
  * Dieser Parameter gibt den vollständigen Dateinamen der
- * SIZ-RDH-Laufzeitbibliothek an. Diese Bibliothek ist <em>nicht</em> Teil von
- * <em>HBCI4Java</em>, sondern muss separat von <a href=
- * "http://hbci4java.kapott.org#download">http://hbci4java.kapott.org</a>
- * heruntergeladen und installiert werden.
+ * SIZ-RDH-Laufzeitbibliothek an. 
  * </p>
  * <p>
  * Siehe dazu auch <code>README.SIZRDHFile</code>

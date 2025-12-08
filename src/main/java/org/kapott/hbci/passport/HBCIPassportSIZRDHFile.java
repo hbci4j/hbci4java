@@ -41,8 +41,7 @@ import org.kapott.hbci.tools.IOUtils;
     {@link org.kapott.hbci.tools.ConvertSIZRDHPassport} verwendet werden.</p>
     <p><b>Achtung: In der reinen GPL-Version von <em>HBCI4Java</em> ist diese Klasse nicht
     funktionstüchtig.</b> Der Grund dafür ist, dass <code>SIZRDHFile</code> eine zusätzliche
-    Bibliothek zur Laufzeit benötigt. Diese Bibliothek steht nur als Binary-Version unter
-    <a href="http://hbci4java.kapott.org#download">http://hbci4java.kapott.org</a> zur Verfügung.
+    Bibliothek zur Laufzeit benötigt. 
     Erst nach Installation dieser Bibliothek können SIZRDHFile-Passports benutzt werden.</p>
     <p><b>Siehe auch die Datei <code>README.SIZRDHFile</code>.</b></p> */    
 public class HBCIPassportSIZRDHFile

@@ -14,7 +14,7 @@ in [Hibiscus](http://www.willuhn.de/products/hibiscus) zum Einsatz kommt.
 
 ## Entstehung
 
-Das Projekt entstand 2010 als Fork von <http://hbci4java.kapott.org>, da dessen
+Das Projekt entstand 2010 als Fork von hbci4java.kapott.org (Seite nicht mehr verfügbar), da dessen
 Weiterentwicklung eingestellt wurde.
 
 Seither wurden umfangreiche neue Features hinzugefügt wie etwa:

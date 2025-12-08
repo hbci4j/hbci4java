@@ -14,8 +14,7 @@ außer der o.g. erfolgreich benutzen kann, bitte eine kurze Mitteilung an mich.
 Installation
 ------------
 
-Für die Verwendung dieser Passport-Klasse muss von 
-http://hbci4java.kapott.org#download die SIZ-RDH-Bibliothek heruntergeladen
+Für die Verwendung dieser Passport-Klasse muss von die SIZ-RDH-Bibliothek heruntergeladen
 und installiert werden. Die in diesem Paket enthaltene Bibliothek für die 
 jeweilige Plattform wird in ein beliebiges Verzeichnis kopiert.
 Der vollständige Dateiname (mit Pfadangabe) dieser Bibliothek muss
