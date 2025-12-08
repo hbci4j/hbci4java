@@ -10,8 +10,7 @@ in [Hibiscus](http://www.willuhn.de/products/hibiscus) zum Einsatz kommt.
 
 ## Kontakt
 
-Unter <https://groups.google.com/forum/?hl=de#!forum/hbci4java> findet ihr die
-zugehörige Mailingliste.
+<https://github.com/hbci4j/hbci4java/discussions>
 
 ## Entstehung
 
