@@ -84,12 +84,22 @@ public abstract class AbstractSEPAGV extends HBCIJobImpl
      */
     private SepaVersion determinePainVersion(HBCIHandler handler, String gvName)
     {
+        // Fest vorkonfigurierte PAIN-Version
+        final String s = HBCIUtils.getParam("kernel.gv." + gvName + ".sepaversion.max");
+        final SepaVersion configuredVersion = (s != null && !s.isBlank()) ? SepaVersion.byURN(s) : null;
+        
+        if (configuredVersion != null)
+        {
+          HBCIUtils.log("have configured pain version, using: " + configuredVersion,HBCIUtils.LOG_DEBUG);
+          return configuredVersion;
+        }
+
         // Schritt 1: Wir holen uns die globale maximale PAIN-Version
-        SepaVersion globalVersion = this.determinePainVersionInternal(handler,GVSEPAInfo.getLowlevelName());
+        final SepaVersion globalVersion = this.determinePainVersionInternal(handler,GVSEPAInfo.getLowlevelName());
         
         // Schritt 2: Die des Geschaeftsvorfalls - fuer den Fall, dass die Bank
         // dort weitere Einschraenkungen hinterlegt hat
-        SepaVersion jobVersion = this.determinePainVersionInternal(handler,gvName);
+        final SepaVersion jobVersion = this.determinePainVersionInternal(handler,gvName);
         
         // Wir haben gar keine PAIN-Version gefunden
         if (globalVersion == null && jobVersion == null)
