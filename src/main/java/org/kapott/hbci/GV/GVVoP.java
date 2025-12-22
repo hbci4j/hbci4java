@@ -227,8 +227,8 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       // Rückmeldungscode 3091 angezeigt. In diesem Fall ist lediglich die Challenge im HITAN durch einen HKTAN zu beantworten.
       // Das heisst: Wir dürfen den eigentlichen Auftrag nochmal mit schicken und müssten nicht den Aufwand betreiben, ihn
       // nur in diesem einen Fall wegzulassen.
-      msg.append(task);
       msg.append(auth);
+      msg.append(task);
     }
     
     /**
