@@ -57,6 +57,16 @@ public class ParameterFinder
         public final static Query BPD_DECOUPLED_TIME_BEFORE_FIRST_STATUS_REQUEST = new Query("Params*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.decoupled_time_before_first_status_request",false);
         public final static Query BPD_DECOUPLED_TIME_BEFORE_NEXT_STATUS_REQUEST = new Query("Params*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.decoupled_time_before_next_status_request",false);
         public final static Query BPD_DECOUPLED_MAX_STATUS_REQUESTS = new Query("Params*.TAN2StepPar*.ParTAN2Step*.TAN2StepParams*.decoupled_max_status_requests",false);
+        
+        /**
+         * Minimale PIN-Länge.
+         */
+        public final static Query BPD_PINTAN_PINLEN_MIN = new Query("Params*.PinTanPar*.ParPinTan*.pinlen_min",false);
+        
+        /**
+         * Maximale PIN-Länge.
+         */
+        public final static Query BPD_PINTAN_PINLEN_MAX = new Query("Params*.PinTanPar*.ParPinTan*.pinlen_max",false);
 
         private String query = null;
         private boolean paramsSet = false;

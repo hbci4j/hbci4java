@@ -827,6 +827,30 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         return HBCIUtilsInternal.getIntegerProperty(bpd, Query.BPD_DECOUPLED_MAX_STATUS_REQUESTS, true);
     }
     
+    /**
+     * Liefert die Mindest-Länge der PIN.
+     * @return die Mindest-Länge der PIN oder NULL, wenn sie nicht ermittelbar ist.
+     */
+    public Integer getPinLengthMin()
+    {
+      final Properties bpd = this.getBPD();
+      if (bpd == null)
+          return null;
+      return HBCIUtilsInternal.getIntegerProperty(bpd, Query.BPD_PINTAN_PINLEN_MIN, false);
+    }
+
+    /**
+     * Liefert die Maximal-Länge der PIN.
+     * @return die Maximal-Länge der PIN oder NULL, wenn sie nicht ermittelbar ist.
+     */
+    public Integer getPinLengthMax()
+    {
+      final Properties bpd = this.getBPD();
+      if (bpd == null)
+          return null;
+      return HBCIUtilsInternal.getIntegerProperty(bpd, Query.BPD_PINTAN_PINLEN_MAX, false);
+    }
+
     /** Kann vor <code>new HBCIHandler()</code> aufgerufen werden, um zu
      * erzwingen, dass die Liste der unterstützten PIN/TAN-Sicherheitsverfahren
      * neu vom Server abgeholt wird und evtl. neu vom Nutzer abgefragt wird. */
