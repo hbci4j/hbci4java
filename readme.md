@@ -142,9 +142,9 @@ Um die aktuelle Version auf Maven Central zu veröffentlichen, benötigt man
    https://central.sonatype.com/usertoken
 
 2. In der `~/.gradle/gradle.properties` trägt man dann sein gerade erstelltes Token für
-   das
-   Maven Central ein ( `~` steht unter Linux für Dein Home Directory, unter Windows geht
-   das entsprechend anders)
+   das Maven Central ein. **Wichtig**: `mavenCentralUsername` und `mavenCentralPassword` bestehen aus dem Token, 
+   welches über das CentralPortal erstellt werden muss, und sind nicht Benutzername und Passwort des Central Portal Account. 
+   Siehe Punkt 2 
    ```
    # ~/.gradle/gradle.properties !!NICHT INS REPO!!
    mavenCentralUsername=yourTokenUsername
@@ -152,7 +152,7 @@ Um die aktuelle Version auf Maven Central zu veröffentlichen, benötigt man
    
    signing.keyId=ABCDEFGH
    signing.password=the_password_of_the_key
-   signing.secretKeyRingFile=~/.gnupg/secring.gpg
+   signing.secretKeyRingFile=/home/YOUR_USERNAME/.gnupg/secring.gpg
    ```
 
 3. Man konfiguriert dort auch seinen GPG Signing Key.
@@ -172,6 +172,12 @@ Um die aktuelle Version auf Maven Central zu veröffentlichen, benötigt man
    ```
    Es dauert ein paar Minuten, bis die neue Version auf Maven Central verfügbar ist:
    https://repo1.maven.org/maven2/com/github/hbci4j/hbci4j-core/
+
+   Wenn bereits die Version getagged ist und man nur das Paket veröffentlichen will, kann man wie folgt vorgehen:
+
+   ```
+   ./gradlew -x createTag clean build publishToMavenCentral
+   ```
 
 Bei der nächsten Version natürlich nur noch Schritte 4 und 5 nötig. 
 
