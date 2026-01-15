@@ -399,4 +399,25 @@ public class TestCamtParse extends AbstractTest
         IOUtils.close(is);
       }
     }    
+
+    /**
+     * Testet das Parsen mit einem ungültigen Saldo (zu viele Nachkommastellen).
+     * @throws Exception
+     */
+    @Test
+    public void test008() throws Exception
+    {
+      InputStream is = null;
+      try
+      {
+        final ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(SepaVersion.CAMT_052_001_08);
+        is = this.getStream("test-camt-parse-5200108-invalid-saldo.xml");
+        GVRKUms ums = new GVRKUms();
+        parser.parse(is, ums.getDataPerDay());
+      }
+      finally
+      {
+        IOUtils.close(is);
+      }
+    }    
 }

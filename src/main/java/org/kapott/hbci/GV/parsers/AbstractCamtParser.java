@@ -21,6 +21,8 @@
 
 package org.kapott.hbci.GV.parsers;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +71,18 @@ public abstract class AbstractCamtParser implements ISEPAParser<List<BTag>>
         return result;
     }
 
+    /**
+     * Rundet den Betrag auf 2 Stellen nach dem Komma.
+     * @param d der Betrag.
+     * @return der gerundete Betrag.
+     */
+    protected BigDecimal round(BigDecimal d)
+    {
+      if (d == null)
+        return null;
+      
+      return d.setScale(2,RoundingMode.HALF_UP);
+    }
 }
 
 

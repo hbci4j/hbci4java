@@ -431,9 +431,9 @@ public class ParseCamt05200108 extends AbstractCamtParser
     private BigDecimal checkDebit(BigDecimal d, CreditDebitCode code)
     {
         if (d == null || code == null || code == CreditDebitCode.CRDT)
-            return d;
+            return round(d);
         
-        return BigDecimal.ZERO.subtract(d);
+        return round(BigDecimal.ZERO.subtract(d));
     }
 }
 
