@@ -38,6 +38,7 @@ import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.sepa.SepaVersion;
+import org.kapott.hbci.tools.IOUtils;
 import org.kapott.hbci4java.AbstractTest;
 
 /**
@@ -378,5 +379,24 @@ public class TestCamtParse extends AbstractTest
         }
     }
 
-
+    /**
+     * Testet das Parsen mit einem fehlenden Saldo-Datum.
+     * @throws Exception
+     */
+    @Test
+    public void test007() throws Exception
+    {
+      InputStream is = null;
+      try
+      {
+        final ISEPAParser<List<BTag>> parser = SEPAParserFactory.get(SepaVersion.CAMT_052_001_08);
+        is = this.getStream("test-camt-parse-5200108-missing-date.xml");
+        GVRKUms ums = new GVRKUms();
+        parser.parse(is, ums.getDataPerDay());
+      }
+      finally
+      {
+        IOUtils.close(is);
+      }
+    }    
 }

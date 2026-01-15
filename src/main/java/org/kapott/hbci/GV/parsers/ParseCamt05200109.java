@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.kapott.hbci.GV.SepaUtil;
 import org.kapott.hbci.GV_Result.GVRKUms.BTag;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
@@ -365,13 +367,21 @@ public class ParseCamt05200109 extends AbstractCamtParser
             if(firstCode.equalsIgnoreCase("PRCD") || firstCode.equalsIgnoreCase("ITBD") || firstCode.equalsIgnoreCase("OPBD")) {
                 tag.start.value = new Value(this.checkDebit(firstBal.getAmt().getValue(),firstBal.getCdtDbtInd()));
                 tag.start.value.setCurr(firstBal.getAmt().getCcy());
-                if(firstCode.equalsIgnoreCase("PRCD") ){
-                    //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
-                    // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
-                    tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime() + day);
-                }else{
-                    // bei einem Zwischensaldo ist der Tag derselbe
-                    tag.start.timestamp = new Date(SepaUtil.toDate(firstBal.getDt().getDt()).getTime());
+
+                final DateAndDateTime2Choice dt = firstBal.getDt();
+                final XMLGregorianCalendar cal = dt != null ? dt.getDt() : null;
+                if (cal != null)
+                {
+                  if(firstCode.equalsIgnoreCase("PRCD")){
+                      //  Wir erhoehen noch das Datum um einen Tag, damit aus dem
+                      // Schlusssaldo des Vortages der Startsaldo des aktuellen Tages wird.
+                      tag.start.timestamp = new Date(SepaUtil.toDate(cal).getTime() + day);
+                  }
+                  else
+                  {
+                      // bei einem Zwischensaldo ist der Tag derselbe
+                      tag.start.timestamp = new Date(SepaUtil.toDate(cal).getTime());
+                  }
                 }
             }
 
@@ -382,7 +392,12 @@ public class ParseCamt05200109 extends AbstractCamtParser
                 if(secondCode.equalsIgnoreCase("CLBD") || secondCode.equalsIgnoreCase("ITBD")) {
                     tag.end.value = new Value(this.checkDebit(secondBal.getAmt().getValue(),secondBal.getCdtDbtInd()));
                     tag.end.value.setCurr(secondBal.getAmt().getCcy());
-                    tag.end.timestamp = SepaUtil.toDate(secondBal.getDt().getDt());
+                    
+                    final DateAndDateTime2Choice dt = secondBal.getDt();
+                    final XMLGregorianCalendar cal = dt != null ? dt.getDt() : null;
+                    
+                    if (cal != null)
+                      tag.end.timestamp = SepaUtil.toDate(cal);
                 }
             }
 
