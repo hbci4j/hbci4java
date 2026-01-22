@@ -93,7 +93,7 @@ public class AESFormat extends AbstractFormat
             // 2. Versionsnummer checken
             version = data[FORMAT_NAME.length()];
             if (version < 1 || version > 2)
-                throw new UnsupportedOperationException("unknown format version");
+                throw new UnsupportedOperationException("unknown format version (must be 1 or 2)");
 
             pos += 1; // Fuer die Versionsnummer haben wir 1 Byte vorgesehen
         }
