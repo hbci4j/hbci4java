@@ -44,6 +44,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.hbci4java.hbci.exceptions.HBCI_Exception;
+import org.hbci4java.hbci.manager.HBCIKey;
 import org.hbci4java.hbci.manager.HBCIUtils;
 import org.hbci4java.hbci.passport.HBCIPassport;
 import org.hbci4java.hbci.passport.storage.PassportData;
@@ -157,7 +158,7 @@ public class AESFormat extends AbstractFormat
                 {
                   HBCIUtils.log("reading passport format 1, will be migrated to format 2 on next save",HBCIUtils.LOG_INFO);
                   org.kapott.hbci.passport.storage.PassportData old = (org.kapott.hbci.passport.storage.PassportData) is.readObject();
-                  result = old.migrate();
+                  result = this.migrate(old);
                 }
                 else
                 {
@@ -352,5 +353,58 @@ public class AESFormat extends AbstractFormat
             HBCIUtils.log("AES-Format not supported in this Java version",HBCIUtils.LOG_DEBUG);
             throw new UnsupportedOperationException("AES-Format not supported in this Java version");
         }
+    }
+    
+    /**
+     * Migriert die Passport-Daten in das neue Format.
+     * @param old Passport-Daten im alten Format.
+     * @return die Passport-Daten im neuen Format.
+     */
+    private PassportData migrate(org.kapott.hbci.passport.storage.PassportData old)
+    {
+      final PassportData result = new PassportData();
+      result.blz = old.blz;
+      result.bpd = old.bpd;
+      result.country = old.country;
+      result.customerId = old.customerId;
+      result.filter = old.filter;
+      result.hbciVersion = old.hbciVersion;
+      result.host = old.host;
+      result.instEncKey = this.migrate(old.instEncKey);
+      result.instSigKey = this.migrate(old.instSigKey);
+      result.myPrivateEncKey = this.migrate(old.myPrivateEncKey);
+      result.myPrivateSigKey = this.migrate(old.myPrivateSigKey);
+      result.myPublicEncKey = this.migrate(old.myPublicEncKey);
+      result.myPublicSigKey = this.migrate(old.myPublicSigKey);
+      result.port = old.port;
+      result.profileVersion = old.profileVersion;
+      result.sigId = old.sigId;
+      result.sysId = old.sysId;
+      result.tanMethod = old.tanMethod;
+      result.twostepMechs = old.twostepMechs;
+      result.upd = old.upd;
+      result.userId = old.userId;
+          
+      return result;
+    }
+    
+    /**
+     * Migriert den Schlüssel.
+     * @param old der zu migrierende Schlüssel.
+     * @return der migrierte Schlüssel.
+     */
+    private HBCIKey migrate(org.kapott.hbci.manager.HBCIKey old)
+    {
+      if (old == null)
+        return null;
+      
+      final HBCIKey result = new HBCIKey();
+      result.blz = old.blz;
+      result.country = old.country;
+      result.key = old.key;
+      result.num = old.num;
+      result.userid = old.userid;
+      result.version = old.version;
+      return result;
     }
 }

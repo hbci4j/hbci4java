@@ -80,21 +80,4 @@ public final class HBCIKey implements Serializable
         
         return ret.toString();
     }
-    
-    /**
-     * Migriert den Schlüssel in das neue Format.
-     * @return der Schlüssel im neuen Format.
-     */
-    public org.hbci4java.hbci.manager.HBCIKey migrate()
-    {
-      final org.hbci4java.hbci.manager.HBCIKey result = new org.hbci4java.hbci.manager.HBCIKey();
-      result.blz = this.blz;
-      result.country = this.country;
-      result.key = this.key;
-      result.num = this.num;
-      result.userid = this.userid;
-      result.version = this.version;
-      
-      return result;
-    }
 }
