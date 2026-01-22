@@ -1,0 +1,7 @@
+# Die unterstuetzten Passport-Formate.
+
+# Das neue AES-basierte Format
+org.hbci4java.hbci.passport.storage.format.AESFormat
+
+# Das alte Format von HBCI4Java
+org.hbci4java.hbci.passport.storage.format.LegacyFormat

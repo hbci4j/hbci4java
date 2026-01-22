@@ -1,0 +1,7 @@
+# Die unterstuetzten Legacy-Formate.
+
+org.hbci4java.hbci.passport.storage.format.legacy.ConverterDDV
+org.hbci4java.hbci.passport.storage.format.legacy.ConverterPinTan
+org.hbci4java.hbci.passport.storage.format.legacy.ConverterAnonymous
+org.hbci4java.hbci.passport.storage.format.legacy.ConverterRSA
+org.hbci4java.hbci.passport.storage.format.legacy.ConverterRDHNew

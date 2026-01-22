@@ -58,7 +58,7 @@ tasks.withType(Javadoc).configureEach {
 
 tasks.named('sourcesJar') {
   // Kann sich der User selbst generieren
-  exclude 'org/kapott/hbci/sepa/jaxb/**'
+  exclude 'org/hbci4java/hbci/sepa/jaxb/**'
 }
 
 jar {
@@ -67,7 +67,7 @@ jar {
 
 def xsdDir  = file('src/main/resources')
 def jaxbOut = file("${layout.buildDirectory.get()}/generated/jaxb")
-def jaxbPackage = 'org.kapott.hbci.sepa.jaxb.'
+def jaxbPackage = 'org.hbci4java.hbci.sepa.jaxb.'
 jaxb {
   javaGen {
     camt05200101 { schema = file(new File(xsdDir,'/camt.052.001.01.xsd')); outputDir = jaxbOut; packageName = jaxbPackage + 'camt_052_001_01' }

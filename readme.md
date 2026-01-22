@@ -127,7 +127,7 @@ Du kannst die Tests starten per:
 
 ## Beispiel-Code
 
-Unter <https://github.com/hbci4j/hbci4java/blob/master/src/main/java/org/kapott/hbci/examples/UmsatzAbrufPinTan.java>
+Unter <https://github.com/hbci4j/hbci4java/blob/master/src/main/java/org/hbci4java/hbci/examples/UmsatzAbrufPinTan.java>
 findest du Beispiel-Code zum Abrufen des Saldos und der Umsätze eines Kontos per
 PIN/TAN-Verfahren.
 

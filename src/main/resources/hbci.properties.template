@@ -95,24 +95,6 @@ client.passport.RDHNew.init=1
 
 # -------------------------------------------------------------------
 
-# the following settings are for security type SIZRDHFile
-# these files are normally used by other HBCI software (e.g. StarMoney),
-# but can also be used with HBCI4Java.
-# please make a backup copy of the keyfile before you use
-# it with HBCI4Java! 
-
-# the filename of the keyfile
-client.passport.SIZRDHFile.filename=./passports/secret.key
-
-# the filename of the shared library to access siz rdh keyfiles
-client.passport.SIZRDHFile.libname=/usr/lib/libhbci4java-sizrdh.so
-
-# always set this to 1, all other possible settings are only used
-# internally
-client.passport.SIZRDHFile.init=1
-
-# -------------------------------------------------------------------
-
 # the following parameters have the same meaning as the
 # corresponding paramaters for RDHnew. The RDH-variant of
 # this type of passports is deprecated now, you are highly
@@ -164,7 +146,7 @@ client.passport.Anonymous.init=1
 # this option specifies which security method to use 
 # (DDV,  
 #  RDHNew, RDH, 
-#  SIZRDHFile, RDHXFile, 
+#  RDHXFile, 
 #  PinTan, Anonymous)
 # when no parameter is given to HBCIPassport.getInstance()
 client.passport.default=DDV
