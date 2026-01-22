@@ -56,7 +56,6 @@ import org.hbci4java.hbci.tools.IOUtils;
 public class AESFormat extends AbstractFormat
 {
     private final static String FORMAT_NAME     = "H4JAES"; // Ein paar Bytes am Anfang, anhand derer wir unser eigenes Dateiformat wiedererkennen
-    private final static int FORMAT_VERSION     = 1; // Versionsnummer des Formats
     private final static String ENCODING        = "UTF-8";
     
     private final static SecureRandom RAND      = new SecureRandom();
@@ -79,6 +78,7 @@ public class AESFormat extends AbstractFormat
           throw new UnsupportedOperationException("not enough data");
         
         int pos = 0;
+        int version = 1;
         
         //////////////////////////////////////////////////////////////////
         // Pre-Checks
@@ -91,8 +91,9 @@ public class AESFormat extends AbstractFormat
             pos += FORMAT_NAME.length();
             
             // 2. Versionsnummer checken
-            if (FORMAT_VERSION != data[FORMAT_NAME.length()])
-                throw new UnsupportedOperationException("wrong format version, expected: " + FORMAT_VERSION);
+            version = data[FORMAT_NAME.length()];
+            if (version < 1 || version > 2)
+                throw new UnsupportedOperationException("unknown format version");
 
             pos += 1; // Fuer die Versionsnummer haben wir 1 Byte vorgesehen
         }
@@ -149,7 +150,19 @@ public class AESFormat extends AbstractFormat
                 cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
                 
                 is = new ObjectInputStream(new CipherInputStream(new ByteArrayInputStream(Arrays.copyOfRange(data,pos,data.length)),cipher));
-                PassportData result = (PassportData) is.readObject();
+                
+                PassportData result = null;
+                
+                if (version == 1)
+                {
+                  HBCIUtils.log("reading format 1 and migrating to format 2",HBCIUtils.LOG_DEBUG);
+                  org.kapott.hbci.passport.storage.PassportData old = (org.kapott.hbci.passport.storage.PassportData) is.readObject();
+                  result = old.migrate();
+                }
+                else
+                {
+                  result = (PassportData) is.readObject();
+                }
                 
                 HBCIUtils.log("used time for decrypting " + data.length + " bytes: " + (System.currentTimeMillis() - started) + " millis",HBCIUtils.LOG_DEBUG);
                 return result;
@@ -210,8 +223,8 @@ public class AESFormat extends AbstractFormat
             // 1. Header mit dem Formatnamen
             bos.write(FORMAT_NAME.getBytes(ENCODING));
             
-            // 2. Versiosnsnummer
-            bos.write(FORMAT_VERSION);
+            // 2. Versionsnummer. Wir speichern nur noch im Format 2
+            bos.write(2);
             
             // 3. Salt
             bos.write(salt.length);

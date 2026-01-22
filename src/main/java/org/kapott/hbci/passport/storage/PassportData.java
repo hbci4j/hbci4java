@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.hbci4java.hbci.manager.HBCIKey;
+import org.kapott.hbci.manager.HBCIKey;
 
 /**
  * Die Klasse gibt es aus Gründen der Abwärtskompatibilität doppelt, da Instanzen
@@ -143,4 +143,46 @@ public class PassportData implements Serializable
      * Der eigene Private-Verschluesselungskey.
      */
     public HBCIKey myPrivateEncKey = null;
+    
+    /**
+     * Migriert die Passport-Daten in das neue Format.
+     * @return die Passport-Daten im neuen Format.
+     */
+    public org.hbci4java.hbci.passport.storage.PassportData migrate()
+    {
+      final org.hbci4java.hbci.passport.storage.PassportData result = new org.hbci4java.hbci.passport.storage.PassportData();
+      result.blz = this.blz;
+      result.bpd = this.bpd;
+      result.country = this.country;
+      result.customerId = this.customerId;
+      result.filter = this.filter;
+      result.hbciVersion = this.hbciVersion;
+      result.host = this.host;
+      result.instEncKey = this.migrate(this.instEncKey);
+      result.instSigKey = this.migrate(this.instSigKey);
+      result.myPrivateEncKey = this.migrate(this.myPrivateEncKey);
+      result.myPrivateSigKey = this.migrate(this.myPrivateSigKey);
+      result.myPublicEncKey = this.migrate(this.myPublicEncKey);
+      result.myPublicSigKey = this.migrate(this.myPublicSigKey);
+      result.port = this.port;
+      result.profileVersion = this.profileVersion;
+      result.sigId = this.sigId;
+      result.sysId = this.sysId;
+      result.tanMethod = this.tanMethod;
+      result.twostepMechs = this.twostepMechs;
+      result.upd = this.upd;
+      result.userId = this.userId;
+          
+      return result;
+    }
+    
+    /**
+     * Migriert den Schlüssel.
+     * @param key der zu migrierende Schlüssel.
+     * @return der migrierte Schlüssel.
+     */
+    private org.hbci4java.hbci.manager.HBCIKey migrate(HBCIKey key)
+    {
+      return key != null ? key.migrate() : null;
+    }
 }
