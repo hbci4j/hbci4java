@@ -155,7 +155,7 @@ public class AESFormat extends AbstractFormat
                 
                 if (version == 1)
                 {
-                  HBCIUtils.log("reading format 1 and migrating to format 2",HBCIUtils.LOG_DEBUG);
+                  HBCIUtils.log("reading passport format 1, will be migrated to format 2 on next save",HBCIUtils.LOG_INFO);
                   org.kapott.hbci.passport.storage.PassportData old = (org.kapott.hbci.passport.storage.PassportData) is.readObject();
                   result = old.migrate();
                 }
