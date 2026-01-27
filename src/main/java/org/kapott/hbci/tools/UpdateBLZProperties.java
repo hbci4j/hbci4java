@@ -218,6 +218,7 @@ public class UpdateBLZProperties
       
       this.updateUrl(e.url);
       this.updateVersion(e.version);
+      this.updateName(e.name);
     }
     
     /**
@@ -239,7 +240,7 @@ public class UpdateBLZProperties
     private void updateUrl(String url)
     {
       // Keine neue URL
-      if (url == null || url.length() == 0)
+      if (url == null || url.isBlank())
         return;
 
       String current = this.values[5];
@@ -250,6 +251,24 @@ public class UpdateBLZProperties
         this.values[5] = url;
       }
     }
+    
+    /**
+     * Aktualisiert den Namen der Bank.
+     * @param name der neue Name.
+     */
+    private void updateName(String name)
+    {
+      if (name == null || name.isBlank())
+        return;
+      
+      String current = this.values[0];
+      current = current != null ? current.trim() : "";
+      if (!current.equals(name))
+      {
+        System.out.println(blz + ": Name \"" + current + "\" -> \"" + name + "\"");
+        this.values[0] = name;
+      }
+    }
 
     /**
      * Speichert die neue BIC, wenn vorher keine da war oder eine andere.
@@ -258,7 +277,7 @@ public class UpdateBLZProperties
     private void updateBic(String bic)
     {
       // Keine neue BIC
-      if (bic == null || bic.length() == 0)
+      if (bic == null || bic.isBlank())
         return;
 
       String current = this.values[2];
