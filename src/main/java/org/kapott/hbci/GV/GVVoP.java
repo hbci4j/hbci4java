@@ -24,6 +24,7 @@ package org.kapott.hbci.GV;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -309,11 +310,12 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
           return;
 
         final Integer maxIndex = SepaUtil.maxIndex(sepaParams);
+        final List<OriginalData> orig = OriginalData.list(sepaParams,maxIndex);
 
         for (VoPResultItem r:result.getItems())
         {
           // Basierend auf IBAN und optional dem Betrag versuchen wir den zugehörigen Auftrag zu finden
-          final OriginalData data = OriginalData.find(sepaParams,maxIndex,r.getIban(),r.getAmount());
+          final OriginalData data = OriginalData.find(orig,r.getIban(),r.getAmount());
           if (data != null)
           {
             // Gefunden. Daten vervollständigen
@@ -325,6 +327,9 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
             
             if (r.getOriginal() == null || r.getOriginal().isBlank())
               r.setOriginal(data.name);
+            
+            // Als zugewiesen markieren. Stellt sicher, dass der Auftrag nicht mehrfach zugewiesen wird
+            data.assigned = true;
           }
         }
       }
@@ -345,42 +350,59 @@ public class GVVoP extends HBCIJobImpl<GVRVoP>
       private String name;
       private String usage;
       private BigDecimal amount;
+      private boolean assigned = false;
+      
+      /**
+       * Liefert die originalen Auftragsdaten.
+       * @param sepaParams die Properties mit den Auftragsdaten.
+       * @param maxIndex der maximale Index bei Sammelaufträgen.
+       * @return die originalen Daten.
+       */
+      private static List<OriginalData> list(Properties sepaParams, Integer maxIndex)
+      {
+        final List<OriginalData> result = new ArrayList<>();
+        
+        if (maxIndex != null)
+        {
+          // Sammelauftrag
+          for (int i=0;i<=maxIndex;i++)
+          {
+            result.add(create(sepaParams,i));
+          }
+        }
+        else
+        {
+          // Einzelauftrag
+          result.add(create(sepaParams,null));
+        }
+        
+        return result;
+      }
       
       /**
        * Sucht in den Auftragsdaten nach einem mit der gleichen IBAN und optional auch dem Betrag.
-       * @param sepaParams die Properties mit den Auftragsdaten.
-       * @param maxIndex der maximale Index bei Sammelaufträgen.
+       * @param data die Auftragsdaten.
        * @param iban die IBAN.
        * @param amount optional der Betrag.
        * @return die originalen Daten oder NULL, wenn keine gefunden wurden.
        */
-      private static OriginalData find(Properties sepaParams, Integer maxIndex, String iban, BigDecimal amount)
+      private static OriginalData find(List<OriginalData> data, String iban, BigDecimal amount)
       {
         // Wenn wir keine IBAN haben, ist die Sache nur dann eindeutig, wenn es kein Sammel-Auftrag ist
         // Der Fall sollte eigentlich gar nicht existieren - nur zur Sicherheit
         if (iban == null || iban.isBlank())
-          return maxIndex == null ? create(sepaParams,null) : null;
-        
-        // Sammelauftrag
-        if (maxIndex != null)
-        {
-          for (int i=0;i<= maxIndex;i++)
-          {
-            final OriginalData data = create(sepaParams,i);
-            if (data == null)
-              continue;
-            
-            if (data.check(iban,amount))
-              return data;
-          }
-          
-          // Keinen passenden Auftrag gefunden
-          return null;
-        }
+          return data.size() == 1 ? data.get(0) : null;
 
-        // Einzelauftrag
-        final OriginalData data = create(sepaParams,null);
-        return data.check(iban,amount) ? data : null;
+        for (OriginalData d:data)
+        {
+          if (d.assigned)
+            continue;
+          
+          if (d.check(iban,amount))
+            return d;
+        }
+        
+        return null;
       }
       
       /**
