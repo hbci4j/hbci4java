@@ -35,6 +35,7 @@ import org.kapott.hbci.manager.IHandlerData;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.passport.HBCIPassportList;
+import org.kapott.hbci.passport.UserSig;
 import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.MultipleSEGs;
 import org.kapott.hbci.protocol.MultipleSyntaxElements;
@@ -337,22 +338,13 @@ public final class Sig
 
                         if (passport.needUserSig())
                         {
-                            String pintan=new String(signature,Comm.ENCODING);
-                            int pos=pintan.indexOf("|");
+                          final String[] pinTan = UserSig.decode(signature);
+                          msg.propagateValue(sigtail.getPath()+".UserSig.pin",pinTan[0],SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
 
-                            // PIN/TAN-Signatur
-                            if (pos!=-1)
-                            {
-                                String pin = pintan.substring(0,pos);
-                                msg.propagateValue(sigtail.getPath()+".UserSig.pin",pin,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
-
-                                // TAN nur senden, wenn vorhanden. Andernfalls lassen wir das DE komplett weg
-                                if (pos<pintan.length()-1)
-                                {
-                                  String tan = pintan.substring(pos+1);
-                                  msg.propagateValue(sigtail.getPath()+".UserSig.tan",tan,SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
-                                }
-                            }
+                          // TAN nur senden, wenn vorhanden. Andernfalls lassen wir das DE komplett weg
+                          if (pinTan[1].length() > 0)
+                            msg.propagateValue(sigtail.getPath()+".UserSig.tan",pinTan[1],SyntaxElement.DONT_TRY_TO_CREATE,SyntaxElement.DONT_ALLOW_OVERWRITE);
+                          
                         }
                         else
                         {

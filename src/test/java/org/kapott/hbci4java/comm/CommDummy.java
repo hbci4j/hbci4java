@@ -24,6 +24,7 @@ package org.kapott.hbci4java.comm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
@@ -37,7 +38,8 @@ import org.kapott.hbci.protocol.MSG;
  */
 public final class CommDummy extends Comm
 {
-  private List<String> responses = new ArrayList();
+  private List<String> responses = new ArrayList<>();
+  private List<Consumer<String>> consumers = new ArrayList<>();
   private AtomicInteger pos = new AtomicInteger(0);
   
   /**
@@ -66,6 +68,16 @@ public final class CommDummy extends Comm
   {
     final String s = msg.toString(0);
     HBCIUtils.log("sending message: " + s,HBCIUtils.LOG_DEBUG2);
+    this.consumers.stream().forEach(c -> c.accept(s));
+  }
+  
+  /**
+   * Wird aufgerufen, wenn eine Nachricht gesendet wird und kann verwendet werden, um diese zu analysieren.
+   * @param f die Funktion. Sie bekommt die zu sendende Nachricht übergeben.
+   */
+  public void onPing(Consumer<String> f)
+  {
+    this.consumers.add(f);
   }
   
   /**

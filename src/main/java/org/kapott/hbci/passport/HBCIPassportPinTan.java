@@ -410,7 +410,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
                         this.decoupledRefreshes = 0;
                         // Beim Decoupled-Verfahren erhalten wir keine TAN. Daher müssen wir hier auch nichts signieren.
                         // Wir ignorieren die Antwort aus dem Callback komplett
-                        return (getPIN()+"|").getBytes("ISO-8859-1");
+                        return UserSig.encode(getPIN(),null);
                     }
 
                     if (payload == null || payload.length()==0)
@@ -423,7 +423,7 @@ public class HBCIPassportPinTan extends AbstractPinTanPassport
             	LogFilter.getInstance().addSecretData(tan,"X",LogFilter.FILTER_SECRETS);
             }
 
-            return (getPIN()+"|"+tan).getBytes("ISO-8859-1");
+            return UserSig.encode(getPIN(),tan);
         } catch (Exception ex) {
             throw new HBCI_Exception("*** signing failed",ex);
         }
