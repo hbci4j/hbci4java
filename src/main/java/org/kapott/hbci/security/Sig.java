@@ -472,12 +472,12 @@ public final class Sig
                         ret=false;
                     }
                 } else {
-                    HBCIUtils.log("message has no signature",HBCIUtils.LOG_WARN);
-                    /* das ist nur für den fall, dass das institut prinzipiell nicht signiert
-                       (also für den client-code);
-                       die verify()-funktion für den server-code überprüft selbstständig, ob
-                       tatsächlich eine benötigte signatur vorhanden ist (verlässt sich also nicht
-                       auf dieses TRUE, was beim fehlen einer signatur zurückgegeben wird */
+                    HBCIUtils.log("message has no signature",HBCIUtils.LOG_DEBUG);
+                    /* das ist nur fuer den fall, dass das institut prinzipiell nicht signiert
+                       (also fuer den client-code);
+                       die verify()-funktion fuer den server-code ueberprueft selbststaendig, ob
+                       tatsaechlich eine benoetigte signatur vorhanden ist (verlaesst sich also nicht
+                       auf dieses TRUE, was beim fehlen einer signatur zurueckgegeben wird */
                     ret=true;
                 }
             } else {
