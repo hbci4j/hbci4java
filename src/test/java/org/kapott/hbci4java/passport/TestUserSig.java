@@ -153,4 +153,19 @@ public class TestUserSig extends AbstractTest
     Assert.assertEquals(pin,pintan[0]);
     Assert.assertEquals(tan,pintan[1]);
   }
+
+
+  /**
+   * Test mit Umlauten.
+   * @throws Exception
+   */
+  @Test
+  public void test012() throws Exception
+  {
+    final String pin = "üöäÜÖÄß";
+    final String tan = "12üöäÜÖÄß";
+    final String[] pintan = UserSig.decode(UserSig.encode(pin,tan));
+    Assert.assertEquals(pin,pintan[0]);
+    Assert.assertEquals(tan,pintan[1]);
+  }
 }

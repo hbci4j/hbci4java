@@ -11,10 +11,9 @@
 package org.kapott.hbci.passport;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtils;
 
@@ -23,7 +22,7 @@ import org.kapott.hbci.manager.HBCIUtils;
  */
 public class UserSig
 {
-  private final static Charset ENCODING = StandardCharsets.UTF_8;
+  private final static String ENCODING = Comm.ENCODING;
       
   /**
    * Erzeugt die Signatur.
@@ -74,8 +73,8 @@ public class UserSig
       if (sig.length < (pinlen+1))
         throw new HBCI_Exception("pin length invalid - sig length: " + siglen + ", pin length: " + pinlen);
       
-      final String pin = new String(Arrays.copyOfRange(sig,1,pinlen+1));
-      final String tan = new String(Arrays.copyOfRange(sig,pinlen+1,siglen));
+      final String pin = new String(Arrays.copyOfRange(sig,1,pinlen+1),ENCODING);
+      final String tan = new String(Arrays.copyOfRange(sig,pinlen+1,siglen),ENCODING);
       return new String[]{pin,tan};
     }
     catch (Exception e)

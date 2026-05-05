@@ -71,7 +71,7 @@ public class TestIssue137
     callback.put(HBCICallback.NEED_FILTER,"Base64");
     callback.put(HBCICallback.NEED_USERID,"1234567890");
     callback.put(HBCICallback.NEED_CUSTOMERID,"1234567890");
-    callback.put(HBCICallback.NEED_PT_PIN,"foo?bar|foo:bar");
+    callback.put(HBCICallback.NEED_PT_PIN,"füöäÜÖÄoo?bar|foo:bar");
     callback.put(HBCICallback.NEED_CONNECTION,"");
     callback.put(HBCICallback.CLOSE_CONNECTION,"");
     callback.put(HBCICallback.NEED_PT_SECMECH,"921");
@@ -117,7 +117,7 @@ public class TestIssue137
         return;
       
       // Das "|"-Symbol in der PIN muss noch enthalten sein. "?" und ":" müssen mit "?" escaped sein
-      final boolean ok = s.contains("foo??bar|foo?:bar");
+      final boolean ok = s.contains("füöäÜÖÄoo??bar|foo?:bar");
 
       if (!ok)
         System.out.println(s);
