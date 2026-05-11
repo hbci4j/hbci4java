@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci4java.AbstractTest;
 
 /**
@@ -50,7 +49,7 @@ public class TestDauerSEPAList extends AbstractTest
     kernel.rawNewMsg("DauerSEPAList2");
     
     final MsgGen gen = kernel.getMsgGen();
-    final MSG msg = MSGFactory.getInstance().createMSG("CustomMsgRes",data,data.length(),gen);
+    final MSG msg = new MSG("CustomMsgRes",data,data.length(),gen);
 
     final Hashtable<String,String> ht = new Hashtable<String,String>();
     msg.extractValues(ht);

@@ -37,7 +37,6 @@ import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci.sepa.SepaVersion;
 import org.kapott.hbci4java.AbstractTest;
 
@@ -57,7 +56,7 @@ public class TestBug1806 extends AbstractTest
     kernel.rawNewMsg("SepaDauerList");
     
     MsgGen gen = kernel.getMsgGen();
-    MSG msg = MSGFactory.getInstance().createMSG("CustomMsgRes",data,data.length(),gen);
+    MSG msg = new MSG("CustomMsgRes",data,data.length(),gen);
 
     Hashtable<String,String> ht = new Hashtable<String,String>();
     msg.extractValues(ht);

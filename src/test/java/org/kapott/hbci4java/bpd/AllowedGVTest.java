@@ -13,7 +13,6 @@ import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci.rewrite.Rewrite;
 import org.kapott.hbci4java.AbstractTest;
 
@@ -61,7 +60,7 @@ public class AllowedGVTest extends AbstractTest
       newmsgstring = rewriters[i].incomingClearText(newmsgstring, gen);
     }
 
-    MSG msg = MSGFactory.getInstance().createMSG("SynchRes", newmsgstring, newmsgstring.length(), gen);
+    MSG msg = new MSG("SynchRes", newmsgstring, newmsgstring.length(), gen);
     Hashtable<String, String> ht = new Hashtable<String, String>();
     msg.extractValues(ht);
   }
@@ -104,7 +103,7 @@ public class AllowedGVTest extends AbstractTest
       newmsgstring = rewriters[i].incomingClearText(newmsgstring, gen);
     }
 
-    MSG msg = MSGFactory.getInstance().createMSG("SynchRes", newmsgstring, newmsgstring.length(), gen);
+    MSG msg = new MSG("SynchRes", newmsgstring, newmsgstring.length(), gen);
     Hashtable<String, String> ht = new Hashtable<String, String>();
     msg.extractValues(ht);
 

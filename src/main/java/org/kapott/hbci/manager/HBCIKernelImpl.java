@@ -38,7 +38,6 @@ import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.passport.HBCIPassportList;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci.rewrite.Rewrite;
 import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
@@ -235,9 +234,6 @@ public final class HBCIKernelImpl implements HBCIKernel
             for (int i=0;i<rewriters.length;i++) {
                 MSG old=msg;
                 msg=rewriters[i].outgoingClearText(old,gen);
-                if (msg!=old) {
-                    MSGFactory.getInstance().unuseObject(old);
-                }
             }
             
             // HBCIUtils.log("sending msg: "+msg.toString(0));
@@ -264,9 +260,6 @@ public final class HBCIKernelImpl implements HBCIKernel
                 for (int i=0;i<rewriters.length;i++) {
                     MSG old=msg;
                     msg=rewriters[i].outgoingSigned(old,gen);
-                    if (msg!=old) {
-                        MSGFactory.getInstance().unuseObject(old);
-                    }
                 }
             }
             
@@ -307,16 +300,9 @@ public final class HBCIKernelImpl implements HBCIKernel
                 HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_MSG_CRYPT,null);
                 
                 // nachricht verschlüsseln
-                MSG   old=msg;
+                MSG old=msg;
                 Crypt crypt=CryptFactory.getInstance().createCrypt(getParentHandlerData(),old);
-                try {
-                    msg=crypt.cryptIt("Crypted");
-                } finally {
-                    CryptFactory.getInstance().unuseObject(crypt);
-                    if (msg!=old) {
-                        MSGFactory.getInstance().unuseObject(old);
-                    }
-                }
+                msg=crypt.cryptIt("Crypted");
                 
                 if (!msg.getName().equals("Crypted")) {
                     String errmsg=HBCIUtilsInternal.getLocMsg("EXCMSG_CANTCRYPT");
@@ -328,9 +314,6 @@ public final class HBCIKernelImpl implements HBCIKernel
                 for (int i=0;i<rewriters.length;i++) {
                     MSG oldMsg=msg;
                     msg=rewriters[i].outgoingCrypted(oldMsg,gen);
-                    if (msg!=oldMsg) {
-                        MSGFactory.getInstance().unuseObject(oldMsg);
-                    }
                 }
                 
                 HBCIUtils.log("encrypted message to be sent: "+msg.toString(0),HBCIUtils.LOG_DEBUG2);
@@ -346,9 +329,6 @@ public final class HBCIKernelImpl implements HBCIKernel
             HBCIUtils.log("communicating dialogid/msgnum "+dialogid+"/"+msgnum,HBCIUtils.LOG_DEBUG);
             MSG old=msg;
             msg=mainPassport.getComm().pingpong(currentMsgName,old);
-            if (msg!=old) {
-                MSGFactory.getInstance().unuseObject(old);
-            }
 
             // ist antwortnachricht verschlüsselt?
             boolean crypted=msg.getName().equals("CryptedRes");
@@ -385,11 +365,7 @@ public final class HBCIKernelImpl implements HBCIKernel
                 try {
                     HBCIUtilsInternal.getCallback().status(mainPassport,HBCICallback.STATUS_MSG_PARSE,currentMsgName+"Res");
                     HBCIUtils.log("message to pe parsed: "+msg.toString(0),HBCIUtils.LOG_DEBUG2);
-                    MSG oldMsg=msg;
-                    msg=MSGFactory.getInstance().createMSG(currentMsgName+"Res",newmsgstring,newmsgstring.length(),gen);
-                    if (msg!=oldMsg) {
-                        MSGFactory.getInstance().unuseObject(oldMsg);
-                    }
+                    msg=new MSG(currentMsgName+"Res",newmsgstring,newmsgstring.length(),gen);
                 } catch (Exception ex) {
                     throw new CanNotParseMessageException(HBCIUtilsInternal.getLocMsg("EXCMSG_CANTPARSE"),newmsgstring,ex);
                 }
@@ -405,9 +381,6 @@ public final class HBCIKernelImpl implements HBCIKernel
             for (int i=0;i<rewriters.length;i++) {
                 MSG oldMsg=msg;
                 msg=rewriters[i].incomingData(oldMsg,gen);
-                if (msg!=oldMsg) {
-                    MSGFactory.getInstance().unuseObject(oldMsg);
-                }
             }
             
             // daten aus nachricht in status-objekt einstellen
@@ -484,7 +457,6 @@ public final class HBCIKernelImpl implements HBCIKernel
                 ret.addException(e);
             }
         } finally {
-            MSGFactory.getInstance().unuseObject(msg);
             currentMsgName=null;
             gen.reset();
         }

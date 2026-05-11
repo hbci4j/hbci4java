@@ -23,11 +23,9 @@ package org.kapott.hbci.protocol;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
-import org.kapott.hbci.protocol.factory.DEGFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -40,7 +38,7 @@ public final class MultipleDEGs
     {
         SyntaxElement ret=null;
 
-        addElement((ret=DEGFactory.getInstance().createDEG(getType(), getName(), path, idx, syntax)));
+        addElement((ret=new DEG(getType(), getName(), path, idx, syntax)));
         return ret;
     }
 
@@ -84,7 +82,7 @@ public final class MultipleDEGs
     protected SyntaxElement parseAndAppendNewElement(Node ref, String path, char predelim, int idx, StringBuffer res, int fullResLen, Document syntax, Hashtable<String, String> predefs,Hashtable<String, String> valids)
     {
         SyntaxElement ret=null;
-        addElement((ret=DEGFactory.getInstance().createDEG(getType(), getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
+        addElement((ret=new DEG(getType(), getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
         return ret;
     }
     
@@ -131,13 +129,4 @@ public final class MultipleDEGs
         }
     }
     
-    public void destroy()
-    {
-        List<SyntaxElement> children=getElements();
-        for (Iterator<SyntaxElement> i=children.iterator();i.hasNext();) {
-            DEGFactory.getInstance().unuseObject(i.next());
-        }
-        
-        super.destroy();
-    }
 }

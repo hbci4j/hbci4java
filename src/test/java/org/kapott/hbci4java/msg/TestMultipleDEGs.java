@@ -10,7 +10,6 @@ import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.MultipleSyntaxElements;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci4java.AbstractTest;
 
 /**
@@ -45,7 +44,7 @@ public class TestMultipleDEGs extends AbstractTest
 
     long start = System.currentTimeMillis();
     MsgGen gen = kernel.getMsgGen();
-    MSG msg = MSGFactory.getInstance().createMSG("DialogInitRes", data, data.length(), gen);
+    MSG msg = new MSG("DialogInitRes", data, data.length(), gen);
     Hashtable<String, String> ht = new Hashtable<String, String>();
     msg.extractValues(ht);
     long end = System.currentTimeMillis();

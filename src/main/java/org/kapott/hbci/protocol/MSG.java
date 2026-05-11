@@ -26,15 +26,12 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.exceptions.NoSuchPathException;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.MsgGen;
-import org.kapott.hbci.protocol.factory.MultipleSEGsFactory;
-import org.kapott.hbci.protocol.factory.MultipleSFsFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -51,9 +48,9 @@ public final class MSG
         MultipleSyntaxElements ret=null;
         
         if ((ref.getNodeName()).equals("SEG"))
-            ret=MultipleSEGsFactory.getInstance().createMultipleSEGs(ref, getPath(), syntax);
+            ret=new MultipleSEGs(ref, getPath(), syntax);
         else if ((ref.getNodeName()).equals("SF"))
-            ret=MultipleSFsFactory.getInstance().createMultipleSFs(ref, getPath(), syntax);
+            ret=new MultipleSFs(ref, getPath(), syntax);
         
         return ret;
     }
@@ -166,6 +163,16 @@ public final class MSG
         initData(type,res,fullResLen,gen,checkSeq,checkValids);
     }
     
+    public MSG(String type, String res, int fullResLen, MsgGen gen)
+    {
+      this(type,res,fullResLen,gen,MSG.CHECK_SEQ);
+    }
+    
+    public MSG(String type,String res,int fullResLen,MsgGen gen,boolean checkSeq)
+    {
+        this(type,res,fullResLen,gen,checkSeq,true);
+    }
+    
     public void init(String type,String res,int fullResLen,MsgGen gen,boolean checkSeq,boolean checkValids)
     {
         super.init(type,type,null,(char)0,0,new StringBuffer(res),fullResLen,
@@ -184,9 +191,9 @@ public final class MSG
         MultipleSyntaxElements ret=null;
 
         if ((segref.getNodeName()).equals("SEG"))
-            ret=MultipleSEGsFactory.getInstance().createMultipleSEGs(segref, getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
+            ret=new MultipleSEGs(segref, getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         else if ((segref.getNodeName()).equals("SF"))
-            ret=MultipleSFsFactory.getInstance().createMultipleSFs(segref, getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
+            ret=new MultipleSFs(segref, getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         
         return ret;
     }
@@ -242,21 +249,4 @@ public final class MSG
         }
     }
     
-    public void destroy()
-    {
-        List<MultipleSyntaxElements> childContainers=getChildContainers();
-        if (childContainers != null)
-        {
-          for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
-            MultipleSyntaxElements child=i.next();
-            if (child instanceof MultipleSFs) {
-                MultipleSFsFactory.getInstance().unuseObject(child);
-            } else {
-                MultipleSEGsFactory.getInstance().unuseObject(child);
-            }
-          }
-        }
-        
-        super.destroy();
-    }
 }

@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.kapott.hbci.manager.HBCIKernelImpl;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci4java.AbstractTest;
 
 /**
@@ -47,7 +46,7 @@ public class TestParseSync extends AbstractTest
       kernel.rawNewMsg("Synch");
       
       MsgGen gen = kernel.getMsgGen();
-      MSG msg = MSGFactory.getInstance().createMSG("SynchRes",data,data.length(),gen);
+      MSG msg = new MSG("SynchRes",data,data.length(),gen);
       Hashtable<String,String> ht = new Hashtable<String,String>();
       msg.extractValues(ht);
     }

@@ -32,10 +32,6 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.NoSuchPathException;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.protocol.factory.MultipleDEGsFactory;
-import org.kapott.hbci.protocol.factory.MultipleDEsFactory;
-import org.kapott.hbci.protocol.factory.MultipleSEGsFactory;
-import org.kapott.hbci.protocol.factory.MultipleSFsFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -146,9 +142,6 @@ public abstract class SyntaxElement
     
     private void initData(String type, String name, String ppath, int idx, Document syntax)
     {
-        if (getElementTypeName().equals("SEG"))
-            HBCIUtils.log("creating segment "+ppath+" -> "+name+"("+idx+")", HBCIUtils.LOG_INTERN);
-        
         this.type = type;
         this.name = name;
         this.parent=null;
@@ -178,78 +171,62 @@ public abstract class SyntaxElement
             if (requestTag!=null && requestTag.equals("1"))
                 needsRequestTag=true;
 
-            try {
-                int syntaxIdx=0;
-                for (Node ref=def.getFirstChild(); ref!=null; ref=ref.getNextSibling()) {
-                    if (ref.getNodeType()==Node.ELEMENT_NODE) {
-                        MultipleSyntaxElements child=createAndAppendNewChildContainer(ref, syntax);
-                        if (child!=null) {
-                            child.setParent(this);
-                            child.setSyntaxIdx(syntaxIdx);
-                            
-                            if (getElementTypeName().equals("MSG"))
-                                HBCIUtils.log("child container "+child.getPath()+" has syntaxIdx="+child.getSyntaxIdx(), HBCIUtils.LOG_INTERN);
-                        }
-                        syntaxIdx++;
+            int syntaxIdx=0;
+            for (Node ref=def.getFirstChild(); ref!=null; ref=ref.getNextSibling()) {
+                if (ref.getNodeType()==Node.ELEMENT_NODE) {
+                    MultipleSyntaxElements child=createAndAppendNewChildContainer(ref, syntax);
+                    if (child!=null) {
+                        child.setParent(this);
+                        child.setSyntaxIdx(syntaxIdx);
+                        
+                        if (getElementTypeName().equals("MSG"))
+                            HBCIUtils.log("child container "+child.getPath()+" has syntaxIdx="+child.getSyntaxIdx(), HBCIUtils.LOG_INTERN);
                     }
+                    syntaxIdx++;
                 }
+            }
 
-                /* durchlaufen aller "value"-knoten und setzen der
-                 werte der entsprechenden de */
-                // Wenn wir das *hier* machen, dann werden ja DOCH wieder
-                // alle "minnum=0"-Segmente
-                // erzeugt, weil für jedes Segment code und version gesetzt
-                // werden müssten. Am besten das immer in dem Moment machen,
-                // wo ein entsprechendes SyntaxDE erzeugt wird.
-                // --> nein, das geht hier. Grund: die optimierte Message-Engine
-                // wird nur für Segmentfolgen angewendet. Und in Segmentfolgen-
-                // Definitionen sind keine values oder valids angegeben, so dass
-                // dieser Code hier gar keine Relevanz für Segmentfolgen hat
-                NodeList valueNodes = ((Element)def).getElementsByTagName("value");
-                int      len=valueNodes.getLength();
-                String   dottedPath = this.path+".";
-                for (int i=0; i<len; i++) {
-                    Node   valueNode = valueNodes.item(i);
-                    String valuePath = ((Element)valueNode).getAttribute("path");
-                    String value     = (valueNode.getFirstChild()).getNodeValue();
-                    String destpath  = dottedPath+valuePath;
-                    
-                    if (!propagateValue(destpath,value,TRY_TO_CREATE,DONT_ALLOW_OVERWRITE))
-                        throw new NoSuchPathException(destpath);
+            /* durchlaufen aller "value"-knoten und setzen der
+             werte der entsprechenden de */
+            // Wenn wir das *hier* machen, dann werden ja DOCH wieder
+            // alle "minnum=0"-Segmente
+            // erzeugt, weil für jedes Segment code und version gesetzt
+            // werden müssten. Am besten das immer in dem Moment machen,
+            // wo ein entsprechendes SyntaxDE erzeugt wird.
+            // --> nein, das geht hier. Grund: die optimierte Message-Engine
+            // wird nur für Segmentfolgen angewendet. Und in Segmentfolgen-
+            // Definitionen sind keine values oder valids angegeben, so dass
+            // dieser Code hier gar keine Relevanz für Segmentfolgen hat
+            NodeList valueNodes = ((Element)def).getElementsByTagName("value");
+            int      len=valueNodes.getLength();
+            String   dottedPath = this.path+".";
+            for (int i=0; i<len; i++) {
+                Node   valueNode = valueNodes.item(i);
+                String valuePath = ((Element)valueNode).getAttribute("path");
+                String value     = (valueNode.getFirstChild()).getNodeValue();
+                String destpath  = dottedPath+valuePath;
+                
+                if (!propagateValue(destpath,value,TRY_TO_CREATE,DONT_ALLOW_OVERWRITE))
+                    throw new NoSuchPathException(destpath);
+            }
+
+            /* durchlaufen aller "valids"-knoten und speichern der valid-values */
+            NodeList validNodes=((Element)def).getElementsByTagName("valids");
+            len = validNodes.getLength();
+            dottedPath = getPath()+".";
+            for (int i=0;i<len;i++) {
+                Node validNode=validNodes.item(i);
+                String valuePath=((Element)(validNode)).getAttribute("path");
+                String absPath=dottedPath+valuePath;
+
+                NodeList validvalueNodes=((Element)(validNode)).getElementsByTagName("validvalue");
+                int len2=validvalueNodes.getLength();
+                for (int j=0;j<len2;j++) {
+                    Node validvalue=validvalueNodes.item(j);
+                    String value=(validvalue.getFirstChild()).getNodeValue();
+
+                    storeValidValueInDE(absPath,value);
                 }
-
-                /* durchlaufen aller "valids"-knoten und speichern der valid-values */
-                NodeList validNodes=((Element)def).getElementsByTagName("valids");
-                len = validNodes.getLength();
-                dottedPath = getPath()+".";
-                for (int i=0;i<len;i++) {
-                    Node validNode=validNodes.item(i);
-                    String valuePath=((Element)(validNode)).getAttribute("path");
-                    String absPath=dottedPath+valuePath;
-
-                    NodeList validvalueNodes=((Element)(validNode)).getElementsByTagName("validvalue");
-                    int len2=validvalueNodes.getLength();
-                    for (int j=0;j<len2;j++) {
-                        Node validvalue=validvalueNodes.item(j);
-                        String value=(validvalue.getFirstChild()).getNodeValue();
-
-                        storeValidValueInDE(absPath,value);
-                    }
-                }
-            } catch (RuntimeException e) {
-                for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
-                    MultipleSyntaxElements o=i.next();
-                    if (o instanceof MultipleSFs) {
-                        MultipleSFsFactory.getInstance().unuseObject(o);
-                    } else if (o instanceof MultipleSEGs) {
-                        MultipleSEGsFactory.getInstance().unuseObject(o);
-                    } else if (o instanceof MultipleDEGs) {
-                        MultipleDEGsFactory.getInstance().unuseObject(o);
-                    } else {
-                        MultipleDEsFactory.getInstance().unuseObject(o);
-                    }
-                }
-                throw e;
             }
         }
     }
@@ -373,51 +350,35 @@ public abstract class SyntaxElement
                 }
             }
 
-            try {
-                // anlegen der child-elemente
-                int counter=0;
-                for (Node ref=def.getFirstChild();ref!=null;ref=ref.getNextSibling()) {
-                	if (ref.getNodeType()==Node.ELEMENT_NODE) {
-                		MultipleSyntaxElements child=parseAndAppendNewChildContainer(ref,
-                				((counter++)==0)?predelim:getInDelim(),
-                						getInDelim(),
-                						res,fullResLen,syntax,predefs,valids);
+            // anlegen der child-elemente
+            int counter=0;
+            for (Node ref=def.getFirstChild();ref!=null;ref=ref.getNextSibling()) {
+            	if (ref.getNodeType()==Node.ELEMENT_NODE) {
+            		MultipleSyntaxElements child=parseAndAppendNewChildContainer(ref,
+            				((counter++)==0)?predelim:getInDelim(),
+            						getInDelim(),
+            						res,fullResLen,syntax,predefs,valids);
 
-                		if (child!=null) {
-                			child.setParent(this);
+            		if (child!=null) {
+            			child.setParent(this);
 
-                			// bei der SF "Params", die mit <SF type="Params" maxnum="0"/> referenziert wird, 
-                			// soll nach jedem erfolgreich in die SF aufgenommenen Param-Segment eine neue
-                			// SF begonnen werden, damit das Problem mit dem am Ende der SF stehenden Template-
-                			// Param-Segment nicht mehr auftritt
-                			// dazu wird beim hinzufuegen von segmenten zur sf ueberprueft, ob diese evtl. bereits
-                			// segmente enthaelt (hasValidChilds()). falls das der fall ist, so wird
-                			// kein neues segment hinzugefuegt
-                			// analoges gilt für die SF "GVRes" - hier muss dafür gesorgt werden, dass jede
-                			// antwort in ein eigenes GVRes kommt, damit die zuordnung reihenfolge-erkennung
-                			// der empfangenen GVRes-segmente funktioniert (in HBCIJobImpl.fillJobResult())
-                			if ((this instanceof SF) && 
-                					(getName().equals("Params") || getName().equals("GVRes")) &&
-                					((MultipleSEGs)child).hasValidChilds()) {
-                				break;
-                			}
-                		}
-                	}
-                }
-            } catch (RuntimeException e) {
-                for (Iterator<MultipleSyntaxElements> i=getChildContainers().iterator();i.hasNext();) {
-                    MultipleSyntaxElements o=i.next();
-                    if (o instanceof MultipleSFs) {
-                        MultipleSFsFactory.getInstance().unuseObject(o);
-                    } else if (o instanceof MultipleSEGs) {
-                        MultipleSEGsFactory.getInstance().unuseObject(o);
-                    } else if (o instanceof MultipleDEGs) {
-                        MultipleDEGsFactory.getInstance().unuseObject(o);
-                    } else {
-                        MultipleDEsFactory.getInstance().unuseObject(o);
-                    }
-                }
-                throw e;
+            			// bei der SF "Params", die mit <SF type="Params" maxnum="0"/> referenziert wird, 
+            			// soll nach jedem erfolgreich in die SF aufgenommenen Param-Segment eine neue
+            			// SF begonnen werden, damit das Problem mit dem am Ende der SF stehenden Template-
+            			// Param-Segment nicht mehr auftritt
+            			// dazu wird beim hinzufuegen von segmenten zur sf ueberprueft, ob diese evtl. bereits
+            			// segmente enthaelt (hasValidChilds()). falls das der fall ist, so wird
+            			// kein neues segment hinzugefuegt
+            			// analoges gilt für die SF "GVRes" - hier muss dafür gesorgt werden, dass jede
+            			// antwort in ein eigenes GVRes kommt, damit die zuordnung reihenfolge-erkennung
+            			// der empfangenen GVRes-segmente funktioniert (in HBCIJobImpl.fillJobResult())
+            			if ((this instanceof SF) && 
+            					(getName().equals("Params") || getName().equals("GVRes")) &&
+            					((MultipleSEGs)child).hasValidChilds()) {
+            				break;
+            			}
+            		}
+            	}
             }
         }
 
@@ -772,19 +733,5 @@ public abstract class SyntaxElement
         return posInMsg;
     }
     
-    protected void destroy()
-    {
-        if (childContainers != null)
-        {
-            childContainers.clear();
-            childContainers=null;
-        }
-        name=null;
-        parent=null;
-        path=null;
-        type=null;
-        syntax=null;
-        def=null;
-    }
 }
 

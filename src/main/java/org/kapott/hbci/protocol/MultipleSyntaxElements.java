@@ -33,10 +33,6 @@ import org.kapott.hbci.exceptions.ParseErrorException;
 import org.kapott.hbci.exceptions.PredelimErrorException;
 import org.kapott.hbci.exceptions.TooMuchElementsException;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.protocol.factory.DEFactory;
-import org.kapott.hbci.protocol.factory.DEGFactory;
-import org.kapott.hbci.protocol.factory.SEGFactory;
-import org.kapott.hbci.protocol.factory.SFFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -110,38 +106,22 @@ public abstract class MultipleSyntaxElements
         if (st.length() != 0)
             maxnum = Integer.parseInt(st);
 
-        try {
-            // anlegen mindestens eines syntaxelementes
-            // warum? würde es nicht auch reichen, NUR den container anzulegen,
-            // wenn minnum=0 ist? -- nein, es gibt zu viele "optionale" Elemente,
-            // die in Wirklichkeit gar nicht optional sind, aber mit der Option
-            // DONT_TRY_TO_CREATE erzeugt werden, so dass sie also nicht angelegt
-            // werden würden und somit fehlerhafte Nachrichten die Folge wären.
-            SyntaxElement child=createAndAppendNewElement(ref, path, 0, syntax);
+        // anlegen mindestens eines syntaxelementes
+        // warum? würde es nicht auch reichen, NUR den container anzulegen,
+        // wenn minnum=0 ist? -- nein, es gibt zu viele "optionale" Elemente,
+        // die in Wirklichkeit gar nicht optional sind, aber mit der Option
+        // DONT_TRY_TO_CREATE erzeugt werden, so dass sie also nicht angelegt
+        // werden würden und somit fehlerhafte Nachrichten die Folge wären.
+        SyntaxElement child=createAndAppendNewElement(ref, path, 0, syntax);
+        if (child!=null)
+            child.setParent(this);
+        
+        /* erzeugen sovieler syntaxelemente, bis die mindestanzahl
+         aus der syntaxdefinition erreicht ist */
+        for (int i = 1; i < minnum; i++) {
+            child=createAndAppendNewElement(ref, path, i, syntax);
             if (child!=null)
                 child.setParent(this);
-            
-            /* erzeugen sovieler syntaxelemente, bis die mindestanzahl
-             aus der syntaxdefinition erreicht ist */
-            for (int i = 1; i < minnum; i++) {
-                child=createAndAppendNewElement(ref, path, i, syntax);
-                if (child!=null)
-                    child.setParent(this);
-            }
-        } catch (RuntimeException e) {
-            for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
-                Object o=i.next();
-                if (o instanceof SF) {
-                    SFFactory.getInstance().unuseObject(o);
-                } else if (o instanceof SEG) {
-                    SEGFactory.getInstance().unuseObject(o);
-                } else if (o instanceof DEG) {
-                    DEGFactory.getInstance().unuseObject(o);
-                } else {
-                    DEFactory.getInstance().unuseObject(o);
-                }
-            }
-            throw e;
         }
     }
     
@@ -385,135 +365,119 @@ public abstract class MultipleSyntaxElements
         int     idx = 0;
         boolean ready = false;
 
-        try {
-            while (!ready) {
-                // sichern des reststrings
-                StringBuffer save=new StringBuffer(res.toString());
-                boolean      emptyElementFound=false;
+        while (!ready) {
+            // sichern des reststrings
+            StringBuffer save=new StringBuffer(res.toString());
+            boolean      emptyElementFound=false;
 
-                try {
-                    // versuch, ein weiteres syntaxelement zu erzeugen
-                    SyntaxElement child=parseAndAppendNewElement(ref,path, 
-                            (idx==0)?predelim0:predelim1, 
-                            idx,res,fullResLen,syntax,predefs,valids);
-                    if (child!=null)
-                        child.setParent(this);
-                } catch (ParseErrorException e) {
-                  
-                    // [willuhn 2012-03-06, BUG 1129] weiterwerfen, wenn sie als fatal eingestuft ist
-                    if (e.isFatal())
-                      throw e;
-                    
-                    // wenn das nicht klappt, dann reststring zuruecksetzen, aber nur, 
-                    //   wenn naechstes zeichen nicht wieder ein delimiter ist
-                    //   dann war naemlich das zu generierende DE leer!!!
+            try {
+                // versuch, ein weiteres syntaxelement zu erzeugen
+                SyntaxElement child=parseAndAppendNewElement(ref,path, 
+                        (idx==0)?predelim0:predelim1, 
+                        idx,res,fullResLen,syntax,predefs,valids);
+                if (child!=null)
+                    child.setParent(this);
+            } catch (ParseErrorException e) {
+              
+                // [willuhn 2012-03-06, BUG 1129] weiterwerfen, wenn sie als fatal eingestuft ist
+                if (e.isFatal())
+                  throw e;
+                
+                // wenn das nicht klappt, dann reststring zuruecksetzen, aber nur, 
+                //   wenn naechstes zeichen nicht wieder ein delimiter ist
+                //   dann war naemlich das zu generierende DE leer!!!
 
-                    // charAt(0) ist auf jede fall ein delimiter.
-                    // wenn auch charAt(1) ein delimiter ist, dann ist
-                    // das dazwischenliegende syntaxelement leer; in diesem
-                    // fall muss der vorderste delimiter entfernt werden
-                    // (so dass es so aussieht, als wurde das leere syntaxelement
-                    // irgendwie richtig geparst)
+                // charAt(0) ist auf jede fall ein delimiter.
+                // wenn auch charAt(1) ein delimiter ist, dann ist
+                // das dazwischenliegende syntaxelement leer; in diesem
+                // fall muss der vorderste delimiter entfernt werden
+                // (so dass es so aussieht, als wurde das leere syntaxelement
+                // irgendwie richtig geparst)
+                
+                // die exception kann entweder durch einen syntax-fehler oder durch
+                // ein leeres element (was ein spezieller fall eines syntax-fehlers ist)
+                // ausgeloest worden sein.
+                // da das entfernen von leeren elementen optional ist (und manchmal sogar
+                // sinvollerweise gar nicht stattfindet), muessen die exceptions, die wegen
+                // leerer elemente geworfen wurden, als OK akzeptiert werden, solange die
+                // mindestanzahl bereits gefuellter elemente erreicht ist
+                
+                if (save.length()>1) {
                     
-                    // die exception kann entweder durch einen syntax-fehler oder durch
-                    // ein leeres element (was ein spezieller fall eines syntax-fehlers ist)
-                    // ausgeloest worden sein.
-                    // da das entfernen von leeren elementen optional ist (und manchmal sogar
-                    // sinvollerweise gar nicht stattfindet), muessen die exceptions, die wegen
-                    // leerer elemente geworfen wurden, als OK akzeptiert werden, solange die
-                    // mindestanzahl bereits gefuellter elemente erreicht ist
-                    
-                    if (save.length()>1) {
-                        
-                        //////////////////////////////////////////////////////////////////////
-                        // Dirty-Hack fuer Sonderfall optionale MultipleDEGs. Also eine Liste vieler DEGs,
-                        // die alle optional sein koennen. bei den "AllowedGV" koennen das 999 sein.
-                        // Wir wuerden hier jedes einzeln parsen - nur um festzustellen, dass
-                        // nichts drin steht und wir ein AllowedGV-DEG ohne GV-Code erzeugen,
-                        // weil da eigentlich nur noch sowas steht: "++++++++++++++++++++ usw".
-                        // Das verlaengert das Parsen enorm. Wir kuerzen daher hier ab.
-                        // Wenn this ein MultiDEGs mit minnum = 0 und maxnum > 1 ist, dann checken
-                        // wir, ob auf dem Substring von "save(0,maxnum-idx)" nur noch "+"-Zeichen
-                        // kommen. Wenn das der Fall ist, koennen wir hier abbrechen
-                        // Siehe http://www.onlinebanking-forum.de/forum/topic.php?t=19879&page=last#last_post
-                        if ((this instanceof MultipleDEGs) && this.minnum == 0 && this.maxnum > 1 && idx > 1)
+                    //////////////////////////////////////////////////////////////////////
+                    // Dirty-Hack fuer Sonderfall optionale MultipleDEGs. Also eine Liste vieler DEGs,
+                    // die alle optional sein koennen. bei den "AllowedGV" koennen das 999 sein.
+                    // Wir wuerden hier jedes einzeln parsen - nur um festzustellen, dass
+                    // nichts drin steht und wir ein AllowedGV-DEG ohne GV-Code erzeugen,
+                    // weil da eigentlich nur noch sowas steht: "++++++++++++++++++++ usw".
+                    // Das verlaengert das Parsen enorm. Wir kuerzen daher hier ab.
+                    // Wenn this ein MultiDEGs mit minnum = 0 und maxnum > 1 ist, dann checken
+                    // wir, ob auf dem Substring von "save(0,maxnum-idx)" nur noch "+"-Zeichen
+                    // kommen. Wenn das der Fall ist, koennen wir hier abbrechen
+                    // Siehe http://www.onlinebanking-forum.de/forum/topic.php?t=19879&page=last#last_post
+                    if ((this instanceof MultipleDEGs) && this.minnum == 0 && this.maxnum > 1 && idx > 1)
+                    {
+                        int size = this.maxnum-idx;
+                        if (size > save.length())
+                            size = save.length();
+                        String rest = save.substring(0,size);
+                        if (containsOnly(rest,'+'))
                         {
-                            int size = this.maxnum-idx;
-                            if (size > save.length())
-                                size = save.length();
-                            String rest = save.substring(0,size);
-                            if (containsOnly(rest,'+'))
-                            {
-                                HBCIUtils.log("applying shortcut for optional MultipleDEGs, have no more content in according range",HBCIUtils.LOG_DEBUG);
-                                res.replace(0,res.length(),res.substring(size-1)); // Wir schneiden die "+++++..." alle weg
-                                ready = true;
-                                continue;
-                            }
+                            HBCIUtils.log("applying shortcut for optional MultipleDEGs, have no more content in according range",HBCIUtils.LOG_DEBUG);
+                            res.replace(0,res.length(),res.substring(size-1)); // Wir schneiden die "+++++..." alle weg
+                            ready = true;
+                            continue;
                         }
-                        //////////////////////////////////////////////////////////////////////
-                        
-                        char secondChar=save.charAt(1);
+                    }
+                    //////////////////////////////////////////////////////////////////////
+                    
+                    char secondChar=save.charAt(1);
 
-                        if (secondChar=='+' || secondChar==':' || secondChar=='\'') {
-                            // nur wenn der Fehler nicht durch einen predelimiter-error
-                            // verursacht wurde, darf der delimiter (der also offensichtlich richtig
-                            // und erwartet war) geloescht werden
-                            if (!(e instanceof PredelimErrorException)) { 
-                                save.deleteCharAt(0);
-                            }
-
-                            emptyElementFound=true;
+                    if (secondChar=='+' || secondChar==':' || secondChar=='\'') {
+                        // nur wenn der Fehler nicht durch einen predelimiter-error
+                        // verursacht wurde, darf der delimiter (der also offensichtlich richtig
+                        // und erwartet war) geloescht werden
+                        if (!(e instanceof PredelimErrorException)) { 
+                            save.deleteCharAt(0);
                         }
-                    } else {
+
                         emptyElementFound=true;
                     }
-                    
-                    res.replace(0,res.length(),save.toString());
-
-                    /* wenn bisher weniger als die mindestanzahl geklappt hat,
-                     dann exception werfen */
-                    if (idx<minnum)
-                        throw new ParseErrorException("reststring in "+getPath()+": "+res.toString(),e);
-
-                    // es wird nur dann aufgehoert, weitere elemente dem aktuellen container hinzu-
-                    // zufuegen, wenn ein element gefunden wurde, was offentsichlich nicht mehr dazu-
-                    // gehoert (exception, aber nicht leeres element) --> dann stimmt naemlich entweder
-                    // der predelimiter nicht, oder die syntax ist falsch
-                    if (!emptyElementFound) {
-                        ready=true;
-                    }
-                }
-
-                // anlegen eines neuen synaxelementes hat geklappt, bzw.
-                // ein FEHLER beim anlegen kann aufgrund der gegebenen constraints
-                // akzeptiert werden (leeres element, aber mindestanzahl erreicht)
-                idx++;
-
-                /* wenn die maxanzahl erreicht wurde oder
-                 wenn die maxanzahl nicht definiert ist, aber kein neues element
-                 erzeugt werden konnte (wenn gesicherter reststring und tatsaechlicher
-                 reststring gleich sind; minnum ist aber erreicht),
-                 dann diesen container normal beenden */
-                if ((maxnum!=0 && idx>=maxnum) ||
-                        (maxnum==0 && save.toString().equals(res.toString()) && !emptyElementFound))
-                {
-                    ready = true;
-                }
-            }
-        } catch (RuntimeException e) {
-            for (Iterator<SyntaxElement> i=getElements().iterator();i.hasNext();) {
-                SyntaxElement o=i.next();
-                if (o instanceof SF) {
-                    SFFactory.getInstance().unuseObject(o);
-                } else if (o instanceof SEG) {
-                    SEGFactory.getInstance().unuseObject(o);
-                } else if (o instanceof DEG) {
-                    DEGFactory.getInstance().unuseObject(o);
                 } else {
-                    DEFactory.getInstance().unuseObject(o);
+                    emptyElementFound=true;
+                }
+                
+                res.replace(0,res.length(),save.toString());
+
+                /* wenn bisher weniger als die mindestanzahl geklappt hat,
+                 dann exception werfen */
+                if (idx<minnum)
+                    throw new ParseErrorException("reststring in "+getPath()+": "+res.toString(),e);
+
+                // es wird nur dann aufgehoert, weitere elemente dem aktuellen container hinzu-
+                // zufuegen, wenn ein element gefunden wurde, was offentsichlich nicht mehr dazu-
+                // gehoert (exception, aber nicht leeres element) --> dann stimmt naemlich entweder
+                // der predelimiter nicht, oder die syntax ist falsch
+                if (!emptyElementFound) {
+                    ready=true;
                 }
             }
-            throw e;
+
+            // anlegen eines neuen synaxelementes hat geklappt, bzw.
+            // ein FEHLER beim anlegen kann aufgrund der gegebenen constraints
+            // akzeptiert werden (leeres element, aber mindestanzahl erreicht)
+            idx++;
+
+            /* wenn die maxanzahl erreicht wurde oder
+             wenn die maxanzahl nicht definiert ist, aber kein neues element
+             erzeugt werden konnte (wenn gesicherter reststring und tatsaechlicher
+             reststring gleich sind; minnum ist aber erreicht),
+             dann diesen container normal beenden */
+            if ((maxnum!=0 && idx>=maxnum) ||
+                    (maxnum==0 && save.toString().equals(res.toString()) && !emptyElementFound))
+            {
+                ready = true;
+            }
         }
     }
 
@@ -582,17 +546,5 @@ public abstract class MultipleSyntaxElements
         }
         
         return true;
-    }
-    
-    protected void destroy()
-    {
-        elements.clear();
-        elements=null;
-        name=null;
-        parent=null;
-        path=null;
-        ref=null;
-        syntax=null;
-        type=null;
     }
 }

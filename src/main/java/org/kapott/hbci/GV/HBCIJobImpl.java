@@ -50,7 +50,6 @@ import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.passport.HBCIPassportList;
 import org.kapott.hbci.protocol.SEG;
 import org.kapott.hbci.protocol.SyntaxElement;
-import org.kapott.hbci.protocol.factory.SEGFactory;
 import org.kapott.hbci.status.HBCIMsgStatus;
 import org.kapott.hbci.status.HBCIRetVal;
 import org.kapott.hbci.structures.Konto;
@@ -511,16 +510,11 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         }
         
         // verify if segment can be created
-        SEG seg=null;
         try {
-            seg=createJobSegment();
+            SEG seg=createJobSegment();
             seg.validate();
         } catch (Exception ex) {
             throw new HBCI_Exception("*** the job segment for this task can not be created",ex);
-        } finally {
-            if (seg!=null) {
-                SEGFactory.getInstance().unuseObject(seg);
-            }
         }
     }
     
@@ -534,7 +528,7 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
         SEG seg=null;
         try {
             MsgGen gen=getParentHandler().getMsgGen();
-            seg=SEGFactory.getInstance().createSEG(getName(),getName(),null,0,gen.getSyntax());
+            seg=new SEG(getName(),getName(),null,0,gen.getSyntax());
             for (Enumeration e=getLowlevelParams().propertyNames();e.hasMoreElements();) {
                 String key=(String)e.nextElement();
                 String value=getLowlevelParams().getProperty(key);

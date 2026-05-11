@@ -30,7 +30,6 @@ import java.util.ListIterator;
 import java.util.Properties;
 
 import org.kapott.hbci.manager.HBCIUtilsInternal;
-import org.kapott.hbci.protocol.factory.DEFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -42,8 +41,8 @@ public final class MultipleDEs
 
     protected SyntaxElement createAndAppendNewElement(Node deref, String path, int idx, Document syntax)
     {
-        SyntaxElement ret=null;
-        addElement((ret=DEFactory.getInstance().createDE(deref, getName(), path, idx, syntax)));
+        SyntaxElement ret=new DE(deref, getName(), path, idx, syntax);
+        addElement(ret);
         return ret;
     }
     
@@ -125,7 +124,7 @@ public final class MultipleDEs
             }
         }
         
-        addElement((ret=DEFactory.getInstance().createDE(ref, getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids)));
+        addElement(ret=new DE(ref, getName(), path, predelim, idx, res, fullResLen, syntax, predefs,valids));
         return ret;
     }
     
@@ -173,15 +172,4 @@ public final class MultipleDEs
         }
     }
     
-    public void destroy()
-    {
-        List<SyntaxElement> children=getElements();
-        for (Iterator<SyntaxElement> i=children.iterator();i.hasNext();) {
-            DEFactory.getInstance().unuseObject(i.next());
-        }
-        valids.clear();
-        valids=null;
-        
-        super.destroy();
-    }
 }

@@ -33,7 +33,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -109,7 +108,7 @@ public final class MsgGen
     */
     public MSG generate(String msgName)
     {
-        return MSGFactory.getInstance().createMSG(msgName,this,clientValues);
+        return new MSG(msgName,this,clientValues);
     }
 
     /** @internal 

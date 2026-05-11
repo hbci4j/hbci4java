@@ -35,7 +35,6 @@ import org.kapott.hbci.manager.IHandlerData;
 import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.protocol.MSG;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci.rewrite.Rewrite;
 
 public abstract class Comm
@@ -105,7 +104,7 @@ public abstract class Comm
             HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_PARSE,"CryptedRes");
             try {
                 HBCIUtils.log("trying to parse message as crypted message",HBCIUtils.LOG_DEBUG);
-                retmsg = MSGFactory.getInstance().createMSG("CryptedRes",st,st.length(),gen,MSG.DONT_CHECK_SEQ);
+                retmsg = new MSG("CryptedRes",st,st.length(),gen,MSG.DONT_CHECK_SEQ);
             } catch (ParseErrorException e) {
                 // wenn das schiefgeht...
                 HBCIUtils.log("message seems not to be encrypted; tring to parse it as "+msgName+"Res message",HBCIUtils.LOG_DEBUG);
@@ -118,7 +117,7 @@ public abstract class Comm
                 
                 // versuch, nachricht als unverschlüsselte msg zu parsen
                 HBCIUtilsInternal.getCallback().status(getParentPassport(),HBCICallback.STATUS_MSG_PARSE,msgName+"Res");
-                retmsg = MSGFactory.getInstance().createMSG(msgName+"Res",st,st.length(),gen);
+                retmsg = new MSG(msgName+"Res",st,st.length(),gen);
             }
         } catch (Exception ex) {
             throw new CanNotParseMessageException(HBCIUtilsInternal.getLocMsg("EXCMSG_CANTPARSE"),st,ex);

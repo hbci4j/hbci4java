@@ -324,13 +324,4 @@ public final class DE
         }
     }
 
-    public void destroy()
-    {
-        SyntaxDEFactory.getInstance().unuseObject(value,getType());
-        value=null;
-        valids.clear();
-        valids=null;
-        
-        super.destroy();
-    }
 }

@@ -23,7 +23,6 @@ package org.kapott.hbci.protocol;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
@@ -31,8 +30,6 @@ import org.kapott.hbci.exceptions.InvalidSegSeqException;
 import org.kapott.hbci.exceptions.NoSuchPathException;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.MsgGen;
-import org.kapott.hbci.protocol.factory.MultipleDEGsFactory;
-import org.kapott.hbci.protocol.factory.MultipleDEsFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -49,9 +46,9 @@ public final class SEG
         MultipleSyntaxElements ret=null;
 
         if ((ref.getNodeName()).equals("DE"))
-            ret=MultipleDEsFactory.getInstance().createMultipleDEs(ref, '+', getPath(), syntax);
+            ret=new MultipleDEs(ref, '+', getPath(), syntax);
         else if ((ref.getNodeName()).equals("DEG"))
-            ret=MultipleDEGsFactory.getInstance().createMultipleDEGs(ref, '+', getPath(), syntax);
+            ret=new MultipleDEGs(ref, '+', getPath(), syntax);
 
         return ret;
     }
@@ -137,9 +134,9 @@ public final class SEG
         MultipleSyntaxElements ret=null;
 
         if ((dataref.getNodeName()).equals("DEG"))
-            ret=MultipleDEGsFactory.getInstance().createMultipleDEGs(dataref, '+', getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
+            ret=new MultipleDEGs(dataref, '+', getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
         else if ((dataref.getNodeName()).equals("DE"))
-            ret=MultipleDEsFactory.getInstance().createMultipleDEs(dataref, '+', getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
+            ret=new MultipleDEs(dataref, '+', getPath(), predelim0, predelim1, res, fullResLen, syntax, predefs,valids);
 
         return ret;
     }
@@ -188,18 +185,4 @@ public final class SEG
         }
     }
     
-    public void destroy()
-    {
-        List<MultipleSyntaxElements> childContainers=getChildContainers();
-        for (Iterator<MultipleSyntaxElements> i=childContainers.iterator();i.hasNext();) {
-            MultipleSyntaxElements child=i.next();
-            if (child instanceof MultipleDEGs) {
-                MultipleDEGsFactory.getInstance().unuseObject(child);
-            } else {
-                MultipleDEsFactory.getInstance().unuseObject(child);
-            }
-        }
-        
-        super.destroy();
-    }
 }

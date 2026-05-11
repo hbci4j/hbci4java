@@ -60,7 +60,6 @@ import org.kapott.hbci.manager.HHDVersion;
 import org.kapott.hbci.manager.HHDVersion.Type;
 import org.kapott.hbci.manager.TanMethod;
 import org.kapott.hbci.protocol.SEG;
-import org.kapott.hbci.protocol.factory.SEGFactory;
 import org.kapott.hbci.security.Crypt;
 import org.kapott.hbci.security.Sig;
 import org.kapott.hbci.status.HBCIMsgStatus;
@@ -1677,19 +1676,11 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                     }
     
                     // orderhash ermitteln
-                    SEG seg = null;
-                    try
-                    {
-                        seg = task.createJobSegment(3);
-                        seg.validate();
-                        final String segdata = seg.toString(0);
-                        HBCIUtils.log("calculating hash for jobsegment: " + segdata,HBCIUtils.LOG_DEBUG2);
-                        hktan.setParam("orderhash",CryptUtils.hash(segdata,this.getOrderHashMode()));
-                    }
-                    finally
-                    {
-                        SEGFactory.getInstance().unuseObject(seg);
-                    }
+                    SEG seg = task.createJobSegment(3);
+                    seg.validate();
+                    final String segdata = seg.toString(0);
+                    HBCIUtils.log("calculating hash for jobsegment: " + segdata,HBCIUtils.LOG_DEBUG2);
+                    hktan.setParam("orderhash",CryptUtils.hash(segdata,this.getOrderHashMode()));
     
                     // HKTAN in einer neuen Nachricht *vor* dem eigentlichen Auftrag einreihen
                     HBCIMessage newMsg = queue.insertBefore(message);

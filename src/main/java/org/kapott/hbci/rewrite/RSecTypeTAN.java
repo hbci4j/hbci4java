@@ -29,7 +29,6 @@ import org.kapott.hbci.manager.MsgGen;
 import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.MultipleSyntaxElements;
 import org.kapott.hbci.protocol.SyntaxElement;
-import org.kapott.hbci.protocol.factory.MSGFactory;
 
 /**
  * Rewriter-Modul für falsche Informationen über TAN-Verfahren. Einige Banken
@@ -56,7 +55,7 @@ public class RSecTypeTAN extends Rewrite
       {
         // empfangene Nachricht parsen, dabei die validvalues-Überprüfung weglassen
         String myMsgName = (String)getData("msgName")+"Res";
-        msg = MSGFactory.getInstance().createMSG(myMsgName,st,st.length(),gen,MSG.CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
+        msg = new MSG(myMsgName,st,st.length(),gen,MSG.CHECK_SEQ,MSG.DONT_CHECK_VALIDS);
         
         // in einer Schleife durch alle SuppSecMethods-Datensätze laufen
         for (int i=0;;i++) {
@@ -117,27 +116,11 @@ public class RSecTypeTAN extends Rewrite
                 break;
             }
         }
-        
-        MSGFactory.getInstance().unuseObject(msg);
       }
       catch (Exception e)
       {
         HBCIUtils.log("unable to apply rewriter " + this.getClass().getSimpleName() + " - leaving message unchanged: " + e.getMessage(), HBCIUtils.LOG_INFO);
         HBCIUtils.log(e,HBCIUtils.LOG_DEBUG);
-      }
-      finally
-      {
-        if (msg != null)
-        {
-          try
-          {
-            MSGFactory.getInstance().unuseObject(msg);
-          }
-          catch (Exception e)
-          {
-            HBCIUtils.log(e,HBCIUtils.LOG_WARN);
-          }
-        }
       }
       return st;
     }
