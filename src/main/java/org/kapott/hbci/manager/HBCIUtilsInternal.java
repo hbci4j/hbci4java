@@ -24,15 +24,9 @@ package org.kapott.hbci.manager;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.MessageFormat;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import org.kapott.hbci.callback.HBCICallback;
@@ -41,13 +35,6 @@ import org.kapott.hbci.tools.ParameterFinder;
 
 public class HBCIUtilsInternal
 {
-
-    public static Properties blzs;
-    public static Map<String,BankInfo> banks = null;
-    public static Hashtable<ThreadGroup, HBCICallback>  callbacks;  // threadgroup->callbackObject
-    public static Hashtable<ThreadGroup, ResourceBundle>  locMsgs;    // threadgroup->resourceBundle
-    public static Hashtable<ThreadGroup, Locale>  locales;    // threadgroup->Locale
-    
     public static String bigDecimal2String(BigDecimal value)
     {
         DecimalFormat format=new DecimalFormat("0.##");
@@ -59,47 +46,13 @@ public class HBCIUtilsInternal
     }
 
     /**
-     * Liefert die Zeile aus der blz.properties mit der angegebenen BLZ.
-     * @param blz die BLZ.
-     * @return die Zeile aus der blz.properties
-     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
-     */
-    @Deprecated
-    public static String getBLZData(String blz)
-    {
-        return blz!=null?blzs.getProperty(blz,"|||||"):"|||||";
-    }
-
-    /**
-     * Liefert den n-ten Datensatz (beginnend bei 1) aus der Zeile.
-     * @param st die Zeile.
-     * @param idx der Index, beginnend bei 1.
-     * @return der Wert oder Leerstring.
-     * @deprecated Bitte {@link HBCIUtils#getBankInfo(String)} verwenden.
-     */
-    @Deprecated
-    public static String getNthToken(String st,int idx)
-    {
-        String[] parts=st.split("\\|");
-        String   ret=null;
-        
-        if ((idx-1)<parts.length) {
-            ret=parts[idx-1];
-        } else {
-            ret="";
-        }
-        
-        return ret;
-    }
-    
-    /**
      * Liefert das Pruefziffern-Verfahren fuer diese Bank.
      * @param blz die BLZ.
      * @return das Pruefziffern-Verfahren fuer diese Bank.
      */
     public static String getAlgForBLZ(String blz)
     {
-        BankInfo info = banks.get(blz);
+        BankInfo info = HBCIUtils.getBankInfo(blz);
         if (info == null)
             return "";
         return info.getChecksumMethod() != null ? info.getChecksumMethod() : "";
@@ -107,33 +60,22 @@ public class HBCIUtilsInternal
 
     public static HBCICallback getCallback()
     {
-        ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return callbacks.get(group);
+      return HBCIUtils.getClient().getCallback();
     }
     
     public static String getLocMsg(String key)
     {
-        ThreadGroup group=Thread.currentThread().getThreadGroup();
-        try
-        {
-            return locMsgs.get(group).getString(key);
-        }
-        catch (MissingResourceException re)
-        {
-            // tolerieren wir
-            HBCIUtils.log(re,HBCIUtils.LOG_ERR);
-            return key;
-        }
+      return HBCIUtils.getClient().tr(key);
     }
 
     public static String getLocMsg(String key,Object o)
     {
-        return HBCIUtilsInternal.getLocMsg(key,new Object[] {o});
+      return HBCIUtils.getClient().tr(key,o);
     }
 
     public static String getLocMsg(String key,Object[] o)
     {
-        return MessageFormat.format(getLocMsg(key),o);
+      return HBCIUtils.getClient().tr(key,o);
     }
 
     public static boolean ignoreError(HBCIPassport passport,String paramName,String msg)
