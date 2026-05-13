@@ -902,7 +902,7 @@ public final class HBCIUtils
 	 */
 	public static Locale getLocale()
 	{
-	  return getClient().getLocale();
+	  return HBCI4JavaClient.getCurrent().getLocale();
 	}
 
 	/**
@@ -913,7 +913,7 @@ public final class HBCIUtils
 	 */
 	public static String getParam(String st, String def)
 	{
-	  return getClient().getConfig().getString(st,def);
+	  return HBCI4JavaClient.getCurrent().getConfig().getString(st,def);
 	}
 
 	/**
@@ -922,7 +922,7 @@ public final class HBCIUtils
 	 */
 	public static Properties getParams()
 	{
-	  return getClient().getConfig().getProperties();
+	  return HBCI4JavaClient.getCurrent().getConfig().getProperties();
 	}
 
 	/**
@@ -964,7 +964,7 @@ public final class HBCIUtils
 	 */
 	public static BankInfo getBankInfo ( String blz )
 	{
-	  return getClient().getBankInfo(blz);
+	  return HBCI4JavaClient.getCurrent().getBankInfo(blz);
 	}
 
 	/**
@@ -982,7 +982,7 @@ public final class HBCIUtils
 	 */
 	public static List<BankInfo> searchBankInfo ( String query )
 	{
-	  return getClient().searchBankInfo(query);
+	  return HBCI4JavaClient.getCurrent().searchBankInfo(query);
 	}
 
 	/**
@@ -1007,12 +1007,10 @@ public final class HBCIUtils
 
 	/**
 	 * Berechnet die IBAN fuer ein angegebenes deutsches Konto.
-	 *
-	 * @param k
-	 *            das Konto.
+	 * @param k das Konto.
 	 * @return die berechnete IBAN.
 	 */
-	public static String getIBANForKonto ( Konto k )
+	public static String getIBANForKonto (Konto k)
 	{
 		String konto = k.number;
 
@@ -1023,43 +1021,25 @@ public final class HBCIUtils
 		// Wir machen das auch nur dann, wenn beide Nummern zusammen max.
 		// 10 Zeichen ergeben
 		if (k.subnumber != null && k.subnumber.length() > 0 && k.subnumber.matches("[0-9]{1,8}") && k.number.length() + k.subnumber.length() <= 10)
-		{
 			konto += k.subnumber;
-		}
 
 		/////////////////
 		// Pruefziffer berechnen
 		// Siehe http://www.iban.de/iban-pruefsumme.html
 		String zeros = "0000000000";
-		String filledKonto = zeros.substring(0, 10 - konto.length()) + konto; // 10-stellig
-																				// mit
-																				// Nullen
-																				// fuellen
+		String filledKonto = zeros.substring(0, 10 - konto.length()) + konto; // 10-stellig mit Nullen fuellen
 		StringBuffer sb = new StringBuffer();
 		sb.append(k.blz);
 		sb.append(filledKonto);
-		sb.append("1314"); // hartcodiert fuer "DE
+		sb.append("1314"); // hartcodiert fuer "DE"
 		sb.append("00"); // fest vorgegeben
 
-		BigInteger mod = new BigInteger(sb.toString()).mod(new BigInteger("97")); // "97"
-																					// ist
-																					// fest
-																					// vorgegeben
-																					// in
-																					// ISO
-																					// 7064/Modulo
-																					// 97-10
-		String checksum = String.valueOf(98 - mod.intValue()); // "98" ist fest
-																// vorgegeben in
-																// ISO
-																// 7064/Modulo
-																// 97-10
+		BigInteger mod = new BigInteger(sb.toString()).mod(new BigInteger("97")); // "97" ist fest vorgegeben in ISO 7064/Modulo 97-10
+		String checksum = String.valueOf(98 - mod.intValue()); // "98" ist fest vorgegeben in ISO 7064/Modulo 97-10
 		if (checksum.length() < 2)
-		{
 			checksum = "0" + checksum;
-			//
-			/////////////////
-		}
+		//
+		/////////////////
 
 		StringBuffer result = new StringBuffer();
 		result.append("DE");
@@ -1163,26 +1143,9 @@ public final class HBCIUtils
 	 * @param value
 	 *            neuer Wert des zu setzenden HBCI-Parameters
 	 */
-	public static void setParam ( String key, String value )
+	public static void setParam (String key, String value)
 	{
-		ThreadGroup group = Thread.currentThread().getThreadGroup();
-		Properties config = getParams();
-		if (config == null)
-		{
-			throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_THREAD_NOTINIT", group.getName()));
-		}
-
-		synchronized (config)
-		{
-			if (value != null)
-			{
-				config.setProperty(key, value);
-			}
-			else
-			{
-				config.remove(key);
-			}
-		}
+	  HBCI4JavaClient.getCurrent().getConfig().setString(key,value);
 	}
 
 	/**
@@ -1202,26 +1165,7 @@ public final class HBCIUtils
 	 */
 	public static synchronized void log ( String st, int level )
 	{
-		if (level <= Integer.parseInt(getParam("log.loglevel.default", "2")))
-		{
-			StackTraceElement trace = null;
-			try
-			{
-				throw new Exception("");
-			}
-			catch (Exception e)
-			{
-				trace = e.getStackTrace()[1];
-			}
-
-			int filterLevel = Integer.parseInt(HBCIUtils.getParam("log.filter", "2"));
-			if (filterLevel != 0)
-			{
-				st = LogFilter.getInstance().filterLine(st, filterLevel);
-			}
-
-			HBCIUtilsInternal.getCallback().log(st, level, new Date(), trace);
-		}
+	  HBCI4JavaClient.getCurrent().getLogger().log(st,level,null);
 	}
 
   /**
@@ -1301,7 +1245,7 @@ public final class HBCIUtils
 	 */
 	public static synchronized void log ( Exception e, int level )
 	{
-		log(exception2String(e), level);
+	  HBCI4JavaClient.getCurrent().getLogger().log(null,level,e);
 	}
 
 	/**
@@ -2126,18 +2070,9 @@ public final class HBCIUtils
 	 */
 	public static String version()
 	{
-	  return getClient().version();
+	  return HBCI4JavaClient.getCurrent().version();
 	}
 	
-	/**
-	 * Liefert den Client des aktuellen Threads.
-	 * @return der Client des aktuellen Threads.
-	 */
-	public static HBCI4JavaClient getClient()
-	{
-	  return HBCI4JavaClient.getCurrent();
-	}
-
 	/**
 	 * Parsen eines MT940-Datenstroms (Kontoauszüge). Kontoauszüge können von
 	 * vielen Software-Produkten im MT940-Format exportiert werden. Diese
@@ -2150,6 +2085,7 @@ public final class HBCIUtils
 	 * @return {@link org.kapott.hbci.GV_Result.GVRKUms GVRKUms}-Objekt für den
 	 *         einfachen Zugriff auf die Umsatzinformationen.
 	 */
+	@Deprecated
 	public static GVRKUms parseMT940 ( String mt940 )
 	{
 		GVRKUms result = new GVRKUms();

@@ -34,49 +34,52 @@ public interface HBCI4JavaLogger
     /**
      * Loglevel für keine Ausgaben
      **/
-    NONE(0),
+    NONE(0,null),
     
     /**
      * Loglevel für Fehlerausgaben
      **/
-    ERROR(1),
+    ERROR(1,"ERR"),
     
     /**
      * Loglevel für Warnungen
      **/
-    WARN(2),
+    WARN(2,"WRN"),
     
     /**
      * Loglevel für Informationen
      **/
-    INFO(3),
+    INFO(3,"INF"),
     
     /**
      * Loglevel für Debug-Ausgaben
      **/
-    DEBUG(4),
+    DEBUG(4,"DBG"),
     
     /**
      * Loglevel für Debug-Ausgaben für extreme-Debugging
      **/
-    DEBUG2(5),
+    DEBUG2(5,"DB2"),
     
     /**
      * Loglevel für devel-Debugging - nicht benutzen!
      **/
-    INTERN(6),
+    INTERN(6,"INT"),
     
     ;
     
     private int level;
+    private String name;
     
     /**
      * ct.
      * @param level das Level.
+     * @param name der Name des Levels.
      */
-    private Level(int level)
+    private Level(int level, String name)
     {
       this.level = level;
+      this.name = name;
     }
     
     /**
@@ -86,6 +89,24 @@ public interface HBCI4JavaLogger
     public int getLevel()
     {
       return this.level;
+    }
+    
+    /**
+     * Liefert den Namen des Loglevels.
+     * @return der Name des Loglevels.
+     */
+    public String getName()
+    {
+      return name;
+    }
+    
+    /**
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString()
+    {
+      return this.getName();
     }
     
     /**

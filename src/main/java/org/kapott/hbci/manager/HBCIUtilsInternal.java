@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import org.hbci4java.HBCI4JavaClient;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.tools.ParameterFinder;
@@ -60,22 +61,22 @@ public class HBCIUtilsInternal
 
     public static HBCICallback getCallback()
     {
-      return HBCIUtils.getClient().getCallback();
+      return HBCI4JavaClient.getCurrent().getCallback();
     }
     
     public static String getLocMsg(String key)
     {
-      return HBCIUtils.getClient().tr(key);
+      return HBCI4JavaClient.getCurrent().tr(key);
     }
 
     public static String getLocMsg(String key,Object o)
     {
-      return HBCIUtils.getClient().tr(key,o);
+      return HBCI4JavaClient.getCurrent().tr(key,o);
     }
 
     public static String getLocMsg(String key,Object[] o)
     {
-      return HBCIUtils.getClient().tr(key,o);
+      return HBCI4JavaClient.getCurrent().tr(key,o);
     }
 
     public static boolean ignoreError(HBCIPassport passport,String paramName,String msg)

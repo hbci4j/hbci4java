@@ -136,7 +136,7 @@ public class HBCI4JavaConfig
    * @param name der Name.
    * @param value der Wert.
    */
-  void setString(String name, String value)
+  public void setString(String name, String value)
   {
     this.props.put(name,value);
   }
