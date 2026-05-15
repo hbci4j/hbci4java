@@ -38,6 +38,8 @@ import org.kapott.hbci.tools.StringUtil;
 public class HBCI4JavaLoggerCallback implements HBCI4JavaLogger
 {
   private HBCI4JavaClient client = null;
+  private Level level = null;
+  private Integer filter = null;
   
   /**
    * ct.
@@ -46,6 +48,11 @@ public class HBCI4JavaLoggerCallback implements HBCI4JavaLogger
   public HBCI4JavaLoggerCallback(HBCI4JavaClient client)
   {
     this.client = client;
+    
+    final HBCI4JavaConfig conf = this.client.getConfig();
+    this.level = Level.find(conf.getInteger("log.loglevel.default",Level.INFO.getLevel()));
+    this.filter = conf.getInteger("log.filter",2);
+    this.log("init logger [level: %s, filter: %s]",Level.INFO.getLevel(),null,new Exception().getStackTrace()[0],this.level,this.filter);
   }
   
   /**
@@ -85,33 +92,64 @@ public class HBCI4JavaLoggerCallback implements HBCI4JavaLogger
    */
   public void log(String msg, int l, Throwable t, Object... params)
   {
-    final HBCI4JavaConfig conf = this.client.getConfig();
-    final Level level = Level.find(conf.getInteger("log.loglevel.default",Level.INFO.getLevel()));
-    if (!level.log(l))
+    this.log(msg,l,t,null,params);
+  }
+  
+  /**
+   * Loggt die Zeile.
+   * @param msg die Nachricht.
+   * @param l das Loglevel.
+   * @param t optionale Exception.
+   * @param trace der Trace.
+   * @param params optionale Parameter.
+   */
+  private void log(String msg, int l, Throwable t, StackTraceElement trace, Object... params)
+  {
+    if (!this.level.log(l))
       return;
     
-    final StringWriter sw = new StringWriter();
-    final PrintWriter pw = new PrintWriter(sw);
-    
-    if (StringUtil.hasText(msg))
+    try
     {
-      if (params != null && params.length > 0)
-        msg = String.format(msg,params);
+      final StringWriter sw = new StringWriter();
+      final PrintWriter pw = new PrintWriter(sw);
       
-      pw.print(msg);
+      if (StringUtil.hasText(msg))
+      {
+        if (params != null && params.length > 0)
+        {
+          try
+          {
+            msg = String.format(msg,params);
+          }
+          catch (Throwable t2)
+          {
+            System.err.println("invalid msg format");
+            t2.printStackTrace();
+          }
+        }
+        
+        pw.print(msg);
+      }
+
+      if (t != null)
+        t.printStackTrace(pw);
+
+      msg = sw.toString();
+      
+      if (this.filter != null && this.filter != 0)
+        msg = LogFilter.getInstance().filterLine(msg, this.filter);
+
+      this.client.getCallback().log(msg, level.getLevel(), new Date(), trace != null ? trace : this.getTrace());
     }
-
-    if (t != null)
-      t.printStackTrace(pw);
-
-    msg = sw.toString();
-    
-    final Integer fl = conf.getInteger("log.filter",2);
-    if (fl != null && fl != 0)
-      msg = LogFilter.getInstance().filterLine(msg, fl);
-
-    final StackTraceElement trace = this.getTrace();
-    this.client.getCallback().log(msg, level.getLevel(), new Date(), trace);
+    catch (Throwable t2)
+    {
+      // Das Logging darf niemals zu einem Fehler führen
+      System.err.println(msg);
+      if (t != null)
+        t.printStackTrace();
+      
+      t2.printStackTrace();
+    }
   }
 
   /**
@@ -137,7 +175,6 @@ public class HBCI4JavaLoggerCallback implements HBCI4JavaLogger
     
     return null;
   }
-  
 }
 
 

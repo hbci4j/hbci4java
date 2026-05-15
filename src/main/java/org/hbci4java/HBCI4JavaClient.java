@@ -21,11 +21,13 @@
 
 package org.hbci4java;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.Security;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -38,16 +40,20 @@ import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.hbci4java.HBCI4JavaAccess.Type;
 import org.hbci4java.log.HBCI4JavaLogger;
 import org.hbci4java.log.HBCI4JavaLoggerCallback;
 import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.passport.AbstractHBCIPassport;
+import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.tools.StringUtil;
 
 /**
@@ -66,17 +72,30 @@ public class HBCI4JavaClient implements AutoCloseable
   private final static String VERSION = HBCIUtils.class.getPackage().getImplementationVersion();
 
   private final static ThreadLocal<HBCI4JavaClient> THREADLOCAL = new ThreadLocal();
-  private final static AtomicBoolean FIRST = new AtomicBoolean(true);
+  private final static AtomicInteger CLIENT_COUNT = new AtomicInteger(0);
   
   private HBCI4JavaConfig config = null;
   private HBCICallback callback = null;
   private HBCI4JavaLogger logger = null;
+  private List<HBCI4JavaSession> sessions = new LinkedList<>();
+  private int clientId = 0;
   
   private Properties blzs = new Properties();
   private Map<String,BankInfo> banks = new HashMap<>();
   private ResourceBundle bundle = null;
   private Locale locale = null;
   
+  
+  /**
+   * ct.
+   * Hierbei wird die Default-Konfiguration verwendet.
+   * @param callback der Callback.
+   */
+  public HBCI4JavaClient(HBCICallback callback)
+  {
+    this(null,callback);
+  }
+
   /**
    * ct.
    * Der Client wird hierbei automatisch per ThreadLocal im aktuellen Thread registriert.
@@ -88,16 +107,12 @@ public class HBCI4JavaClient implements AutoCloseable
     try
     {
       THREADLOCAL.set(this);
-      
-      this.config = config;
-      this.callback = callback;
+      this.clientId = CLIENT_COUNT.getAndIncrement();
+      this.config = config != null ? config : HBCI4JavaConfig.createDefault();
+      this.callback = callback != null ? callback : new HBCICallbackConsole();
       this.logger = new HBCI4JavaLoggerCallback(this);
-
-      this.logger.info("BEGIN create hbci4java client [version %s, thread-id: %s]",version(),Thread.currentThread().getId());
-      
-      this.initConfig();
-      this.initLocale();
-      this.initBanks();
+      this.logger.info("create hbci4java client [version %s, client-id: %s, thread-id: %s]",version(),this.clientId,Thread.currentThread().getId());
+      this.init();
     }
     catch (HBCI_Exception he)
     {
@@ -107,6 +122,49 @@ public class HBCI4JavaClient implements AutoCloseable
     {
       throw new HBCI_Exception("error while initializing HBCI4Java", e);
     }
+  }
+  
+  /**
+   * Erzeugt eine Default PIN/TAN-Session mit FinTS 3.0.
+   * @param file die Passport-Datei.
+   * @return die Session.
+   */
+  public HBCI4JavaSession createSession(File file)
+  {
+    final HBCI4JavaAccess a = new HBCI4JavaAccess(Type.PINTAN,file);
+    final HBCIPassport passport = this.createPassport(a);
+    return this.createSession(passport);
+  }
+
+  /**
+   * Erzeugt eine Session mit dem angegebenen Passport.
+   * @param passport der Passport.
+   * @return die neue Session.
+   */
+  public HBCI4JavaSession createSession(HBCIPassport passport)
+  {
+    final HBCI4JavaSession session = new HBCI4JavaSession(this,passport);
+    this.sessions.add(session);
+    return session;
+  }
+  
+  /**
+   * Verwirft eine Session.
+   * @param session die Session.
+   */
+  void discard(HBCI4JavaSession session)
+  {
+    this.sessions.remove(session);
+  }
+  
+  /**
+   * Erzeugt einen Passport.
+   * @param access die Konfiguration des Zugangs.
+   * @return der Passport.
+   */
+  public HBCIPassport createPassport(HBCI4JavaAccess access)
+  {
+    return AbstractHBCIPassport.getInstance(access.getType().getName(),access.getFile());
   }
   
   /**
@@ -162,11 +220,31 @@ public class HBCI4JavaClient implements AutoCloseable
    */
   public void close()
   {
-    THREADLOCAL.remove();
-    this.blzs.clear();
-    this.banks.clear();
-    this.config.clear();
-    this.logger.info("END closed hbci4java client [version %s, thread-id: %s]",version(),Thread.currentThread().getId());
+    try
+    {
+      // Checken, ob wir noch offene Sessions haben. Wir iterieren ueber eine Kopie
+      // der Liste, weil HBCI4JavaSession#close wiederrum HBCI4JavaClient#discard(HBCI4JavaSession) aufruft
+      for (HBCI4JavaSession session:new ArrayList<>(this.sessions))
+      {
+        try
+        {
+          session.close();
+        }
+        catch (Exception e)
+        {
+          this.logger.error("unable to close session",e);
+        }
+      }
+    }
+    finally
+    {
+      THREADLOCAL.remove();
+      this.blzs.clear();
+      this.banks.clear();
+      this.config.clear();
+      this.sessions.clear();
+      this.logger.info("closed hbci4java client [version %s, client-id: %s, thread-id: %s]",version(),this.clientId,Thread.currentThread().getId());
+    }
   }
   
   /**
@@ -298,12 +376,16 @@ public class HBCI4JavaClient implements AutoCloseable
   }
   
   /**
-   * Definiert für einige Parameter Default-Werte.
+   * Initialisiert den Client.
+   * @throws IOException
    */
-  private void initConfig()
+  private void init() throws IOException
   {
+    if (Security.getProvider(CryptAlgs4JavaProvider.NAME) == null)
+      Security.addProvider(new CryptAlgs4JavaProvider());
+    
     final String product = this.config.getString("client.product.name",HBCIUtils.PRODUCT_ID);
-    if (FIRST.getAndSet(false) && Objects.equals(product,HBCIUtils.PRODUCT_ID))
+    if (this.clientId == 0 && Objects.equals(product,HBCIUtils.PRODUCT_ID))
     {
       this.logger.warn("***********************************************************************************");
       this.logger.warn("** WARNING                                                                       **");
@@ -321,12 +403,9 @@ public class HBCI4JavaClient implements AutoCloseable
       this.logger.warn("**                                                                               **");
       this.logger.warn("***********************************************************************************");
     }
-
-    if (this.config.getString("kernel.rewriter") == null)
-      this.config.setString("kernel.rewriter","InvalidSegment,WrongStatusSegOrder,WrongSequenceNumbers,MissingMsgRef,HBCIVersion,SigIdLeadingZero,InvalidSuppHBCIVersion,SecTypeTAN,KUmsDelimiters,KUmsEmptyBDateSets");
     
-    if (Security.getProvider(CryptAlgs4JavaProvider.NAME) == null)
-      Security.addProvider(new CryptAlgs4JavaProvider());
+    this.initLocale();
+    this.initBanks();
   }
 
   /**

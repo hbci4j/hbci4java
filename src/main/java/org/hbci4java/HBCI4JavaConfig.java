@@ -36,14 +36,12 @@ public class HBCI4JavaConfig
   
   /**
    * ct.
-   * @param props die Konfigurationsdaten.
    */
-  public HBCI4JavaConfig(Map<String,String> props)
+  public HBCI4JavaConfig()
   {
-    if (props != null)
-      this.props.putAll(props);
+    this((Map)null);
   }
-  
+
   /**
    * ct.
    * @param props die Konfigurationsdaten.
@@ -57,8 +55,22 @@ public class HBCI4JavaConfig
         this.props.put(name, props.getProperty(name));
       }
     }
+    
+    this.initConfig();
   }
 
+  /**
+   * ct.
+   * @param props die Konfigurationsdaten.
+   */
+  public HBCI4JavaConfig(Map<String,String> props)
+  {
+    if (props != null)
+      this.props.putAll(props);
+    
+    this.initConfig();
+  }
+  
   /**
    * Liefert den Wert des Parameters als String.
    * @param name der Name des Parameters.
@@ -141,4 +153,21 @@ public class HBCI4JavaConfig
     this.props.put(name,value);
   }
   
+  /**
+   * Definiert für einige Parameter Default-Werte.
+   */
+  private void initConfig()
+  {
+    if (this.getString("kernel.rewriter") == null)
+      this.setString("kernel.rewriter","InvalidSegment,WrongStatusSegOrder,WrongSequenceNumbers,MissingMsgRef,HBCIVersion,SigIdLeadingZero,InvalidSuppHBCIVersion,SecTypeTAN,KUmsDelimiters,KUmsEmptyBDateSets");
+  }
+
+  /**
+   * Erzeugt eine Default-Konfiguration, wenn keine angegeben ist.
+   * @return die Default-Konfiguration.
+   */
+  public static HBCI4JavaConfig createDefault()
+  {
+    return new HBCI4JavaConfig();
+  }
 }

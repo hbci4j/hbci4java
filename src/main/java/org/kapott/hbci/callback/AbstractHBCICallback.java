@@ -45,18 +45,29 @@ public abstract class AbstractHBCICallback
     protected String createDefaultLogLine(String msg, int level, Date date, StackTraceElement trace)
     {
         final StringBuffer ret=new StringBuffer();
+        
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ret.append("[").append(df.format(date)).append("]");
+
         final Level l = Level.find(level);
         ret.append("[").append(l).append("]");
-        
-        SimpleDateFormat df=new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
-        ret.append("[").append(df.format(date)).append("] ");
         
         ret.append("[").append(Thread.currentThread().getName()).append("]");
         
         String classname = trace != null ? trace.getClassName() : null;
         String method = trace != null ? trace.getMethodName() : null;
+        int line = trace != null ? trace.getLineNumber() : -1;
         if (classname!=null && method != null)
-            ret.append("[").append(classname.substring(classname.lastIndexOf('.')+1)).append(".").append(method).append("] ");
+        {
+          final int pkg = classname.lastIndexOf('.');
+          ret.append("[").append(pkg != -1 ? classname.substring(classname.lastIndexOf('.')+1) : classname);
+          if (line >= 0)
+            ret.append(":").append(line);
+          else
+            ret.append(".").append(method);
+            
+          ret.append("] ");
+        }
         
         if (msg==null)
             msg="";
