@@ -21,6 +21,10 @@
 
 package org.kapott.hbci4java.msg;
 
+import java.io.File;
+
+import org.hbci4java.HBCI4JavaAccess;
+import org.hbci4java.HBCI4JavaAccess.Type;
 import org.hbci4java.HBCI4JavaClient;
 import org.hbci4java.HBCI4JavaSession;
 import org.junit.Test;
@@ -37,11 +41,41 @@ import org.kapott.hbci4java.comm.CommDummy;
 public class TestNewApi
 {
   /**
-   * Erzeugt das Passport-Objekt.
+   * Testet den minimal nötigen Code für einen Client.
    * @throws Exception
    */
   @Test
   public void test001() throws Exception
+  {
+    final HBCICallbackTest callback = new HBCICallbackTest();
+    callback.put(HBCICallback.NEED_BLZ,"12345678");
+    callback.put(HBCICallback.NEED_COUNTRY,"DE");
+    callback.put(HBCICallback.NEED_HOST,"127.0.0.1");
+    callback.put(HBCICallback.NEED_PORT,"443");
+    callback.put(HBCICallback.NEED_FILTER,"Base64");
+    callback.put(HBCICallback.NEED_USERID,"1234567890");
+    callback.put(HBCICallback.NEED_CUSTOMERID,"1234567890");
+    callback.put(HBCICallback.NEED_PASSPHRASE_SAVE,"test");
+    callback.put(HBCICallback.NEED_PT_PIN,"test");
+    callback.put(HBCICallback.NEED_CONNECTION,"");
+    callback.put(HBCICallback.CLOSE_CONNECTION,"");
+
+    try (HBCI4JavaClient client = new HBCI4JavaClient(callback))
+    {
+      final File f = File.createTempFile("test-new-api",".pt");
+      f.deleteOnExit();
+      final HBCI4JavaAccess access = new HBCI4JavaAccess(Type.PINTAN,f);
+      final HBCI4JavaSession session = client.createSession(access);
+      session.execute((s,h) -> null);
+    }
+  }
+  
+  /**
+   * Testet die neue API incl. Handler.
+   * @throws Exception
+   */
+  @Test
+  public void test002() throws Exception
   {
     final HBCICallbackTest callback = new HBCICallbackTest();
     callback.put(HBCICallback.NEED_BLZ,"12345678");
@@ -52,6 +86,7 @@ public class TestNewApi
     callback.put(HBCICallback.NEED_USERID,"1234567890");
     callback.put(HBCICallback.NEED_CUSTOMERID,"1234567890");
     callback.put(HBCICallback.NEED_PT_PIN,"test");
+    callback.put(HBCICallback.NEED_PASSPHRASE_SAVE,"test");
     callback.put(HBCICallback.NEED_CONNECTION,"");
     callback.put(HBCICallback.CLOSE_CONNECTION,"");
     callback.put(HBCICallback.NEED_PT_SECMECH,"921");
@@ -90,7 +125,7 @@ public class TestNewApi
       comm.addResponse("HNHBK:1:3+000000000496+300+3895648162526000md3YEKjbmmS6Ri+2+3895648162526000md3YEKjbmmS6Ri:2'HNVSK:998:3+PIN:1+998+1+2::3895648143636000SX1DL9ZRA5M9O8+1:20240612:142924+2:2:13:@8@        :5:1+280:12345678:1234567890123?@1234567890123:V:0:0+0'HNVSD:999:1+@224@HIRMG:2:2+0010::Nachricht entgegengenommen.'HIRMS:3:2:3+0020::Auftrag ausgeführt.'HISPA:4:1:3+J:DE08215741240161523660:DEUTDEDBPB2:0161523660:EUR:280:21574124+J:DE76215741240161523600:DEUTDEDBPB2:0161523600:EUR:280:21574124''HNHBS:5:1+2'");
       comm.addResponse("HNHBK:1:3+000000000349+300+3895648162526000md3YEKjbmmS6Ri+3+3895648162526000md3YEKjbmmS6Ri:3'HNVSK:998:3+PIN:1+998+1+2::3895648143636000SX1DL9ZRA5M9O8+1:20240612:142924+2:2:13:@8@        :5:1+280:12345678:1234567890123?@1234567890123:V:0:0+0'HNVSD:999:1+@78@HIRMG:2:2+0010::Nachricht entgegengenommen.'HIRMS:3:2:3+0100::Dialog beendet.''HNHBS:4:1+3'");
       
-      final HBCI4JavaSession session = client.createSession(passport);
+      final HBCI4JavaSession session = client.createSession(new HBCI4JavaAccess(passport));
       session.execute((s,h) -> {
         h.sync(false);
         return null;

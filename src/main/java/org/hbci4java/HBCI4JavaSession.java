@@ -25,8 +25,6 @@ import java.util.function.BiFunction;
 
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIVersion;
-import org.kapott.hbci.passport.HBCIPassport;
-import org.kapott.hbci.tools.StringUtil;
 
 /**
  * Eine HBCI-Session innerhalb der neuen API.
@@ -34,18 +32,18 @@ import org.kapott.hbci.tools.StringUtil;
 public class HBCI4JavaSession implements AutoCloseable
 {
   private HBCI4JavaClient client = null;
-  private HBCIPassport passport = null;
+  private HBCI4JavaAccess access = null;
   
   /**
    * ct.
    * @param client der Client.
-   * @param passport der Passport.
+   * @param access der Bankzugang.
    */
-  HBCI4JavaSession(HBCI4JavaClient client, HBCIPassport passport)
+  HBCI4JavaSession(HBCI4JavaClient client, HBCI4JavaAccess access)
   {
+    this.access = access;
     this.client = client;
-    this.passport = passport;
-    this.client.getLogger().info("open new session [passport-type: %s]",this.getPassportType());
+    this.client.getLogger().info("open new session");
   }
   
   /**
@@ -58,7 +56,7 @@ public class HBCI4JavaSession implements AutoCloseable
    */
   public <T> T execute(BiFunction<HBCI4JavaSession,HBCIHandler,T> f)
   {
-    try (HBCIHandler handler = new HBCIHandler(HBCIVersion.HBCI_300.getId(),this.passport))
+    try (HBCIHandler handler = new HBCIHandler(HBCIVersion.HBCI_300.getId(),this.access.getPassport()))
     {
       return f.apply(this,handler);
     }
@@ -71,34 +69,19 @@ public class HBCI4JavaSession implements AutoCloseable
   @Override
   public void close() throws Exception
   {
-    if (this.passport == null || this.client == null)
+    if (this.access == null || this.client == null)
       return;
     
     try
     {
-      this.client.getLogger().info("closing session [passport-type: %s]",this.getPassportType());
-      this.passport.close();
+      this.client.getLogger().info("closing session");
+      this.access.getPassport().close();
     }
     finally
     {
-      this.passport = null;
-      
+      this.access = null;
       this.client.discard(this);
       this.client = null;
     }
-  }
-
-  
-  /**
-   * Liefert den Typ des Passports.
-   * @return der Typ des Passports.
-   */
-  private String getPassportType()
-  {
-    if (this.passport == null)
-      return null;
-    
-    String s = this.passport.getClass().getSimpleName();
-    return StringUtil.hasText(s) ? s : this.passport.getClass().getName();
   }
 }

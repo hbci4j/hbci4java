@@ -28,7 +28,7 @@ import java.util.Properties;
 import org.kapott.hbci.tools.StringUtil;
 
 /**
- * Eine HBCI-Session innerhalb der neuen API.
+ * Enthält die Konfigurationsdaten der neuen API.
  */
 public class HBCI4JavaConfig
 {

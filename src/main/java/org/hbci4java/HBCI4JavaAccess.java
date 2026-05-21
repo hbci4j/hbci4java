@@ -12,20 +12,15 @@ package org.hbci4java;
 
 import java.io.File;
 
+import org.kapott.hbci.passport.AbstractHBCIPassport;
+import org.kapott.hbci.passport.HBCIPassport;
+
 /**
  * Die Konfiguration des Bankzugangs.
  */
 public class HBCI4JavaAccess
 {
-  private File file;
-  private Type type;
-  
-  /**
-   * ct.
-   */
-  public HBCI4JavaAccess()
-  {
-  }
+  private HBCIPassport passport;
   
   /**
    * ct.
@@ -34,46 +29,27 @@ public class HBCI4JavaAccess
    */
   public HBCI4JavaAccess(Type type, File file)
   {
-    this.type = type;
-    this.file = file;
+    this.passport = AbstractHBCIPassport.getInstance(type.getName(),file);
   }
   
   /**
-   * Liefert den Typ des Bankzugangs. 
-   * @return der Typ des Bankzugangs.
+   * ct.
+   * Der Konstruktor existiert für den Fall, dass Eigen-Implementierungen des Passport verwendet werden.
+   * @param passport der Passport.
    */
-  public Type getType()
+  public HBCI4JavaAccess(HBCIPassport passport)
   {
-    return type;
+    this.passport = passport;
   }
   
   /**
-   * Speichert den Typ des Bankzugangs.
-   * @param type der Typ des Bankzugangs.
+   * Liefert den Passport. 
+   * @return der Passport.
    */
-  public void setType(Type type)
+  HBCIPassport getPassport()
   {
-    this.type = type;
+    return passport;
   }
-  
-  /**
-   * Liefert die Datei mit den Daten des Bankzugangs. 
-   * @return die Datei mit den Daten des Bankzugangs.
-   */
-  public File getFile()
-  {
-    return file;
-  }
-  
-  /**
-   * Speichert die Datei mit den Daten des Bankzugangs. 
-   * @param file die Datei mit den Daten des Bankzugangs.
-   */
-  public void setFile(File file)
-  {
-    this.file = file;
-  }
-  
   
   /**
    * Die Art des Bankzugangs.

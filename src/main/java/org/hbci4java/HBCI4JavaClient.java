@@ -21,7 +21,6 @@
 
 package org.hbci4java;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,18 +41,14 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.hbci4java.HBCI4JavaAccess.Type;
 import org.hbci4java.log.HBCI4JavaLogger;
 import org.hbci4java.log.HBCI4JavaLoggerCallback;
 import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.hbci.callback.HBCICallback;
-import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.passport.AbstractHBCIPassport;
-import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.tools.StringUtil;
 
 /**
@@ -75,7 +70,7 @@ public class HBCI4JavaClient implements AutoCloseable
   private final static AtomicInteger CLIENT_COUNT = new AtomicInteger(0);
   
   private HBCI4JavaConfig config = null;
-  private HBCICallback callback = null;
+  private HBCI4JavaCallback callback = null;
   private HBCI4JavaLogger logger = null;
   private List<HBCI4JavaSession> sessions = new LinkedList<>();
   private int clientId = 0;
@@ -85,7 +80,25 @@ public class HBCI4JavaClient implements AutoCloseable
   private ResourceBundle bundle = null;
   private Locale locale = null;
   
-  
+  /**
+   * ct.
+   * Hierbei wird die Default-Konfiguration und der Default-Callback für die Console verwendet.
+   */
+  public HBCI4JavaClient()
+  {
+    this(null,null);
+  }
+
+  /**
+   * ct.
+   * Hierbei wird die Default-Konfiguration verwendet.
+   * @param config die Config.
+   */
+  public HBCI4JavaClient(HBCI4JavaConfig config)
+  {
+    this(config,null);
+  }
+
   /**
    * ct.
    * Hierbei wird die Default-Konfiguration verwendet.
@@ -109,7 +122,13 @@ public class HBCI4JavaClient implements AutoCloseable
       THREADLOCAL.set(this);
       this.clientId = CLIENT_COUNT.getAndIncrement();
       this.config = config != null ? config : HBCI4JavaConfig.createDefault();
-      this.callback = callback != null ? callback : new HBCICallbackConsole();
+      
+      // Wenn es schon ein gewrappter Callback ist, dann nicht erneut wrappen
+      if (callback instanceof HBCI4JavaCallback c)
+        this.callback = c;
+      else
+        this.callback = new HBCI4JavaCallback(this,callback);
+      
       this.logger = new HBCI4JavaLoggerCallback(this);
       this.logger.info("create hbci4java client [version %s, client-id: %s, thread-id: %s]",version(),this.clientId,Thread.currentThread().getId());
       this.init();
@@ -125,25 +144,13 @@ public class HBCI4JavaClient implements AutoCloseable
   }
   
   /**
-   * Erzeugt eine Default PIN/TAN-Session mit FinTS 3.0.
-   * @param file die Passport-Datei.
-   * @return die Session.
+   * Erzeugt eine Session mit dem angegebenen Bankzugang.
+   * @param access die Konfiguration des Zugangs.
+   * @return der Passport.
    */
-  public HBCI4JavaSession createSession(File file)
+  public HBCI4JavaSession createSession(HBCI4JavaAccess access)
   {
-    final HBCI4JavaAccess a = new HBCI4JavaAccess(Type.PINTAN,file);
-    final HBCIPassport passport = this.createPassport(a);
-    return this.createSession(passport);
-  }
-
-  /**
-   * Erzeugt eine Session mit dem angegebenen Passport.
-   * @param passport der Passport.
-   * @return die neue Session.
-   */
-  public HBCI4JavaSession createSession(HBCIPassport passport)
-  {
-    final HBCI4JavaSession session = new HBCI4JavaSession(this,passport);
+    final HBCI4JavaSession session = new HBCI4JavaSession(this,access);
     this.sessions.add(session);
     return session;
   }
@@ -155,16 +162,6 @@ public class HBCI4JavaClient implements AutoCloseable
   void discard(HBCI4JavaSession session)
   {
     this.sessions.remove(session);
-  }
-  
-  /**
-   * Erzeugt einen Passport.
-   * @param access die Konfiguration des Zugangs.
-   * @return der Passport.
-   */
-  public HBCIPassport createPassport(HBCI4JavaAccess access)
-  {
-    return AbstractHBCIPassport.getInstance(access.getType().getName(),access.getFile());
   }
   
   /**
