@@ -240,6 +240,7 @@ public class UpdateBLZProperties
         return;
       
       this.updateBic(e.bic);
+      this.updateChecksumMethod(e.checksumMethod);
     }
 
     /**
@@ -316,6 +317,25 @@ public class UpdateBLZProperties
           System.out.println(blz + ": BIC \"" + current + "\" -> \"" + bic + "\"");
           this.values[2] = bic;
         }
+      }
+    }
+
+    /**
+     * Speichert die neue Checksum-Methode, wenn vorher keine da war oder eine andere.
+     * @param checksum die neue Checksum-Methode.
+     */
+    private void updateChecksumMethod(String checksum)
+    {
+      // Keine neue Checksum-Methode
+      if (checksum == null || checksum.isBlank())
+        return;
+
+      String current = this.values[3];
+      current = current != null ? current.trim() : "";
+      if (!current.equals(checksum))
+      {
+        System.out.println(blz + ": Checksum-Methode geändert \"" + current + "\" -> \"" + checksum + "\"");
+        this.values[3] = checksum;
       }
     }
 
