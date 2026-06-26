@@ -19,14 +19,11 @@
  *
  **********************************************************************/
 
-package org.kapott.hbci4java.msg;
+package org.hbci4java;
 
 import java.io.File;
 
-import org.hbci4java.HBCI4JavaBankAccount;
 import org.hbci4java.HBCI4JavaBankAccount.Type;
-import org.hbci4java.HBCI4JavaClient;
-import org.hbci4java.HBCI4JavaSession;
 import org.junit.Test;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -66,7 +63,7 @@ public class TestNewApi
       f.deleteOnExit();
       final HBCI4JavaBankAccount access = new HBCI4JavaBankAccount(Type.PINTAN,f);
       final HBCI4JavaSession session = client.createSession(access);
-      session.execute((s,h) -> null);
+      session.execute(h -> null);
     }
   }
   
@@ -126,7 +123,7 @@ public class TestNewApi
       comm.addResponse("HNHBK:1:3+000000000349+300+3895648162526000md3YEKjbmmS6Ri+3+3895648162526000md3YEKjbmmS6Ri:3'HNVSK:998:3+PIN:1+998+1+2::3895648143636000SX1DL9ZRA5M9O8+1:20240612:142924+2:2:13:@8@        :5:1+280:12345678:1234567890123?@1234567890123:V:0:0+0'HNVSD:999:1+@78@HIRMG:2:2+0010::Nachricht entgegengenommen.'HIRMS:3:2:3+0100::Dialog beendet.''HNHBS:4:1+3'");
       
       final HBCI4JavaSession session = client.createSession(new HBCI4JavaBankAccount(passport));
-      session.execute((s,h) -> {
+      session.execute(h -> {
         h.sync(false);
         return null;
       });

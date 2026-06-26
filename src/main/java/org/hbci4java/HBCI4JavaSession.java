@@ -21,7 +21,7 @@
 
 package org.hbci4java;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIVersion;
@@ -54,11 +54,11 @@ public class HBCI4JavaSession implements AutoCloseable
    * @param f die aufzurufende Funktion.
    * @return das Ergebnis der Funktion.
    */
-  public <T> T execute(BiFunction<HBCI4JavaSession,HBCIHandler,T> f)
+  public <T> T execute(Function<HBCIHandler,T> f)
   {
     try (HBCIHandler handler = new HBCIHandler(HBCIVersion.HBCI_300.getId(),this.access.getPassport()))
     {
-      return f.apply(this,handler);
+      return f.apply(handler);
     }
   }
   
