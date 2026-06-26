@@ -32,14 +32,14 @@ import org.kapott.hbci.manager.HBCIVersion;
 public class HBCI4JavaSession implements AutoCloseable
 {
   private HBCI4JavaClient client = null;
-  private HBCI4JavaAccess access = null;
+  private HBCI4JavaBankAccount access = null;
   
   /**
    * ct.
    * @param client der Client.
    * @param access der Bankzugang.
    */
-  HBCI4JavaSession(HBCI4JavaClient client, HBCI4JavaAccess access)
+  HBCI4JavaSession(HBCI4JavaClient client, HBCI4JavaBankAccount access)
   {
     this.access = access;
     this.client = client;

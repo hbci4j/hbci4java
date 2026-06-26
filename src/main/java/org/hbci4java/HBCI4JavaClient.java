@@ -148,7 +148,7 @@ public class HBCI4JavaClient implements AutoCloseable
    * @param access die Konfiguration des Zugangs.
    * @return der Passport.
    */
-  public HBCI4JavaSession createSession(HBCI4JavaAccess access)
+  public HBCI4JavaSession createSession(HBCI4JavaBankAccount access)
   {
     final HBCI4JavaSession session = new HBCI4JavaSession(this,access);
     this.sessions.add(session);

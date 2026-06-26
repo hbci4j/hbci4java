@@ -18,7 +18,7 @@ import org.kapott.hbci.passport.HBCIPassport;
 /**
  * Die Konfiguration des Bankzugangs.
  */
-public class HBCI4JavaAccess
+public class HBCI4JavaBankAccount
 {
   private HBCIPassport passport;
   
@@ -27,7 +27,7 @@ public class HBCI4JavaAccess
    * @param type der Typ.
    * @param file die Datei.
    */
-  public HBCI4JavaAccess(Type type, File file)
+  public HBCI4JavaBankAccount(Type type, File file)
   {
     this.passport = AbstractHBCIPassport.getInstance(type.getName(),file);
   }
@@ -37,7 +37,7 @@ public class HBCI4JavaAccess
    * Der Konstruktor existiert für den Fall, dass Eigen-Implementierungen des Passport verwendet werden.
    * @param passport der Passport.
    */
-  public HBCI4JavaAccess(HBCIPassport passport)
+  public HBCI4JavaBankAccount(HBCIPassport passport)
   {
     this.passport = passport;
   }
