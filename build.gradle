@@ -111,7 +111,12 @@ mavenPublishing {
     // Wenn man es auf "false setzt, muss man zu "Deployments" im "Maven Central Portal" und dort auf "Publish" klicken.
     // https://vanniktech.github.io/gradle-maven-publish-plugin/central/#uploading-with-automatic-publishing
     publishToMavenCentral(true)
-    signAllPublications()
+    // JitPack has no GPG key configured, so signing would fail the build
+    // there (publishMavenPublicationToMavenLocal expects a .asc it can't
+    // produce). JitPack sets JITPACK=true in its build environment.
+    if (System.getenv("JITPACK") == null) {
+        signAllPublications()
+    }
     coordinates(project.groupId, project.name, project.version.toString())
 
     pom {
