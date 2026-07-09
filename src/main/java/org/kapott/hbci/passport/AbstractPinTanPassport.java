@@ -1800,9 +1800,11 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                 return result;
         }
         
-        // Seit HKTAN 6: Wenn die Angabe eines TAN-Mediennamens laut BPD erforderlich ist, wir aber gar keinen Namen haben,
-        // dann "noref" eintragen.
-        return tn ? "noref" : "";
+        // Upstream previously sent "noref" here when no TAN medium name was available.
+        // At least Taunussparkasse (BLZ 51250000) rejects that literal value with
+        // "9955: Die Geraetebezeichnung ist unbekannt", while accepting an empty value
+        // (matching what python-fints sends in the same field). See guidoffm/fints-export.
+        return "";
     }
     
     public void setPIN(String pin)
