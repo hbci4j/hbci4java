@@ -1802,7 +1802,7 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
         
         // Seit HKTAN 6: Wenn die Angabe eines TAN-Mediennamens laut BPD erforderlich ist, wir aber gar keinen Namen haben,
         // dann "noref" eintragen.
-        return tn ? "noref" : "";
+        return tn ? HBCIUtils.getParam("tanmedia.placeholder","") : "";
     }
     
     public void setPIN(String pin)
