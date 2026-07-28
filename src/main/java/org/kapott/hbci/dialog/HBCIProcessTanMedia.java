@@ -116,7 +116,7 @@ public class HBCIProcessTanMedia implements HBCIProcess
         SCARequest r = super.createSCARequest(secmechInfo, hktanVersion);
         r.setTanReference("HKTAB");
         final String needed = secmechInfo != null ? secmechInfo.getProperty("needtanmedia","") : "";
-        r.setTanMedia(Objects.equals(needed,"2") ? "noref" : "");
+        r.setTanMedia(Objects.equals(needed,"2") ? HBCIUtils.getParam("tanmedia.placeholder","") : "");
         return r;
       }
     };
