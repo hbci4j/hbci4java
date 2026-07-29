@@ -1418,6 +1418,10 @@
             <DEG type="PinTanGV" minnum="0" maxnum="999"/>
         </DEGdef>
         
+        <DEGdef id="ParSaldo">
+            <DE name="canmaxentries" type="JN" />
+        </DEGdef>
+
         <DEGdef id="ParSammelLast">
             <DE name="maxcsets" type="Num" maxsize="6"/>
             <DE name="maxusage" type="Num" maxsize="2"/>
@@ -4954,6 +4958,47 @@
             <value path="SegHead.version">7</value>
         </SEGdef>
 
+        <SEGdef id="Saldo8">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="KTV"/>
+            <DE name="allaccounts" type="JN"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            
+            <value path="SegHead.code">HKSAL</value>
+            <value path="SegHead.version">8</value>
+        </SEGdef>
+        <SEGdef id="SaldoRes8">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="KTV"/>
+            <DE name="kontobez" type="AN" maxsize="30"/>
+            <DE name="curr" type="Cur"/>
+            <DEG type="Saldo2" name="booked"/>
+            <DEG type="Saldo2" name="pending" minnum="0"/>
+            <DEG type="BTG" name="kredit" minnum="0"/>
+            <DEG type="BTG" name="available" minnum="0"/>
+            <DEG type="BTG" name="used" minnum="0"/>
+            <DEG type="BTG" name="overdrive" minnum="0"/>
+            <DEG type="Timestamp" minnum="0"/>
+            <DE name="duedate" type="Date" minnum="0"/>
+            <DEG type="BTG" name="attachable" minnum="0"/>
+            
+            <value path="SegHead.code">HISAL</value>
+            <value path="SegHead.version">8</value>
+        </SEGdef>
+        
+        <SEGdef id="SaldoPar8">
+            &GVP2;
+            
+            <DEG type="ParSaldo"/>
+
+            &SecClassValids;
+            
+            <value path="SegHead.code">HISALS</value>
+            <value path="SegHead.version">8</value>
+        </SEGdef>
+
+
         <SEGdef id="SammelLast3"> <!-- 2.01 -->
             &SammelUser1;
 
@@ -8155,6 +8200,7 @@
             <SEG type="Saldo5" minnum="0"/>
             <SEG type="Saldo6" minnum="0"/>
             <SEG type="Saldo7" minnum="0"/>
+            <SEG type="Saldo8" minnum="0"/>
             <SEG type="SammelLast3" minnum="0"/>
             <SEG type="SammelLast4" minnum="0"/>
             <SEG type="SammelLast5" minnum="0"/>
@@ -8319,6 +8365,7 @@
             <SEG type="SaldoRes5" minnum="0"/>
             <SEG type="SaldoRes6" minnum="0"/>
             <SEG type="SaldoRes7" minnum="0"/>
+            <SEG type="SaldoRes8" minnum="0"/>
             <SEG type="SEPAInfoRes1" minnum="0"/>
             <SEG type="StatusRes2" minnum="0"/>
             <SEG type="StatusRes3" minnum="0"/>
@@ -8471,6 +8518,7 @@
             <SEG type="SaldoPar5" minnum="0"/>
             <SEG type="SaldoPar6" minnum="0"/>
             <SEG type="SaldoPar7" minnum="0"/>
+            <SEG type="SaldoPar8" minnum="0"/>
             <SEG type="SammelLastPar3" minnum="0"/>
             <SEG type="SammelLastPar4" minnum="0"/>
             <SEG type="SammelLastPar5" minnum="0"/>
