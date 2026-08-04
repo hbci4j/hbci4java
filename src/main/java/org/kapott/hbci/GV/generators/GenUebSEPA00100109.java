@@ -24,6 +24,7 @@ import org.kapott.hbci.sepa.jaxb.pain_001_001_09.Document;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.FinancialInstitutionIdentification18;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.GenericFinancialIdentification1;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.GroupHeader85;
+import org.kapott.hbci.sepa.jaxb.pain_001_001_09.LocalInstrument2Choice;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.ObjectFactory;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.PartyIdentification135;
 import org.kapott.hbci.sepa.jaxb.pain_001_001_09.PaymentIdentification6;
@@ -91,6 +92,14 @@ public class GenUebSEPA00100109 extends AbstractSEPAGenerator<Properties>
         final ServiceLevel8Choice svc = new ServiceLevel8Choice();
         svc.setCd("SEPA");
         pmtInf.getPmtTpInf().getSvcLvl().add(svc);
+
+        // Auftragstyp, falls angegeben
+        final String type = sepaParams.getProperty("type");
+        if (type != null && !type.isBlank())
+        {
+          pmtInf.getPmtTpInf().setLclInstrm(new LocalInstrument2Choice());
+          pmtInf.getPmtTpInf().getLclInstrm().setCd(type);
+        }
 
         String date = sepaParams.getProperty("date");
         if(date == null) date = SepaUtil.DATE_UNDEFINED;
