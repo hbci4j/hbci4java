@@ -68,6 +68,38 @@ public class TestStringUtil
     Assert.assertEquals("foobar",StringUtil.join(Arrays.asList("foo","bar"),null));
   }
 
-}
+  /**
+   * @throws Exception
+   */
+  @Test
+  public void test005() throws Exception
+  {
+    Assert.assertEquals("1234.56",StringUtil.normalizeDecimal("1.234,56"));
+    Assert.assertEquals("1234.56",StringUtil.normalizeDecimal("1234.56"));
+    Assert.assertNull(StringUtil.normalizeDecimal(null));
+  }
 
+  /**
+   * @throws Exception
+   */
+  @Test
+  public void test006() throws Exception
+  {
+    Assert.assertEquals("Purpose / City",StringUtil.joinDescription(" Purpose "," City "));
+    Assert.assertEquals("Purpose",StringUtil.joinDescription("Purpose","purpose"));
+    Assert.assertEquals("City",StringUtil.joinDescription(null," City "));
+  }
+
+  /**
+   * @throws Exception
+   */
+  @Test
+  public void test007() throws Exception
+  {
+    Assert.assertEquals("value",StringUtil.normalize(" value "));
+    Assert.assertNull(StringUtil.normalize("  "));
+    Assert.assertNull(StringUtil.normalize(null));
+  }
+
+}
 

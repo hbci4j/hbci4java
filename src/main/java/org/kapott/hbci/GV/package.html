@@ -462,6 +462,22 @@ eines Kontos abgeholt werden.</p>
 </table>
 
 <hr size="1" noshade="noshade"/>
+<h3><a name="kreditkartenumsatz">Kreditkartenumsätze anzeigen</a></h3>
+<p>Mit diesem von einigen Kreditinstituten angebotenen Geschäftsvorfall können
+Umsätze eines Kreditkartenkontos abgeholt werden (DKKKU/DIKKU).</p>
+<table cellpadding="3">
+  <tr valign="top"><td><em>Highlevel-Name</em></td><td><code>KreditkartenUmsatz</code></td><td></td></tr>
+  <tr valign="top"><td><em>Highlevel-Parameter</em></td><td></td><td></td></tr>
+    <tr valign="top"><td></td><td><code>my</code></td><td>Konto</td><td>obligatorisch</td><td>Kontoverbindung, der die Kreditkarte zugeordnet ist</td></tr>
+    <tr valign="top"><td></td><td><code>cardnumber</code></td><td>String</td><td>obligatorisch</td><td>Kreditkartennummer</td></tr>
+    <tr valign="top"><td></td><td><code>cardsubnumber</code></td><td>String</td><td>optional</td><td>Unterkontomerkmal der Kreditkarte</td></tr>
+    <tr valign="top"><td></td><td><code>startdate</code></td><td>Date</td><td>optional</td><td>Nur Umsätze ab diesem Datum abholen</td></tr>
+    <tr valign="top"><td></td><td><code>enddate</code></td><td>Date</td><td>optional</td><td>Nur Umsätze bis zu diesem Datum abholen</td></tr>
+    <tr valign="top"><td></td><td><code>maxentries</code></td><td>String</td><td>optional</td><td>Maximale Anzahl der Einträge je Antwort</td></tr>
+  <tr valign="top"><td><em>Rückgabedaten-Klasse</em></td><td><a href="../GV_Result/GVRKreditkartenUmsatz.html"><code>GVRKreditkartenUmsatz</code></a></td><td></td></tr>
+</table>
+
+<hr size="1" noshade="noshade"/>
 <h3><a name="kumsnew">Neue Kontoumsätze anzeigen</a></h3>
 <p>Mit diesem Geschäftsvorfall kann eine Übersicht über die Kontoumsatzdaten
 eines Kontos abgeholt werden. Dabei werden nur die Umsatzdaten zurückgegeben, die

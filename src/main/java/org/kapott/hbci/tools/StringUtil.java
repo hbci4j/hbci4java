@@ -105,6 +105,47 @@ public class StringUtil
       }
       return sb.toString();
     }
-}
 
+    /**
+     * Normalisiert einen Dezimalwert mit deutschem Dezimaltrennzeichen.
+     * @param value der zu normalisierende Wert.
+     * @return der Wert mit Punkt als Dezimaltrennzeichen.
+     */
+    public static String normalizeDecimal(String value)
+    {
+        if (value == null || value.indexOf(',') < 0)
+            return value;
+        return value.replace(".","").replace(',','.');
+    }
+
+    /**
+     * Verbindet Verwendungszweck und Ort zu einer Beschreibung.
+     * @param purpose der Verwendungszweck.
+     * @param location der Ort.
+     * @return die verbundene Beschreibung oder NULL.
+     */
+    public static String joinDescription(String purpose, String location)
+    {
+        String normalizedPurpose = normalize(purpose);
+        String normalizedLocation = normalize(location);
+        if (normalizedPurpose == null)
+            return normalizedLocation;
+        if (normalizedLocation == null || normalizedPurpose.equalsIgnoreCase(normalizedLocation))
+            return normalizedPurpose;
+        return normalizedPurpose + " / " + normalizedLocation;
+    }
+
+    /**
+     * Entfernt Whitespace am Anfang und Ende eines Strings.
+     * @param value der zu normalisierende Wert.
+     * @return der normalisierte Wert oder NULL, wenn kein Text enthalten ist.
+     */
+    public static String normalize(String value)
+    {
+        if (value == null)
+            return null;
+        String normalized = value.trim();
+        return normalized.length() > 0 ? normalized : null;
+    }
+}
 
