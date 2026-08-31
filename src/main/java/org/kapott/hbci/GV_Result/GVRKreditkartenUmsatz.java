@@ -22,6 +22,8 @@
 package org.kapott.hbci.GV_Result;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.structures.Value;
+import org.kapott.hbci.tools.StringUtil;
 
 /**
  * Ergebnis des Kreditkarten-Umsatzabrufs DKKKU/DIKKU.
@@ -57,12 +60,12 @@ public class GVRKreditkartenUmsatz extends GVRKUms
         line.orig_value = parseValue(data.getProperty(header + ".originalvalue"),
                                      data.getProperty(header + ".originalcurrency"),
                                      data.getProperty(header + ".originalcreditdebit"),false);
-        line.customerref = normalize(data.getProperty(header + ".reference"));
+        line.customerref = StringUtil.normalize(data.getProperty(header + ".reference"));
         line.text = "Kreditkartenzahlung";
         line.isCamt = true;
 
-        String purpose = joinDescription(data.getProperty(header + ".purpose"),
-                                         data.getProperty(header + ".location"));
+        String purpose = StringUtil.joinDescription(data.getProperty(header + ".purpose"),
+                                                    data.getProperty(header + ".location"));
         line.addUsage(purpose != null ? purpose : "-");
         booked.add(line);
     }
@@ -87,7 +90,7 @@ public class GVRKreditkartenUmsatz extends GVRKUms
 
     private static Date parseDate(String value, String label)
     {
-        String normalized = normalize(value);
+        String normalized = StringUtil.normalize(value);
         if (normalized == null)
             throw new IllegalArgumentException("DKKKU-Umsatz ohne " + label);
 
@@ -98,7 +101,8 @@ public class GVRKreditkartenUmsatz extends GVRKUms
 
         try
         {
-            return java.sql.Date.valueOf(java.time.LocalDate.parse(normalized));
+            LocalDate date = LocalDate.parse(normalized);
+            return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
         }
         catch (RuntimeException e)
         {
@@ -108,8 +112,8 @@ public class GVRKreditkartenUmsatz extends GVRKUms
 
     private static Value parseValue(String amount, String currency, String creditDebit, boolean required)
     {
-        String normalizedAmount = normalize(amount);
-        String normalizedCurrency = normalize(currency);
+        String normalizedAmount = StringUtil.normalize(amount);
+        String normalizedCurrency = StringUtil.normalize(currency);
         if (normalizedAmount == null || normalizedCurrency == null)
         {
             if (required)
@@ -119,10 +123,10 @@ public class GVRKreditkartenUmsatz extends GVRKUms
 
         try
         {
-            BigDecimal value = new BigDecimal(normalizeDecimal(normalizedAmount));
-            if ("D".equalsIgnoreCase(normalize(creditDebit)))
+            BigDecimal value = new BigDecimal(StringUtil.normalizeDecimal(normalizedAmount));
+            if ("D".equalsIgnoreCase(StringUtil.normalize(creditDebit)))
                 value = value.abs().negate();
-            else if ("C".equalsIgnoreCase(normalize(creditDebit)))
+            else if ("C".equalsIgnoreCase(StringUtil.normalize(creditDebit)))
                 value = value.abs();
             return new Value(value.toPlainString(),normalizedCurrency);
         }
@@ -132,29 +136,4 @@ public class GVRKreditkartenUmsatz extends GVRKUms
         }
     }
 
-    private static String normalizeDecimal(String value)
-    {
-        if (value.indexOf(',') >= 0)
-            return value.replace(".","").replace(',','.');
-        return value;
-    }
-
-    private static String joinDescription(String purpose, String location)
-    {
-        String normalizedPurpose = normalize(purpose);
-        String normalizedLocation = normalize(location);
-        if (normalizedPurpose == null)
-            return normalizedLocation;
-        if (normalizedLocation == null || normalizedPurpose.equalsIgnoreCase(normalizedLocation))
-            return normalizedPurpose;
-        return normalizedPurpose + " / " + normalizedLocation;
-    }
-
-    private static String normalize(String value)
-    {
-        if (value == null)
-            return null;
-        String normalized = value.trim();
-        return normalized.length() > 0 ? normalized : null;
-    }
 }
