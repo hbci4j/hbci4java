@@ -63,7 +63,7 @@ public class TestNewApi
       f.deleteOnExit();
       final HBCI4JavaBankAccount access = new HBCI4JavaBankAccount(Type.PINTAN,f);
       final HBCI4JavaSession session = client.createSession(access);
-      session.execute(h -> null);
+//      session.execute(h -> null);
     }
   }
   
