@@ -1522,6 +1522,15 @@
             <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
         
+        <DEGdef id="SuppSepaPainMessages">
+            <DE name="format" type="AN" maxsize="256" maxnum="99"/>
+        </DEGdef>
+
+        <DEGdef id="ParInstUebSEPAStatus">
+            <DE name="minwait" type="Num" maxsize="2"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+
 
         <DEGdef id="ParTAN2Step1">
             <DE name="can1step" type="JN"/>
@@ -4148,6 +4157,97 @@
             <value path="SegHead.version">4</value>
         </SEGdef>
         
+        <SEGdef id="KontoauszugUebersicht1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTV3" name="My"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">HKKAU</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugUebersichtRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="number" type="Num" maxsize="5"/>
+            <DE name="acknowledgement" type="Code" maxsize="1"/>
+            <DE name="retrievable" type="JN"/>
+            <DE name="year" type="Num" maxsize="4" minnum="0"/>
+            <DE name="date" type="Date" minnum="0"/>
+            <DE name="time" type="Time" minnum="0"/>
+            <DE name="creationtype" type="AN" maxsize="30" minnum="0"/>
+
+            <value path="SegHead.code">HIKAU</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugUebersichtPar1">
+            &GVP2;
+            &SecClassValids;
+
+            <value path="SegHead.code">HIKAUS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="KontoauszugUebersicht2">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">HKKAU</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugUebersichtRes2">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="number" type="Num" maxsize="5"/>
+            <DE name="acknowledgement" type="Code" maxsize="1"/>
+            <DE name="retrievable" type="JN"/>
+            <DE name="year" type="Num" maxsize="4" minnum="0"/>
+            <DE name="date" type="Date" minnum="0"/>
+            <DE name="time" type="Time" minnum="0"/>
+            <DE name="creationtype" type="AN" maxsize="30" minnum="0"/>
+
+            <value path="SegHead.code">HIKAU</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugUebersichtPar2">
+            &GVP2;
+            &SecClassValids;
+
+            <value path="SegHead.code">HIKAUS</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+
+        <SEGdef id="KontoauszugUebersicht3">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">HKKAU</value>
+            <value path="SegHead.version">3</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugUebersichtRes3">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="number" type="Num" maxsize="5" minnum="0"/>
+            <DE name="acknowledgement" type="Code" maxsize="1"/>
+            <DE name="retrievable" type="JN"/>
+            <DE name="year" type="Num" maxsize="4" minnum="0"/>
+            <DE name="date" type="Date" minnum="0"/>
+            <DE name="time" type="Time" minnum="0"/>
+            <DE name="creationtype" type="AN" maxsize="30" minnum="0"/>
+            <DE name="documentid" type="AN" maxsize="256" minnum="0"/>
+
+            <value path="SegHead.code">HIKAU</value>
+            <value path="SegHead.version">3</value>
+        </SEGdef>
+        <SEGdef id="KontoauszugUebersichtPar3">
+            &GVP2;
+            &SecClassValids;
+
+            <value path="SegHead.code">HIKAUS</value>
+            <value path="SegHead.version">3</value>
+        </SEGdef>
+
         <SEGdef id="Kontoauszug1">
             <DEG type="SegHeadUser" name="SegHead"/>
             <DEG type="KTV3" name="My"/>
@@ -6805,6 +6905,58 @@
             <value path="SegHead.code">HIIPZS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
+
+        <!-- BEGIN SEPA-Instant Payment Status -->
+        <SEGdef id="InstUebSEPAStatus1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DEG type="SuppSepaPainMessages" name="formats"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+
+            <value path="SegHead.code">HKIPS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="InstUebSEPAStatusRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+            <DE name="sepapain" type="Bin" maxsize="0" minnum="0"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+            <DE name="ccode" type="Code" maxsize="1" minnum="0"/>
+            <DE name="orderstatus" type="Code" maxsize="1" minnum="0"/>
+
+            <valids path="ccode">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            <valids path="orderstatus">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+                <validvalue>5</validvalue>
+                <validvalue>6</validvalue>
+                <validvalue>7</validvalue>
+                <validvalue>8</validvalue>
+                <validvalue>9</validvalue>
+            </valids>
+
+            <value path="SegHead.code">HIIPS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="InstUebSEPAStatusPar1">
+            &GVP2;
+            <DEG type="ParInstUebSEPAStatus"/>
+            &SecClassValids;
+
+            <value path="SegHead.code">HIIPSS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- END SEPA-Instant Payment Status -->
         <!-- END SEPA-Instant aka 'SEPA-Instant Payment Zahlung' -->
 
         <!-- BEGIN SEPA-Umbuchung aka 'SEPA-Überweisung auf ein Empfängerkonto' -->
@@ -8252,6 +8404,10 @@
             <SEG type="InfoList3" minnum="0"/>
             <SEG type="InfoList4" minnum="0"/>
             <SEG type="InstUebSEPA1" minnum="0"/>
+            <SEG type="KontoauszugUebersicht1" minnum="0"/>
+            <SEG type="KontoauszugUebersicht2" minnum="0"/>
+            <SEG type="KontoauszugUebersicht3" minnum="0"/>
+            <SEG type="InstUebSEPAStatus1" minnum="0"/>
             <SEG type="Kontoauszug1" minnum="0"/>
             <SEG type="Kontoauszug2" minnum="0"/>
             <SEG type="Kontoauszug3" minnum="0"/>
@@ -8422,6 +8578,10 @@
             <SEG type="InfoListRes3" minnum="0"/>
             <SEG type="InfoListRes4" minnum="0"/>
             <SEG type="InstUebSEPARes1" minnum="0"/>
+            <SEG type="KontoauszugUebersichtRes1" minnum="0"/>
+            <SEG type="KontoauszugUebersichtRes2" minnum="0"/>
+            <SEG type="KontoauszugUebersichtRes3" minnum="0"/>
+            <SEG type="InstUebSEPAStatusRes1" minnum="0"/>
             <SEG type="KontoauszugRes1" minnum="0"/>
             <SEG type="KontoauszugRes2" minnum="0"/>
             <SEG type="KontoauszugRes3" minnum="0"/>
@@ -8570,6 +8730,10 @@
             <SEG type="InfoListPar3" minnum="0"/>
             <SEG type="InfoListPar4" minnum="0"/>
             <SEG type="InstUebSEPAPar1" minnum="0"/>
+            <SEG type="KontoauszugUebersichtPar1" minnum="0"/>
+            <SEG type="KontoauszugUebersichtPar2" minnum="0"/>
+            <SEG type="KontoauszugUebersichtPar3" minnum="0"/>
+            <SEG type="InstUebSEPAStatusPar1" minnum="0"/>
             <SEG type="KontoauszugPar1" minnum="0"/>
             <SEG type="KontoauszugPar2" minnum="0"/>
             <SEG type="KontoauszugPar3" minnum="0"/>
