@@ -1372,6 +1372,13 @@
             <DE name="canallaccounts" type="JN"/>
             <DE name="suppformats" type="AN" maxsize="256" maxnum="99" />
         </DEGdef>
+
+        <!-- Proprietary DKKKU/DIKKU extension used by several institutes. -->
+        <DEGdef id="ParKreditkartenUmsatz2">
+            <DE name="timerange" type="Num" maxsize="4"/>
+            <DE name="canmaxentries" type="JN"/>
+            <DE name="canrange" type="JN"/>
+        </DEGdef>
         
         <DEGdef id="CamtBooked">
             <!-- Die erlaubte Maximalanzahl ist nicht spezifiziert. Da steht nur "n" als Anzahl -->
@@ -1515,6 +1522,15 @@
             <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
         </DEGdef>
         
+        <DEGdef id="SuppSepaPainMessages">
+            <DE name="format" type="AN" maxsize="256" maxnum="99"/>
+        </DEGdef>
+
+        <DEGdef id="ParInstUebSEPAStatus">
+            <DE name="minwait" type="Num" maxsize="2"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+
 
         <DEGdef id="ParTAN2Step1">
             <DE name="can1step" type="JN"/>
@@ -1806,6 +1822,48 @@
                 <validvalue>C</validvalue>
                 <validvalue>D</validvalue>
             </valids>
+        </DEGdef>
+
+        <!-- Some institutes return a signed value although CreditDebit is
+             already present. Keep the proprietary amount field permissive and
+             normalize it in GVRKreditkartenUmsatz. -->
+        <DEGdef id="KreditkartenSaldo">
+            <DE name="CreditDebit" type="Code" maxsize="1"/>
+            <DE name="value" type="AN" maxsize="32"/>
+            <DE name="curr" type="Cur" minnum="0"/>
+            <DE name="date" type="Date" minnum="0"/>
+            <DE name="time" type="Time" minnum="0"/>
+
+            <valids path="CreditDebit">
+                <validvalue>C</validvalue>
+                <validvalue>D</validvalue>
+            </valids>
+        </DEGdef>
+
+        <DEGdef id="KreditkartenUmsatz">
+            <DE name="cardnumber" type="ID"/>
+            <DE name="bookingdate" type="Date"/>
+            <DE name="valuedate" type="Date"/>
+            <DE name="reference" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="originalvalue" type="AN" maxsize="32" minnum="0"/>
+            <DE name="originalcurrency" type="AN" maxsize="32" minnum="0"/>
+            <DE name="originalcreditdebit" type="AN" maxsize="8" minnum="0"/>
+            <DE name="exchangerate" type="AN" maxsize="32" minnum="0"/>
+            <DE name="value" type="AN" maxsize="32" minnum="0"/>
+            <DE name="currency" type="AN" maxsize="32" minnum="0"/>
+            <DE name="creditdebit" type="AN" maxsize="8" minnum="0"/>
+            <DE name="purpose" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="location" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail1" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail2" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail3" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail4" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail5" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail6" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail7" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="finalized" type="AN" maxsize="8" minnum="0"/>
+            <DE name="detail8" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="merchantcategory" type="AN" maxsize="32" minnum="0"/>
         </DEGdef>
         
         <DEGdef id="TAN2StepParams1">
@@ -4713,6 +4771,41 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
 
+        <SEGdef id="KreditkartenUmsatz2">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTV2" name="KTV"/>
+            <DE name="cardnumber" type="ID"/>
+            <DE name="cardsubnumber" type="ID" minnum="0"/>
+            <DE name="startdate" type="Date" minnum="0"/>
+            <DE name="enddate" type="Date" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">DKKKU</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        <SEGdef id="KreditkartenUmsatzRes2">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="cardnumber" type="ID"/>
+            <DE name="reference" type="AN" maxsize="2048" minnum="0"/>
+            <DEG type="KreditkartenSaldo" name="balance" minnum="0"/>
+            <DE name="detail1" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail2" type="AN" maxsize="2048" minnum="0"/>
+            <DEG type="KreditkartenUmsatz" name="transactions" minnum="0" maxnum="999"/>
+
+            <value path="SegHead.code">DIKKU</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        <SEGdef id="KreditkartenUmsatzPar2">
+            &GVP2;
+            <DEG type="ParKreditkartenUmsatz2" name="ParKreditkartenUmsatz"/>
+
+            &SecClassValids;
+
+            <value path="SegHead.code">DIKKUS</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+
         
         <SEGdef id="Last2"> <!-- 2.01 -->
             &SingleInlandUser1;
@@ -6812,6 +6905,58 @@
             <value path="SegHead.code">HIIPZS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
+
+        <!-- BEGIN SEPA-Instant Payment Status -->
+        <SEGdef id="InstUebSEPAStatus1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DEG type="SuppSepaPainMessages" name="formats"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+
+            <value path="SegHead.code">HKIPS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="InstUebSEPAStatusRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+            <DE name="sepapain" type="Bin" maxsize="0" minnum="0"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+            <DE name="ccode" type="Code" maxsize="1" minnum="0"/>
+            <DE name="orderstatus" type="Code" maxsize="1" minnum="0"/>
+
+            <valids path="ccode">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+            </valids>
+            <valids path="orderstatus">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+                <validvalue>3</validvalue>
+                <validvalue>4</validvalue>
+                <validvalue>5</validvalue>
+                <validvalue>6</validvalue>
+                <validvalue>7</validvalue>
+                <validvalue>8</validvalue>
+                <validvalue>9</validvalue>
+            </valids>
+
+            <value path="SegHead.code">HIIPS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="InstUebSEPAStatusPar1">
+            &GVP2;
+            <DEG type="ParInstUebSEPAStatus"/>
+            &SecClassValids;
+
+            <value path="SegHead.code">HIIPSS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- END SEPA-Instant Payment Status -->
         <!-- END SEPA-Instant aka 'SEPA-Instant Payment Zahlung' -->
 
         <!-- BEGIN SEPA-Umbuchung aka 'SEPA-Überweisung auf ein Empfängerkonto' -->
@@ -8262,6 +8407,7 @@
             <SEG type="KontoauszugUebersicht1" minnum="0"/>
             <SEG type="KontoauszugUebersicht2" minnum="0"/>
             <SEG type="KontoauszugUebersicht3" minnum="0"/>
+            <SEG type="InstUebSEPAStatus1" minnum="0"/>
             <SEG type="Kontoauszug1" minnum="0"/>
             <SEG type="Kontoauszug2" minnum="0"/>
             <SEG type="Kontoauszug3" minnum="0"/>
@@ -8278,6 +8424,7 @@
             <SEG type="KUmsZeit6" minnum="0"/>
             <SEG type="KUmsZeit7" minnum="0"/>
             <SEG type="KUmsZeitCamt1" minnum="0"/>
+            <SEG type="KreditkartenUmsatz2" minnum="0"/>
             <SEG type="Last2" minnum="0"/>
             <SEG type="Last3" minnum="0"/>
             <SEG type="Last4" minnum="0"/>
@@ -8434,6 +8581,7 @@
             <SEG type="KontoauszugUebersichtRes1" minnum="0"/>
             <SEG type="KontoauszugUebersichtRes2" minnum="0"/>
             <SEG type="KontoauszugUebersichtRes3" minnum="0"/>
+            <SEG type="InstUebSEPAStatusRes1" minnum="0"/>
             <SEG type="KontoauszugRes1" minnum="0"/>
             <SEG type="KontoauszugRes2" minnum="0"/>
             <SEG type="KontoauszugRes3" minnum="0"/>
@@ -8450,6 +8598,7 @@
             <SEG type="KUmsZeitRes6" minnum="0"/>
             <SEG type="KUmsZeitRes7" minnum="0"/>
             <SEG type="KUmsZeitCamtRes1" minnum="0"/>
+            <SEG type="KreditkartenUmsatzRes2" minnum="0"/>
             <SEG type="LastSEPARes1" minnum="0"/>
             <SEG type="LastCOR1SEPARes1" minnum="0"/>
             <SEG type="LastB2BSEPARes1" minnum="0"/>
@@ -8584,6 +8733,7 @@
             <SEG type="KontoauszugUebersichtPar1" minnum="0"/>
             <SEG type="KontoauszugUebersichtPar2" minnum="0"/>
             <SEG type="KontoauszugUebersichtPar3" minnum="0"/>
+            <SEG type="InstUebSEPAStatusPar1" minnum="0"/>
             <SEG type="KontoauszugPar1" minnum="0"/>
             <SEG type="KontoauszugPar2" minnum="0"/>
             <SEG type="KontoauszugPar3" minnum="0"/>
@@ -8600,6 +8750,7 @@
             <SEG type="KUmsZeitPar6" minnum="0"/>
             <SEG type="KUmsZeitPar7" minnum="0"/>
             <SEG type="KUmsZeitCamtPar1" minnum="0"/>
+            <SEG type="KreditkartenUmsatzPar2" minnum="0"/>
             <SEG type="LastPar2" minnum="0"/>
             <SEG type="LastPar3" minnum="0"/>
             <SEG type="LastPar4" minnum="0"/>
