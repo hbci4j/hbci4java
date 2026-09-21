@@ -193,11 +193,14 @@ public class HBCI4JavaClient implements AutoCloseable
   
   /**
    * Liefert den Client des aktuellen Thread.
-   * @return der Client des aktuellen Thead oder NULL, wenn keiner existiert.
+   * @return der Client des aktuellen Thead oder erstellt on-the-fly einen neuen, wenn noch keiner existiert. Die Funktion liefert nie NULL.
    */
   public static HBCI4JavaClient getCurrent()
   {
-    return THREADLOCAL.get();
+    HBCI4JavaClient client = THREADLOCAL.get();
+    if (client == null)
+      client = new HBCI4JavaClient();
+    return client;
   }
   
   /**
@@ -205,7 +208,7 @@ public class HBCI4JavaClient implements AutoCloseable
    */
   public static void discard()
   {
-    final HBCI4JavaClient client = getCurrent();
+    final HBCI4JavaClient client = THREADLOCAL.get();
     if (client == null)
       return; // Kein Client zum Verwerfen da.
     
