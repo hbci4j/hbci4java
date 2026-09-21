@@ -197,18 +197,28 @@ public class HBCI4JavaClient implements AutoCloseable
    */
   public static HBCI4JavaClient getCurrent()
   {
+    return getCurrent(true);
+  }
+
+  /**
+   * Liefert den Client des aktuellen Thread.
+   * @param autocreate true, wenn bei Bedarf automatisch ein neuer erstellt werden soll.
+   * @return der Client des aktuellen Thead oder NULL bzw. ein on-the-fly erstellter Client - abhängig davon, was als Parameter autocreate angegeben wurde.
+   */
+  public static HBCI4JavaClient getCurrent(boolean autocreate)
+  {
     HBCI4JavaClient client = THREADLOCAL.get();
-    if (client == null)
+    if (client == null && autocreate)
       client = new HBCI4JavaClient();
     return client;
   }
-  
+
   /**
    * Schliesst die Instanz aus dem Thread.
    */
   public static void discard()
   {
-    final HBCI4JavaClient client = THREADLOCAL.get();
+    final HBCI4JavaClient client = getCurrent(false);
     if (client == null)
       return; // Kein Client zum Verwerfen da.
     

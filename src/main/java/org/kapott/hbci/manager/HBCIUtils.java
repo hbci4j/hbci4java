@@ -861,7 +861,7 @@ public final class HBCIUtils
 	 */
 	public static synchronized HBCI4JavaClient initThread(Properties props, HBCICallback callback)
 	{
-	  HBCI4JavaClient client = HBCI4JavaClient.getCurrent();
+	  HBCI4JavaClient client = HBCI4JavaClient.getCurrent(false);
 
 	  // Wir haben schon einen Client für diesen Thread.
 		if (client != null)
