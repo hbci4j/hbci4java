@@ -1865,6 +1865,8 @@
             <DE name="detail8" type="AN" maxsize="2048" minnum="0"/>
             <DE name="merchantcategory" type="AN" maxsize="32" minnum="0"/>
             <DE name="detail9" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail10" type="AN" maxsize="2048" minnum="0"/>
+            <DE name="detail11" type="AN" maxsize="2048" minnum="0"/>
         </DEGdef>
         
         <DEGdef id="TAN2StepParams1">
