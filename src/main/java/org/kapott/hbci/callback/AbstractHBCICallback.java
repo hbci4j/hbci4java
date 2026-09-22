@@ -24,6 +24,7 @@ package org.kapott.hbci.callback;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.hbci4java.log.HBCI4JavaLogger.Level;
 import org.kapott.hbci.passport.HBCIPassport;
 
 /** Diese Klasse dient als Basisklasse für allen Callback-Klassen. Eine Anwendung sollte
@@ -43,21 +44,30 @@ public abstract class AbstractHBCICallback
      */
     protected String createDefaultLogLine(String msg, int level, Date date, StackTraceElement trace)
     {
-        String[] levels={"NON","ERR","WRN","INF","DBG","DB2","INT"};
-        StringBuffer ret=new StringBuffer(128);
-        ret.append("<").append(levels[level]).append("> ");
+        final StringBuffer ret=new StringBuffer();
         
-        SimpleDateFormat df=new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
-        ret.append("[").append(df.format(date)).append("] ");
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ret.append("[").append(df.format(date)).append("]");
+
+        final Level l = Level.find(level);
+        ret.append("[").append(l).append("]");
         
-        Thread thread=Thread.currentThread();
-        ret.append("[").append(thread.getThreadGroup().getName());
-        ret.append("/").append(thread.getName()).append("] ");
+        ret.append("[").append(Thread.currentThread().getName()).append("]");
         
-        String classname=trace.getClassName();
-        String hbciname="org.kapott.hbci.";
-        if (classname!=null && classname.startsWith(hbciname))
-            ret.append(classname.substring((hbciname).length())).append(": ");
+        String classname = trace != null ? trace.getClassName() : null;
+        String method = trace != null ? trace.getMethodName() : null;
+        int line = trace != null ? trace.getLineNumber() : -1;
+        if (classname!=null && method != null)
+        {
+          final int pkg = classname.lastIndexOf('.');
+          ret.append("[").append(pkg != -1 ? classname.substring(classname.lastIndexOf('.')+1) : classname);
+          if (line >= 0)
+            ret.append(":").append(line);
+          else
+            ret.append(".").append(method);
+            
+          ret.append("] ");
+        }
         
         if (msg==null)
             msg="";

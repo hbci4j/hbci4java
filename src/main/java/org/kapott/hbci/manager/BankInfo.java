@@ -204,7 +204,7 @@ public class BankInfo
      * @param text der Text (Value) aus der blz.properties.
      * @return das BankInfo-Objekt. Niemals NULL sondern hoechstens ein leeres Objekt.
      */
-    static BankInfo parse(String text)
+    public static BankInfo parse(String text)
     {
         BankInfo info = new BankInfo();
         if (text == null || text.length() == 0)
