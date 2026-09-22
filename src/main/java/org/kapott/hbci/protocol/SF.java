@@ -133,9 +133,11 @@ public final class SF
             	endpos=sb.length();
             }
             // code und version aus der ersten DEG extrahieren
-            String[] des=sb.substring(startpos,endpos).split(":");
-            ret[0] = des[0]; // segcode
-            ret[1] = des[2]; // segversion
+            String[] des=sb.substring(startpos,endpos).split(":",-1);
+            if (des.length>=3) {
+                ret[0] = des[0]; // segcode
+                ret[1] = des[2]; // segversion
+            }
         }
         
         return ret;
