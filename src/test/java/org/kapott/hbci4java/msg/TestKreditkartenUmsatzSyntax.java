@@ -21,11 +21,15 @@
 
 package org.kapott.hbci4java.msg;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.kapott.hbci.exceptions.ParseErrorException;
 import org.kapott.hbci.manager.HBCIKernelImpl;
+import org.kapott.hbci.manager.MsgGen;
+import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci4java.AbstractTest;
 
 /**
@@ -55,10 +59,92 @@ public class TestKreditkartenUmsatzSyntax extends AbstractTest
         List<String> result = kernel.getLowlevelJobResultNames("KreditkartenUmsatz","2");
         Assert.assertTrue(result.contains("transactions.bookingdate"));
         Assert.assertTrue(result.contains("transactions.value"));
+        Assert.assertTrue(result.contains("transactions.detail9"));
 
         List<String> restrictions = kernel.getLowlevelJobRestrictionNames("KreditkartenUmsatz","2");
         Assert.assertTrue(restrictions.contains("timerange"));
         Assert.assertTrue(restrictions.contains("canmaxentries"));
         Assert.assertTrue(restrictions.contains("canrange"));
+    }
+
+    /**
+     * Prueft das Wire-Format einer anonymisierten realen DIKKU-Antwort.
+     */
+    @Test
+    public void testResponse() throws Exception
+    {
+        String data =
+            "HNHBK:1:3+000000000000+300+1234567890+1+1234567890:1'" +
+            "HIRMG:2:2+0010::Nachricht entgegengenommen.'" +
+            "HIRMS:3:2:3+0020::Auftrag ausgefuehrt.'" +
+            "DIKKU:4:2:3+5555000011112222++D:1234,56:EUR:20260719+++" +
+            "5555000011112222:20260717:20260718::12,34:EUR:D:1,:12,34:EUR:D:" +
+            "EXAMPLE SHOP:BERLIN 555500******2233::::::::J:1000000000000001:5411'" +
+            "HNHBS:5:1+1'";
+        data = data.replace("000000000000",String.format("%012d",data.length()));
+
+        HBCIKernelImpl kernel = new HBCIKernelImpl(null,"300");
+        kernel.rawNewMsg("KreditkartenUmsatz");
+        MsgGen gen = kernel.getMsgGen();
+        MSG msg = new MSG("CustomMsgRes",data,data.length(),gen);
+
+        Hashtable<String,String> values = new Hashtable<String,String>();
+        msg.extractValues(values);
+        Assert.assertTrue(values.containsValue("EXAMPLE SHOP"));
+        Assert.assertTrue(values.containsValue("5411"));
+    }
+
+    /**
+     * Prueft die DIKKU-Variante der Berliner Sparkasse mit zusaetzlichem Feld.
+     */
+    @Test
+    public void testBerlinSparkasseResponse() throws Exception
+    {
+        String data =
+            "HNHBK:1:3+000000000000+300+1234567890+1+1234567890:1'" +
+            "HIRMG:2:2+0010::Nachricht entgegengenommen.'" +
+            "HIRMS:3:2:3+0020::Auftrag ausgefuehrt.'" +
+            "DIKKU:4:2:3+5555000011112222++C:0,:EUR:20260922+20260904++" +
+            "5555000011112222:20260827:20260831::27,99:EUR:D:1,:27,99:EUR:D:" +
+            "EXAMPLE SHOP IRELAND:::::::::J:20262430027631940001:3246:20260904+" +
+            "5555000011112222:20260904:20260904::27,99:EUR:C:1,:27,99:EUR:C:" +
+            "Einzug des Rechnungsbetrages:::::::::J:26247000001130310001::20260904'" +
+            "HNHBS:5:1+1'";
+        data = data.replace("000000000000",String.format("%012d",data.length()));
+
+        HBCIKernelImpl kernel = new HBCIKernelImpl(null,"300");
+        kernel.rawNewMsg("KreditkartenUmsatz");
+        MsgGen gen = kernel.getMsgGen();
+        MSG msg = new MSG("CustomMsgRes",data,data.length(),gen);
+
+        Hashtable<String,String> values = new Hashtable<String,String>();
+        msg.extractValues(values);
+        Assert.assertTrue(values.containsValue("EXAMPLE SHOP IRELAND"));
+        Assert.assertTrue(values.containsValue("Einzug des Rechnungsbetrages"));
+        Assert.assertTrue(values.containsValue("3246"));
+        Assert.assertEquals(2L,values.entrySet().stream()
+            .filter(e -> e.getKey().endsWith(".detail9"))
+            .filter(e -> "20260904".equals(e.getValue()))
+            .count());
+    }
+
+    /**
+     * Ein abweichendes DIKKU-Format darf nicht zu einem internen Indexfehler fuehren.
+     */
+    @Test(expected=ParseErrorException.class)
+    public void testUnexpectedResponseElement() throws Exception
+    {
+        String data =
+            "HNHBK:1:3+000000000000+300+1234567890+1+1234567890:1'" +
+            "HIRMG:2:2+0010::Nachricht entgegengenommen.'" +
+            "HIRMS:3:2:3+0020::Auftrag ausgefuehrt.'" +
+            "DIKKU:4:2:3+5555000011112222++D:1234,56:EUR:20260719+++'" +
+            "UNEXPECTED'";
+        data = data.replace("000000000000",String.format("%012d",data.length()));
+
+        HBCIKernelImpl kernel = new HBCIKernelImpl(null,"300");
+        kernel.rawNewMsg("KreditkartenUmsatz");
+        MsgGen gen = kernel.getMsgGen();
+        new MSG("CustomMsgRes",data,data.length(),gen);
     }
 }
