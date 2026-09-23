@@ -90,6 +90,6 @@ public class HBCI4JavaCallback implements HBCICallback
   @Override
   public boolean useThreadedCallback(HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
   {
-    return this.useThreadedCallback(passport,reason,msg,datatype,retData);
+    return this.parent.useThreadedCallback(passport,reason,msg,datatype,retData);
   }
 }
