@@ -60,6 +60,8 @@ public class TestKreditkartenUmsatzSyntax extends AbstractTest
         Assert.assertTrue(result.contains("transactions.bookingdate"));
         Assert.assertTrue(result.contains("transactions.value"));
         Assert.assertTrue(result.contains("transactions.detail9"));
+        Assert.assertTrue(result.contains("transactions.detail10"));
+        Assert.assertTrue(result.contains("transactions.detail11"));
 
         List<String> restrictions = kernel.getLowlevelJobRestrictionNames("KreditkartenUmsatz","2");
         Assert.assertTrue(restrictions.contains("timerange"));
@@ -107,6 +109,9 @@ public class TestKreditkartenUmsatzSyntax extends AbstractTest
             "DIKKU:4:2:3+5555000011112222++C:0,:EUR:20260922+20260904++" +
             "5555000011112222:20260827:20260831::27,99:EUR:D:1,:27,99:EUR:D:" +
             "EXAMPLE SHOP IRELAND:::::::::J:20262430027631940001:3246:20260904+" +
+            "5555000011112222:20251209:20251210::75,:CAD:D:1,608206:47,53:EUR:D:" +
+            "EXAMPLE SHOP CANADA:75,00 CAD, EURO-KURS  1,608206::::::::J:" +
+            "20253440012930940001:9399:20260104::inkl. 1,90% Einsatz Fremdw. EUR   0,89-+" +
             "5555000011112222:20260904:20260904::27,99:EUR:C:1,:27,99:EUR:C:" +
             "Einzug des Rechnungsbetrages:::::::::J:26247000001130310001::20260904'" +
             "HNHBS:5:1+1'";
@@ -120,11 +125,16 @@ public class TestKreditkartenUmsatzSyntax extends AbstractTest
         Hashtable<String,String> values = new Hashtable<String,String>();
         msg.extractValues(values);
         Assert.assertTrue(values.containsValue("EXAMPLE SHOP IRELAND"));
+        Assert.assertTrue(values.containsValue("EXAMPLE SHOP CANADA"));
         Assert.assertTrue(values.containsValue("Einzug des Rechnungsbetrages"));
         Assert.assertTrue(values.containsValue("3246"));
         Assert.assertEquals(2L,values.entrySet().stream()
             .filter(e -> e.getKey().endsWith(".detail9"))
             .filter(e -> "20260904".equals(e.getValue()))
+            .count());
+        Assert.assertEquals(1L,values.entrySet().stream()
+            .filter(e -> e.getKey().endsWith(".detail11"))
+            .filter(e -> "inkl. 1,90% Einsatz Fremdw. EUR   0,89-".equals(e.getValue()))
             .count());
     }
 
