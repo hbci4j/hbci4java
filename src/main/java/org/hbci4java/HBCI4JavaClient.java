@@ -22,22 +22,14 @@
 package org.hbci4java;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.Security;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,8 +38,6 @@ import org.hbci4java.log.HBCI4JavaLoggerCallback;
 import org.kapott.cryptalgs.CryptAlgs4JavaProvider;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.exceptions.HBCI_Exception;
-import org.kapott.hbci.exceptions.InvalidUserDataException;
-import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.tools.StringUtil;
 
@@ -75,8 +65,6 @@ public class HBCI4JavaClient implements AutoCloseable
   private List<HBCI4JavaSession> sessions = new LinkedList<>();
   private int clientId = 0;
   
-  private Properties blzs = new Properties();
-  private Map<String,BankInfo> banks = new HashMap<>();
   private ResourceBundle bundle = null;
   private Locale locale = null;
   
@@ -249,98 +237,10 @@ public class HBCI4JavaClient implements AutoCloseable
     finally
     {
       THREADLOCAL.remove();
-      this.blzs.clear();
-      this.banks.clear();
       this.config.clear();
       this.sessions.clear();
       this.logger.info("closed hbci4java client [version %s, client-id: %s, thread-id: %s]",version(),this.clientId,Thread.currentThread().getId());
     }
-  }
-  
-  /**
-   * Liefert die Bank-Informationen zur angegebenen BLZ.
-   * @param blz die BLZ.
-   * @return die Bank-Informationen oder NULL, wenn zu der BLZ keine Informationen bekannt sind.
-   */
-  public BankInfo getBankInfo(String blz)
-  {
-    return this.banks.get(blz);
-  }
-  
-  /**
-   * Liefert eine Liste von Bank-Informationen, die zum angegebenen
-   * Suchbegriff passen.
-   *
-   * @param query der Suchbegriff. Der Suchbegriff muss mindestens 3 Zeichen enthalten und ist nicht case-sensitive.
-   * Der Suchbegriff kann im Ort der Bank oder in deren Namen enthalten sein. Oder die BLZ oder BIC beginnt mit diesem Text.
-   * @return die Liste der Bank-Informationen. Die Ergebnis-Liste ist nach BLZ sortiert.
-   * Die Funktion liefert niemals NULL sondern hoechstens eine leere Liste.
-   */
-  public List<BankInfo> searchBankInfo(String query)
-  {
-    if (query != null)
-      query = query.trim();
-
-    final List<BankInfo> list = new LinkedList<BankInfo>();
-    if (query == null || query.length() < 3)
-      return list;
-
-    query = query.toLowerCase();
-
-    for (BankInfo info:this.banks.values())
-    {
-      String blz = info.getBlz();
-      String bic = info.getBic();
-      String name = info.getName();
-      String loc = info.getLocation();
-
-      // Anhand der BLZ?
-      if (blz != null && blz.startsWith(query))
-      {
-        list.add(info);
-        continue;
-      }
-
-      // Anhand der BIC?
-      if (bic != null && bic.toLowerCase().startsWith(query))
-      {
-        list.add(info);
-        continue;
-      }
-
-      // Anhand des Namens?
-      if (name != null && name.toLowerCase().contains(query))
-      {
-        list.add(info);
-        continue;
-      }
-      // Anhand des Orts?
-      if (loc != null && loc.toLowerCase().contains(query))
-      {
-        list.add(info);
-        continue;
-      }
-    }
-
-    Collections.sort(list, new Comparator<BankInfo>()
-    {
-      /**
-       * @see java.util.Comparator#compare(java.lang.Object,java.lang.Object)
-       */
-      @Override
-      public int compare ( BankInfo o1, BankInfo o2 )
-      {
-        if (o1 == null || o1.getBlz() == null)
-          return -1;
-        
-        if (o2 == null || o2.getBlz() == null)
-          return 1;
-
-        return o1.getBlz().compareTo(o2.getBlz());
-      }
-    });
-
-    return list;
   }
   
   /**
@@ -415,7 +315,6 @@ public class HBCI4JavaClient implements AutoCloseable
     }
     
     this.initLocale();
-    this.initBanks();
   }
 
   /**
@@ -432,35 +331,4 @@ public class HBCI4JavaClient implements AutoCloseable
     this.bundle = ResourceBundle.getBundle("hbci4java-messages", locale);
   }
 
-  /**
-   * Lädt die Bankenliste.
-   * @throws IOException
-   */
-  private void initBanks() throws IOException
-  {
-    final ClassLoader cl = this.getClass().getClassLoader();
-    final String file = "blz.properties";
-    final InputStream is = cl.getResourceAsStream(file);
-
-    if (is == null)
-      throw new InvalidUserDataException(this.tr("EXCMSG_BLZLOAD", file));
-
-    try (is)
-    {
-      this.logger.debug("trying to load BLZ data [file: %s]",file);
-      final InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-      this.blzs.load(isr);
-
-      for (Entry<Object, Object> e:this.blzs.entrySet())
-      {
-        final String blz = (String) e.getKey();
-        final String value = (String) e.getValue();
-
-        final BankInfo info = BankInfo.parse(value);
-        info.setBlz(blz);
-        this.banks.put(blz, info);
-      }
-    }
-  }
-  
 }

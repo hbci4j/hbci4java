@@ -21,7 +21,9 @@
 
 package org.kapott.hbci.manager;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -32,9 +34,15 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.hbci4java.HBCI4JavaClient;
@@ -45,9 +53,9 @@ import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.exceptions.InvalidArgumentException;
-import org.kapott.hbci.exceptions.InvalidUserDataException;
 import org.kapott.hbci.structures.Konto;
 import org.kapott.hbci.swift.Swift;
+import org.kapott.hbci.tools.IOUtils;
 
 /**
  * <p>
@@ -695,83 +703,55 @@ public final class HBCIUtils
 			'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
 			'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/' };
 
+  private static Properties blzs = new Properties();
+  private static Map<String,BankInfo> banks = new HashMap<>();
+  
+  static
+  {
+    initBanks();
+  }
+
 	private HBCIUtils ()
 	{}
 
-	/**
-	 * Lädt ein Properties-File, welches über ClassLoader.getRessourceAsStream()
-	 * gefunden wird. Der Name des Property-Files wird durch den Parameter
-	 * <code>configfile</code> bestimmt. Wie dieser Name interpretiert wird, um
-	 * das Property-File tatsächlich zu finden, hängt von dem zum Laden
-	 * benutzten ClassLoader ab. Im Parameter <code>cl</code> kann dazu eine
-	 * ClassLoader-Instanz übergeben werden, deren
-	 * <code>getRessource</code>-Methode benutzt wird, um das Property-File zu
-	 * lokalisieren und zu laden. Wird kein ClassLoader angegeben
-	 * (<code>cl==null</code>), so wird zum Laden des Property-Files der
-	 * ClassLoader benutzt, der auch zum Laden der aufrufenden Klasse benutzt
-	 * wurde.
-	 *
-	 * @param cl
-	 *            ClassLoader, der zum Laden des Property-Files verwendet werden
-	 *            soll
-	 * @param configfile
-	 *            Name des zu ladenden Property-Files (kann <code>null</code>
-	 *            sein - in dem Fall gibt diese Methode auch <code>null</code>
-	 *            zurück).
-	 * @return Properties-Objekt
-	 */
-	public static Properties loadPropertiesFile ( ClassLoader cl, String configfile )
-	{
-		Properties props = null;
+  /**
+   * Lädt die Bankenliste.
+   */
+  private static void initBanks()
+  {
+    final ClassLoader cl = HBCIUtils.class.getClassLoader();
+    final String file = "blz.properties";
+    final InputStream is = cl.getResourceAsStream(file);
 
-		if (configfile != null)
-		{
-			try
-			{
-				// load kernel params from properties file
-				/* determine classloader to be used */
-				if (cl == null)
-				{
-					try
-					{
-						throw new Exception();
-					}
-					catch (Exception e)
-					{
-						StackTraceElement[] stackTrace = e.getStackTrace();
+    if (is == null)
+      throw new RuntimeException(String.format("%s not found in classpath",file));
 
-						if (stackTrace.length > 1)
-						{
-							String classname = stackTrace[1].getClassName();
-							cl = Class.forName(classname).getClassLoader();
-						}
-					}
+    try
+    {
+      final InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+      blzs.load(isr);
 
-					if (cl == null)
-					{
-						cl = ClassLoader.getSystemClassLoader();
-					}
-				}
+      for (Entry<Object, Object> e:blzs.entrySet())
+      {
+        final String blz = (String) e.getKey();
+        final String value = (String) e.getValue();
 
-				/* get an input stream */
-				InputStream f = cl.getResourceAsStream(configfile);
-				if (f == null)
-				{
-					throw new InvalidUserDataException("*** can not load config file " + configfile);
-				}
+        final BankInfo info = BankInfo.parse(value);
+        info.setBlz(blz);
+        banks.put(blz, info);
+      }
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(String.format("unable to load %s",file),e);
+    }
+    finally
+    {
+      IOUtils.close(is);
+    }
+  }
+  
 
-				props = new Properties();
-				props.load(f);
-				f.close();
-			}
-			catch (Exception e)
-			{
-				throw new HBCI_Exception("*** can not load config file " + configfile, e);
-			}
-		}
-
-		return props;
-	}
 
 	/**
 	 * <p>
@@ -954,35 +934,88 @@ public final class HBCIUtils
 		return info.getName() != null ? info.getName() : "";
 	}
 
-	/**
-	 * Liefert die Bank-Informationen zur angegebenen BLZ.
-	 *
-	 * @param blz
-	 *            die BLZ.
-	 * @return die Bank-Informationen oder NULL, wenn zu der BLZ keine
-	 *         Informationen bekannt sind.
-	 */
-	public static BankInfo getBankInfo ( String blz )
+  /**
+   * Liefert die Bank-Informationen zur angegebenen BLZ.
+   * @param blz die BLZ.
+   * @return die Bank-Informationen oder NULL, wenn zu der BLZ keine Informationen bekannt sind.
+   */
+	public static BankInfo getBankInfo(String blz)
 	{
-	  return HBCI4JavaClient.getCurrent().getBankInfo(blz);
+    return banks.get(blz);
 	}
 
-	/**
-	 * Liefert eine Liste von Bank-Informationen, die zum angegebenen
-	 * Suchbegriff passen.
-	 *
-	 * @param query
-	 *            der Suchbegriff. Der Suchbegriff muss mindestens 3 Zeichen
-	 *            enthalten und ist nicht case-sensitive. Der Suchbegriff kann
-	 *            im Ort der Bank oder in deren Namen enthalten sein. Oder die
-	 *            BLZ oder BIC beginnt mit diesem Text.
-	 * @return die Liste der Bank-Informationen. Die Ergebnis-Liste ist nach BLZ
-	 *         sortiert. Die Funktion liefert niemals NULL sondern hoechstens
-	 *         eine leere Liste.
-	 */
-	public static List<BankInfo> searchBankInfo ( String query )
+  /**
+   * Liefert eine Liste von Bank-Informationen, die zum angegebenen Suchbegriff passen.
+   * @param query der Suchbegriff. Der Suchbegriff muss mindestens 3 Zeichen enthalten und ist nicht case-sensitive.
+   * Der Suchbegriff kann im Ort der Bank oder in deren Namen enthalten sein. Oder die BLZ oder BIC beginnt mit diesem Text.
+   * @return die Liste der Bank-Informationen. Die Ergebnis-Liste ist nach BLZ sortiert.
+   * Die Funktion liefert niemals NULL sondern hoechstens eine leere Liste.
+   */
+	public static List<BankInfo> searchBankInfo (String query)
 	{
-	  return HBCI4JavaClient.getCurrent().searchBankInfo(query);
+    if (query != null)
+      query = query.trim();
+
+    final List<BankInfo> list = new LinkedList<BankInfo>();
+    if (query == null || query.length() < 3)
+      return list;
+
+    query = query.toLowerCase();
+
+    for (BankInfo info:banks.values())
+    {
+      String blz = info.getBlz();
+      String bic = info.getBic();
+      String name = info.getName();
+      String loc = info.getLocation();
+
+      // Anhand der BLZ?
+      if (blz != null && blz.startsWith(query))
+      {
+        list.add(info);
+        continue;
+      }
+
+      // Anhand der BIC?
+      if (bic != null && bic.toLowerCase().startsWith(query))
+      {
+        list.add(info);
+        continue;
+      }
+
+      // Anhand des Namens?
+      if (name != null && name.toLowerCase().contains(query))
+      {
+        list.add(info);
+        continue;
+      }
+      // Anhand des Orts?
+      if (loc != null && loc.toLowerCase().contains(query))
+      {
+        list.add(info);
+        continue;
+      }
+    }
+
+    Collections.sort(list, new Comparator<BankInfo>()
+    {
+      /**
+       * @see java.util.Comparator#compare(java.lang.Object,java.lang.Object)
+       */
+      @Override
+      public int compare ( BankInfo o1, BankInfo o2 )
+      {
+        if (o1 == null || o1.getBlz() == null)
+          return -1;
+        
+        if (o2 == null || o2.getBlz() == null)
+          return 1;
+
+        return o1.getBlz().compareTo(o2.getBlz());
+      }
+    });
+
+    return list;
 	}
 
 	/**
