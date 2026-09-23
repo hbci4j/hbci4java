@@ -47,7 +47,6 @@ import java.util.Properties;
 
 import org.hbci4java.HBCI4JavaClient;
 import org.hbci4java.HBCI4JavaConfig;
-import org.hbci4java.log.HBCI4JavaLogger.Level;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -685,19 +684,19 @@ public final class HBCIUtils
   public final static String PRODUCT_ID = HBCI4JavaClient.PRODUCT_ID;
   
   /** Loglevel für keine Ausgaben */
-	public static final int								LOG_NONE	= Level.NONE.getLevel();
+	public static final int								LOG_NONE	= 0;
 	/** Loglevel für Fehlerausgaben */
-	public static final int								LOG_ERR		= Level.ERROR.getLevel();
+	public static final int								LOG_ERR		= 1;
 	/** Loglevel für Warnungen */
-	public static final int								LOG_WARN	= Level.WARN.getLevel();
+	public static final int								LOG_WARN	= 2;
 	/** Loglevel für Informationen */
-	public static final int								LOG_INFO	= Level.INFO.getLevel();
+	public static final int								LOG_INFO	= 3;
 	/** Loglevel für Debug-Ausgaben */
-	public static final int								LOG_DEBUG	= Level.DEBUG.getLevel();
+	public static final int								LOG_DEBUG	= 4;
 	/** Loglevel für Debug-Ausgaben für extreme-Debugging */
-	public static final int								LOG_DEBUG2	= Level.DEBUG2.getLevel();
+	public static final int								LOG_DEBUG2	= 5;
 	/** Loglevel für devel-Debugging - nicht benutzen! */
-	public static final int								LOG_INTERN	= Level.INTERN.getLevel();
+	public static final int								LOG_INTERN	= 6;
 
 	private static char[]								base64table	= { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
 			'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',

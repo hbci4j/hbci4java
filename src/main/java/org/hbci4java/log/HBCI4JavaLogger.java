@@ -21,6 +21,8 @@
 
 package org.hbci4java.log;
 
+import org.kapott.hbci.manager.HBCIUtils;
+
 /**
  * Interface für einen Logger für HBCI4Java.
  */
@@ -34,37 +36,37 @@ public interface HBCI4JavaLogger
     /**
      * Loglevel für keine Ausgaben
      **/
-    NONE(0,null),
+    NONE(HBCIUtils.LOG_NONE,null),
     
     /**
      * Loglevel für Fehlerausgaben
      **/
-    ERROR(1,"ERR"),
+    ERROR(HBCIUtils.LOG_ERR,"ERR"),
     
     /**
      * Loglevel für Warnungen
      **/
-    WARN(2,"WRN"),
+    WARN(HBCIUtils.LOG_WARN,"WRN"),
     
     /**
      * Loglevel für Informationen
      **/
-    INFO(3,"INF"),
+    INFO(HBCIUtils.LOG_INFO,"INF"),
     
     /**
      * Loglevel für Debug-Ausgaben
      **/
-    DEBUG(4,"DBG"),
+    DEBUG(HBCIUtils.LOG_DEBUG,"DBG"),
     
     /**
      * Loglevel für Debug-Ausgaben für extreme-Debugging
      **/
-    DEBUG2(5,"DB2"),
+    DEBUG2(HBCIUtils.LOG_DEBUG2,"DB2"),
     
     /**
      * Loglevel für devel-Debugging - nicht benutzen!
      **/
-    INTERN(6,"INT"),
+    INTERN(HBCIUtils.LOG_INTERN,"INT"),
     
     ;
     
