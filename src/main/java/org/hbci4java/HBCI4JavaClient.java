@@ -56,7 +56,7 @@ public class HBCI4JavaClient implements AutoCloseable
   public final static String PRODUCT_ID = "36792786FA12F235F04647689";
   private final static String VERSION = HBCIUtils.class.getPackage().getImplementationVersion();
 
-  private final static ThreadLocal<HBCI4JavaClient> THREADLOCAL = new ThreadLocal();
+  private final static HBCI4JavaClientHolder holder;
   private final static AtomicInteger CLIENT_COUNT = new AtomicInteger(0);
   
   private HBCI4JavaConfig config = null;
@@ -67,6 +67,11 @@ public class HBCI4JavaClient implements AutoCloseable
   
   private ResourceBundle bundle = null;
   private Locale locale = null;
+  
+  static
+  {
+    holder = Boolean.parseBoolean(System.getProperty("hbci4java.holder.threadgroup","true")) ? HBCI4JavaClientHolder.BY_THREADGROUP : HBCI4JavaClientHolder.BY_THREAD;
+  }
   
   /**
    * ct.
@@ -107,7 +112,7 @@ public class HBCI4JavaClient implements AutoCloseable
   {
     try
     {
-      THREADLOCAL.set(this);
+      holder.set(this);
       this.clientId = CLIENT_COUNT.getAndIncrement();
       this.config = config != null ? config : HBCI4JavaConfig.createDefault();
       
@@ -118,7 +123,9 @@ public class HBCI4JavaClient implements AutoCloseable
         this.callback = new HBCI4JavaCallback(this,callback);
       
       this.logger = new HBCI4JavaLoggerCallback(this);
-      this.logger.info("create hbci4java client [version %s, client-id: %s, thread-id: %s]",version(),this.clientId,Thread.currentThread().getId());
+      
+      final Thread t = Thread.currentThread();
+      this.logger.info("create hbci4java client [version %s, client-id: %s, thread-id: %s, thread-group: %s, holder: %s, callback: %s]",version(),this.clientId,t.getId(),t.getThreadGroup().getName(),holder.getId(),callback != null ? callback.getClass().getName() : "<default-console>");
       this.init();
     }
     catch (HBCI_Exception he)
@@ -195,7 +202,7 @@ public class HBCI4JavaClient implements AutoCloseable
    */
   public static HBCI4JavaClient getCurrent(boolean autocreate)
   {
-    HBCI4JavaClient client = THREADLOCAL.get();
+    HBCI4JavaClient client = holder.get();
     if (client == null && autocreate)
       client = new HBCI4JavaClient();
     return client;
@@ -236,7 +243,7 @@ public class HBCI4JavaClient implements AutoCloseable
     }
     finally
     {
-      THREADLOCAL.remove();
+      holder.remove();
       this.config.clear();
       this.sessions.clear();
       this.logger.info("closed hbci4java client [version %s, client-id: %s, thread-id: %s]",version(),this.clientId,Thread.currentThread().getId());
