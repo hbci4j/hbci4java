@@ -90,10 +90,14 @@ public class GVKUmsAllCamt extends AbstractSEPAGV
     {
         this(handler,getLowlevelName());
 
-        addConstraint("my.bic",  "KTV.bic",  null, LogFilter.FILTER_MOST);
-        addConstraint("my.iban", "KTV.iban", null, LogFilter.FILTER_IDS);
+        // Ist die nationale Kontoverbindung erlaubt, sind IBAN/BIC optional.
+        // Kreditkartenkonten (z.B. bei der DKB) haben keine IBAN.
+        boolean nat = this.canNationalAcc(handler);
+        String def = nat ? "" : null;
+        addConstraint("my.bic",  "KTV.bic",  def, LogFilter.FILTER_MOST);
+        addConstraint("my.iban", "KTV.iban", def, LogFilter.FILTER_IDS);
 
-        if (this.canNationalAcc(handler))
+        if (nat)
         {
           addConstraint("my.country","KTV.KIK.country","DE", LogFilter.FILTER_NONE);
           addConstraint("my.blz","KTV.KIK.blz",null, LogFilter.FILTER_MOST);

@@ -84,8 +84,11 @@ public class GVKUmsAll extends HBCIJobImpl
 
         if (sepa)
         {
-          addConstraint("my.bic",  "KTV.bic",  null, LogFilter.FILTER_MOST);
-          addConstraint("my.iban", "KTV.iban", null, LogFilter.FILTER_IDS);
+          // Ist die nationale Kontoverbindung erlaubt, sind IBAN/BIC optional.
+          // Kreditkartenkonten (z.B. bei der DKB) haben keine IBAN.
+          String def = nat ? "" : null;
+          addConstraint("my.bic",  "KTV.bic",  def, LogFilter.FILTER_MOST);
+          addConstraint("my.iban", "KTV.iban", def, LogFilter.FILTER_IDS);
         }
 
         if (nat || !sepa)
