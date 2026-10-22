@@ -56,6 +56,9 @@ public final class GVRDauerList
         public String[] usage;
         /** Datum der nächsten Ausführung (optional) */
         public Date     nextdate;
+        /** Uhrzeit der Ausführung im Format HH:mm:ss (optional). Wird nur von einzelnen
+            Banken und nur bei SEPA-Daueraufträgen geliefert. */
+        public String   exectime;
         /** Eindeutige Auftragsnummer, um diesen Dauerauftrag zu identifizieren (optional) */
         public String   orderid;
 
@@ -123,6 +126,46 @@ public final class GVRDauerList
             usage=(a.toArray(usage));
         }
 
+        /**
+         * Setzt das Datum der nächsten Ausführung aus dem von der Bank gelieferten
+         * Termin. Der Termin wird geparst und geprüft, aber nicht berechnet. Ist
+         * der gelieferte Wert nicht vorhanden oder nicht plausibel (z.B. ein
+         * Platzhalter der Bank), bleibt das Datum der nächsten Ausführung unbekannt.
+         * <p>
+         * Voraussetzung: {@link #firstdate} und {@link #lastdate} müssen bereits
+         * gesetzt sein, da sie in die Prüfung einfließen.
+         * </p>
+         *
+         * @param value der von der Bank gelieferte Termin im Format JJJJ-MM-TT
+         *              (null, wenn die Bank keinen Termin geliefert hat)
+         */
+        public void setNextDate(String value)
+        {
+            this.nextdate=GVRDauerNextDate.parse(value,firstdate,lastdate);
+        }
+
+        /**
+         * Setzt die Uhrzeit der Ausführung. Die Uhrzeit wird nur von einzelnen
+         * Banken und nur bei SEPA-Daueraufträgen (Segment DauerSEPAListRes2)
+         * geliefert. Der Wert wird geprüft, ein unbrauchbarer Wert verworfen.
+         *
+         * @param value die Uhrzeit der Ausführung im Format HH:mm:ss
+         *              (null, wenn die Bank keine Uhrzeit geliefert hat)
+         */
+        public void setExecTime(String value)
+        {
+            if (!GVRDauerNextDate.isValidTime(value))
+            {
+                if (value!=null && value.length()>0)
+                    HBCIUtils.log("Die von der Bank gelieferte Uhrzeit der Ausführung ('"+value+"') ist ungültig und wird verworfen.",HBCIUtils.LOG_WARN);
+
+                this.exectime=null;
+                return;
+            }
+
+            this.exectime=value;
+        }
+
         public String toString()
         {
             StringBuffer ret=new StringBuffer();
@@ -138,6 +181,8 @@ public final class GVRDauerList
             }
             if (nextdate!=null)
                 ret.append("  ").append(HBCIUtilsInternal.getLocMsg("NEXTEXECDATE")).append(": ").append(HBCIUtils.date2StringLocal(nextdate)).append(linesep);
+            if (exectime!=null)
+                ret.append("  ").append(HBCIUtilsInternal.getLocMsg("TIME")).append(": ").append(exectime).append(linesep);
             ret.append("  ").append(HBCIUtilsInternal.getLocMsg("ORDERID")).append(": ").append(orderid).append(linesep);
 
             ret.append("  ").append(HBCIUtilsInternal.getLocMsg("FIRSTLASTEXEC")).append(": ").append(HBCIUtils.date2StringLocal(firstdate)).append(" / ");

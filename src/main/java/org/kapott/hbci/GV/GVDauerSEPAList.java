@@ -189,6 +189,9 @@ public final class GVDauerSEPAList extends AbstractSEPAGV
             }
         }
         
+        entry.setNextDate(sepaResult.getProperty("date"));
+        entry.setExecTime(result.getProperty(header+".DauerDetails.exectime"));
+
         entry.can_change = result.getProperty(header+".canchange")==null || result.getProperty(header+".canchange").equals("J");
         entry.can_skip = result.getProperty(header+".canskip")==null || result.getProperty(header+".canskip").equals("J");
         entry.can_delete = result.getProperty(header+".candel")==null || result.getProperty(header+".candel").equals("J");

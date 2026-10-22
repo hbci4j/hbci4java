@@ -186,6 +186,8 @@ public final class GVDauerLastSEPAList extends AbstractSEPAGV {
         entry.can_skip = result.getProperty(header + ".canskip") == null || result.getProperty(header + ".canskip").equals("J");
         entry.can_delete = result.getProperty(header + ".candel") == null || result.getProperty(header + ".candel").equals("J");
 
+        entry.setNextDate(sepaResult.getProperty("targetdate"));
+
         ((GVRDauerLastList) (jobResult)).addEntry(entry);
 
         if (entry.orderid != null && entry.orderid.length() != 0) {

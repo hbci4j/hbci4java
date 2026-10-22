@@ -96,9 +96,6 @@ public final class GVDauerList
         }
 
         String st;
-        if ((st=result.getProperty(header+".date"))!=null)
-            entry.nextdate=HBCIUtils.string2DateISO(st);
-
         entry.orderid=result.getProperty(header+".orderid");
 
         entry.firstdate=HBCIUtils.string2DateISO(result.getProperty(header+".DauerDetails.firstdate"));
@@ -122,6 +119,9 @@ public final class GVDauerList
                     result.getProperty(header+".Aussetzung.newvalue.curr"));
             }
         }
+
+        entry.setNextDate(result.getProperty(header+".date"));
+        entry.setExecTime(result.getProperty(header+".DauerDetails.exectime"));
 
         ((GVRDauerList)(jobResult)).addEntry(entry);
 
