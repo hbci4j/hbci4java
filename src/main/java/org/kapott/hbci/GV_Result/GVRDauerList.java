@@ -21,6 +21,8 @@
 
 package org.kapott.hbci.GV_Result;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -56,6 +58,9 @@ public final class GVRDauerList
         public String[] usage;
         /** Datum der nächsten Ausführung (optional) */
         public Date     nextdate;
+        /** Uhrzeit der Ausführung im Format HH:mm:ss (optional). Wird nur von einzelnen
+            Banken und nur bei SEPA-Daueraufträgen geliefert. */
+        public String   exectime;
         /** Eindeutige Auftragsnummer, um diesen Dauerauftrag zu identifizieren (optional) */
         public String   orderid;
 
@@ -123,6 +128,34 @@ public final class GVRDauerList
             usage=(a.toArray(usage));
         }
 
+        /**
+         * Setzt die Uhrzeit der Ausführung. Die Uhrzeit wird nur von einzelnen
+         * Banken und nur bei SEPA-Daueraufträgen (Segment DauerSEPAListRes2)
+         * geliefert. Der Wert wird geprüft, ein unbrauchbarer Wert verworfen.
+         *
+         * @param value die Uhrzeit der Ausführung im Format HH:mm:ss
+         *              (null, wenn die Bank keine Uhrzeit geliefert hat)
+         */
+        public void setExecTime(String value)
+        {
+            if (value==null || value.length()==0)
+            {
+                this.exectime=null;
+                return;
+            }
+
+            try
+            {
+                LocalTime.parse(value);
+                this.exectime=value;
+            }
+            catch (DateTimeParseException e)
+            {
+                HBCIUtils.log("Die von der Bank gelieferte Uhrzeit der Ausführung ('"+value+"') ist ungültig und wird verworfen.",HBCIUtils.LOG_WARN);
+                this.exectime=null;
+            }
+        }
+
         public String toString()
         {
             StringBuffer ret=new StringBuffer();
@@ -138,6 +171,8 @@ public final class GVRDauerList
             }
             if (nextdate!=null)
                 ret.append("  ").append(HBCIUtilsInternal.getLocMsg("NEXTEXECDATE")).append(": ").append(HBCIUtils.date2StringLocal(nextdate)).append(linesep);
+            if (exectime!=null)
+                ret.append("  ").append(HBCIUtilsInternal.getLocMsg("TIME")).append(": ").append(exectime).append(linesep);
             ret.append("  ").append(HBCIUtilsInternal.getLocMsg("ORDERID")).append(": ").append(orderid).append(linesep);
 
             ret.append("  ").append(HBCIUtilsInternal.getLocMsg("FIRSTLASTEXEC")).append(": ").append(HBCIUtils.date2StringLocal(firstdate)).append(" / ");

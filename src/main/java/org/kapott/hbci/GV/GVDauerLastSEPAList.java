@@ -186,6 +186,10 @@ public final class GVDauerLastSEPAList extends AbstractSEPAGV {
         entry.can_skip = result.getProperty(header + ".canskip") == null || result.getProperty(header + ".canskip").equals("J");
         entry.can_delete = result.getProperty(header + ".candel") == null || result.getProperty(header + ".candel").equals("J");
 
+        st=sepaResult.getProperty("targetdate");
+        if (st!=null && !SepaUtil.DATE_UNDEFINED.equals(st))
+            entry.nextdate=HBCIUtils.string2DateISO(st);
+
         ((GVRDauerLastList) (jobResult)).addEntry(entry);
 
         if (entry.orderid != null && entry.orderid.length() != 0) {

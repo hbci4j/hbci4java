@@ -82,9 +82,11 @@ public class ParsePain00100111 extends AbstractSepaParser<List<Properties>>
                     put(prop,Names.PURPOSECODE,purp.getCd());
                 
                 DateAndDateTime2Choice dt = pmtInf.getReqdExctnDt();
-                XMLGregorianCalendar date = dt != null ? dt.getDt() : null;
-                if (date != null) {
-                    put(prop,Names.DATE, SepaUtil.format(date,null));
+                if (dt != null) {
+                    XMLGregorianCalendar date = dt.getDt() != null ? dt.getDt() : dt.getDtTm();
+                    if (date != null) {
+                        put(prop,Names.DATE, SepaUtil.formatDate(date));
+                    }
                 }
                 
                 PaymentIdentification6 pmtId = tx.getPmtId();

@@ -80,6 +80,24 @@ public class SepaUtil
         
         return cal.toGregorianCalendar().getTime();
     }
+
+    /**
+     * Formatiert das Datum eines Kalenders ohne Berücksichtigung der Zeitzone.
+     * Im Gegensatz zu {@link #format(XMLGregorianCalendar, String)} wird der
+     * Datumsteil des Kalenders unverändert übernommen. Das ist wichtig, wenn der
+     * Kalender einen Zeitstempel mit Zeitzone enthält, der auf ein anderes Datum
+     * führen würde.
+     *
+     * @param cal der Kalender.
+     * @return das Datum im Format JJJJ-MM-TT.
+     */
+    public static String formatDate(XMLGregorianCalendar cal)
+    {
+        if (cal == null)
+            return null;
+
+        return String.format("%04d-%02d-%02d", cal.getYear(), cal.getMonth(), cal.getDay());
+    }
     
     /**
      * Formatiert die Dezimalzahl als String.

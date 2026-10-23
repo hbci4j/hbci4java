@@ -67,4 +67,36 @@ public class TestDauerSEPAList extends AbstractTest
     
     Assert.assertTrue(found);
   }
+
+  /**
+   * Versucht, die Datei mit dem Response zu parsen und prueft, ob die Uhrzeit
+   * der Ausfuehrung (DE "exectime") gelesen wird.
+   * @throws Exception
+   */
+  @Test
+  public void test002() throws Exception
+  {
+    final String data = this.getFile("TestDauerSEPAListExecTime.txt");
+    final HBCIKernelImpl kernel = new HBCIKernelImpl(null,"300");
+    kernel.rawNewMsg("DauerSEPAList2");
+
+    final MsgGen gen = kernel.getMsgGen();
+    final MSG msg = new MSG("CustomMsgRes",data,data.length(),gen);
+
+    final Hashtable<String,String> ht = new Hashtable<String,String>();
+    msg.extractValues(ht);
+
+    boolean found = false;
+    for (Entry<String,String> e:ht.entrySet())
+    {
+      if (Objects.equals(e.getKey(),"CustomMsgRes.GVRes.DauerSEPAListRes2.DauerDetails.exectime"))
+      {
+        Assert.assertEquals("12:00:00",e.getValue());
+        found = true;
+        break;
+      }
+    }
+
+    Assert.assertTrue(found);
+  }
 }
