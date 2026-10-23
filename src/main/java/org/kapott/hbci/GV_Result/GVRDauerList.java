@@ -21,6 +21,8 @@
 
 package org.kapott.hbci.GV_Result;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -127,24 +129,6 @@ public final class GVRDauerList
         }
 
         /**
-         * Setzt das Datum der nächsten Ausführung aus dem von der Bank gelieferten
-         * Termin. Der Termin wird geparst und geprüft, aber nicht berechnet. Ist
-         * der gelieferte Wert nicht vorhanden oder nicht plausibel (z.B. ein
-         * Platzhalter der Bank), bleibt das Datum der nächsten Ausführung unbekannt.
-         * <p>
-         * Voraussetzung: {@link #firstdate} und {@link #lastdate} müssen bereits
-         * gesetzt sein, da sie in die Prüfung einfließen.
-         * </p>
-         *
-         * @param value der von der Bank gelieferte Termin im Format JJJJ-MM-TT
-         *              (null, wenn die Bank keinen Termin geliefert hat)
-         */
-        public void setNextDate(String value)
-        {
-            this.nextdate=GVRDauerNextDate.parse(value,firstdate,lastdate);
-        }
-
-        /**
          * Setzt die Uhrzeit der Ausführung. Die Uhrzeit wird nur von einzelnen
          * Banken und nur bei SEPA-Daueraufträgen (Segment DauerSEPAListRes2)
          * geliefert. Der Wert wird geprüft, ein unbrauchbarer Wert verworfen.
@@ -154,16 +138,22 @@ public final class GVRDauerList
          */
         public void setExecTime(String value)
         {
-            if (!GVRDauerNextDate.isValidTime(value))
+            if (value==null || value.length()==0)
             {
-                if (value!=null && value.length()>0)
-                    HBCIUtils.log("Die von der Bank gelieferte Uhrzeit der Ausführung ('"+value+"') ist ungültig und wird verworfen.",HBCIUtils.LOG_WARN);
-
                 this.exectime=null;
                 return;
             }
 
-            this.exectime=value;
+            try
+            {
+                LocalTime.parse(value);
+                this.exectime=value;
+            }
+            catch (DateTimeParseException e)
+            {
+                HBCIUtils.log("Die von der Bank gelieferte Uhrzeit der Ausführung ('"+value+"') ist ungültig und wird verworfen.",HBCIUtils.LOG_WARN);
+                this.exectime=null;
+            }
         }
 
         public String toString()

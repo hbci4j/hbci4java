@@ -126,24 +126,6 @@ public final class GVRDauerLastList
             usage = a.toArray(usage);
         }
 
-        /**
-         * Setzt das Datum der nächsten Ausführung aus dem von der Bank gelieferten
-         * Termin. Der Termin wird geparst und geprüft, aber nicht berechnet. Ist
-         * der gelieferte Wert nicht vorhanden oder nicht plausibel (z.B. ein
-         * Platzhalter der Bank), bleibt das Datum der nächsten Ausführung unbekannt.
-         * <p>
-         * Voraussetzung: {@link #firstdate} und {@link #lastdate} müssen bereits
-         * gesetzt sein, da sie in die Prüfung einfließen.
-         * </p>
-         *
-         * @param value der von der Bank gelieferte Termin im Format JJJJ-MM-TT
-         *              (null, wenn die Bank keinen Termin geliefert hat)
-         */
-        public void setNextDate(String value)
-        {
-            this.nextdate=GVRDauerNextDate.parse(value,firstdate,lastdate);
-        }
-
         public String toString()
         {
             StringBuilder ret = new StringBuilder();

@@ -46,6 +46,17 @@ public class GVDauerSEPAListTest extends AbstractTest
     }
 
     /**
+     * Der Kalender-Tag eines Zeitstempels bleibt auch bei einem Zeitzonenoffset erhalten.
+     */
+    @Test
+    public void testNextDateFromTimestampWithTimezone()
+    {
+        Dauer entry=parse(pain("<DtTm>2099-12-01T00:00:00+14:00</DtTm>"));
+
+        assertEquals("2099-12-01",format(entry.nextdate));
+    }
+
+    /**
      * "1999-01-01" ist der in SEPA-Nachrichten uebliche Platzhalter fuer "kein Datum gesetzt".
      */
     @Test
