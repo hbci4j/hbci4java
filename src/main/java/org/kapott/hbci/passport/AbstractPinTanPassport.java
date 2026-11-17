@@ -573,13 +573,13 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             // Beim Bezug auf das Segment schicken wir per Default "HKIDN". Gemaess Kapitel B.4.3.1 muss das Bezugssegment aber
             // bei PIN/TAN-Management-Geschaeftsvorfaellen mit dem GV des jeweiligen Geschaeftsvorfalls belegt werden.
             // Daher muessen wir im Payload schauen, ob ein entsprechender Geschaeftsvorfall enthalten ist.
-            // Wird muessen nur nach HKPAE, HKTAB schauen - das sind die einzigen beiden, die wir unterstuetzen
+            // Wir muessen nur nach HKPAE, HKPSA, HKTAB, HKTSY schauen - das sind die einzigen, die wir unterstuetzen
             String segcode = "HKIDN";
             HBCIDialog payload = ctx.getDialog();
             if (payload != null)
             {
                 final HBCIMessageQueue queue = payload.getMessageQueue();
-                for (String code:Arrays.asList("HKPAE","HKTAB")) // Das sind GVChangePIN und GVTANMediaList
+                for (String code:Arrays.asList("HKPAE","HKPSA","HKTAB","HKTSY")) // Das sind GVChangePIN, GVUnlockPIN, GVTANMediaList und GVTANGeneratorSync
                 {
                     if (queue.findTask(code) != null)
                     {

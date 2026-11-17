@@ -1629,6 +1629,11 @@
             </valids>
         </DEGdef>
 
+        <DEGdef id="ParTANGeneratorSync">
+            <DE name="needcardnumber" type="JN"/>
+            <DE name="needcardseqnumber" type="JN"/>
+        </DEGdef>
+
         <DEGdef id="ParTemplateD">
             <DE name="dummy" type="AN" minsize="0" maxsize="999" minnum="2" maxnum="999"/>
         </DEGdef>
@@ -3181,6 +3186,21 @@
 	    &GVP;
 
 	    <value path="SegHead.code">DIPAES</value>
+	    <value path="SegHead.version">1</value>
+	</SEGdef>
+
+	<SEGdef id="UnlockPIN1" needsRequestTag="1">
+	    <DEG type="SegHeadUser" name="SegHead" />
+
+	    <value path="SegHead.code">HKPSA</value>
+	    <value path="SegHead.version">1</value>
+	</SEGdef>
+	<SEGdef id="UnlockPINPar1">
+	    &GVP2;
+
+	    &SecClassValids;
+
+	    <value path="SegHead.code">HIPSAS</value>
 	    <value path="SegHead.version">1</value>
 	</SEGdef>
         
@@ -6238,6 +6258,28 @@
 
         <!--  macemmi 2012-02-20 END HKTAB -->
 
+        <!-- BEGIN TAN-Generator Synchronisierung -->
+        <SEGdef id="TANGeneratorSync1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DE name="atc" type="Num" maxsize="5"/>
+            <DE name="tan" type="AN" maxsize="99"/>
+            <DE name="cardnumber" type="ID" minnum="0"/>
+            <DE name="cardseqnumber" type="ID" minnum="0"/>
+
+            <value path="SegHead.code">HKTSY</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="TANGeneratorSyncPar1">
+            &GVP2;
+            <DEG type="ParTANGeneratorSync"/>
+            &SecClassValids;
+
+            <value path="SegHead.code">HITSYS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- END TAN-Generator Synchronisierung -->
+
         <SEGdef id="TANListList1" needsRequestTag="1"> <!-- 2.2 -->
             <DEG type="SegHeadUser" name="SegHead"/>
 
@@ -8476,6 +8518,7 @@
             <SEG type="TANMediaList3" minnum="0"/>
             <SEG type="TANMediaList4" minnum="0"/>
             <SEG type="TANMediaList5" minnum="0"/>
+            <SEG type="TANGeneratorSync1" minnum="0"/>
             <SEG type="TermSammelLast3" minnum="0"/>
             <SEG type="TermSammelLastDel3" minnum="0"/>
             <SEG type="TermSammelLastList3" minnum="0"/>
@@ -8510,6 +8553,7 @@
             <SEG type="UmbSEPA1" minnum="0"/>
             <SEG type="Umb1" minnum="0"/>
             <SEG type="Umb2" minnum="0"/>
+            <SEG type="UnlockPIN1" minnum="0"/>
             <SEG type="VoPCheck1" minnum="0"/>
             <SEG type="VoPAuth1" minnum="0"/>
             <SEG type="Vormerkposten1" minnum="0"/>
@@ -8803,6 +8847,7 @@
             <SEG type="TANMediaListPar3" minnum="0"/>
             <SEG type="TANMediaListPar4" minnum="0"/>
             <SEG type="TANMediaListPar5" minnum="0"/>
+            <SEG type="TANGeneratorSyncPar1" minnum="0"/>
             <SEG type="TermSammelLastPar3" minnum="0"/>
             <SEG type="TermSammelLastDelPar3" minnum="0"/>
             <SEG type="TermSammelLastListPar3" minnum="0"/>
@@ -8838,6 +8883,7 @@
             <SEG type="UmbSEPAPar1" minnum="0"/>
             <SEG type="UmbPar1" minnum="0"/>
             <SEG type="UmbPar2" minnum="0"/>
+            <SEG type="UnlockPINPar1" minnum="0"/>
             <SEG type="VoPCheckPar1" minnum="0"/>
             <SEG type="VormerkpostenPar1" minnum="0"/>
             <SEG type="WPDepotListPar2" minnum="0"/>
