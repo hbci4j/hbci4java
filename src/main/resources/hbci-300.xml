@@ -1703,6 +1703,12 @@
             <DE name="maxpretime" type="Num" maxsize="4"/>
         </DEGdef>
 
+        <DEGdef id="ParTermLastSEPAList2">
+            <DE name="canmaxentries" type="JN"/>
+            <DE name="cantimerange" type="JN"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+
         <DEGdef id="ParUeb">
             <DE name="maxusage" type="Num" maxsize="2"/>
             <DE name="key" type="Dig" minsize="2" maxsize="2" maxnum="99"/>
@@ -7055,6 +7061,121 @@
             <value path="SegHead.version">1</value>
         </SEGdef>
         <!-- END SEPA-Lastschrift CORE -->
+
+        <!-- BEGIN Terminierte SEPA-Lastschrift: Bestand, Aenderung, Loeschung -->
+        <!-- Bestand abrufen, Segmentversion 1 -->
+        <SEGdef id="TermLastSEPAList1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DEG type="SuppSepaPainMessages" name="formats"/>
+            <DE name="startdate" type="Date" minnum="0"/>
+            <DE name="enddate" type="Date" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">HKDBS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPAListRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="candel" type="JN" minnum="0"/>
+            <DE name="canchange" type="JN" minnum="0"/>
+
+            <value path="SegHead.code">HIDBS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPAListPar1">
+            &GVP2;
+            <DEG type="ParTermUebSEPAList" name="ParTermLastSEPAList"/>
+            &SecClassValids;
+            <value path="SegHead.code">HIDBSS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <!-- Bestand abrufen, Segmentversion 2 -->
+        <SEGdef id="TermLastSEPAList2">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DEG type="SuppSepaPainMessages" name="formats"/>
+            <DE name="startdate" type="Date" minnum="0"/>
+            <DE name="enddate" type="Date" minnum="0"/>
+            <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+            <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+
+            <value path="SegHead.code">HKDBS</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPAListRes2">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="ccode" type="Code" maxsize="1" minnum="0"/>
+            <DE name="canchange" type="JN" minnum="0"/>
+            <DE name="orderstatus" type="Code" maxsize="1" minnum="0"/>
+
+            <value path="SegHead.code">HIDBS</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPAListPar2">
+            &GVP2;
+            <DEG type="ParTermLastSEPAList2" name="ParTermLastSEPAList"/>
+            &SecClassValids;
+            <value path="SegHead.code">HIDBSS</value>
+            <value path="SegHead.version">2</value>
+        </SEGdef>
+
+        <!-- Aenderung -->
+        <SEGdef id="TermLastSEPAEdit1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256"/>
+            <DE name="sepapain" type="Bin" maxsize="0"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+
+            <value path="SegHead.code">HKDSA</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPAEditRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+            <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            <DE name="orderidold" type="AN" maxsize="99" minnum="0"/>
+
+            <value path="SegHead.code">HIDSA</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPAEditPar1">
+            &GVP2;
+            <DEG type="ParTermSepaEinzelLast" name="ParTermSepaEinzelLast"/>
+            &SecClassValids;
+            <value path="SegHead.code">HIDSAS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <!-- Loeschung -->
+        <SEGdef id="TermLastSEPADel1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+            <DEG type="KTVInt" name="My"/>
+            <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+            <DE name="sepapain" type="Bin" maxsize="0" minnum="0"/>
+            <DE name="orderid" type="AN" maxsize="99"/>
+
+            <value path="SegHead.code">HKDSL</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <SEGdef id="TermLastSEPADelPar1">
+            &GVP2;
+            <DEG type="ParTermUebSEPADel" name="ParTermLastSEPADel"/>
+            &SecClassValids;
+            <value path="SegHead.code">HIDSLS</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+        <!-- END Terminierte SEPA-Lastschrift: Bestand, Aenderung, Loeschung -->
         
         <!-- BEGIN SEPA-Lastschrift COR1 -->
         <!-- Request -->
@@ -8477,6 +8598,10 @@
             <SEG type="LastSEPA1" minnum="0"/>
             <SEG type="LastCOR1SEPA1" minnum="0"/>
             <SEG type="LastB2BSEPA1" minnum="0"/>
+            <SEG type="TermLastSEPAList1" minnum="0"/>
+            <SEG type="TermLastSEPAList2" minnum="0"/>
+            <SEG type="TermLastSEPAEdit1" minnum="0"/>
+            <SEG type="TermLastSEPADel1" minnum="0"/>
             <SEG type="LastObjection1" minnum="0"/>
             <SEG type="LastObjection2" minnum="0"/>
             <SEG type="OrderHistory1" minnum="0"/>
@@ -8649,6 +8774,9 @@
             <SEG type="LastSEPARes1" minnum="0"/>
             <SEG type="LastCOR1SEPARes1" minnum="0"/>
             <SEG type="LastB2BSEPARes1" minnum="0"/>
+            <SEG type="TermLastSEPAListRes1" minnum="0"/>
+            <SEG type="TermLastSEPAListRes2" minnum="0"/>
+            <SEG type="TermLastSEPAEditRes1" minnum="0"/>
             <SEG type="SammelLastSEPARes1" minnum="0"/>
             <SEG type="SammelLastCOR1SEPARes1" minnum="0"/>
             <SEG type="SammelLastB2BSEPARes1" minnum="0"/>
@@ -8805,6 +8933,10 @@
             <SEG type="LastSEPAPar1" minnum="0"/>
             <SEG type="LastCOR1SEPAPar1" minnum="0"/>
             <SEG type="LastB2BSEPAPar1" minnum="0"/>
+            <SEG type="TermLastSEPAListPar1" minnum="0"/>
+            <SEG type="TermLastSEPAListPar2" minnum="0"/>
+            <SEG type="TermLastSEPAEditPar1" minnum="0"/>
+            <SEG type="TermLastSEPADelPar1" minnum="0"/>
             <SEG type="LastObjectionPar1" minnum="0"/>
             <SEG type="LastObjectionPar2" minnum="0"/>
             <SEG type="OrderHistoryPar1" minnum="0"/>
