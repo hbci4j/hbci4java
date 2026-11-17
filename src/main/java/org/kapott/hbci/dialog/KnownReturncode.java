@@ -68,6 +68,11 @@ public enum KnownReturncode
     W3956("3956"),
     
     /**
+     * Dialog abgebrochen - starke Authentifizierung erforderlich.
+     */
+    E9075("9075"),
+    
+    /**
      * Signatur falsch (generisch)
      */
     E9340("9340"),
@@ -91,6 +96,11 @@ public enum KnownReturncode
      *  Neue Kundensystem-ID holen
      */
     E9391("9391"),
+    
+    /**
+     * Dialog abgebrochen.
+     */
+    E9800("9800"),
     
     ;
     
