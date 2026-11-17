@@ -97,6 +97,12 @@ public class TestParseVoP extends AbstractTest
       Assert.assertEquals(17,codes.size());
       Assert.assertTrue(codes.contains("HKIPZ"));
       
+      // HIVOOS: Sammelauftraege, fuer die auf den Namensabgleich verzichtet werden darf
+      final List<String> optOutCodes = params.getOptOutGvCodes();
+      Assert.assertEquals(4,optOutCodes.size());
+      Assert.assertTrue(optOutCodes.contains("HKCCM"));
+      Assert.assertFalse(optOutCodes.contains("HKCCS"));
+      
     }
     catch (Exception e)
     {

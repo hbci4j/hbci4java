@@ -35,7 +35,9 @@ import org.kapott.hbci.tools.ParameterFinder;
 public class VoPParameter
 {
   private List<String> gvCodes = new ArrayList<>();
+  private List<String> optOutGvCodes = new ArrayList<>();
   private boolean infoTextFormatted = false;
+  private boolean optOutInfoTextFormatted = false;
   private List<SepaVersion> formats = new ArrayList<>();
   
   /**
@@ -55,12 +57,30 @@ public class VoPParameter
   }
   
   /**
+   * Liefert die Liste der Sammelaufträge, für die laut HIVOOS auf den Namensabgleich verzichtet werden darf (Opt-Out).
+   * @return die Liste der Sammelaufträge, für die Opt-Out erlaubt ist.
+   */
+  public List<String> getOptOutGvCodes()
+  {
+    return optOutGvCodes;
+  }
+  
+  /**
    * Liefert true, wenn der Informationstext im HIVPP formatiert ist. 
    * @return true, wenn der Informationstext im HIVPP formatiert ist.
    */
   public boolean isInfoTextFormatted()
   {
     return infoTextFormatted;
+  }
+  
+  /**
+   * Liefert true, wenn der Aufklärungstext Opt-Out im HIVOO formatiert ist (laut HIVOOS).
+   * @return true, wenn der Aufklärungstext Opt-Out im HIVOO formatiert ist.
+   */
+  public boolean isOptOutInfoTextFormatted()
+  {
+    return optOutInfoTextFormatted;
   }
   
   /**
@@ -104,6 +124,13 @@ public class VoPParameter
     for (Object o:gvList.values())
     {
       result.gvCodes.add(o.toString());
+    }
+    
+    result.optOutInfoTextFormatted = Objects.equals("j",ParameterFinder.getValue(bpd,"Params*.VoPOptOutPar1.ParVoPOptOut.infotextformatted","n").toLowerCase());
+    final Properties optOutList = ParameterFinder.find(bpd,"Params*.VoPOptOutPar1.ParVoPOptOut.segcode*");
+    for (Object o:optOutList.values())
+    {
+      result.optOutGvCodes.add(o.toString());
     }
     
     return result;
