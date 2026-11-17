@@ -38,12 +38,13 @@ public class TestDialogInitTanReference
       "HNHBK:1:3+000000000000+300+0+1+0:1'" +
       "HIRMG:2:2+0020::Auftrag ausgefuehrt.'" +
       "HIBPA:3:3+1+280:12345678+Testbank+0+1+300+9999'" +
-      "HIPINS:4:1:3+1+1+0+5:50:6:::HKTAN:N:HKTSY:N:HKTAB:N:HKPAE:N'" +
+      "HIPINS:4:1:3+1+1+0+5:50:6:::HKTAN:N:HKTSY:N:HKTAB:N:HKPAE:N:HKPSA:N'" +
       "HITANS:5:7:3+1+1+0+N:N:0:921:2:PushTan1-Push:Decoupled::PushTan1-Push:::PushTan1-Push:999:N:1:N:0:2:N:J:00:2:N:9:60:5:5:N:J'" +
       "HITSYS:6:1:3+1+1+0+N:N'" +
       "HITABS:7:4:3+1+1+0'" +
       "HIPAES:8:1:3+1+1+0'" +
-      "HNHBS:9:1+1'";
+      "HIPSAS:9:1:3+1+1+0'" +
+      "HNHBS:10:1+1'";
 
   private final String job;
   private final String segcode;
@@ -61,6 +62,7 @@ public class TestDialogInitTanReference
       {"TANGeneratorSync", "HKTSY"},
       {"TANMediaList", "HKTAB"},
       {"ChangePIN", "HKPAE"},
+      {"UnlockPIN", "HKPSA"},
     });
   }
 

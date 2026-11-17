@@ -3188,6 +3188,21 @@
 	    <value path="SegHead.code">DIPAES</value>
 	    <value path="SegHead.version">1</value>
 	</SEGdef>
+
+	<SEGdef id="UnlockPIN1" needsRequestTag="1">
+	    <DEG type="SegHeadUser" name="SegHead" />
+
+	    <value path="SegHead.code">HKPSA</value>
+	    <value path="SegHead.version">1</value>
+	</SEGdef>
+	<SEGdef id="UnlockPINPar1">
+	    &GVP2;
+
+	    &SecClassValids;
+
+	    <value path="SegHead.code">HIPSAS</value>
+	    <value path="SegHead.version">1</value>
+	</SEGdef>
         
         <SEGdef id="CommList2" needsRequestTag="1"> <!-- 2.01 -->
             <DEG type="SegHeadUser" name="SegHead"/>
@@ -8538,6 +8553,7 @@
             <SEG type="UmbSEPA1" minnum="0"/>
             <SEG type="Umb1" minnum="0"/>
             <SEG type="Umb2" minnum="0"/>
+            <SEG type="UnlockPIN1" minnum="0"/>
             <SEG type="VoPCheck1" minnum="0"/>
             <SEG type="VoPAuth1" minnum="0"/>
             <SEG type="Vormerkposten1" minnum="0"/>
@@ -8867,6 +8883,7 @@
             <SEG type="UmbSEPAPar1" minnum="0"/>
             <SEG type="UmbPar1" minnum="0"/>
             <SEG type="UmbPar2" minnum="0"/>
+            <SEG type="UnlockPINPar1" minnum="0"/>
             <SEG type="VoPCheckPar1" minnum="0"/>
             <SEG type="VormerkpostenPar1" minnum="0"/>
             <SEG type="WPDepotListPar2" minnum="0"/>
