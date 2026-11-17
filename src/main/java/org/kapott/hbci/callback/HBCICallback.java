@@ -381,6 +381,10 @@ public interface HBCICallback
      * werden soll oder ein "false", wenn die Ausführung abgebrochen werden soll. Alternativ kann der Aufrufer auch eine
      * Exception werfen, um den Vorgang abzubrechen. Ob die ggf. abweichenden Namen im Adressbuch der Anwendung aktualisiert
      * werden oder nicht, ist Sache der Anwendung.
+     * <p>
+     * Der Callback wird auch beim Verzicht auf den Namensabgleich (Opt-Out per HKVOO) ausgelöst. Das VoP-Result enthält
+     * dann keine Prüfergebnisse, sondern nur den Aufklärungstext, den der User bestätigen muss. Ob dieser Text
+     * Formatsteuerzeichen enthalten darf, liefert <code>VoPParameter#isOptOutInfoTextFormatted()</code> (aus HIVOOS).
      */
     public final static int HAVE_VOP_RESULT = 37;
 

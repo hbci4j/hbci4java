@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.GVVoP;
+import org.kapott.hbci.GV.GVVoPOptOut;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.GV_Result.GVRVoP.VoPResult;
 import org.kapott.hbci.bpd.VoPParameter;
@@ -1063,6 +1064,27 @@ public abstract class AbstractHBCIPassport implements HBCIPassportInternal,Seria
                   continue;
               
                 final String segcode = task.getHBCICode();
+                
+                // Opt-Out: Der Kunde verzichtet bei einem Sammelauftrag auf den Namensabgleich.
+                // Dann senden wir HKVOO statt HKVPP. Nur wenn per Parameter gewünscht, in HIVOOS
+                // gelistet, für das Konto in den UPD erlaubt und der Sammelauftrag mehr als eine
+                // Transaktion enthält.
+                final boolean optOut = HBCIUtils.getParam("vop." + segcode + ".optout","false").equals("true");
+                if (optOut)
+                {
+                    final boolean optOutEnabled = vopParams != null && vopParams.getOptOutGvCodes().contains(segcode);
+                    if (optOutEnabled && GVVoPOptOut.isAllowed(task))
+                    {
+                        HBCIUtils.log("patch VoP opt-out request into message for: " + segcode,HBCIUtils.LOG_INFO);
+                        final GVVoPOptOut vop = (GVVoPOptOut) handler.newJob("VoPOptOut");
+                        vop.setDialogContext(ctx);
+                        vop.setTask(task);
+                        task.vopApplied();
+                        message.prepend(task,vop);
+                        continue;
+                    }
+                    HBCIUtils.log("VoP opt-out not possible for " + segcode + " (enabled in BPD: " + optOutEnabled + "), using regular VoP",HBCIUtils.LOG_INFO);
+                }
                 
                 // Checken, ob wir entweder passende BPD-Parameter haben oder bei dem GV das Senden einer
                 // VoP forciert werden soll, selbst wenn es nicht in den BPD steht

@@ -1745,6 +1745,13 @@
             </valids>
         </DEGdef>
 
+        <DEGdef id="ParVoPOptOut">
+            <DE name="infotextformatted" type="JN" />
+
+            <!-- Segmentkennung HK... der Sammelauftraege, fuer die auf den Namensabgleich verzichtet werden darf -->
+            <DE name="segcode" type="AN" maxsize="6" maxnum="999" />
+        </DEGdef>
+
         <DEGdef id="ParVormerkposten">
           <DE name="canmaxentries" type="JN"/>
           <DE name="canallaccounts" type="JN"/>
@@ -6046,10 +6053,40 @@
         <SEGdef id="VoPAuth1">
             <DEG type="SegHeadUser" name="SegHead"/>
 
-            <!-- Die VoP-ID mit der Freigabe -->
-            <DE name="vopid" type="Bin" maxsize="1024" minnum="1" />
+            <!-- Die VoP-ID mit der Freigabe. Laenge laut Spezifikation ".." (ohne Begrenzung) -->
+            <DE name="vopid" type="Bin" minnum="1" />
 
             <value path="SegHead.code">HKVPA</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+
+        <!--  BEGIN VoP Opt-Out -->
+        <SEGdef id="VoPOptOut1">
+            <DEG type="SegHeadUser" name="SegHead"/>
+
+            <value path="SegHead.code">HKVOO</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="VoPOptOutRes1">
+            <DEG type="SegHeadInst" name="SegHead"/>
+
+            <!-- Die VoP-ID, die mit dem HKVPA zurueckgesendet wird. Laenge laut Spezifikation ".." (ohne Begrenzung) -->
+            <DE name="vopid" type="Bin" minnum="1" />
+
+            <!-- Aufklaerungstext Opt-Out -->
+            <DE name="infotext" type="AN" maxsize="65535" minnum="0" />
+
+            <value path="SegHead.code">HIVOO</value>
+            <value path="SegHead.version">1</value>
+        </SEGdef>
+
+        <SEGdef id="VoPOptOutPar1">
+            &GVP2;
+            <DEG type="ParVoPOptOut" name="ParVoPOptOut" />
+            &SecClassValids;
+            <value path="SegHead.code">HIVOOS</value>
             <value path="SegHead.version">1</value>
         </SEGdef>
 
@@ -8681,6 +8718,7 @@
             <SEG type="UnlockPIN1" minnum="0"/>
             <SEG type="VoPCheck1" minnum="0"/>
             <SEG type="VoPAuth1" minnum="0"/>
+            <SEG type="VoPOptOut1" minnum="0"/>
             <SEG type="Vormerkposten1" minnum="0"/>
             <SEG type="WPDepotList2" minnum="0"/>
             <SEG type="WPDepotList3" minnum="0"/>
@@ -8816,6 +8854,7 @@
             <SEG type="TermUebSEPAEditRes1" minnum="0"/>
             <SEG type="UebGarRes1" minnum="0"/>
             <SEG type="VoPCheckRes1" minnum="0"/>
+            <SEG type="VoPOptOutRes1" minnum="0"/>
             <SEG type="VormerkpostenRes1" minnum="0"/>
             <SEG type="WPDepotListRes2" minnum="0"/>
             <SEG type="WPDepotListRes3" minnum="0"/>
@@ -9017,6 +9056,7 @@
             <SEG type="UmbPar2" minnum="0"/>
             <SEG type="UnlockPINPar1" minnum="0"/>
             <SEG type="VoPCheckPar1" minnum="0"/>
+            <SEG type="VoPOptOutPar1" minnum="0"/>
             <SEG type="VormerkpostenPar1" minnum="0"/>
             <SEG type="WPDepotListPar2" minnum="0"/>
             <SEG type="WPDepotListPar3" minnum="0"/>
