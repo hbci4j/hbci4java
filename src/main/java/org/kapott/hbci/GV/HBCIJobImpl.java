@@ -45,6 +45,7 @@ import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.manager.LogFilter;
 import org.kapott.hbci.manager.MsgGen;
+import org.kapott.hbci.passport.AbstractPinTanPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.HBCIPassportInternal;
 import org.kapott.hbci.passport.HBCIPassportList;
@@ -90,6 +91,8 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     private boolean haveTan = false;
     private boolean skip = false;
     private boolean haveVop = false;
+    private boolean tanRequired = false;
+    private boolean retryWithTan = false;
     
     private HashSet<String> indexedConstraints;
     
@@ -768,6 +771,16 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
     }
     
     /**
+     * Liefert true, wenn der Auftrag unabhaengig vom HIPINS ein HKTAN braucht.
+     * Das ist der Fall, wenn die Bank den Auftrag ohne HKTAN mit 9075 abgelehnt hat.
+     * @return true, wenn der Auftrag unabhaengig vom HIPINS ein HKTAN braucht.
+     */
+    public boolean tanRequired()
+    {
+        return this.tanRequired;
+    }
+    
+    /**
      * Liefert true, wenn fuer den Auftrag die VoP-Prüfung erzeugt wurde.
      * @return true, wenn fuer den Auftrag ein VoP-Prüfung erzeugt wurde.
      */
@@ -834,12 +847,20 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
 
     /**
      * Liefert den ggf erneut auszufuehrenden Job.
-     * Die Default-Implementierung liefert "this", wenn die Bank ein 3040 zurueckgemeldet hat.
+     * Die Default-Implementierung liefert "this", wenn die Bank ein 3040 zurueckgemeldet hat
+     * oder wenn der Auftrag nach 9075 mit HKTAN wiederholt werden soll.
      * Das kann aber auch ein anderer sein, als "this". Naemlich bei HKTAN in Prozess-Variante #2. Dort liefert es stattdessen den eigentlichen GV.
      * @return den ggf erneut auszufuehrenden Job.
      */
     public HBCIJobImpl redo()
     {
+        // Auftrag nach 9075 genau einmal mit HKTAN wiederholen
+        if (this.retryWithTan)
+        {
+            this.retryWithTan = false;
+            return this;
+        }
+        
         if (!this.redoAllowed())
             return null;
         
@@ -908,6 +929,16 @@ public abstract class HBCIJobImpl<T extends HBCIJobResultImpl>
        die GV-spezifischen Daten im outStore abgelegt */
     public void fillJobResult(HBCIMsgStatus status,int offset)
     {
+        // Hat die Bank den Auftrag ohne HKTAN mit 9075 abgelehnt, senden wir ihn per redo() erneut mit HKTAN.
+        // Die 9075 uebernehmen wir dann nicht in das Ergebnis, es zaehlt das Ergebnis der Wiederholung.
+        final HBCIPassportInternal p = this.getMainPassport();
+        if ((p instanceof AbstractPinTanPassport) && ((AbstractPinTanPassport) p).shouldRetryWithTan(this,status,idx+offset))
+        {
+            this.tanRequired = true;
+            this.retryWithTan = true;
+            return;
+        }
+        
         try {
             this.haveTan = false;
             this.skip = false;

@@ -32,6 +32,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.kapott.hbci.GV.GVTAN2Step;
+import org.kapott.hbci.GV.GVVoP;
+import org.kapott.hbci.GV.GVVoPAuth;
+import org.kapott.hbci.GV.GVVoPOptOut;
 import org.kapott.hbci.GV.HBCIJobImpl;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.comm.Comm;
@@ -755,6 +758,53 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
             }
         }
         this.decoupledRefreshes++;
+        return true;
+    }
+    
+    /**
+     * Prueft, ob der Auftrag erneut mit HKTAN gesendet werden soll.
+     * Manche Banken lehnen einen Auftrag, fuer den laut HIPINS keine TAN erforderlich ist, ohne HKTAN mit 9075
+     * (starke Authentifizierung erforderlich) auf Segment-Ebene ab, waehrend andere Auftraege in der selben Nachricht
+     * ausgefuehrt werden. Mit HKTAN fuehren sie ihn aus. Wir senden den Auftrag dann genau einmal erneut mit HKTAN.
+     * Siehe https://github.com/hbci4j/hbci4java/issues/155
+     * @param task der Auftrag.
+     * @param status der Status der Nachricht, in der der Auftrag gesendet wurde.
+     * @param segnum die Segment-Nummer des Auftrags in dieser Nachricht.
+     * @return true, wenn der Auftrag erneut mit HKTAN gesendet werden soll.
+     */
+    public boolean shouldRetryWithTan(HBCIJobImpl task, HBCIMsgStatus status, int segnum)
+    {
+        // Wurde bereits mit HKTAN gesendet oder ist selbst ein HKTAN. Und wir wiederholen nur einmal.
+        if (task.haveTan() || task.tanRequired())
+            return false;
+        
+        // Auftraege mit VoP und die VoP-Segmente selbst nicht. Den Auftrag sendet der VoP-Ablauf zusammen mit dem
+        // HKVPA ohnehin erneut, und GVVoPAuth braucht dafuer die Segment-Nummer aus dem ersten Ergebnis.
+        if (task.haveVoP() || task instanceof GVVoP || task instanceof GVVoPAuth || task instanceof GVVoPOptOut)
+            return false;
+        
+        // Hat die Bank 9075 zum Auftrag gemeldet?
+        final String segref = Integer.toString(segnum);
+        if (KnownReturncode.E9075.searchReturnValues(status.segStatus.getRetVals()).stream().noneMatch(r -> segref.equals(r.segref)))
+            return false;
+        
+        // Nur relevant fuer Auftraege, die laut HIPINS keine TAN brauchen. Die anderen hatten bereits ein HKTAN
+        final String segcode = task.getHBCICode();
+        if (segcode == null || !this.getPinTanInfo(segcode).equals("N"))
+            return false;
+        
+        // Beim Einschritt-Verfahren gibt es kein HKTAN
+        if (this.getCurrentTANMethod(false).equals(TanMethod.ONESTEP.getId()))
+            return false;
+        
+        // Hat die Bank den Dialog beendet, koennen wir in diesem Dialog nichts mehr senden
+        if (!KnownReturncode.E9800.searchReturnValues(status).isEmpty())
+        {
+            HBCIUtils.log("found status code 9075 for task " + segcode + ", but dialog was ended by the bank (9800) - not repeating it",HBCIUtils.LOG_INFO);
+            return false;
+        }
+        
+        HBCIUtils.log("found status code 9075 for task " + segcode + " - repeating it with HKTAN",HBCIUtils.LOG_INFO);
         return true;
     }
     
@@ -1608,8 +1658,8 @@ public abstract class AbstractPinTanPassport extends AbstractHBCIPassport
                   continue;
                 }
                 
-                // Braucht der Job eine TAN?
-                if (!this.getPinTanInfo(segcode).equals("J"))
+                // Braucht der Job eine TAN? Entweder laut HIPINS oder weil die Bank ihn ohne HKTAN mit 9075 abgelehnt hat
+                if (!task.tanRequired() && !this.getPinTanInfo(segcode).equals("J"))
                 {
                     HBCIUtils.log("found task that does not require HKTAN: " + segcode + " - adding it to current msg",HBCIUtils.LOG_DEBUG);
                     continue;
